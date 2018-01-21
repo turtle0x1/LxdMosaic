@@ -29,8 +29,10 @@ if debug_mode_enabled; then
 	params="$params -DDebug"
 fi
 
+LISTEN_ADDRESS="$(apache_listen_address)"
 HTTP_PORT="$(apache_http_port)"
 HTTPS_PORT="$(apache_https_port)"
+export LISTEN_ADDRESS
 export HTTP_PORT
 export HTTPS_PORT
 
