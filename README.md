@@ -48,7 +48,9 @@ This has only been done on ubuntu 18.04 but it should work any where apache does
 
 6. Add a hosts entry for your domain name (the default apache config uses lxd.local)
 
-6. Go to your browser and load the site
+7. Change .env.dist to .env and fill out the values
+
+8. Go to your browser and load the site
 
 ## Notes
 
@@ -72,19 +74,3 @@ This program contains the basic functionality to create and manage cloud config
 files and deploy them to containers (through profiles) onto one or many hosts.
 
 Most of the information about cloud config can be read here [here](https://cloudinit.readthedocs.io/en/latest/topics/examples.html)
-
-## TODO
-1. Install Missing CRIU
-
-When trying to migrate an the source server is missing CRIU it will fail with the
-error
->Unable to perform container live migration. CRIU isn't installed on the source server
-
-To fix this we have to run
-`sudo apt-get install criu`
-https://criu.org/Installation
-
-2. Cloud config just stores yaml in the db i tried with the symfony class to
-   convert to json but it removed comments so it didn't work
-
-3. Dockerize this
