@@ -29,7 +29,9 @@ This has only been done on ubuntu 18.04 but it should work any where apache does
 
 6. Add a hosts entry for your domain name (the default apache config uses lxd.local)
 
-6. Go to your browser and load the site
+7. Change .env.dist to .env and fill out the values
+
+8. Go to your browser and load the site
 
 ## Notes
 
