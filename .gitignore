@@ -1,0 +1,5 @@
+vendor/**
+src/sensitiveData/certs/**
+.env
+build/**
+.php_cs.cache

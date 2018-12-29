@@ -1,0 +1,104 @@
+#boxHolder{
+    min-height:20px;
+    padding:10px;
+    padding-left: 20px;
+    margin-bottom:20px;
+    background-color:#fbfbfb;
+    border:1px solid #999;
+    -webkit-border-radius:1px;
+    -moz-border-radius:1px;
+    border-radius:1px;
+    -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05)
+}
+
+
+#cloudConfig-editorCollapse {
+    height: 550px;
+}
+
+#editor {
+    position: absolute;
+    width: 750px;
+    height: 500px;
+}
+
+
+/* Adapated from https://bootsnipp.com/snippets/featured/multi-select-tiled-layout */
+#profileHostsBox{margin:20px 0 0 0}
+#profileHostsBox label.btn-default.active{background-color:#007ba7;color:#FFF}
+#profileHostsBox label.btn-default{width:90%;border:1px solid #efefef;margin:5px; box-shadow:5px 8px 8px 0 #ccc;}
+#profileHostsBox label .bizcontent{width:100%;}
+#profileHostsBox .btn-group{width:90%}
+#profileHostsBox .btn span.fa{
+    opacity: 0;
+}
+#profileHostsBox .btn.active span.fa {
+    opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .modal-xl {
+    width: 90%;
+   max-width:1200px;
+  }
+}
+
+.navbar .navbar-brand:hover{
+    color: #E95420;
+}
+
+.fa-play {
+    color: green;
+}
+
+.fa-snowflake-o {
+    color: blue;
+}
+
+.fa-stop-circle {
+    color: red;
+}
+
+.navbar
+{
+    margin-bottom: 1%;
+    background-color: black;
+    background-image: none;
+}
+
+.navbar .navbar-brand {
+    color: #ffffff;
+}
+
+.navbar .navbar-nav > li > a {
+    color: #ffffff !important;
+}
+
+.navbar .navbar-nav > .dropdown > a .caret {
+    border-top-color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+.navbar .navbar-toggle {
+    border-color: #E95420;
+}
+.navbar .navbar-toggle:hover,
+.navbar .navbar-toggle:focus {
+    background-color: blue;
+}
+.navbar .navbar-toggle .icon-bar {
+    background-color: #ffffff;
+}
+
+.navbar .navbar-nav > li > a:hover{
+    background-color: #E95420;
+}
+
+
+
+.navbar .navbar-nav > .active > a {
+  color: red;
+  background: #E95420;
+}

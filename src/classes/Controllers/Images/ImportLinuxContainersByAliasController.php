@@ -1,0 +1,23 @@
+<?php
+namespace dhope0000\LXDClient\Controllers\Images;
+
+use dhope0000\LXDClient\Model\Images\ImportLinuxContainersByAlias;
+
+class ImportLinuxContainersByAliasController
+{
+    public function __construct(ImportLinuxContainersByAlias $importLinuxContainersByAlias)
+    {
+        $this->importLinuxContainersByAlias = $importLinuxContainersByAlias;
+    }
+
+    public function import(array $hosts, array $aliases)
+    {
+        $operations = $this->importLinuxContainersByAlias->import($hosts, $aliases);
+
+        return [
+            "state"=>"success",
+            "message"=>"Image Import Started",
+            "operations"=>$operations
+        ];
+    }
+}
