@@ -17,7 +17,7 @@ services:
       - ./sql/seed.sql:/docker-entrypoint-initdb.d/dump.sql
   webserver:
     build: ./examples/docker/webserver
-    image: triangle-cloud
+    image: lxd-manager
     ports:
       - "5000:443"
     volumes:
