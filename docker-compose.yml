@@ -1,0 +1,25 @@
+
+version: '2'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: lxdManagerPasswordComplex321!%
+      MYSQL_DATABASE: LXD_Manager
+      MYSQL_USER: lxd
+      MYSQL_PASSWORD: lxdManagerPasswordComplex321
+    volumes:
+      - /var/www/LxdManager/examples/database
+      - ./sql/seed.sql:/docker-entrypoint-initdb.d/dump.sql
+  webserver:
+    build: ./examples/docker/webserver
+    image: triangle-cloud
+    ports:
+      - "5000:443"
+    volumes:
+      - /var/www/LxdManager/examples/lxd_manager.conf:/etc/apache2/sites-enabled/000-default.conf
+      - /var/www/LxdManager:/var/www/LxdManager
