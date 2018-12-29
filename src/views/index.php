@@ -111,6 +111,10 @@ if ($haveServers->haveAny() !== true) {
                 getAll: "/api/Images/GetImagesController/getAllHostImages",
                 import: "/api/Images/ImportLinuxContainersByAliasController/import",
             },
+            networks: {
+                getAll: '/api/Networks/GetAllNetworksController/getAll',
+                get: '/api/Networks/GetNetworkController/getNetworkByName',
+            },
             cloudConfig: {
                 create: '/api/CloudConfig/CreateController/create',
                 update: '/api/CloudConfig/UpdateController/update',
@@ -146,6 +150,9 @@ if ($haveServers->haveAny() !== true) {
                 <li class="nav-item viewProfiles">
                     <a class="nav-link" href="#">Profiles</a>
                 </li>
+                <li class="nav-item viewNetworks">
+                    <a class="nav-link" href="#">Networks</a>
+                </li>
                 <li class="nav-item viewCloudConfigFiles">
                     <a class="nav-link" href="#">Cloud Config</a>
                 </li>
@@ -174,6 +181,7 @@ if ($haveServers->haveAny() !== true) {
                 require __DIR__ . "/boxes/profile.php";
                 require __DIR__ . "/boxes/cloudConfig.php";
                 require __DIR__ . "/boxes/images.php";
+                require __DIR__ . "/boxes/networks.php";
             ?>
         </div>
         <div class="col-md-2">
@@ -407,6 +415,10 @@ $(document).on("click", ".overview", function(){
 
 $(document).on("click", ".viewProfiles", function(){
     loadProfileView();
+});
+
+$(document).on("click", ".viewNetworks", function(){
+    loadNetworkView();
 });
 
 $(document).on("click", ".viewCloudConfigFiles", function(){
