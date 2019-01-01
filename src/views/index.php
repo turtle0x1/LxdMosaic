@@ -54,6 +54,10 @@ if ($haveServers->haveAny() !== true) {
     <script src="/assets/token/src/jquery.tokeninput.js"></script>
     <link rel="stylesheet" type="text/css" href="/assets/token/styles/token-input.css" />
     <link rel="stylesheet" type="text/css" href="/assets/token/styles/token-input-facebook.css" />
+
+
+    <script src="/socket.io/socket.io.js"></script>
+
     <script>
         var currentContainerDetails = null;
 
@@ -177,9 +181,9 @@ if ($haveServers->haveAny() !== true) {
             ?>
         </div>
         <div class="col-md-2">
-            <div class="tree well" id="operationsList">
+            <div class="tree well" id="">
             <b> Running Operations </b>
-
+            <div id="operationsList"></div>
             <!-- <div class="alert alert-info">
                 Operations are a bit vague in lxd versions preceding
                 lxd version 3.0, as they lack a description. This means
@@ -237,9 +241,9 @@ var statusCodeIconMap = {
     109: "Freezing",
     110: "fa fa-snowflake-o",
     111: "Thawed",
-    112: "Error",
-    200: "Success",
-    400: "Failure",
+    112: "fa fa-exclamation-triangle",
+    200: "fa fa-check",
+    400: "fa fa-exclamation-triangle",
     40:  "Cancelled",
 }
 
@@ -260,6 +264,22 @@ toastr.options = {
   "showMethod": "fadeIn",
   "hideMethod": "fadeOut"
 }
+
+var socket = io("lxd.local:3000");
+let seenOperationsIndex = {};
+var lastIndex = 0;
+socket.on('operationUpdate', function(msg){
+   let id = msg.metadata.id;
+   let status = msg.metadata.status_code;
+   let liItem = $("#operationsList").find("#" + id);
+   console.log(msg);
+   if(liItem.length > 0){
+       liItem.html("<span class='" + statusCodeIconMap[status] + "'></span>" + msg.metadata.description);
+   }else{
+       $("#operationsList").prepend("<div id='" + id + "'><span class='" + statusCodeIconMap[status] + "'></span>" + msg.metadata.description + "</div>");
+   }
+   // operationsList
+ });
 
 var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");

@@ -28,6 +28,13 @@ class RouteController
             $this->routeApi->route($explodedPath, $_POST);
         } elseif ($explodedPath[0] == "assets") {
             $this->routeAssets->route($explodedPath);
+        } elseif ($explodedPath[0] == "socket.io") {
+            $port = '3000';
+
+            header('Location: '
+                . $_SERVER['REQUEST_SCHEME']
+                . '://' . $_SERVER['HTTP_HOST'] . ':' . $port
+                . $_SERVER['REQUEST_URI']);
         } else {
             throw new \Exception("Dont understand the path", 1);
         }
