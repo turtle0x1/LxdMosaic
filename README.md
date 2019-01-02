@@ -13,6 +13,9 @@ of.
 
 ## Installation
 
+The prefered installation is currently docker but the install script should
+do the trick (only tested on ubuntu 18.04)
+
 ## Docker
 
 1. Install docker && docker-compose
@@ -29,28 +32,21 @@ of.
 5. Point your browser to `https://lxd.local:5000` (you can change from port 5000
     in docker-composer.yaml)
 
+## Install script
+**Warning this installs apache, mysql-server, php, git and other dependecies its
+best to run in a container or an empty vm to avoid clutering your system**
 
-## Manuall
+In examples you will find an bash script called install_with_clone.sh this will
+handle the installation of dependecies and setup this program.
 
-This has only been done on ubuntu 18.04 but it should work any where apache does
+Once you have run the script you should launch your browser and go to https://host_setup_run_on_ip
+or you can add the hosts ip to your host file with the name lxd.local
 
-1. Install apache, php & composer
+## Manual
 
-2. cd /var/www/
-
-3. git clone https://github.com/turtle0x1/LxdManager.git
-
-4. Install mysql file from sql/seed.sql this creates some empty for keeping track of
-   - Hosts and cert names
-   - Cloud config files and their revisions
-
-5. Setup access through a webserver (there is an apache config example under /examples)
-
-6. Add a hosts entry for your domain name (the default apache config uses lxd.local)
-
-7. Change .env.dist to .env and fill out the values
-
-8. Go to your browser and load the site
+The manual steps for deploying this can be read from the install script which
+will handle all the dependecies it should be commented well enough to serve
+as instructions!
 
 ## Notes
 
