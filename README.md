@@ -40,7 +40,19 @@ In examples you will find an bash script called install_with_clone.sh this will
 handle the installation of dependecies and setup this program.
 
 Once you have run the script you should launch your browser and go to https://host_setup_run_on_ip
-or you can add the hosts ip to your host file with the name lxd.local
+or you can add the hosts ip to your host file with the name lxd.local,
+
+It handles the cloning of the repository so you can just do;
+
+`curl https://raw.githubusercontent.com/turtle0x1/LxdManager/master/examples/install_with_clone.sh >> installLxdManger.sh`
+
+Then give the script execution permisions
+
+`chmod +x installLxdManger.sh`
+
+Then run bellow to setup the program
+
+`sudo ./installLxdManger.sh`
 
 ## Manual
 
