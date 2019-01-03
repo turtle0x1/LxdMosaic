@@ -9,7 +9,7 @@ if [[ !$EUID -eq 0 ]]; then
 fi
 
 # Install Dependecies
-apt-get install apache2 php7.2 php7.2-cli php7.2-json php7.2-mysql unzip zip mysql-server git -y
+apt-get install apache2 php7.2 php7.2-cli php7.2-json php7.2-mysql php7.2-dom unzip zip mysql-server git -y
 
 # Install composer
 
