@@ -265,7 +265,7 @@ toastr.options = {
   "hideMethod": "fadeOut"
 }
 
-var socket = io("", {rejectUnauthorized: false});
+var socket = io();
 
 socket.on('operationUpdate', function(msg){
    let id = msg.metadata.id;

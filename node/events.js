@@ -29,14 +29,14 @@ var con = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
+con.connect(function(err) {
+    if (err) {
+      throw err;
+    }
+});
+
 function createWebSockets()
 {
-
-    con.connect(function(err) {
-      if (err) {
-        throw err;
-      }
-
       con.query("SELECT * FROM Hosts", function (err, result, fields) {
         if (err) {
             throw err;
@@ -71,7 +71,6 @@ function createWebSockets()
             });
         }
       });
-    });
 }
 
 
