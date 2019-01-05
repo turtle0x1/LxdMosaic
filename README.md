@@ -16,6 +16,17 @@ of.
 The prefered installation is currently docker but the install script should
 do the trick (only tested on ubuntu 18.04)
 
+## LXD Hosts
+
+You need to enable access from the network on your lxd hosts first, you can do this by logging onto your hosts and executing the following (make sure to change the password from "some-secret_string") 
+
+```
+lxc config set core.https_address [::]
+lxc config set core.trust_password some-secret-string
+```
+
+When first accessing the web application it will ask you about your "trust password" which is the password you set in the last command
+
 ## Docker
 
 1. Install docker && docker-compose
