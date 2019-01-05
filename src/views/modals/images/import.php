@@ -21,7 +21,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="importImagesBtn">Add</button>
+        <button type="button" class="btn btn-primary" id="addImages">Add</button>
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@
         $("#imagesToUpload").empty().append(imageHtml);
     });
 
-    $("#modal-hosts-addImages").on("click", "#importImagesBtn", function(){
+    $("#modal-hosts-addImages").on("click", "#addImages", function(){
         let p = mapObjToSignleDimension($("#hostsToImportImagesTo").tokenInput("get"), "host");
 
         let x = {

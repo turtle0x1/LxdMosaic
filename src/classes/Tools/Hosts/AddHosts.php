@@ -5,17 +5,20 @@ namespace dhope0000\LXDClient\Tools\Hosts;
 use dhope0000\LXDClient\Model\Hosts\AddHost as AddHostModel;
 use dhope0000\LXDClient\Tools\Hosts\GenerateCert;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
+use dhope0000\LXDClient\Tools\Node\Hosts;
 
 class AddHosts
 {
     public function __construct(
         AddHostModel $addHost,
         GenerateCert $generateCert,
-        GetDetails $getDetails
+        GetDetails $getDetails,
+        Hosts $hosts
     ) {
         $this->generateCert = $generateCert;
         $this->addHost = $addHost;
         $this->getDetails = $getDetails;
+        $this->hosts = $hosts;
     }
 
     public function add(array $hostsDetails)
@@ -29,15 +32,19 @@ class AddHosts
                 throw new \Exception("Already have host under " . $hostName, 1);
             }
 
-            $this->generateCert->createCertAndPushToServer(
+            $result = $this->generateCert->createCertAndPushToServer(
                 $hostName,
                 $hostsDetail["trustPassword"]
             );
 
             $this->addHost->addHost(
                 $hostName,
-                $this->generateCert->generateName($hostName)
+                $result["shortPaths"]["key"],
+                $result["shortPaths"]["cert"],
+                $result["shortPaths"]["combined"]
             );
+
+            $this->hosts->reloadHosts();
         }
     }
 

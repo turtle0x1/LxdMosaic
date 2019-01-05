@@ -54,6 +54,10 @@ if ($haveServers->haveAny() !== true) {
     <script src="/assets/token/src/jquery.tokeninput.js"></script>
     <link rel="stylesheet" type="text/css" href="/assets/token/styles/token-input.css" />
     <link rel="stylesheet" type="text/css" href="/assets/token/styles/token-input-facebook.css" />
+
+
+    <script src="/socket.io/socket.io.js"></script>
+
     <script>
         var currentContainerDetails = null;
 
@@ -177,9 +181,9 @@ if ($haveServers->haveAny() !== true) {
             ?>
         </div>
         <div class="col-md-2">
-            <div class="tree well" id="operationsList">
-            <b> Running Operations </b>
-
+            <div class="tree well" id="">
+            <b> Operations </b>
+            <div id="operationsList"></div>
             <!-- <div class="alert alert-info">
                 Operations are a bit vague in lxd versions preceding
                 lxd version 3.0, as they lack a description. This means
@@ -237,9 +241,9 @@ var statusCodeIconMap = {
     109: "Freezing",
     110: "fa fa-snowflake-o",
     111: "Thawed",
-    112: "Error",
-    200: "Success",
-    400: "Failure",
+    112: "fa fa-exclamation-triangle",
+    200: "fa fa-check",
+    400: "fa fa-exclamation-triangle",
     40:  "Cancelled",
 }
 
@@ -259,6 +263,38 @@ toastr.options = {
   "hideEasing": "linear",
   "showMethod": "fadeIn",
   "hideMethod": "fadeOut"
+}
+
+var socket = io("", {rejectUnauthorized: false});
+
+socket.on('operationUpdate', function(msg){
+   let id = msg.metadata.id;
+   let icon = statusCodeIconMap[msg.metadata.status_code];
+   let description = msg.metadata.description;
+   let host = msg.host;
+   let hostList = $("#operationsList").find("[data-host='" + host + "']");
+
+   if(hostList.length == 0){
+       $("#operationsList").append("<div data-host='" + host + "'>"+
+            "<div class='text-center'><h5><u>" + host + "</u></h5></div>"+
+            "<div class='opList'></div></div>"
+        );
+   }
+
+   let hostOpList = hostList.find(".opList");
+
+   let liItem = hostOpList.find("#" + id);
+
+   if(liItem.length > 0){
+       liItem.html("<span class='" + icon + "'></span>" + description);
+   }else{
+       hostOpList.prepend(makeOperationHtmlItem(id, icon, description));
+   }
+});
+
+function makeOperationHtmlItem(id, icon, description)
+{
+    return "<div id='" + id + "'><span class='" + icon + "'></span>" + description + "</div>";
 }
 
 var editor = ace.edit("editor");

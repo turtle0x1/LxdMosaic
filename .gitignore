@@ -3,3 +3,4 @@ src/sensitiveData/certs/**
 .env
 build/**
 .php_cs.cache
+node_modules/**
