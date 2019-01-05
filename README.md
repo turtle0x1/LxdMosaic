@@ -59,11 +59,11 @@ It handles the cloning of the repository so you can just do;
 
 Then give the script execution permisions
 
-`chmod +x installLxdManger.sh`
+`chmod +x installLxdManager.sh`
 
 Then run bellow to setup the program
 
-`sudo ./installLxdManger.sh`
+`sudo ./installLxdManager.sh`
 
 ## Manual
 
