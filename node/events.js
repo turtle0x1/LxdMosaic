@@ -15,7 +15,7 @@ if (envImportResult.error) {
 // Https certificate and key file location for secure websockets + https server
 var privateKey  = fs.readFileSync('/etc/ssl/private/ssl-cert-snakeoil.key', 'utf8');
 var certificate = fs.readFileSync('/etc/ssl/certs/ssl-cert-snakeoil.pem', 'utf8');
-var certDir = "/var/www/LxdManager/src/sensitiveData/certs";
+var certDir = "/var/www/LxdManager/src/sensitiveData/certs/";
 
 var credentials = {key: privateKey, cert: certificate};
 var app = express();
