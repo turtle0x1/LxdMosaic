@@ -44,7 +44,7 @@ or you can add the hosts ip to your host file with the name lxd.local,
 
 It handles the cloning of the repository so you can just do;
 
-`curl https://raw.githubusercontent.com/turtle0x1/LxdManager/master/examples/install_with_clone.sh >> installLxdManger.sh`
+`curl https://raw.githubusercontent.com/turtle0x1/LxdManager/master/examples/install_with_clone.sh >> installLxdManager.sh`
 
 Then give the script execution permisions
 
