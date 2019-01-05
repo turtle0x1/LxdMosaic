@@ -29,46 +29,58 @@ var con = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
-con.connect(function(err) {
-  if (err) {
-    throw err;
-  }
+function createWebSockets()
+{
 
-  con.query("SELECT * FROM Hosts", function (err, result, fields) {
-    if (err) {
+    con.connect(function(err) {
+      if (err) {
         throw err;
-    }
-    for(i = 0; i < result.length; i++){
-        let lxdClientCert = certDir + result[i].Host_Cert_Only_File
-        let lxdClientKey = certDir + result[i].Host_Key_File
+      }
 
-        // Connecting to the lxd server/s
-        const wsoptions = {
-            cert: fs.readFileSync(lxdClientCert),
-            key: fs.readFileSync(lxdClientKey),
-            rejectUnauthorized: false,
+      con.query("SELECT * FROM Hosts", function (err, result, fields) {
+        if (err) {
+            throw err;
         }
+        for(i = 0; i < result.length; i++){
+            let lxdClientCert = certDir + result[i].Host_Cert_Only_File
+            let lxdClientKey = certDir + result[i].Host_Key_File
 
-        var portRegex = /:[0-9]+/;
+            // Connecting to the lxd server/s
+            const wsoptions = {
+                cert: fs.readFileSync(lxdClientCert),
+                key: fs.readFileSync(lxdClientKey),
+                rejectUnauthorized: false,
+            }
 
-        let hostWithOutProto = result[i].Host_Url_And_Port.replace("https://", "");
-        let hostWithOutProtoOrPort = hostWithOutProto.replace(portRegex, "");
+            var portRegex = /:[0-9]+/;
 
-        var ws = new WebSocket('wss://' + hostWithOutProto + '/1.0/events?type=operation', wsoptions);
+            let hostWithOutProto = result[i].Host_Url_And_Port.replace("https://", "");
+            let hostWithOutProtoOrPort = hostWithOutProto.replace(portRegex, "");
 
-        ws.on('error', (error) => {
-          console.log(error)
-        });
+            var ws = new WebSocket('wss://' + hostWithOutProto + '/1.0/events?type=operation', wsoptions);
 
-        ws.on('message', function(data, flags) {
-          var buf = Buffer.from(data)
-          let message = JSON.parse(data.toString());
-          message.host = hostWithOutProtoOrPort;
-          io.emit('operationUpdate', message);
-        });
-    }
-  });
-});
+            ws.on('error', (error) => {
+              console.log(error)
+            });
+
+            ws.on('message', function(data, flags) {
+              var buf = Buffer.from(data)
+              let message = JSON.parse(data.toString());
+              message.host = hostWithOutProtoOrPort;
+              io.emit('operationUpdate', message);
+            });
+        }
+      });
+    });
+}
+
 
 httpsServer.listen(3000, function(){
 });
+
+app.get('/hosts/reload/', function (req, res) {
+  createWebSockets();
+  res.send({success: "reloaded"});
+})
+
+createWebSockets();
