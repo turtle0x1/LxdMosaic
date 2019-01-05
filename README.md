@@ -15,20 +15,10 @@ of.
 
 ## Docker
 
-1. Install docker && docker-compose
+Docker was supported until the 0.1 release where a node server was added and
+I frankly didn't have the energry to keep it up to date!
 
-2. cd /var/www/ && git clone https://github.com/turtle0x1/LxdManager.git
-
-3. Change .env.dist to .env and ucommented the enviroment variables setup
-    for docker
-
-3. Run `docker-composer up` and this should build the webserver and database
-
-4. Add lxd.local to your hosts file (/etc/hosts ussually)
-
-5. Point your browser to `https://lxd.local:5000` (you can change from port 5000
-    in docker-composer.yaml)
-
+You should install this in a container or a VM!
 
 ## Manuall
 
