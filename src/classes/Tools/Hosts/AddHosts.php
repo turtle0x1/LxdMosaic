@@ -29,14 +29,16 @@ class AddHosts
                 throw new \Exception("Already have host under " . $hostName, 1);
             }
 
-            $this->generateCert->createCertAndPushToServer(
+            $result = $this->generateCert->createCertAndPushToServer(
                 $hostName,
                 $hostsDetail["trustPassword"]
             );
 
             $this->addHost->addHost(
                 $hostName,
-                $this->generateCert->generateName($hostName)
+                $result["shortPaths"]["key"],
+                $result["shortPaths"]["cert"],
+                $result["shortPaths"]["combined"]
             );
         }
     }

@@ -182,7 +182,7 @@ if ($haveServers->haveAny() !== true) {
         </div>
         <div class="col-md-2">
             <div class="tree well" id="">
-            <b> Running Operations </b>
+            <b> Operations </b>
             <div id="operationsList"></div>
             <!-- <div class="alert alert-info">
                 Operations are a bit vague in lxd versions preceding
@@ -265,21 +265,37 @@ toastr.options = {
   "hideMethod": "fadeOut"
 }
 
-var socket = io("lxd.local:3000");
-let seenOperationsIndex = {};
-var lastIndex = 0;
+var socket = io();
+
 socket.on('operationUpdate', function(msg){
    let id = msg.metadata.id;
-   let status = msg.metadata.status_code;
-   let liItem = $("#operationsList").find("#" + id);
-   console.log(msg);
-   if(liItem.length > 0){
-       liItem.html("<span class='" + statusCodeIconMap[status] + "'></span>" + msg.metadata.description);
-   }else{
-       $("#operationsList").prepend("<div id='" + id + "'><span class='" + statusCodeIconMap[status] + "'></span>" + msg.metadata.description + "</div>");
+   let icon = statusCodeIconMap[msg.metadata.status_code];
+   let description = msg.metadata.description;
+   let host = msg.host;
+   let hostList = $("#operationsList").find("[data-host='" + host + "']");
+
+   if(hostList.length == 0){
+       $("#operationsList").append("<div data-host='" + host + "'>"+
+            "<div class='text-center'><h5><u>" + host + "</u></h5></div>"+
+            "<div class='opList'></div></div>"
+        );
    }
-   // operationsList
- });
+
+   let hostOpList = hostList.find(".opList");
+
+   let liItem = hostOpList.find("#" + id);
+
+   if(liItem.length > 0){
+       liItem.html("<span class='" + icon + "'></span>" + description);
+   }else{
+       hostOpList.prepend(makeOperationHtmlItem(id, icon, description));
+   }
+});
+
+function makeOperationHtmlItem(id, icon, description)
+{
+    return "<div id='" + id + "'><span class='" + icon + "'></span>" + description + "</div>";
+}
 
 var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");

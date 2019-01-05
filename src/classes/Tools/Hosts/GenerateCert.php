@@ -26,25 +26,39 @@ class GenerateCert
 
     public function createCertAndPushToServer(
         $urlAndPort,
-        $trustPassword,
-        $pathToCert = null
+        $trustPassword
     ) {
-        if (is_null($pathToCert)) {
-            $pathToCert = $this->generateCertPathName($urlAndPort);
-            $this->generateCert($pathToCert);
+        $paths = $this->createCertKeyAndCombinedPaths($urlAndPort);
+
+        $this->generateCert($paths);
+
+        $lxdResponse = $this->addToServer($urlAndPort, $trustPassword, $paths["combined"]);
+
+        $shortPaths = $this->createShortPaths($paths);
+
+        return [
+            "shortPaths"=>$shortPaths,
+            "lxdResponse"=>$lxdResponse
+        ];
+    }
+
+    private function createCertKeyAndCombinedPaths($urlAndPort)
+    {
+        $host = parse_url($urlAndPort)["host"];
+
+        return [
+            "key"=>Constants::CERTS_DIR . $host . ".key",
+            "cert"=>Constants::CERTS_DIR . $host . ".cert",
+            "combined"=>Constants::CERTS_DIR . $host . ".combined"
+        ];
+    }
+
+    private function createShortPaths($pathsArray)
+    {
+        foreach ($pathsArray as $key => $path) {
+            $pathsArray[$key] = str_replace(Constants::CERTS_DIR, "", $path);
         }
-
-        return $this->addToServer($urlAndPort, $trustPassword, $pathToCert);
-    }
-
-    public function generateCertPathName($urlAndPort)
-    {
-        return Constants::CERTS_DIR . $this->generateName($urlAndPort);
-    }
-
-    public function generateName($urlAndPort)
-    {
-        return parse_url($urlAndPort)["host"] . ".cert";
+        return $pathsArray;
     }
 
     private function addToServer($urlAndPort, $trustPassword, $pathToCert)
@@ -54,7 +68,7 @@ class GenerateCert
         return $lxd->certificates->add(file_get_contents($pathToCert), $trustPassword);
     }
 
-    private function generateCert($pathToCert)
+    private function generateCert($paths)
     {
         // Generate certificate
         $privkey = openssl_pkey_new();
@@ -64,8 +78,19 @@ class GenerateCert
         // Generate strings
         openssl_x509_export($cert, $certString);
         openssl_pkey_export($privkey, $privkeyString);
-        if (file_put_contents($pathToCert, $certString.$privkeyString) != true) {
-            throw new \Exception("Couldn't save cert", 1);
+
+        if (file_put_contents($paths["key"], $privkeyString) != true) {
+            throw new \Exception("Couldn't store key file", 1);
         }
+
+        if (file_put_contents($paths["cert"], $certString) != true) {
+            throw new \Exception("Couldn't store cert file", 1);
+        }
+
+        if (file_put_contents($paths["combined"], $certString.$privkeyString) != true) {
+            throw new \Exception("Couldn't store combined file", 1);
+        }
+
+        return true;
     }
 }

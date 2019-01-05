@@ -1,48 +1,74 @@
 // This originated from https://gist.github.com/CalebEverett/bed94582b437ffe88f650819d772b682
 // and was modified to suite our needs
-const fs = require('fs');
-const WebSocket = require('ws');
+const fs = require('fs'),
+      WebSocket = require('ws'),
+      express = require('express'),
+      https = require('https'),
+      mysql = require('mysql');
 
+const envImportResult = require('dotenv').config({path: "/var/www/LxdManager/.env"});
+
+if (envImportResult.error) {
+  throw envImportResult.error
+}
+
+// Https certificate and key file location for secure websockets + https server
 var privateKey  = fs.readFileSync('/etc/ssl/private/ssl-cert-snakeoil.key', 'utf8');
 var certificate = fs.readFileSync('/etc/ssl/certs/ssl-cert-snakeoil.pem', 'utf8');
-var lxdClientCert = "";
-var lxdClientKey = "";
+var certDir = "../src/sensitiveData/certs/";
 
 var credentials = {key: privateKey, cert: certificate};
-var express = require('express');
 var app = express();
-
-var https = require('https');
-
-// your express configuration here
 var httpsServer = https.createServer(credentials, app);
 var io = require('socket.io')(httpsServer);
 
-// Connecting to the lxd server/s
-const wsoptions = {
-    cert: fs.readFileSync(lxdClientCert),
-    key: fs.readFileSync(lxdClientKey),
-    rejectUnauthorized: false
-}
-
-var ws = new WebSocket('wss://192.168.1.6:8443/1.0/events?type=operation', wsoptions);
-
-ws.on('open', function open() {
-  console.log('open for notifications')
+var con = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
 });
 
-ws.on('error', (error) => {
-  console.log(error)
-});
+con.connect(function(err) {
+  if (err) {
+    throw err;
+  }
 
-ws.on('message', function(data, flags) {
-  var buf = Buffer.from(data)
-  let message = JSON.parse(data.toString());
-  io.emit('operationUpdate', message);
-});
+  con.query("SELECT * FROM Hosts", function (err, result, fields) {
+    if (err) {
+        throw err;
+    }
+    for(i = 0; i < result.length; i++){
+        let lxdClientCert = certDir + result[i].Host_Cert_Only_File
+        let lxdClientKey = certDir + result[i].Host_Key_File
 
-//NOTE We run this socket there are no express endpoints (yet ?)
+        // Connecting to the lxd server/s
+        const wsoptions = {
+            cert: fs.readFileSync(lxdClientCert),
+            key: fs.readFileSync(lxdClientKey),
+            rejectUnauthorized: false,
+        }
+
+        var portRegex = /:[0-9]+/;
+
+        let hostWithOutProto = result[i].Host_Url_And_Port.replace("https://", "");
+        let hostWithOutProtoOrPort = hostWithOutProto.replace(portRegex, "");
+
+        var ws = new WebSocket('wss://' + hostWithOutProto + '/1.0/events?type=operation', wsoptions);
+
+        ws.on('error', (error) => {
+          console.log(error)
+        });
+
+        ws.on('message', function(data, flags) {
+          var buf = Buffer.from(data)
+          let message = JSON.parse(data.toString());
+          message.host = hostWithOutProtoOrPort;
+          io.emit('operationUpdate', message);
+        });
+    }
+  });
+});
 
 httpsServer.listen(3000, function(){
-  console.log('listening on *:3000');
 });
