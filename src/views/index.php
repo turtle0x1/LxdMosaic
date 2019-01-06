@@ -320,6 +320,17 @@ $(function(){
     loadServerOview();
 });
 
+var unknownServerDetails = {
+    cpu: {
+        sockets: [{vendor: "Unknown Vendor"}],
+        total: "Unknown Cpu Total"
+    },
+    memory: {
+        used: "Uknown Memory Use",
+        total: "Uknown Memory Total"
+    }
+};
+
 function loadServerOview()
 {
     ajaxRequest(globalUrls["hosts"].getOverview, null, function(data){
@@ -330,6 +341,18 @@ function loadServerOview()
         }
         let html = "";
         $.each(x, function(host, data){
+            let memoryUsed = unknownServerDetails.memory.used;
+            let memoryTotal = unknownServerDetails.memory.total;
+
+            if(data.hasOwnProperty("memory")){
+                memoryUsed = formatBytes(data.memory.used);
+                memoryTotal = formatBytes(data.memory.total);
+            }
+
+            if(!data.hasOwnProperty("cpu")){
+                data = unknownServerDetails;
+            }
+
             html += "<h5><u>" + host + "</u></h5>" +
                 "<dl class='row'>" +
                 "<dt class='col-sm-4'> CPU </dt> "+
@@ -339,8 +362,8 @@ function loadServerOview()
                     "</dd>" +
                 "<dt class='col-sm-4'> Memory (used / free) </dt>" +
                     "<dd class='col-sm-8'>" +
-                        formatBytes(data.memory.used) + " / " +
-                        formatBytes(data.memory.total) +
+                        memoryUsed + " / " +
+                        memoryTotal +
                     "</dd>" +
                 "</dl>";
         });

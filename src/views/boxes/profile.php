@@ -195,7 +195,14 @@ function viewProfile(profileId, host){
     currentProfileDetails.host =    host;
     let details = profileData[currentProfileDetails.host]["profiles"][currentProfileDetails.profile]["details"];
     let deviceTableRows = createTableRowsHtml(details.devices);
-    let profileUsedBy = createTableRowsHtml(details.used_by);
+
+    let usedBy = [{empty: "Couldn't get profiles uesd by (api version probably)"}];
+
+    if(details.hasOwnProperty("used_by")){
+        usedBy = details.used_by;
+    }
+
+    let profileUsedByHtml = createTableRowsHtml(usedBy);
     let configTr = createTableRowsHtml(details.config);
 
     let collpaseDetailsFunc = $.isEmptyObject(details.devices) ? "hide" : "show";
@@ -204,9 +211,9 @@ function viewProfile(profileId, host){
     $("#profileDevicesCard").collapse(collpaseDetailsFunc);
     $("#configDeviceCard").collapse(collpaseConfigFunc);
 
-    $("#profileBox #deleteProfile").attr("disabled", details.used_by.length > 0);
+    $("#profileBox #deleteProfile").attr("disabled", usedBy.length > 0);
     $("#profile-deviceData > tbody").empty().html(deviceTableRows);
-    $("#profile-usedByData > tbody").empty().html(profileUsedBy);
+    $("#profile-usedByData > tbody").empty().html(profileUsedByHtml);
     $("#profile-configData > tbody").empty().html(configTr);
     $("#profileOverview").hide();
     $(".boxSlide").hide();
