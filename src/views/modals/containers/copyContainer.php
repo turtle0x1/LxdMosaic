@@ -14,6 +14,15 @@
             <b> From Host: </b> <span id="copyModal-currentHost"></span>
         </h5>
         <div class="form-group">
+            <b><label>New Host</label></b>
+            <div class="alert alert-info">
+                You can read more <a target="_blank" href="https://github.com/turtle0x1/LxdManager/wiki/Copying-between-instances">
+                    here on github </a>
+                about copying to another host, additional steps are required!
+            </div>
+            <input class="form-control validateName" maxlength="63" id="copyModal-newHost"/>
+        </div>
+        <div class="form-group">
             <b><label>New Container Name</label></b>
             <input class="form-control validateName" maxlength="63" id="copyModal-newName"/>
         </div>
@@ -26,7 +35,17 @@
   </div>
 </div>
 <script>
+
+    $("#copyModal-newHost").tokenInput(globalUrls.hosts.search.search, {
+        queryParam: "host",
+        propertyToSearch: "host",
+        preventDuplicates: false,
+        tokenLimit: 1,
+        theme: "facebook"
+    });
+
     $("#modal-container-copy").on("shown.bs.modal", function(){
+
         if(!$.isPlainObject(currentContainerDetails)){
             $("#modal-container-migrate").modal("toggle");
             alert("required variable isn't right");
@@ -36,13 +55,22 @@
             alert("container isn't set");
             return false;
         }
+
+        $("#copyModal-newHost").tokenInput("add", {id: null, host: currentContainerDetails.host});
         $(".copyModal-containerName").html(currentContainerDetails.container);
         $("#copyModal-currentHost").html(currentContainerDetails.host);
     });
 
     $("#modal-container-copy").on("click", ".copy", function(){
+        let d = $("#copyModal-newHost").tokenInput("get");
+
+        if(d.length == 0){
+            return false;
+        }
+
         let x = $.extend({
-            newContainer: $("#copyModal-newName").val()
+            newContainer: $("#copyModal-newName").val(),
+            newHost: d[0]["host"]
         }, currentContainerDetails);
 
         ajaxRequest(globalUrls.containers.copy, x, function(data){
@@ -50,6 +78,7 @@
             if(x.hasOwnProperty("error")){
                 return false;
             }
+            loadContainerTreeAfter();
             $("#modal-container-copy").modal("toggle");
         });
     });
