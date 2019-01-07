@@ -21,7 +21,7 @@ curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
 # Install Dependecies
 apt-get install apache2 php7.2 php7.2-cli php7.2-json php7.2-mysql php7.2-dom php7.2-curl unzip zip mysql-server git nodejs -y
 
-npm install forever -g
+npm -g install pm2
 
 # Install composer
 
@@ -64,7 +64,11 @@ mysql < sql/0.1.0.sql
 
 cp examples/lxd_manager.conf /etc/apache2/sites-available/
 
-forever start node/events.js
+pm2 start node/events.js
+
+pm2 startup
+
+pm2 save
 
 # Enable required apache mods
 a2enmod ssl

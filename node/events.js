@@ -4,7 +4,8 @@ const fs = require('fs'),
       WebSocket = require('ws'),
       express = require('express'),
       https = require('https'),
-      mysql = require('mysql');
+      mysql = require('mysql'),
+      path = require('path');
 
 const envImportResult = require('dotenv').config({path: "/var/www/LxdManager/.env"});
 
@@ -80,6 +81,10 @@ httpsServer.listen(3000, function(){
 app.get('/hosts/reload/', function (req, res) {
   createWebSockets();
   res.send({success: "reloaded"});
-})
+});
+
+app.get('/', function(req, res){
+ res.sendFile(path.join(__dirname+'/index.html'));
+});
 
 createWebSockets();
