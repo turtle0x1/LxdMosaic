@@ -14,16 +14,22 @@
 
       <div id="container-headerCollapse" class="collapse show" role="tabpanel" aria-labelledby="container-header">
         <div class="card-block">
-            <div clas="row">
-                Host: <span id="container-hostNameDisplay"></span>
-                <br/>
-                <a
-                    href="https://github.com/lxc/pylxd/issues/242#issuecomment-323272318"
-                    target="_blank">
-                    CPU Time:
-                </a> <span id="container-cpuTime"></span>
-                <br/>
-                Created: <span id="container-createdAt"></span>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        Host: <span id="container-hostNameDisplay"></span>
+                        <br/>
+                        <a
+                            href="https://github.com/lxc/pylxd/issues/242#issuecomment-323272318"
+                            target="_blank">
+                            CPU Time:
+                        </a> <span id="container-cpuTime"></span>
+                        <br/>
+                        Created: <span id="container-createdAt"></span>
+                    </div>
+                    <div class="col-md-6" id="networkDetails">
+                    </div>
+                </div>
             </div>
         </div>
       </div>
@@ -45,40 +51,39 @@
 
       <div id="actionsCollapse" class="collapsed show" aria-expanded="true" role="tabpanel" aria-labelledby="container-actionsHeading">
         <div class="card-block">
-            <div clas="row">
-                <div class="form-group">
-                    <label><u> Change State </u></label>
-                    <select class="form-control" id="container-changeState">
-                        <option value="" selected="selected">  </option>
-                        <option value="startContainer"> Start </option>
-                        <option value="stopContainer"> Stop </option>
-                        <option value="restartContainer"> Restart </option>
-                        <option value="freezeContainer"> Freeze </option>
-                        <option value="unfreezeContainer"> Unfreeze </option>
-                    </select>
-                </div>
-                <hr/>
-                <button class="btn btn-block btn-success takeSnapshot">
-                    Snapshot
-                </button>
-                <hr/>
-                <button class="btn btn-block btn-info copyContainer">
-                    Copy
-                </button>
-                <button class="btn btn-block btn-primary migrateContainer">
-                    Migrate
-                </button>
-                <button class="btn btn-block btn-warning renameContainer">
-                    Rename
-                </button>
-                <button class="btn btn-block btn-danger deleteContainer">
-                    Delete
-                </button>
+            <div class="form-group">
+                <label><u> Change State </u></label>
+                <select class="form-control" id="container-changeState">
+                    <option value="" selected="selected">  </option>
+                    <option value="startContainer"> Start </option>
+                    <option value="stopContainer"> Stop </option>
+                    <option value="restartContainer"> Restart </option>
+                    <option value="freezeContainer"> Freeze </option>
+                    <option value="unfreezeContainer"> Unfreeze </option>
+                </select>
             </div>
+            <hr/>
+            <button class="btn btn-block btn-success takeSnapshot">
+                Snapshot
+            </button>
+            <hr/>
+            <button class="btn btn-block btn-info copyContainer">
+                Copy
+            </button>
+            <button class="btn btn-block btn-primary migrateContainer">
+                Migrate
+            </button>
+            <button class="btn btn-block btn-warning renameContainer">
+                Rename
+            </button>
+            <button class="btn btn-block btn-danger deleteContainer">
+                Delete
+            </button>
         </div>
       </div>
     </div>
-    <br/>
+</div>
+<div class="col-md-3">
     <div class="card">
       <div class="card-header" role="tab">
         <h5>
@@ -121,7 +126,7 @@
       </div>
     </div>
 </div>
-<div class="col-md-9">
+<div class="col-md-6">
       <div class="card">
         <div class="card-header" role="tab" id="headingOne">
           <h5>
@@ -139,16 +144,6 @@
                         <tr>
                             <th> Family </th>
                             <th> Ussage </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-              </table>
-              <table class="table table-striped" id="inetData">
-                    <thead class="thead-inverse">
-                        <tr>
-                            <th> Interface </th>
-                            <th> Address </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -227,24 +222,23 @@ function loadContainerView(data)
             profileTrHtml = "<tr><td colspan='999' class='text-center'> No Profiles </td></tr>"
         }else{
             $.each(x.details["profiles"], function(i, item){
-                profileTrHtml += "<tr><td>" + item + "</td></tr>";
+                profileTrHtml += "<tr><td><a href='#' class='toProfile'>" + item + "</a></td></tr>";
             });
         }
 
         $("#profileData >  tbody").empty().append(profileTrHtml);
 
         let networkData = "";
-        $.each(x["state"]["network"],  function(i, item){
-            networkData += "<tr><td class='text-center' colspan='999'>" + i + "</td></tr>";
-            $.each(item.addresses, function(i, item){
-                networkData += "<tr>" +
-                    "<td>" + item.family + "</td>" +
-                    "<td>" + item.address + "/" + item.netmask +
-                    "</tr>";
-            });
-        });
 
-        $("#inetData > tbody").empty().append(networkData);
+        $.each(x["state"]["network"],  function(i, item){
+            networkData += "<div class='padding-bottom: 2em;'><b>" + i + ":</b><br/>";
+            let lastKey = item.addresses.length - 1;
+            $.each(item.addresses, function(i, item){
+                networkData +=  "<span style='padding-left:3em'>" + item.address + "<br/></span>";
+            });
+            networkData += "</div>";
+        });
+        $("#networkDetails").empty().append(networkData);
 
         let memoryHtml = "";
 
@@ -261,6 +255,14 @@ function loadContainerView(data)
 
 $("#containerBox").on("click", ".renameContainer", function(){
     $("#modal-container-rename").modal("show");
+});
+
+$("#containerBox").on("click", ".toProfile", function(){
+    let profile = $(this).text();
+    loadProfileView(profile, currentContainerDetails.host, function(){
+        viewProfile(profile, currentContainerDetails.host);
+    });
+
 });
 
 $("#containerBox").on("click", ".copyContainer", function(){

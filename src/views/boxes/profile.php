@@ -141,7 +141,7 @@
 
 <script>
 
-function loadProfileView()
+function loadProfileView(selectedProfile = null, selectedHost = null, callback = null)
 {
     ajaxRequest(globalUrls["profiles"].getAllProfiles, null, function(data){
         var data = $.parseJSON(data);
@@ -153,16 +153,24 @@ function loadProfileView()
                 selected: true
             }
         }];
+        let matched = false;
         $.each(data, function(hostName, host){
             let profiles = [];
             $.each(host.profiles, function(profileName, details){
-                profiles.push({
+                let x = {
                     text: profileName,
                     icon: "fa fa-user",
                     type: "profile",
                     id: profileName,
                     host: hostName
-                });
+                };
+                if(hostName == selectedHost && profileName == selectedProfile ){
+                    matched = true;
+                    x.state = {
+                        selected: true
+                    };
+                }
+                profiles.push(x);
             });
             treeData.push({
                 text: hostName,
@@ -172,6 +180,9 @@ function loadProfileView()
         });
         $(".boxSlide, #profileDetails").hide();
         $("#profileOverview, #profileBox").show();
+        if(matched){
+            treeData[0].state.selected = false;
+        }
         $('#jsTreeSidebar').treeview({
             data: treeData,         // data is not optional
             levels: 5,
@@ -185,7 +196,9 @@ function loadProfileView()
             }
         });
         profileData = data;
-
+        if($.isFunction(callback)){
+            callback();
+        }
     });
     changeActiveNav(".viewProfiles");
 }
