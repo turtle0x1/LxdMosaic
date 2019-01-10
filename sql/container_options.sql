@@ -1,3 +1,5 @@
+USE `LXD_Manager`;
+
 CREATE TABLE `Container_Options` (
     `CO_ID` INT(11) NOT NULL AUTO_INCREMENT,
     `CO_Key` VARCHAR(255) NOT NULL,
