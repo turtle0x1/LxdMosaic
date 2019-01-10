@@ -79,9 +79,11 @@ if ($haveServers->haveAny() !== true) {
                 create: "/api/Containers/CreateController/create",
                 delete: "/api/Containers/DeleteContainerController/deleteContainer",
                 getDetails: "/api/Containers/GetContainerDetailsController/get",
+                getCurrentSettings: "/api/Containers/GetCurrentContainerSettingsController/get",
                 migrate: "/api/Containers/MigrateContainerController/migrateContainer",
                 copy: "/api/Containers/CopyContainerController/copyContainer",
                 rename: "/api/Containers/RenameContainerController/renameContainer",
+                setSettings: "/api/Containers/SetSettingsController/set",
                 state:{
                     startContainer: "/api/Containers/StateController/startContainer",
                     stopContainer: "/api/Containers/StateController/stopContainer",

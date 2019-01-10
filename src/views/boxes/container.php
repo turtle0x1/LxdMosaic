@@ -63,6 +63,9 @@
                 </select>
             </div>
             <hr/>
+            <button class="btn btn-block btn-primary editContainerSettings">
+                Settings
+            </button>
             <button class="btn btn-block btn-success takeSnapshot">
                 Snapshot
             </button>
@@ -277,6 +280,11 @@ $("#containerBox").on("click", ".takeSnapshot", function(){
     $("#modal-container-snapshot").modal("show");
 });
 
+$("#containerBox").on("click", ".editContainerSettings", function(){
+    console.log("asdf");
+    $("#modal-container-editSettings").modal("show");
+});
+
 $("#containerBox").on("click", ".deleteContainer", function(){
     $.confirm({
         title: 'Delete Container ' + currentContainerDetails.host + '/' + currentContainerDetails.container,
@@ -321,4 +329,5 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
     require __DIR__ . "/../modals/containers/copyContainer.php";
     require __DIR__ . "/../modals/containers/renameContainer.php";
     require __DIR__ . "/../modals/containers/createContainer.php";
+    require __DIR__ . "/../modals/containers/editSettings.php";
 ?>
