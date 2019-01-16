@@ -125,6 +125,9 @@ if ($haveServers->haveAny() !== true) {
                 getAll: '/api/CloudConfig/GetAllController/getAll',
                 getDetails: '/api/CloudConfig/GetDetailsController/get',
                 getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
+            },
+            user: {
+                setHostProject: '/api/User/SetSessionHostProjectController/set'
             }
         };
 
@@ -366,8 +369,21 @@ function loadServerOview()
                     "<dd class='col-sm-8'>" +
                         memoryUsed + " / " +
                         memoryTotal +
-                    "</dd>" +
-                "</dl>";
+                    "</dd>";
+
+                if(data.extensions.supportsProjects){
+                    html += "<dt class='col-sm-4'>Current Project</dt>"+
+                    "<dd><select class='changeHostProject form-control'>";
+                    $.each(data.projects, function(o, project){
+                        let selected = project == data.currentProject ? "selected" : "";
+                        html += "<option data-host='" + data.hostId  + "' "+
+                            " value='" + project + "' " + selected + ">"
+                            + project + "</option>"
+                    });
+                    html += "</select></dd>";
+                }
+
+                html += "</dl>";
         });
         $(".boxSlide").hide();
         $("#overviewBox").show();
@@ -457,6 +473,19 @@ $(document).on("click", "#addNewServer", function(){
     $("#modal-hosts-add").modal("show");
 });
 
+$(document).on("change", ".changeHostProject", function(){
+    let selected = $(this).find(":selected");
+
+    let x = {
+        hostId: selected.data("host"),
+        project: selected.val()
+    };
+
+    ajaxRequest(globalUrls.user.setHostProject, x, function(data){
+        createContainerTree();
+    })
+
+});
 
 $(document).on("click", ".overview", function(){
     changeActiveNav(".overview");
