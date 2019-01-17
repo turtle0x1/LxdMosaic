@@ -128,6 +128,11 @@ if ($haveServers->haveAny() !== true) {
             },
             user: {
                 setHostProject: '/api/User/SetSessionHostProjectController/set'
+            },
+            projects: {
+                create: '/api/Projects/CreateProjectController/create',
+                getAllFromHosts: '/api/Projects/GetHostsProjectsController/get',
+                info: '/api/Projects/GetProjectInfoController/get'
             }
         };
 
@@ -161,6 +166,9 @@ if ($haveServers->haveAny() !== true) {
                 <li class="nav-item viewImages">
                     <a class="nav-link" href="#">Images</a>
                 </li>
+                <li class="nav-item viewProjects">
+                    <a class="nav-link" href="#">Projects</a>
+                </li>
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -183,6 +191,7 @@ if ($haveServers->haveAny() !== true) {
                 require __DIR__ . "/boxes/profile.php";
                 require __DIR__ . "/boxes/cloudConfig.php";
                 require __DIR__ . "/boxes/images.php";
+                require __DIR__ . "/boxes/projects.php";
             ?>
         </div>
         <div class="col-md-2">
@@ -497,6 +506,10 @@ $(document).on("click", ".overview", function(){
 
 $(document).on("click", ".viewProfiles", function(){
     loadProfileView();
+});
+
+$(document).on("click", ".viewProjects", function(){
+    loadProjectView();
 });
 
 $(document).on("click", ".viewCloudConfigFiles", function(){
