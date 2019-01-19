@@ -43,11 +43,11 @@
         <div class="card">
           <div class="card-header" role="tab" id="projectsActionHeading">
             <h5>
-              <a id="projectName" data-toggle="collapse" data-parent="#accordion" href="#projectActions" aria-expanded="true" aria-controls="projectActions">
+              <a id="projectName" data-toggle="collapse" data-parent="#accordion" href="#projectDetailsHeading" aria-expanded="true" aria-controls="projectDetailsHeading">
               </a>
             </h5>
           </div>
-          <div id="projectActions" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
+          <div id="projectDetailsHeading" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
             <div class="card-block" id="projectDescription">
             </div>
           </div>
@@ -67,16 +67,71 @@
             <div id="projectActions" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
               <div class="card-block table-responsive">
                   <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-                    <div class="card-block">
+                    <div class="card-block text-center">
+                        <button class="btn btn-warning" id="renameProject">
+                            Rename
+                        </button>
+                        <button class="btn btn-danger" id="deleteProject">
+                            Delete
+                        </button>
                     </div>
                   </div>
               </div>
             </div>
           </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
+        <div class="card">
+          <div class="card-header" role="tab" id="projectsActionHeading">
+            <h5>
+              <a data-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
+                Used By
+              </a>
+            </h5>
+          </div>
+          <div id="projectUsedBy" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
+            <div class="card-block table-responsive">
+                <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+                    <table class="table table-bordered" id="projectUsedByTable">
+                        <thead>
+                            <tr>
+                                <th> Item </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          </div>
+        </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
+        <div class="card">
+          <div class="card-header" role="tab" id="projectsActionHeading">
+            <h5>
+              <a data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
+                Config
+              </a>
+            </h5>
+          </div>
+          <div id="projectConfig" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
+            <div class="card-block table-responsive">
+                <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+                    <table class="table table-bordered" id="projectConfigTable">
+                        <thead>
+                            <tr>
+                                <th> Key </th>
+                                <th> Value </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                 </div>
+            </div>
+          </div>
+        </div>
     </div>
 </div>
 </div>
@@ -152,18 +207,47 @@ function viewProject(project, host){
         data = $.parseJSON(data);
         $("#projectsOverview").hide();
         $("#projectDetails").show();
-        let description = data.description == "" ? "<b> No description </b>" : data.description;
+        let emptyDescription = data.description == "";
+        let description = emptyDescription ? "<b style='color: red;'> No description </b>" : data.description;
+        let collapseDescription = emptyDescription ? "hide" : "show";
         $("#projectName").text(data.name);
         $("#projectDescription").html(description);
+        $("#projectDetailsHeading").collapse(collapseDescription);
+        let projectUsedBy = "";
+        if(data.used_by.length == 0){
+            projectUsedBy += "<tr><td class='text-center'><b style='color: red;'>Not Used</b></td></tr>"
+        }else{
+            $.each(data.used_by, function(i, item){
+                projectUsedBy += "<tr><td>" + item + "</td></tr>"
+            });
+        }
+        $("#projectUsedByTable > tbody").empty().append(projectUsedBy);
+
+        let projectConfig = "";
+        $.each(data.config, function(i, item){
+            projectConfig += "<tr><td>" + i.replace("features.", "") + "</td><td>" + item + "</td></tr>"
+        });
+        $("#projectConfigTable > tbody").empty().append(projectConfig);
     });
 }
 
 
+$("#projectsBox").on("click", "#deleteProject", function(){
+    $("#modal-projects-create").modal("show");
+});
+
 $("#projectsBox").on("click", "#createProject", function(){
     $("#modal-projects-create").modal("show");
+});
+
+$("#projectsBox").on("click", "#renameProject", function(){
+    renameProjectObj.host = currentProject.host;
+    renameProjectObj.project = currentProject.project;
+    $("#modal-projects-rename").modal("show");
 });
 </script>
 
 <?php
     require __DIR__ . "/../modals/projects/createProject.php";
+    require __DIR__ . "/../modals/projects/renameProject.php";
 ?>
