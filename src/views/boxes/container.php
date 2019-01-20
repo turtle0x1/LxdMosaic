@@ -201,9 +201,12 @@ function loadContainerView(data)
         //NOTE Read more here https://github.com/lxc/pylxd/issues/242
         let containerCpuTime = nanoSecondsToHourMinutes(x["state"]["cpu"].usage);
 
+        let os = x.details.config.hasOwnProperty("image.asdf") ? x.details.config["image.os"] : "<b style='color: #ffc107'>Can't find OS</b>";
+        let version  = x.details.config.hasOwnProperty("image.asdf") ? x.details.config["image.version"] : "<b style='color: #ffc107'>Cant find verison</b>";
+
         $("#container-hostNameDisplay").text(data.host);
         $("#container-containerNameDisplay").text(data.container);
-        $("#container-imageDescription").text(" - " + x.details.config["image.os"] + " " + "(" + x.details.config["image.version"] + ")");
+        $("#container-imageDescription").html(" - " + os + " " + "(" + version + ")");
         $("#container-cpuTime").text(containerCpuTime);
         $("#container-createdAt").text(moment(x.details.create_at).format("MMM DD YYYY h:mm A"));
 
