@@ -132,7 +132,10 @@
 
         data = $.extend(data, currentContainerDetails);
         ajaxRequest(globalUrls.containers.setSettings, data, function(data){
-            console.log(data);
+            data = makeToastr(data);
+            if(data.state == "success"){
+                $("#modal-container-editSettings").modal("toggle");
+            }
         });
     });
 

@@ -284,7 +284,6 @@ $("#containerBox").on("click", ".takeSnapshot", function(){
 });
 
 $("#containerBox").on("click", ".editContainerSettings", function(){
-    console.log("asdf");
     $("#modal-container-editSettings").modal("show");
 });
 
