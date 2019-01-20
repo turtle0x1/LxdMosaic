@@ -286,7 +286,7 @@ var socket = io();
 socket.on('operationUpdate', function(msg){
    let id = msg.metadata.id;
    let icon = statusCodeIconMap[msg.metadata.status_code];
-   let description = msg.metadata.description;
+   let description = msg.metadata.hasOwnProperty("description") ? msg.metadata.description : "No Description Available";
    let host = msg.host;
    let hostList = $("#operationsList").find("[data-host='" + host + "']");
 
