@@ -6,14 +6,16 @@ use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 use \Opensaucesystems\Lxd\Client;
 use dhope0000\LXDClient\Constants\Constants;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class LxdClient
 {
     private $clientBag = [];
 
-    public function __construct(GetDetails $getDetails)
+    public function __construct(GetDetails $getDetails, Session $session)
     {
         $this->getDetails = $getDetails;
+        $this->session = $session;
     }
 
     public function getClientByUrl($url, $checkCache = true)
@@ -22,7 +24,7 @@ class LxdClient
         return $this->getANewClient($hostId, $checkCache);
     }
 
-    public function getANewClient($hostId, $checkCache = true)
+    public function getANewClient($hostId, $checkCache = true, $setProject = true)
     {
         $hostDetails = $this->getDetails->getAll($hostId);
 
@@ -36,7 +38,9 @@ class LxdClient
 
         $certPath = $this->createFullcertPath($hostDetails["Host_Cert_Path"]);
         $config = $this->createConfigArray($certPath);
-        return $this->createNewClient($hostDetails["Host_Url_And_Port"], $config);
+        $client = $this->createNewClient($hostDetails["Host_Url_And_Port"], $config);
+        $client->setProject($this->session->get("host/$hostId/project", "default"));
+        return $client;
     }
 
     private function createFullcertPath(string $certName)

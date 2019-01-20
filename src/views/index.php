@@ -125,6 +125,16 @@ if ($haveServers->haveAny() !== true) {
                 getAll: '/api/CloudConfig/GetAllController/getAll',
                 getDetails: '/api/CloudConfig/GetDetailsController/get',
                 getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
+            },
+            user: {
+                setHostProject: '/api/User/SetSessionHostProjectController/set'
+            },
+            projects: {
+                create: '/api/Projects/CreateProjectController/create',
+                getAllFromHosts: '/api/Projects/GetHostsProjectsController/get',
+                info: '/api/Projects/GetProjectInfoController/get',
+                rename: '/api/Projects/RenameProjectController/rename',
+                delete: '/api/Projects/DeleteProjectController/delete',
             }
         };
 
@@ -158,6 +168,9 @@ if ($haveServers->haveAny() !== true) {
                 <li class="nav-item viewImages">
                     <a class="nav-link" href="#">Images</a>
                 </li>
+                <li class="nav-item viewProjects">
+                    <a class="nav-link" href="#">Projects</a>
+                </li>
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -180,6 +193,7 @@ if ($haveServers->haveAny() !== true) {
                 require __DIR__ . "/boxes/profile.php";
                 require __DIR__ . "/boxes/cloudConfig.php";
                 require __DIR__ . "/boxes/images.php";
+                require __DIR__ . "/boxes/projects.php";
             ?>
         </div>
         <div class="col-md-2">
@@ -366,8 +380,21 @@ function loadServerOview()
                     "<dd class='col-sm-8'>" +
                         memoryUsed + " / " +
                         memoryTotal +
-                    "</dd>" +
-                "</dl>";
+                    "</dd>";
+
+                if(data.extensions.supportsProjects){
+                    html += "<dt class='col-sm-4'>Current Project</dt>"+
+                    "<dd><select class='changeHostProject form-control'>";
+                    $.each(data.projects, function(o, project){
+                        let selected = project == data.currentProject ? "selected" : "";
+                        html += "<option data-host='" + data.hostId  + "' "+
+                            " value='" + project + "' " + selected + ">"
+                            + project + "</option>"
+                    });
+                    html += "</select></dd>";
+                }
+
+                html += "</dl>";
         });
         $(".boxSlide").hide();
         $("#overviewBox").show();
@@ -457,6 +484,19 @@ $(document).on("click", "#addNewServer", function(){
     $("#modal-hosts-add").modal("show");
 });
 
+$(document).on("change", ".changeHostProject", function(){
+    let selected = $(this).find(":selected");
+
+    let x = {
+        hostId: selected.data("host"),
+        project: selected.val()
+    };
+
+    ajaxRequest(globalUrls.user.setHostProject, x, function(data){
+        createContainerTree();
+    })
+
+});
 
 $(document).on("click", ".overview", function(){
     changeActiveNav(".overview");
@@ -468,6 +508,10 @@ $(document).on("click", ".overview", function(){
 
 $(document).on("click", ".viewProfiles", function(){
     loadProfileView();
+});
+
+$(document).on("click", ".viewProjects", function(){
+    loadProjectView();
 });
 
 $(document).on("click", ".viewCloudConfigFiles", function(){
