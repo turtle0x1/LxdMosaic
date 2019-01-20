@@ -133,7 +133,8 @@ if ($haveServers->haveAny() !== true) {
                 create: '/api/Projects/CreateProjectController/create',
                 getAllFromHosts: '/api/Projects/GetHostsProjectsController/get',
                 info: '/api/Projects/GetProjectInfoController/get',
-                rename: '/api/Projects/RenameProjectController/rename'
+                rename: '/api/Projects/RenameProjectController/rename',
+                delete: '/api/Projects/DeleteProjectController/delete',
             }
         };
 

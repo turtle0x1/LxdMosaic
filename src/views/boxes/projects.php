@@ -68,10 +68,10 @@
               <div class="card-block table-responsive">
                   <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
                     <div class="card-block text-center">
-                        <button class="btn btn-warning" id="renameProject">
+                        <button class="btn btn-block btn-warning" id="renameProject">
                             Rename
                         </button>
-                        <button class="btn btn-danger" id="deleteProject">
+                        <button class="btn btn-block btn-danger" id="deleteProject">
                             Delete
                         </button>
                     </div>
@@ -214,13 +214,18 @@ function viewProject(project, host){
         $("#projectDescription").html(description);
         $("#projectDetailsHeading").collapse(collapseDescription);
         let projectUsedBy = "";
-        if(data.used_by.length == 0){
+        let emptyProject = data.used_by.length == 0;
+        if(emptyProject){
             projectUsedBy += "<tr><td class='text-center'><b style='color: red;'>Not Used</b></td></tr>"
         }else{
             $.each(data.used_by, function(i, item){
                 projectUsedBy += "<tr><td>" + item + "</td></tr>"
             });
         }
+
+        $("#projectsBox #deleteProject").attr("disabled", !emptyProject);
+        $("#projectsBox #renameProject").attr("disabled", !emptyProject);
+        
         $("#projectUsedByTable > tbody").empty().append(projectUsedBy);
 
         let projectConfig = "";
@@ -233,7 +238,13 @@ function viewProject(project, host){
 
 
 $("#projectsBox").on("click", "#deleteProject", function(){
-    $("#modal-projects-create").modal("show");
+    ajaxRequest(globalUrls.projects.delete, currentProject, function(data){
+        data = makeToastr(data);
+        if(data.state == "success"){
+            loadProjectView();
+
+        }
+    });
 });
 
 $("#projectsBox").on("click", "#createProject", function(){
