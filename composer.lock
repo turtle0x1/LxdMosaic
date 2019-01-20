@@ -91,16 +91,16 @@
         },
         {
             "name": "dhope0000/lxd",
-            "version": "v0.10.0",
+            "version": "v0.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/turtle0x1/php-lxd.git",
-                "reference": "8d07bcf19de74f665b153460fb0d5b8d6ef6fdb3"
+                "reference": "f55e320c13cceef1cd4be60535340e3cefea972b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/8d07bcf19de74f665b153460fb0d5b8d6ef6fdb3",
-                "reference": "8d07bcf19de74f665b153460fb0d5b8d6ef6fdb3",
+                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/f55e320c13cceef1cd4be60535340e3cefea972b",
+                "reference": "f55e320c13cceef1cd4be60535340e3cefea972b",
                 "shasum": ""
             },
             "require": {
@@ -156,7 +156,7 @@
                 "lxd",
                 "wrapper"
             ],
-            "time": "2019-01-16T21:44:40+00:00"
+            "time": "2019-01-20T16:02:10+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
