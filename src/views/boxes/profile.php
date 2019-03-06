@@ -200,7 +200,6 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
             callback();
         }
     });
-    changeActiveNav(".viewProfiles");
 }
 
 function viewProfile(profileId, host){

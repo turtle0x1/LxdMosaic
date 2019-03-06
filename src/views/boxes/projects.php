@@ -195,8 +195,6 @@ function loadProjectView()
                 }
             }
         });
-
-        changeActiveNav(".viewProjects");
     });
 }
 
@@ -225,7 +223,7 @@ function viewProject(project, host){
 
         $("#projectsBox #deleteProject").attr("disabled", !emptyProject);
         $("#projectsBox #renameProject").attr("disabled", !emptyProject);
-        
+
         $("#projectUsedByTable > tbody").empty().append(projectUsedBy);
 
         let projectConfig = "";

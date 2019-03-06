@@ -32,7 +32,7 @@
                 <tbody>
                 </tbody>
             </table>
-            <div id="remoteImagesTableBox">
+            <div id="remoteImagesTableBox" class="table-responsive">
                 <table class="table table-responsive" id="remoteImagesTable">
                 </table>
             </div>
@@ -123,7 +123,7 @@
             $("#imagesTable").hide();
             if(dataTable !== null){
                 dataTable.clear();
-                dataTable.destroy();    
+                dataTable.destroy();
             }
 
             $("#remoteImagesTable").empty().append(html).show();
@@ -164,11 +164,11 @@
     }
 
     $(document).on("click", ".viewImages", function(){
+        setBreadcrumb("Images", "viewImages active");
         loadLocalImages();
-        changeActiveNav(".viewImages");
         var treeData = [
             {
-                text: "Local Images",
+                text: " Local Images",
                 type: "localImages",
                 icon: "fa fa-home",
                 state: {
@@ -176,9 +176,9 @@
                 }
             },
             {
-                text: "Linux Containers Org",
+                text: " Linux Containers Org",
                 type: "linuxContainersOrg",
-                icon: "fa fa-cloud-download"
+                icon: "fas fa-cloud-download-alt"
             }
         ]
         $('#jsTreeSidebar').treeview({

@@ -1,46 +1,45 @@
 <div id="containerBox" class="boxSlide">
 <div class="row">
     <div class="col-md-12">
-    <div class="card">
-      <div class="card-header" role="tab" id="container-header">
-        <h5>
-          <a data-toggle="collapse" data-parent="#accordion" href="#container-headerCollapse" aria-expanded="true" aria-controls="container-headerCollapse">
-              <span id="container-containerNameDisplay"></span>
-              <span id="container-currentState"></span>
-              <span id="container-imageDescription"></span>
-          </a>
-        </h5>
-      </div>
-
-      <div id="container-headerCollapse" class="collapse show" role="tabpanel" aria-labelledby="container-header">
-        <div class="card-block">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        Host: <span id="container-hostNameDisplay"></span>
-                        <br/>
-                        <a
-                            href="https://github.com/lxc/pylxd/issues/242#issuecomment-323272318"
-                            target="_blank">
-                            CPU Time:
-                        </a> <span id="container-cpuTime"></span>
-                        <br/>
-                        Created: <span id="container-createdAt"></span>
-                    </div>
-                    <div class="col-md-6" id="networkDetails">
-                    </div>
-                </div>
-            </div>
+        <h4> <u>
+            <span id="container-containerNameDisplay"></span>
+            <span id="container-currentState"></span>
+            <span id="container-imageDescription"></span>
+        </u></h4>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-white bg-success">
+          <div class="card-body">
+              <h5> <u> Container Details </u> </h5>
+              Host: <span id="container-hostNameDisplay"></span>
+              <br/>
+              <a
+                  href="https://github.com/lxc/pylxd/issues/242#issuecomment-323272318"
+                  target="_blank">
+                  CPU Time:
+              </a> <span id="container-cpuTime"></span>
+              <br/>
+              Created: <span id="container-createdAt"></span>
+          </div>
         </div>
-      </div>
     </div>
+    <div class="col-md-6">
+        <div class="card text-white bg-primary">
+          <div class="card-body">
+            <h5> <u> Network Information </u> </h5>
+                <div class="col-md-12" id="networkDetails">
+                </div>
+
+          </div>
+        </div>
     </div>
+
 </div>
 <br/>
 <div class="row">
 <!-- <h4> Container: <`span id="containerName"></span> </h4> -->
 <div class="col-md-3">
-    <div class="card">
+    <div class="card card-accent-danger">
       <div class="card-header" role="tab" id="container-actionsHeading">
         <h5>
           <a data-toggle="collapse" data-parent="#accordion" href="#actionsCollapse" aria-expanded="true" aria-controls="container-actionsCollapse">
@@ -134,7 +133,7 @@
         <div class="card-header" role="tab" id="headingOne">
           <h5>
             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              Details
+              Memory Details
             </a>
           </h5>
         </div>
@@ -237,6 +236,9 @@ function loadContainerView(data)
         let networkData = "";
 
         $.each(x["state"]["network"],  function(i, item){
+            if(i == "lo"){
+                return;
+            }
             networkData += "<div class='padding-bottom: 2em;'><b>" + i + ":</b><br/>";
             let lastKey = item.addresses.length - 1;
             $.each(item.addresses, function(i, item){
