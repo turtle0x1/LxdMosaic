@@ -37,7 +37,7 @@ if ($haveServers->haveAny() === true) {
     <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h1 class='text-center'><u> LXD Manager </u></h1>
+            <h1 class='text-center'><u> LXD Mosaic </u></h1>
             <h4 class=''> Add Your Hosts
                 <button class="btn btn-sm btn-primary" id="addServer">
                     <i class="fa fa-plus"></i>

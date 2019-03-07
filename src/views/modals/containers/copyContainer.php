@@ -16,7 +16,7 @@
         <div class="form-group">
             <b><label>New Host</label></b>
             <div class="alert alert-info">
-                You can read more <a target="_blank" href="https://github.com/turtle0x1/LxdManager/wiki/Copying-between-instances">
+                You can read more <a target="_blank" href="https://github.com/turtle0x1/LxdMosaic/wiki/Copying-between-instances">
                     here on github </a>
                 about copying to another host, additional steps are required!
             </div>

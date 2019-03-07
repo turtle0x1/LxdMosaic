@@ -37,15 +37,15 @@ handle the installation of dependencies and setup this program.
 
 It handles the cloning of the repository so you can just do;
 
-`curl https://raw.githubusercontent.com/turtle0x1/LxdManager/master/examples/install_with_clone.sh >> installLxdManager.sh`
+`curl https://raw.githubusercontent.com/turtle0x1/LxdMosaic/master/examples/install_with_clone.sh >> installLxdMosaic.sh`
 
 Then give the script execution permissions
 
-`chmod +x installLxdManager.sh`
+`chmod +x installLxdMosaic.sh`
 
 Then run bellow to setup the program
 
-`sudo ./installLxdManager.sh`
+`sudo ./installLxdMosaic.sh`
 
 Once installation is complete you need to go to into your browser and goto;
 
