@@ -1,14 +1,14 @@
 <div id="containerBox" class="boxSlide">
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 text-center">
         <h4> <u>
-            <span id="container-containerNameDisplay"></span>
             <span id="container-currentState"></span>
+            <span id="container-containerNameDisplay"></span>
             <span id="container-imageDescription"></span>
         </u></h4>
     </div>
     <div class="col-md-6">
-        <div class="card text-white bg-success">
+        <div class="card text-white bg-deepblue">
           <div class="card-body">
               <h5> <u> Container Details </u> </h5>
               Host: <span id="container-hostNameDisplay"></span>
@@ -17,7 +17,7 @@
                   href="https://github.com/lxc/pylxd/issues/242#issuecomment-323272318"
                   target="_blank">
                   CPU Time:
-              </a> <span id="container-cpuTime"></span>
+              </a><span id="container-cpuTime"></span>
               <br/>
               Created: <span id="container-createdAt"></span>
           </div>
@@ -86,7 +86,7 @@
     </div>
 </div>
 <div class="col-md-3">
-    <div class="card">
+    <div class="card border-primary">
       <div class="card-header" role="tab">
         <h5>
             Profiles
@@ -94,7 +94,7 @@
       </div>
       <div class="collapse show" role="tabpanel" aria-labelledby="headingOne">
         <div class="card-block table-responsive">
-            <table class="table"id="profileData">
+            <table class="table table-bordered"id="profileData">
                   <thead class="thead-inverse">
                       <tr>
                           <th> Name </th>
@@ -107,7 +107,7 @@
       </div>
     </div>
     <br/>
-    <div class="card">
+    <div class="card border-primary">
       <div class="card-header" role="tab">
         <h5>
             Snapshots
@@ -115,7 +115,7 @@
       </div>
       <div class="collapse show" role="tabpanel" aria-labelledby="headingOne">
         <div class="card-block table-responsive">
-            <table class="table"id="snapshotData">
+            <table class="table table-bordered"id="snapshotData">
                   <thead class="thead-inverse">
                       <tr>
                           <th> Name </th>
@@ -129,7 +129,7 @@
     </div>
 </div>
 <div class="col-md-6">
-      <div class="card">
+      <div class="card card-accent-success">
         <div class="card-header" role="tab" id="headingOne">
           <h5>
             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -188,13 +188,14 @@ function loadContainerView(data)
             return false;
         }
 
+        addBreadcrumbs([data.host, "container", data.container ], ["", "", "active"]);
 
         let disableActions = x.state.status_code !== 102;
 
         $(".renameContainer").attr("disabled", disableActions);
         $(".deleteContainer").attr("disabled", disableActions);
 
-        $("#container-currentState").text(x["state"]["status"]);
+        $("#container-currentState").html(`<i class="` +statusCodeIconMap[x["state"]["status_code"]] +`"></i>`);
         $("#container-changeState").val("");
 
         //NOTE Read more here https://github.com/lxc/pylxd/issues/242

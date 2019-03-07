@@ -47,7 +47,6 @@
 
     $(function(){
         $("#importImagesBtn").hide();
-        // dataTable = $("#remoteImagesTable").DataTable();
     });
 
     function loadLocalImagesAfter(milSeconds = 2000)
@@ -133,9 +132,6 @@
 
     function loadLocalImages()
     {
-        if(dataTable !== null){
-            // dataTable.destroy();
-        }
         ajaxRequest(globalUrls["images"].getAll, null, function(data){
             let x = $.parseJSON(data);
             if(x.hasOwnProperty("error")){
@@ -165,6 +161,7 @@
 
     $(document).on("click", ".viewImages", function(){
         setBreadcrumb("Images", "viewImages active");
+        changeActiveNav(".viewImages");
         loadLocalImages();
         var treeData = [
             {
@@ -182,7 +179,7 @@
             }
         ]
         $('#jsTreeSidebar').treeview({
-            data: treeData,         // data is not optional
+            data: treeData,
             levels: 5,
             onNodeSelected: function(event, node) {
                 if(node.type == "localImages"){

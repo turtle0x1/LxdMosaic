@@ -17,7 +17,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script>
 
 
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
       <!-- jqueryConfirm assets -->
       <link rel="stylesheet" href="/assets/jqueryConfirm/dist/jquery-confirm.min.css">
@@ -26,6 +26,8 @@
       <!-- Ace web editor  -->
       <script src="/assets/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 
+      <!-- Main styles for this application-->
+      <link href="/assets/coreui/style.css" rel="stylesheet">
 
       <link rel="stylesheet" href="/assets/styles.css">
 
@@ -41,8 +43,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
       <title>LXD Mosaic</title>
-      <!-- Main styles for this application-->
-      <link href="/assets/coreui/style.css" rel="stylesheet">
+
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
       <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
       <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -158,23 +159,42 @@
               $(".breadcrumb").empty().append(createBreadcrumbItemHtml(name, classes))
           }
 
-          function addToBreadcrumbs(name, classes)
+          function addBreadcrumbs(names, classes, preserveRoot = true)
           {
-              $(".breadcrumb").append(createBreadcrumbItemHtml(name, classes))
+            if(preserveRoot){
+                $(".breadcrumb").find(".breadcrumb-item:gt(0)").remove();
+            }else{
+                $(".breadcrumb").empty();
+            }
+
+            $(".breadcrumb").find(".active").removeClass("active");
+            let items = "";
+
+            $.each(names, function(i, item){
+                items += createBreadcrumbItemHtml(item, classes[i]);
+            })
+
+            $(".breadcrumb").append(items)
+          }
+
+          function changeActiveNav(newActiveSelector)
+          {
+              $(".sidebar").find(".active").removeClass("active");
+              $(".sidebar").find(newActiveSelector).parent(".nav-item").addClass("active");
           }
       </script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
     <header class="app-header navbar">
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
-        <i class="fas fa-bars" style="color: red;"></i>
+        <i class="fas fa-bars" style="color: #dd4814;"></i>
       </button>
       <a class="navbar-brand" href="#">
         <img class="navbar-brand-full" src="img/brand/logo.svg" width="89" height="25" alt="LXD Mosaic">
         <img class="navbar-brand-minimized" src="img/brand/sygnet.svg" width="30" height="30" alt="LXD Mosaic">
       </a>
       <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
-        <i class="fas fa-bars" style="color: red;"></i>
+        <i class="fas fa-bars" style="color: #dd4814;"></i>
       </button>
       <ul class="nav navbar-nav ml-auto">
       </ul>
@@ -184,7 +204,7 @@
       <div class="sidebar">
         <nav class="sidebar-nav">
           <ul class="nav">
-            <li class="nav-item">
+            <li class="nav-item active">
               <a class="nav-link overview">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
               </a>
@@ -243,15 +263,11 @@
         </div>
       </main>
     </div>
-    <script src="/assets/coreui/coreui.js"></script>
   </body>
 </html>
 <script type='text/javascript'>
 
 var profileData = null;
-
-
-// var currentContainerListObj = null;
 
 var statusCodeMap = {
     100: "OperationCreated",
@@ -283,7 +299,7 @@ var statusCodeIconMap = {
     107: "fa fa-stop",
     108: "Aborting",
     109: "Freezing",
-    110: "fa fa-snowflake-o",
+    110: "fas fa-snowflake",
     111: "Thawed",
     112: "fa fa-exclamation-triangle",
     200: "fa fa-check",
@@ -385,6 +401,7 @@ var unknownServerDetails = {
 
 function loadServerOview()
 {
+    setBreadcrumb("Dashboard", "active");
     ajaxRequest(globalUrls["hosts"].getOverview, null, function(data){
         let x = $.parseJSON(data);
         if(x.hasOwnProperty("error")){
@@ -409,8 +426,6 @@ function loadServerOview()
 
             let p = emptyServerBox();
 
-            console.log(p);
-
             if(data.extensions.supportsProjects){
                 let projects = "";
                 $.each(data.projects, function(o, project){
@@ -429,22 +444,6 @@ function loadServerOview()
             $(p).find(".cpuDetails").text(data.cpu.sockets[0].vendor);
 
             $("#serverOverviewDetails").append(p);
-
-            // html += "<h5><u>" + host + "</u></h5>" +
-            //     "<dl class='row'>" +
-            //     "<dt class='col-sm-4'> CPU </dt> "+
-            //         "<dd class='col-sm-8'>" +
-            //
-            //         "</dd>" +
-            //     "<dt class='col-sm-4'> Memory (used / free) </dt>" +
-            //         "<dd class='col-sm-8'>" +
-            //             memoryUsed + " / " +
-            //             memoryTotal +
-            //         "</dd>";
-            //
-
-            //
-            //     html += "</dl>";
         });
         $(".boxSlide").hide();
         $("#overviewBox").show();
@@ -474,7 +473,7 @@ function createContainerTree(){
             })
         });
         $('#jsTreeSidebar').treeview({
-            data: treeData,         // data is not optional
+            data: treeData,
             levels: 5,
             onNodeSelected: function(event, node) {
                 if(node.type == "container"){
@@ -500,7 +499,6 @@ function formatBytes(bytes,decimals) {
 
 function setContDetsByTreeItem(node)
 {
-    // currentContainerListObj =  node;
     currentContainerDetails = {
         container: node.text,
         host: node.host
@@ -552,6 +550,7 @@ $(document).on("click", ".overview", function(){
     setBreadcrumb("Dashboard", "overview active");
     createContainerTree();
     loadServerOview();
+    changeActiveNav(".overview")
     $(".boxSlide").hide();
     $("#overviewBox").show();
 });
@@ -559,16 +558,19 @@ $(document).on("click", ".overview", function(){
 $(document).on("click", ".viewProfiles", function(){
     setBreadcrumb("Profiles", "viewProfiles active");
     loadProfileView();
+    changeActiveNav(".viewProfiles")
 });
 
 $(document).on("click", ".viewProjects", function(){
     setBreadcrumb("Projects", "viewProjects active");
     loadProjectView();
+    changeActiveNav(".viewProjects")
 });
 
 $(document).on("click", ".viewCloudConfigFiles", function(){
     setBreadcrumb("Cloud Config", "viewCloudConfigFiles active");
     loadCloudConfigTree();
+    changeActiveNav(".viewCloudConfigFiles")
 });
 
 function createTableRowsHtml(data, childPropertyToSearch)

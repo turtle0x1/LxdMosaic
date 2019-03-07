@@ -16,21 +16,6 @@
             </div>
           </div>
     </div>
-    <div class="col-md-3">
-          <div class="card">
-            <div class="card-header" role="tab" id="headingOne">
-              <h5>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Actions
-                </a>
-              </h5>
-            </div>
-            <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-              <div class="card-block">
-              </div>
-            </div>
-          </div>
-    </div>
 </div>
 <div id="profileDetails" class="row">
 <!-- <h4> Container: <`span id="containerName"></span> </h4> -->
@@ -184,7 +169,7 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
             treeData[0].state.selected = false;
         }
         $('#jsTreeSidebar').treeview({
-            data: treeData,         // data is not optional
+            data: treeData,
             levels: 5,
             onNodeSelected: function(event, node) {
                 if(node.type == "profile"){

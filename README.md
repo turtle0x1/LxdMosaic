@@ -1,4 +1,4 @@
-# LXDManager
+# LXD Mosaic
 
 This is an application you can use to do basic management for multiple instances
 of lxd
