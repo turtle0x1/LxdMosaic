@@ -52,6 +52,10 @@ body {
     font-size: 0.875rem;
 }
 
+.app-header .nav-item {
+    margin-right: 2px;
+}
+
 /* Adapated from https://bootsnipp.com/snippets/featured/multi-select-tiled-layout */
 #profileHostsBox{margin:20px 0 0 0}
 #profileHostsBox label.btn-default.active{background-color:#007ba7;color:#FFF}

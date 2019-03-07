@@ -35,7 +35,7 @@ var emptyServerBox = function(){
     </div>`);
 }
 
-$("#overviewBox").on("click", "#createContainer", function(){
+$(document).on("click", "#createContainer", function(){
     $("#modal-container-create").modal("show");
 });
 </script>
