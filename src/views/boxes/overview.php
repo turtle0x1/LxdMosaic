@@ -1,26 +1,40 @@
 <div id="overviewBox" class="boxSlide">
-<!-- <h4> Container: <`span id="containerName"></span> </h4> -->
-<div class="col-md-12">
-    <div class="card">
-      <div class="card-header" role="tab" id="container-actionsHeading">
-        <h5>
-          <a data-toggle="collapse" data-parent="#accordion" href="#container-actionsCollapse" aria-expanded="true" aria-controls="container-actionsCollapse">
-            Server Overview
-          </a>
-          <button class="btn btn-primary pull-right" id="createContainer"> Create Container </button>
-        </h5>
+    <div class="row">
+      <!-- /.col-->
+      <div class="col-sm-6 col-lg-12" id="serverOverviewDetails">
       </div>
-
-      <div id="container-actionsCollapse" class="collapsed show" aria-expanded="true" role="tabpanel" aria-labelledby="container-actionsHeading">
-        <div id="serverOverviewDetails" class="card-block">
-
-        </div>
-      </div>
+      <!-- /.col-->
     </div>
-</div>
 </div>
 
 <script>
+
+var emptyServerBox = function(){
+    return $(`
+    <div class="brand-card">
+      <div class="brand-card-header bg-twitter">
+        <h4 class='host'></h4>
+      </div>
+      <div class="brand-card-body">
+        <div>
+          <div class="text-value">CPU</div>
+          <div class="text-uppercase text-muted cpuDetails">CPU Details</div>
+        </div>
+        <div>
+          <div class="text-value">Memory</div>
+          <div class="text-uppercase text-muted memory"></div>
+        </div>
+        <div>
+            <div class="text-value">Project</div>
+            <div class="form-group projectFormGroup">
+                <select class="form-control projects changeHostProject"></select>
+            </div>
+
+        </div>
+      </div>
+    </div>`);
+}
+
 $("#overviewBox").on("click", "#createContainer", function(){
     $("#modal-container-create").modal("show");
 });

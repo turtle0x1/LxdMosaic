@@ -79,8 +79,33 @@
               </div>
             </div>
           </div>
+          <div class="card">
+            <div class="card-header" role="tab" id="projectsActionHeading">
+              <h5>
+                <a data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
+                  Config
+                </a>
+              </h5>
+            </div>
+            <div id="projectConfig" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
+              <div class="card-block table-responsive">
+                  <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+                      <table class="table table-bordered" id="projectConfigTable">
+                          <thead>
+                              <tr>
+                                  <th> Key </th>
+                                  <th> Value </th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      </table>
+                   </div>
+              </div>
+            </div>
+          </div>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-9">
         <div class="card">
           <div class="card-header" role="tab" id="projectsActionHeading">
             <h5>
@@ -102,33 +127,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card">
-          <div class="card-header" role="tab" id="projectsActionHeading">
-            <h5>
-              <a data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
-                Config
-              </a>
-            </h5>
-          </div>
-          <div id="projectConfig" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
-            <div class="card-block table-responsive">
-                <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-                    <table class="table table-bordered" id="projectConfigTable">
-                        <thead>
-                            <tr>
-                                <th> Key </th>
-                                <th> Value </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                 </div>
             </div>
           </div>
         </div>
@@ -169,12 +167,6 @@ function loadProjectView()
                     id: projectName,
                     host: hostName
                 };
-                // if(hostName == selectedHost && projectName == selectedProfile ){
-                //     matched = true;
-                //     x.state = {
-                //         selected: true
-                //     };
-                // }
                 hostProjects.push(x);
             });
             treeData.push({
@@ -184,7 +176,7 @@ function loadProjectView()
             })
         });
         $('#jsTreeSidebar').treeview({
-            data: treeData,         // data is not optional
+            data: treeData,
             levels: 5,
             onNodeSelected: function(event, node) {
                 if(node.type == "project"){
@@ -195,8 +187,6 @@ function loadProjectView()
                 }
             }
         });
-
-        changeActiveNav(".viewProjects");
     });
 }
 
@@ -225,7 +215,7 @@ function viewProject(project, host){
 
         $("#projectsBox #deleteProject").attr("disabled", !emptyProject);
         $("#projectsBox #renameProject").attr("disabled", !emptyProject);
-        
+
         $("#projectUsedByTable > tbody").empty().append(projectUsedBy);
 
         let projectConfig = "";

@@ -37,8 +37,6 @@ $("#modal-projects-rename").on("shown.bs.modal", function(){
         alert("current project isn't set");
         return false;
     }
-    // $(".renameModal-containerName").html(currentContainerDetails.container);
-    // $("#renameModal-currentHost").html(currentContainerDetails.host);
 });
 
 $("#modal-projects-rename").on("click", "#renameProject", function(){

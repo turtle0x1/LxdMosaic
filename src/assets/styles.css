@@ -1,29 +1,56 @@
-#boxHolder{
-    min-height:20px;
-    padding:10px;
-    padding-left: 20px;
-    margin-bottom:20px;
-    background-color:#fbfbfb;
-    border:1px solid #999;
-    -webkit-border-radius:1px;
-    -moz-border-radius:1px;
-    border-radius:1px;
-    -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
-    -moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
-    box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05)
-}
-
-
 #cloudConfig-editorCollapse {
     height: 550px;
 }
 
 #editor {
     position: absolute;
-    width: 750px;
+    width: 95%;
     height: 500px;
 }
 
+.sidebar .nav-link:hover {
+    background-color: #167495;
+}
+
+.nav-item.active {
+    background-color: #20a8d8;
+}
+
+.breadcrumb-item {
+    color: white;
+}
+
+.breadcrumb-item.active {
+    color: #20a8d8;
+}
+
+
+a:hover {
+  color: #167495;
+  color: #20a8d8;
+  text-decoration: underline;
+}
+
+.bg-deepblue {
+  background-color: #167495 !important;
+}
+
+.bg-deepblue  a {
+    color: #3a4149;
+    text-decoration: underline;
+}
+
+.breadcrumb {
+    background-color: #3a4149;
+}
+
+.nav-link:hover {
+    cursor: pointer;
+}
+
+body {
+    font-size: 0.875rem;
+}
 
 /* Adapated from https://bootsnipp.com/snippets/featured/multi-select-tiled-layout */
 #profileHostsBox{margin:20px 0 0 0}
@@ -53,7 +80,7 @@
     color: green;
 }
 
-.fa-snowflake-o {
+.fa-snowflake {
     color: blue;
 }
 
@@ -61,44 +88,15 @@
     color: red;
 }
 
-.navbar
-{
-    margin-bottom: 1%;
-    background-color: black;
-    background-image: none;
+.card-block {
+    padding: 20px;
 }
 
-.navbar .navbar-brand {
-    color: #ffffff;
+.brand-card-header > .host {
+    color: white;
 }
 
-.navbar .navbar-nav > li > a {
-    color: #ffffff !important;
-}
-
-.navbar .navbar-nav > .dropdown > a .caret {
-    border-top-color: #ffffff;
-    border-bottom-color: #ffffff;
-}
-
-.navbar .navbar-toggle {
-    border-color: #E95420;
-}
-.navbar .navbar-toggle:hover,
-.navbar .navbar-toggle:focus {
-    background-color: blue;
-}
-.navbar .navbar-toggle .icon-bar {
-    background-color: #ffffff;
-}
-
-.navbar .navbar-nav > li > a:hover{
-    background-color: #E95420;
-}
-
-
-
-.navbar .navbar-nav > .active > a {
-  color: red;
-  background: #E95420;
+.brand-card-body > div > .projectFormGroup {
+    margin-left: 10px;
+    margin-right: 10px;
 }

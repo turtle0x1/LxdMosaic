@@ -32,7 +32,7 @@
                 <tbody>
                 </tbody>
             </table>
-            <div id="remoteImagesTableBox">
+            <div id="remoteImagesTableBox" class="table-responsive">
                 <table class="table table-responsive" id="remoteImagesTable">
                 </table>
             </div>
@@ -47,7 +47,6 @@
 
     $(function(){
         $("#importImagesBtn").hide();
-        // dataTable = $("#remoteImagesTable").DataTable();
     });
 
     function loadLocalImagesAfter(milSeconds = 2000)
@@ -123,7 +122,7 @@
             $("#imagesTable").hide();
             if(dataTable !== null){
                 dataTable.clear();
-                dataTable.destroy();    
+                dataTable.destroy();
             }
 
             $("#remoteImagesTable").empty().append(html).show();
@@ -133,9 +132,6 @@
 
     function loadLocalImages()
     {
-        if(dataTable !== null){
-            // dataTable.destroy();
-        }
         ajaxRequest(globalUrls["images"].getAll, null, function(data){
             let x = $.parseJSON(data);
             if(x.hasOwnProperty("error")){
@@ -164,11 +160,12 @@
     }
 
     $(document).on("click", ".viewImages", function(){
-        loadLocalImages();
+        setBreadcrumb("Images", "viewImages active");
         changeActiveNav(".viewImages");
+        loadLocalImages();
         var treeData = [
             {
-                text: "Local Images",
+                text: " Local Images",
                 type: "localImages",
                 icon: "fa fa-home",
                 state: {
@@ -176,13 +173,13 @@
                 }
             },
             {
-                text: "Linux Containers Org",
+                text: " Linux Containers Org",
                 type: "linuxContainersOrg",
-                icon: "fa fa-cloud-download"
+                icon: "fas fa-cloud-download-alt"
             }
         ]
         $('#jsTreeSidebar').treeview({
-            data: treeData,         // data is not optional
+            data: treeData,
             levels: 5,
             onNodeSelected: function(event, node) {
                 if(node.type == "localImages"){

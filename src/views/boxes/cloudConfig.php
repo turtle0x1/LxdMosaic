@@ -132,7 +132,7 @@ function loadCloudConfigTree()
         });
 
         $('#jsTreeSidebar').treeview({
-            data: h,         // data is not optional
+            data: h,
             levels: 5,
             onNodeSelected: function(event, node) {
                 if(node.type == "cloudConfig"){

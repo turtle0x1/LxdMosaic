@@ -1,229 +1,280 @@
 <?php
 $haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
-
 if ($haveServers->haveAny() !== true) {
     header("Location: /views/firstRun");
     exit;
 }
 ?>
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>LXD Client</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-    <script
-    			  src="https://code.jquery.com/jquery-3.3.1.min.js"
-    			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    			  crossorigin="anonymous"></script>
+<!--
+* CoreUI - Free Bootstrap Admin Template
+* @version v2.1.12
+* @link https://coreui.io
+* Copyright (c) 2018 creativeLabs Łukasz Holeczek
+* Licensed under MIT (https://coreui.io/license)
+-->
+
+<html lang="en">
+  <head>
+      <script
+                  src="https://code.jquery.com/jquery-3.3.1.min.js"
+                  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+                  crossorigin="anonymous"></script>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!-- Global CSS  -->
-    <link rel="stylesheet" href="/assets/styles.css">
+      <!-- jqueryConfirm assets -->
+      <link rel="stylesheet" href="/assets/jqueryConfirm/dist/jquery-confirm.min.css">
+      <script src="/assets/jqueryConfirm/dist/jquery-confirm.min.js"></script>
 
+      <!-- Ace web editor  -->
+      <script src="/assets/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script>
+      <!-- Main styles for this application-->
+      <link href="/assets/coreui/style.css" rel="stylesheet">
 
-    <!-- jqueryConfirm assets -->
-    <link rel="stylesheet" href="/assets/jqueryConfirm/dist/jquery-confirm.min.css">
-    <script src="/assets/jqueryConfirm/dist/jquery-confirm.min.js"></script>
+      <link rel="stylesheet" href="/assets/styles.css">
 
-    <!-- Ace web editor  -->
-    <script src="/assets/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-
-
-    <link rel="stylesheet" href="/assets/toastr.js/toastr.min.css">
-    <script src="/assets/toastr.js/toastr.min.js"></script>
+      <link rel="stylesheet" href="/assets/toastr.js/toastr.min.css">
+      <script src="/assets/toastr.js/toastr.min.js"></script>
 
 
-    <link rel="stylesheet" href="/assets/bootstrap-treeview/bootstrap-treeview.min.css">
-    <script src="/assets/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+      <link rel="stylesheet" href="/assets/bootstrap-treeview/bootstrap-treeview.min.css">
+      <script src="/assets/bootstrap-treeview/bootstrap-treeview.min.js"></script>
 
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+      <base href="./">
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+      <title>LXD Mosaic</title>
 
-    <!-- Data tables  -->
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+      <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+      <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
 
+      <script src="/assets/token/src/jquery.tokeninput.js"></script>
+      <link rel="stylesheet" type="text/css" href="/assets/token/styles/token-input.css" />
+      <link rel="stylesheet" type="text/css" href="/assets/token/styles/token-input-facebook.css" />
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
-    <script src="/assets/token/src/jquery.tokeninput.js"></script>
-    <link rel="stylesheet" type="text/css" href="/assets/token/styles/token-input.css" />
-    <link rel="stylesheet" type="text/css" href="/assets/token/styles/token-input-facebook.css" />
+      <script src="/socket.io/socket.io.js"></script>
 
+      <script>
+          var currentContainerDetails = null;
 
-    <script src="/socket.io/socket.io.js"></script>
+          var currentProfileDetails = {
+              profile: null,
+              host: null
+          };
 
-    <script>
-        var currentContainerDetails = null;
+          var containerAwaitingResponse = null;
 
-        var currentProfileDetails = {
-            profile: null,
-            host: null
-        };
+          var globalUrls = {
+              profiles: {
+                  search:{
+                      getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles"
+                  },
+                  getAllProfiles: '/api/Profiles/GetAllProfilesController/getAllProfiles',
+                  delete: '/api/Profiles/DeleteProfileController/delete',
+                  rename: '/api/Profiles/RenameProfileController/rename',
+              },
+              containers:{
+                  create: "/api/Containers/CreateController/create",
+                  delete: "/api/Containers/DeleteContainerController/deleteContainer",
+                  getDetails: "/api/Containers/GetContainerDetailsController/get",
+                  getCurrentSettings: "/api/Containers/GetCurrentContainerSettingsController/get",
+                  migrate: "/api/Containers/MigrateContainerController/migrateContainer",
+                  copy: "/api/Containers/CopyContainerController/copyContainer",
+                  rename: "/api/Containers/RenameContainerController/renameContainer",
+                  setSettings: "/api/Containers/SetSettingsController/set",
+                  state:{
+                      startContainer: "/api/Containers/StateController/startContainer",
+                      stopContainer: "/api/Containers/StateController/stopContainer",
+                      restartContainer: "/api/Containers/StateController/restartContainer",
+                      freezeContainer: "/api/Containers/StateController/freezeContainer",
+                      unfreezeContainer: "/api/Containers/StateController/unfreezeContainer",
+                  },
+                  snapShots: {
+                      take: "/api/Containers/Snapshot/TakeSnapshotController/takeSnapshot",
+                      delete: "/api/Containers/Snapshot/DeleteSnapshotController/deleteSnapshot",
+                      restore: "/api/Containers/Snapshot/RestoreSnapshotController/restoreSnapshot",
+                      createFrom: "/api/Containers/CopyContainerController/copyContainer",
+                  }
+              },
+              hosts: {
+                  search: {
+                      search: "/api/Hosts/SearchHosts/search"
+                  },
+                  containers: {
+                      getAll: "/api/Hosts/Containers/GetAllController/getAll",
+                  },
+                  getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
+                  getOverview: "/api/Hosts/GetOverviewController/get"
+              },
+              images: {
+                  search: {
+                      searchAllHosts: "/api/Images/Search/SearchController/getAllAvailableImages",
+                  },
+                  getLinuxContainersOrgImages: "/api/Images/GetLinuxContainersOrgImagesController/get",
+                  delete: "/api/Images/DeleteImagesController/delete",
+                  getAll: "/api/Images/GetImagesController/getAllHostImages",
+                  import: "/api/Images/ImportLinuxContainersByAliasController/import",
+              },
+              cloudConfig: {
+                  create: '/api/CloudConfig/CreateController/create',
+                  update: '/api/CloudConfig/UpdateController/update',
+                  delete: '/api/CloudConfig/DeleteController/delete',
+                  deploy: '/api/CloudConfig/DeployController/deploy',
+                  getAll: '/api/CloudConfig/GetAllController/getAll',
+                  getDetails: '/api/CloudConfig/GetDetailsController/get',
+                  getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
+              },
+              user: {
+                  setHostProject: '/api/User/SetSessionHostProjectController/set'
+              },
+              projects: {
+                  create: '/api/Projects/CreateProjectController/create',
+                  getAllFromHosts: '/api/Projects/GetHostsProjectsController/get',
+                  info: '/api/Projects/GetProjectInfoController/get',
+                  rename: '/api/Projects/RenameProjectController/rename',
+                  delete: '/api/Projects/DeleteProjectController/delete',
+              }
+          };
 
-        var globalUrls = {
-            profiles: {
-                search:{
-                    getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles"
-                },
-                getAllProfiles: '/api/Profiles/GetAllProfilesController/getAllProfiles',
-                delete: '/api/Profiles/DeleteProfileController/delete',
-                rename: '/api/Profiles/RenameProfileController/rename',
-            },
-            containers:{
-                create: "/api/Containers/CreateController/create",
-                delete: "/api/Containers/DeleteContainerController/deleteContainer",
-                getDetails: "/api/Containers/GetContainerDetailsController/get",
-                getCurrentSettings: "/api/Containers/GetCurrentContainerSettingsController/get",
-                migrate: "/api/Containers/MigrateContainerController/migrateContainer",
-                copy: "/api/Containers/CopyContainerController/copyContainer",
-                rename: "/api/Containers/RenameContainerController/renameContainer",
-                setSettings: "/api/Containers/SetSettingsController/set",
-                state:{
-                    startContainer: "/api/Containers/StateController/startContainer",
-                    stopContainer: "/api/Containers/StateController/stopContainer",
-                    restartContainer: "/api/Containers/StateController/restartContainer",
-                    freezeContainer: "/api/Containers/StateController/freezeContainer",
-                    unfreezeContainer: "/api/Containers/StateController/unfreezeContainer",
-                },
-                snapShots: {
-                    take: "/api/Containers/Snapshot/TakeSnapshotController/takeSnapshot",
-                    delete: "/api/Containers/Snapshot/DeleteSnapshotController/deleteSnapshot",
-                    restore: "/api/Containers/Snapshot/RestoreSnapshotController/restoreSnapshot",
-                    createFrom: "/api/Containers/CopyContainerController/copyContainer",
-                }
-            },
-            hosts: {
-                search: {
-                    search: "/api/Hosts/SearchHosts/search"
-                },
-                containers: {
-                    getAll: "/api/Hosts/Containers/GetAllController/getAll",
-                },
-                getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
-                getOverview: "/api/Hosts/GetOverviewController/get"
-            },
-            images: {
-                search: {
-                    searchAllHosts: "/api/Images/Search/SearchController/getAllAvailableImages",
-                },
-                getLinuxContainersOrgImages: "/api/Images/GetLinuxContainersOrgImagesController/get",
-                delete: "/api/Images/DeleteImagesController/delete",
-                getAll: "/api/Images/GetImagesController/getAllHostImages",
-                import: "/api/Images/ImportLinuxContainersByAliasController/import",
-            },
-            cloudConfig: {
-                create: '/api/CloudConfig/CreateController/create',
-                update: '/api/CloudConfig/UpdateController/update',
-                delete: '/api/CloudConfig/DeleteController/delete',
-                deploy: '/api/CloudConfig/DeployController/deploy',
-                getAll: '/api/CloudConfig/GetAllController/getAll',
-                getDetails: '/api/CloudConfig/GetDetailsController/get',
-                getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
-            },
-            user: {
-                setHostProject: '/api/User/SetSessionHostProjectController/set'
-            },
-            projects: {
-                create: '/api/Projects/CreateProjectController/create',
-                getAllFromHosts: '/api/Projects/GetHostsProjectsController/get',
-                info: '/api/Projects/GetProjectInfoController/get',
-                rename: '/api/Projects/RenameProjectController/rename',
-                delete: '/api/Projects/DeleteProjectController/delete',
+          function mapObjToSignleDimension(obj, keyToMap)
+          {
+              let output = [];
+              Object.keys(obj).map(function(key, index) {
+                 output.push(obj[key][keyToMap]);
+              });
+              return output;
+          }
+
+          function createBreadcrumbItemHtml(name, classes)
+          {
+              return `<li class="breadcrumb-item ` + classes + `">` + name + `</li>`;
+          }
+
+          function setBreadcrumb(name, classes)
+          {
+              $(".breadcrumb").empty().append(createBreadcrumbItemHtml(name, classes))
+          }
+
+          function addBreadcrumbs(names, classes, preserveRoot = true)
+          {
+            if(preserveRoot){
+                $(".breadcrumb").find(".breadcrumb-item:gt(0)").remove();
+            }else{
+                $(".breadcrumb").empty();
             }
-        };
 
-        function mapObjToSignleDimension(obj, keyToMap)
-        {
-            let output = [];
-            Object.keys(obj).map(function(key, index) {
-               output.push(obj[key][keyToMap]);
-            });
-            return output;
-        }
-    </script>
-</head>
-<body>
-    <nav class="navbar   navbar-toggleable-md navbar-light bg-faded">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="#">LXD Manager</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active overview">
-                    <a class="nav-link" href="#">Overview</a>
-                </li>
-                <li class="nav-item viewProfiles">
-                    <a class="nav-link" href="#">Profiles</a>
-                </li>
-                <li class="nav-item viewCloudConfigFiles">
-                    <a class="nav-link" href="#">Cloud Config</a>
-                </li>
-                <li class="nav-item viewImages">
-                    <a class="nav-link" href="#">Images</a>
-                </li>
-                <li class="nav-item viewProjects">
-                    <a class="nav-link" href="#">Projects</a>
-                </li>
+            $(".breadcrumb").find(".active").removeClass("active");
+            let items = "";
 
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="btn btn-primary pull-right" id="addNewServer">
-                    <a> Add A Server </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+            $.each(names, function(i, item){
+                items += createBreadcrumbItemHtml(item, classes[i]);
+            })
+
+            $(".breadcrumb").append(items)
+          }
+
+          function changeActiveNav(newActiveSelector)
+          {
+              $(".sidebar").find(".active").removeClass("active");
+              $(".sidebar").find(newActiveSelector).parent(".nav-item").addClass("active");
+          }
+      </script>
+  </head>
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+    <header class="app-header navbar">
+      <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+        <i class="fas fa-bars" style="color: #dd4814;"></i>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img class="navbar-brand-full" src="img/brand/logo.svg" width="89" height="25" alt="LXD Mosaic">
+        <img class="navbar-brand-minimized" src="img/brand/sygnet.svg" width="30" height="30" alt="LXD Mosaic">
+      </a>
+      <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+        <i class="fas fa-bars" style="color: #dd4814;"></i>
+      </button>
+      <ul class="nav navbar-nav ml-auto">
+      </ul>
+
+    </header>
+    <div class="app-body">
+      <div class="sidebar">
+        <nav class="sidebar-nav">
+          <ul class="nav">
+            <li class="nav-item active">
+              <a class="nav-link overview">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link viewProfiles">
+                <i class="fas fa-users"></i> Profiles</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link viewCloudConfigFiles">
+                <i class="fa fa-cogs"></i> Cloud Config</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link viewImages">
+                <i class="fa fa-images"></i> Images</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link viewProjects">
+                <i class="fas fa-project-diagram"></i> Projects</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <main class="main">
+        <!-- Breadcrumb-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
         <div class="container-fluid">
-        <div class="row">
-        <div class="col-md-3">
-            <div class="" id="jsTreeSidebar">
+          <div id="dashboard" class="animated fadeIn">
+            <div class="row">
+            <div class="col-md-3">
+                <div class="" id="jsTreeSidebar">
+                </div>
             </div>
-        </div>
-        <div class="col-md-7" id="boxHolder">
-            <?php
-                require __DIR__ . "/boxes/overview.php";
-                require __DIR__ . "/boxes/container.php";
-                require __DIR__ . "/boxes/profile.php";
-                require __DIR__ . "/boxes/cloudConfig.php";
-                require __DIR__ . "/boxes/images.php";
-                require __DIR__ . "/boxes/projects.php";
-            ?>
-        </div>
-        <div class="col-md-2">
-            <div class="tree well" id="">
-            <b> Operations </b>
-            <div id="operationsList"></div>
-            <!-- <div class="alert alert-info">
-                Operations are a bit vague in lxd versions preceding
-                lxd version 3.0, as they lack a description. This means
-                that programs would have to track every initiated operation to
-                know what it was doing.
-                <br/>
-                Which isn't ideal, because it would
-                be nice to show cli initiated operations. Also LXD doesn't make
-                available completed operations so its hard to tell if it failed
-                so this will show running tasks, but as to there completion
-                status i wouldn't hold hope.
-            </div> -->
+            <div class="col-md-7" id="boxHolder">
+                <?php
+                    require __DIR__ . "/boxes/overview.php";
+                    require __DIR__ . "/boxes/container.php";
+                    require __DIR__ . "/boxes/profile.php";
+                    require __DIR__ . "/boxes/cloudConfig.php";
+                    require __DIR__ . "/boxes/images.php";
+                    require __DIR__ . "/boxes/projects.php";
+                ?>
             </div>
+            <div class="col-md-2">
+                <div class="tree well" id="">
+                <b> Operations </b>
+                <div id="operationsList"></div>
+                </div>
+            </div>
+            </div>
+            <!-- /.row-->
+          </div>
         </div>
-        </div>
-        </div>
-    </body>
-
-    <script type='text/javascript'>
+      </main>
+    </div>
+  </body>
+</html>
+<script type='text/javascript'>
 
 var profileData = null;
-
-
-// var currentContainerListObj = null;
 
 var statusCodeMap = {
     100: "OperationCreated",
@@ -255,7 +306,7 @@ var statusCodeIconMap = {
     107: "fa fa-stop",
     108: "Aborting",
     109: "Freezing",
-    110: "fa fa-snowflake-o",
+    110: "fas fa-snowflake",
     111: "Thawed",
     112: "fa fa-exclamation-triangle",
     200: "fa fa-check",
@@ -321,11 +372,19 @@ $(document).on("keyup", ".validateName", function(){
     this.value = this.value.replace(/[^-a-zA-Z0-9]+/g,'');
 })
 
-function makeToastr(response) {
-    let x = $.parseJSON(response);
-    toastr[x.state](x.message);
-    if(x.hasOwnProperty("lxdResponse")){
-        let response = x.lxdResponse;
+function makeToastr(x) {
+    if(!$.isPlainObject(x)){
+        x = $.parseJSON(x);
+    }
+
+    if(x.hasOwnProperty("responseText")){
+        x = $.parseJSON(x.responseText);
+    }
+
+
+    if(x.hasOwnProperty("state")){
+
+        toastr[x.state](x.message);
     }
     return x;
 }
@@ -349,6 +408,7 @@ var unknownServerDetails = {
 
 function loadServerOview()
 {
+    setBreadcrumb("Dashboard", "active");
     ajaxRequest(globalUrls["hosts"].getOverview, null, function(data){
         let x = $.parseJSON(data);
         if(x.hasOwnProperty("error")){
@@ -356,6 +416,8 @@ function loadServerOview()
             return false;
         }
         let html = "";
+        $("#serverOverviewDetails").empty();
+
         $.each(x, function(host, data){
             let memoryUsed = unknownServerDetails.memory.used;
             let memoryTotal = unknownServerDetails.memory.total;
@@ -369,36 +431,30 @@ function loadServerOview()
                 data = unknownServerDetails;
             }
 
-            html += "<h5><u>" + host + "</u></h5>" +
-                "<dl class='row'>" +
-                "<dt class='col-sm-4'> CPU </dt> "+
-                    "<dd class='col-sm-8'>" +
-                        data.cpu.sockets[0].vendor +
-                        " (" + data.cpu.total + " threads)" +
-                    "</dd>" +
-                "<dt class='col-sm-4'> Memory (used / free) </dt>" +
-                    "<dd class='col-sm-8'>" +
-                        memoryUsed + " / " +
-                        memoryTotal +
-                    "</dd>";
+            let p = emptyServerBox();
 
-                if(data.extensions.supportsProjects){
-                    html += "<dt class='col-sm-4'>Current Project</dt>"+
-                    "<dd><select class='changeHostProject form-control'>";
-                    $.each(data.projects, function(o, project){
-                        let selected = project == data.currentProject ? "selected" : "";
-                        html += "<option data-host='" + data.hostId  + "' "+
+            if(data.extensions.supportsProjects){
+                let projects = "";
+                $.each(data.projects, function(o, project){
+                    let selected = project == data.currentProject ? "selected" : "";
+                        projects += "<option data-host='" + data.hostId  + "' "+
                             " value='" + project + "' " + selected + ">"
                             + project + "</option>"
-                    });
-                    html += "</select></dd>";
-                }
+                });
+                $(p).find(".projects").append(projects)
+            }else{
 
-                html += "</dl>";
+            }
+
+            $(p).find(".host").text(host);
+            $(p).find(".memory").text(memoryUsed + " / " + memoryTotal);
+            $(p).find(".cpuDetails").text(data.cpu.sockets[0].vendor);
+
+            $("#serverOverviewDetails").append(p);
         });
         $(".boxSlide").hide();
         $("#overviewBox").show();
-        $("#serverOverviewDetails").empty().html(html);
+
     });
 }
 
@@ -424,7 +480,7 @@ function createContainerTree(){
             })
         });
         $('#jsTreeSidebar').treeview({
-            data: treeData,         // data is not optional
+            data: treeData,
             levels: 5,
             onNodeSelected: function(event, node) {
                 if(node.type == "container"){
@@ -450,7 +506,6 @@ function formatBytes(bytes,decimals) {
 
 function setContDetsByTreeItem(node)
 {
-    // currentContainerListObj =  node;
     currentContainerDetails = {
         container: node.text,
         host: node.host
@@ -499,32 +554,31 @@ $(document).on("change", ".changeHostProject", function(){
 });
 
 $(document).on("click", ".overview", function(){
-    changeActiveNav(".overview");
+    setBreadcrumb("Dashboard", "overview active");
     createContainerTree();
     loadServerOview();
+    changeActiveNav(".overview")
     $(".boxSlide").hide();
     $("#overviewBox").show();
 });
 
 $(document).on("click", ".viewProfiles", function(){
+    setBreadcrumb("Profiles", "viewProfiles active");
     loadProfileView();
+    changeActiveNav(".viewProfiles")
 });
 
 $(document).on("click", ".viewProjects", function(){
+    setBreadcrumb("Projects", "viewProjects active");
     loadProjectView();
+    changeActiveNav(".viewProjects")
 });
 
 $(document).on("click", ".viewCloudConfigFiles", function(){
-    changeActiveNav(".viewCloudConfigFiles");
+    setBreadcrumb("Cloud Config", "viewCloudConfigFiles active");
     loadCloudConfigTree();
+    changeActiveNav(".viewCloudConfigFiles")
 });
-
-
-function changeActiveNav(newActiveSelector)
-{
-    $(".navbar").find(".active").removeClass("active");
-    $(".navbar").find(newActiveSelector).addClass("active");
-}
 
 function createTableRowsHtml(data, childPropertyToSearch)
 {
@@ -555,6 +609,9 @@ function ajaxRequest(url, data, callback){
          data: data,
          url: url,
          success: function(data){
+             callback(data);
+         },
+         error: function(data){
              callback(data);
          }
      });
