@@ -1,3 +1,10 @@
+<?php
+$haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
+if ($haveServers->haveAny() !== true) {
+    header("Location: /views/firstRun");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <!--
 * CoreUI - Free Bootstrap Admin Template
