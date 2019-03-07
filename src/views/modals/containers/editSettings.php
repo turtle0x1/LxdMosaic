@@ -140,7 +140,6 @@
     });
 
     $("#modal-container-editSettings").on("click", "#addNewSettingRow", function(){
-        //NOTE This cols add up to more than 12 ? Not gunna question it works (?)
         $("#editSettings-list").append(
             "<div style='margin-bottom: 5px; border-bottom: 1px solid black; padding: 10px;' class='input-group'>" +
             "<div class='col-md-4'>" +
@@ -154,7 +153,7 @@
             "<div class='col-md-3'>" +
                 '<input  style="width: 100%" type="text" name="value" class="form-control"/>' +
             "</div>" +
-            "<div class='col-md-3'>" +
+            "<div class='col-md-1'>" +
                 '<button class="btn btn-danger removeSetting"><i class="fa fa-trash"></i></button>' +
             "</div>" +
             '</div>'

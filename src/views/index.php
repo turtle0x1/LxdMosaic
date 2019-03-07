@@ -204,6 +204,13 @@ if ($haveServers->haveAny() !== true) {
         <i class="fas fa-bars" style="color: #dd4814;"></i>
       </button>
       <ul class="nav navbar-nav ml-auto">
+          <li class="nav-item px-3 btn btn-primary pull-right" id="addNewServer">
+                <a> Add A Server </a>
+           </li>
+          <li class="nav-item px-3 btn btn-success pull-right" id="createContainer">
+                <a> Create Container </a>
+           </li>
+
       </ul>
 
     </header>
