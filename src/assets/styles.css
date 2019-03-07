@@ -44,6 +44,10 @@ a:hover {
     background-color: #3a4149;
 }
 
+.nav-link:hover {
+    cursor: pointer;
+}
+
 body {
     font-size: 0.875rem;
 }
