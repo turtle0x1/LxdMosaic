@@ -3,6 +3,13 @@
 This is an application you can use to do basic management for multiple instances
 of LXD
 
+
+<img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/c22f74bfe73a6000868d2aa2d40d97798206201b.png" width="428"> <img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/5d4e73f3f51489350589635593fae51fde7ff022.png" width="428">
+
+<img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/6ccc9cfe863d998ec8bbdb8676718e5ff4da277d.png" width="428"><img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/3c2569da49575e9fdcd08f87b42cc1620ca38cf3.png" width="428">
+
+
+
 ## Why ?
 
 Most of the other LXD managers I saw are only used  to manage one LXD instance which
