@@ -31,6 +31,11 @@ a:hover {
   text-decoration: underline;
 }
 
+.card-hover-primary:hover{
+    background-color: #20a8d8;
+    color: white;
+}
+
 .bg-deepblue {
   background-color: #167495 !important;
 }
