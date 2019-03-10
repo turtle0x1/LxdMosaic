@@ -24,7 +24,7 @@ of.
 
 You need to enable access from the network on your LXD hosts first, you can do this by logging onto your hosts and executing the following (make sure to change the password from "some-secret_string")
 
-```
+```bash
 lxc config set core.https_address [::]
 lxc config set core.trust_password some-secret-string
 ```
@@ -44,16 +44,14 @@ In examples you will find an bash script called install_with_clone.sh this will
 handle the installation of dependencies and setup this program.
 
 It handles the cloning of the repository so you can just do;
-
-`curl https://raw.githubusercontent.com/turtle0x1/LxdMosaic/master/examples/install_with_clone.sh >> installLxdMosaic.sh`
-
-Then give the script execution permissions
-
-`chmod +x installLxdMosaic.sh`
-
-Then run bellow to setup the program
-
-`sudo ./installLxdMosaic.sh`
+```bash
+# Download the script
+curl https://raw.githubusercontent.com/turtle0x1/LxdMosaic/master/examples/install_with_clone.sh >> installLxdMosaic.sh
+# Then give the script execution permissions
+chmod +x installLxdMosaic.sh
+# Then run bellow to setup the program
+sudo ./installLxdMosaic.sh
+```
 
 Once installation is complete you need to go to into your browser and goto;
 
