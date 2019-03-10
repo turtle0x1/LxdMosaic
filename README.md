@@ -11,12 +11,9 @@ is no good as I have many!
 They also don't really touch on profiles or cloud config which I make heavy use
 of.
 
-## Installation
+## Install Prep
 
-The preferred installation is currently docker but the install script should
-do the trick (only tested on ubuntu 18.04)
-
-## LXD Hosts
+### LXD Hosts
 
 You need to enable access from the network on your LXD hosts first, you can do this by logging onto your hosts and executing the following (make sure to change the password from "some-secret_string")
 
@@ -27,7 +24,11 @@ lxc config set core.trust_password some-secret-string
 
 When first accessing the web application it will ask you about your "trust password" which is the password you set in the last command
 
-## Install script
+## Installation
+
+The preferred installation method is using a ubuntu container.
+
+### Install script
 **Warning this installs apache, docker, mysql-server, php, git and other
 dependencies its best to run in a container or an empty VM to avoid cluttering
 your system**
@@ -54,19 +55,6 @@ Once installation is complete you need to go to into your browser and goto;
 Then go to the following web address to run the application
 
 `https://host_ip_address`
-
-## Manual
-
-The manual steps for deploying this can be read from the install script which
-will handle all the dependencies it should be commented well enough to serve
-as instructions!
-
-## Docker
-
-Docker was supported until the 0.1 release where a node server was added and
-I frankly didn't have the energy to keep it up to date!
-
-You should install this in a container or a VM!
 
 # Notes
 
