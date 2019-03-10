@@ -35,6 +35,8 @@ cd /var/www
 
 git clone https://github.com/turtle0x1/LxdManager.git
 
+git checkout web-terminal
+
 mkdir -p /var/www/LxdManager/src/sensitiveData/certs
 chown -R www-data:www-data /var/www/LxdManager/src/sensitiveData/certs
 

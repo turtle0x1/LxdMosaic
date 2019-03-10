@@ -26,6 +26,8 @@ if ($haveServers->haveAny() !== true) {
 
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+      <link rel="stylesheet" href="/assets/xterm/xterm.css" />
+
       <!-- jqueryConfirm assets -->
       <link rel="stylesheet" href="/assets/jqueryConfirm/dist/jquery-confirm.min.css">
       <script src="/assets/jqueryConfirm/dist/jquery-confirm.min.js"></script>
@@ -339,7 +341,7 @@ toastr.options = {
   "hideMethod": "fadeOut"
 }
 
-var socket = io();
+var socket = io.connect("/operations");
 
 socket.on('operationUpdate', function(msg){
    let id = msg.metadata.id;

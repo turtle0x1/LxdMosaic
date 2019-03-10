@@ -1,5 +1,4 @@
 <div id="containerBox" class="boxSlide">
-<div class="row">
     <div class="col-md-12 text-center">
         <h4> <u>
             <span id="container-currentState"></span>
@@ -7,6 +6,25 @@
             <span id="container-imageDescription"></span>
         </u></h4>
     </div>
+    <div class="row" id="containerViewBtns">
+        <div class="col-md-6 text-center">
+            <div class="card bg-primary card-hover-primary text-center toggleCard" id="goToDetails">
+                <div class="card-body">
+                    Details
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 text-center">
+            <div class="card card-hover-primary text-center toggleCard" id="goToConsole">
+                <div class="card-body">
+                    Console
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="containerDetails">
+<div class="row">
+
     <div class="col-md-6">
         <div class="card text-white bg-deepblue">
           <div class="card-body">
@@ -158,7 +176,17 @@
 </div>
 </div>
 </div>
+<div id="containerConsole">
+    <div id="terminal-container"></div>
+</div>
+</div>
+<script src="/assets/xterm/xterm.js"></script>
+<script src="/assets/xterm/addons/attach.js"></script>
 <script>
+
+var term = new Terminal();
+var consoleSocket;
+var currentTerminalProcessId;
 
 function loadContainerViewAfter(data = null, milSeconds = 2000)
 {
@@ -180,6 +208,13 @@ function loadContainerTreeAfter(milSeconds = 2000)
 
 function loadContainerView(data)
 {
+    $("#containerConsole").hide();
+    $("#containerDetails").show();
+    $("#goToDetails").trigger("click");
+    if(consoleSocket !== undefined){
+        consoleSocket.emit("close", currentTerminalProcessId);
+    }
+
     ajaxRequest(globalUrls.containers.getDetails, data, function(result){
         let x = $.parseJSON(result);
 
@@ -264,6 +299,65 @@ function loadContainerView(data)
 
 $("#containerBox").on("click", ".renameContainer", function(){
     $("#modal-container-rename").modal("show");
+});
+
+$("#containerBox").on("click", ".toggleCard", function(){
+    $("#containerViewBtns").find(".bg-primary").removeClass("bg-primary");
+    $(this).addClass("bg-primary");
+});
+
+
+$("#containerBox").on("click", "#goToDetails", function(){
+    $("#containerDetails").show();
+    $("#containerConsole").hide();
+});
+
+$("#containerBox").on("click", "#goToConsole", function(){
+    Terminal.applyAddon(attach);
+
+    $("#containerDetails").hide();
+    $("#containerConsole").show();
+
+    const terminalContainer = document.getElementById('terminal-container');
+      // Clean terminal
+      while (terminalContainer.children.length) {
+        terminalContainer.removeChild(terminalContainer.children[0]);
+      }
+      term = new Terminal({});
+      window.term = term;  // Expose `term` to window for debugging purposes
+
+      term.open(terminalContainer);
+
+      // fit is called within a setTimeout, cols and rows need this.
+      setTimeout(() => {
+        $.ajax({
+          type: "POST",
+          url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
+          data: {},
+          success: function(processId) {
+              currentTerminalProcessId = processId;
+              consoleSocket = io.connect("/terminals", {query: $.extend({
+                  pid: processId,
+              }, currentContainerDetails)
+              });
+              consoleSocket.on('data', function(data) {
+                   term.write(data);
+              });
+
+              // Browser -> Backend
+              term.on('data', function(data) {
+                consoleSocket.emit('data', data);
+              });
+              // consoleSocket = new WebSocket(consoleSocketURL);
+              consoleSocket.onopen = function() {
+                  term.attach(consoleSocket);
+                  term._initialized = true;
+              };
+
+          },
+          dataType: "json"
+        });
+      }, 0);
 });
 
 $("#containerBox").on("click", ".toProfile", function(){
