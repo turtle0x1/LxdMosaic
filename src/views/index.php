@@ -361,16 +361,28 @@ socket.on('operationUpdate', function(msg){
 
    let liItem = hostOpList.find("#" + id);
 
+
+
    if(liItem.length > 0){
-       liItem.html("<span class='" + icon + "'></span>" + description);
+       // Some sort of race condition exists with the closing of a terminal
+       // that emits a 103 / 105 status code after the 200 code so it causes
+       // the operation list to say running even though the socket has closed
+       // so this is a work around as im pretty once an event goes to 200 that
+       // is it finished
+       let span = liItem.find("span:eq(0)");
+       if(span.data("status") == 200){
+           return;
+       }
+
+       liItem.html("<span data-status='" + msg.metadata.status_code + "' class='" + icon + "'></span>" + description);
    }else{
-       hostOpList.prepend(makeOperationHtmlItem(id, icon, description));
+       hostOpList.prepend(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code));
    }
 });
 
-function makeOperationHtmlItem(id, icon, description)
+function makeOperationHtmlItem(id, icon, description, statusCode)
 {
-    return "<div id='" + id + "'><span class='" + icon + "'></span>" + description + "</div>";
+    return "<div id='" + id + "'><span data-status='" + statusCode + "' class='" + icon + "'></span>" + description + "</div>";
 }
 
 var editor = ace.edit("editor");

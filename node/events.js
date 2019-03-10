@@ -141,44 +141,46 @@ var terminalsIo = io.of("/terminals");
 terminalsIo.on("connect", function(socket) {
 
     let indentifier = socket.handshake.query.pid;
-    let host = socket.handshake.query.host;
-    let container = socket.handshake.query.container;
-    let execOptions = createExecOptions(host, container);
 
-    const wsoptions = {
-        cert: execOptions.cert,
-        key: execOptions.key,
-        rejectUnauthorized: false
-    }
+    if(lxdConsoles[indentifier] == undefined) {
+        let host = socket.handshake.query.host;
+        let container = socket.handshake.query.container;
 
 
-    const lxdReq = https.request(execOptions, res => {
-        res.on('data', d => {
-            const output = JSON.parse(d);
+        let execOptions = createExecOptions(host, container);
 
-            const lxdWs = new WebSocket('wss://' +
-                execOptions.host + ':' + execOptions.port + output.operation +
-                '/websocket?secret=' + output.metadata.metadata.fds['0'],
-                wsoptions
-            );
+        const wsoptions = {
+            cert: execOptions.cert,
+            key: execOptions.key,
+            rejectUnauthorized: false
+        }
 
-            lxdWs.on('error', error => console.log(error));
+        const lxdReq = https.request(execOptions, res => {
+            res.on('data', d => {
+                const output = JSON.parse(d);
+                const lxdWs = new WebSocket('wss://' +
+                    execOptions.host + ':' + execOptions.port + output.operation +
+                    '/websocket?secret=' + output.metadata.metadata.fds['0'],
+                    wsoptions
+                );
 
-            lxdWs.on('message', data => {
-                try {
-                    const buf = Buffer.from(data);
-                    data = buf.toString();
-                    socket.emit("data", data);
-                } catch (ex) {
-                    // The WebSocket is not open, ignore
-                }
+                lxdWs.on('error', error => console.log(error));
+
+                lxdWs.on('message', data => {
+                    try {
+                        const buf = Buffer.from(data);
+                        data = buf.toString();
+                        socket.emit("data", data);
+                    } catch (ex) {
+                        // The WebSocket is not open, ignore
+                    }
+                });
+                lxdConsoles.push(lxdWs);
             });
-            lxdConsoles.push(lxdWs);
         });
-    });
-
-    lxdReq.write(lxdExecBody);
-    lxdReq.end();
+        lxdReq.write(lxdExecBody);
+        lxdReq.end();
+    }
 
     //NOTE When user inputs from browser
     socket.on('data', function(msg) {
@@ -188,13 +190,12 @@ terminalsIo.on("connect", function(socket) {
     });
 
     socket.on('close', function(indentifier) {
-        lxdConsoles[indentifier].send("exit \r", {
-            binary: true
-        }, () => {
-            // Clean things up
-            delete lxdConsoles[indentifier];
-        });
-
+        setTimeout(() => {
+             lxdConsoles[indentifier].send('exit  \r', { binary: true }, function(){
+                lxdConsoles[indentifier].close();
+                delete lxdConsoles[indentifier];
+            });
+         }, 100);
     });
 });
 

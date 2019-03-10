@@ -211,8 +211,9 @@ function loadContainerView(data)
     $("#containerConsole").hide();
     $("#containerDetails").show();
     $("#goToDetails").trigger("click");
-    if(consoleSocket !== undefined){
+    if(consoleSocket !== undefined && currentTerminalProcessId !== null){
         consoleSocket.emit("close", currentTerminalProcessId);
+        currentTerminalProcessId = null;
     }
 
     ajaxRequest(globalUrls.containers.getDetails, data, function(result){
@@ -312,52 +313,60 @@ $("#containerBox").on("click", "#goToDetails", function(){
     $("#containerConsole").hide();
 });
 
-$("#containerBox").on("click", "#goToConsole", function(){
+$("#containerBox").on("click", "#goToConsole", function() {
     Terminal.applyAddon(attach);
 
     $("#containerDetails").hide();
     $("#containerConsole").show();
 
-    const terminalContainer = document.getElementById('terminal-container');
-      // Clean terminal
-      while (terminalContainer.children.length) {
-        terminalContainer.removeChild(terminalContainer.children[0]);
-      }
-      term = new Terminal({});
-      window.term = term;  // Expose `term` to window for debugging purposes
 
-      term.open(terminalContainer);
+    if(!$.isNumeric(currentTerminalProcessId)){
+        const terminalContainer = document.getElementById('terminal-container');
 
-      // fit is called within a setTimeout, cols and rows need this.
-      setTimeout(() => {
-        $.ajax({
-          type: "POST",
-          url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
-          data: {},
-          success: function(processId) {
-              currentTerminalProcessId = processId;
-              consoleSocket = io.connect("/terminals", {query: $.extend({
-                  pid: processId,
-              }, currentContainerDetails)
-              });
-              consoleSocket.on('data', function(data) {
-                   term.write(data);
-              });
+        // Clean terminal
+        while (terminalContainer.children.length) {
+            terminalContainer.removeChild(terminalContainer.children[0]);
+        }
+        term = new Terminal({});
 
-              // Browser -> Backend
-              term.on('data', function(data) {
-                consoleSocket.emit('data', data);
-              });
-              // consoleSocket = new WebSocket(consoleSocketURL);
-              consoleSocket.onopen = function() {
-                  term.attach(consoleSocket);
-                  term._initialized = true;
-              };
 
-          },
-          dataType: "json"
-        });
-      }, 0);
+
+        term.open(terminalContainer);
+
+
+        // fit is called within a setTimeout, cols and rows need this.
+        setTimeout(() => {
+            $.ajax({
+                type: "POST",
+                url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
+                data: {},
+                success: function(processId) {
+                    currentTerminalProcessId = processId;
+                    consoleSocket = io.connect("/terminals", {
+                        query: $.extend({
+                            pid: processId,
+                        }, currentContainerDetails)
+                    });
+                    consoleSocket.on('data', function(data) {
+                        term.write(data);
+                    });
+
+                    // Browser -> Backend
+                    term.on('data', function(data) {
+                        consoleSocket.emit('data', data);
+                    });
+                    // consoleSocket = new WebSocket(consoleSocketURL);
+                    consoleSocket.onopen = function() {
+                        term.attach(consoleSocket);
+                        term._initialized = true;
+                    };
+
+                },
+                dataType: "json"
+            });
+        }, 0);
+    }
+
 });
 
 $("#containerBox").on("click", ".toProfile", function(){
