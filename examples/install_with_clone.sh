@@ -41,8 +41,6 @@ chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/certs
 # Move in LxdManager
 cd /var/www/LxdMosaic
 
-git checkout web-terminal
-
 npm install
 
 # Install Dependecies
