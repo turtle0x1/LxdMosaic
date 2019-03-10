@@ -10,7 +10,7 @@ const fs = require('fs'),
     cors = require('cors');
 
 const envImportResult = require('dotenv').config({
-    path: "/var/www/LxdManager/.env"
+    path: "/var/www/LxdMosaic/.env"
 });
 
 if (envImportResult.error) {
@@ -20,7 +20,7 @@ if (envImportResult.error) {
 // Https certificate and key file location for secure websockets + https server
 var privateKey = fs.readFileSync('/etc/ssl/private/ssl-cert-snakeoil.key', 'utf8'),
     certificate = fs.readFileSync('/etc/ssl/certs/ssl-cert-snakeoil.pem', 'utf8');
-    certDir = "/var/www/LxdManager/src/sensitiveData/certs/",
+    certDir = "/var/www/LxdMosaic/src/sensitiveData/certs/",
     lxdConsoles = [],
     credentials = {
         key: privateKey,

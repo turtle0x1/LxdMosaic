@@ -33,7 +33,7 @@ class RouteController
             $port = '3000';
 
             $url = $_SERVER['REQUEST_SCHEME']
-            . '://' . $_SERVER['HTTP_HOST'] . ':' . $port
+            . '://localhost:' . $port
             . $_SERVER['REQUEST_URI'];
 
             $ch = curl_init();

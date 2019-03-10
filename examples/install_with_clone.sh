@@ -33,15 +33,15 @@ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 # Move to www & clone repository
 cd /var/www
 
-git clone https://github.com/turtle0x1/LxdManager.git
+git clone https://github.com/turtle0x1/LxdMosaic.git
 
-git checkout web-terminal
-
-mkdir -p /var/www/LxdManager/src/sensitiveData/certs
-chown -R www-data:www-data /var/www/LxdManager/src/sensitiveData/certs
+mkdir -p /var/www/LxdMosaic/src/sensitiveData/certs
+chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/certs
 
 # Move in LxdManager
-cd /var/www/LxdManager
+cd /var/www/LxdMosaic
+
+git checkout web-terminal
 
 npm install
 
@@ -79,6 +79,9 @@ a2enmod headers
 a2enmod rewrite
 a2enmod proxy
 a2enmod proxy_wstunnel
+a2enmod proxy_wstunnel
+a2enmod proxy_http
+a2enmod proxy_balancer
 
 # Enable site
 a2ensite lxd_manager
