@@ -3,6 +3,11 @@ namespace dhope0000\LXDClient\App;
 
 class RouteAssets
 {
+    private $extensionMapping = [
+        "css"=>"text/css",
+        "js"=>"text/javascript"
+    ];
+
     public function route($path)
     {
         $this->outputFile($path);
@@ -34,7 +39,12 @@ class RouteAssets
         }
 
         $extension = pathinfo($path, PATHINFO_EXTENSION);
-        header('Content-Type: ' . $extension);
+        
+        if(!isset($this->extensionMapping[$extension])){
+            throw new \Exception("Can't map this file type to content-type", 1);
+        }
+
+        header('Content-Type: ' . $this->extensionMapping[$extension]);
         echo file_get_contents($path);
     }
 }
