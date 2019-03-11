@@ -3,6 +3,13 @@
 This is an application you can use to do basic management for multiple instances
 of LXD
 
+
+<img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/c22f74bfe73a6000868d2aa2d40d97798206201b.png" width="428"> <img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/5d4e73f3f51489350589635593fae51fde7ff022.png" width="428">
+
+<img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/6ccc9cfe863d998ec8bbdb8676718e5ff4da277d.png" width="428"><img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/3c2569da49575e9fdcd08f87b42cc1620ca38cf3.png" width="428">
+
+
+
 ## Why ?
 
 Most of the other LXD managers I saw are only used  to manage one LXD instance which
@@ -17,7 +24,7 @@ of.
 
 You need to enable access from the network on your LXD hosts first, you can do this by logging onto your hosts and executing the following (make sure to change the password from "some-secret_string")
 
-```
+```bash
 lxc config set core.https_address [::]
 lxc config set core.trust_password some-secret-string
 ```
@@ -37,16 +44,14 @@ In examples you will find an bash script called install_with_clone.sh this will
 handle the installation of dependencies and setup this program.
 
 It handles the cloning of the repository so you can just do;
-
-`curl https://raw.githubusercontent.com/turtle0x1/LxdMosaic/master/examples/install_with_clone.sh >> installLxdMosaic.sh`
-
-Then give the script execution permissions
-
-`chmod +x installLxdMosaic.sh`
-
-Then run bellow to setup the program
-
-`sudo ./installLxdMosaic.sh`
+```bash
+# Download the script
+curl https://raw.githubusercontent.com/turtle0x1/LxdMosaic/master/examples/install_with_clone.sh >> installLxdMosaic.sh
+# Then give the script execution permissions
+chmod +x installLxdMosaic.sh
+# Then run bellow to setup the program
+sudo ./installLxdMosaic.sh
+```
 
 Once installation is complete you need to go to into your browser and goto;
 
