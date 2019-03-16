@@ -24,13 +24,14 @@ class CreateContainer
         array $hosts,
         array $imageDetails,
         $server = "",
-        array $profileNames = []
+        array $profileNames = [],
+        string $instanceType = ""
     ) {
         $this->hostsHaveContainer->ifHostInListHasContainerNameThrow($hosts, $name);
 
         $profiles = $this->createProfileNameArray($profiles, $profileNames);
 
-        $options = $this->createOptionsArray($profiles, $imageDetails, $server);
+        $options = $this->createOptionsArray($profiles, $imageDetails, $server, $instanceType);
 
         $results = [];
 
@@ -52,12 +53,13 @@ class CreateContainer
     }
 
 
-    private function createOptionsArray($profiles, $imageDetails, $server = "")
+    private function createOptionsArray($profiles, $imageDetails, $server = "", $instanceType = "")
     {
         return [
             "fingerprint"=>$imageDetails["fingerprint"],
             "profiles"=>$profiles,
-            "server"=>$server
+            "server"=>$server,
+            "instance_type"=>$instanceType
         ];
     }
 

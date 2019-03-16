@@ -95,6 +95,9 @@ if ($haveServers->haveAny() !== true) {
                   copy: "/api/Containers/CopyContainerController/copyContainer",
                   rename: "/api/Containers/RenameContainerController/renameContainer",
                   setSettings: "/api/Containers/SetSettingsController/set",
+                  instanceTypes: {
+                      getInstanceTypes: "/api/Containers/InstanceTypes/GetAllController/getAll"
+                  },
                   state:{
                       startContainer: "/api/Containers/StateController/startContainer",
                       stopContainer: "/api/Containers/StateController/stopContainer",
