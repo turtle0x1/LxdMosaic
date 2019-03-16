@@ -38,6 +38,8 @@
               </a><span id="container-cpuTime"></span>
               <br/>
               Created: <span id="container-createdAt"></span>
+              <br/>
+              Up Time: <span id="container-upTime"></span>
           </div>
         </div>
     </div>
@@ -245,6 +247,24 @@ function loadContainerView(data)
         $("#container-imageDescription").html(" - " + os + " " + "(" + version + ")");
         $("#container-cpuTime").text(containerCpuTime);
         $("#container-createdAt").text(moment(x.details.create_at).format("MMM DD YYYY h:mm A"));
+
+        if(x.details.hasOwnProperty("last_used_at")){
+            let last_used_at = moment(x.details.last_used_at);
+            if(last_used_at.format("YYYY") == "1970"){
+                $("#container-upTime").text("Not Started Yet");
+            }else if(!disableActions){
+                $("#container-upTime").text("Not Running");
+            }else{
+                let now = moment(new Date());
+
+                var ms = now.diff(last_used_at);
+                var d = moment.duration(ms);
+                var s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss")
+                $("#container-upTime").text(s);
+            }
+        }else{
+            $("#container-upTime").text("LXD Extension Missing");
+        }
 
         let snapshotTrHtml = "";
 

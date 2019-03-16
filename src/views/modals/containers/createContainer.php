@@ -112,6 +112,10 @@
         };
 
         ajaxRequest(globalUrls["containers"].create, x, function(data){
+            let x = makeToastr(data);
+            if(x.state == "error"){
+                return false;
+            }
             $("#modal-container-create").modal("toggle");
             loadContainerTreeAfter();
         });
