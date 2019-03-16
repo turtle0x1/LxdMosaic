@@ -1,3 +1,5 @@
+USE `LXD_Manager`;
+
 CREATE TABLE `Instace_Type_Providers` (
     `ITP_ID` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `ITP_Name` VARCHAR(255) NOT NULL
