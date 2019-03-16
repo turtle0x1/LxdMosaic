@@ -61,6 +61,7 @@ mysql < sql/users.sql
 mysql < sql/seed.sql
 mysql < sql/0.1.0.sql
 mysql < sql/container_options.sql
+mysql < sql/instance_types.sql
 
 
 cp examples/lxd_manager.conf /etc/apache2/sites-available/

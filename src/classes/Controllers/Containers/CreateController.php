@@ -11,15 +11,22 @@ class CreateController
         $this->createContainer = $createContainer;
     }
 
-    public function create($name, $profileIds = [], $hosts, array $imageDetails, $server = "")
-    {
+    public function create(
+        $name,
+        $profileIds = [],
+        $hosts,
+        array $imageDetails,
+        string $instanceType = "",
+        $server = ""
+    ) {
         $lxdResponses = $this->createContainer->create(
             $name,
             $profileIds,
             $hosts,
             $imageDetails,
             $server,
-            []
+            [],
+            $instanceType
         );
         return ["success"=>"Created Container", "lxdResponses"=>$lxdResponses];
     }

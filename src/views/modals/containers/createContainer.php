@@ -34,11 +34,16 @@
                 one server on the network to use it here!
             </div>
             <input id="newContainerImage" type="text" class="form-control"/>
+            <br/>
+            <div class="alert alert-info">
+                If the image isn't available to the machine/s you are creating the
+                container on it may cause the response to be slow while lxd fetches
+                the image (may get from the internet)
+            </div>
         </div>
-        <div class="alert alert-info">
-            If the image isn't available to the machine/s you are creating the
-            container on it may cause the response to be slow while lxd fetches
-            the image (may get from the internet)
+        <div class="form-group">
+            <label> Instance Type (Optional) </label>
+            <select id="newContainerInstanceType" class="form-control"></select>
         </div>
       </div>
       <div class="modal-footer">
@@ -72,10 +77,26 @@
         theme: "facebook"
     });
 
+    $("#modal-container-create").on("shown.bs.modal", function(){
+        ajaxRequest(globalUrls.containers.instanceTypes.getInstanceTypes, {}, function(data){
+            data = $.parseJSON(data);
+            let h = "<option value=''>Please Select</option>";
+            $.each(data, function(provider, templates){
+                h += `<optgroup label='${provider}'>`;
+                $.each(templates, function(o, t){
+                    h += `<option value="${t.instanceName}">${t.instanceName} (CPU: ${t.cpu}, Mem: ${t.mem}GB)</option>`;
+                })
+                h += `</optgroup>`;
+            });
+            $("#newContainerInstanceType").empty().append(h);
+        });
+    });
+
     $("#modal-container-create").on("click", "#create", function(){
         let profileIds = mapObjToSignleDimension($("#newContainerProfiles").tokenInput("get"), "profile");
         let hosts = mapObjToSignleDimension($("#newContainerHosts").tokenInput("get"), "host");
         let image = $("#newContainerImage").tokenInput("get");
+        let instanceType = $("#newContainerInstanceType").val();
 
         if(image.legnth == 0 || !image[0].hasOwnProperty("details")){
             makeToastr(JSON.stringify({state: "error", message: "Please select image"}));
@@ -86,7 +107,8 @@
             name: $("#newContainerName").val(),
             profileIds: profileIds,
             hosts: hosts,
-            imageDetails: image[0]["details"]
+            imageDetails: image[0]["details"],
+            instanceType: instanceType
         };
 
         ajaxRequest(globalUrls["containers"].create, x, function(data){
