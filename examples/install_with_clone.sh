@@ -62,6 +62,7 @@ mysql < sql/seed.sql
 mysql < sql/0.1.0.sql
 mysql < sql/container_options.sql
 mysql < sql/instance_types.sql
+mysql < sql/store_details.sql
 
 
 cp examples/lxd_manager.conf /etc/apache2/sites-available/
@@ -71,6 +72,9 @@ pm2 start node/events.js
 pm2 startup
 
 pm2 save
+
+# Add cron job for gathering data
+crontab -l | { cat; echo "*/5 * * * * php /var/www/LxdMosaic/src/cronJobs/fleetAnalytics.php"; } | crontab -
 
 # Enable required apache mods
 a2enmod ssl
