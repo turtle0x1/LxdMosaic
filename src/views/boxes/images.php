@@ -11,7 +11,7 @@
       </div>
 
       <div id="container-imagesCollapse" class="collapsed show" aria-expanded="true" role="tabpanel" aria-labelledby="container-imagesHeading">
-        <div id="imagesOverviewDetails" class="card-block">
+        <div id="imagesOverviewDetails" class="card-block table-responsive">
             <div class="row">
                 <div class="col-md-12">
                     <button class="btn btn-danger deleteImages" id="deleteImagesBtn"> Delete </button>
@@ -19,7 +19,7 @@
                 </div>
             </div>
             <br/>
-            <table class="table table-responsive" id="imagesTable">
+            <table class="table" id="imagesTable">
                 <thead>
                     <th>  </th>
                     <th> OS </th>
@@ -33,7 +33,7 @@
                 </tbody>
             </table>
             <div id="remoteImagesTableBox" class="table-responsive">
-                <table class="table table-responsive" id="remoteImagesTable">
+                <table class="table" id="remoteImagesTable">
                 </table>
             </div>
         </div>
@@ -140,6 +140,10 @@
             let trs = "";
             $.each(x, function(host, images){
                 trs += "<tr class='alert alert-info'><td colspan='7' class='text-center'>" + host + "</td></tr>";
+                if(images.length == 0){
+                    trs += `<tr><td colspan="7" class="text-center"><b>No Images</b></td></tr>`;
+                    return;
+                }
                 $.each(images, function(i, data){
                     trs += "<tr>" +
                         "<td> <input data-host='" + host + "' id='" + data.fingerprint + "' name='imageSelect' type='checkbox' /></td>" +
