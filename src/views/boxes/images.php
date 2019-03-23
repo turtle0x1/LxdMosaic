@@ -158,7 +158,7 @@
             })
 
             $("#imagesTable > tbody").empty().append(trs);
-            $("#profileBox, #containerBox, #cloudConfigBox, #overviewBox").hide();
+            $("#profileBox, #containerBox, #cloudConfigBox, #overviewBox, #projectsBox").hide();
             $("#imagesBox").show();
         });
     }
