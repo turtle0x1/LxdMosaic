@@ -41,10 +41,6 @@ chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/certs
 # Move in LxdManager
 cd /var/www/LxdMosaic
 
-#TEMP
-git fetch
-git checkout store-details
-
 npm install
 
 # Install Dependecies
