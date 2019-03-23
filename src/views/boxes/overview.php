@@ -1,6 +1,22 @@
 <div id="overviewBox" class="boxSlide">
     <div class="row">
       <!-- /.col-->
+      <div class="card-columns cols-2" id="serverOverviewGraphs">
+          <div class="card">
+              <div class="card-body">
+                  <canvas id="memoryUsage" height="200"></canvas>
+              </div>
+          </div>
+          <div class="card">
+              <div class="card-body">
+                   <canvas id="activeContainers" height="200"></canvas>
+              </div>
+          </div>
+      </div>
+      <!-- /.col-->
+    </div>
+    <div class="row">
+      <!-- /.col-->
       <div class="col-sm-6 col-lg-12" id="serverOverviewDetails">
       </div>
       <!-- /.col-->

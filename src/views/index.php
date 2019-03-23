@@ -67,6 +67,8 @@ if ($haveServers->haveAny() !== true) {
 
       <script src="/socket.io/socket.io.js"></script>
 
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+
       <script>
           var currentContainerDetails = null;
 
@@ -78,6 +80,11 @@ if ($haveServers->haveAny() !== true) {
           var containerAwaitingResponse = null;
 
           var globalUrls = {
+              //NOTE The url can't be "Analytics" because some ad blockers
+              //     will block it by default
+              analytics: {
+                  getLatestData: "/api/AnalyticData/GetLatestDataController/get"
+              },
               profiles: {
                   search:{
                       getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles"
@@ -433,7 +440,86 @@ var unknownServerDetails = {
 function loadServerOview()
 {
     setBreadcrumb("Dashboard", "active");
-    ajaxRequest(globalUrls["hosts"].getOverview, null, function(data){
+
+    ajaxRequest(globalUrls.analytics.getLatestData, {}, function(data){
+        data = $.parseJSON(data);
+
+        var mCtx = $('#memoryUsage');
+        var acCtx = $('#activeContainers');
+
+        var myLineChart = new Chart(acCtx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: "Fleet Active Containers",
+                        borderColor: '#00aced',
+                        pointBackgroundColor: "#ed4100",
+                        pointBorderColor: "#ed4100",
+                        data: data.activeContainers.data,
+                    }
+                ],
+                labels: data.activeContainers.labels
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Fleet Active Containers'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 1
+                        }
+                    }]
+                }
+            }
+        });
+
+
+        // console.log(typeof data.memory.data);
+        var myLineChart = new Chart(mCtx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: "Memory Usage",
+                        borderColor: '#00aced',
+                        pointBackgroundColor: "#ed4100",
+                        pointBorderColor: "#ed4100",
+                        data: data.memory.data,
+                    }
+                ],
+                labels: data.memory.labels
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Fleet Memory Usage'
+                },
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      callback: function(value, index, values) {
+                          return formatBytes(value);
+                      }
+                    }
+                  }]
+              },
+              tooltips: {
+                  callbacks: {
+                      label: function(value, data) {
+                          return formatBytes(value.value);
+                      }
+                  }
+              }
+          }
+      });
+
+    });
+
+    ajaxRequest(globalUrls.hosts.getOverview, null, function(data){
         let x = $.parseJSON(data);
         if(x.hasOwnProperty("error")){
             makeToastr(data);
