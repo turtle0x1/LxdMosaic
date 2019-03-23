@@ -444,6 +444,13 @@ function loadServerOview()
     ajaxRequest(globalUrls.analytics.getLatestData, {}, function(data){
         data = $.parseJSON(data);
 
+        if(data.hasOwnProperty("warning")){
+            $("#memoryUsage, #activeContainers").hide().parents(".card-body").find(".notEnoughData").show();
+            return false;
+        }
+
+        $("#memoryUsage, #activeContainers").show().parents(".card-body").find(".notEnoughData").hide();
+
         var mCtx = $('#memoryUsage');
         var acCtx = $('#activeContainers');
 

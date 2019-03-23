@@ -14,6 +14,11 @@ class GetLatestData
     public function get()
     {
         $latestData = $this->fetchLatestData->lastHour();
+        
+        if (count($latestData) < 2) {
+            return ["warning"=>"Not Enough Data, 10 minutes is minimum time"];
+        }
+
         return $this->prepareForGraphs($latestData);
     }
 
