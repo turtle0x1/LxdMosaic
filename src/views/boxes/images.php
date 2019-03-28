@@ -19,11 +19,12 @@
                 </div>
             </div>
             <br/>
-            <table class="table" id="imagesTable">
+            <table class="table table-bordered" id="imagesTable">
                 <thead>
                     <th>  </th>
                     <th> OS </th>
                     <th> Description </th>
+                    <th> Aliases </th>
                     <th> Release </th>
                     <th> Auto update </th>
                     <th> Created </th>
@@ -145,15 +146,24 @@
                     return;
                 }
                 $.each(images, function(i, data){
-                    trs += "<tr>" +
-                        "<td> <input data-host='" + host + "' id='" + data.fingerprint + "' name='imageSelect' type='checkbox' /></td>" +
-                        "<td>" + data.properties.os + "</td>" +
-                        "<td>" + data.properties.description + "</td>" +
-                        "<td>" + data.properties.release + "</td>" +
-                        "<td>" + data.auto_update + "</td>" +
-                        "<td>" + moment(data.created_at).format("DD-MM-YYYY") + "</td>" +
-                        "<td>" + formatBytes(data.size) + "</td>" +
-                    "</tr>";
+                    let a = "-";
+                    if(data.aliases.length > 0){
+                        a = ""
+                        $.each(data.aliases, function(i, item){
+                            a += `${item.name} <br/>`;
+                        });
+                    }
+
+                    trs += `<tr>
+                        <td><input data-host='" + host + "' id='" + data.fingerprint + "' name='imageSelect' type='checkbox' /></td>" +
+                        <td>${data.properties.os} </td>
+                        <td>${data.properties.description} </td>
+                        <td>${a}</td>
+                        <td>${data.properties.release}</td>
+                        <td>${data.auto_update}</td>
+                        <td>${moment(data.created_at).format("DD-MM-YYYY")}</td>
+                        <td>${formatBytes(data.size)}</td>
+                    </tr>`;
                 });
             })
 
