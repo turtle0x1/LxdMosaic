@@ -201,6 +201,25 @@ if ($haveServers->haveAny() !== true) {
               $(".sidebar").find(".active").removeClass("active");
               $(".sidebar").find(newActiveSelector).parent(".nav-item").addClass("active");
           }
+
+          function makeNodeMissingPopup()
+          {
+
+              $.confirm({
+                  title: "Node server isn't reachable!",
+                  content: `You can try <code> restarting the container</code> or <code>pm2 restart all</code>
+                      <br/>
+                      <br/>
+                      Without the node server you won't be able to get operation updates or
+                      connect to container consoles`,
+                  theme: 'dark',
+                  buttons: {
+                      ok: {
+                          btnClass: "btn btn-danger"
+                      }
+                  }
+              });
+          }
       </script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
@@ -350,45 +369,48 @@ toastr.options = {
   "showMethod": "fadeIn",
   "hideMethod": "fadeOut"
 }
+if(typeof io !== "undefined"){
+    var socket = io.connect("/operations");
 
-var socket = io.connect("/operations");
+    socket.on('operationUpdate', function(msg){
+       let id = msg.metadata.id;
+       let icon = statusCodeIconMap[msg.metadata.status_code];
+       let description = msg.metadata.hasOwnProperty("description") ? msg.metadata.description : "No Description Available";
+       let host = msg.host;
+       let hostList = $("#operationsList").find("[data-host='" + host + "']");
 
-socket.on('operationUpdate', function(msg){
-   let id = msg.metadata.id;
-   let icon = statusCodeIconMap[msg.metadata.status_code];
-   let description = msg.metadata.hasOwnProperty("description") ? msg.metadata.description : "No Description Available";
-   let host = msg.host;
-   let hostList = $("#operationsList").find("[data-host='" + host + "']");
-
-   if(hostList.length == 0){
-       $("#operationsList").append("<div data-host='" + host + "'>"+
-            "<div class='text-center'><h5><u>" + host + "</u></h5></div>"+
-            "<div class='opList'></div></div>"
-        );
-   }
-
-   let hostOpList = hostList.find(".opList");
-
-   let liItem = hostOpList.find("#" + id);
-
-
-
-   if(liItem.length > 0){
-       // Some sort of race condition exists with the closing of a terminal
-       // that emits a 103 / 105 status code after the 200 code so it causes
-       // the operation list to say running even though the socket has closed
-       // so this is a work around as im pretty once an event goes to 200 that
-       // is it finished
-       let span = liItem.find("span:eq(0)");
-       if(span.data("status") == 200){
-           return;
+       if(hostList.length == 0){
+           $("#operationsList").append("<div data-host='" + host + "'>"+
+                "<div class='text-center'><h5><u>" + host + "</u></h5></div>"+
+                "<div class='opList'></div></div>"
+            );
        }
 
-       liItem.html("<span data-status='" + msg.metadata.status_code + "' class='" + icon + "'></span>" + description);
-   }else{
-       hostOpList.prepend(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code));
-   }
-});
+       let hostOpList = hostList.find(".opList");
+
+       let liItem = hostOpList.find("#" + id);
+
+       if(liItem.length > 0){
+           // Some sort of race condition exists with the closing of a terminal
+           // that emits a 103 / 105 status code after the 200 code so it causes
+           // the operation list to say running even though the socket has closed
+           // so this is a work around as im pretty once an event goes to 200 that
+           // is it finished
+           let span = liItem.find("span:eq(0)");
+           if(span.data("status") == 200){
+               return;
+           }
+
+           liItem.html("<span data-status='" + msg.metadata.status_code + "' class='" + icon + "'></span>" + description);
+       }else{
+           hostOpList.prepend(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code));
+       }
+    });
+}else {
+    makeNodeMissingPopup();
+}
+
+
 
 function makeOperationHtmlItem(id, icon, description, statusCode)
 {

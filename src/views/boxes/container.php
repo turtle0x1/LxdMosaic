@@ -349,10 +349,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
         }
         term = new Terminal({});
 
-
-
         term.open(terminalContainer);
-
 
         // fit is called within a setTimeout, cols and rows need this.
         setTimeout(() => {
@@ -380,7 +377,9 @@ $("#containerBox").on("click", "#goToConsole", function() {
                         term.attach(consoleSocket);
                         term._initialized = true;
                     };
-
+                },
+                error: function(){
+                    makeNodeMissingPopup();
                 },
                 dataType: "json"
             });
