@@ -18,8 +18,8 @@ if (envImportResult.error) {
 }
 
 // Https certificate and key file location for secure websockets + https server
-var privateKey = fs.readFileSync('/etc/ssl/private/ssl-cert-snakeoil.key', 'utf8'),
-    certificate = fs.readFileSync('/etc/ssl/certs/ssl-cert-snakeoil.pem', 'utf8');
+var privateKey = fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
+    certificate = fs.readFileSync(process.env.CERT_PATH, 'utf8');
     certDir = "/var/www/LxdMosaic/src/sensitiveData/certs/",
     lxdConsoles = [],
     credentials = {
