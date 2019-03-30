@@ -64,6 +64,7 @@ class GenerateCert
     private function addToServer($urlAndPort, $trustPassword, $pathToCert)
     {
         $config = $this->lxdClient->createConfigArray($pathToCert);
+        $config["timeout"] = 2;
         $lxd = $this->lxdClient->createNewClient($urlAndPort, $config);
         return $lxd->certificates->add(file_get_contents($pathToCert), $trustPassword);
     }

@@ -32,20 +32,25 @@ class AddHosts
                 throw new \Exception("Already have host under " . $hostName, 1);
             }
 
-            $result = $this->generateCert->createCertAndPushToServer(
-                $hostName,
-                $hostsDetail["trustPassword"]
-            );
+            try {
+                $result = $this->generateCert->createCertAndPushToServer(
+                    $hostName,
+                    $hostsDetail["trustPassword"]
+                );
 
-            $this->addHost->addHost(
-                $hostName,
-                $result["shortPaths"]["key"],
-                $result["shortPaths"]["cert"],
-                $result["shortPaths"]["combined"]
-            );
+                $this->addHost->addHost(
+                    $hostName,
+                    $result["shortPaths"]["key"],
+                    $result["shortPaths"]["cert"],
+                    $result["shortPaths"]["combined"]
+                );
 
-            $this->hosts->reloadHosts();
+                $this->hosts->reloadHosts();
+            } catch (\Http\Client\Exception\NetworkException $e) {
+                throw new \Exception("Can't connect to host, is lxd running and the port open?", 1);
+            }
         }
+        return true;
     }
 
     private function addSchemeAndDefaultPort($name)
