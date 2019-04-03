@@ -63,6 +63,7 @@ let inputTemplate = '<div class="input-group mb-3 serverGroup">' +
 '</div>' +
     '<input placeholder="ip / hostname" name="connectDetails" class="form-control"/>' +
     '<input placeholder="trust password" name="trustPassword" type="password" class="form-control"/>' +
+    '<input placeholder="Alias (Optional)" name="alias" type="text" class="form-control"/>' +
     '<div class="input-group-addon">' +
     '<button class="btn btn-danger removeRow" type="button"><i class="fa fa-trash"></i></button>' +
     '</div>' +
@@ -101,9 +102,14 @@ $(document).on("click", "#addServers", function(){
             toastr["error"]("Please provide trust provide");
             return false;
         }
+
+        let alias = $(this).find("input[name=alias]").val();
+        alias = alias == "" ? null : alias;
+
         details.hostsDetails.push({
             name: connectDetailsInputVal,
-            trustPassword: trustPasswordInputVal
+            trustPassword: trustPasswordInputVal,
+            alias: alias
         });
     });
 

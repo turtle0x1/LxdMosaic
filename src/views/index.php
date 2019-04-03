@@ -120,6 +120,9 @@ if ($haveServers->haveAny() !== true) {
                   }
               },
               hosts: {
+                  alias: {
+                    update: "/api/Hosts/Alias/UpdateAliasController/update"
+                  },
                   search: {
                       search: "/api/Hosts/SearchHosts/search"
                   },
@@ -581,11 +584,12 @@ function loadServerOview()
                             + project + "</option>"
                 });
                 $(p).find(".projects").append(projects)
-            }else{
-
             }
 
-            $(p).find(".host").text(host);
+            let indent = data.alias == "" ? host : data.alias + ` (${host})`;
+
+            $(p).find(".host").text(indent);
+            $(p).attr("id", data.hostId);
             $(p).find(".memory").text(memoryUsed + " / " + memoryTotal);
             $(p).find(".cpuDetails").text(data.cpu.sockets[0].vendor);
 
@@ -608,11 +612,13 @@ function createContainerTree(){
                     text: containerName,
                     icon: statusCodeIconMap[details.state.status_code],
                     type: "container",
+                    hostIp: host.hostIp,
                     host: i
                 });
             });
             treeData.push({
                 text: i,
+                hostIp: host.hostIp,
                 nodes: containers,
                 type: "server",
                 icon: "fa fa-server"
@@ -647,7 +653,8 @@ function setContDetsByTreeItem(node)
 {
     currentContainerDetails = {
         container: node.text,
-        host: node.host
+        host: node.hostIp,
+        alias: node.host
     }
     return currentContainerDetails;
 }

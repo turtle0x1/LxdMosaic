@@ -15,10 +15,12 @@ class GetAllProfiles
     public function getAllProfiles()
     {
         $details = array();
-        foreach ($this->hostList->getHostList() as $host) {
-            $client = $this->client->getClientByUrl($host);
+        foreach ($this->hostList->getHostListWithDetails() as $host) {
+            $client = $this->client->getANewClient($host["Host_ID"]);
+            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
             $profiles = $client->profiles->all();
-            $details[$host] = [
+            $details[$indent] = [
+                "hostIp"=>$host["Host_Url_And_Port"],
                 "profiles"=>$this->getProfileDetails($client, $profiles)
             ];
         }

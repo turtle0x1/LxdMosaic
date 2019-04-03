@@ -157,15 +157,15 @@ function loadProjectView()
         $(".boxSlide, #projectDetails").hide();
         $("#projectsOverview, #projectsBox").show();
         data = $.parseJSON(data);
-        $.each(data, function(hostName, projects){
+        $.each(data, function(hostName, data){
             let hostProjects = [];
-            $.each(projects, function(i, projectName){
+            $.each(data.projects, function(i, projectName){
                 let x = {
                     text: projectName,
                     icon: "fa fa-user",
                     type: "project",
                     id: projectName,
-                    host: hostName
+                    host: data.hostIp
                 };
                 hostProjects.push(x);
             });

@@ -35,7 +35,7 @@
 
 var emptyServerBox = function(){
     return $(`
-    <div class="brand-card">
+    <div class="brand-card" id="">
       <div class="brand-card-header bg-twitter">
         <h4 class='host'></h4>
       </div>
@@ -53,7 +53,11 @@ var emptyServerBox = function(){
             <div class="form-group projectFormGroup">
                 <select class="form-control projects changeHostProject"></select>
             </div>
-
+        </div>
+        <div>
+            <div class="text-value">Edit Alias</div>
+                <button class="btn btn-primary editHost pull-right"><i class="fas fa-pencil-alt"></i></button>
+            </div>
         </div>
       </div>
     </div>`);
@@ -62,4 +66,13 @@ var emptyServerBox = function(){
 $(document).on("click", "#createContainer", function(){
     $("#modal-container-create").modal("show");
 });
+
+$(document).on("click", ".editHost", function(){
+    editHostDetailsObj.hostId = $(this).parents(".brand-card").attr("id");
+    $("#modal-hosts-edit").modal("show");
+});
 </script>
+
+<?php
+    require __DIR__ . "/../modals/hosts/editDetails.php";
+?>

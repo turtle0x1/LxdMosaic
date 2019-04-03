@@ -73,6 +73,7 @@
     $("#newContainerHosts").tokenInput(globalUrls.hosts.search.search, {
         queryParam: "host",
         propertyToSearch: "host",
+        tokenValue: "hostIp",
         preventDuplicates: false,
         theme: "facebook"
     });
@@ -94,7 +95,8 @@
 
     $("#modal-container-create").on("click", "#create", function(){
         let profileIds = mapObjToSignleDimension($("#newContainerProfiles").tokenInput("get"), "profile");
-        let hosts = mapObjToSignleDimension($("#newContainerHosts").tokenInput("get"), "host");
+        let hosts = mapObjToSignleDimension($("#newContainerHosts").tokenInput("get"), "hostIp");
+        console.log($("#newContainerHosts").tokenInput("get"));
         let image = $("#newContainerImage").tokenInput("get");
         let instanceType = $("#newContainerInstanceType").val();
 

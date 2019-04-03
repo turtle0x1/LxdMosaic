@@ -15,15 +15,19 @@ class GetAllImages
     public function getAllHostImages()
     {
         $output = array();
-        foreach ($this->hostList->getHostList() as $host) {
-            $client = $this->client->getClientByUrl($host);
+        foreach ($this->hostList->getHostListWithDetails() as $host) {
+            $client = $this->client->getANewClient($host["Host_ID"]);
             $ids = $client->images->all();
             $details = [];
+            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
             foreach ($ids as $fingerprint) {
                 $details[] = $client->images->info($fingerprint);
             }
 
-            $output[$host] = $details;
+            $output[$indent] = [
+                "hostIp"=>$host["Host_Url_And_Port"],
+                "images"=>$details
+            ];
         }
         return $output;
     }

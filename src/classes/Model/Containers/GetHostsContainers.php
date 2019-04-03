@@ -17,8 +17,10 @@ class GetHostsContainers
         $details = array();
         foreach ($this->hostList->getHostListWithDetails() as $host) {
             $client = $this->client->getANewClient($host["Host_ID"]);
+            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
             $containers = $client->containers->all();
-            $details[$host["Host_Url_And_Port"]] = [
+            $details[$indent] = [
+                "hostIp"=>$host["Host_Url_And_Port"],
                 "containers"=>$this->getContainersState($client, $containers)
             ];
         }

@@ -16,8 +16,8 @@ class SearchController
         $allImages = $this->getAllImages->getAllHostImages();
         $output = [];
         $seenFingerPrints = [];
-        foreach ($allImages as $images) {
-            foreach ($images as $image) {
+        foreach ($allImages as $details) {
+            foreach ($details["images"] as $image) {
                 if (in_array($image["fingerprint"], $seenFingerPrints)) {
                     continue;
                 }

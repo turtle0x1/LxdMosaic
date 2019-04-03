@@ -38,11 +38,18 @@ class AddHosts
                     $hostsDetail["trustPassword"]
                 );
 
+                $alias = null;
+
+                if (isset($hostsDetail["alias"]) && !empty($hostsDetail["alias"])) {
+                    $alias = $hostsDetail["alias"];
+                }
+
                 $this->addHost->addHost(
                     $hostName,
                     $result["shortPaths"]["key"],
                     $result["shortPaths"]["cert"],
-                    $result["shortPaths"]["combined"]
+                    $result["shortPaths"]["combined"],
+                    $alias
                 );
 
                 $this->hosts->reloadHosts();

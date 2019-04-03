@@ -61,15 +61,16 @@
   </div>
 </div>
 <script>
-    $("#newProjectHosts").tokenInput(globalUrls["hosts"].search.search, {
+    $("#newProjectHosts").tokenInput(globalUrls.hosts.search.search, {
         queryParam: "host",
         propertyToSearch: "host",
+        tokenValue: "hostIp",
         preventDuplicates: false,
         theme: "facebook"
     });
 
     $("#modal-projects-create").on("click", "#createProject", function(){
-        let hosts = mapObjToSignleDimension($("#newProjectHosts").tokenInput("get"), "host");
+        let hosts = mapObjToSignleDimension($("#newProjectHosts").tokenInput("get"), "hostIp");
 
         let newProjectNameInput = $("#modal-projects-create #newProjectName");
         let description = $("#modal-projects-create #newProjectDescription").val();

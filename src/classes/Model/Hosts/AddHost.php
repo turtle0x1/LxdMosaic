@@ -11,19 +11,21 @@ class AddHost
         $this->database = $database->dbObject;
     }
 
-    public function addHost($urlAndPort, $keyPath, $certPath, $combiendPath)
+    public function addHost($urlAndPort, $keyPath, $certPath, $combiendPath, $alias = null)
     {
         $sql = "INSERT INTO `Hosts`
                 (
                     `Host_Url_And_Port`,
                     `Host_Key_File`,
                     `Host_Cert_Only_File`,
-                    `Host_Cert_Path`
+                    `Host_Cert_Path`,
+                    `Host_Alias`
                 ) VALUES (
                     :urlAndPort,
                     :keyPath,
                     :certPath,
-                    :combinedPath
+                    :combinedPath,
+                    :alias
                 );
                 ";
         $do = $this->database->prepare($sql);
@@ -31,7 +33,8 @@ class AddHost
             ":urlAndPort"=>$urlAndPort,
             ":keyPath"=>$keyPath,
             ":certPath"=>$certPath,
-            ":combinedPath"=>$combiendPath
+            ":combinedPath"=>$combiendPath,
+            ":alias"=>$alias
         ]);
         return $do->rowCount() ? true : false;
     }

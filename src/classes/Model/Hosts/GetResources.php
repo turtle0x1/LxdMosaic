@@ -36,6 +36,7 @@ class GetResources
             $supportsProjects = $this->hasExtension->checkWithClient($client, "projects");
 
             $details["hostId"] = $hostId;
+            $details["alias"] = !is_null($host["Host_Alias"]) ? $host["Host_Alias"] : $host["Host_Url_And_Port"];
 
             $details["extensions"] = [
                 "supportsProjects"=>$supportsProjects
@@ -44,7 +45,7 @@ class GetResources
             $details["projects"] = [];
             $details["currentProject"] = $this->session->get("host/$hostId/project");
 
-            if($supportsProjects){
+            if ($supportsProjects) {
                 $details["projects"] = $client->projects->all();
             }
 

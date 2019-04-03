@@ -139,13 +139,13 @@
                 return false;
             }
             let trs = "";
-            $.each(x, function(host, images){
+            $.each(x, function(host, hostDetails){
                 trs += "<tr class='alert alert-info'><td colspan='7' class='text-center'>" + host + "</td></tr>";
-                if(images.length == 0){
+                if(hostDetails.images.length == 0){
                     trs += `<tr><td colspan="7" class="text-center"><b>No Images</b></td></tr>`;
                     return;
                 }
-                $.each(images, function(i, data){
+                $.each(hostDetails.images, function(i, data){
                     let a = "-";
                     if(data.aliases.length > 0){
                         a = ""
@@ -155,7 +155,7 @@
                     }
 
                     trs += `<tr>
-                        <td><input data-host='" + host + "' id='" + data.fingerprint + "' name='imageSelect' type='checkbox' /></td>" +
+                        <td><input data-host='${hostDetails.hostIp}' id='${data.fingerprint}' name='imageSelect' type='checkbox' /></td>" +
                         <td>${data.properties.os} </td>
                         <td>${data.properties.description} </td>
                         <td>${a}</td>

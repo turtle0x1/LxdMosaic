@@ -39,6 +39,7 @@
     $("#copyModal-newHost").tokenInput(globalUrls.hosts.search.search, {
         queryParam: "host",
         propertyToSearch: "host",
+        tokenValue: "hostIp",
         preventDuplicates: false,
         tokenLimit: 1,
         theme: "facebook"
@@ -70,7 +71,7 @@
 
         let x = $.extend({
             newContainer: $("#copyModal-newName").val(),
-            newHost: d[0]["host"]
+            newHost: d[0]["hostIp"]
         }, currentContainerDetails);
 
         ajaxRequest(globalUrls.containers.copy, x, function(data){

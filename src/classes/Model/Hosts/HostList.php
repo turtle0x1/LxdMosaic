@@ -32,7 +32,8 @@ class HostList
     {
         $sql = "SELECT
                     `Host_ID`,
-                    `Host_Url_And_Port`
+                    `Host_Url_And_Port`,
+                    `Host_Alias`
                 FROM
                     `Hosts`
                 ORDER BY
