@@ -48,6 +48,10 @@ var emptyServerBox = function(){
           <div class="text-value">Memory</div>
           <div class="text-uppercase text-muted memory"></div>
         </div>
+        <div class='gpuGroup'>
+          <div class="text-value">GPU Details</div>
+          <div class="text-uppercase text-muted gpuDetails"></div>
+        </div>
         <div>
             <div class="text-value">Project</div>
             <div class="form-group projectFormGroup">

@@ -594,6 +594,17 @@ function loadServerOview()
             $(p).find(".memory").text(memoryUsed + " / " + memoryTotal);
             $(p).find(".cpuDetails").text(data.cpu.sockets[0][cpuIndentKey]);
 
+            if(data.extensions.resGpu && data.hasOwnProperty("gpu") && data.gpu.cards.length > 0){
+                let g = "";
+                $.each(data.gpu.cards, function(i, gpu){
+                    g += `${gpu.product} <br/>`
+                });
+
+                $(p).find(".gpuDetails").html(g);
+            }else{
+                $(p).find(".gpuGroup").remove();
+            }
+
             $("#serverOverviewDetails").append(p);
         });
         $(".boxSlide").hide();
