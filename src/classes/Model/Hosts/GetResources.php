@@ -34,12 +34,14 @@ class GetResources
             $details = $client->resources->info();
 
             $supportsProjects = $this->hasExtension->checkWithClient($client, "projects");
+            $resCpuSocket = $this->hasExtension->checkWithClient($client, "resources_cpu_socket");
 
             $details["hostId"] = $hostId;
             $details["alias"] = !is_null($host["Host_Alias"]) ? $host["Host_Alias"] : $host["Host_Url_And_Port"];
 
             $details["extensions"] = [
-                "supportsProjects"=>$supportsProjects
+                "supportsProjects"=>$supportsProjects,
+                "resCpuSocket"=>$resCpuSocket
             ];
 
             $details["projects"] = [];

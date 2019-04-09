@@ -587,11 +587,12 @@ function loadServerOview()
             }
 
             let indent = data.alias == "" ? host : data.alias + ` (${host})`;
+            let cpuIndentKey = data.extensions.resCpuSocket ? "name" : "vendor";
 
             $(p).find(".host").text(indent);
             $(p).attr("id", data.hostId);
             $(p).find(".memory").text(memoryUsed + " / " + memoryTotal);
-            $(p).find(".cpuDetails").text(data.cpu.sockets[0].vendor);
+            $(p).find(".cpuDetails").text(data.cpu.sockets[0][cpuIndentKey]);
 
             $("#serverOverviewDetails").append(p);
         });
