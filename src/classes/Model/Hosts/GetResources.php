@@ -40,7 +40,10 @@ class GetResources
             $client = $this->client->getANewClient($hostId);
 
             $details = $this->getDetails($client);
-
+            $details["alias"] = !is_null($host["Host_Alias"]) ? $host["Host_Alias"] : $host["Host_Url_And_Port"];
+            $details["currentProject"] = $this->session->get("host/$hostId/project");
+            $details["hostId"] = $hostId;
+            
             $output[$host["Host_Url_And_Port"]] = $details;
         }
         return $output;
@@ -54,9 +57,6 @@ class GetResources
         $resCpuSocket = $this->hasExtension->checkWithClient($client, "resources_cpu_socket");
         $resGpu = $this->hasExtension->checkWithClient($client, "resources_gpu");
 
-        $details["hostId"] = $hostId;
-        $details["alias"] = !is_null($host["Host_Alias"]) ? $host["Host_Alias"] : $host["Host_Url_And_Port"];
-
         $details["extensions"] = [
             "supportsProjects"=>$supportsProjects,
             "resCpuSocket"=>$resCpuSocket,
@@ -64,7 +64,6 @@ class GetResources
         ];
 
         $details["projects"] = [];
-        $details["currentProject"] = $this->session->get("host/$hostId/project");
 
         if ($supportsProjects) {
             $details["projects"] = $client->projects->all();
