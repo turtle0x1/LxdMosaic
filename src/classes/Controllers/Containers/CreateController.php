@@ -17,7 +17,8 @@ class CreateController
         $hosts,
         array $imageDetails,
         string $instanceType = "",
-        $server = ""
+        $server = "",
+        array $gpus = []
     ) {
         $lxdResponses = $this->createContainer->create(
             $name,
@@ -26,7 +27,8 @@ class CreateController
             $imageDetails,
             $server,
             [],
-            $instanceType
+            $instanceType,
+            $gpus
         );
         return ["success"=>"Created Container", "lxdResponses"=>$lxdResponses];
     }

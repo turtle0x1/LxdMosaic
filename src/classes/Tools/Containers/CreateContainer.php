@@ -25,13 +25,20 @@ class CreateContainer
         array $imageDetails,
         $server = "",
         array $profileNames = [],
-        string $instanceType = ""
+        string $instanceType = "",
+        array $gpus = null
     ) {
         $this->hostsHaveContainer->ifHostInListHasContainerNameThrow($hosts, $name);
 
         $profiles = $this->createProfileNameArray($profiles, $profileNames);
 
-        $options = $this->createOptionsArray($profiles, $imageDetails, $server, $instanceType);
+        $options = $this->createOptionsArray(
+            $profiles,
+            $imageDetails,
+            $server,
+            $instanceType,
+            $gpus
+        );
 
         $results = [];
 
@@ -53,14 +60,29 @@ class CreateContainer
     }
 
 
-    private function createOptionsArray($profiles, $imageDetails, $server = "", $instanceType = "")
-    {
-        return [
+    private function createOptionsArray(
+        $profiles,
+        $imageDetails,
+        $server = "",
+        $instanceType = "",
+        array $gpus = null
+    ) {
+        $x = [
             "fingerprint"=>$imageDetails["fingerprint"],
             "profiles"=>$profiles,
             "server"=>$server,
             "instance_type"=>$instanceType
         ];
+
+        foreach ($gpus as $index => $id) {
+            $x["devices"] = [];
+            $x["devices"]["gpu_$index"] = [
+                "type"=>"gpu",
+                "id"=>$id
+            ];
+        }
+
+        return $x;
     }
 
     private function createProfileNameArray($profiles, $additionalProfiles)

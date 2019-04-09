@@ -120,6 +120,9 @@ if ($haveServers->haveAny() !== true) {
                   }
               },
               hosts: {
+                  gpu: {
+                    getAll: "/api/Hosts/GPU/GetAllController/getAll"
+                  },
                   alias: {
                     update: "/api/Hosts/Alias/UpdateAliasController/update"
                   },
