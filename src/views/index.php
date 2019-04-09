@@ -706,6 +706,7 @@ $(document).on("change", ".changeHostProject", function(){
     };
 
     ajaxRequest(globalUrls.user.setHostProject, x, function(data){
+        makeToastr(data);
         createContainerTree();
     })
 
