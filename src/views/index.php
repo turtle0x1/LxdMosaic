@@ -614,19 +614,32 @@ function loadServerOview()
 }
 
 function createContainerTree(){
+
     ajaxRequest(globalUrls.hosts.containers.getAll, {}, (data)=>{
         data = $.parseJSON(data);
         let treeData = [];
         $.each(data, function(i, host){
             let containers = [];
             $.each(host.containers, function(containerName, details){
+                let selected = false;
+                if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
+                    if(i == currentContainerDetails.alias && containerName == currentContainerDetails.container){
+                        selected = true
+                    }
+                }else{
+                    selected = false;
+                }
                 containers.push({
                     text: containerName,
                     icon: statusCodeIconMap[details.state.status_code],
                     type: "container",
                     hostIp: host.hostIp,
-                    host: i
+                    host: i,
+                    state: {
+                        selected: selected
+                    }
                 });
+
             });
             treeData.push({
                 text: i,
