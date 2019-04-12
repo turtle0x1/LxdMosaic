@@ -416,7 +416,12 @@ if(typeof io !== "undefined"){
     makeNodeMissingPopup();
 }
 
-
+$(".sidebar-nav").on("click", ".nav-item", function(){
+    if(consoleSocket !== undefined && currentTerminalProcessId !== null){
+        consoleSocket.emit("close", currentTerminalProcessId);
+        currentTerminalProcessId = null;
+    }
+});
 
 function makeOperationHtmlItem(id, icon, description, statusCode)
 {
