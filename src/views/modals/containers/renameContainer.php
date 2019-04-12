@@ -14,7 +14,7 @@
             <b> From Host: </b> <span id="renameModal-currentHost"></span>
         </h5>
         <div class="form-group">
-            <b><label> New Name</label></b>return
+            <b><label> New Name</label></b>
             <input class="form-control validateName" maxlength="63" id="renameModal-newName"/>
         </div>
       </div>
@@ -51,6 +51,10 @@
                 return false;
             }
             $("#modal-container-rename").modal("toggle");
+            //TODO This needs to be a callback just a dirty fix for now
+            currentContainerDetails.container = $("#renameModal-newName").val();
+            createContainerTree();
+            loadContainerView(currentContainerDetails);
         });
     });
 </script>
