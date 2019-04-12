@@ -90,7 +90,6 @@ function createWebSockets() {
             let lxdClientKey = certDir + result[i].Host_Key_File
 
             if(result[i].Host_Online == 0){
-                console.log(result[i]);
                 continue;
             }
 
