@@ -15,13 +15,12 @@ class GetProfilesOnAllHosts
     public function getProfilesOnAllHosts()
     {
         $profiles = array();
-        $hosts = $this->hostList->getHostList();
-
+        $hosts = $this->hostList->getOnlineHostsWithDetails();
         $numberOfHosts = count($hosts);
         $seenProfiles = [];
 
         foreach ($hosts as $host) {
-            $client = $this->client->getClientByUrl($host);
+            $client = $this->client->getANewClient($host["Host_ID"]);
             $hostProfiles = $client->profiles->all();
             foreach ($hostProfiles as $profile) {
                 if (!isset($seenProfiles[$profile])) {

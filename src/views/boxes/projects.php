@@ -169,10 +169,19 @@ function loadProjectView()
                 };
                 hostProjects.push(x);
             });
+
+            let state = {};
+
+            if(data.online == false){
+                hostName += " (Offline)";
+                state.disabled = true;
+            }
+
             treeData.push({
                 text: hostName,
                 nodes: hostProjects,
-                icon: "fa fa-server"
+                icon: "fa fa-server",
+                state: state
             })
         });
         $('#jsTreeSidebar').treeview({

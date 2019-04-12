@@ -37,13 +37,29 @@ class GetResources
         $output = array();
         foreach ($this->hostList->getHostListWithDetails() as $host) {
             $hostId = $host["Host_ID"];
-            $client = $this->client->getANewClient($hostId);
+            $details = [];
 
+            $alias = !is_null($host["Host_Alias"]) ? $host["Host_Alias"] : $host["Host_Url_And_Port"];
+            $currentProject = $this->session->get("host/$hostId/project");
+
+            if ($host["Host_Online"] != true) {
+                $output[$host["Host_Url_And_Port"]] = [
+                    "online"=>false,
+                    "alias"=>$alias,
+                    "currentProject"=>$currentProject,
+                    "hostId"=>$hostId
+                ];
+                continue;
+            }
+
+            $client = $this->client->getANewClient($hostId);
             $details = $this->getDetails($client);
-            $details["alias"] = !is_null($host["Host_Alias"]) ? $host["Host_Alias"] : $host["Host_Url_And_Port"];
-            $details["currentProject"] = $this->session->get("host/$hostId/project");
+
+            $details["alias"] = $alias;
+            $details["currentProject"] = $currentProject;
             $details["hostId"] = $hostId;
-            
+
+
             $output[$host["Host_Url_And_Port"]] = $details;
         }
         return $output;

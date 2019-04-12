@@ -29,6 +29,12 @@ var privateKey = fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
     app = express();
 
 app.use(cors());
+var bodyParser = require('body-parser')
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
+
 var httpsServer = https.createServer(credentials, app);
 var io = require('socket.io')(httpsServer);
 
@@ -83,6 +89,11 @@ function createWebSockets() {
             let lxdClientCert = certDir + result[i].Host_Cert_Only_File
             let lxdClientKey = certDir + result[i].Host_Key_File
 
+            if(result[i].Host_Online == 0){
+                console.log(result[i]);
+                continue;
+            }
+
             // Connecting to the lxd server/s
             const wsoptions = {
                 cert: fs.readFileSync(lxdClientCert),
@@ -107,10 +118,6 @@ function createWebSockets() {
 
             var ws = new WebSocket('wss://' + hostWithOutProto + '/1.0/events?type=operation', wsoptions);
 
-            ws.on('error', (error) => {
-                console.log(error)
-            });
-
             ws.on('message', function(data, flags) {
                 var buf = Buffer.from(data)
                 let message = JSON.parse(data.toString());
@@ -129,6 +136,14 @@ app.get('/hosts/reload/', function(req, res) {
     createWebSockets();
     res.send({
         success: "reloaded"
+    });
+});
+
+app.post('/hosts/message/', function(req, res) {
+    console.log(req.body.data);
+    operationSocket.emit(req.body.type, req.body.data);
+    res.send({
+        success: "delivered"
     });
 });
 
@@ -157,7 +172,14 @@ terminalsIo.on("connect", function(socket) {
 
         const lxdReq = https.request(execOptions, res => {
             res.on('data', d => {
+
                 const output = JSON.parse(d);
+
+                if(output.hasOwnProperty("error") && output.error !== ""){
+                    socket.emit("data", "Container Offline");
+                    return false;
+                }
+
                 const lxdWs = new WebSocket('wss://' +
                     execOptions.host + ':' + execOptions.port + output.operation +
                     '/websocket?secret=' + output.metadata.metadata.fds['0'],
@@ -191,6 +213,9 @@ terminalsIo.on("connect", function(socket) {
 
     socket.on('close', function(indentifier) {
         setTimeout(() => {
+            if(lxdConsoles[indentifier] == undefined){
+                return
+            }
              lxdConsoles[indentifier].send('exit  \r', { binary: true }, function(){
                 lxdConsoles[indentifier].close();
                 delete lxdConsoles[indentifier];

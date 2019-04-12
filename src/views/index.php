@@ -1,5 +1,6 @@
 <?php
 $haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
+
 if ($haveServers->haveAny() !== true) {
     header("Location: /views/firstRun");
     exit;
@@ -226,6 +227,28 @@ if ($haveServers->haveAny() !== true) {
                   }
               });
           }
+
+          function makeServerChangePopup(status, host)
+          {
+              let message = "";
+              if(status == "offline"){
+                  message = `If there any requests related to hosts running you
+                    may need to wait 30 seconds and refresh the page`;
+              }else{
+                  message = "Host is now online"
+              }
+
+              $.confirm({
+                  title: `${host} is ${status}!`,
+                  content: message,
+                  theme: 'dark',
+                  buttons: {
+                      ok: {
+                          btnClass: "btn btn-danger"
+                      }
+                  }
+              });
+          }
       </script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
@@ -377,6 +400,12 @@ toastr.options = {
 }
 if(typeof io !== "undefined"){
     var socket = io.connect("/operations");
+
+    socket.on('hostChange', function(msg){
+        let data = $.parseJSON(msg);
+        let status = data.offline ? "offline" : "online";
+        makeServerChangePopup(status, data.host);
+    });
 
     socket.on('operationUpdate', function(msg){
        let id = msg.metadata.id;
@@ -569,6 +598,20 @@ function loadServerOview()
         $("#serverOverviewDetails").empty();
 
         $.each(x, function(host, data){
+
+
+            let p = emptyServerBox();
+            let indent = data.alias == "" ? host : data.alias + ` (${host})`;
+            $(p).find(".host").text(indent);
+            $(p).attr("id", data.hostId);
+
+            if(data.online == false){
+                $(p).find(".host").text(indent + "(Offline)");
+                $(p).find(".bg-twitter").removeClass("bg-twitter").addClass("bg-danger");
+                $("#serverOverviewDetails").append(p);
+                return;
+            }
+
             let memoryUsed = unknownServerDetails.memory.used;
             let memoryTotal = unknownServerDetails.memory.total;
 
@@ -581,8 +624,6 @@ function loadServerOview()
                 data = unknownServerDetails;
             }
 
-            let p = emptyServerBox();
-
             if(data.extensions.supportsProjects){
                 let projects = "";
                 $.each(data.projects, function(o, project){
@@ -594,11 +635,10 @@ function loadServerOview()
                 $(p).find(".projects").append(projects)
             }
 
-            let indent = data.alias == "" ? host : data.alias + ` (${host})`;
+
             let cpuIndentKey = data.extensions.resCpuSocket ? "name" : "vendor";
 
-            $(p).find(".host").text(indent);
-            $(p).attr("id", data.hostId);
+
             $(p).find(".memory").text(memoryUsed + " / " + memoryTotal);
             $(p).find(".cpuDetails").text(data.cpu.sockets[0][cpuIndentKey]);
 
@@ -647,14 +687,20 @@ function createContainerTree(){
                         selected: selected
                     }
                 });
-
             });
+
+            let state = {};
+            if(host.online == false){
+                i += " (Offline)";
+                state.disabled = true;
+            }
             treeData.push({
                 text: i,
                 hostIp: host.hostIp,
                 nodes: containers,
                 type: "server",
-                icon: "fa fa-server"
+                icon: "fa fa-server",
+                state: state
             })
         });
         $('#jsTreeSidebar').treeview({

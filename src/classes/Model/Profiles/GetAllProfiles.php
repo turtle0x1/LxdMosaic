@@ -16,10 +16,19 @@ class GetAllProfiles
     {
         $details = array();
         foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $client = $this->client->getANewClient($host["Host_ID"]);
             $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
+
+            if ($host["Host_Online"] != true) {
+                $details[$indent] = [
+                    "online"=>false
+                ];
+                continue;
+            }
+            $client = $this->client->getANewClient($host["Host_ID"]);
+
             $profiles = $client->profiles->all();
             $details[$indent] = [
+                "online"=>true,
                 "hostIp"=>$host["Host_Url_And_Port"],
                 "profiles"=>$this->getProfileDetails($client, $profiles)
             ];

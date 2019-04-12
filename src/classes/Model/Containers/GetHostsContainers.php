@@ -16,10 +16,21 @@ class GetHostsContainers
     {
         $details = array();
         foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $client = $this->client->getANewClient($host["Host_ID"]);
             $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
+
+            if ($host["Host_Online"] != true) {
+                $details[$indent] = [
+                    "online"=>false,
+                    "hostIp"=>$host["Host_Url_And_Port"],
+                    "containers"=>[]
+                ];
+                continue;
+            }
+
+            $client = $this->client->getANewClient($host["Host_ID"]);
             $containers = $client->containers->all();
             $details[$indent] = [
+                "online"=>true,
                 "hostIp"=>$host["Host_Url_And_Port"],
                 "containers"=>$this->getContainersState($client, $containers)
             ];
