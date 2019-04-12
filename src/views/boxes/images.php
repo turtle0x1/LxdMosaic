@@ -142,7 +142,12 @@
             $.each(x, function(host, hostDetails){
                 trs += "<tr class='alert alert-info'><td colspan='7' class='text-center'>" + host + "</td></tr>";
                 if(hostDetails.images.length == 0){
-                    trs += `<tr><td colspan="7" class="text-center"><b>No Images</b></td></tr>`;
+                    if(hostDetails.online){
+                        trs += `<tr><td colspan="7" class="text-center"><b>No Images</b></td></tr>`;
+                    }else{
+                        trs += `<tr><td colspan="7" class="text-center"><b class="text-danger">Host Offline</b></td></tr>`;
+                    }
+
                     return;
                 }
                 $.each(hostDetails.images, function(i, data){

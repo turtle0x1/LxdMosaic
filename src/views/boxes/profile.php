@@ -157,10 +157,18 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
                 }
                 profiles.push(x);
             });
+            let state = {};
+            if(host.online == false){
+                hostName += " (Offline)";
+                state.disabled = true;
+            }
+
             treeData.push({
                 text: hostName,
                 nodes: profiles,
-                icon: "fa fa-server"
+                icon: "fa fa-server",
+                state: state
+
             })
         });
         $(".boxSlide, #profileDetails").hide();

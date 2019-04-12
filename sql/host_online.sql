@@ -1,0 +1,3 @@
+USE `LXD_Manager`;
+
+ALTER TABLE `Hosts` ADD COLUMN `Host_Online` TINYINT(1) NULL DEFAULT 1;

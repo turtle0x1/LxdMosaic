@@ -33,9 +33,28 @@ class HostList
         $sql = "SELECT
                     `Host_ID`,
                     `Host_Url_And_Port`,
-                    `Host_Alias`
+                    `Host_Alias`,
+                    `Host_Online`
                 FROM
                     `Hosts`
+                ORDER BY
+                    `Host_ID` DESC
+                ";
+        $do = $this->database->query($sql);
+        return $do->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getOnlineHostsWithDetails()
+    {
+        $sql = "SELECT
+                    `Host_ID`,
+                    `Host_Url_And_Port`,
+                    `Host_Alias`,
+                    `Host_Online`
+                FROM
+                    `Hosts`
+                WHERE
+                    `Host_Online` = 1
                 ORDER BY
                     `Host_ID` DESC
                 ";

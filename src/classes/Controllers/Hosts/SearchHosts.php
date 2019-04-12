@@ -15,6 +15,10 @@ class SearchHosts
         $servers = $this->hostList->getHostListWithDetails();
         $output = [];
         foreach ($servers as $server) {
+            if ($server["Host_Online"] != true) {
+                continue;
+            }
+            
             $alias = is_null($server["Host_Alias"]) ? $server['Host_Url_And_Port'] : $server["Host_Alias"];
             if (strpos($alias, $host) !== false) {
                 $output[] = [
