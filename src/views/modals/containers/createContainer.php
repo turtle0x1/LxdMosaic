@@ -94,7 +94,7 @@
                 $("#gpuWarning").show();
                 $("#newContainerGpus").hide();
             }else{
-                let x = {hostIp: h[0].hostId}
+                let x = {hostId: h[0].hostId}
                 ajaxRequest(globalUrls.hosts.gpu.getAll, x, (data)=>{
                     data =  $.parseJSON(data);
                     //TODO if len == 0

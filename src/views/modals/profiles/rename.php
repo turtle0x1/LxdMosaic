@@ -24,14 +24,14 @@
 </div>
 <script>
     var renameProfileData = {
-        host: null,
+        hostAlias: null,
         currentName:  null,
         hostId: null
     }
 
     $("#modal-profile-rename").on("shown.bs.modal", function(){
-        if(renameProfileData.host == null){
-            makeToastr(JSON.stringify({state: "error", message: "Developer fail - Please provide host"}));
+        if(renameProfileData.hostAlias == null){
+            makeToastr(JSON.stringify({state: "error", message: "Developer fail - Please provide host alias"}));
             return false;
         } else if(renameProfileData.currentName == null){
             makeToastr(JSON.stringify({state: "error", message: "Developer fail - Please provide currentName"}));
@@ -39,7 +39,7 @@
         }
 
         $(".renameProfile-profileName").text(renameProfileData.currentName);
-        $("#renameProfile-host").text(renameProfileData.host);
+        $("#renameProfile-host").text(renameProfileData.hostAlias);
     });
 
     $("#modal-profile-rename").on("click", "#renameProfile", function(){
