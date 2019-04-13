@@ -165,7 +165,7 @@ function loadProjectView()
                     icon: "fa fa-user",
                     type: "project",
                     id: projectName,
-                    host: data.hostIp
+                    hostId: data.hostId
                 };
                 hostProjects.push(x);
             });
@@ -189,7 +189,7 @@ function loadProjectView()
             levels: 5,
             onNodeSelected: function(event, node) {
                 if(node.type == "project"){
-                    viewProject(node.id, node.host);
+                    viewProject(node.id, node.hostId);
                 } else if (node.type == "projectsOverview"){
                     $(".boxSlide, #projectDetails").hide();
                     $("#projectsOverview, #projectsBox").show();
@@ -199,9 +199,9 @@ function loadProjectView()
     });
 }
 
-function viewProject(project, host){
+function viewProject(project, hostId){
     currentProject.project = project;
-    currentProject.host =    host;
+    currentProject.hostId = hostId;
     ajaxRequest(globalUrls.projects.info, currentProject, (data)=>{
         data = $.parseJSON(data);
         $("#projectsOverview").hide();
@@ -251,7 +251,7 @@ $("#projectsBox").on("click", "#createProject", function(){
 });
 
 $("#projectsBox").on("click", "#renameProject", function(){
-    renameProjectObj.host = currentProject.host;
+    renameProjectObj.hostId = currentProject.hostId;
     renameProjectObj.project = currentProject.project;
     $("#modal-projects-rename").modal("show");
 });

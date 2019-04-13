@@ -10,8 +10,8 @@ class GetContainerDetailsController
         $this->getContainer = $getContainer;
     }
 
-    public function get(string $host, string $container)
+    public function get(int $hostId, string $container)
     {
-        return $this->getContainer->get($host, $container);
+        return $this->getContainer->get($hostId, $container);
     }
 }

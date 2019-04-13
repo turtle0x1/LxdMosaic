@@ -29,7 +29,7 @@ class GetHostsProjects
             $projects = $client->projects->all();
 
 
-            $details[$indent]["hostIp"] = $host["Host_Url_And_Port"];
+            $details[$indent]["hostId"] = $host["Host_ID"];
             $details[$indent]["projects"] = $projects;
         }
         return $details;

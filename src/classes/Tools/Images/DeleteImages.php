@@ -15,7 +15,7 @@ class DeleteImages
         $output = [];
         foreach ($imageData as $image) {
             $this->validateOrThrowImageDetails($image);
-            $client = $this->lxdClient->getClientByUrl($image["host"]);
+            $client = $this->lxdClient->getANewClient($image["hostId"]);
             $output[] = $client->images->remove($image["fingerprint"]);
         }
         return $output;
@@ -23,7 +23,7 @@ class DeleteImages
 
     private function validateOrThrowImageDetails(array $image)
     {
-        if (!isset($image["host"]) && !is_string($image["host"])) {
+        if (!isset($image["hostId"]) && !is_numeric($image["hostId"])) {
             throw new \Exception("Host Details Missing", 1);
         } elseif (!isset($image["fingerprint"]) && !is_string($image["fingerprint"])) {
             throw new \Exception("Fingerprint Missing", 1);

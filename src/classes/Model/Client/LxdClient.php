@@ -18,12 +18,6 @@ class LxdClient
         $this->session = $session;
     }
 
-    public function getClientByUrl($url, $checkCache = true)
-    {
-        $hostId = $this->getDetails->getIdByUrlMatch($url);
-        return $this->getANewClient($hostId, $checkCache);
-    }
-
     public function getANewClient($hostId, $checkCache = true, $setProject = true)
     {
         $hostDetails = $this->getDetails->getAll($hostId);

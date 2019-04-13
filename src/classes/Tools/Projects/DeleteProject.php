@@ -11,9 +11,9 @@ class DeleteProject
         $this->lxdClient = $lxdClient;
     }
 
-    public function remove(string $host, string $project)
+    public function remove(int $hostId, string $project)
     {
-        $client = $this->lxdClient->getClientByUrl($host);
+        $client = $this->lxdClient->getANewClient($hostId);
         return $client->projects->remove($project);
     }
 }

@@ -11,10 +11,10 @@ class HostsHaveContainer
         $this->client = $lxdClient;
     }
 
-    public function ifHostInListHasContainerNameThrow($hosts, $name)
+    public function ifHostInListHasContainerNameThrow($hostIds, $name)
     {
-        foreach ($hosts as $host) {
-            $client = $this->client->getClientByUrl($host);
+        foreach ($hostIds as $hostId) {
+            $client = $this->client->getANewClient($hostId);
             $allContainers = $client->containers->all();
             if (in_array($name, $allContainers)) {
                 throw new \Exception("$host has a container with the name $name", 1);

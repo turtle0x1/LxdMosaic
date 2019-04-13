@@ -11,9 +11,9 @@ class GetContainer
         $this->client = $lxdClient;
     }
 
-    public function get(string $host, string $containerName)
+    public function get(string $hostId, string $containerName)
     {
-        $client = $this->client->getClientByUrl($host);
+        $client = $this->client->getANewClient($hostId);
         $details = $client->containers->info($containerName);
         $state = $client->containers->state($containerName);
         $snapshots = $client->containers->snapshots->all($containerName);

@@ -10,9 +10,9 @@ class DeleteContainer
         $this->lxdClient = $lxdClient;
     }
 
-    public function delete($host, $container)
+    public function delete(int $hostId, string $container)
     {
-        $lxd = $this->lxdClient->getClientByUrl($host);
+        $lxd = $this->lxdClient->getANewClient($hostId);
         return $lxd->containers->remove($container);
     }
 }

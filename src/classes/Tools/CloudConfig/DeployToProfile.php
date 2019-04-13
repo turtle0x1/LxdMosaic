@@ -21,8 +21,8 @@ class DeployToProfile
         int $cloudConfigId
     ) {
         $deployResults = [];
-        foreach ($hosts as $host) {
-            $client = $this->client->getClientByUrl($host);
+        foreach ($hosts as $hostId) {
+            $client = $this->client->getANewClient($hostId);
             $serverProfiles = $client->profiles->all();
 
             $latestData = $this->getConfig->getLatestConfig($cloudConfigId);

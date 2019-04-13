@@ -11,7 +11,8 @@ class GetProjectInfoController
         $this->getProjectInfo = $getProjectInfo;
     }
 
-    public function get(string $host, string $project){
-        return $this->getProjectInfo->get($host, $project);
+    public function get(int $hostId, string $project)
+    {
+        return $this->getProjectInfo->get($hostId, $project);
     }
 }

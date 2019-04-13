@@ -64,13 +64,13 @@
     $("#newProjectHosts").tokenInput(globalUrls.hosts.search.search, {
         queryParam: "host",
         propertyToSearch: "host",
-        tokenValue: "hostIp",
+        tokenValue: "hostId",
         preventDuplicates: false,
         theme: "facebook"
     });
 
     $("#modal-projects-create").on("click", "#createProject", function(){
-        let hosts = mapObjToSignleDimension($("#newProjectHosts").tokenInput("get"), "hostIp");
+        let hosts = mapObjToSignleDimension($("#newProjectHosts").tokenInput("get"), "hostId");
 
         let newProjectNameInput = $("#modal-projects-create #newProjectName");
         let description = $("#modal-projects-create #newProjectDescription").val();

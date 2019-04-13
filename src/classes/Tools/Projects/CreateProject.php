@@ -18,8 +18,8 @@ class CreateProject
         array $config = []
     ) {
         $output = [];
-        foreach($hosts as $host){
-            $client = $this->lxdClient->getClientByUrl($host);
+        foreach ($hosts as $hostId) {
+            $client = $this->lxdClient->getANewClient($hostId);
             //TODO Check if project exsits
             $client->projects->create($name, $description, $config);
         }

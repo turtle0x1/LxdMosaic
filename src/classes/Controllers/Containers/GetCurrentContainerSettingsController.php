@@ -10,8 +10,8 @@ class GetCurrentContainerSettingsController
         $this->getContainerSettings = $getContainerSettings;
     }
 
-    public function get(string $host, string $container)
+    public function get(int $hostId, string $container)
     {
-        return $this->getContainerSettings->get($host, $container);
+        return $this->getContainerSettings->get($hostId, $container);
     }
 }

@@ -390,8 +390,8 @@ $("#containerBox").on("click", "#goToConsole", function() {
 
 $("#containerBox").on("click", ".toProfile", function(){
     let profile = $(this).text();
-    loadProfileView(profile, currentContainerDetails.host, function(){
-        viewProfile(profile, currentContainerDetails.host);
+    loadProfileView(profile, currentContainerDetails.hostId, function(){
+        viewProfile(profile, currentContainerDetails.hostId);
     });
 
 });
@@ -414,14 +414,14 @@ $("#containerBox").on("click", ".editContainerSettings", function(){
 
 $("#containerBox").on("click", ".deleteContainer", function(){
     $.confirm({
-        title: 'Delete Container ' + currentContainerDetails.host + '/' + currentContainerDetails.container,
+        title: 'Delete Container ' + currentContainerDetails.alias + '/' + currentContainerDetails.container,
         content: 'Are you sure you want to delete this container ?!',
         buttons: {
             cancel: function () {},
             delete: {
                 btnClass: 'btn-danger',
                 action: function () {
-                    ajaxRequest(globalUrls["containers"].delete, currentContainerDetails, function(data){
+                    ajaxRequest(globalUrls.containers.delete, currentContainerDetails, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
                             loadContainerTreeAfter();
@@ -436,7 +436,7 @@ $("#containerBox").on("click", ".deleteContainer", function(){
 });
 
 $("#containerBox").on("change", "#container-changeState", function(){
-    let url = globalUrls["containers"]["state"][$(this).val()];
+    let url = globalUrls.containers.state[$(this).val()];
     ajaxRequest(url, currentContainerDetails, function(data){
         let result = makeToastr(data);
         loadContainerTreeAfter();

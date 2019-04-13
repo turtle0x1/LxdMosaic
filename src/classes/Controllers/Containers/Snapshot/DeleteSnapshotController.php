@@ -10,10 +10,10 @@ class DeleteSnapshotController
         $this->deleteSnapshot = $deleteSnapshot;
     }
 
-    public function deleteSnapshot($host, $container, $snapshotName)
+    public function deleteSnapshot(int $hostId, string $container, string $snapshotName)
     {
         $lxdResponse = $this->deleteSnapshot->deleteSnapshot(
-            $host,
+            $hostId,
             $container,
             $snapshotName
         );

@@ -80,14 +80,14 @@
         }
 
         $(".restoreSnapshotModal-containerName").html(currentContainerDetails.container);
-        $("#restoreSnapshotModal-currentHost").html(currentContainerDetails.host);
+        $("#restoreSnapshotModal-currentHost").html(currentContainerDetails.alias);
         $("#restoreSnapshotModal-snapshotName").html(snapshotDetails.snapshotName);
     });
 
     $("#modal-container-restoreSnapshot").on("click", ".createFromSnapshot", function(){
         let x = {
             newContainer: $("#modal-container-restoreSnapshot-newName").val(),
-            host: currentContainerDetails.host,
+            hostId: currentContainerDetails.hostId,
             container: currentContainerDetails.container + "/" + snapshotDetails.snapshotName
         };
 

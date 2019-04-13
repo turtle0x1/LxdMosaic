@@ -128,7 +128,7 @@
 
 function loadProfileView(selectedProfile = null, selectedHost = null, callback = null)
 {
-    ajaxRequest(globalUrls["profiles"].getAllProfiles, null, function(data){
+    ajaxRequest(globalUrls.profiles.getAllProfiles, null, function(data){
         var data = $.parseJSON(data);
         var treeData = [{
             text: "Overview",
@@ -195,11 +195,11 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
     });
 }
 
-function viewProfile(profileId, host, hostId){
+function viewProfile(profileId, hostAlias, hostId){
     currentProfileDetails.profile = profileId;
-    currentProfileDetails.host =    host;
-    currentProfileDetails.hostId =    hostId;
-    let details = profileData[currentProfileDetails.host]["profiles"][currentProfileDetails.profile]["details"];
+    currentProfileDetails.hostAlias = hostAlias;
+    currentProfileDetails.hostId = hostId;
+    let details = profileData[hostAlias]["profiles"][profileId]["details"];
     let deviceTableRows = createTableRowsHtml(details.devices);
 
     let usedBy = [{empty: "Couldn't get profiles uesd by (api version probably)"}];
@@ -228,7 +228,7 @@ function viewProfile(profileId, host, hostId){
 
 
 $("#profileBox").on("click", "#renameProfile", function(){
-    renameProfileData.host = currentProfileDetails.host;
+    renameProfileData.hostAlias = currentProfileDetails.hostAlias;
     renameProfileData.hostId = currentProfileDetails.hostId;
     renameProfileData.currentName = currentProfileDetails.profile;
     $("#modal-profile-rename").modal("show");
@@ -236,7 +236,7 @@ $("#profileBox").on("click", "#renameProfile", function(){
 
 $("#profileBox").on("click", "#deleteProfile", function(){
     $.confirm({
-        title: 'Delete profile ' + currentProfileDetails.profile + ' from ' + currentProfileDetails.host,
+        title: 'Delete profile ' + currentProfileDetails.profile + ' from ' + currentProfileDetails.hostAlias,
         content: 'Are you sure you want to delete this profile ?!',
         buttons: {
             cancel: function () {},

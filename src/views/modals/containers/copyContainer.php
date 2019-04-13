@@ -39,7 +39,7 @@
     $("#copyModal-newHost").tokenInput(globalUrls.hosts.search.search, {
         queryParam: "host",
         propertyToSearch: "host",
-        tokenValue: "hostIp",
+        tokenValue: "hostId",
         preventDuplicates: false,
         tokenLimit: 1,
         theme: "facebook"
@@ -57,9 +57,13 @@
             return false;
         }
 
-        $("#copyModal-newHost").tokenInput("add", {id: null, host: currentContainerDetails.host});
+        $("#copyModal-newHost").tokenInput("add", {
+            id: null,
+            host: currentContainerDetails.alias,
+            hostId: currentContainerDetails.hostId
+        });
         $(".copyModal-containerName").html(currentContainerDetails.container);
-        $("#copyModal-currentHost").html(currentContainerDetails.host);
+        $("#copyModal-currentHost").html(currentContainerDetails.alias);
     });
 
     $("#modal-container-copy").on("click", ".copy", function(){
@@ -69,14 +73,16 @@
             return false;
         }
 
+        console.log(d);
+
         let x = $.extend({
             newContainer: $("#copyModal-newName").val(),
-            newHost: d[0]["hostIp"]
+            newHostId: d[0]["hostId"]
         }, currentContainerDetails);
 
         ajaxRequest(globalUrls.containers.copy, x, function(data){
             let x = makeToastr(data);
-            if(x.hasOwnProperty("error")){
+            if(x.state == "error"){
                 return false;
             }
             loadContainerTreeAfter();

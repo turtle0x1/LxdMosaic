@@ -85,7 +85,7 @@
     $("#newContainerHosts").tokenInput(globalUrls.hosts.search.search, {
         queryParam: "host",
         propertyToSearch: "host",
-        tokenValue: "hostIp",
+        tokenValue: "hostId",
         preventDuplicates: false,
         theme: "facebook",
         onAdd: function(token){
@@ -94,7 +94,7 @@
                 $("#gpuWarning").show();
                 $("#newContainerGpus").hide();
             }else{
-                let x = {hostIp: h[0].hostIp}
+                let x = {hostId: h[0].hostId}
                 ajaxRequest(globalUrls.hosts.gpu.getAll, x, (data)=>{
                     data =  $.parseJSON(data);
                     //TODO if len == 0
@@ -139,7 +139,7 @@
 
     $("#modal-container-create").on("click", "#create", function(){
         let profileIds = mapObjToSignleDimension($("#newContainerProfiles").tokenInput("get"), "profile");
-        let hosts = mapObjToSignleDimension($("#newContainerHosts").tokenInput("get"), "hostIp");
+        let hosts = mapObjToSignleDimension($("#newContainerHosts").tokenInput("get"), "hostId");
         let image = $("#newContainerImage").tokenInput("get");
         let instanceType = $("#newContainerInstanceType").val();
 

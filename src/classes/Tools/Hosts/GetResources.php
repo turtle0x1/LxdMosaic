@@ -21,14 +21,9 @@ class GetResources
         $this->session = $session;
     }
 
-    public function getHostResources($host)
+    public function getHostExtended(int $hostId)
     {
-        return $this->client->getClientByUrl($host)->resources->info();
-    }
-
-    public function getHostExtended($host)
-    {
-        $client = $this->client->getClientByUrl($host);
+        $client = $this->client->getANewClient($hostId);
         return $this->getDetails($client);
     }
 

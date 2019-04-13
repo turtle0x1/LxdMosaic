@@ -10,9 +10,12 @@ class DeleteContainerController
         $this->deleteContainer =  $deleteContainer;
     }
 
-    public function deleteContainer($host, $container)
-    {
-        $this->deleteContainer->delete($host, $container);
-        return ["state"=>"success", "message"=>"Deleting $host/$container"];
+    public function deleteContainer(
+        int $hostId,
+        string $container,
+        string $alias = null
+    ) {
+        $this->deleteContainer->delete($hostId, $container);
+        return ["state"=>"success", "message"=>"Deleting $alias/$container"];
     }
 }

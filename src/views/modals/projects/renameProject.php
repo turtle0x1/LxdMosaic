@@ -23,14 +23,14 @@
 </div>
 <script>
 var renameProjectObj = {
-    host: null,
+    hostId: null,
     project: null
 }
 
 $("#modal-projects-rename").on("shown.bs.modal", function(){
-    if(renameProjectObj.host == null || renameProjectObj.host == ""){
+    if(renameProjectObj.hostId == null || renameProjectObj.hostId == ""){
         $("#modal-projects-rename").modal("toggle");
-        alert("current host isn't set");
+        alert("current hostId isn't set");
         return false;
     }else if(renameProjectObj.project == null || renameProjectObj.project == ""){
         $("#modal-projects-rename").modal("toggle");
@@ -53,6 +53,10 @@ $("#modal-projects-rename").on("click", "#renameProject", function(){
     },renameProjectObj);
 
     ajaxRequest(globalUrls.projects.rename, x, (data)=>{
+        data = makeToastr(data);
+        if(data.state == "error"){
+            return false;
+        }
         $("#modal-projects-rename").modal("toggle");
         loadProjectView();
     });

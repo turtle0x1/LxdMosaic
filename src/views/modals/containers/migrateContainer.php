@@ -45,7 +45,7 @@
             return false;
         }
         $(".migrateModal-containerName").html(currentContainerDetails.container);
-        $("#migrateModal-currentHost").html(currentContainerDetails.host);
+        $("#migrateModal-currentHost").html(currentContainerDetails.alias);
 
         ajaxRequest(globalUrls.hosts.getAllHosts, {}, function(data){
             let result = $.parseJSON(data);

@@ -11,31 +11,31 @@ class StateController
         $this->state = $state;
     }
 
-    public function startContainer($host, $container)
+    public function startContainer($hostId, $container, string $alias = null)
     {
-        $this->state->change($host, $container, StateCon::START);
-        return ["state"=>"success", "message"=>"Starting $host/$container", "code"=>101];
+        $this->state->change($hostId, $container, StateCon::START);
+        return ["state"=>"success", "message"=>"Starting $alias/$container", "code"=>101];
     }
 
-    public function stopContainer($host, $container)
+    public function stopContainer($hostId, $container, string $alias = null)
     {
-        $this->state->change($host, $container, StateCon::STOP);
-        return ["state"=>"success", "message"=>"Stoping $host/$container", "code"=>102];
+        $this->state->change($hostId, $container, StateCon::STOP);
+        return ["state"=>"success", "message"=>"Stoping $alias/$container", "code"=>102];
     }
 
-    public function restartContainer($host, $container)
+    public function restartContainer($hostId, $container, string $alias = null)
     {
-        $this->state->change($host, $container, StateCon::RESTART);
-        return ["state"=>"success", "message"=>"Restarting $host/$container", "code"=>101];
+        $this->state->change($hostId, $container, StateCon::RESTART);
+        return ["state"=>"success", "message"=>"Restarting $alias/$container", "code"=>101];
     }
-    public function freezeContainer($host, $container)
+    public function freezeContainer($hostId, $container, string $alias = null)
     {
-        $this->state->change($host, $container, StateCon::FREEZE);
-        return ["state"=>"success", "message"=>"Freezing $host/$container", "code"=>110];
+        $this->state->change($hostId, $container, StateCon::FREEZE);
+        return ["state"=>"success", "message"=>"Freezing $alias/$container", "code"=>110];
     }
-    public function unfreezeContainer($host, $container)
+    public function unfreezeContainer($hostId, $container, string $alias = null)
     {
-        $this->state->change($host, $container, StateCon::UNFREEZE);
-        return ["state"=>"success", "message"=>"Unfreezing $host/$container", "code"=>101];
+        $this->state->change($hostId, $container, StateCon::UNFREEZE);
+        return ["state"=>"success", "message"=>"Unfreezing $alias/$container", "code"=>101];
     }
 }

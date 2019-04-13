@@ -10,9 +10,9 @@ class TakeSnapshotController
         $this->takeSnapshot = $takeSnapshot;
     }
 
-    public function takeSnapshot($host, $container, $snapshotName)
+    public function takeSnapshot(int $hostId, string $container, string $snapshotName)
     {
-        $response = $this->takeSnapshot->takeSnapshot($host, $container, $snapshotName);
+        $response = $this->takeSnapshot->takeSnapshot($hostId, $container, $snapshotName);
         return ["state"=>"success", "message"=>"Snapshot Started", "lxdResponse"=>$response];
     }
 }

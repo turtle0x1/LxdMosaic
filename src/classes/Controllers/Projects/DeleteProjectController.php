@@ -11,9 +11,9 @@ class DeleteProjectController
         $this->deleteProject = $deleteProject;
     }
 
-    public function delete(string $host, string $project)
+    public function delete(int $hostId, string $project)
     {
-        $this->deleteProject->remove($host, $project);
+        $this->deleteProject->remove($hostId, $project);
         return ["state"=>"success", "message"=>"Deleted project"];
     }
 }
