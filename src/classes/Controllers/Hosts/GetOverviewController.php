@@ -1,7 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Hosts;
 
-use dhope0000\LXDClient\Model\Hosts\GetResources;
+use dhope0000\LXDClient\Tools\Hosts\GetResources;
 
 class GetOverviewController
 {

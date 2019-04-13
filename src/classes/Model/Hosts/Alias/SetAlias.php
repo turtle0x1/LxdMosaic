@@ -13,7 +13,8 @@ class SetAlias
 
     public function set(int $hostId, string $alias)
     {
-        $sql = "UPDATE `Hosts`
+        $sql = "UPDATE
+                    `Hosts`
                 SET
                     `Host_Alias` = :alias
                 WHERE

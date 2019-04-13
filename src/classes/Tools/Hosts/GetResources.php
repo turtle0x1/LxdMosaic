@@ -1,5 +1,5 @@
 <?php
-namespace dhope0000\LXDClient\Model\Hosts;
+namespace dhope0000\LXDClient\Tools\Hosts;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Hosts\HostList;

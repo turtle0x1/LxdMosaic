@@ -2,7 +2,7 @@
 
 namespace dhope0000\LXDClient\Tools\Containers;
 
-use dhope0000\LXDClient\Model\Hosts\HostsHaveContainer;
+use dhope0000\LXDClient\Tools\Hosts\HostsHaveContainer;
 use dhope0000\LXDClient\Tools\Hosts\Images\ImportImageIfNotHave;
 use dhope0000\LXDClient\Model\Client\LxdClient;
 
