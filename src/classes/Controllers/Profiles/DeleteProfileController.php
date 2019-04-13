@@ -1,7 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
-use dhope0000\LXDClient\Model\Profiles\DeleteProfile;
+use dhope0000\LXDClient\Tools\Profiles\DeleteProfile;
 
 class DeleteProfileController
 {

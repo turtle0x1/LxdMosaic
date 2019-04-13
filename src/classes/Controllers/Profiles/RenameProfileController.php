@@ -1,7 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
-use dhope0000\LXDClient\Model\Profiles\Rename;
+use dhope0000\LXDClient\Tools\Profiles\Rename;
 
 class RenameProfileController
 {

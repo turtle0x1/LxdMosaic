@@ -1,7 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Profiles\Search;
 
-use dhope0000\LXDClient\Model\Profiles\GetProfilesOnAllHosts;
+use dhope0000\LXDClient\Tools\Profiles\GetProfilesOnAllHosts;
 
 class SearchProfiles
 {
