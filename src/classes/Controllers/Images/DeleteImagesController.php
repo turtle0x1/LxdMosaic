@@ -2,7 +2,7 @@
 
 namespace dhope0000\LxdClient\Controllers\Images;
 
-use dhope0000\LXDClient\Model\Images\DeleteImages;
+use dhope0000\LXDClient\Tools\Images\DeleteImages;
 
 class DeleteImagesController
 {

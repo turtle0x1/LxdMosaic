@@ -2,7 +2,7 @@
 
 namespace dhope0000\LXDClient\Controllers\Images;
 
-use dhope0000\LXDClient\Model\Images\GetLinuxContainersOrgImages;
+use dhope0000\LXDClient\Tools\Images\GetLinuxContainersOrgImages;
 
 class GetLinuxContainersOrgImagesController
 {

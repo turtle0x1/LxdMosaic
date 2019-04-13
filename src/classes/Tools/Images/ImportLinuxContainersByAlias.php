@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LXDClient\Model\Images;
+namespace dhope0000\LXDClient\Tools\Images;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 

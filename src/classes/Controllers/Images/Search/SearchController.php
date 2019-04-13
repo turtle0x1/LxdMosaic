@@ -2,7 +2,7 @@
 
 namespace dhope0000\LxdClient\Controllers\Images\Search;
 
-use dhope0000\LXDClient\Model\Images\GetAllImages;
+use dhope0000\LXDClient\Tools\Images\GetAllImages;
 
 class SearchController
 {

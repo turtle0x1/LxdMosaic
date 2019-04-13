@@ -1,7 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Images;
 
-use dhope0000\LXDClient\Model\Images\GetAllImages;
+use dhope0000\LXDClient\Tools\Images\GetAllImages;
 
 class GetImagesController
 {
