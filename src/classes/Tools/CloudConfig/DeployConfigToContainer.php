@@ -2,11 +2,11 @@
 
 namespace dhope0000\LXDClient\Tools\CloudConfig;
 
-use dhope0000\LXDClient\Model\CloudConfig\DeployToProfile;
+use dhope0000\LXDClient\Tools\CloudConfig\DeployToProfile;
 use dhope0000\LXDClient\Tools\Containers\CreateContainer;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
 
-class Deploy
+class DeployConfigToContainer
 {
     public function __construct(
         DeployToProfile $deployToProfile,

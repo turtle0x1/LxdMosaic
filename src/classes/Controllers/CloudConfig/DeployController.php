@@ -1,13 +1,13 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
-use dhope0000\LXDClient\Tools\CloudConfig\Deploy;
+use dhope0000\LXDClient\Tools\CloudConfig\DeployConfigToContainer;
 
 class DeployController
 {
-    public function __construct(Deploy $deploy)
+    public function __construct(DeployConfigToContainer $deploy)
     {
-        $this->deploy = $deploy;
+        $this->deployConfigToContainer = $deploy;
     }
 
     public function deploy(
@@ -18,7 +18,7 @@ class DeployController
         $profileName = "",
         $additionalProfiles = []
     ) {
-        $this->deploy->deploy(
+        $this->deployConfigToContainer->deploy(
             $hosts,
             $containerName,
             $cloudConfigId,

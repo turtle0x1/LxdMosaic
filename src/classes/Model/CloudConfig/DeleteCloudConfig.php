@@ -12,7 +12,8 @@ class DeleteCloudConfig
 
     public function delete(int $cloudConfigId)
     {
-        $sql = "DELETE FROM `Cloud_Config`
+        $sql = "DELETE FROM
+                    `Cloud_Config`
                 WHERE
                     `CC_ID` = :cloudConfigId
                 ";

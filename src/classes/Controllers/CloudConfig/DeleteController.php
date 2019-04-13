@@ -1,7 +1,6 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
-use dhope0000\LXDClient\Tools\CloudConfig\Deploy;
 use dhope0000\LXDClient\Model\CloudConfig\DeleteCloudConfig;
 
 class DeleteController

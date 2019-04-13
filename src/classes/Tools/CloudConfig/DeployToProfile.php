@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LXDClient\Model\CloudConfig;
+namespace dhope0000\LXDClient\Tools\CloudConfig;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
