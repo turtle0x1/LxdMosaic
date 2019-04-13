@@ -1,7 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Containers;
 
-use dhope0000\LXDClient\Model\Containers\State;
+use dhope0000\LXDClient\Tools\Containers\State;
 use dhope0000\LXDClient\Constants\StateConstants as StateCon;
 
 class StateController

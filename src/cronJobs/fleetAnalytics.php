@@ -9,7 +9,7 @@ $env = new Dotenv\Dotenv(__DIR__ . "/../../");
 $env->load();
 
 $getResources = $container->make("dhope0000\LXDClient\Tools\Hosts\GetResources");
-$getAllContainers = $container->make("dhope0000\LXDClient\Model\Containers\GetHostsContainers");
+$getAllContainers = $container->make("dhope0000\LXDClient\Tools\Containers\GetHostsContainers");
 $storeDetails = $container->make("dhope0000\LXDClient\Model\Analytics\StoreFleetAnalytics");
 
 $resourcesByHost = $getResources->getAllHostRecourses();

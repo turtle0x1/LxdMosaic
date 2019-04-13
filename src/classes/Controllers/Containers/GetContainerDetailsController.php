@@ -1,7 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Containers;
 
-use dhope0000\LXDClient\Model\Containers\GetContainer;
+use dhope0000\LXDClient\Tools\Containers\GetContainer;
 
 class GetContainerDetailsController
 {

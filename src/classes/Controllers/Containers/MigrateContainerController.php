@@ -1,7 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Containers;
 
-use dhope0000\LXDClient\Model\Containers\MigrateContainer;
+use dhope0000\LXDClient\Tools\Containers\MigrateContainer;
 
 class MigrateContainerController
 {

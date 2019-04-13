@@ -1,5 +1,5 @@
 <?php
-namespace dhope0000\LXDClient\Model\Containers\Snapshot;
+namespace dhope0000\LXDClient\Tools\Containers\Snapshot;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 

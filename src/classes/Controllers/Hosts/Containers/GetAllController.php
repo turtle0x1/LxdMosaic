@@ -1,7 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Hosts\Containers;
 
-use dhope0000\LXDClient\Model\Containers\GetHostsContainers;
+use dhope0000\LXDClient\Tools\Containers\GetHostsContainers;
 
 class GetAllController
 {
