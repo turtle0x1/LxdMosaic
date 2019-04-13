@@ -11,8 +11,8 @@ class GetAllController
         $this->getAll = $getAll;
     }
 
-    public function getAll(string $hostIp)
+    public function getAll(int $hostId)
     {
-        return $this->getAll->getAll($hostIp);
+        return $this->getAll->getAll($hostId);
     }
 }
