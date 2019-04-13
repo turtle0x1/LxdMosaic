@@ -11,10 +11,10 @@ class DeleteProfile
     }
 
     public function delete(
-        string $host,
+        int $hostId,
         string $profile
     ) {
-        $client = $this->client->getClientByUrl($host);
+        $client = $this->client->getANewClient($hostId);
         return $client->profiles->remove($profile);
     }
 }

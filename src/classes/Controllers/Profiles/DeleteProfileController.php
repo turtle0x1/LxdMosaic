@@ -12,9 +12,9 @@ class DeleteProfileController
 
     public function delete(
         string $profile,
-        string $host
+        int $hostId
     ) {
-        $response = $this->deleteProfile->delete($host, $profile);
+        $response = $this->deleteProfile->delete($hostId, $profile);
         return ["state"=>"success", "message"=>"Deleted Profile", "lxdResponse"=>$response];
     }
 }

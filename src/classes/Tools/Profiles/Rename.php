@@ -11,11 +11,11 @@ class Rename
     }
 
     public function rename(
-        string $host,
+        int $hostId,
         string $currentName,
         string $newProfileName
     ) {
-        $client = $this->client->getClientByUrl($host);
+        $client = $this->client->getANewClient($hostId);
         return $client->profiles->rename($currentName, $newProfileName);
     }
 }

@@ -20,7 +20,8 @@ class GetAllProfiles
 
             if ($host["Host_Online"] != true) {
                 $details[$indent] = [
-                    "online"=>false
+                    "online"=>false,
+                    "hostId"=>$host["Host_ID"]
                 ];
                 continue;
             }
@@ -30,6 +31,7 @@ class GetAllProfiles
             $details[$indent] = [
                 "online"=>true,
                 "hostIp"=>$host["Host_Url_And_Port"],
+                "hostId"=>$host["Host_ID"],
                 "profiles"=>$this->getProfileDetails($client, $profiles)
             ];
         }

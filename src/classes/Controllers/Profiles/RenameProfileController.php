@@ -11,12 +11,12 @@ class RenameProfileController
     }
 
     public function rename(
-        string $host,
+        int $hostId,
         string $currentName,
         string $newProfileName
     ) {
         $this->rename->rename(
-            $host,
+            $hostId,
             $currentName,
             $newProfileName
         );

@@ -147,7 +147,8 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
                     icon: "fa fa-user",
                     type: "profile",
                     id: profileName,
-                    host: hostName
+                    host: hostName,
+                    hostId: host.hostId
                 };
                 if(hostName == selectedHost && profileName == selectedProfile ){
                     matched = true;
@@ -167,8 +168,7 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
                 text: hostName,
                 nodes: profiles,
                 icon: "fa fa-server",
-                state: state
-
+                state: state,
             })
         });
         $(".boxSlide, #profileDetails").hide();
@@ -181,7 +181,7 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
             levels: 5,
             onNodeSelected: function(event, node) {
                 if(node.type == "profile"){
-                    viewProfile(node.id, node.host);
+                    viewProfile(node.id, node.host, node.hostId);
                 } else if (node.type == "profileOverview"){
                     $(".boxSlide, #profileDetails").hide();
                     $("#profileOverview, #profileBox").show();
@@ -195,9 +195,10 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
     });
 }
 
-function viewProfile(profileId, host){
+function viewProfile(profileId, host, hostId){
     currentProfileDetails.profile = profileId;
     currentProfileDetails.host =    host;
+    currentProfileDetails.hostId =    hostId;
     let details = profileData[currentProfileDetails.host]["profiles"][currentProfileDetails.profile]["details"];
     let deviceTableRows = createTableRowsHtml(details.devices);
 
@@ -227,8 +228,8 @@ function viewProfile(profileId, host){
 
 
 $("#profileBox").on("click", "#renameProfile", function(){
-
     renameProfileData.host = currentProfileDetails.host;
+    renameProfileData.hostId = currentProfileDetails.hostId;
     renameProfileData.currentName = currentProfileDetails.profile;
     $("#modal-profile-rename").modal("show");
 });

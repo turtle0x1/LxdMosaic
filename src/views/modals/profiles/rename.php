@@ -26,6 +26,7 @@
     var renameProfileData = {
         host: null,
         currentName:  null,
+        hostId: null
     }
 
     $("#modal-profile-rename").on("shown.bs.modal", function(){
