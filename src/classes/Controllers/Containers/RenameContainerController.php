@@ -10,9 +10,9 @@ class RenameContainerController
         $this->renameContainer = $renameContainer;
     }
 
-    public function renameContainer($host, $container, $newContainer)
+    public function renameContainer(int $hostId, string $container, string $newContainer)
     {
-        $result = $this->renameContainer->rename($host, $container, $newContainer);
+        $result = $this->renameContainer->rename($hostId, $container, $newContainer);
         return [
             "state"=>"success",
             "message"=>"Renaming $host/$container to $host/$newContainer",

@@ -736,7 +736,6 @@ function formatBytes(bytes,decimals) {
 
 function setContDetsByTreeItem(node)
 {
-    console.log(node.hostId);
     currentContainerDetails = {
         container: node.text,
         host: node.hostIp,

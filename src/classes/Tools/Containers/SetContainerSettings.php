@@ -11,9 +11,9 @@ class SetContainerSettings
         $this->client = $lxdClient;
     }
 
-    public function set(string $host, string $container, array $settings)
+    public function set(int $hostId, string $container, array $settings)
     {
-        $client = $this->client->getClientByUrl($host);
+        $client = $this->client->getANewClient($hostId);
         $client->containers->update($container, ["config"=>$settings]);
         return true;
     }

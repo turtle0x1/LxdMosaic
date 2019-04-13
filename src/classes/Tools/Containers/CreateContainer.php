@@ -43,8 +43,7 @@ class CreateContainer
         $results = [];
 
         foreach ($hosts as $host) {
-            $client = $this->client->getClientByUrl($host);
-
+            $client = $this->client->getANewClient($host);
             $this->importImageIfNotHave->importIfNot($client, $imageDetails);
 
             $response = $client->containers->create($name, $options, true);

@@ -421,7 +421,7 @@ $("#containerBox").on("click", ".deleteContainer", function(){
             delete: {
                 btnClass: 'btn-danger',
                 action: function () {
-                    ajaxRequest(globalUrls["containers"].delete, currentContainerDetails, function(data){
+                    ajaxRequest(globalUrls.containers.delete, currentContainerDetails, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
                             loadContainerTreeAfter();
@@ -436,7 +436,7 @@ $("#containerBox").on("click", ".deleteContainer", function(){
 });
 
 $("#containerBox").on("change", "#container-changeState", function(){
-    let url = globalUrls["containers"]["state"][$(this).val()];
+    let url = globalUrls.containers.state[$(this).val()];
     ajaxRequest(url, currentContainerDetails, function(data){
         let result = makeToastr(data);
         loadContainerTreeAfter();

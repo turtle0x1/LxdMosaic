@@ -87,7 +87,7 @@
     $("#modal-container-restoreSnapshot").on("click", ".createFromSnapshot", function(){
         let x = {
             newContainer: $("#modal-container-restoreSnapshot-newName").val(),
-            host: currentContainerDetails.host,
+            hostId: currentContainerDetails.hostId,
             container: currentContainerDetails.container + "/" + snapshotDetails.snapshotName
         };
 
