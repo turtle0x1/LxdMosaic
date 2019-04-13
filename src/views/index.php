@@ -425,6 +425,10 @@ if(typeof io !== "undefined"){
 
        let liItem = hostOpList.find("#" + id);
 
+       if(hostOpList.find("div").length >= 10){
+           hostOpList.find("div").last().remove();
+       }
+
        if(liItem.length > 0){
            // Some sort of race condition exists with the closing of a terminal
            // that emits a 103 / 105 status code after the 200 code so it causes
