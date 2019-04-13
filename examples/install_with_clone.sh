@@ -5,13 +5,10 @@ error() {
 
 red=$'\e[1;31m'
 grn=$'\e[1;32m'
-yel=$'\e[1;33m'
 blu=$'\e[1;34m'
-mag=$'\e[1;35m'
-cyn=$'\e[1;36m'
 end=$'\e[0m'
 
-if [[ !$EUID -eq 0 ]]; then
+if [[ ! $EUID -eq 0 ]]; then
     error "This script should be run using sudo or as the root user"
     exit 1
 fi
@@ -31,7 +28,7 @@ curl -sS https://getcomposer.org/installer -o composer-setup.php
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 # Move to www & clone repository
-cd /var/www
+cd /var/www || exit
 
 git clone https://github.com/turtle0x1/LxdMosaic.git
 
@@ -39,7 +36,7 @@ mkdir -p /var/www/LxdMosaic/src/sensitiveData/certs
 chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/certs
 
 # Move in LxdManager
-cd /var/www/LxdMosaic
+cd /var/www/LxdMosaic || exit
 
 npm install
 
