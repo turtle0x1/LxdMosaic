@@ -20,6 +20,7 @@ class GetAllImages
 
             if ($host["Host_Online"] != true) {
                 $output[$indent] = [
+                    "hostId"=>$host["Host_ID"],
                     "online"=>false,
                     "images"=>[]
                 ];
@@ -37,7 +38,8 @@ class GetAllImages
             $output[$indent] = [
                 "online"=>true,
                 "hostIp"=>$host["Host_Url_And_Port"],
-                "images"=>$details
+                "images"=>$details,
+                "hostId"=>$host["Host_ID"]
             ];
         }
         return $output;

@@ -32,7 +32,7 @@
     $("#hostsToImportImagesTo").tokenInput(globalUrls.hosts.search.search, {
         queryParam: "host",
         propertyToSearch: "host",
-        tokenValue: "hostIp",
+        tokenValue: "hostId",
         theme: "facebook",
         preventDuplicates: false
     });
@@ -46,7 +46,7 @@
     });
 
     $("#modal-hosts-addImages").on("click", "#addImages", function(){
-        let p = mapObjToSignleDimension($("#hostsToImportImagesTo").tokenInput("get"), "hostIp");
+        let p = mapObjToSignleDimension($("#hostsToImportImagesTo").tokenInput("get"), "hostId");
 
         let x = {
             aliases: imageAliasesToImport,

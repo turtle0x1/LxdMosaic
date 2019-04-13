@@ -12,10 +12,10 @@ class ImportLinuxContainersByAlias
         $this->client = $lxdClient;
     }
 
-    public function import($hosts, $aliases)
+    public function import(array $hosts, array $aliases)
     {
-        foreach ($hosts as $host) {
-            $client = $this->client->getClientByUrl($host);
+        foreach ($hosts as $hostId) {
+            $client = $this->client->getANewClient($hostId);
             foreach ($aliases as $alias) {
                 $output[] = $client->images->createFromRemote(
                     "https://images.linuxcontainers.org:8443",

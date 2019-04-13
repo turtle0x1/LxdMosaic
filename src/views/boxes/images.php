@@ -64,7 +64,7 @@
             let input = $(this).find("input[name=imageSelect]");
             if($(input).is(":checked")){
                 data.push({
-                    host: $(input).attr("data-host"),
+                    hostId: $(input).attr("data-host"),
                     fingerprint: $(input).attr("id")
                 })
             }
@@ -160,7 +160,7 @@
                     }
 
                     trs += `<tr>
-                        <td><input data-host='${hostDetails.hostIp}' id='${data.fingerprint}' name='imageSelect' type='checkbox' /></td>" +
+                        <td><input data-host='${hostDetails.hostId}' id='${data.fingerprint}' name='imageSelect' type='checkbox' /></td>" +
                         <td>${data.properties.os} </td>
                         <td>${data.properties.description} </td>
                         <td>${a}</td>
