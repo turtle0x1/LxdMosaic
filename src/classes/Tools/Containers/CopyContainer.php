@@ -23,6 +23,6 @@ class CopyContainer
             return $x;
         }
         $lxd = $this->lxdClient->getANewClient($hostId);
-        return $lxd->containers->copy($container, $newContainer);
+        return $lxd->containers->copy($container, $newContainerName);
     }
 }

@@ -10,12 +10,16 @@ class RenameContainerController
         $this->renameContainer = $renameContainer;
     }
 
-    public function renameContainer(int $hostId, string $container, string $newContainer)
-    {
+    public function renameContainer(
+        int $hostId,
+        string $container,
+        string $newContainer,
+        string $alias = null
+    ) {
         $result = $this->renameContainer->rename($hostId, $container, $newContainer);
         return [
             "state"=>"success",
-            "message"=>"Renaming $host/$container to $host/$newContainer",
+            "message"=>"Renaming $alias/$container to $alias/$newContainer",
             "lxdResponse"=>$result
         ];
     }

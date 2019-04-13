@@ -59,11 +59,11 @@
 
         $("#copyModal-newHost").tokenInput("add", {
             id: null,
-            host: currentContainerDetails.host,
+            host: currentContainerDetails.alias,
             hostId: currentContainerDetails.hostId
         });
         $(".copyModal-containerName").html(currentContainerDetails.container);
-        $("#copyModal-currentHost").html(currentContainerDetails.host);
+        $("#copyModal-currentHost").html(currentContainerDetails.alias);
     });
 
     $("#modal-container-copy").on("click", ".copy", function(){
@@ -72,6 +72,8 @@
         if(d.length == 0){
             return false;
         }
+
+        console.log(d);
 
         let x = $.extend({
             newContainer: $("#copyModal-newName").val(),

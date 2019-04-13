@@ -80,7 +80,7 @@
         }
 
         $(".restoreSnapshotModal-containerName").html(currentContainerDetails.container);
-        $("#restoreSnapshotModal-currentHost").html(currentContainerDetails.host);
+        $("#restoreSnapshotModal-currentHost").html(currentContainerDetails.alias);
         $("#restoreSnapshotModal-snapshotName").html(snapshotDetails.snapshotName);
     });
 

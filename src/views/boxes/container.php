@@ -390,8 +390,8 @@ $("#containerBox").on("click", "#goToConsole", function() {
 
 $("#containerBox").on("click", ".toProfile", function(){
     let profile = $(this).text();
-    loadProfileView(profile, currentContainerDetails.host, function(){
-        viewProfile(profile, currentContainerDetails.host);
+    loadProfileView(profile, currentContainerDetails.hostId, function(){
+        viewProfile(profile, currentContainerDetails.hostId);
     });
 
 });
@@ -414,7 +414,7 @@ $("#containerBox").on("click", ".editContainerSettings", function(){
 
 $("#containerBox").on("click", ".deleteContainer", function(){
     $.confirm({
-        title: 'Delete Container ' + currentContainerDetails.host + '/' + currentContainerDetails.container,
+        title: 'Delete Container ' + currentContainerDetails.alias + '/' + currentContainerDetails.container,
         content: 'Are you sure you want to delete this container ?!',
         buttons: {
             cancel: function () {},

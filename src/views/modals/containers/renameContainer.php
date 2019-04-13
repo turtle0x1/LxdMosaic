@@ -37,7 +37,7 @@
             return false;
         }
         $(".renameModal-containerName").html(currentContainerDetails.container);
-        $("#renameModal-currentHost").html(currentContainerDetails.host);
+        $("#renameModal-currentHost").html(currentContainerDetails.alias);
     });
 
     $("#modal-container-rename").on("click", ".rename", function(){

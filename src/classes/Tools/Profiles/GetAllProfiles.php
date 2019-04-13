@@ -30,7 +30,6 @@ class GetAllProfiles
             $profiles = $client->profiles->all();
             $details[$indent] = [
                 "online"=>true,
-                "hostIp"=>$host["Host_Url_And_Port"],
                 "hostId"=>$host["Host_ID"],
                 "profiles"=>$this->getProfileDetails($client, $profiles)
             ];

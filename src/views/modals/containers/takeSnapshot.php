@@ -46,7 +46,7 @@
         }
 
         $(".snapshotModal-containerName").html(currentContainerDetails.container);
-        $("#snapshotModal-currentHost").html(currentContainerDetails.host);
+        $("#snapshotModal-currentHost").html(currentContainerDetails.alias);
     });
 
     $("#modal-container-snapshot").on("click", ".takeSnapshot", function(){

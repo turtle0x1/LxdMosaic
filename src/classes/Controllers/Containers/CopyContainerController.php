@@ -10,9 +10,14 @@ class CopyContainerController
         $this->copyContainer = $copyContainer;
     }
 
-    public function copyContainer(int $hostId, $container, $newContainer, int $newHostId)
-    {
+    public function copyContainer(
+        int $hostId,
+        string $container,
+        string $newContainer,
+        int $newHostId,
+        string $alias = null
+    ) {
         $this->copyContainer->copyContainer($hostId, $container, $newContainer, $newHostId);
-        return ["state"=>"success", "message"=>"Copying $container to $hostId / $newContainer"];
+        return ["state"=>"success", "message"=>"Copying $container to $alias / $newContainer"];
     }
 }

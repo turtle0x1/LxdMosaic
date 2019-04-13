@@ -10,9 +10,13 @@ class RestoreSnapshotController
         $this->restoreSnapshot = $restoreSnapshot;
     }
 
-    public function restoreSnapshot(int $hostId, string $container, string $snapshotName)
-    {
+    public function restoreSnapshot(
+        int $hostId,
+        string $container,
+        string $snapshotName,
+        string $alias = null
+    ) {
         $this->restoreSnapshot->restoreSnapshot($hostId, $container, $snapshotName);
-        return array("state"=>"success", "message"=>"Restored $snapshotName (snapshot) to $host - $container");
+        return array("state"=>"success", "message"=>"Restored $snapshotName (snapshot) to $alias - $container");
     }
 }

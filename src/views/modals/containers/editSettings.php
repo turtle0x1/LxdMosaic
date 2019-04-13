@@ -85,7 +85,7 @@
         });
 
         $(".editSettings-containerName").html(currentContainerDetails.container);
-        $("#editSettings-currentHost").html(currentContainerDetails.host);
+        $("#editSettings-currentHost").html(currentContainerDetails.alias);
     });
 
     $("#modal-container-editSettings").on("click", ".removeSetting", function(){

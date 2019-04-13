@@ -23,7 +23,6 @@ class SearchHosts
             if (strpos($alias, $host) !== false) {
                 $output[] = [
                     "host"=>$alias,
-                    "hostIp"=>$server["Host_Url_And_Port"],
                     "hostId"=>$server["Host_ID"]
                 ];
             }

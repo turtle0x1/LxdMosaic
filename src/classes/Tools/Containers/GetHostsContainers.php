@@ -21,7 +21,7 @@ class GetHostsContainers
             if ($host["Host_Online"] != true) {
                 $details[$indent] = [
                     "online"=>false,
-                    "hostIp"=>$host["Host_Url_And_Port"],
+                    "hostId"=>$host["Host_ID"],
                     "containers"=>[]
                 ];
                 continue;
@@ -31,7 +31,6 @@ class GetHostsContainers
             $containers = $client->containers->all();
             $details[$indent] = [
                 "online"=>true,
-                "hostIp"=>$host["Host_Url_And_Port"],
                 "hostId"=>$host["Host_ID"],
                 "containers"=>$this->getContainersState($client, $containers)
             ];

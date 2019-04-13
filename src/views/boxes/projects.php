@@ -165,7 +165,6 @@ function loadProjectView()
                     icon: "fa fa-user",
                     type: "project",
                     id: projectName,
-                    host: data.hostIp,
                     hostId: data.hostId
                 };
                 hostProjects.push(x);
@@ -190,7 +189,7 @@ function loadProjectView()
             levels: 5,
             onNodeSelected: function(event, node) {
                 if(node.type == "project"){
-                    viewProject(node.id, node.host, node.hostId);
+                    viewProject(node.id, node.hostId);
                 } else if (node.type == "projectsOverview"){
                     $(".boxSlide, #projectDetails").hide();
                     $("#projectsOverview, #projectsBox").show();
@@ -200,11 +199,9 @@ function loadProjectView()
     });
 }
 
-function viewProject(project, host, hostId){
+function viewProject(project, hostId){
     currentProject.project = project;
-    currentProject.host =    host;
     currentProject.hostId = hostId;
-    console.log(hostId);
     ajaxRequest(globalUrls.projects.info, currentProject, (data)=>{
         data = $.parseJSON(data);
         $("#projectsOverview").hide();

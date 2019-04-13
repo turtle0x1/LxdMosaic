@@ -37,7 +37,6 @@ class GetAllImages
 
             $output[$indent] = [
                 "online"=>true,
-                "hostIp"=>$host["Host_Url_And_Port"],
                 "images"=>$details,
                 "hostId"=>$host["Host_ID"]
             ];
