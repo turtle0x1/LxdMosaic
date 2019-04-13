@@ -11,7 +11,8 @@ class RenameProjectController
         $this->renameProject = $renameProject;
     }
 
-    public function rename(string $host, string $project, string $newName){
-        return $this->renameProject->rename($host, $project, $newName);
+    public function rename(int $hostId, string $project, string $newName)
+    {
+        return $this->renameProject->rename($hostId, $project, $newName);
     }
 }

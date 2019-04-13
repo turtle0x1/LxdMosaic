@@ -11,8 +11,9 @@ class RenameProject
         $this->lxdClient = $lxdClient;
     }
 
-    public function rename(string $host, string $project, string $newName) {
-        $client = $this->lxdClient->getClientByUrl($host);
+    public function rename(int $hostId, string $project, string $newName)
+    {
+        $client = $this->lxdClient->getANewClient($hostId);
         return $client->projects->rename($project, $newName);
     }
 }

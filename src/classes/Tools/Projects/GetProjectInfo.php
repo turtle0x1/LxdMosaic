@@ -11,8 +11,9 @@ class GetProjectInfo
         $this->lxdClient = $lxdClient;
     }
 
-    public function get(string $host, string $project) {
-        $client = $this->lxdClient->getClientByUrl($host);
+    public function get(int $hostId, string $project)
+    {
+        $client = $this->lxdClient->getANewClient($hostId);
         return $client->projects->info($project);
     }
 }
