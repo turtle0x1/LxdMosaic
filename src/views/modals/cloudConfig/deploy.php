@@ -66,7 +66,7 @@ $("#deployCloudConfigProfiles").tokenInput(globalUrls["profiles"].search.getComm
 $("#deployCloudConfigHosts").tokenInput(globalUrls.hosts.search.search, {
     queryParam: "host",
     propertyToSearch: "host",
-    tokenValue: "hostIp",
+    tokenValue: "hostId",
     preventDuplicates: false,
     theme: "facebook"
 });
@@ -89,7 +89,7 @@ $("#modal-cloudConfig-deploy").on("shown.bs.modal", function(){
 
 $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
     let profileIds = mapObjToSignleDimension($("#deployCloudConfigProfiles").tokenInput("get"), "profile");
-    let hosts = mapObjToSignleDimension($("#deployCloudConfigHosts").tokenInput("get"), "hostIp");
+    let hosts = mapObjToSignleDimension($("#deployCloudConfigHosts").tokenInput("get"), "hostId");
 
     let containerNameInput = $("#modal-cloudConfig-deploy input[name=containerName]");
     let containerName = containerNameInput.val();

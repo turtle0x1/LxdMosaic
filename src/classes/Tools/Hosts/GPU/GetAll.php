@@ -11,9 +11,9 @@ class GetAll
         $this->getResources = $getResources;
     }
 
-    public function getAll(string $hostIp)
+    public function getAll(int $hostId)
     {
-        $x = $this->getResources->getHostExtended($hostIp);
+        $x = $this->getResources->getHostExtended($hostId);
         if ($x["extensions"]["resGpu"]) {
             return $x["gpu"]["cards"];
         }
