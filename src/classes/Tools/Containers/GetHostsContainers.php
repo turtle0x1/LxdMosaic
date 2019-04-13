@@ -32,6 +32,7 @@ class GetHostsContainers
             $details[$indent] = [
                 "online"=>true,
                 "hostIp"=>$host["Host_Url_And_Port"],
+                "hostId"=>$host["Host_ID"],
                 "containers"=>$this->getContainersState($client, $containers)
             ];
         }

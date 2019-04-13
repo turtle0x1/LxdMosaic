@@ -12,13 +12,17 @@ class CopyContainer
         $this->migrateContainer = $migrateContainer;
     }
 
-    public function copyContainer($host, $container, $newContainerName, $newHost)
-    {
-        if ($host !== $newHost) {
-            $x = $this->migrateContainer->migrate($host, $container, $newHost, $newContainerName);
+    public function copyContainer(
+        int $hostId,
+        string $container,
+        string $newContainerName,
+        int $newHostId
+    ) {
+        if ($hostId !== $newHostId) {
+            $x = $this->migrateContainer->migrate($hostId, $container, $newHostId, $newContainerName);
             return $x;
         }
-        $lxd = $this->lxdClient->getClientByUrl($host);
+        $lxd = $this->lxdClient->getANewClient($hostId);
         return $lxd->containers->copy($container, $newContainer);
     }
 }

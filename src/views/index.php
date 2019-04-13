@@ -686,6 +686,7 @@ function createContainerTree(){
                     icon: statusCodeIconMap[details.state.status_code],
                     type: "container",
                     hostIp: host.hostIp,
+                    hostId: host.hostId,
                     host: i,
                     state: {
                         selected: selected
@@ -701,6 +702,7 @@ function createContainerTree(){
             treeData.push({
                 text: i,
                 hostIp: host.hostIp,
+                hostId: host.hostId,
                 nodes: containers,
                 type: "server",
                 icon: "fa fa-server",
@@ -734,10 +736,12 @@ function formatBytes(bytes,decimals) {
 
 function setContDetsByTreeItem(node)
 {
+    console.log(node.hostId);
     currentContainerDetails = {
         container: node.text,
         host: node.hostIp,
-        alias: node.host
+        alias: node.host,
+        hostId: node.hostId
     }
     return currentContainerDetails;
 }
