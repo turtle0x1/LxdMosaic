@@ -86,6 +86,10 @@ if ($haveServers->haveAny() !== true) {
               analytics: {
                   getLatestData: "/api/AnalyticData/GetLatestDataController/get"
               },
+              deployments: {
+                  create: "/api/Deployments/CreateController/create",
+                  getAll: "/api/Deployments/GetController/getAll"
+              },
               profiles: {
                   search:{
                       getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles"
@@ -304,6 +308,10 @@ if ($haveServers->haveAny() !== true) {
               <a class="nav-link viewProjects">
                 <i class="fas fa-project-diagram"></i> Projects</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link viewDeployments">
+                <i class="fas fa-rocket"></i> Deployments</a>
+            </li>
           </ul>
         </nav>
       </div>
@@ -327,6 +335,7 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/cloudConfig.php";
                     require __DIR__ . "/boxes/images.php";
                     require __DIR__ . "/boxes/projects.php";
+                    require __DIR__ . "/boxes/deployments.php";
                 ?>
             </div>
             <div class="col-md-2">
@@ -810,6 +819,12 @@ $(document).on("click", ".viewProjects", function(){
     setBreadcrumb("Projects", "viewProjects active");
     loadProjectView();
     changeActiveNav(".viewProjects")
+});
+
+$(document).on("click", ".viewDeployments", function(){
+    setBreadcrumb("Deployments", "viewDeployments active");
+    loadDeploymentsView();
+    changeActiveNav(".viewDeployments")
 });
 
 $(document).on("click", ".viewCloudConfigFiles", function(){
