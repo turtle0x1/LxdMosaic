@@ -108,7 +108,7 @@ function createWebSockets() {
             let hostWithOutProto = stringUrl.replace("https://", "");
             let hostWithOutProtoOrPort = hostWithOutProto.replace(portRegex, "");
 
-            hostDetails[result[i].Host_Url_And_Port] = {
+            hostDetails[result[i].Host_ID] = {
                 cert: lxdClientCert,
                 key: lxdClientKey,
                 hostWithOutProtoOrPort: hostWithOutProtoOrPort,
@@ -157,9 +157,8 @@ terminalsIo.on("connect", function(socket) {
     let indentifier = socket.handshake.query.pid;
 
     if(lxdConsoles[indentifier] == undefined) {
-        let host = socket.handshake.query.host;
+        let host = socket.handshake.query.hostId;
         let container = socket.handshake.query.container;
-
 
         let execOptions = createExecOptions(host, container);
 
