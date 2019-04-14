@@ -249,6 +249,10 @@ if ($haveServers->haveAny() !== true) {
                   }
               });
           }
+
+          function getSum(total, num) {
+              return parseInt(total) + parseInt(num);
+          }
       </script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
@@ -520,6 +524,10 @@ function loadServerOview()
         var mCtx = $('#memoryUsage');
         var acCtx = $('#activeContainers');
 
+        let sum = data.activeContainers.data.reduce(getSum);
+
+        let scaleStep = sum > 30 ? 10 : 1;
+
         var myLineChart = new Chart(acCtx, {
             type: 'line',
             data: {
@@ -543,7 +551,7 @@ function loadServerOview()
                     yAxes: [{
                         ticks: {
                             beginAtZero: true,
-                            stepSize: 1
+                            stepSize: scaleStep
                         }
                     }]
                 }
