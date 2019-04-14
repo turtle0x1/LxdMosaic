@@ -315,6 +315,7 @@ function loadContainerView(data)
 
         $(".boxSlide").hide();
         $("#containerBox").show();
+        $('html, body').animate({scrollTop:0},500);
     });
 }
 
