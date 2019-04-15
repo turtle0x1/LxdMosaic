@@ -33,7 +33,7 @@
             </button>
             </div>
         </div>
-        <br/>
+        <hr/>
         <div class="row">
             <div class="col-md-12">
             <h5 clas="pull-left"><u> New Container </u></h5>
@@ -47,6 +47,19 @@
             </div>
             <button class="btn btn-primary createFromSnapshot">
                 Create Container
+            </button>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-md-12">
+            <h5 clas="pull-left"><u> Rename Snapshot </u></h5>
+            <div class="form-group">
+                <label> New Snapshot Name </label>
+                <input class="form-control" name="newSnapshotName" type="string" />
+            </div>
+            <button class="btn btn-primary renameSnapshot">
+                Rename Snapshot
             </button>
             </div>
         </div>
@@ -64,7 +77,7 @@
         snapshotName: null
     };
 
-    $("#modal-container-restoreSnapshot").on("shown.bs.modal", function(){
+    $("#modal-container-restoreSnapshot").on("show.bs.modal", function(){
         if(!$.isPlainObject(currentContainerDetails)){
             $("#modal-container-migrate").modal("toggle");
             alert("required variable isn't right");
@@ -78,11 +91,14 @@
             alert("snapshot name isn't set");
             return false;
         }
+        setupRestoreSnapshotModal();
+    });
 
+    function setupRestoreSnapshotModal() {
         $(".restoreSnapshotModal-containerName").html(currentContainerDetails.container);
         $("#restoreSnapshotModal-currentHost").html(currentContainerDetails.alias);
         $("#restoreSnapshotModal-snapshotName").html(snapshotDetails.snapshotName);
-    });
+    }
 
     $("#modal-container-restoreSnapshot").on("click", ".createFromSnapshot", function(){
         let x = {
@@ -98,6 +114,25 @@
             }
             $("#modal-container-restoreSnapshot").modal("toggle");
             loadContainerViewAfter();
+        });
+    });
+
+    $("#modal-container-restoreSnapshot").on("click", ".renameSnapshot", function(){
+        let nm = $("#modal-container-restoreSnapshot input[name=newSnapshotName]").val();
+
+        let x = $.extend({
+            snapshotName: snapshotDetails.snapshotName,
+            newSnapshotName: nm
+        }, currentContainerDetails);
+        ajaxRequest(globalUrls.containers.snapShots.rename, x, function(data){
+            let x = makeToastr(data);
+            if(x.hasOwnProperty("error")){
+                return false;
+            }
+            snapshotDetails.snapshotName = nm;
+            $("#modal-container-restoreSnapshot input[name=newSnapshotName]").val("");
+            setupRestoreSnapshotModal();
+            loadContainerView(currentContainerDetails);
         });
     });
 

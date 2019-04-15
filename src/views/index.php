@@ -117,6 +117,7 @@ if ($haveServers->haveAny() !== true) {
                       take: "/api/Containers/Snapshot/TakeSnapshotController/takeSnapshot",
                       delete: "/api/Containers/Snapshot/DeleteSnapshotController/deleteSnapshot",
                       restore: "/api/Containers/Snapshot/RestoreSnapshotController/restoreSnapshot",
+                      rename: "/api/Containers/Snapshot/RenameSnapshotController/renameSnapshot",
                       createFrom: "/api/Containers/CopyContainerController/copyContainer",
                   }
               },
