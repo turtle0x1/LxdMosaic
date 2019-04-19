@@ -88,7 +88,8 @@ if ($haveServers->haveAny() !== true) {
               },
               deployments: {
                   create: "/api/Deployments/CreateController/create",
-                  getAll: "/api/Deployments/GetController/getAll"
+                  getAll: "/api/Deployments/GetController/getAll",
+                  getDeployment: "/api/Deployments/GetDeploymentController/get"
               },
               profiles: {
                   search:{
@@ -150,6 +151,9 @@ if ($haveServers->haveAny() !== true) {
                   import: "/api/Images/ImportLinuxContainersByAliasController/import",
               },
               cloudConfig: {
+                  search: {
+                      searchAll: "/api/CloudConfig/Search/SearchController/searchAll"
+                  },
                   create: '/api/CloudConfig/CreateController/create',
                   update: '/api/CloudConfig/UpdateController/update',
                   delete: '/api/CloudConfig/DeleteController/delete',

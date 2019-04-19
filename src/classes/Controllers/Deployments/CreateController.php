@@ -11,9 +11,9 @@ class CreateController
         $this->createDeployment = $createDeployment;
     }
 
-    public function create(string $name)
+    public function create(string $name, array $cloudConfigs)
     {
-        $this->createDeployment->create($name);
+        $this->createDeployment->create($name, $cloudConfigs);
         return ["state"=>"success", "message"=>"Created deployment"];
     }
 }

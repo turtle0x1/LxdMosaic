@@ -13,6 +13,10 @@
               <b> Name </b>
               <input class="form-control" id="newDeploymentName"/>
           </div>
+          <div class="form-group">
+              <b> Cloud Configs </b>
+              <input class="form-control" id="newDeploymentConfigs"/>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23,9 +27,20 @@
 </div>
 <script>
 
+$("#newDeploymentConfigs").tokenInput(globalUrls.cloudConfig.search.searchAll, {
+    queryParam: "criteria",
+    propertyToSearch: "name",
+    theme: "facebook",
+    tokenValue: "id",
+});
+
 $("#modal-deployments-create").on("click", "#create", function(){
+
+    let cloudConfigs = mapObjToSignleDimension($("#newDeploymentConfigs").tokenInput("get"), "id");
+
     let x = {
-        name: $("#modal-deployments-create #newDeploymentName").val()
+        name: $("#modal-deployments-create #newDeploymentName").val(),
+        cloudConfigs: cloudConfigs
     };
 
     ajaxRequest(globalUrls.deployments.create, x, function(data){
