@@ -54,6 +54,10 @@
                                 Deploy
                             </button>
                             <hr/>
+                            <button class="btn btn-block btn-success" id="startDeployment">
+                                Start Deployment
+                            </button>
+                            <hr/>
                         </div>
                       </div>
                   </div>
@@ -190,6 +194,24 @@ function viewDeployment(deploymentId)
         $("#deploymentContainersList > tbody").empty().append(c);
     });
 }
+
+$("#deploymentsBox").on("click", "#startDeployment", function(){
+    $.confirm({
+        title: 'Start Deployment',
+        content: 'This will start all containers in the deployment!',
+        buttons: {
+            cancel: function () {},
+            yes: {
+                btnClass: 'btn-success',
+                action: function () {
+                    ajaxRequest(globalUrls.deployments.startDeployment, {deploymentId: currentDeployment}, (data)=>{
+                        makeToastr(data);
+                    });
+                }
+            }
+        }
+    });
+});
 
 $("#deploymentsBox").on("click", "#createDeployment", function(){
     $("#modal-deployments-create").modal("show");
