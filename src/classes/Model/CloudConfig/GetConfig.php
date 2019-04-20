@@ -68,4 +68,23 @@ class GetConfig
         ]);
         return $do->fetch(\PDO::FETCH_ASSOC);
     }
+
+    public function getCloudConfigByRevId(int $revId)
+    {
+        $sql = "SELECT
+                    `CC_ID` as `id`,
+                    `CC_Name` as `name`,
+                    `CC_Namespace` as `namespace`
+                FROM
+                    `Cloud_Config_Data`
+                INNER JOIN `Cloud_Config` ON
+                    `Cloud_Config`.`CC_ID` = `Cloud_Config_Data`.`CCD_Cloud_Config_ID`
+                WHERE
+                    `CCD_ID` = :revId";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":revId"=>$revId
+        ]);
+        return $do->fetch(\PDO::FETCH_ASSOC);
+    }
 }

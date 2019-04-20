@@ -13,6 +13,7 @@ class DeployController
 
     public function deploy(int $deploymentId, array $instances)
     {
-        return $this->deploy->deploy($deploymentId, $instances);
+        $this->deploy->deploy($deploymentId, $instances);
+        return ["state"=>"success", "message"=>"Deployment complete"];
     }
 }

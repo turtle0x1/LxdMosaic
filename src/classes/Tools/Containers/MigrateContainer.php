@@ -16,8 +16,6 @@ class MigrateContainer
         int $newHostId,
         string $newContainerName
     ) {
-
-        //TODO Check the destination is aviable for us to manage
         $hostClient = $this->lxdClient->getANewClient($hostId);
         $destinationClient = $this->lxdClient->getANewClient($newHostId);
 

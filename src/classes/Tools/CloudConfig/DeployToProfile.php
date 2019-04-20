@@ -19,27 +19,30 @@ class DeployToProfile
         string $profileName,
         array $hosts,
         int $cloudConfigId = null,
-        int $cloudConfigRevId = null
+        int $cloudConfigRevId = null,
+        array $extraConfigParams = null
     ) {
-        if(!is_numeric($cloudConfigId) && !is_numeric($cloudConfigRevId)){
+        if (!is_numeric($cloudConfigId) && !is_numeric($cloudConfigRevId)) {
             throw new \Exception("Please provide either cloud config id or rev id", 1);
+        } elseif (isset($extraConfigParams["user.user-data"])) {
+            throw new \Exception("You can't provide user.user-data here", 1);
         }
 
         $deployResults = [];
 
-        if(!is_numeric($cloudConfigRevId)){
+        if (!is_numeric($cloudConfigRevId)) {
             $latestData = $this->getConfig->getLatestConfig($cloudConfigId);
         } else {
             $latestData = $this->getConfig->getLatestConfigByRevId($cloudConfigRevId);
         }
 
+        $config = is_array($extraConfigParams) ? $extraConfigParams : [];
+
+        $config["user.user-data"] = $latestData["data"];
+
         foreach ($hosts as $hostId) {
             $client = $this->client->getANewClient($hostId);
             $serverProfiles = $client->profiles->all();
-
-            $config = [];
-
-            $config["user.user-data"] = $latestData["data"];
 
             $function = "create";
 

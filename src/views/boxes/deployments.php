@@ -60,15 +60,33 @@
                 </div>
               </div>
         </div>
-        <div class="col-md-5">
-
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5> <a> Containers In Deployment </a> </h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered" id="deploymentContainersList">
+                        <thead>
+                            <tr>
+                                <th> Name </th>
+                                <th> Type </th>
+                                <th> Memory </th>
+                                <th> Network </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
               <div class="card">
                 <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                   <h5>
                     <a data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
-                      Cloud Configs In Deployment
+                      Cloud Configs
                     </a>
                   </h5>
                 </div>
@@ -148,7 +166,28 @@ function viewDeployment(deploymentId)
             trs += `<tr><td>${item.name}</td></tr>`
         });
 
+        let c = "";
+
+        $.each(data.containers, function(host, hostData){
+            c += `<tr><td class="text-center bg-info" colspan="999"><h5> Host: ${host} </h5></td></tr>`;
+            $.each(hostData.containers, function(_, container){
+                c += `<tr>
+                    <td><i class='${statusCodeIconMap[container.statusCode]}'></i>${container.name}</td>
+                    <td>${container.type}</td>
+                    <td>${formatBytes(container.state.memory.usage)}</td>
+                    <td>`;
+                $.each(container.state.network, function(name, details){
+                    if(name == "lo"){
+                        return;
+                    }
+                    c += `${details.addresses[0].address}`
+                });
+                c += `</td></tr>`
+            });
+        });
+
         $("#deploymentCloudConfigTable > tbody").empty().append(trs);
+        $("#deploymentContainersList > tbody").empty().append(c);
     });
 }
 

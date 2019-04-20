@@ -25,13 +25,11 @@ class DeployConfigToContainer
         int $cloudConfigId = null,
         int $cloudConfigRevId = null
     ) {
-
-        if(!is_numeric($cloudConfigId) && !is_numeric($cloudConfigRevId)){
+        if (!is_numeric($cloudConfigId) && !is_numeric($cloudConfigRevId)) {
             throw new \Exception("Please provide cloud config id or a rev id", 1);
         }
 
         if (empty($profileName)) {
-            //TODO Generate a random string for profile name
             $profileName = StringTools::random(12);
         }
 
