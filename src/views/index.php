@@ -89,7 +89,9 @@ if ($haveServers->haveAny() !== true) {
               deployments: {
                   create: "/api/Deployments/CreateController/create",
                   getAll: "/api/Deployments/GetController/getAll",
-                  getDeployment: "/api/Deployments/GetDeploymentController/get"
+                  getDeployment: "/api/Deployments/GetDeploymentController/get",
+                  getDeploymentConfigs: "/api/Deployments/GetCloudsConfigController/get",
+                  deploy: "/api/Deployments/DeployController/deploy"
               },
               profiles: {
                   search:{

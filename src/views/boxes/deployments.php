@@ -50,7 +50,7 @@
                   <div class="card-block table-responsive">
                       <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
                         <div class="card-block">
-                            <button class="btn btn-block btn-primary" id="">
+                            <button class="btn btn-block btn-primary" id="deploy">
                                 Deploy
                             </button>
                             <hr/>
@@ -156,8 +156,14 @@ $("#deploymentsBox").on("click", "#createDeployment", function(){
     $("#modal-deployments-create").modal("show");
 });
 
+$("#deploymentsBox").on("click", "#deploy", function(){
+    deploymentDeployObj.deploymentId = currentDeployment;
+    $("#modal-deployments-deploy").modal("show");
+});
+
 </script>
 
 <?php
     require __DIR__ . "/../modals/deployments/createDeployment.php";
+    require __DIR__ . "/../modals/deployments/deploy.php";
 ?>

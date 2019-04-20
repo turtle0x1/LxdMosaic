@@ -48,4 +48,24 @@ class GetConfig
         ]);
         return $do->fetch(\PDO::FETCH_ASSOC);
     }
+
+    public function getLatestConfigByRevId(int $cloudConfigRevId)
+    {
+        $sql = "SELECT
+                    `CCD_ID` as `revisionId`,
+                    `CCD_Cloud_Config_ID` as `cloudConfigId`,
+                    `CCD_Data` as `data`
+                FROM
+                    `Cloud_Config_Data`
+                WHERE
+                    `CCD_ID` = :cloudConfigRevId
+                ORDER BY
+                    `CCD_ID` DESC
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":cloudConfigRevId"=>$cloudConfigRevId
+        ]);
+        return $do->fetch(\PDO::FETCH_ASSOC);
+    }
 }

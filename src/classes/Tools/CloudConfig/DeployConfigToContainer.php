@@ -19,17 +19,28 @@ class DeployConfigToContainer
     public function deploy(
         array $hostUrls,
         string $containerName,
-        int $cloudConfigId,
         array $imageDetails,
         string $profileName = "",
-        array $additionalProfiles = []
+        array $additionalProfiles = [],
+        int $cloudConfigId = null,
+        int $cloudConfigRevId = null
     ) {
+
+        if(!is_numeric($cloudConfigId) && !is_numeric($cloudConfigRevId)){
+            throw new \Exception("Please provide cloud config id or a rev id", 1);
+        }
+
         if (empty($profileName)) {
             //TODO Generate a random string for profile name
             $profileName = StringTools::random(12);
         }
 
-        $this->deployToProfile->deployToHosts($profileName, $hostUrls, $cloudConfigId);
+        $this->deployToProfile->deployToHosts(
+            $profileName,
+            $hostUrls,
+            $cloudConfigId,
+            $cloudConfigRevId
+        );
 
         return $this->createContainer->create(
             $containerName,
