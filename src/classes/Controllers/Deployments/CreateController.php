@@ -13,7 +13,11 @@ class CreateController
 
     public function create(string $name, array $cloudConfigs)
     {
-        $this->createDeployment->create($name, $cloudConfigs);
-        return ["state"=>"success", "message"=>"Created deployment"];
+        $deploymentId = $this->createDeployment->create($name, $cloudConfigs);
+        return [
+            "state"=>"success",
+            "message"=>"Created deployment",
+            "deploymentId"=>$deploymentId
+        ];
     }
 }

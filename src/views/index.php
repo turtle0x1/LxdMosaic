@@ -93,7 +93,8 @@ if ($haveServers->haveAny() !== true) {
                   getDeploymentConfigs: "/api/Deployments/GetCloudsConfigController/get",
                   deploy: "/api/Deployments/DeployController/deploy",
                   startDeployment: "/api/Deployments/StartDeploymentController/start",
-                  stopDeployment: "/api/Deployments/StopDeploymentController/stop"
+                  stopDeployment: "/api/Deployments/StopDeploymentController/stop",
+                  delete: "/api/Deployments/DeleteDeploymentController/delete",
               },
               profiles: {
                   search:{

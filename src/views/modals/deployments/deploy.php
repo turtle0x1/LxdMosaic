@@ -33,7 +33,8 @@
 <script>
 
 var deploymentDeployObj = {
-    deploymentId: null
+    deploymentId: null,
+    callback: null
 }
 
 $("#modal-deployments-deploy").on("shown.bs.modal", function(){
@@ -109,6 +110,9 @@ $("#modal-deployments-deploy").on("click", "#deploy", function(){
         data = makeToastr(data);
         if(data.state == "error"){
             return false;
+        }
+        if($.isFunction(deploymentDeployObj.callback)){
+            deploymentDeployObj.callback();
         }
         $("#modal-deployments-deploy").modal("toggle");
     })

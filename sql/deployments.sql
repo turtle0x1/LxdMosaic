@@ -11,3 +11,10 @@ CREATE TABLE `Deployment_Cloud_Config` (
     `DCC_Deployment_ID` INT(11) NOT NULL,
     `DCC_Cloud_Config_Rev_ID` INT(11) NOT NULL
 );
+
+ALTER TABLE `Deployment_Cloud_Config`
+ADD CONSTRAINT `deployments_link`
+FOREIGN KEY `drop_on_delete`(`DCC_Deployment_ID`)
+REFERENCES `Deployments`(`Deployment_ID`)
+ON DELETE CASCADE
+ON UPDATE CASCADE;

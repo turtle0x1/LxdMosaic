@@ -28,6 +28,6 @@ class CreateDeployment
             $this->addCloudConfig->add($deploymentId, $latestRev["revisionId"]);
         }
 
-        return true;
+        return $deploymentId;
     }
 }

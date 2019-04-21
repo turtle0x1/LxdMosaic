@@ -53,13 +53,13 @@
                     <div class="card-body">Start Deployment</div>
                 </div>
             </div>
-            <div id="stopDeployment" class="col-md-3">
-                <div class="card text-center actionCard bg-warning text-white">
+            <div class="col-md-3">
+                <div id="stopDeployment" class="card text-center actionCard bg-warning text-white">
                     <div class="card-body">Stop Deployment</div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center actionCard bg-danger text-white">
+                <div id="deleteDeployment" class="card text-center actionCard bg-danger text-white">
                     <div class="card-body">Delete Deployment</div>
                 </div>
             </div>
@@ -142,6 +142,7 @@ function loadDeploymentsView()
     $(".boxSlide, #depoymentDetails").hide();
     $("#deploymentsOverview, #deploymentsBox").show();
     $("#deploymentList").empty();
+    addBreadcrumbs(["Deployments"], ["active"], false);
     ajaxRequest(globalUrls.deployments.getAll, {}, (data)=>{
         data = $.parseJSON(data);
 
@@ -241,9 +242,16 @@ $("#deploymentsBox").on("click", "#startDeployment", function(){
             yes: {
                 btnClass: 'btn-success',
                 action: function () {
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin"></i>Starting..'); // let the user know
+                    this.buttons.yes.disable();
+                    this.buttons.cancel.disable();
+                    var modal = this;
                     ajaxRequest(globalUrls.deployments.startDeployment, {deploymentId: currentDeployment}, (data)=>{
                         makeToastr(data);
+                        viewDeployment(currentDeployment);
+                        modal.close();
                     });
+                    return false;
                 }
             }
         }
@@ -255,6 +263,31 @@ $("#deploymentsBox").on("click", ".viewDeployment", function(e){
     viewDeployment($(this).data("deploymentId"));
 });
 
+$("#deploymentsBox").on("click", "#deleteDeployment", function(){
+    $.confirm({
+        title: 'Delete Deployment?',
+        content: 'This will remove all containers & profiles in the deployment!',
+        buttons: {
+            cancel: function () {},
+            yes: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin"></i>Deleting..'); // let the user know
+                    this.buttons.yes.disable();
+                    this.buttons.cancel.disable();
+                    var modal = this;
+                    ajaxRequest(globalUrls.deployments.delete, {deploymentId: currentDeployment}, (data)=>{
+                        makeToastr(data);
+                        modal.close();
+                        loadDeploymentsView();
+                    });
+                    return false;
+                }
+            }
+        }
+    });
+});
+
 $("#deploymentsBox").on("click", "#stopDeployment", function(){
     $.confirm({
         title: 'Stop Deployment',
@@ -264,9 +297,16 @@ $("#deploymentsBox").on("click", "#stopDeployment", function(){
             yes: {
                 btnClass: 'btn-danger',
                 action: function () {
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin"></i>Stopping..'); // let the user know
+                    this.buttons.yes.disable();
+                    this.buttons.cancel.disable();
+                    var modal = this;
                     ajaxRequest(globalUrls.deployments.stopDeployment, {deploymentId: currentDeployment}, (data)=>{
                         makeToastr(data);
+                        viewDeployment(currentDeployment);
+                        modal.close();
                     });
+                    return false;
                 }
             }
         }
@@ -274,11 +314,20 @@ $("#deploymentsBox").on("click", "#stopDeployment", function(){
 });
 
 $("#deploymentsBox").on("click", "#createDeployment", function(){
+    createDeploymentCallback = function(deploymentId){
+        loadDeploymentsView();
+        viewDeployment(deploymentId)
+    };
     $("#modal-deployments-create").modal("show");
 });
 
 $("#deploymentsBox").on("click", "#deploy", function(){
     deploymentDeployObj.deploymentId = currentDeployment;
+    deploymentDeployObj.callback = function(){
+         setTimeout(function(){
+             viewDeployment(currentDeployment);
+         }, 1000)
+    };
     $("#modal-deployments-deploy").modal("show");
 });
 

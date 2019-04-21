@@ -2,37 +2,46 @@
 
 namespace dhope0000\LXDClient\Tools\Deployments;
 
-use dhope0000\LXDClient\Model\Deployments\CloudConfig\FetchCloudConfigs;
 use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInDeployment;
 use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Model\Deployments\RemoveDeployment;
 
-class ChangeDeploymentState
+class DeleteDeployment
 {
     public function __construct(
-        FetchCloudConfigs $fetchCloudConfigs,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
         GetContainersInDeployment $getContainersInDeployment,
-        LxdClient $lxdClient
+        LxdClient $lxdClient,
+        RemoveDeployment $removeDeployment
     ) {
-        $this->fetchCloudConfigs = $fetchCloudConfigs;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
         $this->getContainersInDeployment = $getContainersInDeployment;
         $this->client = $lxdClient;
+        $this->removeDeployment = $removeDeployment;
     }
 
-    public function change(int $deploymentId, string $state)
+    public function delete(int $deploymentId)
     {
         $profiles = $this->hostHaveDeploymentProfiles->getAllProfilesInDeployment($deploymentId);
-
         $containers = $this->getContainersInDeployment->getFromProfile($profiles);
 
         foreach ($containers as $host => $details) {
             $client = $this->client->getANewClient($details["hostId"]);
             foreach ($details["containers"] as $container) {
-                $client->containers->setState($container["name"], $state, 30, true, false, true);
+                $client->containers->setState($container["name"], "stop", 30, true, false, true);
+                $client->containers->remove($container["name"], true);
             }
         }
+
+        foreach ($profiles as $host => $details) {
+            $client = $this->client->getANewClient($details["hostId"]);
+            foreach ($details["profiles"] as $profile) {
+                $client->profiles->remove($profile["name"]);
+            }
+        }
+
+        $this->removeDeployment->delete($deploymentId);
 
         return true;
     }

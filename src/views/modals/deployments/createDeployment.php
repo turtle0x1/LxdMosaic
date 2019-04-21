@@ -27,6 +27,9 @@
 </div>
 <script>
 
+
+var createDeploymentCallback = null;
+
 $("#newDeploymentConfigs").tokenInput(globalUrls.cloudConfig.search.searchAll, {
     queryParam: "criteria",
     propertyToSearch: "name",
@@ -47,6 +50,9 @@ $("#modal-deployments-create").on("click", "#create", function(){
         data = makeToastr(data);
         if(data.state == "error"){
             return false;
+        }
+        if($.isFunction(createDeploymentCallback)){
+            createDeploymentCallback(data.deploymentId);
         }
         $("#modal-deployments-create").modal("toggle");
     });
