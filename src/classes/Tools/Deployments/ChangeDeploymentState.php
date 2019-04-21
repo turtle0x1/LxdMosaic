@@ -5,28 +5,35 @@ namespace dhope0000\LXDClient\Tools\Deployments;
 use dhope0000\LXDClient\Model\Deployments\CloudConfig\FetchCloudConfigs;
 use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInDeployment;
+use dhope0000\LXDClient\Model\Client\LxdClient;
 
-class StartDeployment
+class ChangeDeploymentState
 {
     public function __construct(
         FetchCloudConfigs $fetchCloudConfigs,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
-        GetContainersInDeployment $getContainersInDeployment
+        GetContainersInDeployment $getContainersInDeployment,
+        LxdClient $lxdClient
     ) {
         $this->fetchCloudConfigs = $fetchCloudConfigs;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
         $this->getContainersInDeployment = $getContainersInDeployment;
+        $this->client = $lxdClient;
     }
 
-    public function get(int $deploymentId)
+    public function change(int $deploymentId, string $state)
     {
-        $output = [];
-
         $profiles = $this->hostHaveDeploymentProfiles->getAllProfilesInDeployment($deploymentId);
 
-        $output["cloudConfigs"] = $this->fetchCloudConfigs->getAll($deploymentId);
-        $output["profiles"] = $profiles;
-        $output["containers"] = $this->getContainersInDeployment->getFromProfile($profiles);
-        return $output;
+        $containers = $this->getContainersInDeployment->getFromProfile($profiles);
+
+        foreach ($containers as $host => $details) {
+            $client = $this->client->getANewClient($details["hostId"]);
+            foreach ($details["containers"] as $container) {
+                $client->containers->setState($container["name"], $state);
+            }
+        }
+
+        return true;
     }
 }

@@ -58,6 +58,10 @@
                                 Start Deployment
                             </button>
                             <hr/>
+                            <button class="btn btn-block btn-warning" id="stopDeployment">
+                                Stop Deployment
+                            </button>
+                            <hr/>
                         </div>
                       </div>
                   </div>
@@ -205,6 +209,24 @@ $("#deploymentsBox").on("click", "#startDeployment", function(){
                 btnClass: 'btn-success',
                 action: function () {
                     ajaxRequest(globalUrls.deployments.startDeployment, {deploymentId: currentDeployment}, (data)=>{
+                        makeToastr(data);
+                    });
+                }
+            }
+        }
+    });
+});
+
+$("#deploymentsBox").on("click", "#stopDeployment", function(){
+    $.confirm({
+        title: 'Stop Deployment',
+        content: 'This will stop all containers in the deployment!',
+        buttons: {
+            cancel: function () {},
+            yes: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    ajaxRequest(globalUrls.deployments.stopDeployment, {deploymentId: currentDeployment}, (data)=>{
                         makeToastr(data);
                     });
                 }
