@@ -37,7 +37,7 @@ var deploymentDeployObj = {
 }
 
 $("#modal-deployments-deploy").on("shown.bs.modal", function(){
-    // $("#deployCloudConfigTable > tbody").empty();
+    $("#deployCloudConfigTable > tbody").empty();
     ajaxRequest(globalUrls.deployments.getDeploymentConfigs, deploymentDeployObj, function(data){
         data = $.parseJSON(data);
         let trs = $();

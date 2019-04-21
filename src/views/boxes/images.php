@@ -99,7 +99,7 @@
         $("#deleteImagesBtn").hide();
         $("#importImagesBtn").show()
         $("#remoteImagesTableBox").show();
-
+        addBreadcrumbs(["Images", "Remote Images"], ["", "active"], false)
         ajaxRequest(globalUrls["images"].getLinuxContainersOrgImages, "POST", function(data){
             let x = $.parseJSON(data);
             if(x.hasOwnProperty("error")){
@@ -133,6 +133,7 @@
 
     function loadLocalImages()
     {
+        addBreadcrumbs(["Images", "Local Images"], ["", "active"], false)
         ajaxRequest(globalUrls["images"].getAll, null, function(data){
             let x = $.parseJSON(data);
             if(x.hasOwnProperty("error")){
@@ -173,13 +174,12 @@
             })
 
             $("#imagesTable > tbody").empty().append(trs);
-            $("#profileBox, #containerBox, #cloudConfigBox, #overviewBox, #projectsBox").hide();
+            $(".boxSlide").hide();
             $("#imagesBox").show();
         });
     }
 
     $(document).on("click", ".viewImages", function(){
-        setBreadcrumb("Images", "viewImages active");
         changeActiveNav(".viewImages");
         loadLocalImages();
         var treeData = [

@@ -16,6 +16,8 @@
                   </div>
                 </div>
               </div>
+              <div id="deploymentList">
+              </div>
         </div>
         <div class="col-md-3">
               <div class="card">
@@ -36,82 +38,78 @@
               </div>
         </div>
     </div>
-    <div id="depoymentDetails" class="row">
-        <div class="col-md-3">
-              <div class="card">
-                <div class="card-header" role="tab" id="deploymentActionHeading">
-                  <h5>
-                    <a data-toggle="collapse" data-parent="#accordion" href="#deploymentActions" aria-expanded="true" aria-controls="deploymentActions">
-                      Actions
-                    </a>
-                  </h5>
-                </div>
-                <div id="deploymentActions" class="collapse show" role="tabpanel" aria-labelledby="deploymentActionHeading">
-                  <div class="card-block table-responsive">
-                      <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="card-block">
-                            <button class="btn btn-block btn-primary" id="deploy">
-                                Deploy
-                            </button>
-                            <hr/>
-                            <button class="btn btn-block btn-success" id="startDeployment">
-                                Start Deployment
-                            </button>
-                            <hr/>
-                            <button class="btn btn-block btn-warning" id="stopDeployment">
-                                Stop Deployment
-                            </button>
-                            <hr/>
-                        </div>
-                      </div>
-                  </div>
-                </div>
-              </div>
+    <div id="depoymentDetails">
+        <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
+            <h4 id="deploymentName"> Deployment Name </h4>
         </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h5> <a> Containers In Deployment </a> </h5>
+        <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
+            <div class="col-md-3">
+                <div id="deploy" class="card text-center actionCard bg-primary text-white">
+                    <div class="card-body">Deploy Containers</div>
                 </div>
-                <div class="card-body">
-                    <table class="table table-bordered" id="deploymentContainersList">
-                        <thead>
-                            <tr>
-                                <th> Name </th>
-                                <th> Type </th>
-                                <th> Memory </th>
-                                <th> Network </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+            </div>
+            <div class="col-md-3">
+                <div id="startDeployment" class="card text-center actionCard bg-success text-white">
+                    <div class="card-body">Start Deployment</div>
+                </div>
+            </div>
+            <div id="stopDeployment" class="col-md-3">
+                <div class="card text-center actionCard bg-warning text-white">
+                    <div class="card-body">Stop Deployment</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center actionCard bg-danger text-white">
+                    <div class="card-body">Delete Deployment</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-              <div class="card">
-                <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
-                  <h5>
-                    <a data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
-                      Cloud Configs
-                    </a>
-                  </h5>
-                </div>
-                <div id="deploymentCloudConfig" class="collapse show" role="tabpanel" aria-labelledby="deploymentCloudConfigHeading">
-                  <div class="card-block table-responsive">
-                      <table class="table table-bordered" id="deploymentCloudConfigTable">
-                          <thead>
-                              <tr>
-                                  <th> Cloud Config </th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                      </table>
+        <div class="row">
+            <div class="col-md-3">
+                  <div class="card">
+                    <div class="card-header text-center bg-info" role="tab" id="deploymentCloudConfigHeading">
+                      <h5>
+                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
+                        Cloud Configs
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="deploymentCloudConfig" class="collapse show" role="tabpanel" aria-labelledby="deploymentCloudConfigHeading">
+                      <div class="card-block bg-dark table-responsive">
+                          <table class="table table-bordered table-dark" id="deploymentCloudConfigTable">
+                              <thead>
+                                  <tr>
+                                      <th> Cloud Config </th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                          </table>
+                      </div>
+                    </div>
                   </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header bg-info text-center">
+                        <h5> <a> Containers In Deployment </a> </h5>
+                    </div>
+                    <div class="card-body bg-dark">
+                        <table class="table table-bordered table-dark" id="deploymentContainersList">
+                            <thead>
+                                <tr>
+                                    <th> Container </th>
+                                    <th> Type </th>
+                                    <th> Memory </th>
+                                    <th> Network </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-              </div>
+            </div>
         </div>
     </div>
 </div>
@@ -120,11 +118,30 @@
 
 var currentDeployment = null;
 
+var emptyDeploymentBox = function(){
+    return $(`
+    <div class="brand-card" id="">
+      <div class="brand-card-header bg-twitter">
+        <h5 class='text-white name'></h5>
+      </div>
+      <div class="brand-card-body">
+        <div>
+          <div class="text-value">Memory <i class="fas fa-memory"></i></div>
+          <div class="text-uppercase text-muted memory"></div>
+        </div>
+        <div>
+          <div class="text-value">Containers <i class="fas fa-box-open"></i></div>
+          <div class="text-uppercase text-muted containers"></div>
+        </div>
+      </div>
+    </div>`);
+}
+
 function loadDeploymentsView()
 {
     $(".boxSlide, #depoymentDetails").hide();
     $("#deploymentsOverview, #deploymentsBox").show();
-
+    $("#deploymentList").empty();
     ajaxRequest(globalUrls.deployments.getAll, {}, (data)=>{
         data = $.parseJSON(data);
 
@@ -138,10 +155,17 @@ function loadDeploymentsView()
         }];
 
         $.each(data, function(i, item){
+            let box = emptyDeploymentBox();
+            box.find(".name").html(`
+                <a class='viewDeployment' href="#" data-deployment-id="${item.id}"><u>${item.name}</u>
+                </a>`);
+            box.find(".memory").text(formatBytes(item.containerDetails.totalMem));
+            box.find(".containers").text(item.containerDetails.totalContainers);
+            $("#deploymentList").append(box);
             treeData.push({
                 text: item.name,
                 id: item.id,
-                icon: "fas fa-archive",
+                icon: "fas fa-space-shuttle",
                 type: "deployment",
             });
         });
@@ -169,6 +193,10 @@ function viewDeployment(deploymentId)
     $("#depoymentDetails").show();
     ajaxRequest(globalUrls.deployments.getDeployment, x, function(data){
         data = $.parseJSON(data);
+
+        $("#deploymentName").text(`Deployment: ${data.details.name}`);
+        addBreadcrumbs(["Deployments", data.details.name ], ["", "active"], false);
+
         let trs = "";
         $.each(data.cloudConfigs, function(i, item){
             trs += `<tr><td>${item.name}</td></tr>`
@@ -176,23 +204,28 @@ function viewDeployment(deploymentId)
 
         let c = "";
 
-        $.each(data.containers, function(host, hostData){
-            c += `<tr><td class="text-center bg-info" colspan="999"><h5> Host: ${host} </h5></td></tr>`;
-            $.each(hostData.containers, function(_, container){
-                c += `<tr>
-                    <td><i class='${statusCodeIconMap[container.statusCode]}'></i>${container.name}</td>
-                    <td>${container.type}</td>
-                    <td>${formatBytes(container.state.memory.usage)}</td>
-                    <td>`;
-                $.each(container.state.network, function(name, details){
-                    if(name == "lo"){
-                        return;
-                    }
-                    c += `${details.addresses[0].address}`
+        if(data.containers.length == 0){
+            c += `<tr><td class='text-center' colspan="999">No Containers Deployed Yet</td></tr>`;
+        }else{
+            $.each(data.containers, function(host, hostData){
+                c += `<tr><td class="text-center bg-secondary text-white" colspan="999"><h5> Host: ${host} </h5></td></tr>`;
+                $.each(hostData.containers, function(_, container){
+                    c += `<tr>
+                        <td><i class='${statusCodeIconMap[container.statusCode]}'></i> ${container.name}</td>
+                        <td>${container.type}</td>
+                        <td>${formatBytes(container.state.memory.usage)}</td>
+                        <td>`;
+                    $.each(container.state.network, function(name, details){
+                        if(name == "lo"){
+                            return;
+                        }
+                        c += `${details.addresses[0].address}`
+                    });
+                    c += `</td></tr>`
                 });
-                c += `</td></tr>`
             });
-        });
+        }
+
 
         $("#deploymentCloudConfigTable > tbody").empty().append(trs);
         $("#deploymentContainersList > tbody").empty().append(c);
@@ -215,6 +248,11 @@ $("#deploymentsBox").on("click", "#startDeployment", function(){
             }
         }
     });
+});
+
+$("#deploymentsBox").on("click", ".viewDeployment", function(e){
+    e.preventDefault();
+    viewDeployment($(this).data("deploymentId"));
 });
 
 $("#deploymentsBox").on("click", "#stopDeployment", function(){

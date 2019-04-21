@@ -25,6 +25,7 @@
           <h5>
             <a data-toggle="collapse" data-parent="#accordion" href="#profileActions" aria-expanded="true" aria-controls="profileActions">
               Actions
+              <i class="fas fa-edit float-right"></i>
             </a>
           </h5>
         </div>
@@ -74,7 +75,8 @@
         <div class="card-header" role="tab" id="configDeviceCardHeading">
           <h5>
             <a data-toggle="collapse" data-parent="#accordion" href="#configDeviceCard" aria-expanded="true" aria-controls="configDeviceCard">
-              Config Data
+              Configuration
+              <i class="fas fa-cogs float-right"></i>
             </a>
           </h5>
         </div>
@@ -100,7 +102,8 @@
         <div class="card-header" role="tab" id="usedByCard">
           <h5>
             <a data-toggle="collapse" data-parent="#accordion" href="#usedByCollapse" aria-expanded="true" aria-controls="usedByCollapse">
-              Entities Profile Used By
+              Used By
+              <i class="fas fa-users float-right"></i>
             </a>
           </h5>
         </div>

@@ -41,25 +41,25 @@ var emptyServerBox = function(){
       </div>
       <div class="brand-card-body">
         <div>
-          <div class="text-value">CPU</div>
+          <div class="text-value">CPU <i class="fas fa-microchip"></i></div>
           <div class="text-uppercase text-muted cpuDetails">CPU Details</div>
         </div>
         <div>
-          <div class="text-value">Memory</div>
+          <div class="text-value">Memory <i class="fas fa-memory"></i></div>
           <div class="text-uppercase text-muted memory"></div>
         </div>
         <div class='gpuGroup'>
-          <div class="text-value">GPU Details</div>
+          <div class="text-value">GPU's<i class="fab fa-megaport"></i></div>
           <div class="text-uppercase text-muted gpuDetails"></div>
         </div>
         <div>
-            <div class="text-value">Project</div>
+            <div class="text-value">Project <i class="fas fa-project-diagram"></i></div>
             <div class="form-group projectFormGroup">
                 <select class="form-control projects changeHostProject"></select>
             </div>
         </div>
         <div>
-            <div class="text-value">Edit Alias</div>
+            <div class="text-value">Alias<i class="fas fa-passport"></i></div>
                 <button class="btn btn-primary editHost pull-right"><i class="fas fa-pencil-alt"></i></button>
             </div>
         </div>

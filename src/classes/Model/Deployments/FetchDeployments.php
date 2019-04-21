@@ -24,4 +24,21 @@ class FetchDeployments
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function fetch(int $deploymentId)
+    {
+        $sql = "SELECT
+                    `Deployment_ID` as `id`,
+                    `Deployment_Name` as `name`
+                FROM
+                    `Deployments`
+                WHERE
+                    `Deployment_ID` = :id
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":id"=>$deploymentId
+        ]);
+        return $do->fetch(\PDO::FETCH_ASSOC);
+    }
 }

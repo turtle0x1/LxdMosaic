@@ -61,6 +61,7 @@
               <h5>
                 <a data-toggle="collapse" data-parent="#accordion" href="#projectActions" aria-expanded="true" aria-controls="projectActions">
                   Actions
+                  <i class="float-right fas fa-edit"></i>
                 </a>
               </h5>
             </div>
@@ -84,6 +85,7 @@
               <h5>
                 <a data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
                   Config
+                  <i class="float-right fas fa-cog"></i>
                 </a>
               </h5>
             </div>
@@ -111,6 +113,7 @@
             <h5>
               <a data-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
                 Used By
+                <i class="float-right fas fa-users"></i>
               </a>
             </h5>
           </div>
@@ -162,10 +165,11 @@ function loadProjectView()
             $.each(data.projects, function(i, projectName){
                 let x = {
                     text: projectName,
-                    icon: "fa fa-user",
+                    icon: "fa fa-project-diagram",
                     type: "project",
                     id: projectName,
-                    hostId: data.hostId
+                    hostId: data.hostId,
+                    hostAlias: hostName
                 };
                 hostProjects.push(x);
             });
@@ -189,8 +193,9 @@ function loadProjectView()
             levels: 5,
             onNodeSelected: function(event, node) {
                 if(node.type == "project"){
-                    viewProject(node.id, node.hostId);
+                    viewProject(node.id, node.hostId, node.hostAlias);
                 } else if (node.type == "projectsOverview"){
+                    addBreadcrumbs(["Projects"], ["active"], false)
                     $(".boxSlide, #projectDetails").hide();
                     $("#projectsOverview, #projectsBox").show();
                 }
@@ -199,9 +204,11 @@ function loadProjectView()
     });
 }
 
-function viewProject(project, hostId){
+function viewProject(project, hostId, hostAlias){
     currentProject.project = project;
     currentProject.hostId = hostId;
+    currentProject.hostAlias = hostAlias;
+    addBreadcrumbs([hostAlias, project], ["", "active"], true)
     ajaxRequest(globalUrls.projects.info, currentProject, (data)=>{
         data = $.parseJSON(data);
         $("#projectsOverview").hide();
