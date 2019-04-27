@@ -157,52 +157,42 @@ function loadProjectView()
             }
         }];
 
+        let hosts = ``;
+
         $(".boxSlide, #projectDetails").hide();
         $("#projectsOverview, #projectsBox").show();
         data = $.parseJSON(data);
         $.each(data, function(hostName, data){
-            let hostProjects = [];
-            $.each(data.projects, function(i, projectName){
-                let x = {
-                    text: projectName,
-                    icon: "fa fa-project-diagram",
-                    type: "project",
-                    id: projectName,
-                    hostId: data.hostId,
-                    hostAlias: hostName
-                };
-                hostProjects.push(x);
-            });
-
-            let state = {};
-
             if(data.online == false){
                 hostName += " (Offline)";
                 state.disabled = true;
             }
 
-            treeData.push({
-                text: hostName,
-                nodes: hostProjects,
-                icon: "fa fa-server",
-                state: state
-            })
+            hosts += `<li class="nav-item nav-dropdown open">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon fas fa-caret-down"></i> ${hostName}
+                </a>
+                <ul class="nav-dropdown-items">`;
+
+            $.each(data.projects, function(i, projectName){
+                hosts += `<li class="nav-item view-project"
+                    data-host-id="${data.hostId}"
+                    data-project="${projectName}"
+                    data-alias="${hostName}">
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon fa fa-project-diagram"></i>
+                    ${projectName}
+                  </a>
+                </li>`;
+            });
         });
-        $('#jsTreeSidebar').treeview({
-            data: treeData,
-            levels: 5,
-            onNodeSelected: function(event, node) {
-                if(node.type == "project"){
-                    viewProject(node.id, node.hostId, node.hostAlias);
-                } else if (node.type == "projectsOverview"){
-                    addBreadcrumbs(["Projects"], ["active"], false)
-                    $(".boxSlide, #projectDetails").hide();
-                    $("#projectsOverview, #projectsBox").show();
-                }
-            }
-        });
+        $("#sidebar-ul").empty().append(hosts);
     });
 }
+
+$("#sidebar-ul").on("click", ".view-project", function(){
+     viewProject($(this).data("project"), $(this).data("hostId"), $(this).data("alias"));
+})
 
 function viewProject(project, hostId, hostAlias){
     currentProject.project = project;

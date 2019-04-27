@@ -107,43 +107,33 @@ function loadCloudConfigTree()
     ajaxRequest(globalUrls.cloudConfig.getAll, null, function(data){
         loadCloudConfigOverview();
         var data = $.parseJSON(data);
-        let h = [{
-            text: "Overview",
-            icon: "fa fa-home",
-            type: "overview",
-            state: {
-                selected: true
-            }
-        }];
+        let hosts = "";
         $.each(data, function(i, item){
-            let nodes = [];
+            hosts += `<li class="nav-item nav-dropdown open">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon fas fa-caret-down"></i> ${i}
+                </a>
+                <ul class="nav-dropdown-items">`;
+
             $.each(item, function(o, z){
-                nodes.push({
-                    text: z.name,
-                    icon: "fa fa-file",
-                    type: "cloudConfig",
-                    id: z.id
-                });
-            });
-            h.push({
-                text: i,
-                nodes: nodes
+                hosts += `<li class="nav-item view-cloudConifg"
+                    data-id="${z.id}"
+                    data-project="${z.name}">
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon fa fa-file"></i>
+                    ${z.name}
+                  </a>
+                </li>`;
             });
         });
 
-        $('#jsTreeSidebar').treeview({
-            data: h,
-            levels: 5,
-            onNodeSelected: function(event, node) {
-                if(node.type == "cloudConfig"){
-                    loadCloudConfigView(node.id);
-                } else if(node.type == "overview"){
-                    loadCloudConfigOverview();
-                }
-            }
-        });
+        $("#sidebar-ul").empty().append(hosts);
     });
 }
+
+$("#sidebar-ul").on("click", ".view-cloudConifg", function(){
+    loadCloudConfigView($(this).data("id"));
+});
 
 function loadCloudConfigOverview(){
     $(".boxSlide, #cloudConfigContents").hide();

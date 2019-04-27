@@ -141,12 +141,12 @@
             }
             let trs = "";
             $.each(x, function(host, hostDetails){
-                trs += "<tr class='alert alert-info'><td colspan='7' class='text-center'>" + host + "</td></tr>";
+                trs += "<tr class='alert alert-info'><td colspan='999' class='text-center'>" + host + "</td></tr>";
                 if(hostDetails.images.length == 0){
                     if(hostDetails.online){
-                        trs += `<tr><td colspan="7" class="text-center"><b>No Images</b></td></tr>`;
+                        trs += `<tr><td colspan="999" class="text-center"><b>No Images</b></td></tr>`;
                     }else{
-                        trs += `<tr><td colspan="7" class="text-center"><b class="text-danger">Host Offline</b></td></tr>`;
+                        trs += `<tr><td colspan="999" class="text-center"><b class="text-danger">Host Offline</b></td></tr>`;
                     }
 
                     return;
@@ -182,32 +182,27 @@
     $(document).on("click", ".viewImages", function(){
         changeActiveNav(".viewImages");
         loadLocalImages();
-        var treeData = [
-            {
-                text: " Local Images",
-                type: "localImages",
-                icon: "fa fa-home",
-                state: {
-                    selected: true
-                }
-            },
-            {
-                text: " Linux Containers Org",
-                type: "linuxContainersOrg",
-                icon: "fas fa-cloud-download-alt"
-            }
-        ]
-        $('#jsTreeSidebar').treeview({
-            data: treeData,
-            levels: 5,
-            onNodeSelected: function(event, node) {
-                if(node.type == "localImages"){
-                    showLocalImages();
-                }else if(node.type == "linuxContainersOrg"){
-                    showRemoteImages();
-                }
-            }
-        });
+        $("#sidebar-ul").empty().append(`
+            <li class="nav-item imageLink" data-type="localImages">
+                <a class="nav-link" href="#">
+                    <i class="nav-icon fa fa-home"></i> Local Images
+                </a>
+            </li>
+            <li class="nav-item imageLink" data-type="linuxContainersOrg">
+                <a class="nav-link" href="#">
+                    <i class="nav-icon fas fa-cloud-download-alt"></i> Linux Containers Org
+                </a>
+            </li>
+            `);
+    });
+
+    $("#sidebar-ul").on("click", ".imageLink", function(){
+        let type = $(this).data("type");
+        if(type == "localImages"){
+            showLocalImages();
+        }else if(type == "linuxContainersOrg"){
+            showRemoteImages();
+        }
     });
 
 </script>

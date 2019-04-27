@@ -133,70 +133,53 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
 {
     ajaxRequest(globalUrls.profiles.getAllProfiles, null, function(data){
         var data = $.parseJSON(data);
-        var treeData = [{
-            text: "Overview",
-            icon: "fa fa-home",
-            type: "profileOverview",
-            state: {
-                selected: true
-            }
-        }];
+        let hosts = "";
         let matched = false;
         $.each(data, function(hostName, host){
-            let profiles = [];
-            $.each(host.profiles, function(profileName, details){
-                let x = {
-                    text: profileName,
-                    icon: "fa fa-user",
-                    type: "profile",
-                    id: profileName,
-                    host: hostName,
-                    hostId: host.hostId
-                };
-                if(hostName == selectedHost && profileName == selectedProfile ){
-                    matched = true;
-                    x.state = {
-                        selected: true
-                    };
-                }
-                profiles.push(x);
-            });
-            let state = {};
             if(host.online == false){
                 hostName += " (Offline)";
                 state.disabled = true;
             }
 
-            treeData.push({
-                text: hostName,
-                nodes: profiles,
-                icon: "fa fa-server",
-                state: state,
-            })
+            hosts += `<li class="nav-item nav-dropdown open">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon fas fa-caret-down"></i> ${hostName}
+                </a>
+                <ul class="nav-dropdown-items">`;
+
+            $.each(host.profiles, function(profileName, details){
+                hosts += `<li class="nav-item view-profile"
+                    data-host-id="${host.hostId}"
+                    data-profile="${profileName}"
+                    data-alias="${hostName}">
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon fa fa-user"></i>
+                    ${profileName}
+                  </a>
+                </li>`;
+                //TODO Put it back
+                // if(hostName == selectedHost && profileName == selectedProfile ){
+                //     matched = true;
+                //     x.state = {
+                //         selected: true
+                //     };
+                // }
+            });
         });
         $(".boxSlide, #profileDetails").hide();
         $("#profileOverview, #profileBox").show();
-        if(matched){
-            treeData[0].state.selected = false;
-        }
-        $('#jsTreeSidebar').treeview({
-            data: treeData,
-            levels: 5,
-            onNodeSelected: function(event, node) {
-                if(node.type == "profile"){
-                    viewProfile(node.id, node.host, node.hostId);
-                } else if (node.type == "profileOverview"){
-                    $(".boxSlide, #profileDetails").hide();
-                    $("#profileOverview, #profileBox").show();
-                }
-            }
-        });
+        $("#sidebar-ul").empty().append(hosts);
+
         profileData = data;
         if($.isFunction(callback)){
             callback();
         }
     });
 }
+
+$("#sidebar-ul").on("click", ".view-profile", function(){
+    viewProfile($(this).data("profile"), $(this).data("alias"), $(this).data("hostId"));
+})
 
 function viewProfile(profileId, hostAlias, hostId){
     currentProfileDetails.profile = profileId;
