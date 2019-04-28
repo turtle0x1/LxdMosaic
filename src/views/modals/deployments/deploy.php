@@ -15,7 +15,6 @@
                       <th> Cloud Config </th>
                       <th> Number Of Instances </th>
                       <th> Host </th>
-                      <th> Images </th>
                       <th> Extra Profiles </th>
                   </tr>
               </thead>
@@ -47,7 +46,6 @@ $("#modal-deployments-deploy").on("shown.bs.modal", function(){
                 <td>${item.name}</td>
                 <td><input name="qty" class="form-control"/></td>
                 <td><input name="hosts" class="form-control"/></td>
-                <td><input name="image" class="form-control"/></td>
                 <td><input name="extraProfiles" class="form-control"/></td>
             </tr>`);
             x.find("input[name=extraProfiles]").tokenInput(globalUrls.profiles.search.getCommonProfiles, {
@@ -66,14 +64,6 @@ $("#modal-deployments-deploy").on("shown.bs.modal", function(){
                 theme: "facebook"
             });
 
-            x.find("input[name=image]").tokenInput(globalUrls.images.search.searchAllHosts, {
-                queryParam: "image",
-                tokenLimit: 1,
-                propertyToSearch: "description",
-                theme: "facebook",
-                tokenValue: "details"
-            });
-
             $("#deployCloudConfigTable > tbody").append(x);
         });
 
@@ -85,7 +75,6 @@ $("#modal-deployments-deploy").on("click", "#deploy", function(){
     let x = [];
     $("#deployCloudConfigTable > tbody > tr").each(function(){
         let p =  $(this).find("input[name=extraProfiles]").tokenInput("get");
-        let i =  $(this).find("input[name=image]").tokenInput("get");
         let hosts = mapObjToSignleDimension($(this).find("input[name=hosts]").tokenInput("get"), "hostId");
 
         p = mapObjToSignleDimension(p, "profile");
@@ -94,7 +83,6 @@ $("#modal-deployments-deploy").on("click", "#deploy", function(){
             revId: $(this).attr("id"),
             qty: $(this).find("input[name=qty]").val(),
             extraProfiles: p,
-            image: i[0]["details"],
             hosts: hosts
         });
     });

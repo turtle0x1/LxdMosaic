@@ -33,7 +33,8 @@ class GetConfig
         $sql = "SELECT
                     `CCD_ID` as `revisionId`,
                     `CCD_Cloud_Config_ID` as `cloudConfigId`,
-                    `CCD_Data` as `data`
+                    `CCD_Data` as `data`,
+                    `CCD_Image_Details` as `imageDetails`
                 FROM
                     `Cloud_Config_Data`
                 WHERE
@@ -86,5 +87,20 @@ class GetConfig
             ":revId"=>$revId
         ]);
         return $do->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function getImageDetailsByRevId(int $revId)
+    {
+        $sql = "SELECT
+                    `CCD_Image_Details`
+                FROM
+                    `Cloud_Config_Data`
+                WHERE
+                    `CCD_ID` = :revId";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":revId"=>$revId
+        ]);
+        return $do->fetchColumn();
     }
 }

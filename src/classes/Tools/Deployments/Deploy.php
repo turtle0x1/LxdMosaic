@@ -6,24 +6,28 @@ use dhope0000\LXDClient\Tools\CloudConfig\DeployToProfile;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
 use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 use dhope0000\LXDClient\Tools\Containers\CreateContainer;
+use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 
 class Deploy
 {
     public function __construct(
         DeployToProfile $deployToProfile,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
-        CreateContainer $createContainer
+        CreateContainer $createContainer,
+        GetConfig $getConfig
     ) {
         $this->deployToProfile = $deployToProfile;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
         $this->createContainer = $createContainer;
+        $this->getConfig = $getConfig;
     }
-    /**
-     * @TODO Get hosts to deploy on
-     */
+
     public function deploy(int $deploymentId, array $instances)
     {
         $this->validateInstances($instances);
+
+        $revIds = array_column($instances, "revId");
+        $imageDetails = $this->getImageDetails($revIds);
 
         $revProfileNames = [];
 
@@ -53,7 +57,7 @@ class Deploy
                         $containerName,
                         $profiles,
                         [$hostId],
-                        $instance["image"]
+                        $imageDetails[$instance["revId"]]
                     );
                 }
             }
@@ -77,6 +81,19 @@ class Deploy
         return $profileName;
     }
 
+    public function getImageDetails($revIds)
+    {
+        $imageDetails = [];
+        foreach($revIds as $revId){
+            $details = $this->getConfig->getImageDetailsByRevId($revId);
+            if(empty($details)){
+                throw new \Exception("Missing image from cloud config", 1);
+            }
+            $imageDetails[$revId] = json_decode($details, true)["details"];
+        }
+        return $imageDetails;
+    }
+
     public function validateInstances(array $instances)
     {
         foreach ($instances as $instance) {
@@ -84,8 +101,6 @@ class Deploy
                 throw new \Exception("Missing rev id", 1);
             } elseif (!isset($instance["qty"]) || !is_numeric($instance["qty"])) {
                 throw new \Exception("Missing the number of instances", 1);
-            } elseif (!isset($instance["image"]) && !is_array($instance["image"])) {
-                throw new \Exception("Missing image details", 1);
             } elseif (isset($instance["extraProfiles"]) && !is_array($instance["extraProfiles"])) {
                 throw new \Exception("If extra profiles are included its needs to be an array", 1);
             } elseif (isset($instance["hosts"]) && !is_array($instance["hosts"])) {

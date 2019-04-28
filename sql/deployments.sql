@@ -25,7 +25,7 @@ ON UPDATE CASCADE;
 
 INSERT INTO `Cloud_Config` (`CC_ID`, `CC_Name`, `CC_Namespace`, `CC_Description`) VALUES (1, "Example Node", "example/node", "an example cloud config for a node app");
 
-INSERT INTO `Cloud_Config_Data` (`CCD_ID`, `CCD_Cloud_Config_ID`, `CCD_Data`) VALUES (1, 1, "#cloud-config
+INSERT INTO `Cloud_Config_Data` (`CCD_ID`, `CCD_Cloud_Config_ID`, `CCD_Data`, `CCD_Image_Details`) VALUES (1, 1, "#cloud-config
 
 # Apply updates using apt
 package_update: true
@@ -42,7 +42,7 @@ runcmd:
  - npm -g install pm2
  - pm2 start /root/nodeExample/index.js
  - pm2 startup
- - pm2 save");
+ - pm2 save", '{"details": {"alias": "default", "server": "https://cloud-images.ubuntu.com/releases", "protocol": "simplestreams", "certificate": "", "fingerprint": "5b72cf46f628b3d60f5d99af48633539b2916993c80fc5a2323d7d841f66afbe"}, "description": "ubuntu 18.04 LTS amd64 (release) (20190424)"}');
 
 INSERT INTO `Deployments` (`Deployment_ID`, `Deployment_Name`) VALUES (1, "Example");
 

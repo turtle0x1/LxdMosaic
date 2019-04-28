@@ -64,6 +64,7 @@ mysql < sql/instance_types.sql
 mysql < sql/store_details.sql
 mysql < sql/host_alias.sql
 mysql < sql/host_online.sql
+mysql < sql/cloud_config_image_details.sql
 mysql < sql/deployments.sql
 
 

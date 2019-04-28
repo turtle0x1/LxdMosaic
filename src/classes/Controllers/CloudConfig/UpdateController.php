@@ -10,9 +10,9 @@ class UpdateController
         $this->update = $update;
     }
 
-    public function update(int $cloudConfigId, string $code)
+    public function update(int $cloudConfigId, string $code, array $imageDetails)
     {
-        $this->update->update($cloudConfigId, $code);
+        $this->update->update($cloudConfigId, $code, $imageDetails);
         return ["state"=>"success", "message"=>"Save cloud config"];
     }
 }

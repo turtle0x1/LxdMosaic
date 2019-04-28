@@ -39,6 +39,20 @@
 <div class="row" id="cloudConfigContents">
     <div class="col-md-9">
         <div class="card">
+          <div class="card-header" role="tab" id="headingOne">
+            <h5>
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Image
+              </a>
+            </h5>
+          </div>
+          <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+            <div class="card-body">
+                <input class="form-control" id="cloudConfigImage"/>
+            </div>
+          </div>
+        </div>
+        <div class="card">
           <div class="card-header" role="tab" id="cloudConfig-actionsHeading">
             <h5>
               <a data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-editorCollapse" aria-expanded="true" aria-controls="cloudConfig-editorCollapse">
@@ -95,7 +109,15 @@ function loadCloudConfigView(cloudConfigId)
     currentCloudConfigId = cloudConfigId;
 
     ajaxRequest(globalUrls.cloudConfig.getDetails, data ,function(data){
+
         let config = $.parseJSON(data);
+        $("#cloudConfigImage").tokenInput("clear");
+        
+        if(config.data.imageDetails.hasOwnProperty("description")){
+            $("#cloudConfigImage").tokenInput("add", config.data.imageDetails);
+        }
+
+
         editor.setValue(config.data.data, -1);
         $("#cloudConfigOverview").hide();
         $("#cloudConfigContents").show();
@@ -104,6 +126,14 @@ function loadCloudConfigView(cloudConfigId)
 
 function loadCloudConfigTree()
 {
+    $("#cloudConfigImage").tokenInput(globalUrls.images.search.searchAllHosts, {
+        queryParam: "image",
+        tokenLimit: 1,
+        propertyToSearch: "description",
+        theme: "facebook",
+        tokenValue: "details"
+    });
+
     ajaxRequest(globalUrls.cloudConfig.getAll, null, function(data){
         loadCloudConfigOverview();
         var data = $.parseJSON(data);
@@ -160,6 +190,15 @@ $("#cloudConfigBox").on("click", ".save", function(){
         code: code,
         cloudConfigId: currentCloudConfigId
     }
+
+    let image = $("#cloudConfigImage").tokenInput("get");
+
+    if(image.length == 0){
+        makeToastr(JSON.stringify({state: "error", message: "Please select image"}));
+        return false;
+    }
+
+    x.imageDetails = image[0];
 
     ajaxRequest(globalUrls.cloudConfig.update, x, function(response){
         response = makeToastr(response);
