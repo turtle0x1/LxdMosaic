@@ -190,6 +190,7 @@ function loadProjectView()
                   </a>
                 </li>`;
             });
+            hosts += "</ul></li>";
         });
         $("#sidebar-ul").empty().append(hosts);
     });

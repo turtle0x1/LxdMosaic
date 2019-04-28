@@ -112,7 +112,7 @@ function loadCloudConfigView(cloudConfigId)
 
         let config = $.parseJSON(data);
         $("#cloudConfigImage").tokenInput("clear");
-        
+
         if(config.data.imageDetails.hasOwnProperty("description")){
             $("#cloudConfigImage").tokenInput("add", config.data.imageDetails);
         }
@@ -160,6 +160,7 @@ function loadCloudConfigTree()
                   </a>
                 </li>`;
             });
+            hosts += "</ul></li>";
         });
 
         $("#sidebar-ul").empty().append(hosts);

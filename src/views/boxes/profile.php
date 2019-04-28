@@ -170,6 +170,7 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
                   </a>
                 </li>`;
             });
+            hosts += "</ul></li>";
         });
         $(".boxSlide, #profileDetails").hide();
         $("#profileOverview, #profileBox").show();
