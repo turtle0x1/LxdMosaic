@@ -38,15 +38,12 @@ if ($haveServers->haveAny() !== true) {
 
       <!-- Main styles for this application-->
       <link href="/assets/coreui/style.css" rel="stylesheet">
+      <script src="https://unpkg.com/@coreui/coreui/dist/js/coreui.min.js"></script>
 
       <link rel="stylesheet" href="/assets/styles.css">
 
       <link rel="stylesheet" href="/assets/toastr.js/toastr.min.css">
       <script src="/assets/toastr.js/toastr.min.js"></script>
-
-
-      <link rel="stylesheet" href="/assets/bootstrap-treeview/bootstrap-treeview.min.css">
-      <script src="/assets/bootstrap-treeview/bootstrap-treeview.min.js"></script>
 
       <base href="./">
       <meta charset="utf-8">
@@ -218,8 +215,8 @@ if ($haveServers->haveAny() !== true) {
 
           function changeActiveNav(newActiveSelector)
           {
-              $(".sidebar").find(".active").removeClass("active");
-              $(".sidebar").find(newActiveSelector).parent(".nav-item").addClass("active");
+              $("#mainNav").find(".active").removeClass("active");
+              $("#mainNav").find(newActiveSelector).parent(".nav-item").addClass("active");
           }
 
           function makeNodeMissingPopup()
@@ -269,58 +266,58 @@ if ($haveServers->haveAny() !== true) {
       </script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-    <header class="app-header navbar">
+    <header class="app-header navbar navbar-dark bg-dark">
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <i class="fas fa-bars" style="color: #dd4814;"></i>
       </button>
       <a class="navbar-brand" href="#">
-        <img class="navbar-brand-full" src="img/brand/logo.svg" width="89" height="25" alt="LXD Mosaic">
-        <img class="navbar-brand-minimized" src="img/brand/sygnet.svg" width="30" height="30" alt="LXD Mosaic">
+        LXD Mosaic
       </a>
       <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
         <i class="fas fa-bars" style="color: #dd4814;"></i>
       </button>
-      <ul class="nav navbar-nav ml-auto">
+      <ul class="navbar-nav mr-auto d-md-down-none" id="mainNav">
+          <li class="nav-item active">
+            <a class="nav-link overview">
+              <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link viewProfiles">
+              <i class="fas fa-users"></i> Profiles</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link viewCloudConfigFiles">
+              <i class="fa fa-cogs"></i> Cloud Config</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link viewImages">
+              <i class="fa fa-images"></i> Images</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link viewProjects">
+              <i class="fas fa-project-diagram"></i> Projects</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link viewDeployments">
+              <i class="fas fa-rocket"></i> Deployments</a>
+          </li>
+        </ul>
+      <ul class="nav navbar-nav ml-auto d-md-down-none">
           <li class="nav-item px-3 btn btn-primary pull-right" id="addNewServer">
                 <a> Add A Server </a>
            </li>
           <li class="nav-item px-3 btn btn-success pull-right" id="createContainer">
                 <a> Create Container </a>
            </li>
-
       </ul>
-
     </header>
     <div class="app-body">
       <div class="sidebar">
         <nav class="sidebar-nav">
-          <ul class="nav">
-            <li class="nav-item active">
-              <a class="nav-link overview">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link viewProfiles">
-                <i class="fas fa-users"></i> Profiles</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link viewCloudConfigFiles">
-                <i class="fa fa-cogs"></i> Cloud Config</a>
-            </li>
+          <ul class="nav" id="sidebar-ul">
 
-            <li class="nav-item">
-              <a class="nav-link viewImages">
-                <i class="fa fa-images"></i> Images</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link viewProjects">
-                <i class="fas fa-project-diagram"></i> Projects</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link viewDeployments">
-                <i class="fas fa-rocket"></i> Deployments</a>
-            </li>
           </ul>
         </nav>
       </div>
@@ -332,11 +329,7 @@ if ($haveServers->haveAny() !== true) {
         <div class="container-fluid">
           <div id="dashboard" class="animated fadeIn">
             <div class="row">
-            <div class="col-md-3">
-                <div class="" id="jsTreeSidebar">
-                </div>
-            </div>
-            <div class="col-md-7" id="boxHolder">
+            <div class="col-md-10" id="boxHolder">
                 <?php
                     require __DIR__ . "/boxes/overview.php";
                     require __DIR__ . "/boxes/container.php";
@@ -362,6 +355,14 @@ if ($haveServers->haveAny() !== true) {
   </body>
 </html>
 <script type='text/javascript'>
+
+$("#sidebar-ul").on("click", ".nav-item", function(){
+    if($(this).hasClass("nav-dropdown")){
+        return;
+    }
+    $("#sidebar-ul").find(".active").removeClass("active");
+    $(this).addClass("active");
+})
 
 var profileData = null;
 
@@ -692,62 +693,59 @@ function loadServerOview()
 }
 
 function createContainerTree(){
-
     ajaxRequest(globalUrls.hosts.containers.getAll, {}, (data)=>{
         data = $.parseJSON(data);
         let treeData = [];
+        let active = $.isPlainObject(currentContainerDetails) && currentContainerDetails.hasOwnProperty("container") ? "" : "active";
+        let hosts = `
+        <li class="nav-item container-overview ${active}">
+            <a class="nav-link" href="#">
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </a>
+        </li>`;
         $.each(data, function(i, host){
-            let containers = [];
-            $.each(host.containers, function(containerName, details){
-                let selected = false;
-                if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
-                    if(i == currentContainerDetails.alias && containerName == currentContainerDetails.container){
-                        selected = true
-                    }
-                }else{
-                    selected = false;
-                }
-                containers.push({
-                    text: containerName,
-                    icon: statusCodeIconMap[details.state.status_code],
-                    type: "container",
-                    hostId: host.hostId,
-                    host: i,
-                    state: {
-                        selected: selected
-                    }
-                });
-            });
-
-            let state = {};
             if(host.online == false){
                 i += " (Offline)";
                 state.disabled = true;
             }
-            treeData.push({
-                text: i,
-                hostId: host.hostId,
-                nodes: containers,
-                type: "server",
-                icon: "fa fa-server",
-                state: state
-            })
-        });
-        $('#jsTreeSidebar').treeview({
-            data: treeData,
-            levels: 5,
-            onNodeSelected: function(event, node) {
-                if(node.type == "container"){
-                    setContDetsByTreeItem(node);
-                    loadContainerView(currentContainerDetails);
-                } else if(node.type == "server"){
-                    loadServerOview();
-                }
-            }
-        });
-    });
 
+            hosts += `<li class="nav-item nav-dropdown open">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="fas fa-server"></i> ${i}
+                </a>
+                <ul class="nav-dropdown-items">`;
+
+            let containers = [];
+            $.each(host.containers, function(containerName, details){
+                let active = "";
+                if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
+                    if(i == currentContainerDetails.alias && containerName == currentContainerDetails.container){
+                        active = "active"
+                    }
+                }
+
+                hosts += `<li class="nav-item view-container ${active}"
+                    data-host-id="${host.hostId}"
+                    data-container="${containerName}"
+                    data-alias="${i}">
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
+                    ${containerName}
+                  </a>
+                </li>`;
+            });
+
+            hosts += `</ul>
+                </li>`
+        });
+        $("#sidebar-ul").empty().append(hosts);
+    });
 }
+
+$("#sidebar-ul").on("click", ".view-container", function(){
+    setContDetsByTreeItem($(this));
+    loadContainerView(currentContainerDetails);
+});
 
 function formatBytes(bytes,decimals) {
    if(bytes == 0) return '0 Bytes';
@@ -761,9 +759,9 @@ function formatBytes(bytes,decimals) {
 function setContDetsByTreeItem(node)
 {
     currentContainerDetails = {
-        container: node.text,
-        alias: node.host,
-        hostId: node.hostId
+        container: node.data("container"),
+        alias: node.data("alias"),
+        hostId: node.data("hostId")
     }
     return currentContainerDetails;
 }
@@ -809,7 +807,8 @@ $(document).on("change", ".changeHostProject", function(){
 
 });
 
-$(document).on("click", ".overview", function(){
+$(document).on("click", ".overview, .container-overview", function(){
+    currentContainerDetails = null;
     setBreadcrumb("Dashboard", "overview active");
     createContainerTree();
     loadServerOview();
@@ -818,25 +817,25 @@ $(document).on("click", ".overview", function(){
     $("#overviewBox").show();
 });
 
-$(document).on("click", ".viewProfiles", function(){
+$(document).on("click", ".viewProfiles, .profile-overview", function(){
     setBreadcrumb("Profiles", "viewProfiles active");
     loadProfileView();
     changeActiveNav(".viewProfiles")
 });
 
-$(document).on("click", ".viewProjects", function(){
+$(document).on("click", ".viewProjects, .projects-overview", function(){
     setBreadcrumb("Projects", "viewProjects active");
     loadProjectView();
     changeActiveNav(".viewProjects")
 });
 
-$(document).on("click", ".viewDeployments", function(){
+$(document).on("click", ".viewDeployments, .deployments-overview", function(){
     setBreadcrumb("Deployments", "viewDeployments active");
     loadDeploymentsView();
     changeActiveNav(".viewDeployments")
 });
 
-$(document).on("click", ".viewCloudConfigFiles", function(){
+$(document).on("click", ".viewCloudConfigFiles, .cloudConfig-overview", function(){
     setBreadcrumb("Cloud Config", "viewCloudConfigFiles active");
     loadCloudConfigTree();
     changeActiveNav(".viewCloudConfigFiles")

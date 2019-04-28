@@ -146,14 +146,12 @@ function loadDeploymentsView()
     ajaxRequest(globalUrls.deployments.getAll, {}, (data)=>{
         data = $.parseJSON(data);
 
-        var treeData = [{
-            text: "Overview",
-            icon: "fa fa-home",
-            type: "deploymentsOverview",
-            state: {
-                selected: true
-            }
-        }];
+        let hosts = `
+        <li class="nav-item active deployments-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </a>
+        </li>`;
 
         $.each(data, function(i, item){
             let box = emptyDeploymentBox();
@@ -163,28 +161,19 @@ function loadDeploymentsView()
             box.find(".memory").text(formatBytes(item.containerDetails.totalMem));
             box.find(".containers").text(item.containerDetails.totalContainers);
             $("#deploymentList").append(box);
-            treeData.push({
-                text: item.name,
-                id: item.id,
-                icon: "fas fa-space-shuttle",
-                type: "deployment",
-            });
+            hosts += `<li class="nav-item view-deployment" data-id="${item.id}" >
+                <a class="nav-link" href="#">
+                    <i class="nav-icon fas fa-space-shuttle"></i> ${item.name}
+                </a>
+            </li>`
         });
-
-
-        $('#jsTreeSidebar').treeview({
-            data: treeData,
-            levels: 5,
-            onNodeSelected: function(event, node) {
-                if(node.type == "deployment"){
-                    viewDeployment(node.id);
-                } else if (node.type == "deploymentsOverview"){
-                    loadDeploymentsView();
-                }
-            }
-        });
+        $("#sidebar-ul").empty().append(hosts);
     });
 }
+
+$("#sidebar-ul").on("click", ".view-deployment", function(){
+    viewDeployment($(this).data("id"))
+});
 
 function viewDeployment(deploymentId)
 {

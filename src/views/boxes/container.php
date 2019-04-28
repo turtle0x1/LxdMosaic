@@ -396,7 +396,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
 $("#containerBox").on("click", ".toProfile", function(){
     let profile = $(this).text();
     loadProfileView(profile, currentContainerDetails.hostId, function(){
-        viewProfile(profile, currentContainerDetails.hostId);
+        viewProfile(profile, currentContainerDetails.alias, currentContainerDetails.hostId);
     });
 
 });
@@ -431,6 +431,7 @@ $("#containerBox").on("click", ".deleteContainer", function(){
                         if(r.state == "success"){
                             loadContainerTreeAfter();
                         }
+                        currentContainerDetails = null;
                         $("#overviewBox").show();
                         $("#containerBox").hide();
                     });

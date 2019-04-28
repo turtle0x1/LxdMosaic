@@ -1,23 +1,27 @@
 <div id="overviewBox" class="boxSlide">
     <div class="row">
       <!-- /.col-->
-      <div class="card-columns cols-2" id="serverOverviewGraphs">
-          <div class="card">
-              <div class="card-body">
-                  <div class="alert alert-warning text-center notEnoughData">
-                      <b> <u> Memory Ussage Chart </u> </b><br/>
-                      Not enough data check again in 10 minutes
+      <div class="card-columns col-xs-12 cols-2" id="serverOverviewGraphs">
+          <div class="col-xs-6">
+              <div class="card">
+                  <div class="card-body">
+                      <div class="alert alert-warning text-center notEnoughData">
+                          <b> <u> Memory Ussage Chart </u> </b><br/>
+                          Not enough data check again in 10 minutes
+                      </div>
+                      <canvas id="memoryUsage" height="200"></canvas>
                   </div>
-                  <canvas id="memoryUsage" height="200"></canvas>
               </div>
           </div>
-          <div class="card">
-              <div class="card-body">
-                  <div class="alert alert-warning text-center notEnoughData">
-                      <b> <u> Active Containers Chart </u> </b><br/>
-                      Not enough data check again in 10 minutes
+          <div class="col-xs-6">
+              <div class="card">
+                  <div class="card-body">
+                      <div class="alert alert-warning text-center notEnoughData">
+                          <b> <u> Active Containers Chart </u> </b><br/>
+                          Not enough data check again in 10 minutes
+                      </div>
+                      <canvas id="activeContainers" height="200"></canvas>
                   </div>
-                  <canvas id="activeContainers" height="200"></canvas>
               </div>
           </div>
       </div>
@@ -48,7 +52,7 @@ var emptyServerBox = function(){
           <div class="text-value">Memory <i class="fas fa-memory"></i></div>
           <div class="text-uppercase text-muted memory"></div>
         </div>
-        <div class='gpuGroup'>
+        <div class='gpuGroup d-md-down-none'>
           <div class="text-value">GPU's<i class="fab fa-megaport"></i></div>
           <div class="text-uppercase text-muted gpuDetails"></div>
         </div>
@@ -60,7 +64,7 @@ var emptyServerBox = function(){
         </div>
         <div>
             <div class="text-value">Alias<i class="fas fa-passport"></i></div>
-                <button class="btn btn-primary editHost pull-right"><i class="fas fa-pencil-alt"></i></button>
+                <button class="btn btn-xs-sm btn-primary editHost pull-right"><i class="fas fa-pencil-alt"></i></button>
             </div>
         </div>
       </div>
