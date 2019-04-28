@@ -215,8 +215,8 @@ if ($haveServers->haveAny() !== true) {
 
           function changeActiveNav(newActiveSelector)
           {
-              $(".sidebar").find(".active").removeClass("active");
-              $(".sidebar").find(newActiveSelector).parent(".nav-item").addClass("active");
+              $("#mainNav").find(".active").removeClass("active");
+              $("#mainNav").find(newActiveSelector).parent(".nav-item").addClass("active");
           }
 
           function makeNodeMissingPopup()
@@ -266,18 +266,17 @@ if ($haveServers->haveAny() !== true) {
       </script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-    <header class="app-header navbar">
+    <header class="app-header navbar navbar-dark bg-dark">
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <i class="fas fa-bars" style="color: #dd4814;"></i>
       </button>
       <a class="navbar-brand" href="#">
-        <img class="navbar-brand-full" src="img/brand/logo.svg" width="89" height="25" alt="LXD Mosaic">
-        <img class="navbar-brand-minimized" src="img/brand/sygnet.svg" width="30" height="30" alt="LXD Mosaic">
+        LXD Mosaic
       </a>
       <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
         <i class="fas fa-bars" style="color: #dd4814;"></i>
       </button>
-      <ul class="navbar-nav mr-auto">
+      <ul class="navbar-nav mr-auto d-md-down-none" id="mainNav">
           <li class="nav-item active">
             <a class="nav-link overview">
               <i class="fas fa-tachometer-alt"></i> Dashboard
@@ -305,7 +304,7 @@ if ($haveServers->haveAny() !== true) {
               <i class="fas fa-rocket"></i> Deployments</a>
           </li>
         </ul>
-      <ul class="nav navbar-nav ml-auto">
+      <ul class="nav navbar-nav ml-auto d-md-down-none">
           <li class="nav-item px-3 btn btn-primary pull-right" id="addNewServer">
                 <a> Add A Server </a>
            </li>
@@ -360,7 +359,7 @@ if ($haveServers->haveAny() !== true) {
 $("#sidebar-ul").on("click", ".nav-item", function(){
     if($(this).hasClass("nav-dropdown")){
         return;
-    }    
+    }
     $("#sidebar-ul").find(".active").removeClass("active");
     $(this).addClass("active");
 })
@@ -694,11 +693,16 @@ function loadServerOview()
 }
 
 function createContainerTree(){
-
     ajaxRequest(globalUrls.hosts.containers.getAll, {}, (data)=>{
         data = $.parseJSON(data);
         let treeData = [];
-        let hosts = ``;
+        let active = $.isPlainObject(currentContainerDetails) && currentContainerDetails.hasOwnProperty("container") ? "" : "active";
+        let hosts = `
+        <li class="nav-item container-overview ${active}">
+            <a class="nav-link" href="#">
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </a>
+        </li>`;
         $.each(data, function(i, host){
             if(host.online == false){
                 i += " (Offline)";
@@ -707,13 +711,20 @@ function createContainerTree(){
 
             hosts += `<li class="nav-item nav-dropdown open">
                 <a class="nav-link nav-dropdown-toggle" href="#">
-                    <i class="nav-icon fas fa-caret-down"></i> ${i}
+                    <i class="fas fa-server"></i> ${i}
                 </a>
                 <ul class="nav-dropdown-items">`;
 
             let containers = [];
             $.each(host.containers, function(containerName, details){
-                hosts += `<li class="nav-item view-container"
+                let active = "";
+                if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
+                    if(i == currentContainerDetails.alias && containerName == currentContainerDetails.container){
+                        active = "active"
+                    }
+                }
+
+                hosts += `<li class="nav-item view-container ${active}"
                     data-host-id="${host.hostId}"
                     data-container="${containerName}"
                     data-alias="${i}">
@@ -722,15 +733,6 @@ function createContainerTree(){
                     ${containerName}
                   </a>
                 </li>`;
-                //TODO Put it this back
-                let selected = false;
-                if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
-                    if(i == currentContainerDetails.alias && containerName == currentContainerDetails.container){
-                        selected = true
-                    }
-                }else{
-                    selected = false;
-                }
             });
 
             hosts += `</ul>
@@ -805,7 +807,8 @@ $(document).on("change", ".changeHostProject", function(){
 
 });
 
-$(document).on("click", ".overview", function(){
+$(document).on("click", ".overview, .container-overview", function(){
+    currentContainerDetails = null;
     setBreadcrumb("Dashboard", "overview active");
     createContainerTree();
     loadServerOview();
@@ -814,25 +817,25 @@ $(document).on("click", ".overview", function(){
     $("#overviewBox").show();
 });
 
-$(document).on("click", ".viewProfiles", function(){
+$(document).on("click", ".viewProfiles, .profile-overview", function(){
     setBreadcrumb("Profiles", "viewProfiles active");
     loadProfileView();
     changeActiveNav(".viewProfiles")
 });
 
-$(document).on("click", ".viewProjects", function(){
+$(document).on("click", ".viewProjects, .projects-overview", function(){
     setBreadcrumb("Projects", "viewProjects active");
     loadProjectView();
     changeActiveNav(".viewProjects")
 });
 
-$(document).on("click", ".viewDeployments", function(){
+$(document).on("click", ".viewDeployments, .deployments-overview", function(){
     setBreadcrumb("Deployments", "viewDeployments active");
     loadDeploymentsView();
     changeActiveNav(".viewDeployments")
 });
 
-$(document).on("click", ".viewCloudConfigFiles", function(){
+$(document).on("click", ".viewCloudConfigFiles, .cloudConfig-overview", function(){
     setBreadcrumb("Cloud Config", "viewCloudConfigFiles active");
     loadCloudConfigTree();
     changeActiveNav(".viewCloudConfigFiles")

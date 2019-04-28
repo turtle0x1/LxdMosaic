@@ -107,7 +107,12 @@ function loadCloudConfigTree()
     ajaxRequest(globalUrls.cloudConfig.getAll, null, function(data){
         loadCloudConfigOverview();
         var data = $.parseJSON(data);
-        let hosts = "";
+        let hosts = `
+        <li class="nav-item active cloudConfig-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </a>
+        </li>`;
         $.each(data, function(i, item){
             hosts += `<li class="nav-item nav-dropdown open">
                 <a class="nav-link nav-dropdown-toggle" href="#">

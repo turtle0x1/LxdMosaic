@@ -157,7 +157,12 @@ function loadProjectView()
             }
         }];
 
-        let hosts = ``;
+        let hosts = `
+        <li class="nav-item active projects-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </a>
+        </li>`;
 
         $(".boxSlide, #projectDetails").hide();
         $("#projectsOverview, #projectsBox").show();
@@ -170,7 +175,7 @@ function loadProjectView()
 
             hosts += `<li class="nav-item nav-dropdown open">
                 <a class="nav-link nav-dropdown-toggle" href="#">
-                    <i class="nav-icon fas fa-caret-down"></i> ${hostName}
+                    <i class="fas fa-server"></i> ${hostName}
                 </a>
                 <ul class="nav-dropdown-items">`;
 

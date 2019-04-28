@@ -183,7 +183,7 @@
         changeActiveNav(".viewImages");
         loadLocalImages();
         $("#sidebar-ul").empty().append(`
-            <li class="nav-item imageLink" data-type="localImages">
+            <li class="nav-item imageLink active" data-type="localImages">
                 <a class="nav-link" href="#">
                     <i class="nav-icon fa fa-home"></i> Local Images
                 </a>

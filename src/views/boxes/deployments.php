@@ -146,7 +146,12 @@ function loadDeploymentsView()
     ajaxRequest(globalUrls.deployments.getAll, {}, (data)=>{
         data = $.parseJSON(data);
 
-        let hosts = ``;
+        let hosts = `
+        <li class="nav-item active deployments-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </a>
+        </li>`;
 
         $.each(data, function(i, item){
             let box = emptyDeploymentBox();

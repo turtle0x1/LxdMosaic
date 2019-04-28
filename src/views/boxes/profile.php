@@ -131,10 +131,17 @@
 
 function loadProfileView(selectedProfile = null, selectedHost = null, callback = null)
 {
+    changeActiveNav(".viewProfiles")
     ajaxRequest(globalUrls.profiles.getAllProfiles, null, function(data){
         var data = $.parseJSON(data);
-        let hosts = "";
-        let matched = false;
+
+        let a = selectedProfile == null ? "active" : "";
+        let hosts = `
+        <li class="nav-item ${a} profile-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </a>
+        </li>`;
         $.each(data, function(hostName, host){
             if(host.online == false){
                 hostName += " (Offline)";
@@ -143,12 +150,17 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
 
             hosts += `<li class="nav-item nav-dropdown open">
                 <a class="nav-link nav-dropdown-toggle" href="#">
-                    <i class="nav-icon fas fa-caret-down"></i> ${hostName}
+                    <i class="fas fa-server"></i> ${hostName}
                 </a>
                 <ul class="nav-dropdown-items">`;
 
             $.each(host.profiles, function(profileName, details){
-                hosts += `<li class="nav-item view-profile"
+                let active = "";
+                if(host.hostId == selectedHost && profileName == selectedProfile ){
+                    active = "active";
+                }
+
+                hosts += `<li class="nav-item view-profile ${active}"
                     data-host-id="${host.hostId}"
                     data-profile="${profileName}"
                     data-alias="${hostName}">
@@ -157,13 +169,6 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
                     ${profileName}
                   </a>
                 </li>`;
-                //TODO Put it back
-                // if(hostName == selectedHost && profileName == selectedProfile ){
-                //     matched = true;
-                //     x.state = {
-                //         selected: true
-                //     };
-                // }
             });
         });
         $(".boxSlide, #profileDetails").hide();
@@ -187,6 +192,8 @@ function viewProfile(profileId, hostAlias, hostId){
     currentProfileDetails.hostId = hostId;
     let details = profileData[hostAlias]["profiles"][profileId]["details"];
     let deviceTableRows = createTableRowsHtml(details.devices);
+
+    addBreadcrumbs(["Profiles", hostAlias, profileId], ["", "", "active"], false);
 
     let usedBy = [{empty: "Couldn't get profiles uesd by (api version probably)"}];
 
