@@ -43,6 +43,7 @@
             <h5>
               <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                 Image
+                <i class="fas float-right fa-image"></i>
               </a>
             </h5>
           </div>
@@ -57,6 +58,7 @@
             <h5>
               <a data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-editorCollapse" aria-expanded="true" aria-controls="cloudConfig-editorCollapse">
                 Cloud Config File
+                <i class="fas float-right fa-file"></i>
               </a>
             </h5>
           </div>
