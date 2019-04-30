@@ -2,6 +2,10 @@
     height: 550px;
 }
 
+.sidebar .nav-dropdown.open > .nav-dropdown-items {
+    max-height: 200000px;
+}
+
 #deploymentList a {
     color: white;
 }
