@@ -100,6 +100,15 @@
 
 var currentCloudConfigId = null;
 
+$("#cloudConfigImage").tokenInput(globalUrls.images.search.searchAllHosts, {
+    queryParam: "image",
+    tokenLimit: 1,
+    propertyToSearch: "description",
+    theme: "facebook",
+    tokenValue: "details"
+});
+
+
 function loadCloudConfigView(cloudConfigId)
 {
     let data = {
@@ -126,14 +135,6 @@ function loadCloudConfigView(cloudConfigId)
 
 function loadCloudConfigTree()
 {
-    $("#cloudConfigImage").tokenInput(globalUrls.images.search.searchAllHosts, {
-        queryParam: "image",
-        tokenLimit: 1,
-        propertyToSearch: "description",
-        theme: "facebook",
-        tokenValue: "details"
-    });
-
     ajaxRequest(globalUrls.cloudConfig.getAll, null, function(data){
         loadCloudConfigOverview();
         var data = $.parseJSON(data);
@@ -153,9 +154,10 @@ function loadCloudConfigTree()
             $.each(item, function(o, z){
                 hosts += `<li class="nav-item view-cloudConifg"
                     data-id="${z.id}"
-                    data-project="${z.name}">
+                    data-name="${z.name}"
+                    data-namespace="${i}">
                   <a class="nav-link" href="#">
-                    <i class="nav-icon fa fa-file"></i>
+                    <i class="nav-icon fa fa-cog"></i>
                     ${z.name}
                   </a>
                 </li>`;
@@ -168,6 +170,7 @@ function loadCloudConfigTree()
 }
 
 $("#sidebar-ul").on("click", ".view-cloudConifg", function(){
+    addBreadcrumbs([$(this).data("namespace"), $(this).data("name")], ["", "active"]);
     loadCloudConfigView($(this).data("id"));
 });
 
