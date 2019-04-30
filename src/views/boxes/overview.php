@@ -1,8 +1,7 @@
 <div id="overviewBox" class="boxSlide">
-    <div class="row">
+    <div class="row" id="serverOverviewGraphs">
       <!-- /.col-->
-      <div class="card-columns col-xs-12 cols-2" id="serverOverviewGraphs">
-          <div class="col-xs-6">
+          <div class="col-lg-6">
               <div class="card">
                   <div class="card-body">
                       <div class="alert alert-warning text-center notEnoughData">
@@ -13,7 +12,7 @@
                   </div>
               </div>
           </div>
-          <div class="col-xs-6">
+          <div class="col-lg-6">
               <div class="card">
                   <div class="card-body">
                       <div class="alert alert-warning text-center notEnoughData">
@@ -24,7 +23,6 @@
                   </div>
               </div>
           </div>
-      </div>
       <!-- /.col-->
     </div>
     <div class="row">
