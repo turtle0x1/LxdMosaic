@@ -1,23 +1,27 @@
 <div id="overviewBox" class="boxSlide">
     <div class="row">
       <!-- /.col-->
-      <div class="card-columns cols-2" id="serverOverviewGraphs">
-          <div class="card">
-              <div class="card-body">
-                  <div class="alert alert-warning text-center notEnoughData">
-                      <b> <u> Memory Ussage Chart </u> </b><br/>
-                      Not enough data check again in 10 minutes
+      <div class="card-columns col-xs-12 cols-2" id="serverOverviewGraphs">
+          <div class="col-xs-6">
+              <div class="card">
+                  <div class="card-body">
+                      <div class="alert alert-warning text-center notEnoughData">
+                          <b> <u> Memory Ussage Chart </u> </b><br/>
+                          Not enough data check again in 10 minutes
+                      </div>
+                      <canvas id="memoryUsage" height="200"></canvas>
                   </div>
-                  <canvas id="memoryUsage" height="200"></canvas>
               </div>
           </div>
-          <div class="card">
-              <div class="card-body">
-                  <div class="alert alert-warning text-center notEnoughData">
-                      <b> <u> Active Containers Chart </u> </b><br/>
-                      Not enough data check again in 10 minutes
+          <div class="col-xs-6">
+              <div class="card">
+                  <div class="card-body">
+                      <div class="alert alert-warning text-center notEnoughData">
+                          <b> <u> Active Containers Chart </u> </b><br/>
+                          Not enough data check again in 10 minutes
+                      </div>
+                      <canvas id="activeContainers" height="200"></canvas>
                   </div>
-                  <canvas id="activeContainers" height="200"></canvas>
               </div>
           </div>
       </div>
@@ -41,26 +45,26 @@ var emptyServerBox = function(){
       </div>
       <div class="brand-card-body">
         <div>
-          <div class="text-value">CPU</div>
+          <div class="text-value">CPU <i class="fas fa-microchip"></i></div>
           <div class="text-uppercase text-muted cpuDetails">CPU Details</div>
         </div>
         <div>
-          <div class="text-value">Memory</div>
+          <div class="text-value">Memory <i class="fas fa-memory"></i></div>
           <div class="text-uppercase text-muted memory"></div>
         </div>
-        <div class='gpuGroup'>
-          <div class="text-value">GPU Details</div>
+        <div class='gpuGroup d-md-down-none'>
+          <div class="text-value">GPU's<i class="fab fa-megaport"></i></div>
           <div class="text-uppercase text-muted gpuDetails"></div>
         </div>
         <div>
-            <div class="text-value">Project</div>
+            <div class="text-value">Project <i class="fas fa-project-diagram"></i></div>
             <div class="form-group projectFormGroup">
                 <select class="form-control projects changeHostProject"></select>
             </div>
         </div>
         <div>
-            <div class="text-value">Edit Alias</div>
-                <button class="btn btn-primary editHost pull-right"><i class="fas fa-pencil-alt"></i></button>
+            <div class="text-value">Alias<i class="fas fa-passport"></i></div>
+                <button class="btn btn-xs-sm btn-primary editHost pull-right"><i class="fas fa-pencil-alt"></i></button>
             </div>
         </div>
       </div>

@@ -12,7 +12,6 @@ class State
 
     public function change(int $hostId, string $container, string $state)
     {
-        //TODO Check the destination is aviable for us to manage
         $hostClient = $this->lxdClient->getANewClient($hostId);
         return $hostClient->containers->{$state}($container);
     }

@@ -17,7 +17,7 @@
         <div class="col-md-6 text-center">
             <div class="card card-hover-primary text-center toggleCard" id="goToConsole">
                 <div class="card-body">
-                    Console
+                    <i class="fas fa-terminal"></i>Console
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
     <div class="col-md-6">
         <div class="card text-white bg-deepblue">
           <div class="card-body">
-              <h5> <u> Container Details </u> </h5>
+              <h5> <u> Container Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
               Host: <span id="container-hostNameDisplay"></span>
               <br/>
               <a
@@ -46,7 +46,7 @@
     <div class="col-md-6">
         <div class="card text-white bg-primary">
           <div class="card-body">
-            <h5> <u> Network Information </u> </h5>
+            <h5> <u> Network Information <i class="fas float-right fa-network-wired"></i> </u> </h5>
                 <div class="col-md-12" id="networkDetails">
                 </div>
 
@@ -64,6 +64,7 @@
         <h5>
           <a data-toggle="collapse" data-parent="#accordion" href="#actionsCollapse" aria-expanded="true" aria-controls="container-actionsCollapse">
             Actions
+            <i class="fas fa-edit float-right"></i>
           </a>
         </h5>
       </div>
@@ -110,6 +111,7 @@
       <div class="card-header" role="tab">
         <h5>
             Profiles
+             <i class="fas fa-users float-right"></i>
         </h5>
       </div>
       <div class="collapse show" role="tabpanel" aria-labelledby="headingOne">
@@ -131,6 +133,7 @@
       <div class="card-header" role="tab">
         <h5>
             Snapshots
+            <i class="fas fa-images float-right"></i>
         </h5>
       </div>
       <div class="collapse show" role="tabpanel" aria-labelledby="headingOne">
@@ -154,6 +157,7 @@
           <h5>
             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               Memory Details
+              <i class="fas fa-memory float-right"></i>
             </a>
           </h5>
         </div>
@@ -392,7 +396,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
 $("#containerBox").on("click", ".toProfile", function(){
     let profile = $(this).text();
     loadProfileView(profile, currentContainerDetails.hostId, function(){
-        viewProfile(profile, currentContainerDetails.hostId);
+        viewProfile(profile, currentContainerDetails.alias, currentContainerDetails.hostId);
     });
 
 });
@@ -427,6 +431,7 @@ $("#containerBox").on("click", ".deleteContainer", function(){
                         if(r.state == "success"){
                             loadContainerTreeAfter();
                         }
+                        currentContainerDetails = null;
                         $("#overviewBox").show();
                         $("#containerBox").hide();
                     });

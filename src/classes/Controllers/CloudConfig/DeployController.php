@@ -21,10 +21,10 @@ class DeployController
         $this->deployConfigToContainer->deploy(
             $hosts,
             $containerName,
-            $cloudConfigId,
             $imageDetails,
             $profileName,
-            $additionalProfiles
+            $additionalProfiles,
+            $cloudConfigId
         );
         return ["state"=>"success", "message"=>"Begun deploy"];
     }

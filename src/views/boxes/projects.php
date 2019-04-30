@@ -61,6 +61,7 @@
               <h5>
                 <a data-toggle="collapse" data-parent="#accordion" href="#projectActions" aria-expanded="true" aria-controls="projectActions">
                   Actions
+                  <i class="float-right fas fa-edit"></i>
                 </a>
               </h5>
             </div>
@@ -84,6 +85,7 @@
               <h5>
                 <a data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
                   Config
+                  <i class="float-right fas fa-cog"></i>
                 </a>
               </h5>
             </div>
@@ -111,6 +113,7 @@
             <h5>
               <a data-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
                 Used By
+                <i class="float-right fas fa-users"></i>
               </a>
             </h5>
           </div>
@@ -154,54 +157,54 @@ function loadProjectView()
             }
         }];
 
+        let hosts = `
+        <li class="nav-item active projects-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </a>
+        </li>`;
+
         $(".boxSlide, #projectDetails").hide();
         $("#projectsOverview, #projectsBox").show();
         data = $.parseJSON(data);
         $.each(data, function(hostName, data){
-            let hostProjects = [];
-            $.each(data.projects, function(i, projectName){
-                let x = {
-                    text: projectName,
-                    icon: "fa fa-user",
-                    type: "project",
-                    id: projectName,
-                    hostId: data.hostId
-                };
-                hostProjects.push(x);
-            });
-
-            let state = {};
-
             if(data.online == false){
                 hostName += " (Offline)";
                 state.disabled = true;
             }
 
-            treeData.push({
-                text: hostName,
-                nodes: hostProjects,
-                icon: "fa fa-server",
-                state: state
-            })
+            hosts += `<li class="nav-item nav-dropdown open">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="fas fa-server"></i> ${hostName}
+                </a>
+                <ul class="nav-dropdown-items">`;
+
+            $.each(data.projects, function(i, projectName){
+                hosts += `<li class="nav-item view-project"
+                    data-host-id="${data.hostId}"
+                    data-project="${projectName}"
+                    data-alias="${hostName}">
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon fa fa-project-diagram"></i>
+                    ${projectName}
+                  </a>
+                </li>`;
+            });
+            hosts += "</ul></li>";
         });
-        $('#jsTreeSidebar').treeview({
-            data: treeData,
-            levels: 5,
-            onNodeSelected: function(event, node) {
-                if(node.type == "project"){
-                    viewProject(node.id, node.hostId);
-                } else if (node.type == "projectsOverview"){
-                    $(".boxSlide, #projectDetails").hide();
-                    $("#projectsOverview, #projectsBox").show();
-                }
-            }
-        });
+        $("#sidebar-ul").empty().append(hosts);
     });
 }
 
-function viewProject(project, hostId){
+$("#sidebar-ul").on("click", ".view-project", function(){
+     viewProject($(this).data("project"), $(this).data("hostId"), $(this).data("alias"));
+})
+
+function viewProject(project, hostId, hostAlias){
     currentProject.project = project;
     currentProject.hostId = hostId;
+    currentProject.hostAlias = hostAlias;
+    addBreadcrumbs([hostAlias, project], ["", "active"], true)
     ajaxRequest(globalUrls.projects.info, currentProject, (data)=>{
         data = $.parseJSON(data);
         $("#projectsOverview").hide();

@@ -18,9 +18,16 @@ class GetLatest
             return [
                 "revisionId"=>null,
                 "cloudConfigId"=>$cloudConfigId,
-                "data"=>""
+                "data"=>"",
+                "imageDetails"=>[]
             ];
         }
+        if(!empty($latest["imageDetails"])){
+            $latest["imageDetails"] = json_decode($latest["imageDetails"]);
+        }else{
+            $latest["imageDetails"] = [];
+        }
+
         return $latest;
     }
 }

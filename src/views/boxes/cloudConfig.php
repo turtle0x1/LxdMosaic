@@ -39,10 +39,26 @@
 <div class="row" id="cloudConfigContents">
     <div class="col-md-9">
         <div class="card">
+          <div class="card-header" role="tab" id="headingOne">
+            <h5>
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Image
+                <i class="fas float-right fa-image"></i>
+              </a>
+            </h5>
+          </div>
+          <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+            <div class="card-body">
+                <input class="form-control" id="cloudConfigImage"/>
+            </div>
+          </div>
+        </div>
+        <div class="card">
           <div class="card-header" role="tab" id="cloudConfig-actionsHeading">
             <h5>
               <a data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-editorCollapse" aria-expanded="true" aria-controls="cloudConfig-editorCollapse">
                 Cloud Config File
+                <i class="fas float-right fa-file"></i>
               </a>
             </h5>
           </div>
@@ -86,6 +102,15 @@
 
 var currentCloudConfigId = null;
 
+$("#cloudConfigImage").tokenInput(globalUrls.images.search.searchAllHosts, {
+    queryParam: "image",
+    tokenLimit: 1,
+    propertyToSearch: "description",
+    theme: "facebook",
+    tokenValue: "details"
+});
+
+
 function loadCloudConfigView(cloudConfigId)
 {
     let data = {
@@ -95,7 +120,15 @@ function loadCloudConfigView(cloudConfigId)
     currentCloudConfigId = cloudConfigId;
 
     ajaxRequest(globalUrls.cloudConfig.getDetails, data ,function(data){
+
         let config = $.parseJSON(data);
+        $("#cloudConfigImage").tokenInput("clear");
+
+        if(config.data.imageDetails.hasOwnProperty("description")){
+            $("#cloudConfigImage").tokenInput("add", config.data.imageDetails);
+        }
+
+
         editor.setValue(config.data.data, -1);
         $("#cloudConfigOverview").hide();
         $("#cloudConfigContents").show();
@@ -107,43 +140,41 @@ function loadCloudConfigTree()
     ajaxRequest(globalUrls.cloudConfig.getAll, null, function(data){
         loadCloudConfigOverview();
         var data = $.parseJSON(data);
-        let h = [{
-            text: "Overview",
-            icon: "fa fa-home",
-            type: "overview",
-            state: {
-                selected: true
-            }
-        }];
+        let hosts = `
+        <li class="nav-item active cloudConfig-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </a>
+        </li>`;
         $.each(data, function(i, item){
-            let nodes = [];
+            hosts += `<li class="nav-item nav-dropdown open">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon fas fa-caret-down"></i> ${i}
+                </a>
+                <ul class="nav-dropdown-items">`;
+
             $.each(item, function(o, z){
-                nodes.push({
-                    text: z.name,
-                    icon: "fa fa-file",
-                    type: "cloudConfig",
-                    id: z.id
-                });
+                hosts += `<li class="nav-item view-cloudConifg"
+                    data-id="${z.id}"
+                    data-name="${z.name}"
+                    data-namespace="${i}">
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon fa fa-cog"></i>
+                    ${z.name}
+                  </a>
+                </li>`;
             });
-            h.push({
-                text: i,
-                nodes: nodes
-            });
+            hosts += "</ul></li>";
         });
 
-        $('#jsTreeSidebar').treeview({
-            data: h,
-            levels: 5,
-            onNodeSelected: function(event, node) {
-                if(node.type == "cloudConfig"){
-                    loadCloudConfigView(node.id);
-                } else if(node.type == "overview"){
-                    loadCloudConfigOverview();
-                }
-            }
-        });
+        $("#sidebar-ul").empty().append(hosts);
     });
 }
+
+$("#sidebar-ul").on("click", ".view-cloudConifg", function(){
+    addBreadcrumbs([$(this).data("namespace"), $(this).data("name")], ["", "active"]);
+    loadCloudConfigView($(this).data("id"));
+});
 
 function loadCloudConfigOverview(){
     $(".boxSlide, #cloudConfigContents").hide();
@@ -165,6 +196,15 @@ $("#cloudConfigBox").on("click", ".save", function(){
         code: code,
         cloudConfigId: currentCloudConfigId
     }
+
+    let image = $("#cloudConfigImage").tokenInput("get");
+
+    if(image.length == 0){
+        makeToastr(JSON.stringify({state: "error", message: "Please select image"}));
+        return false;
+    }
+
+    x.imageDetails = image[0];
 
     ajaxRequest(globalUrls.cloudConfig.update, x, function(response){
         response = makeToastr(response);

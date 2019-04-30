@@ -37,6 +37,13 @@ class GetAllProfiles
         return $details;
     }
 
+    public function getHostProfilesWithDetails(int $hostId)
+    {
+        $client = $this->client->getANewClient($hostId);
+        $profiles = $client->profiles->all();
+        return $this->getProfileDetails($client, $profiles);
+    }
+
     public function getProfileDetails($client, $profiles)
     {
         $details = array();

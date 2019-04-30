@@ -56,7 +56,7 @@ var deployCloudConfigObj = {
     cloudConfigId : null
 }
 
-$("#deployCloudConfigProfiles").tokenInput(globalUrls["profiles"].search.getCommonProfiles, {
+$("#deployCloudConfigProfiles").tokenInput(globalUrls.profiles.search.getCommonProfiles, {
     queryParam: "profile",
     propertyToSearch: "profile",
     theme: "facebook",

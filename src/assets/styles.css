@@ -2,17 +2,43 @@
     height: 550px;
 }
 
+.sidebar .nav-dropdown.open > .nav-dropdown-items {
+    max-height: 200000px;
+}
+
+#deploymentList a {
+    color: white;
+}
+
+.actionCard {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 #editor {
     position: absolute;
     width: 95%;
     height: 500px;
 }
 
+.app-header .nav-item.active .nav-link {
+    color: #20a8d8;
+}
+
+.app-header .nav-item {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.app-header .nav-item .nav-link {
+    color: white;
+}
+
 .sidebar .nav-link:hover {
     background-color: #167495;
 }
 
-.nav-item.active {
+.sidebar .nav-item.active {
     background-color: #20a8d8;
 }
 
@@ -82,7 +108,7 @@ body {
 }
 
 .navbar .navbar-brand:hover{
-    color: #E95420;
+    color: #20a8d8;
 }
 
 .fa-play, .fa-check {
