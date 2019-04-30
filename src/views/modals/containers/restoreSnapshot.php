@@ -104,12 +104,13 @@
         let x = {
             newContainer: $("#modal-container-restoreSnapshot-newName").val(),
             hostId: currentContainerDetails.hostId,
+            newHostId: currentContainerDetails.hostId,
             container: currentContainerDetails.container + "/" + snapshotDetails.snapshotName
         };
 
         ajaxRequest(globalUrls.containers.snapShots.createFrom, x, function(data){
             let x = makeToastr(data);
-            if(x.hasOwnProperty("error")){
+            if(x.state == "error"){
                 return false;
             }
             $("#modal-container-restoreSnapshot").modal("toggle");
