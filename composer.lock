@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e2256b31b3d24e716c46bdd987cb191",
+    "content-hash": "c0046789e2ecb5dc11d2cc30f40e982f",
     "packages": [
         {
             "name": "clue/stream-filter",
-            "version": "v1.4.0",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/clue/php-stream-filter.git",
-                "reference": "d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0"
+                "reference": "5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-stream-filter/zipball/d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0",
-                "reference": "d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0",
+                "url": "https://api.github.com/repos/clue/php-stream-filter/zipball/5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71",
+                "reference": "5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71",
                 "shasum": ""
             },
             "require": {
@@ -32,7 +32,7 @@
                     "Clue\\StreamFilter\\": "src/"
                 },
                 "files": [
-                    "src/functions.php"
+                    "src/functions_include.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -56,7 +56,7 @@
                 "stream_filter_append",
                 "stream_filter_register"
             ],
-            "time": "2017-08-18T09:54:01+00:00"
+            "time": "2019-04-09T12:31:48+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -91,16 +91,16 @@
         },
         {
             "name": "dhope0000/lxd",
-            "version": "v0.10.2",
+            "version": "v0.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/turtle0x1/php-lxd.git",
-                "reference": "dad6a220abec3f05acd5122baa4274a7b8979811"
+                "reference": "7c69175841ea18009a8d1ea80af86f3f356cd37a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/dad6a220abec3f05acd5122baa4274a7b8979811",
-                "reference": "dad6a220abec3f05acd5122baa4274a7b8979811",
+                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/7c69175841ea18009a8d1ea80af86f3f356cd37a",
+                "reference": "7c69175841ea18009a8d1ea80af86f3f356cd37a",
                 "shasum": ""
             },
             "require": {
@@ -156,7 +156,7 @@
                 "lxd",
                 "wrapper"
             ],
-            "time": "2019-03-16T17:09:31+00:00"
+            "time": "2019-05-01T17:48:58+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1038,16 +1038,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v4.2.4",
+            "version": "v4.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "850a667d6254ccf6c61d853407b16f21c4579c77"
+                "reference": "1ea878bd3af18f934dedb8c0de60656a9a31a718"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/850a667d6254ccf6c61d853407b16f21c4579c77",
-                "reference": "850a667d6254ccf6c61d853407b16f21c4579c77",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/1ea878bd3af18f934dedb8c0de60656a9a31a718",
+                "reference": "1ea878bd3af18f934dedb8c0de60656a9a31a718",
                 "shasum": ""
             },
             "require": {
@@ -1088,20 +1088,20 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-26T08:03:39+00:00"
+            "time": "2019-05-01T08:36:31+00:00"
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v4.2.4",
+            "version": "v4.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "3896e5a7d06fd15fa4947694c8dcdd371ff147d1"
+                "reference": "fd4a5f27b7cd085b489247b9890ebca9f3e10044"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/3896e5a7d06fd15fa4947694c8dcdd371ff147d1",
-                "reference": "3896e5a7d06fd15fa4947694c8dcdd371ff147d1",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/fd4a5f27b7cd085b489247b9890ebca9f3e10044",
+                "reference": "fd4a5f27b7cd085b489247b9890ebca9f3e10044",
                 "shasum": ""
             },
             "require": {
@@ -1142,20 +1142,20 @@
                 "configuration",
                 "options"
             ],
-            "time": "2019-02-23T15:17:42+00:00"
+            "time": "2019-04-10T16:20:36+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.10.0",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "e3d826245268269cd66f8326bd8bc066687b4a19"
+                "reference": "82ebae02209c21113908c229e9883c419720738a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/e3d826245268269cd66f8326bd8bc066687b4a19",
-                "reference": "e3d826245268269cd66f8326bd8bc066687b4a19",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/82ebae02209c21113908c229e9883c419720738a",
+                "reference": "82ebae02209c21113908c229e9883c419720738a",
                 "shasum": ""
             },
             "require": {
@@ -1167,7 +1167,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "1.11-dev"
                 }
             },
             "autoload": {
@@ -1200,20 +1200,20 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2018-08-06T14:22:27+00:00"
+            "time": "2019-02-06T07:57:58+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.10.0",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494"
+                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/c79c051f5b3a46be09205c73b80b346e4153e494",
-                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fe5e94c604826c35a32fa832f35bd036b6799609",
+                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609",
                 "shasum": ""
             },
             "require": {
@@ -1225,7 +1225,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "1.11-dev"
                 }
             },
             "autoload": {
@@ -1259,7 +1259,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-09-21T13:07:52+00:00"
+            "time": "2019-02-06T07:57:58+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

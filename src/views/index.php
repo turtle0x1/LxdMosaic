@@ -83,6 +83,12 @@ if ($haveServers->haveAny() !== true) {
               analytics: {
                   getLatestData: "/api/AnalyticData/GetLatestDataController/get"
               },
+              storage: {
+                  getAll: "/api/Storage/GetHostsStorageController/get",
+                  getPool: "/api/Storage/GetHostsStoragePoolController/get",
+                  deletePool: "/api/Storage/DeleteStoragePoolController/delete",
+                  createPool: "/api/Storage/CreatePoolController/create"
+              },
               deployments: {
                   create: "/api/Deployments/CreateController/create",
                   getAll: "/api/Deployments/GetController/getAll",
@@ -304,6 +310,10 @@ if ($haveServers->haveAny() !== true) {
             <a class="nav-link viewDeployments">
               <i class="fas fa-rocket"></i> Deployments</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link viewStorage">
+              <i class="fas fa-hdd"></i> Stroage </a>
+          </li>
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">
           <li class="nav-item px-3 btn btn-primary pull-right" id="addNewServer">
@@ -339,6 +349,7 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/images.php";
                     require __DIR__ . "/boxes/projects.php";
                     require __DIR__ . "/boxes/deployments.php";
+                    require __DIR__ . "/boxes/storage.php";
                 ?>
             </div>
             <div class="col-md-2">
@@ -834,6 +845,11 @@ $(document).on("click", ".viewDeployments, .deployments-overview", function(){
     setBreadcrumb("Deployments", "viewDeployments active");
     loadDeploymentsView();
     changeActiveNav(".viewDeployments")
+});
+
+$(document).on("click", ".viewStorage, .storage-overview", function(){
+    loadStroageView();
+    changeActiveNav(".viewStorage")
 });
 
 $(document).on("click", ".viewCloudConfigFiles, .cloudConfig-overview", function(){
