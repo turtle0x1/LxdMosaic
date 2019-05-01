@@ -4,9 +4,9 @@ This is an application you can use to do basic management for multiple instances
 of LXD
 
 
-<img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/b7a6a15b653a742209b577f98e14c24bbca51caa.png" width="428"> <img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/5d4e73f3f51489350589635593fae51fde7ff022.png" width="428">
+<img src="https://i.imgur.com/rp1912o.png" width="428"> <img src="https://i.imgur.com/xTBv82W.png" width="428">
 
-<img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/6ccc9cfe863d998ec8bbdb8676718e5ff4da277d.png" width="428"><img src="https://discuss.linuxcontainers.org/uploads/default/original/1X/3c2569da49575e9fdcd08f87b42cc1620ca38cf3.png" width="428">
+<img src="https://i.imgur.com/47Q3kEh.png" width="428"><img src="https://i.imgur.com/KXbwvnL.png" width="428">
 
 
 
