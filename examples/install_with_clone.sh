@@ -57,13 +57,7 @@ sed -i -e 's/DB_PASS=/DB_PASS=lxdManagerPasswordComplex321/g' .env
 mysql < sql/users.sql
 mysql < sql/seed.sql
 mysql < sql/0.1.0.sql
-mysql < sql/container_options.sql
-mysql < sql/instance_types.sql
-mysql < sql/store_details.sql
-mysql < sql/host_alias.sql
-mysql < sql/host_online.sql
-mysql < sql/cloud_config_image_details.sql
-mysql < sql/deployments.sql
+mysql < sql/0.2.0.sql
 
 
 cp examples/lxd_manager.conf /etc/apache2/sites-available/
