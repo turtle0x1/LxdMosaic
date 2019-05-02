@@ -546,20 +546,21 @@ function loadServerOview()
         data = $.parseJSON(data);
 
         if(data.hasOwnProperty("warning")){
-            $("#memoryUsage, #activeContainers").hide().parents(".card-body").find(".notEnoughData").show();
+            $("#memoryUsage, #activeContainers, #totalStorageUsage").hide().parents(".card-body").find(".notEnoughData").show();
             return false;
         }
 
-        $("#memoryUsage, #activeContainers").show().parents(".card-body").find(".notEnoughData").hide();
+        $("#memoryUsage, #activeContainers, #totalStorageUsage").show().parents(".card-body").find(".notEnoughData").hide();
 
         var mCtx = $('#memoryUsage');
         var acCtx = $('#activeContainers');
+        var tsuCtx = $('#totalStorageUsage');
 
         let sum = data.activeContainers.data.reduce(getSum);
 
         let scaleStep = sum > 30 ? 10 : 1;
 
-        var myLineChart = new Chart(acCtx, {
+        new Chart(acCtx, {
             type: 'line',
             data: {
                 datasets: [
@@ -589,9 +590,26 @@ function loadServerOview()
             }
         });
 
+        let toolTipsBytesCallbacks = {
+            callbacks: {
+                label: function(value, data) {
+                    return formatBytes(value.value);
+                }
+            }
+        };
 
-        // console.log(typeof data.memory.data);
-        var myLineChart = new Chart(mCtx, {
+
+        let scalesBytesCallbacks = {
+          yAxes: [{
+            ticks: {
+              callback: function(value, index, values) {
+                  return formatBytes(value);
+              }
+            }
+          }]
+        };
+
+        new Chart(mCtx, {
             type: 'line',
             data: {
                 datasets: [
@@ -610,22 +628,32 @@ function loadServerOview()
                     display: true,
                     text: 'Fleet Memory Usage'
                 },
-                scales: {
-                  yAxes: [{
-                    ticks: {
-                      callback: function(value, index, values) {
-                          return formatBytes(value);
-                      }
+                scales: scalesBytesCallbacks,
+                tooltips: toolTipsBytesCallbacks
+            }
+        });
+
+        new Chart(tsuCtx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: "Storage Usage",
+                        borderColor: '#00aced',
+                        pointBackgroundColor: "#ed4100",
+                        pointBorderColor: "#ed4100",
+                        data: data.storageUsage.data,
                     }
-                  }]
-              },
-              tooltips: {
-                  callbacks: {
-                      label: function(value, data) {
-                          return formatBytes(value.value);
-                      }
-                  }
-              }
+                ],
+                labels: data.storageUsage.labels
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Fleet Storage Usage'
+                },
+                scales: scalesBytesCallbacks,
+                tooltips: toolTipsBytesCallbacks
           }
       });
 

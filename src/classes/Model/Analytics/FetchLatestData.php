@@ -16,11 +16,12 @@ class FetchLatestData
         $sql = "SELECT
                     `FA_Date_Created` as `dateTime`,
                     `FA_Total_Memory_Usage` as `memoryUsage`,
-                    `FA_Active_Containers` as `activeContainers`
+                    `FA_Active_Containers` as `activeContainers`,
+                    `FA_Total_Storage_Usage` as `storageUsage`
                 FROM
                     `Fleet_Analytics`
                 WHERE
-                    `FA_Date_Created` >= DATE_SUB(NOW(),INTERVAL 1 HOUR); 
+                    `FA_Date_Created` >= DATE_SUB(NOW(),INTERVAL 1 HOUR);
                 ORDER BY
                     `FA_ID` ASC
                 ";

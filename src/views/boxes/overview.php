@@ -1,7 +1,7 @@
 <div id="overviewBox" class="boxSlide">
     <div class="row" id="serverOverviewGraphs">
       <!-- /.col-->
-          <div class="col-lg-6">
+          <div class="col-lg-4">
               <div class="card">
                   <div class="card-body">
                       <div class="alert alert-warning text-center notEnoughData">
@@ -12,7 +12,7 @@
                   </div>
               </div>
           </div>
-          <div class="col-lg-6">
+          <div class="col-lg-4">
               <div class="card">
                   <div class="card-body">
                       <div class="alert alert-warning text-center notEnoughData">
@@ -20,6 +20,17 @@
                           Not enough data check again in 10 minutes
                       </div>
                       <canvas id="activeContainers" height="200"></canvas>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-4">
+              <div class="card">
+                  <div class="card-body">
+                      <div class="alert alert-warning text-center notEnoughData">
+                          <b> <u> Total Storage Used </u> </b><br/>
+                          Not enough data check again in 10 minutes
+                      </div>
+                      <canvas id="totalStorageUsage" height="200"></canvas>
                   </div>
               </div>
           </div>
