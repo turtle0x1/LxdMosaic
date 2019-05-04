@@ -312,7 +312,7 @@ if ($haveServers->haveAny() !== true) {
           </li>
           <li class="nav-item">
             <a class="nav-link viewStorage">
-              <i class="fas fa-hdd"></i> Stroage </a>
+              <i class="fas fa-hdd"></i> Storage </a>
           </li>
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">
@@ -875,7 +875,7 @@ $(document).on("click", ".viewDeployments, .deployments-overview", function(){
 });
 
 $(document).on("click", ".viewStorage, .storage-overview", function(){
-    loadStroageView();
+    loadStorageView();
     changeActiveNav(".viewStorage")
 });
 

@@ -130,7 +130,7 @@
 
 var currentPool = {};
 
-function loadStroageView()
+function loadStorageView()
 {
     $(".boxSlide, #storageDetails").hide();
     $("#storageOverview, #storageBox").show();
@@ -241,7 +241,7 @@ $("#storageDetails").on("click", "#deletePool", function(){
                         data = makeToastr(data);
                         modal.close();
                         if(data.state == "success"){
-                            loadStroageView();
+                            loadStorageView();
                         }
                     });
                     return false;

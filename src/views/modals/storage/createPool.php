@@ -157,7 +157,7 @@
             data = makeToastr(data);
             if(data.state == "success"){
                 $("#modal-storage-createPool").modal("toggle");
-                loadStroageView();
+                loadStorageView();
             }
         });
     });
