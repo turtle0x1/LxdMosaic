@@ -6,3 +6,6 @@ Fixed
 
 Added
     Store total storage usage for fleet analytics (#75)
+
+Changed
+    Fix finding os version (#79)
