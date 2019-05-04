@@ -251,7 +251,7 @@ function loadContainerView(data)
             version = x.details.config["image.release"];
         }
 
-        $("#container-hostNameDisplay").text(data.host);
+        $("#container-hostNameDisplay").text(currentContainerDetails.alias);
         $("#container-containerNameDisplay").text(data.container);
         $("#container-imageDescription").html(" - " + os + " " + "(" + version + ")");
         $("#container-cpuTime").text(containerCpuTime);

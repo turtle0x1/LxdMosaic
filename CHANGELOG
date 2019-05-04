@@ -3,6 +3,7 @@ Unreleased
 Fixed
     Fix ui doesn't load when server is offline (#77)
     Cant view projects page if one host doesn't have projects endpoint (#76)
+    Show host on container information (#80)
 
 Added
     Store total storage usage for fleet analytics (#75)
