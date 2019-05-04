@@ -1,4 +1,7 @@
 Unreleased
 
+Fixed
+    Fix ui doesn't load when server is offline (#77)
+
 Added
-    Storage total storage usage for fleet analytics (#75)
+    Store total storage usage for fleet analytics (#75)

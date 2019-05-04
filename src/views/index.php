@@ -746,7 +746,6 @@ function createContainerTree(){
         $.each(data, function(i, host){
             if(host.online == false){
                 i += " (Offline)";
-                state.disabled = true;
             }
 
             hosts += `<li class="nav-item nav-dropdown open">
