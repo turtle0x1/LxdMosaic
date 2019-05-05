@@ -87,12 +87,12 @@
 
 var currentNetwork = {};
 
-function loadNetworkView()
+function loadNetworksView()
 {
     $(".boxSlide, #networkInfo").hide();
     $("#networkOverview, #networkBox").show();
     $("#deploymentList").empty();
-    setBreadcrumb("Storage", "viewStorage active");
+    setBreadcrumb("Networks", "viewNetwork active");
     ajaxRequest(globalUrls.networks.getAll, {}, (data)=>{
         data = $.parseJSON(data);
 
@@ -118,7 +118,7 @@ function loadNetworkView()
                 hosts += `<li class="nav-item view-network"
                     data-host-id="${data.hostId}"
                     data-network="${network}"
-                    data-alias="${data.alias}">
+                    data-alias="${hostName}">
                   <a class="nav-link" href="#">
                     <i class="fas fa-ethernet"></i>
                     ${network}
@@ -132,7 +132,7 @@ function loadNetworkView()
 }
 
 $("#sidebar-ul").on("click", ".view-network", function(){
-    viewNetwork($(this).data("hostId"), $(this).data("network"))
+    viewNetwork($(this).data("hostId"), $(this).data("network"), $(this).data("alias"))
 });
 
 
@@ -140,17 +140,18 @@ $("#networkOverview").on("click", "#createNetwork", function(){
     $("#modal-networks-create").modal("toggle");
 });
 
-function viewNetwork(hostId, network)
+function viewNetwork(hostId, network, alias)
 {
     currentNetwork = {hostId: hostId, network: network};
     $("#networkOverview").hide();
     $("#networkInfo").show();
+    addBreadcrumbs([alias, network], ["", "active"]);
     ajaxRequest(globalUrls.networks.get, currentNetwork, function(data){
         data = $.parseJSON(data);
         let configHtml = "",
             usedByHtml = "";
 
-        $("#networkName").text(`Storage Pool: ${data.name} (${data.type})`);
+        $("#networkName").text(`Network: ${data.name} (${data.type})`);
 
         if(data.config.length == 0){
             configHtml += `<tr><td>No Config Settings</td></tr>`
@@ -175,7 +176,7 @@ function viewNetwork(hostId, network)
 
 $("#networkInfo").on("click", "#deleteNetwork", function(){
     $.confirm({
-        title: 'Delete Storage Pool?',
+        title: 'Delete Network?',
         content: 'This can\'t be undone?!',
         buttons: {
             cancel: function () {},
@@ -191,7 +192,7 @@ $("#networkInfo").on("click", "#deleteNetwork", function(){
                         modal.close();
                         if(data.state == "success"){
                             currentNetwork = {};
-                            loadNetworkView();
+                            loadNetworksView();
                         }
                     });
                     return false;

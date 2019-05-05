@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Create Project</h5>
+        <h5 class="modal-title">Create Network</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -127,7 +127,7 @@
             data = makeToastr(data);
             if(data.state == "success"){
                 $("#modal-networks-create").modal("toggle");
-                loadNetworkView();
+                loadNetworksView();
             }
         });
     });

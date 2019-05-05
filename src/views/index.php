@@ -891,7 +891,7 @@ $(document).on("click", ".viewStorage, .storage-overview", function(){
 });
 
 $(document).on("click", ".viewNetwork, .network-overview", function(){
-    loadNetworkView();
+    loadNetworksView();
     changeActiveNav(".viewNetwork")
 });
 
