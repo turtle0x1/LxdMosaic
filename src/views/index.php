@@ -83,6 +83,12 @@ if ($haveServers->haveAny() !== true) {
               analytics: {
                   getLatestData: "/api/AnalyticData/GetLatestDataController/get"
               },
+              networks: {
+                  getAll: "/api/Networks/GetHostsNetworksController/get",
+                  get: "/api/Networks/GetNetworkController/get",
+                  deleteNetwork: "/api/Networks/DeleteNetworkController/delete",
+                  createNetwork: "/api/Networks/CreateNetworkController/create"
+              },
               storage: {
                   getAll: "/api/Storage/GetHostsStorageController/get",
                   getPool: "/api/Storage/GetHostsStoragePoolController/get",
@@ -314,6 +320,10 @@ if ($haveServers->haveAny() !== true) {
             <a class="nav-link viewStorage">
               <i class="fas fa-hdd"></i> Storage </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link viewNetwork">
+              <i class="fas fa-network-wired"></i> Networks </a>
+          </li>
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">
           <li class="nav-item px-3 btn btn-primary pull-right" id="addNewServer">
@@ -350,6 +360,7 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/projects.php";
                     require __DIR__ . "/boxes/deployments.php";
                     require __DIR__ . "/boxes/storage.php";
+                    require __DIR__ . "/boxes/networks.php";
                 ?>
             </div>
             <div class="col-md-2">
@@ -877,6 +888,11 @@ $(document).on("click", ".viewDeployments, .deployments-overview", function(){
 $(document).on("click", ".viewStorage, .storage-overview", function(){
     loadStorageView();
     changeActiveNav(".viewStorage")
+});
+
+$(document).on("click", ".viewNetwork, .network-overview", function(){
+    loadNetworksView();
+    changeActiveNav(".viewNetwork")
 });
 
 $(document).on("click", ".viewCloudConfigFiles, .cloudConfig-overview", function(){
