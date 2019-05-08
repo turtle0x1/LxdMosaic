@@ -6,6 +6,7 @@ Fixed
     Show host on container information (#80)
     Finding os version for a container (#79)
     The spelling of storage (#81)
+    Curl bug with centos7 (#84)
 
 Added
     Store total storage usage for fleet analytics (#75)

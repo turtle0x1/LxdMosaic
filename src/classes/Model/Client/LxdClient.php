@@ -50,13 +50,21 @@ class LxdClient
             throw new \Exception("Certificate has gone walk abouts", 1);
         }
 
-        return [
+        $config = [
             'verify' => false,
             'cert' => [
                 $certPath,
                 ''
             ]
         ];
+
+        if(file_exists("/etc/centos-release")){
+            $config["headers"] = [
+                'Connection' => 'close'
+            ];
+        }
+
+        return $config;
     }
 
     public function createNewClient($urlAndPort, $config)
