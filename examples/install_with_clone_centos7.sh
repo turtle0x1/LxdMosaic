@@ -19,7 +19,7 @@ curl -sL https://rpm.nodesource.com/setup_10.x | bash -
 yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 
 # Install mariadb 10.4 repo
-cat >/etc/yum.repos.d/MariaDB.repo<<EOF 
+cat >/etc/yum.repos.d/MariaDB.repo<<EOF
 [mariadb]
 name = MariaDB
 baseurl = http://yum.mariadb.org/10.4/centos7-amd64
@@ -74,7 +74,7 @@ mysql < sql/users.sql
 mysql < sql/seed.sql
 mysql < sql/0.1.0.sql
 mysql < sql/0.2.0.sql
-mysql < sql/fleet_storage_usage.sql
+mysql < sql/0.3.0.sql
 
 
 # Install a self-signed certificate as CentOS doesn't ship with one

@@ -1,4 +1,4 @@
-Unreleased
+0.3.0
 
 Fixed
     Fix ui doesn't load when server is offline (#77)
@@ -12,3 +12,4 @@ Fixed
 Added
     Store total storage usage for fleet analytics (#75)
     Support for CentOS7 (#84)
+    Basic network management (#4)

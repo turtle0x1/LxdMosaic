@@ -58,7 +58,7 @@ mysql < sql/users.sql
 mysql < sql/seed.sql
 mysql < sql/0.1.0.sql
 mysql < sql/0.2.0.sql
-mysql < sql/fleet_storage_usage.sql
+mysql < sql/0.3.0.sql
 
 
 cp examples/lxd_manager.conf /etc/apache2/sites-available/
