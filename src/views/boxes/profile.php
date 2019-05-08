@@ -145,7 +145,6 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
         $.each(data, function(hostName, host){
             if(host.online == false){
                 hostName += " (Offline)";
-                state.disabled = true;
             }
 
             hosts += `<li class="nav-item nav-dropdown open">

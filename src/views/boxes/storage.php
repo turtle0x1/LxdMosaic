@@ -151,7 +151,6 @@ function loadStorageView()
         $.each(data, function(hostName, data){
             if(data.online == false){
                 hostName += " (Offline)";
-                state.disabled = true;
             }
             hosts += `<li class="nav-item nav-dropdown open">
                 <a class="nav-link nav-dropdown-toggle" href="#">
