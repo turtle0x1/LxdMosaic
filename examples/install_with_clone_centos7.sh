@@ -98,7 +98,7 @@ crontab -l | { cat; echo "*/1 * * * * php /var/www/LxdMosaic/src/cronJobs/hostsO
 systemctl restart httpd
 
 printf "${grn}\nInstallation successfull \n\n"
-printf  "${grn}then point your browser at ${blu}https://myip${end} ${red}and accept the self signed certificate${end} \n"
+printf  "${grn}Point your browser at ${blu}https://myip${end} ${red}and accept the self signed certificate${end} \n"
 printf  "${grn} \n or \n\nyou could add lxd.local to your hosts file (on your pc) E.G \n"
 printf  " \n myip lxd.local \n\n"
 printf  "ServerName for LxdManager can be changed in /etc/httpd/conf.d/lxd_manager_centos.conf, followed by an apache restart (systemctl restart httpd) \n${end}"
