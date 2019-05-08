@@ -46,7 +46,7 @@ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 # Move to www & clone repository
 cd /var/www || exit
 
-git clone https://github.com/trenb/LxdMosaic.git
+git clone https://github.com/turtle0x1/LxdMosaic.git
 
 mkdir -p /var/www/LxdMosaic/src/sensitiveData/certs
 chown -R apache:apache /var/www/LxdMosaic/src/sensitiveData/certs
