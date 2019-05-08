@@ -9,3 +9,4 @@ Fixed
 
 Added
     Store total storage usage for fleet analytics (#75)
+    Support for CentOS7 (#84)
