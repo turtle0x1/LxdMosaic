@@ -44,13 +44,31 @@ In examples you will find an bash script called install_with_clone.sh this will
 handle the installation of dependencies and setup this program.
 
 It handles the cloning of the repository so you can just do;
+#### Ubuntu
 ```bash
+# Launch a centos 7 container
+lxc launch ubuntu: lxdMosaic
+# Connect to centos console
+lxc exec lxdMosaic bash
 # Download the script
 curl https://raw.githubusercontent.com/turtle0x1/LxdMosaic/master/examples/install_with_clone.sh >> installLxdMosaic.sh
 # Then give the script execution permissions
 chmod +x installLxdMosaic.sh
 # Then run bellow to setup the program
-sudo ./installLxdMosaic.sh
+./installLxdMosaic.sh
+```
+#### Centos 7
+```bash
+# Launch a centos 7 container
+lxc launch images:centos/7/amd64 lxdMosaic
+# Connect to centos console
+lxc exec lxdMosaic bash
+# Download the script
+curl https://raw.githubusercontent.com/turtle0x1/LxdMosaic/master/examples/install_with_clone_centos7.sh >> installLxdMosaic.sh
+# Then give the script execution permissions
+chmod +x installLxdMosaic.sh
+# Then run bellow to setup the program
+./installLxdMosaic.sh
 ```
 
 Once installation is complete you need to go to into your browser and goto;
