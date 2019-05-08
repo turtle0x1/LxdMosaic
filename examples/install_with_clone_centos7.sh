@@ -99,7 +99,7 @@ crontab -l | { cat; echo "*/1 * * * * php /var/www/LxdMosaic/src/cronJobs/hostsO
 systemctl restart httpd
 
 printf "${grn}\nInstallation successfull \n\n"
-printf  "You now need to point your browser at ${blu}https://{$myip}:3000${end} ${red}and accept the self signed certificate${end} \n\n"
+printf  "You now need to point your browser at ${blu}https://${myip}:3000${end} ${red}and accept the self signed certificate${end} \n\n"
 printf  "${grn}then point your browser at ${blu}https://${myip}${end} ${red}and accept the self signed certificate${end} \n"
 printf  "${grn} \n or \n\nyou could add lxd.local to your hosts file (on your pc) E.G \n"
 printf  " \n ${myip} lxd.local \n\n"
