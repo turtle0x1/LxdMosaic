@@ -47,7 +47,7 @@ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 # Move to www & clone repository
 cd /var/www || exit
 
-git clone https://github.com/turtle0x1/LxdMosaic.git
+git clone https://github.com/trenb/LxdMosaic.git
 
 mkdir -p /var/www/LxdMosaic/src/sensitiveData/certs
 chown -R apache:apache /var/www/LxdMosaic/src/sensitiveData/certs
@@ -84,7 +84,7 @@ openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 \
             -subj "/C=NA/ST=NoState/L=NoLocale/O=Blah/CN=mosaic" \
             -keyout /etc/ssl/private/ssl-cert-snakeoil.key  -out /etc/ssl/certs/ssl-cert-snakeoil.pem
 
-cp /var/www/LxdMosaic/examples/lxd_manager_centos.conf /etc/httpd/conf.d/
+cp examples/lxd_manager_centos.conf /etc/httpd/conf.d/
 
 pm2 start node/events.js
 
