@@ -84,7 +84,7 @@ openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 \
             -subj "/C=NA/ST=NoState/L=NoLocale/O=Blah/CN=mosaic" \
             -keyout /etc/ssl/private/ssl-cert-snakeoil.key  -out /etc/ssl/certs/ssl-cert-snakeoil.pem
 
-cp examples/lxd_manager_centos.conf /etc/httpd/conf.d/
+cp /var/www/LxdMosaic/examples/lxd_manager_centos.conf /etc/httpd/conf.d/
 
 pm2 start node/events.js
 
