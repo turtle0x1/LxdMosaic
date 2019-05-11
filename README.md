@@ -4,9 +4,9 @@ This is an application you can use to do basic management for multiple instances
 of LXD
 
 
-<img src="https://i.imgur.com/rp1912o.png" width="428"> <img src="https://i.imgur.com/xTBv82W.png" width="428">
+<img src="https://i.imgur.com/92xYQIZ.png" width="428"> <img src="https://i.imgur.com/vbEKP4r.png" width="428">
 
-<img src="https://i.imgur.com/47Q3kEh.png" width="428"><img src="https://i.imgur.com/KXbwvnL.png" width="428">
+<img src="https://i.imgur.com/pYHnBjt.png" width="428"><img src="https://i.imgur.com/1aSwRWy.png" width="428">
 
 
 
