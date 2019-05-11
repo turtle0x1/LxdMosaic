@@ -1,6 +1,6 @@
     <!-- Modal -->
 <div class="modal fade" id="modal-container-create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Create Container</h5>
@@ -23,27 +23,40 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label> Profiles </label>
-            <div class="alert alert-info">
-                Only profiles on all hosts will appear
-                <br/>
-                Remember the default profile usually contains storage information &
-                network details!
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Only profiles on all hosts will appear!
+                            <br/>
+                            <br/>
+                            Remember the default profile usually contains storage information & network details!">
+                        Profiles
+                        <i class="fas fa-question-circle"></i>
+                    </label>
+                    <input id="newContainerProfiles" type="text" class="form-control"/>
+                </div>
             </div>
-            <input id="newContainerProfiles" type="text" class="form-control"/>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label> Hosts To Create On </label>
+                    <input id="newContainerHosts" type="text" class="form-control"/>
+                </div>
+            </div>
         </div>
         <div class="form-group">
-            <label> Hosts To Create On </label>
-            <input id="newContainerHosts" type="text" class="form-control"/>
-        </div>
-        <div class="form-group">
-            <label> Image </label>
-            <div class="alert alert-info">
-                Currently an image needs to have been imported into atleast
+            <label>  </label>
+            <label
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Currently an image needs to have been imported into atleast
                 one server on the network to use it here! Images will be downloaded
-                onto hosts that dont have the selected image.
-            </div>
+                onto hosts that dont have the selected image.">
+                Image
+                <i class="fas fa-question-circle"></i>
+            </label>
             <input id="newContainerImage" type="text" class="form-control"/>
         </div>
         <div class="form-group">
@@ -56,6 +69,21 @@
                 on one host.
             </div>
         </div>
+        <label for="newContainerSettings">
+            Container Settings(Optional)
+            <button id="addNewContainerSetting" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+        </label>
+        <table class="table table-borered" id="newContainerSettings">
+            <thead>
+                <tr>
+                    <th> Setting </th>
+                    <th> Value </th>
+                    <th> Remove </th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
 
       </div>
       <div class="modal-footer">
@@ -121,7 +149,24 @@
         }
     });
 
+    var containerSettingRow = "";
+
     $("#modal-container-create").on("shown.bs.modal", function(){
+        ajaxRequest(globalUrls.containers.settings.getAllAvailableSettings, {}, function(data){
+            data = $.parseJSON(data);
+            let selectHtml = "<select name='key' class='form-control containerSetting'><option value=''>Please Select</option>";
+            $.each(data, function(i, item){
+                selectHtml += `<option value='${item.key}' data-value="${item.value}">${item.key}</option>`;
+            });
+            selectHtml += `</select>`;
+            containerSettingRow = `<tr>
+                <td>${selectHtml}</td>
+                <td><input name="value" class='form-control'/></td>
+                <td><button class="removeSetting btn btn-danger"><i class='fas fa-trash'></i></button></td>
+                </tr>`
+
+        });
+
         $("#gpuWarning").hide();
         ajaxRequest(globalUrls.containers.instanceTypes.getInstanceTypes, {}, function(data){
             data = $.parseJSON(data);
@@ -135,6 +180,18 @@
             });
             $("#newContainerInstanceType").empty().append(h);
         });
+    });
+
+    $("#modal-container-create").on("click", ".removeSetting", function(){
+        $(this).parents("tr").remove();
+    });
+
+    $("#modal-container-create").on("click", "#addNewContainerSetting", function(){
+        $("#newContainerSettings > tbody").append(containerSettingRow);
+    });
+
+    $("#modal-container-create").on("change", ".containerSetting", function(){
+        $(this).parents("tr").find("input[name=value]").val($(this).find(":selected").data("value"));
     });
 
     $("#modal-container-create").on("click", "#create", function(){
@@ -154,13 +211,40 @@
             gpus = $("#newContainerGpus").val();
         }
 
+        let config = {};
+        let invalid = false;
+        let message = "";
+        $("#newContainerSettings > tbody > tr").each(function(){
+            let keyInput = $(this).find("select[name=key]");
+            let valueInput = $(this).find("input[name=value]");
+            let key = keyInput.val();
+            let value = valueInput.val();
+            if(key == ""){
+                keyInput.focus();
+                invalid = true;
+                message = "Please select setting";
+            }else if(value == ""){
+                valueInput.focus();
+                invalid = true;
+                message = "Please select value";
+            }
+
+            config[key] = value;
+        });
+
+        if(invalid){
+            makeToastr(JSON.stringify({state: "error", message: message}));
+            return false;
+        }
+
         let x = {
             name: $("#newContainerName").val(),
             profileIds: profileIds,
             hosts: hosts,
             imageDetails: image[0]["details"],
             instanceType: instanceType,
-            gpus: gpus
+            gpus: gpus,
+            config: config
         };
 
         ajaxRequest(globalUrls.containers.create, x, function(data){

@@ -138,6 +138,9 @@ if ($haveServers->haveAny() !== true) {
                       restore: "/api/Containers/Snapshot/RestoreSnapshotController/restoreSnapshot",
                       rename: "/api/Containers/Snapshot/RenameSnapshotController/renameSnapshot",
                       createFrom: "/api/Containers/CopyContainerController/copyContainer",
+                  },
+                  settings: {
+                      getAllAvailableSettings: "/api/Containers/Settings/GetAllAvailableSettingsController/getAll",
                   }
               },
               hosts: {
@@ -534,6 +537,7 @@ function makeToastr(x) {
 
 
 $(function(){
+    $('[data-toggle="tooltip"]').tooltip({html: true})
     createContainerTree();
     loadServerOview();
 });

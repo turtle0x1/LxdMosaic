@@ -29,7 +29,8 @@ class CreateContainer
         $server = "",
         array $profileNames = [],
         string $instanceType = "",
-        array $gpus = null
+        array $gpus = null,
+        array $config = []
     ) {
         $this->hostsHaveContainer->ifHostInListHasContainerNameThrow($hosts, $name);
 
@@ -40,7 +41,8 @@ class CreateContainer
             $imageDetails,
             $server,
             $instanceType,
-            $gpus
+            $gpus,
+            $config
         );
 
         $results = [];
@@ -67,7 +69,8 @@ class CreateContainer
         $imageDetails,
         $server = "",
         $instanceType = "",
-        array $gpus = null
+        array $gpus = null,
+        array $config = []
     ) {
         $x = [
             "fingerprint"=>$imageDetails["fingerprint"],
@@ -82,6 +85,10 @@ class CreateContainer
                 "type"=>"gpu",
                 "id"=>$id
             ];
+        }
+
+        if(!empty($config)){
+            $x["config"] = $config;
         }
 
         return $x;

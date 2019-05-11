@@ -18,7 +18,8 @@ class CreateController
         array $imageDetails,
         string $instanceType = "",
         $server = "",
-        array $gpus = []
+        array $gpus = [],
+        array $config = []
     ) {
         $lxdResponses = $this->createContainer->create(
             $name,
@@ -28,7 +29,8 @@ class CreateController
             $server,
             [],
             $instanceType,
-            $gpus
+            $gpus,
+            $config
         );
         return ["success"=>"Created Container", "lxdResponses"=>$lxdResponses];
     }
