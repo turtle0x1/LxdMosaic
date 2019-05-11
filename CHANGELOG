@@ -1,3 +1,8 @@
+Unreleased
+
+Changed
+    Redirect by default to https (#86)
+
 0.3.0
 
 Fixed
