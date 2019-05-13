@@ -5,6 +5,7 @@ Added
 
 Changed
     Redirect by default to https (#86)
+    Update sql for smoother upgrade path from 0.2.0 (#88)
 
 0.3.0
 
