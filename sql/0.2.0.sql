@@ -2,20 +2,37 @@ use `LXD_Manager`;
 
 ALTER TABLE `Cloud_Config_Data` ADD COLUMN `CCD_Image_Details` JSON;
 
-CREATE TABLE `Fleet_Analytics` (
+CREATE TABLE IF NOT EXISTS `Fleet_Analytics` (
   `FA_ID` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `FA_Date_Created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `FA_Total_Memory_Usage` BIGINT NOT NULL,
   `FA_Active_Containers` INT(11) NOT NULL
 );
 
-ALTER TABLE `Hosts` ADD COLUMN `Host_Online` TINYINT(1) NULL DEFAULT 1;
+-- See https://stackoverflow.com/a/45548042 for more information
+DROP PROCEDURE IF EXISTS `?`;
+DELIMITER //
+CREATE PROCEDURE `?`()
+BEGIN
+  DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN END;
+  ALTER TABLE `Hosts` ADD COLUMN `Host_Online` TINYINT(1) NULL DEFAULT 1;
+END //
+DELIMITER ;
+CALL `?`();
+DROP PROCEDURE `?`;
 
+DROP PROCEDURE IF EXISTS `?`;
+DELIMITER //
+CREATE PROCEDURE `?`()
+BEGIN
+  DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN END;
+  ALTER TABLE `Hosts` ADD COLUMN `Host_Alias` VARCHAR(255) NULL;
+END //
+DELIMITER ;
+CALL `?`();
+DROP PROCEDURE `?`;
 
-ALTER TABLE `Hosts` ADD COLUMN `Host_Alias` VARCHAR(255) NULL;
-
-
-CREATE TABLE `Container_Options` (
+CREATE TABLE IF NOT EXISTS `Container_Options` (
     `CO_ID` INT(11) NOT NULL AUTO_INCREMENT,
     `CO_Key` VARCHAR(255) NOT NULL,
     `CO_Type` VARCHAR(255) NOT NULL,
@@ -27,8 +44,7 @@ CREATE TABLE `Container_Options` (
     PRIMARY KEY(`CO_ID`)
 );
 
-
-INSERT INTO `Container_Options` (
+INSERT IGNORE INTO `Container_Options` (
     `CO_Key`,
     `CO_Type`,
     `CO_Default`,
@@ -84,20 +100,7 @@ INSERT INTO `Container_Options` (
 ("snapshots.pattern","string","snap%d","no","snapshot_scheduling","Pongo2 template string which represents the snapshot name (used for scheduled snapshots and unnamed snapshots)","0"),
 ("user.*","string","-","n/a","-","","0");
 
-CREATE TABLE `Instace_Type_Providers` (
-    `ITP_ID` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `ITP_Name` VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE `Instance_Types` (
-    `IT_ID` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `IT_Provider_ID` INT(11) NOT NULL,
-    `IT_Name` VARCHAR(255) NOT NULL,
-    `IT_CPU` FLOAT(6, 2) NOT NULL,
-    `IT_Mem` FLOAT(6, 2) NOT NULL
-);
-
-INSERT INTO `Instace_Type_Providers` (
+INSERT IGNORE INTO `Instace_Type_Providers` (
     `ITP_ID`,
     `ITP_Name`
 ) VALUES
@@ -105,7 +108,7 @@ INSERT INTO `Instace_Type_Providers` (
     (2, "azure"),
     (3, "gce");
 
-INSERT INTO `Instance_Types` (
+INSERT IGNORE INTO `Instance_Types` (
     `IT_Provider_ID`,
     `IT_Name`,
     `IT_CPU`,
