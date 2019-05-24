@@ -1,3 +1,14 @@
 use `LXD_Manager`;
 
-ALTER TABLE `Fleet_Analytics` ADD COLUMN `FA_Total_Storage_Usage` BIGINT NOT NULL;
+-- It doesn't hurt to include this.
+DROP PROCEDURE IF EXISTS `?`;
+DELIMITER //
+CREATE PROCEDURE `?`()
+BEGIN
+  DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN END;
+  ALTER TABLE `Fleet_Analytics` ADD COLUMN `FA_Total_Storage_Usage` BIGINT NOT NULL;
+END //
+DELIMITER ;
+CALL `?`();
+DROP PROCEDURE `?`;
+
