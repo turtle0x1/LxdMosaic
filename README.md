@@ -46,9 +46,9 @@ handle the installation of dependencies and setup this program.
 It handles the cloning of the repository so you can just do;
 #### Ubuntu
 ```bash
-# Launch a centos 7 container
+# Launch a ubuntu 7 container
 lxc launch ubuntu: lxdMosaic
-# Connect to centos console
+# Connect to ubuntu console
 lxc exec lxdMosaic bash
 # Download the script
 curl https://raw.githubusercontent.com/turtle0x1/LxdMosaic/master/examples/install_with_clone.sh >> installLxdMosaic.sh
