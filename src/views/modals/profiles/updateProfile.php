@@ -76,7 +76,7 @@
                 let html = "<option value=''>Please Select </option>";
                 $.each(data, function(host, profiles){
                     $.each(profiles.profiles, function(name, data){
-                        html += "<option value='" + name + "'>" + name + "</option>";
+                        html += `<option value='${name}'>${name}</option>`;
                     });
                 })
                 $("#profileSelect").empty().append(html);

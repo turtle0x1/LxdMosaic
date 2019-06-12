@@ -461,18 +461,22 @@ if(typeof io !== "undefined"){
        let icon = statusCodeIconMap[msg.metadata.status_code];
        let description = msg.metadata.hasOwnProperty("description") ? msg.metadata.description : "No Description Available";
        let host = msg.host;
-       let hostList = $("#operationsList").find("[data-host='" + host + "']");
+       let hostList = $("#operationsList").find(`[data-host='${host}']`);
 
        if(hostList.length == 0){
-           $("#operationsList").append("<div data-host='" + host + "'>"+
-                "<div class='text-center'><h5><u>" + host + "</u></h5></div>"+
-                "<div class='opList'></div></div>"
+           $("#operationsList").append(`<div data-host='${host}'>
+                <div class='text-center'>
+                    <h5><u>
+                        ${host}
+                    </u></h5>
+                </div>
+                <div class='opList'></div></div>`
             );
        }
 
        let hostOpList = hostList.find(".opList");
 
-       let liItem = hostOpList.find("#" + id);
+       let liItem = hostOpList.find(`#${id}`);
 
        if(hostOpList.find("div").length >= 10){
            hostOpList.find("div").last().remove();
@@ -489,7 +493,7 @@ if(typeof io !== "undefined"){
                return;
            }
 
-           liItem.html("<span data-status='" + msg.metadata.status_code + "' class='" + icon + "'></span>" + description);
+           liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon}'></span>${description}`);
        }else{
            hostOpList.prepend(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code));
        }
@@ -507,7 +511,7 @@ $(".sidebar-nav").on("click", ".nav-item", function(){
 
 function makeOperationHtmlItem(id, icon, description, statusCode)
 {
-    return "<div id='" + id + "'><span data-status='" + statusCode + "' class='" + icon + "'></span>" + description + "</div>";
+    return `<div id='${id}'><span data-status='${statusCode}' class='${icon}'></span>${description}</div>`;
 }
 
 var editor = ace.edit("editor");
@@ -714,9 +718,9 @@ function loadServerOview()
                 let projects = "";
                 $.each(data.projects, function(o, project){
                     let selected = project == data.currentProject ? "selected" : "";
-                        projects += "<option data-host='" + data.hostId  + "' "+
-                            " value='" + project + "' " + selected + ">"
-                            + project + "</option>"
+                        projects += `<option data-host='${data.hostId}'
+                            value='${project}' ${selected}>
+                            ${project}</option>`;
                 });
                 $(p).find(".projects").append(projects)
             }
@@ -725,7 +729,7 @@ function loadServerOview()
             let cpuIndentKey = data.extensions.resCpuSocket ? "name" : "vendor";
 
 
-            $(p).find(".memory").text(memoryUsed + " / " + memoryTotal);
+            $(p).find(".memory").text(`${memoryUsed} / ${memoryTotal}`);
             $(p).find(".cpuDetails").text(data.cpu.sockets[0][cpuIndentKey]);
 
             if(data.extensions.resGpu && data.hasOwnProperty("gpu") && data.gpu.cards.length > 0){
@@ -910,18 +914,18 @@ function createTableRowsHtml(data, childPropertyToSearch)
     let html = "";
     $.each(data, function(x, y){
         if($.isPlainObject(y)){
-            html += "<tr><td class='text-center' colspan='2'>" + x + "</td></tr>";
+            html += `<tr><td class='text-center' colspan='2'>${x}</td></tr>`;
             if(typeof childPropertyToSearch == "string"){
                 $.each(y[childPropertyToSearch], function(i, p){
-                    html += "<tr><td>" + i + "</td><td>" + nl2br(y) + "</td></tr>";
+                    html += `<tr><td>${i}</td><td>${nl2br(y)}</td></tr>`;
                 });
             }else{
                 $.each(y, function(i, p){
-                    html += "<tr><td>" + i + "</td><td>" + nl2br(p) + "</td></tr>";
+                    html += `<tr><td>${i}</td><td>${nl2br(p)}</td></tr>`;
                 });
             }
         }else{
-            html += "<tr><td>" + x + "</td><td>" + nl2br(y) + "</td></tr>";
+            html += `<tr><td>${x}</td><td>${nl2br(y)}</td></tr>`;
         }
     });
     return html;

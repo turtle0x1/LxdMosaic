@@ -51,7 +51,7 @@
             let result = $.parseJSON(data);
             let html = "";
             $.each(result, function(i, item){
-                html += "<option value='" + item + "'>" + item + "</option>'"
+                html += `<option value='${item}'>${item}</option>`;
             });
             $("#migrateModal-targetHost").empty().append(html);
         });

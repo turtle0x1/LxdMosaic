@@ -105,17 +105,17 @@
             if(x.hasOwnProperty("error")){
                 return false;
             }
-            let html = "<thead><tr>" +
-                "<th> Import </th>"
+            let html = `<thead><tr>
+                <th> Import </th>`
             $.each(x["headers"], function(i, head){
-                html += "<th>" + head + "</th>";
+                html += `<th>${head}</th>`;
             });
             html += "</tr></thead><tbody>";
             $.each(x["data"], function(i, item){
-                html += "<tr>";
-                html += "<td> <input name='imageToImport' type='checkbox' value='" + item[0] + "/" + item[1] + "/" + item[2] + "'/></td>"
+                html += `<tr>
+                    <td> <input name='imageToImport' type='checkbox' value='${item[0]}/${item[1]}/${item[2]}'/></td>`;
                 $.each(item, function(o, p){
-                    html += "<td>" + p + "</td>";
+                    html += `<td>${p}</td>`;
                 })
                 html += "</tr>";
             });
@@ -141,7 +141,7 @@
             }
             let trs = "";
             $.each(x, function(host, hostDetails){
-                trs += "<tr class='alert alert-info'><td colspan='999' class='text-center'>" + host + "</td></tr>";
+                trs += `<tr class='bg-info'><td colspan='999' class='text-center'>${host}</td></tr>`;
                 if(hostDetails.images.length == 0){
                     if(hostDetails.online){
                         trs += `<tr><td colspan="999" class="text-center"><b>No Images</b></td></tr>`;
@@ -161,7 +161,7 @@
                     }
 
                     trs += `<tr>
-                        <td><input data-host='${hostDetails.hostId}' id='${data.fingerprint}' name='imageSelect' type='checkbox' /></td>" +
+                        <td><input data-host='${hostDetails.hostId}' id='${data.fingerprint}' name='imageSelect' type='checkbox' /></td>
                         <td>${data.properties.os} </td>
                         <td>${data.properties.description} </td>
                         <td>${a}</td>

@@ -215,8 +215,8 @@ function viewStoragePool(hostId, poolName)
             });
         }
 
-        $("#storagePoolUsage").text("Total Used: " + formatBytes(data.resources.space.used))
-        $("#storagePoolTotal").text("Total Free: " + formatBytes(data.resources.space.total))
+        $("#storagePoolUsage").text(`Total Used: ${formatBytes(data.resources.space.used)}`)
+        $("#storagePoolTotal").text(`Total Free: ${formatBytes(data.resources.space.total)}`)
 
         $("#storagePoolConfigDetails").empty().append(configHtml);
         $("#storagePoolUsedBy > tbody").empty().append(usedByHtml);

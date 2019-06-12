@@ -105,7 +105,7 @@
             newContainer: $("#modal-container-restoreSnapshot-newName").val(),
             hostId: currentContainerDetails.hostId,
             newHostId: currentContainerDetails.hostId,
-            container: currentContainerDetails.container + "/" + snapshotDetails.snapshotName
+            container: `${currentContainerDetails.container}/${snapshotDetails.snapshotName}`
         };
 
         ajaxRequest(globalUrls.containers.snapShots.createFrom, x, function(data){

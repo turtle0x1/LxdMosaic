@@ -253,7 +253,7 @@ function loadContainerView(data)
 
         $("#container-hostNameDisplay").text(currentContainerDetails.alias);
         $("#container-containerNameDisplay").text(data.container);
-        $("#container-imageDescription").html(" - " + os + " " + "(" + version + ")");
+        $("#container-imageDescription").html(` - ${os} (${version})`);
         $("#container-cpuTime").text(containerCpuTime);
         $("#container-createdAt").text(moment(x.details.create_at).format("MMM DD YYYY h:mm A"));
 
@@ -281,7 +281,7 @@ function loadContainerView(data)
             snapshotTrHtml = "<tr><td colspan='999' class='text-center'> No snapshots </td></tr>"
         }else{
             $.each(x["snapshots"], function(i, item){
-                snapshotTrHtml += "<tr><td><a href='#' id='" + item + "' class='viewSnapsnot'>" + item + "</a></td></tr>";
+                snapshotTrHtml += `<tr><td><a href='#' id='${item}' class='viewSnapsnot'> ${item} </a></td></tr>`;
             });
         }
 
@@ -293,7 +293,7 @@ function loadContainerView(data)
             profileTrHtml = "<tr><td colspan='999' class='text-center'> No Profiles </td></tr>"
         }else{
             $.each(x.details["profiles"], function(i, item){
-                profileTrHtml += "<tr><td><a href='#' class='toProfile'>" + item + "</a></td></tr>";
+                profileTrHtml += `<tr><td><a href='#' class='toProfile'>${item}</a></td></tr>`;
             });
         }
 
@@ -305,10 +305,10 @@ function loadContainerView(data)
             if(i == "lo"){
                 return;
             }
-            networkData += "<div class='padding-bottom: 2em;'><b>" + i + ":</b><br/>";
+            networkData += `<div class='padding-bottom: 2em;'><b>${i}:</b><br/>`;
             let lastKey = item.addresses.length - 1;
             $.each(item.addresses, function(i, item){
-                networkData +=  "<span style='padding-left:3em'>" + item.address + "<br/></span>";
+                networkData += `<span style='padding-left:3em'>${item.address}<br/></span>`;
             });
             networkData += "</div>";
         });
@@ -317,7 +317,7 @@ function loadContainerView(data)
         let memoryHtml = "";
 
         $.each(x["state"]["memory"], function(i, item){
-            memoryHtml += "<tr><td>" + i + "</td><td>" + formatBytes(item) + "</tr>";
+            memoryHtml += `<tr><td>${i}</td><td>${formatBytes(item)}</tr>`;
         });
 
         $("#memoryData > tbody").empty().append(memoryHtml);

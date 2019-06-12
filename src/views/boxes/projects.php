@@ -220,7 +220,7 @@ function viewProject(project, hostId, hostAlias){
             projectUsedBy += "<tr><td class='text-center'><b style='color: red;'>Not Used</b></td></tr>"
         }else{
             $.each(data.used_by, function(i, item){
-                projectUsedBy += "<tr><td>" + item + "</td></tr>"
+                projectUsedBy += `<tr><td>${item}</td></tr>`;
             });
         }
 
@@ -231,7 +231,7 @@ function viewProject(project, hostId, hostAlias){
 
         let projectConfig = "";
         $.each(data.config, function(i, item){
-            projectConfig += "<tr><td>" + i.replace("features.", "") + "</td><td>" + item + "</td></tr>"
+            projectConfig += `<tr><td>${i.replace("features.", "")}</td><td>${item}</td></tr>`;
         });
         $("#projectConfigTable > tbody").empty().append(projectConfig);
     });
