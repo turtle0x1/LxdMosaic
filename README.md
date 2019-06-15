@@ -46,7 +46,7 @@ handle the installation of dependencies and setup this program.
 It handles the cloning of the repository so you can just do;
 #### Ubuntu
 ```bash
-# Launch a ubuntu 7 container
+# Launch a ubuntu container
 lxc launch ubuntu: lxdMosaic
 # Connect to ubuntu console
 lxc exec lxdMosaic bash
