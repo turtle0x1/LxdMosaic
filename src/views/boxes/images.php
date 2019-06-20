@@ -72,7 +72,7 @@
         let x = {
             imageData: data
         };
-        ajaxRequest(globalUrls["images"].delete, x, function(data){
+        ajaxRequest(globalUrls.images.delete, x, function(data){
             makeToastr(data);
             loadLocalImagesAfter();
         });
@@ -107,11 +107,11 @@
             }
             let html = `<thead><tr>
                 <th> Import </th>`
-            $.each(x["headers"], function(i, head){
+            $.each(x.headers, function(i, head){
                 html += `<th>${head}</th>`;
             });
             html += "</tr></thead><tbody>";
-            $.each(x["data"], function(i, item){
+            $.each(x.data, function(i, item){
                 html += `<tr>
                     <td> <input name='imageToImport' type='checkbox' value='${item[0]}/${item[1]}/${item[2]}'/></td>`;
                 $.each(item, function(o, p){
@@ -134,7 +134,7 @@
     function loadLocalImages()
     {
         addBreadcrumbs(["Images", "Local Images"], ["", "active"], false)
-        ajaxRequest(globalUrls["images"].getAll, null, function(data){
+        ajaxRequest(globalUrls.images.getAll, null, function(data){
             let x = $.parseJSON(data);
             if(x.hasOwnProperty("error")){
                 return false;

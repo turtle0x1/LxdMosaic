@@ -190,7 +190,7 @@ function viewProfile(profileId, hostAlias, hostId){
     currentProfileDetails.profile = profileId;
     currentProfileDetails.hostAlias = hostAlias;
     currentProfileDetails.hostId = hostId;
-    let details = profileData[hostAlias]["profiles"][profileId]["details"];
+    let details = profileData[hostAlias].profiles[profileId].details;
     let deviceTableRows = createTableRowsHtml(details.devices);
 
     addBreadcrumbs(["Profiles", hostAlias, profileId], ["", "", "active"], false);

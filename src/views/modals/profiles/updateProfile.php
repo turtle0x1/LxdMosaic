@@ -71,7 +71,7 @@
     $("#modal-profile-update").on("shown.bs.modal", function(){
         if(!$.isPlainObject(currentProfileDetails) || typeof currentProfileDetails.profile !== "string"){
             $("#profileUpdateData").hide();
-            ajaxRequest(globalUrls["profiles"].getAllProfiles, null, function(data){
+            ajaxRequest(globalUrls.profiles.getAllProfiles, null, function(data){
                 var data = $.parseJSON(data);
                 let html = "<option value=''>Please Select </option>";
                 $.each(data, function(host, profiles){
@@ -105,7 +105,7 @@
             return false;
         }
 
-        ajaxRequest(globalUrls["profiles"]["search"].getCommonProfiles, x, function(data){
+        ajaxRequest(globalUrls.profiles.search.getCommonProfiles, x, function(data){
             let hosts = $.parseJSON(data);
             let checkboxHtml = '';
             $.each(hosts, function(i, host){

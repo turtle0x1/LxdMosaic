@@ -237,11 +237,11 @@ function loadContainerView(data)
         $(".renameContainer").attr("disabled", disableActions);
         $(".deleteContainer").attr("disabled", disableActions);
 
-        $("#container-currentState").html(`<i class="` +statusCodeIconMap[x["state"]["status_code"]] +`"></i>`);
+        $("#container-currentState").html(`<i class="` + statusCodeIconMap[x.state.status_code] +`"></i>`);
         $("#container-changeState").val("");
 
         //NOTE Read more here https://github.com/lxc/pylxd/issues/242
-        let containerCpuTime = nanoSecondsToHourMinutes(x["state"]["cpu"].usage);
+        let containerCpuTime = nanoSecondsToHourMinutes(x.state.cpu.usage);
 
         let os = x.details.config.hasOwnProperty("image.os") ? x.details.config["image.os"] : "<b style='color: #ffc107'>Can't find OS</b>";
         let version = "<b style='color: #ffc107'>Cant find verison</b>";
@@ -277,10 +277,10 @@ function loadContainerView(data)
 
         let snapshotTrHtml = "";
 
-        if(x["snapshots"].length == 0){
+        if(x.snapshots.length == 0){
             snapshotTrHtml = "<tr><td colspan='999' class='text-center'> No snapshots </td></tr>"
         }else{
-            $.each(x["snapshots"], function(i, item){
+            $.each(x.snapshots, function(i, item){
                 snapshotTrHtml += `<tr><td><a href='#' id='${item}' class='viewSnapsnot'> ${item} </a></td></tr>`;
             });
         }
@@ -289,10 +289,10 @@ function loadContainerView(data)
 
         let profileTrHtml = "";
 
-        if(x.details["profiles"].length == 0){
+        if(x.details.profiles.length == 0){
             profileTrHtml = "<tr><td colspan='999' class='text-center'> No Profiles </td></tr>"
         }else{
-            $.each(x.details["profiles"], function(i, item){
+            $.each(x.details.profiles, function(i, item){
                 profileTrHtml += `<tr><td><a href='#' class='toProfile'>${item}</a></td></tr>`;
             });
         }
@@ -301,7 +301,7 @@ function loadContainerView(data)
 
         let networkData = "";
 
-        $.each(x["state"]["network"],  function(i, item){
+        $.each(x.state.network,  function(i, item){
             if(i == "lo"){
                 return;
             }
@@ -316,7 +316,7 @@ function loadContainerView(data)
 
         let memoryHtml = "";
 
-        $.each(x["state"]["memory"], function(i, item){
+        $.each(x.state.memory, function(i, item){
             memoryHtml += `<tr><td>${i}</td><td>${formatBytes(item)}</tr>`;
         });
 

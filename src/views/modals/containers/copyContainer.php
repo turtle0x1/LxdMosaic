@@ -77,7 +77,7 @@
 
         let x = $.extend({
             newContainer: $("#copyModal-newName").val(),
-            newHostId: d[0]["hostId"]
+            newHostId: d[0].hostId
         }, currentContainerDetails);
 
         ajaxRequest(globalUrls.containers.copy, x, function(data){

@@ -116,7 +116,7 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
         cloudConfigId: deployCloudConfigObj.cloudConfigId,
         profileName: profileName,
         additionalProfiles: profileIds,
-        imageDetails: image[0]["details"]
+        imageDetails: image[0].details
     };
 
     ajaxRequest(globalUrls.cloudConfig.deploy, x, (response)=>{
