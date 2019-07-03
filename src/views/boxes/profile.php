@@ -33,6 +33,9 @@
           <div class="card-block table-responsive">
               <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
                 <div class="card-block">
+                    <button class="btn btn-block btn-primary" id="copyProfile">
+                        Copy
+                    </button>
                     <button class="btn btn-block btn-warning" id="renameProfile">
                         Rename
                     </button>
@@ -220,6 +223,13 @@ function viewProfile(profileId, hostAlias, hostId){
 }
 
 
+$("#profileBox").on("click", "#copyProfile", function(){
+    copyProfileData.hostAlias = currentProfileDetails.hostAlias;
+    copyProfileData.hostId = currentProfileDetails.hostId;
+    copyProfileData.profile = currentProfileDetails.profile;
+    $("#modal-profile-copy").modal("show");
+});
+
 $("#profileBox").on("click", "#renameProfile", function(){
     renameProfileData.hostAlias = currentProfileDetails.hostAlias;
     renameProfileData.hostId = currentProfileDetails.hostId;
@@ -251,4 +261,5 @@ $("#profileBox").on("click", "#deleteProfile", function(){
 
 <?php
 require __DIR__ . "/../modals/profiles/rename.php";
+require __DIR__ . "/../modals/profiles/copy.php";
 ?>

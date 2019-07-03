@@ -2,10 +2,11 @@ Unreleased
 
 Added
     Allow setting container settings when creating them (#57)
+    Copy profiles between hosts (#94)
 
 Changed
     Redirect by default to https (#86)
-    Spelling of "Stoping"
+    Spelling of "Stoping" (#95)
 
 0.3.0
 

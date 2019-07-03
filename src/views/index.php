@@ -112,6 +112,7 @@ if ($haveServers->haveAny() !== true) {
                   getAllProfiles: '/api/Profiles/GetAllProfilesController/getAllProfiles',
                   delete: '/api/Profiles/DeleteProfileController/delete',
                   rename: '/api/Profiles/RenameProfileController/rename',
+                  copy: '/api/Profiles/CopyProfileController/copyProfile',
               },
               containers:{
                   create: "/api/Containers/CreateController/create",
