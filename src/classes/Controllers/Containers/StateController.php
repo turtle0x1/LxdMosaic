@@ -20,7 +20,7 @@ class StateController
     public function stopContainer($hostId, $container, string $alias = null)
     {
         $this->state->change($hostId, $container, StateCon::STOP);
-        return ["state"=>"success", "message"=>"Stoping $alias/$container", "code"=>102];
+        return ["state"=>"success", "message"=>"Stopping $alias/$container", "code"=>102];
     }
 
     public function restartContainer($hostId, $container, string $alias = null)
