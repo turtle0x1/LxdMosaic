@@ -349,7 +349,7 @@ if ($haveServers->haveAny() !== true) {
       </div>
       <main class="main">
         <!-- Breadcrumb-->
-        <ol class="breadcrumb">
+        <ol class="breadcrumb" id="mainBreadcrumb">
             <li class="breadcrumb-item active">Dashboard</li>
         </ol>
         <div class="container-fluid">
@@ -464,6 +464,10 @@ if(typeof io !== "undefined"){
        let description = msg.metadata.hasOwnProperty("description") ? msg.metadata.description : "No Description Available";
        let host = msg.host;
        let hostList = $("#operationsList").find(`[data-host='${host}']`);
+       
+       if(msg.metadata.description == "Creating container" && msg.metadata.status_code == 200 && $("#mainBreadcrumb").find(".active").text()){
+          loadServerOview();
+       }
 
        if(hostList.length == 0){
            $("#operationsList").append(`<div data-host='${host}'>
@@ -749,7 +753,6 @@ function loadServerOview()
         });
         $(".boxSlide").hide();
         $("#overviewBox").show();
-
     });
 }
 

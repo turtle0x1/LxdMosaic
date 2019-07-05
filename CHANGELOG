@@ -5,6 +5,7 @@ Added
     Copy profiles between hosts (#94)
     Choose host to restore container snapshot to (#96)
     Delete host (#99)
+    Reload server dashboard after finishing creating a container (#97)
 
 Changed
     Redirect by default to https (#86)
