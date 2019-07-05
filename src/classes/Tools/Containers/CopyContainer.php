@@ -19,10 +19,19 @@ class CopyContainer
         int $newHostId
     ) {
         if ($hostId !== $newHostId) {
-            $x = $this->migrateContainer->migrate($hostId, $container, $newHostId, $newContainerName);
-            return $x;
+            return $this->migrateContainer->migrate(
+                $hostId,
+                $container,
+                $newHostId,
+                $newContainerName
+            );
         }
         $lxd = $this->lxdClient->getANewClient($hostId);
-        return $lxd->containers->copy($container, $newContainerName);
+        $r = $lxd->containers->copy($container, $newContainerName, [], true);
+        // There is some error that is not being caught here so added this checking
+        if (isset($r["err"]) && !empty($r["err"])) {
+            throw new \Exception($r["err"], 1);
+        }
+        return $r;
     }
 }

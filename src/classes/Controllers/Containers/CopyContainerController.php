@@ -18,6 +18,6 @@ class CopyContainerController
         string $alias = null
     ) {
         $this->copyContainer->copyContainer($hostId, $container, $newContainer, $newHostId);
-        return ["state"=>"success", "message"=>"Copying $container to $alias / $newContainer"];
+        return ["state"=>"success", "message"=>"Copying $container to $newContainer"];
     }
 }

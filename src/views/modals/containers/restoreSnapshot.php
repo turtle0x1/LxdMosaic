@@ -1,6 +1,6 @@
     <!-- Modal -->
 <div class="modal fade" id="modal-container-restoreSnapshot" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Restore Snapshot From Container
@@ -22,46 +22,53 @@
             <dd class="col-sm-6" id="restoreSnapshotModal-snapshotName"></dd>
         </dl>
         <div class="row">
-            <div class="col-md-12">
-            <h5 clas="pull-left"><u> Restore To Origin </u></h5>
-            <div class="alert alert-danger">
-                Restoring a snapshot to an existing container will
-                overwrite any changed data
+            <div class="col-md-6 text-center">
+                <h5 clas="pull-left"><u> Restore To Origin </u></h5>
+                <div class="alert alert-danger">
+                    Restoring a snapshot to an existing container will
+                    overwrite any changed data
+                </div>
+                <button class="btn btn-primary restoreSnapToOrigin">
+                    Restore To Origin
+                </button>
             </div>
-            <button class="btn btn-primary restoreSnapToOrigin">
-                Restore To Origin
-            </button>
+            <div class="col-md-6 text-center">
+                <h5 clas="pull-left"><u> Rename Snapshot </u></h5>
+                <div class="form-group">
+                    <input class="form-control" name="newSnapshotName" type="string" />
+                </div>
+                <button class="btn btn-primary renameSnapshot">
+                    Rename Snapshot
+                </button>
+            </div>
+        </div>
+        <div class="mt-4 row">
+            <div class="offset-md-3 col-md-6 text-center">
+                <h5
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    data-animation="false"
+                    title='You can create new containers from a snapshot instaed of
+                    restoring "on top off" an existing container'>
+                    <u> New Container </u>
+                    <i class="fas fa-question-circle"></i>
+                </h5>
+                <div class="form-group">
+                    <label> Target Host </label>
+                    <input class="form-control" id="modal-container-restoreSnapshot-newTargetHost" type="string" />
+                </div>
+                <div class="form-group">
+                    <label> New Container Name </label>
+                    <input class="form-control" id="modal-container-restoreSnapshot-newName" type="string" />
+                </div>
+                <button class="btn btn-primary createFromSnapshot">
+                    Create Container
+                </button>
             </div>
         </div>
         <hr/>
         <div class="row">
-            <div class="col-md-12">
-            <h5 clas="pull-left"><u> New Container </u></h5>
-            <div class="alert alert-info">
-                You can create new containers from a snapshot instaed of
-                restoring "on top off" an existing container
-            </div>
-            <div class="form-group">
-                <label> New Container Name </label>
-                <input class="form-control" id="modal-container-restoreSnapshot-newName" type="string" />
-            </div>
-            <button class="btn btn-primary createFromSnapshot">
-                Create Container
-            </button>
-            </div>
-        </div>
-        <hr/>
-        <div class="row">
-            <div class="col-md-12">
-            <h5 clas="pull-left"><u> Rename Snapshot </u></h5>
-            <div class="form-group">
-                <label> New Snapshot Name </label>
-                <input class="form-control" name="newSnapshotName" type="string" />
-            </div>
-            <button class="btn btn-primary renameSnapshot">
-                Rename Snapshot
-            </button>
-            </div>
+
         </div>
       </div>
       <div class="modal-footer">
@@ -76,6 +83,15 @@
     var snapshotDetails = {
         snapshotName: null
     };
+
+    $("#modal-container-restoreSnapshot-newTargetHost").tokenInput(globalUrls.hosts.search.search, {
+        queryParam: "host",
+        propertyToSearch: "host",
+        tokenValue: "hostId",
+        tokenLimit: 1,
+        preventDuplicates: false,
+        theme: "facebook"
+    });
 
     $("#modal-container-restoreSnapshot").on("show.bs.modal", function(){
         if(!$.isPlainObject(currentContainerDetails)){
@@ -107,6 +123,12 @@
             newHostId: currentContainerDetails.hostId,
             container: `${currentContainerDetails.container}/${snapshotDetails.snapshotName}`
         };
+
+        let newHost = mapObjToSignleDimension($("#modal-container-restoreSnapshot-newTargetHost").tokenInput("get"), "hostId");
+
+        if(newHost.length > 0){
+            x.newHostId = newHost[0];
+        }
 
         ajaxRequest(globalUrls.containers.snapShots.createFrom, x, function(data){
             let x = makeToastr(data);
