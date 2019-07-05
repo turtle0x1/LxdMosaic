@@ -127,7 +127,7 @@ body {
     padding: 20px;
 }
 
-.brand-card-header > .host {
+.brand-card-header .host {
     color: white;
 }
 

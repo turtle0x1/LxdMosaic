@@ -158,7 +158,8 @@ if ($haveServers->haveAny() !== true) {
                       getAll: "/api/Hosts/Containers/GetAllController/getAll",
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
-                  getOverview: "/api/Hosts/GetOverviewController/get"
+                  getOverview: "/api/Hosts/GetOverviewController/get",
+                  delete: "/api/Hosts/DeleteHostController/delete"
               },
               images: {
                   search: {

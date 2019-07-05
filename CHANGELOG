@@ -4,6 +4,7 @@ Added
     Allow setting container settings when creating them (#57)
     Copy profiles between hosts (#94)
     Choose host to restore container snapshot to (#96)
+    Delete host (#99)
 
 Changed
     Redirect by default to https (#86)
