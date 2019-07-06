@@ -407,7 +407,65 @@ $("#containerBox").on("click", ".toProfile", function(){
 });
 
 $("#containerBox").on("click", ".copyContainer", function(){
-    $("#modal-container-copy").modal("show");
+    $.confirm({
+        title: 'Copy Container!',
+        content: `
+            <div class="form-group">
+                <label> New Host </label>
+                <input class="form-control" maxlength="63" name="newHost"/>
+            </div>
+            <div class="form-group">
+                <label> Name </label>
+                <input class="form-control validateName" maxlength="63" name="name"/>
+            </div>`,
+        buttons: {
+            cancel: function(){},
+            copy: {
+                text: 'Copy',
+                btnClass: 'btn-blue',
+                action: function () {
+                    let modal = this;
+                    let d = this.$content.find("input[name=newHost]").tokenInput("get");
+                    let btn  = $(this);
+
+                    modal.buttons.copy.setText('<i class="fa fa-cog fa-spin"></i>Copying..'); // let the user know
+                    modal.buttons.copy.disable();
+                    modal.buttons.cancel.disable();
+
+                    if(d.length == 0){
+                        return false;
+                    }
+
+                    let x = $.extend({
+                        newContainer: modal.$content.find("input[name=name]").val(),
+                        newHostId: d[0].hostId
+                    }, currentContainerDetails);
+
+                    ajaxRequest(globalUrls.containers.copy, x, function(data){
+                        let x = makeToastr(data);
+                        if(x.state == "error"){
+                            return false;
+                        }
+                        loadContainerTreeAfter();
+                        modal.close();
+                    });
+                    return false;
+                }
+            },
+        },
+        onContentReady: function () {
+            // bind to events
+            var jc = this;
+            this.$content.find('input[name=newHost]').tokenInput(globalUrls.hosts.search.search, {
+                queryParam: "host",
+                propertyToSearch: "host",
+                tokenValue: "hostId",
+                preventDuplicates: false,
+                tokenLimit: 1,
+                theme: "facebook"
+            });
+        }
+    });
 });
 
 $("#containerBox").on("click", ".migrateContainer", function(){
@@ -464,7 +522,6 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
     require __DIR__ . "/../modals/containers/migrateContainer.php";
     require __DIR__ . "/../modals/containers/takeSnapshot.php";
     require __DIR__ . "/../modals/containers/restoreSnapshot.php";
-    require __DIR__ . "/../modals/containers/copyContainer.php";
     require __DIR__ . "/../modals/containers/renameContainer.php";
     require __DIR__ . "/../modals/containers/createContainer.php";
     require __DIR__ . "/../modals/containers/editSettings.php";

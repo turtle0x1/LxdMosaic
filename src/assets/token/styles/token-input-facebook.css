@@ -9,7 +9,7 @@ ul.token-input-list-facebook {
     font-size: 12px;
     font-family: Verdana;
     min-height: 1px;
-    z-index: 999;
+    z-index: 99999999;
     margin: 0;
     padding: 0;
     background-color: #fff;

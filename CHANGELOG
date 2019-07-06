@@ -10,6 +10,7 @@ Added
 Changed
     Redirect by default to https (#86)
     Spelling of "Stoping" (#95)
+    Use $.confirm instead of modal for copying container
 
 0.3.0
 
