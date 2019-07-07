@@ -2,15 +2,15 @@
     <div id="deploymentsOverview" class="row">
         <div class="col-md-9">
               <div class="card">
-                <div class="card-header" role="tab" id="headingOne">
+                <div class="card-header bg-info" role="tab" id="headingOne">
                   <h5>
-                    <a data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
+                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
                       Deployments
                     </a>
                   </h5>
                 </div>
                 <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-                  <div class="card-block">
+                  <div class="card-block bg-dark">
                       Deployments are used to deploy multiple cloud configs to multiple
                       containers.
                   </div>
@@ -21,15 +21,15 @@
         </div>
         <div class="col-md-3">
               <div class="card">
-                <div class="card-header" role="tab" id="headingOne">
+                <div class="card-header bg-info" role="tab" id="headingOne">
                   <h5>
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                       Actions
                     </a>
                   </h5>
                 </div>
                 <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-                  <div class="card-block">
+                  <div class="card-block bg-dark">
                       <button class="btn btn-block btn-primary" id="createDeployment">
                           Create
                       </button>
@@ -40,7 +40,7 @@
     </div>
     <div id="depoymentDetails">
         <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
-            <h4 id="deploymentName"> Deployment Name </h4>
+            <h4 class="text-white" id="deploymentName"> Deployment Name </h4>
         </div>
         <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
             <div class="col-md-3">
@@ -121,10 +121,10 @@ var currentDeployment = null;
 var emptyDeploymentBox = function(){
     return $(`
     <div class="brand-card" id="">
-      <div class="brand-card-header bg-twitter">
+      <div class="brand-card-header bg-info">
         <h5 class='text-white name'></h5>
       </div>
-      <div class="brand-card-body">
+      <div class="brand-card-body bg-dark">
         <div>
           <div class="text-value">Memory <i class="fas fa-memory"></i></div>
           <div class="text-uppercase text-muted memory"></div>

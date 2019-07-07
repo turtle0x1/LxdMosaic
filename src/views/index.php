@@ -565,6 +565,8 @@ var unknownServerDetails = {
 
 function loadServerOview()
 {
+    Chart.defaults.global.defaultFontColor='white';
+
     setBreadcrumb("Dashboard", "active");
 
     ajaxRequest(globalUrls.analytics.getLatestData, {}, function(data){
@@ -603,6 +605,9 @@ function loadServerOview()
                 title: {
                     display: true,
                     text: 'Fleet Active Containers'
+                },
+                legend: {
+                    display: false
                 },
                 scales: {
                     yAxes: [{
@@ -653,6 +658,9 @@ function loadServerOview()
                     display: true,
                     text: 'Fleet Memory Usage'
                 },
+                legend: {
+                    display: false
+                },
                 scales: scalesBytesCallbacks,
                 tooltips: toolTipsBytesCallbacks
             }
@@ -676,6 +684,9 @@ function loadServerOview()
                 title: {
                     display: true,
                     text: 'Fleet Storage Usage'
+                },
+                legend: {
+                    display: false
                 },
                 scales: scalesBytesCallbacks,
                 tooltips: toolTipsBytesCallbacks

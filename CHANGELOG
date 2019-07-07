@@ -11,6 +11,7 @@ Changed
     Redirect by default to https (#86)
     Spelling of "Stoping" (#95)
     Use $.confirm instead of modal for copying container
+    Use more consistent card theming & add a light gray background
 
 0.3.0
 

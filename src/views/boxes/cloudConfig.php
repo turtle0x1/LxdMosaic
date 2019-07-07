@@ -2,15 +2,15 @@
 <div id="cloudConfigOverview" class="row">
     <div class="col-md-9">
           <div class="card">
-            <div class="card-header" role="tab" id="headingOne">
+            <div class="card-header bg-info" role="tab" id="headingOne">
               <h5>
-                <a data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
+                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
                   Cloud Config
                 </a>
               </h5>
             </div>
             <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-              <div class="card-block">
+              <div class="card-block bg-dark">
                   Cloud config files are scripts or controllers that run when
                   a container is first created to set it up for a particular task.
               </div>
@@ -19,15 +19,15 @@
     </div>
     <div class="col-md-3">
           <div class="card">
-            <div class="card-header" role="tab" id="headingOne">
+            <div class="card-header bg-info" role="tab" id="headingOne">
               <h5>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                   Actions
                 </a>
               </h5>
             </div>
             <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-              <div class="card-block">
+              <div class="card-block bg-dark">
                   <button class="btn btn-block btn-primary" id="createCloudConfig">
                       Create
                   </button>
@@ -39,48 +39,46 @@
 <div class="row" id="cloudConfigContents">
     <div class="col-md-9">
         <div class="card">
-          <div class="card-header" role="tab" id="headingOne">
+          <div class="card-header bg-info" role="tab" id="headingOne">
             <h5>
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                 Image
                 <i class="fas float-right fa-image"></i>
               </a>
             </h5>
           </div>
           <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-            <div class="card-body">
+            <div class="card-body bg-dark">
                 <input class="form-control" id="cloudConfigImage"/>
             </div>
           </div>
         </div>
         <div class="card">
-          <div class="card-header" role="tab" id="cloudConfig-actionsHeading">
+          <div class="card-header bg-info" role="tab" id="cloudConfig-actionsHeading">
             <h5>
-              <a data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-editorCollapse" aria-expanded="true" aria-controls="cloudConfig-editorCollapse">
+              <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-editorCollapse" aria-expanded="true" aria-controls="cloudConfig-editorCollapse">
                 Cloud Config File
                 <i class="fas float-right fa-file"></i>
               </a>
             </h5>
           </div>
-          <div id="cloudConfig-editorCollapse" class="collapse show" role="tabpanel" aria-labelledby="cloudConfig-actionsHeading">
-            <div class="card-block">
-                <div clas="row">
-                    <div id="editor"></div>
-                </div>
+          <div class="bg-dark" id="cloudConfig-editorCollapse" class="collapse show" role="tabpanel" aria-labelledby="cloudConfig-actionsHeading">
+            <div class="card-block bg-dark">
+                <div id="editor"></div>
             </div>
           </div>
         </div>
     </div>
     <div class="col-md-3">
           <div class="card">
-            <div class="card-header" role="tab" id="headingOne">
+            <div class="card-header bg-info" role="tab" id="headingOne">
               <h5>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                   Actions
                 </a>
               </h5>
             </div>
-            <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+            <div class="bg-dark" id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
               <div class="card-block">
                   <button class="btn btn-block btn-success save">
                       Save

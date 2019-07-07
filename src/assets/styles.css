@@ -1,3 +1,11 @@
+body {
+    background-color: #a8a8a8;
+}
+
+.card {
+    border: none;
+}
+
 #cloudConfig-editorCollapse {
     height: 550px;
 }
@@ -73,6 +81,7 @@ a:hover {
 
 .breadcrumb {
     background-color: #3a4149;
+    border-bottom: none;
 }
 
 .nav-link:hover {
@@ -125,6 +134,10 @@ body {
 
 .card-block {
     padding: 20px;
+}
+
+.brand-card {
+    border: none;
 }
 
 .brand-card-header .host {

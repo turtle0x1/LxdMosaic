@@ -2,16 +2,16 @@
 <!-- <h4> Container: <`span id="containerName"></span> </h4> -->
 <div class="col-md-12">
     <div class="card">
-      <div class="card-header" role="tab" id="container-imagesHeading">
+      <div class="card-header bg-info" role="tab" id="container-imagesHeading">
         <h5>
-          <a data-toggle="collapse" data-parent="#accordion" href="#container-imagesCollapse" aria-expanded="true" aria-controls="container-imagesCollapse">
+          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#container-imagesCollapse" aria-expanded="true" aria-controls="container-imagesCollapse">
             Images Overview
           </a>
         </h5>
       </div>
 
       <div id="container-imagesCollapse" class="collapsed show" aria-expanded="true" role="tabpanel" aria-labelledby="container-imagesHeading">
-        <div id="imagesOverviewDetails" class="card-block table-responsive">
+        <div id="imagesOverviewDetails" class="card-block bg-dark table-responsive">
             <div class="row">
                 <div class="col-md-12">
                     <button class="btn btn-danger deleteImages" id="deleteImagesBtn"> Delete </button>
@@ -19,7 +19,7 @@
                 </div>
             </div>
             <br/>
-            <table class="table table-bordered" id="imagesTable">
+            <table class="table table-dark table-bordered" id="imagesTable">
                 <thead>
                     <th>  </th>
                     <th> OS </th>
@@ -33,8 +33,8 @@
                 <tbody>
                 </tbody>
             </table>
-            <div id="remoteImagesTableBox" class="table-responsive">
-                <table class="table" id="remoteImagesTable">
+            <div id="remoteImagesTableBox">
+                <table class="table table-dark table-bordered" id="remoteImagesTable">
                 </table>
             </div>
         </div>
@@ -127,7 +127,14 @@
             }
 
             $("#remoteImagesTable").empty().append(html).show();
-            dataTable = $("#remoteImagesTable").DataTable();
+            dataTable = $("#remoteImagesTable").DataTable({
+                drawCallback: function( settings, json ) {
+                    $('#remoteImagesTable td').css({
+                        "background-color": "#454d55",
+                        "color": "white"
+                    });
+                },
+            });
         });
     }
 

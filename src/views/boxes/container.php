@@ -24,7 +24,6 @@
     </div>
 <div id="containerDetails">
 <div class="row">
-
     <div class="col-md-6">
         <div class="card text-white bg-deepblue">
           <div class="card-body">
@@ -60,9 +59,9 @@
 <!-- <h4> Container: <`span id="containerName"></span> </h4> -->
 <div class="col-md-3">
     <div class="card card-accent-danger">
-      <div class="card-header" role="tab" id="container-actionsHeading">
+      <div class="card-header bg-info" role="tab" id="container-actionsHeading">
         <h5>
-          <a data-toggle="collapse" data-parent="#accordion" href="#actionsCollapse" aria-expanded="true" aria-controls="container-actionsCollapse">
+          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#actionsCollapse" aria-expanded="true" aria-controls="container-actionsCollapse">
             Actions
             <i class="fas fa-edit float-right"></i>
           </a>
@@ -70,7 +69,7 @@
       </div>
 
       <div id="actionsCollapse" class="collapsed show" aria-expanded="true" role="tabpanel" aria-labelledby="container-actionsHeading">
-        <div class="card-block">
+        <div class="card-block bg-dark">
             <div class="form-group">
                 <label><u> Change State </u></label>
                 <select class="form-control" id="container-changeState">
@@ -108,15 +107,15 @@
 </div>
 <div class="col-md-3">
     <div class="card border-primary">
-      <div class="card-header" role="tab">
-        <h5>
+      <div class="card-header bg-info" role="tab">
+        <h5 class="text-white">
             Profiles
              <i class="fas fa-users float-right"></i>
         </h5>
       </div>
       <div class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-        <div class="card-block table-responsive">
-            <table class="table table-bordered"id="profileData">
+        <div class="card-block bg-dark table-responsive">
+            <table class="table table-dark table-bordered"id="profileData">
                   <thead class="thead-inverse">
                       <tr>
                           <th> Name </th>
@@ -130,15 +129,15 @@
     </div>
     <br/>
     <div class="card border-primary">
-      <div class="card-header" role="tab">
-        <h5>
+      <div class="card-header bg-info" role="tab">
+        <h5 class="text-white">
             Snapshots
             <i class="fas fa-images float-right"></i>
         </h5>
       </div>
       <div class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-        <div class="card-block table-responsive">
-            <table class="table table-bordered"id="snapshotData">
+        <div class="card-block bg-dark table-responsive">
+            <table class="table table-dark table-bordered"id="snapshotData">
                   <thead class="thead-inverse">
                       <tr>
                           <th> Name </th>
@@ -153,9 +152,9 @@
 </div>
 <div class="col-md-6">
       <div class="card card-accent-success">
-        <div class="card-header" role="tab" id="headingOne">
+        <div class="card-header bg-info" role="tab" id="headingOne">
           <h5>
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               Memory Details
               <i class="fas fa-memory float-right"></i>
             </a>
@@ -163,19 +162,17 @@
         </div>
 
         <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-          <div class="card-block">
-              <div class="row table-responsive">
-              <table class="table" id="memoryData">
-                    <thead class="thead-inverse">
-                        <tr>
-                            <th> Family </th>
-                            <th> Ussage </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
+          <div class="card-block bg-dark">
+              <table class="table table-dark table-bordered" id="memoryData">
+                  <thead class="thead-inverse">
+                      <tr>
+                          <th> Family </th>
+                          <th> Ussage </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
               </table>
-            </div>
           </div>
         </div>
       </div>

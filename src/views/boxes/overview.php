@@ -3,7 +3,7 @@
       <!-- /.col-->
           <div class="col-lg-4">
               <div class="card">
-                  <div class="card-body">
+                  <div class="card-body bg-dark">
                       <div class="alert alert-warning text-center notEnoughData">
                           <b> <u> Memory Ussage Chart </u> </b><br/>
                           Not enough data check again in 10 minutes
@@ -14,7 +14,7 @@
           </div>
           <div class="col-lg-4">
               <div class="card">
-                  <div class="card-body">
+                  <div class="card-body bg-dark">
                       <div class="alert alert-warning text-center notEnoughData">
                           <b> <u> Active Containers Chart </u> </b><br/>
                           Not enough data check again in 10 minutes
@@ -25,7 +25,7 @@
           </div>
           <div class="col-lg-4">
               <div class="card">
-                  <div class="card-body">
+                  <div class="card-body bg-dark">
                       <div class="alert alert-warning text-center notEnoughData">
                           <b> <u> Total Storage Used </u> </b><br/>
                           Not enough data check again in 10 minutes
@@ -49,33 +49,33 @@
 var emptyServerBox = function(){
     return $(`
     <div class="brand-card" id="">
-      <div class="brand-card-header bg-twitter">
+      <div class="brand-card-header bg-info">
             <h4 class="host"></h4>
             <button class="btn btn-sm btn-danger deleteHost pull-right">
                 <span class="fas fa-trash"></span>
             </button>
       </div>
-      <div class="brand-card-body">
+      <div class="brand-card-body bg-dark text-white">
         <div>
-          <div class="text-value">CPU <i class="fas fa-microchip"></i></div>
+          <div class="text-value text-white">CPU <i class="fas fa-microchip"></i></div>
           <div class="text-uppercase text-muted cpuDetails">CPU Details</div>
         </div>
         <div>
-          <div class="text-value">Memory <i class="fas fa-memory"></i></div>
+          <div class="text-value text-white">Memory <i class="fas fa-memory"></i></div>
           <div class="text-uppercase text-muted memory"></div>
         </div>
         <div class='gpuGroup d-md-down-none'>
-          <div class="text-value">GPU's<i class="fab fa-megaport"></i></div>
-          <div class="text-uppercase text-muted gpuDetails"></div>
+          <div class="text-value text-white">GPU's<i class="fab fa-megaport"></i></div>
+          <div class="text-uppercase text-muted gpuDetails text-white"></div>
         </div>
         <div>
-            <div class="text-value">Project <i class="fas fa-project-diagram"></i></div>
+            <div class="text-value text-white">Project <i class="fas fa-project-diagram"></i></div>
             <div class="form-group projectFormGroup">
                 <select class="form-control projects changeHostProject"></select>
             </div>
         </div>
         <div>
-            <div class="text-value">Alias<i class="fas fa-passport"></i></div>
+            <div class="text-value text-white">Alias<i class="fas fa-passport"></i></div>
                 <button class="btn btn-xs-sm btn-primary editHost pull-right"><i class="fas fa-pencil-alt"></i></button>
             </div>
         </div>

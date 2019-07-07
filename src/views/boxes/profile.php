@@ -2,15 +2,15 @@
 <div id="profileOverview" class="row">
     <div class="col-md-9">
           <div class="card">
-            <div class="card-header" role="tab" id="headingOne">
+            <div class="card-header bg-info" role="tab" id="headingOne">
               <h5>
-                <a data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
+                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
                   Profiles
                 </a>
               </h5>
             </div>
             <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-              <div class="card-block">
+              <div class="card-block bg-dark">
                   Profiles are used to store processes used with a container.
               </div>
             </div>
@@ -18,19 +18,18 @@
     </div>
 </div>
 <div id="profileDetails" class="row">
-<!-- <h4> Container: <`span id="containerName"></span> </h4> -->
 <div class="col-md-3">
       <div class="card">
-        <div class="card-header" role="tab" id="profilesActionHeading">
+        <div class="card-header bg-info" role="tab" id="profilesActionHeading">
           <h5>
-            <a data-toggle="collapse" data-parent="#accordion" href="#profileActions" aria-expanded="true" aria-controls="profileActions">
+            <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#profileActions" aria-expanded="true" aria-controls="profileActions">
               Actions
               <i class="fas fa-edit float-right"></i>
             </a>
           </h5>
         </div>
         <div id="profileActions" class="collapse show" role="tabpanel" aria-labelledby="profilesActionHeading">
-          <div class="card-block table-responsive">
+          <div class="card-block bg-dark table-responsive">
               <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
                 <div class="card-block">
                     <button class="btn btn-block btn-primary" id="copyProfile">
@@ -51,16 +50,17 @@
 </div>
 <div class="col-md-6">
       <div class="card">
-        <div class="card-header" role="tab" id="profileDevicesHeading">
+        <div class="card-header bg-info" role="tab" id="profileDevicesHeading">
           <h5>
-            <a id="devicesAriaToggle" data-toggle="collapse" data-parent="#profileDevicesHeading" href="#profileDevicesCard" aria-expanded="true" aria-controls="profileDevicesCard">
+            <a id="devicesAriaToggle" class="text-white" data-toggle="collapse" data-parent="#profileDevicesHeading" href="#profileDevicesCard" aria-expanded="true" aria-controls="profileDevicesCard">
               Devices
+              <i class="nav-icon fa fa-cog float-right"></i>
             </a>
           </h5>
         </div>
         <div id="profileDevicesCard" class="collapse show" role="tabpanel" aria-labelledby="profileDevicesHeading">
-          <div class="card-block table-responsive">
-              <table class="table table-striped" id="profile-deviceData">
+          <div class="card-block bg-dark table-responsive">
+              <table class="table table-bordered table-dark" id="profile-deviceData">
                     <thead class="thead-inverse">
                         <tr>
                             <th> Key </th>
@@ -75,9 +75,9 @@
       </div>
       <br/>
       <div class="card">
-        <div class="card-header" role="tab" id="configDeviceCardHeading">
+        <div class="card-header bg-info" role="tab" id="configDeviceCardHeading">
           <h5>
-            <a data-toggle="collapse" data-parent="#accordion" href="#configDeviceCard" aria-expanded="true" aria-controls="configDeviceCard">
+            <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#configDeviceCard" aria-expanded="true" aria-controls="configDeviceCard">
               Configuration
               <i class="fas fa-cogs float-right"></i>
             </a>
@@ -85,8 +85,8 @@
         </div>
 
         <div id="configDeviceCard" class="collapse show" role="tabpanel" aria-labelledby="configDeviceCardHeading">
-          <div class="card-block table-responsive">
-              <table class="table table-striped" id="profile-configData">
+          <div class="card-block bg-dark table-responsive">
+              <table class="table table-dark table-striped" id="profile-configData">
                     <thead class="thead-inverse">
                         <tr>
                             <th> Key </th>
@@ -102,18 +102,18 @@
 </div>
 <div class="col-md-3">
       <div class="card">
-        <div class="card-header" role="tab" id="usedByCard">
+        <div class="card-header bg-info" role="tab" id="usedByCard">
           <h5>
-            <a data-toggle="collapse" data-parent="#accordion" href="#usedByCollapse" aria-expanded="true" aria-controls="usedByCollapse">
+            <a data-toggle="collapse" class="text-white" data-parent="#accordion" href="#usedByCollapse" aria-expanded="true" aria-controls="usedByCollapse">
               Used By
               <i class="fas fa-users float-right"></i>
             </a>
           </h5>
         </div>
 
-        <div id="usedByCollapse" class="collapse show" role="tabpanel" aria-labelledby="usedByCard">
-          <div class="card-block">
-              <table class="table table-responsive table-striped" id="profile-usedByData">
+        <div id="usedByCollapse" class="collapse show bg-dark" role="tabpanel" aria-labelledby="usedByCard">
+          <div class="card-block bg-dark table-responsive">
+              <table class="table table-bordered table-dark" id="profile-usedByData">
                     <thead class="thead-inverse">
                         <tr>
                             <th> Counter </th>
