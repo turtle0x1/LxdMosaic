@@ -100,7 +100,7 @@
         $("#importImagesBtn").show()
         $("#remoteImagesTableBox").show();
         addBreadcrumbs(["Images", "Remote Images"], ["", "active"], false)
-        ajaxRequest(globalUrls["images"].getLinuxContainersOrgImages, "POST", function(data){
+        ajaxRequest(globalUrls.images.getLinuxContainersOrgImages, "POST", function(data){
             let x = $.parseJSON(data);
             if(x.hasOwnProperty("error")){
                 return false;
