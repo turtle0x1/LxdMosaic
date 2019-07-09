@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d7cebfcf05c62d52dbdc8cc09f9721b",
+    "content-hash": "97f97c0b368b35ef84e9b3f2a380693a",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -91,16 +91,16 @@
         },
         {
             "name": "dhope0000/lxd",
-            "version": "v0.12.2",
+            "version": "v0.12.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/turtle0x1/php-lxd.git",
-                "reference": "3dd64ecbfc85a1189518b11c587bc73aae087b26"
+                "reference": "931da6461fd63f54033aafedc8ba47d3153eebfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/3dd64ecbfc85a1189518b11c587bc73aae087b26",
-                "reference": "3dd64ecbfc85a1189518b11c587bc73aae087b26",
+                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/931da6461fd63f54033aafedc8ba47d3153eebfb",
+                "reference": "931da6461fd63f54033aafedc8ba47d3153eebfb",
                 "shasum": ""
             },
             "require": {
@@ -156,7 +156,7 @@
                 "lxd",
                 "wrapper"
             ],
-            "time": "2019-07-05T23:03:38+00:00"
+            "time": "2019-07-09T19:21:31+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
