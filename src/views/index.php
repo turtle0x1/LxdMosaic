@@ -714,7 +714,7 @@ function loadServerOview()
 
             if(data.online == false){
                 $(p).find(".host").text(indent + "(Offline)");
-                $(p).find(".bg-twitter").removeClass("bg-twitter").addClass("bg-danger");
+                $(p).find(".bg-info").removeClass("bg-info").addClass("bg-danger");
                 $("#serverOverviewDetails").append(p);
                 return;
             }
