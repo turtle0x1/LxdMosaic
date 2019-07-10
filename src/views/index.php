@@ -713,7 +713,7 @@ function loadServerOview()
             $(p).attr("id", data.hostId);
 
             if(data.online == false){
-                $(p).find(".host").text(indent + "<span class='text-danger'>(Offline)</span>");
+                $(p).find(".host").text(indent + " (Offline)");
                 $(p).find(".bg-info").removeClass("bg-info").addClass("bg-danger");
                 $("#serverOverviewDetails").append(p);
                 return;
