@@ -168,12 +168,14 @@ function loadProjectView()
         $("#projectsOverview, #projectsBox").show();
         data = $.parseJSON(data);
         $.each(data, function(hostName, data){
+            let disabled = "";
             if(data.online == false){
+                disabled = "disabled text-warning";
                 hostName += " (Offline)";
             }
 
             hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle" href="#">
+                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${hostName}
                 </a>
                 <ul class="nav-dropdown-items">`;

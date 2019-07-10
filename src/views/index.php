@@ -567,7 +567,7 @@ function loadServerOview()
 {
     Chart.defaults.global.defaultFontColor='white';
 
-    setBreadcrumb("Dashboard", "active");
+    setBreadcrumb("Dashboard", "active overview");
 
     ajaxRequest(globalUrls.analytics.getLatestData, {}, function(data){
         data = $.parseJSON(data);
@@ -713,7 +713,7 @@ function loadServerOview()
             $(p).attr("id", data.hostId);
 
             if(data.online == false){
-                $(p).find(".host").text(indent + "(Offline)");
+                $(p).find(".host").text(indent + "<span class='text-danger'>(Offline)</span>");
                 $(p).find(".bg-info").removeClass("bg-info").addClass("bg-danger");
                 $("#serverOverviewDetails").append(p);
                 return;
@@ -779,12 +779,14 @@ function createContainerTree(){
             </a>
         </li>`;
         $.each(data, function(i, host){
+            let disabled = "";
             if(host.online == false){
+                disabled = "disabled text-warning";
                 i += " (Offline)";
             }
 
             hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle" href="#">
+                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${i}
                 </a>
                 <ul class="nav-dropdown-items">`;

@@ -146,12 +146,14 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
             </a>
         </li>`;
         $.each(data, function(hostName, host){
+            let disabled = "";
             if(host.online == false){
+                disabled = "disabled text-warning";
                 hostName += " (Offline)";
             }
 
             hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle" href="#">
+                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${hostName}
                 </a>
                 <ul class="nav-dropdown-items">`;
@@ -196,7 +198,7 @@ function viewProfile(profileId, hostAlias, hostId){
     let details = profileData[hostAlias].profiles[profileId].details;
     let deviceTableRows = createTableRowsHtml(details.devices);
 
-    addBreadcrumbs(["Profiles", hostAlias, profileId], ["", "", "active"], false);
+    addBreadcrumbs(["Profiles", hostAlias, profileId], ["viewProfiles", "", "active"], false);
 
     let usedBy = [{empty: "Couldn't get profiles uesd by (api version probably)"}];
 

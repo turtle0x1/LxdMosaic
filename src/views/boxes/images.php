@@ -99,7 +99,7 @@
         $("#deleteImagesBtn").hide();
         $("#importImagesBtn").show()
         $("#remoteImagesTableBox").show();
-        addBreadcrumbs(["Images", "Remote Images"], ["", "active"], false)
+        addBreadcrumbs(["Images", "Remote Images"], ["viewImages", "active"], false)
         ajaxRequest(globalUrls.images.getLinuxContainersOrgImages, "POST", function(data){
             let x = $.parseJSON(data);
             if(x.hasOwnProperty("error")){

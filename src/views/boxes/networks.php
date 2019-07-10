@@ -1,17 +1,13 @@
 <div id="networkBox" class="boxSlide">
     <div id="networkOverview" class="row">
         <div class="col-md-9">
-              <div class="card">
-                <div class="card-header bg-info" role="tab" id="headingOne">
+              <div class="card bg-info">
+                <div class="card-body">
                   <h5>
                     <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
                       Networks
                     </a>
                   </h5>
-                </div>
-                <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-                  <div class="card-block bg-dark">
-                  </div>
                 </div>
               </div>
         </div>
@@ -104,11 +100,13 @@ function loadNetworksView()
         </li>`;
 
         $.each(data, function(hostName, data){
+            let disabled = "";
             if(data.online == false){
+                disabled = "disabled text-warning";
                 hostName += " (Offline)";
             }
             hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle" href="#">
+                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${hostName}
                 </a>
                 <ul class="nav-dropdown-items">`;

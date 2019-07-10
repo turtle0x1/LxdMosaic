@@ -1,20 +1,14 @@
 <div id="storageBox" class="boxSlide">
     <div id="storageOverview" class="row">
         <div class="col-md-9">
-              <div class="card">
-                <div class="card-header bg-info" role="tab" id="headingOne">
-                  <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
-                      Storage
-                    </a>
-                  </h5>
-                </div>
-                <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
-                  <div class="card-block bg-dark">
-                      Deployments are used to deploy multiple cloud configs to multiple
-                      containers.
+              <div class="card bg-info">
+                  <div class="card-body">
+                      <h5>
+                        <a class="text-white">
+                          Storage
+                        </a>
+                      </h5>
                   </div>
-                </div>
               </div>
               <div class="card">
                 <div class="card-header bg-info" role="tab" id="headingOne">
@@ -149,11 +143,13 @@ function loadStorageView()
         let tableList = "";
 
         $.each(data, function(hostName, data){
+            let disabled = "";
             if(data.online == false){
+                disabled = "disabled text-warning";
                 hostName += " (Offline)";
             }
             hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle" href="#">
+                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${hostName}
                 </a>
                 <ul class="nav-dropdown-items">`;

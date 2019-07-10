@@ -2,6 +2,11 @@ body {
     background-color: #a8a8a8;
 }
 
+li.breadcrumb-item:nth-child(1) {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .card {
     border: none;
 }
