@@ -61,7 +61,7 @@
                             </div>
                     </div>
                     <div class='col-md-4'>
-                        "<div class='description'>${item.description}</div>
+                        <div class='description'>${item.description}</div>
                     </div>
                     <div class='col-md-3'>
                         <input  style="width: 100%" type="text" name="value" value="${item.value}" class="form-control"/>
