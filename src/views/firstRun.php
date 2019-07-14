@@ -57,17 +57,19 @@ if ($haveServers->haveAny() === true) {
 </html>
 <script>
 
-let inputTemplate = '<div class="input-group mb-3 serverGroup">' +
-'<div class="input-group-addon">' +
-'<label> Server </label>' +
-'</div>' +
-    '<input placeholder="ip / hostname" name="connectDetails" class="form-control"/>' +
-    '<input placeholder="trust password" name="trustPassword" type="password" class="form-control"/>' +
-    '<input placeholder="Alias (Optional)" name="alias" type="text" class="form-control"/>' +
-    '<div class="input-group-addon">' +
-    '<button class="btn btn-danger removeRow" type="button"><i class="fa fa-trash"></i></button>' +
-    '</div>' +
-    '</button></div>';
+let inputTemplate = `<div class="input-group mb-3 serverGroup">
+    <div class="input-group-addon">
+        <label> Server </label>
+    </div>
+    <input placeholder="ip / hostname" name="connectDetails" class="form-control"/>
+    <input placeholder="trust password" name="trustPassword" type="password" class="form-control"/>
+    <input placeholder="Alias (Optional)" name="alias" type="text" class="form-control"/>
+    <div class="input-group-addon">
+        <button class="btn btn-danger removeRow" type="button">
+            <i class="fa fa-trash"></i>
+        </button>
+    </div>
+</div>`;
 
 
 $(function(){

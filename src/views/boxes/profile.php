@@ -131,6 +131,14 @@
 </div>
 
 <script>
+//TODO Refactor this away
+var profileData = null;
+
+var currentProfileDetails = {
+    profile: null,
+    host: null
+};
+
 
 function loadProfileView(selectedProfile = null, selectedHost = null, callback = null)
 {

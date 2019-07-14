@@ -67,15 +67,9 @@ if ($haveServers->haveAny() !== true) {
 
       <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
 
+      <script src="/assets/lxdMosaic/globalFunctions.js"></script>
       <script>
           var currentContainerDetails = null;
-
-          var currentProfileDetails = {
-              profile: null,
-              host: null
-          };
-
-          var containerAwaitingResponse = null;
 
           var globalUrls = {
               //NOTE The url can't be "Analytics" because some ad blockers
@@ -194,93 +188,65 @@ if ($haveServers->haveAny() !== true) {
               }
           };
 
-          function mapObjToSignleDimension(obj, keyToMap)
-          {
-              let output = [];
-              Object.keys(obj).map(function(key, index) {
-                 output.push(obj[key][keyToMap]);
-              });
-              return output;
+          var statusCodeMap = {
+              100: "OperationCreated",
+              101: "Started",
+              102: "Stopped",
+              103: "Running",
+              104: "Cancelling",
+              105: "Pending",
+              106: "Starting",
+              107: "Stopping",
+              108: "Aborting",
+              109: "Freezing",
+              110: "Frozen",
+              111: "Thawed",
+              112: "Error",
+              200: "Success",
+              400: "Failure",
+              40: "Cancelled",
+          }
+          // TODO Sort these out
+          var statusCodeIconMap = {
+              100: "fa fa-ban",
+              101: "fa fa-play",
+              102: "fa fa-stop-circle",
+              103: "fa fa-play",
+              104: "fa fa-ban",
+              105: "fa fa-clock",
+              106: "fa fa-play",
+              107: "fa fa-stop",
+              108: "Aborting",
+              109: "Freezing",
+              110: "fas fa-snowflake",
+              111: "Thawed",
+              112: "fa fa-exclamation-triangle",
+              200: "fa fa-check",
+              400: "fa fa-exclamation-triangle",
+              40:  "Cancelled",
           }
 
-          function createBreadcrumbItemHtml(name, classes)
-          {
-              return `<li class="breadcrumb-item ` + classes + `">` + name + `</li>`;
+          toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
           }
 
-          function setBreadcrumb(name, classes)
-          {
-              $(".breadcrumb").empty().append(createBreadcrumbItemHtml(name, classes))
-          }
-
-          function addBreadcrumbs(names, classes, preserveRoot = true)
-          {
-            if(preserveRoot){
-                $(".breadcrumb").find(".breadcrumb-item:gt(0)").remove();
-            }else{
-                $(".breadcrumb").empty();
-            }
-
-            $(".breadcrumb").find(".active").removeClass("active");
-            let items = "";
-
-            $.each(names, function(i, item){
-                items += createBreadcrumbItemHtml(item, classes[i]);
-            })
-
-            $(".breadcrumb").append(items)
-          }
-
-          function changeActiveNav(newActiveSelector)
-          {
-              $("#mainNav").find(".active").removeClass("active");
-              $("#mainNav").find(newActiveSelector).parent(".nav-item").addClass("active");
-          }
-
-          function makeNodeMissingPopup()
-          {
-
-              $.confirm({
-                  title: "Node server isn't reachable!",
-                  content: `You can try <code> restarting the container</code> or <code>pm2 restart all</code>
-                      <br/>
-                      <br/>
-                      Without the node server you won't be able to get operation updates or
-                      connect to container consoles`,
-                  theme: 'dark',
-                  buttons: {
-                      ok: {
-                          btnClass: "btn btn-danger"
-                      }
-                  }
-              });
-          }
-
-          function makeServerChangePopup(status, host)
-          {
-              let message = "";
-              if(status == "offline"){
-                  message = `If there any requests related to hosts running you
-                    may need to wait 30 seconds and refresh the page`;
-              }else{
-                  message = "Host is now online"
-              }
-
-              $.confirm({
-                  title: `${host} is ${status}!`,
-                  content: message,
-                  theme: 'dark',
-                  buttons: {
-                      ok: {
-                          btnClass: "btn btn-danger"
-                      }
-                  }
-              });
-          }
-
-          function getSum(total, num) {
-              return parseInt(total) + parseInt(num);
-          }
+          $(document).on("keyup", ".validateName", function(){
+              this.value = this.value.replace(/[^-a-zA-Z0-9]+/g,'');
+          })
       </script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
@@ -392,63 +358,6 @@ $("#sidebar-ul").on("click", ".nav-item", function(){
     $(this).addClass("active");
 })
 
-var profileData = null;
-
-var statusCodeMap = {
-    100: "OperationCreated",
-    101: "Started",
-    102: "Stopped",
-    103: "Running",
-    104: "Cancelling",
-    105: "Pending",
-    106: "Starting",
-    107: "Stopping",
-    108: "Aborting",
-    109: "Freezing",
-    110: "Frozen",
-    111: "Thawed",
-    112: "Error",
-    200: "Success",
-    400: "Failure",
-    40: "Cancelled",
-}
-// TODO Sort these out
-var statusCodeIconMap = {
-    100: "fa fa-ban",
-    101: "fa fa-play",
-    102: "fa fa-stop-circle",
-    103: "fa fa-play",
-    104: "fa fa-ban",
-    105: "fa fa-clock",
-    106: "fa fa-play",
-    107: "fa fa-stop",
-    108: "Aborting",
-    109: "Freezing",
-    110: "fas fa-snowflake",
-    111: "Thawed",
-    112: "fa fa-exclamation-triangle",
-    200: "fa fa-check",
-    400: "fa fa-exclamation-triangle",
-    40:  "Cancelled",
-}
-
-toastr.options = {
-  "closeButton": false,
-  "debug": false,
-  "newestOnTop": true,
-  "progressBar": false,
-  "positionClass": "toast-top-right",
-  "preventDuplicates": true,
-  "onclick": null,
-  "showDuration": "300",
-  "hideDuration": "1000",
-  "timeOut": "5000",
-  "extendedTimeOut": "1000",
-  "showEasing": "swing",
-  "hideEasing": "linear",
-  "showMethod": "fadeIn",
-  "hideMethod": "fadeOut"
-}
 if(typeof io !== "undefined"){
     var socket = io.connect("/operations");
 
@@ -523,28 +432,6 @@ function makeOperationHtmlItem(id, icon, description, statusCode)
 var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
   editor.getSession().setMode("ace/mode/yaml");
-
-$(document).on("keyup", ".validateName", function(){
-    this.value = this.value.replace(/[^-a-zA-Z0-9]+/g,'');
-})
-
-function makeToastr(x) {
-    if(!$.isPlainObject(x)){
-        x = $.parseJSON(x);
-    }
-
-    if(x.hasOwnProperty("responseText")){
-        x = $.parseJSON(x.responseText);
-    }
-
-
-    if(x.hasOwnProperty("state")){
-
-        toastr[x.state](x.message);
-    }
-    return x;
-}
-
 
 $(function(){
     $('[data-toggle="tooltip"]').tooltip({html: true})
@@ -823,15 +710,6 @@ $("#sidebar-ul").on("click", ".view-container", function(){
     loadContainerView(currentContainerDetails);
 });
 
-function formatBytes(bytes,decimals) {
-   if(bytes == 0) return '0 Bytes';
-   var k = 1024,
-       dm = decimals || 2,
-       sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-       i = Math.floor(Math.log(bytes) / Math.log(k));
-   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-}
-
 function setContDetsByTreeItem(node)
 {
     currentContainerDetails = {
@@ -840,28 +718,6 @@ function setContDetsByTreeItem(node)
         hostId: node.data("hostId")
     }
     return currentContainerDetails;
-}
-// Adapted from https://stackoverflow.com/questions/4687723/how-to-convert-minutes-to-hours-minutes-and-add-various-time-values-together-usi
-function convertMinsToHrsMins(mins) {
-  let h = Math.floor(mins / 60);
-  let m = mins % 60;
-  h = h < 10 ? '0' + h : h;
-  m = m < 10 ? '0' + m : m;
-  m = parseFloat(m).toFixed(0);
-  return `${h}:${m}`
-}
-
-function nanoSecondsToHourMinutes(nanoseconds) {
-    return convertMinsToHrsMins(nanoseconds / 60000000000);
-}
-
-
-function nl2br (str, is_xhtml) {
-    if (typeof str === 'undefined' || str === null) {
-        return '';
-    }
-    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
 }
 
 $(document).on("click", "#addNewServer", function(){
@@ -926,43 +782,6 @@ $(document).on("click", ".viewCloudConfigFiles, .cloudConfig-overview", function
     loadCloudConfigTree();
     changeActiveNav(".viewCloudConfigFiles")
 });
-
-function createTableRowsHtml(data, childPropertyToSearch)
-{
-    let html = "";
-    $.each(data, function(x, y){
-        if($.isPlainObject(y)){
-            html += `<tr><td class='text-center' colspan='2'>${x}</td></tr>`;
-            if(typeof childPropertyToSearch == "string"){
-                $.each(y[childPropertyToSearch], function(i, p){
-                    html += `<tr><td>${i}</td><td>${nl2br(y)}</td></tr>`;
-                });
-            }else{
-                $.each(y, function(i, p){
-                    html += `<tr><td>${i}</td><td>${nl2br(p)}</td></tr>`;
-                });
-            }
-        }else{
-            html += `<tr><td>${x}</td><td>${nl2br(y)}</td></tr>`;
-        }
-    });
-    return html;
-}
-
-
-function ajaxRequest(url, data, callback){
-    $.ajax({
-         type: 'POST',
-         data: data,
-         url: url,
-         success: function(data){
-             callback(data);
-         },
-         error: function(data){
-             callback(data);
-         }
-     });
-}
 </script>
 <?php
     require_once __DIR__ . "/modals/hosts/addHosts.php";

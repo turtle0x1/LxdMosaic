@@ -1,0 +1,174 @@
+function makeToastr(x) {
+    if(!$.isPlainObject(x)){
+        x = $.parseJSON(x);
+    }
+
+    if(x.hasOwnProperty("responseText")){
+        x = $.parseJSON(x.responseText);
+    }
+
+
+    if(x.hasOwnProperty("state")){
+
+        toastr[x.state](x.message);
+    }
+    return x;
+}
+
+
+function formatBytes(bytes,decimals) {
+   if(bytes == 0) return '0 Bytes';
+   var k = 1024,
+       dm = decimals || 2,
+       sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+       i = Math.floor(Math.log(bytes) / Math.log(k));
+   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+// Adapted from https://stackoverflow.com/questions/4687723/how-to-convert-minutes-to-hours-minutes-and-add-various-time-values-together-usi
+function convertMinsToHrsMins(mins) {
+  let h = Math.floor(mins / 60);
+  let m = mins % 60;
+  h = h < 10 ? '0' + h : h;
+  m = m < 10 ? '0' + m : m;
+  m = parseFloat(m).toFixed(0);
+  return `${h}:${m}`
+}
+
+function nanoSecondsToHourMinutes(nanoseconds) {
+    return convertMinsToHrsMins(nanoseconds / 60000000000);
+}
+
+
+function nl2br (str, is_xhtml) {
+    if (typeof str === 'undefined' || str === null) {
+        return '';
+    }
+    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+}
+
+function createTableRowsHtml(data, childPropertyToSearch)
+{
+    let html = "";
+    $.each(data, function(x, y){
+        if($.isPlainObject(y)){
+            html += `<tr><td class='text-center' colspan='2'>${x}</td></tr>`;
+            if(typeof childPropertyToSearch == "string"){
+                $.each(y[childPropertyToSearch], function(i, p){
+                    html += `<tr><td>${i}</td><td>${nl2br(y)}</td></tr>`;
+                });
+            }else{
+                $.each(y, function(i, p){
+                    html += `<tr><td>${i}</td><td>${nl2br(p)}</td></tr>`;
+                });
+            }
+        }else{
+            html += `<tr><td>${x}</td><td>${nl2br(y)}</td></tr>`;
+        }
+    });
+    return html;
+}
+
+
+function ajaxRequest(url, data, callback){
+    $.ajax({
+         type: 'POST',
+         data: data,
+         url: url,
+         success: function(data){
+             callback(data);
+         },
+         error: function(data){
+             callback(data);
+         }
+     });
+}
+
+
+function mapObjToSignleDimension(obj, keyToMap)
+{
+    let output = [];
+    Object.keys(obj).map(function(key, index) {
+       output.push(obj[key][keyToMap]);
+    });
+    return output;
+}
+
+function createBreadcrumbItemHtml(name, classes)
+{
+    return `<li class="breadcrumb-item ` + classes + `">` + name + `</li>`;
+}
+
+function setBreadcrumb(name, classes)
+{
+    $(".breadcrumb").empty().append(createBreadcrumbItemHtml(name, classes))
+}
+
+function addBreadcrumbs(names, classes, preserveRoot = true)
+{
+  if(preserveRoot){
+      $(".breadcrumb").find(".breadcrumb-item:gt(0)").remove();
+  }else{
+      $(".breadcrumb").empty();
+  }
+
+  $(".breadcrumb").find(".active").removeClass("active");
+  let items = "";
+
+  $.each(names, function(i, item){
+      items += createBreadcrumbItemHtml(item, classes[i]);
+  })
+
+  $(".breadcrumb").append(items)
+}
+
+function changeActiveNav(newActiveSelector)
+{
+    $("#mainNav").find(".active").removeClass("active");
+    $("#mainNav").find(newActiveSelector).parent(".nav-item").addClass("active");
+}
+
+function makeNodeMissingPopup()
+{
+    $.confirm({
+        title: "Node server isn't reachable!",
+        content: `You can try <code> restarting the container</code> or <code>pm2 restart all</code>
+            <br/>
+            <br/>
+            Without the node server you won't be able to get operation updates or
+            connect to container consoles`,
+        theme: 'dark',
+        buttons: {
+            ok: {
+                btnClass: "btn btn-danger"
+            }
+        }
+    });
+}
+
+function makeServerChangePopup(status, host)
+{
+    let message = "";
+    if(status == "offline"){
+        message = `If there any requests related to hosts running you
+          may need to wait 30 seconds and refresh the page`;
+    }else{
+        message = "Host is now online"
+    }
+
+    $.confirm({
+        title: `${host} is ${status}!`,
+        content: message,
+        theme: 'dark',
+        buttons: {
+            ok: {
+                btnClass: "btn btn-danger"
+            }
+        }
+    });
+}
+
+function getSum(total, num) {
+    return parseInt(total) + parseInt(num);
+}
