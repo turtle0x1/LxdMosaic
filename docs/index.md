@@ -5,6 +5,11 @@ LXDMosaic is a web interface for managing instances of LXD.
 Its recomended that you install LXDMosaic in a container or virtual machine to avoid
 clutering your system, it installs alot of dependencies (mysql, apache, node)
 
+### Documentation
+
+The majority of what will be covered in this documentation is specific to LXDMosaic
+and not LXD itself, you can read the documentation for lxd <a href="https://lxd.readthedocs.io/" target="_blank"> Here </a>
+
 ### Installing LXDMosaic Ubuntu
 ```
 # Launch a ubuntu container
@@ -21,7 +26,7 @@ chmod +x installLxdMosaic.sh
 ### Installing LXDMosaic Centos 7
 ```
 # Launch a centos 7 container
-`lxc launch images:centos/7/amd64 lxdMosaic`
+lxc launch images:centos/7/amd64 lxdMosaic
 # Connect to centos console
 lxc exec lxdMosaic bash
 # Download the script
@@ -35,6 +40,7 @@ chmod +x installLxdMosaic.sh
 ### Post Installation
 Once the installation is complete you need to go to into your browser and vist;
 
-https://container_ip_address
+`https://container_ip_address`
 
-and accept the self signed certificate
+and accept the self signed certificate, you will then be able to enter your LXD instance
+details.
