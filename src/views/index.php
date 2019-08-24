@@ -607,6 +607,7 @@ function loadServerOview()
             if(data.online == false){
                 $(p).find(".host").text(indent + " (Offline)");
                 $(p).find(".bg-info").removeClass("bg-info").addClass("bg-danger");
+                $(p).find(".deleteHost").removeClass("btn-danger").addClass("btn-info")
                 $("#serverOverviewDetails").append(p);
                 return;
             }

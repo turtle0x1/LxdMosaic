@@ -38,7 +38,7 @@
     </div>
     <div class="row">
       <!-- /.col-->
-      <div class="col-sm-6 col-lg-12" id="serverOverviewDetails">
+      <div class="col-sm-12 col-lg-12" id="serverOverviewDetails">
       </div>
       <!-- /.col-->
     </div>

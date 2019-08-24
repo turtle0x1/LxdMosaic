@@ -146,6 +146,12 @@ function loadDeploymentsView()
     ajaxRequest(globalUrls.deployments.getAll, {}, (data)=>{
         data = $.parseJSON(data);
 
+        if(data.hasOwnProperty("state") && data.state == "error"){
+            $("#sidebar-ul").empty()
+            makeToastr(data);
+            return false;
+        }
+
         let hosts = `
         <li class="nav-item active deployments-overview">
             <a class="nav-link" href="#">
@@ -158,6 +164,7 @@ function loadDeploymentsView()
             box.find(".name").html(`
                 <a class='viewDeployment' href="#" data-deployment-id="${item.id}"><u>${item.name}</u>
                 </a>`);
+
             box.find(".memory").text(formatBytes(item.containerDetails.totalMem));
             box.find(".containers").text(item.containerDetails.totalContainers);
             $("#deploymentList").append(box);
