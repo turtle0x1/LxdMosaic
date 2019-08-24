@@ -14,6 +14,7 @@ Changed
     Use more consistent card theming & add a light gray background
     Bump composer libaries to fix (#101)
     Only reload container tree instead of dashboard in certian instances (#109, #105)
+    Stop host online / offline from appearing over and over (#110)
 
 Fixed
     Breadcrumb navigation (#103)

@@ -147,8 +147,14 @@ function makeNodeMissingPopup()
     });
 }
 
+var hostStatusChangeConfirm = null;
+
 function makeServerChangePopup(status, host)
 {
+    if(hostStatusChangeConfirm !== null && hostStatusChangeConfirm.isOpen()){
+        hostStatusChangeConfirm.close();
+    }
+
     let message = "";
     if(status == "offline"){
         message = `If there any requests related to hosts running you
@@ -157,7 +163,7 @@ function makeServerChangePopup(status, host)
         message = "Host is now online"
     }
 
-    $.confirm({
+    hostStatusChangeConfirm = $.confirm({
         title: `${host} is ${status}!`,
         content: message,
         theme: 'dark',
