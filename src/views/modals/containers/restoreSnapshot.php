@@ -128,15 +128,16 @@
 
         if(newHost.length > 0){
             x.newHostId = newHost[0];
+            $(".createFromSnapshot").html('<i class="fa fa-cog fa-spin"></i>Creating...')
         }
 
         ajaxRequest(globalUrls.containers.snapShots.createFrom, x, function(data){
-            let x = makeToastr(data);
-            if(x.state == "error"){
+            data = makeToastr(data);
+            $(".createFromSnapshot").text("Create Container");
+            if(data.state == "error"){
                 return false;
             }
             $("#modal-container-restoreSnapshot").modal("toggle");
-            loadContainerViewAfter();
         });
     });
 

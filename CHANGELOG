@@ -13,6 +13,7 @@ Changed
     Use $.confirm instead of modal for copying container
     Use more consistent card theming & add a light gray background
     Bump composer libaries to fix (#101)
+    Only reload container tree instead of dashboard in certian instances (#109, #105)
 
 Fixed
     Breadcrumb navigation (#103)

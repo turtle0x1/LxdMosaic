@@ -374,8 +374,13 @@ if(typeof io !== "undefined"){
        let host = msg.host;
        let hostList = $("#operationsList").find(`[data-host='${host}']`);
 
-       if(msg.metadata.description == "Creating container" && msg.metadata.status_code == 200 && $("#mainBreadcrumb").find(".active").text()){
-          loadServerOview();
+       let loadServerOviewDescriptions = [
+           "Transferring snapshot",
+           "Creating container"
+       ]
+
+       if(loadServerOviewDescriptions.includes(msg.metadata.description)  && msg.metadata.status_code == 200 && $("#mainBreadcrumb").find(".active").text()){
+          loadContainerTreeAfter();
        }
 
        if(hostList.length == 0){
