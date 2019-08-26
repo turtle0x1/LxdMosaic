@@ -2084,10 +2084,10 @@ canvas {
   flex: 1;
   overflow-x: hidden;
   overflow-y: auto;
-  width: 200px;
+  width: 300px;
 }
 .sidebar .nav {
-  width: 200px;
+  width: 300px;
   flex-direction: column;
   min-height: 100%;
   padding: 0;
@@ -2485,10 +2485,10 @@ canvas {
     display: none;
   }
   .sidebar-minimized .sidebar .nav-dropdown-items .nav-item {
-    width: 200px;
+    width: 300px;
   }
   .sidebar-minimized .sidebar .nav-dropdown-items .nav-item .nav-link {
-    width: 200px;
+    width: 300px;
   }
   .sidebar-minimized .sidebar .nav > .nav-dropdown > .nav-dropdown-items {
     display: none;
@@ -3050,7 +3050,7 @@ app-root {
   min-width: 0;
 }
 .app-body .sidebar {
-  flex: 0 0 200px;
+  flex: 0 0 300px;
   order: -1;
 }
 .app-body .aside-menu {
@@ -3058,7 +3058,7 @@ app-root {
 }
 
 html:not([dir=rtl]) .sidebar {
-  margin-left: -200px;
+  margin-left: -300px;
 }
 html:not([dir=rtl]) .aside-menu {
   right: 0;
@@ -3066,7 +3066,7 @@ html:not([dir=rtl]) .aside-menu {
 }
 
 html[dir=rtl] .sidebar {
-  margin-right: -200px;
+  margin-right: -300px;
 }
 html[dir=rtl] .aside-menu {
   left: 0;
@@ -3086,7 +3086,7 @@ html[dir=rtl] .aside-menu {
   .sidebar-fixed .sidebar {
     position: fixed;
     z-index: 1019;
-    width: 200px;
+    width: 300px;
     height: 100vh;
   }
 
@@ -3232,7 +3232,7 @@ html:not([dir=rtl]) .sidebar-show .sidebar {
 html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed .app-footer,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
-    margin-left: 200px;
+    margin-left: 300px;
   }
   html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed.sidebar-compact .main,
 html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed.sidebar-compact .app-footer,
@@ -3244,11 +3244,11 @@ html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-compact .app-footer {
 html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed.sidebar-minimized .app-footer,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .main,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
-    margin-left: 200px;
+    margin-left: 300px;
   }
   html:not([dir=rtl]) .sidebar-sm-show.breadcrumb-fixed .breadcrumb,
 html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
-    left: 200px;
+    left: 300px;
   }
   html:not([dir=rtl]) .sidebar-sm-show.breadcrumb-fixed.sidebar-compact .breadcrumb,
 html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed.sidebar-compact .breadcrumb {
@@ -3281,7 +3281,7 @@ html[dir=rtl] .sidebar-show .sidebar {
 html[dir=rtl] .sidebar-sm-show.sidebar-fixed .app-footer,
 html[dir=rtl] .sidebar-show.sidebar-fixed .main,
 html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
-    margin-right: 200px;
+    margin-right: 300px;
   }
   html[dir=rtl] .sidebar-sm-show.sidebar-fixed.sidebar-compact .main,
 html[dir=rtl] .sidebar-sm-show.sidebar-fixed.sidebar-compact .app-footer,
@@ -3293,11 +3293,11 @@ html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-compact .app-footer {
 html[dir=rtl] .sidebar-sm-show.sidebar-fixed.sidebar-minimized .app-footer,
 html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .main,
 html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
-    margin-right: 200px;
+    margin-right: 300px;
   }
   html[dir=rtl] .sidebar-sm-show.breadcrumb-fixed .breadcrumb,
 html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
-    right: 200px;
+    right: 300px;
   }
   html[dir=rtl] .sidebar-sm-show.breadcrumb-fixed.sidebar-compact .breadcrumb,
 html[dir=rtl] .sidebar-show.breadcrumb-fixed.sidebar-compact .breadcrumb {
@@ -3340,7 +3340,7 @@ html:not([dir=rtl]) .sidebar-show .sidebar {
 html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed .app-footer,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
-    margin-left: 200px;
+    margin-left: 300px;
   }
   html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed.sidebar-compact .main,
 html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed.sidebar-compact .app-footer,
@@ -3352,11 +3352,11 @@ html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-compact .app-footer {
 html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed.sidebar-minimized .app-footer,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .main,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
-    margin-left: 200px;
+    margin-left: 300px;
   }
   html:not([dir=rtl]) .sidebar-md-show.breadcrumb-fixed .breadcrumb,
 html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
-    left: 200px;
+    left: 300px;
   }
   html:not([dir=rtl]) .sidebar-md-show.breadcrumb-fixed.sidebar-compact .breadcrumb,
 html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed.sidebar-compact .breadcrumb {
@@ -3389,7 +3389,7 @@ html[dir=rtl] .sidebar-show .sidebar {
 html[dir=rtl] .sidebar-md-show.sidebar-fixed .app-footer,
 html[dir=rtl] .sidebar-show.sidebar-fixed .main,
 html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
-    margin-right: 200px;
+    margin-right: 300px;
   }
   html[dir=rtl] .sidebar-md-show.sidebar-fixed.sidebar-compact .main,
 html[dir=rtl] .sidebar-md-show.sidebar-fixed.sidebar-compact .app-footer,
@@ -3401,11 +3401,11 @@ html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-compact .app-footer {
 html[dir=rtl] .sidebar-md-show.sidebar-fixed.sidebar-minimized .app-footer,
 html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .main,
 html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
-    margin-right: 200px;
+    margin-right: 300px;
   }
   html[dir=rtl] .sidebar-md-show.breadcrumb-fixed .breadcrumb,
 html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
-    right: 200px;
+    right: 300px;
   }
   html[dir=rtl] .sidebar-md-show.breadcrumb-fixed.sidebar-compact .breadcrumb,
 html[dir=rtl] .sidebar-show.breadcrumb-fixed.sidebar-compact .breadcrumb {
@@ -3448,7 +3448,7 @@ html:not([dir=rtl]) .sidebar-show .sidebar {
 html:not([dir=rtl]) .sidebar-lg-show.sidebar-fixed .app-footer,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
-    margin-left: 200px;
+    margin-left: 300px;
   }
   html:not([dir=rtl]) .sidebar-lg-show.sidebar-fixed.sidebar-compact .main,
 html:not([dir=rtl]) .sidebar-lg-show.sidebar-fixed.sidebar-compact .app-footer,
@@ -3464,7 +3464,7 @@ html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
   }
   html:not([dir=rtl]) .sidebar-lg-show.breadcrumb-fixed .breadcrumb,
 html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
-    left: 200px;
+    left: 300px;
   }
   html:not([dir=rtl]) .sidebar-lg-show.breadcrumb-fixed.sidebar-compact .breadcrumb,
 html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed.sidebar-compact .breadcrumb {
@@ -3497,7 +3497,7 @@ html[dir=rtl] .sidebar-show .sidebar {
 html[dir=rtl] .sidebar-lg-show.sidebar-fixed .app-footer,
 html[dir=rtl] .sidebar-show.sidebar-fixed .main,
 html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
-    margin-right: 200px;
+    margin-right: 300px;
   }
   html[dir=rtl] .sidebar-lg-show.sidebar-fixed.sidebar-compact .main,
 html[dir=rtl] .sidebar-lg-show.sidebar-fixed.sidebar-compact .app-footer,
@@ -3513,7 +3513,7 @@ html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
   }
   html[dir=rtl] .sidebar-lg-show.breadcrumb-fixed .breadcrumb,
 html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
-    right: 200px;
+    right: 300px;
   }
   html[dir=rtl] .sidebar-lg-show.breadcrumb-fixed.sidebar-compact .breadcrumb,
 html[dir=rtl] .sidebar-show.breadcrumb-fixed.sidebar-compact .breadcrumb {
@@ -3547,7 +3547,7 @@ html[dir=rtl] .aside-menu-lg-show.breadcrumb-fixed .breadcrumb {
     }
   }
 }
-@media (min-width: 1200px) {
+@media (min-width: 1300px) {
   html:not([dir=rtl]) .sidebar-xl-show .sidebar,
 html:not([dir=rtl]) .sidebar-show .sidebar {
     margin-left: 0;
@@ -3556,7 +3556,7 @@ html:not([dir=rtl]) .sidebar-show .sidebar {
 html:not([dir=rtl]) .sidebar-xl-show.sidebar-fixed .app-footer,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
 html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
-    margin-left: 200px;
+    margin-left: 300px;
   }
   html:not([dir=rtl]) .sidebar-xl-show.sidebar-fixed.sidebar-compact .main,
 html:not([dir=rtl]) .sidebar-xl-show.sidebar-fixed.sidebar-compact .app-footer,
@@ -3572,7 +3572,7 @@ html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
   }
   html:not([dir=rtl]) .sidebar-xl-show.breadcrumb-fixed .breadcrumb,
 html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
-    left: 200px;
+    left: 300px;
   }
   html:not([dir=rtl]) .sidebar-xl-show.breadcrumb-fixed.sidebar-compact .breadcrumb,
 html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed.sidebar-compact .breadcrumb {
@@ -3605,7 +3605,7 @@ html[dir=rtl] .sidebar-show .sidebar {
 html[dir=rtl] .sidebar-xl-show.sidebar-fixed .app-footer,
 html[dir=rtl] .sidebar-show.sidebar-fixed .main,
 html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
-    margin-right: 200px;
+    margin-right: 300px;
   }
   html[dir=rtl] .sidebar-xl-show.sidebar-fixed.sidebar-compact .main,
 html[dir=rtl] .sidebar-xl-show.sidebar-fixed.sidebar-compact .app-footer,
@@ -3621,7 +3621,7 @@ html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
   }
   html[dir=rtl] .sidebar-xl-show.breadcrumb-fixed .breadcrumb,
 html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
-    right: 200px;
+    right: 300px;
   }
   html[dir=rtl] .sidebar-xl-show.breadcrumb-fixed.sidebar-compact .breadcrumb,
 html[dir=rtl] .sidebar-show.breadcrumb-fixed.sidebar-compact .breadcrumb {
@@ -3708,7 +3708,7 @@ html[dir=rtl] .aside-menu-xl-show.breadcrumb-fixed .breadcrumb {
   .sidebar {
     position: fixed;
     z-index: 1019;
-    width: 200px;
+    width: 300px;
     height: calc(100vh - 55px);
   }
 
@@ -4408,5 +4408,5 @@ body {
   breakpoint-sm: 576px;
   breakpoint-md: 768px;
   breakpoint-lg: 992px;
-  breakpoint-xl: 1200px;
+  breakpoint-xl: 1300px;
 }
