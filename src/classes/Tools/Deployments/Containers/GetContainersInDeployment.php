@@ -32,6 +32,11 @@ class GetContainersInDeployment
                         }
 
                         $containerName = str_replace("/1.0/containers/", "", $item);
+
+                        if (count(explode("/", $containerName)) > 1) {
+                            continue;
+                        }
+
                         $info = $client->containers->info($containerName);
                         if (!isset($output[$host])) {
                             $output[$host] = [

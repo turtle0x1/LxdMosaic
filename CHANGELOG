@@ -1,3 +1,11 @@
+Unreleased
+
+Fixed
+    Container snapshot breaks loading deployments
+
+Changed
+    Some ui tweaks including sidebar width
+
 0.4.0
 
 Added
