@@ -609,6 +609,7 @@ function loadServerOview()
                 $(p).find(".bg-info").removeClass("bg-info").addClass("bg-danger");
                 $(p).find(".deleteHost").removeClass("btn-danger").addClass("btn-info")
                 $("#serverOverviewDetails").append(p);
+                $(p).find(".brand-card-body").remove();
                 return;
             }
 
