@@ -102,6 +102,8 @@
                                     <th> Type </th>
                                     <th> Memory </th>
                                     <th> Network </th>
+                                    <th> Last Started </th>
+                                    <th> Phoned Home </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -207,6 +209,20 @@ function viewDeployment(deploymentId)
             $.each(data.containers, function(host, hostData){
                 c += `<tr><td class="text-center bg-secondary text-white" colspan="999"><h5> Host: ${host} </h5></td></tr>`;
                 $.each(hostData.containers, function(_, container){
+
+                    let phonedHome = "<i class='fas fa-times'></i>";
+                    let hasBeenSeenStarted = "<i class='fas fa-times'></i>";
+
+                    if(container.hasOwnProperty("mosaicInfo")){
+                        if(container.mosaicInfo.hasPhonedHome){
+                            phonedHome = "<i class='fas fa-check'></i>";
+                        }
+
+                        if(container.mosaicInfo.lastStart){
+                            hasBeenSeenStarted = moment(container.mosaicInfo.lastStart).format("LLLL");
+                        }
+                    }
+
                     c += `<tr>
                         <td><i class='${statusCodeIconMap[container.statusCode]}'></i> ${container.name}</td>
                         <td>${container.type}</td>
@@ -218,7 +234,12 @@ function viewDeployment(deploymentId)
                         }
                         c += `${details.addresses[0].address}`
                     });
-                    c += `</td></tr>`
+
+
+                    c += `</td>
+                    <td>${hasBeenSeenStarted}</td>
+                    <td>${phonedHome}</td>
+                    </tr>`
                 });
             });
         }
