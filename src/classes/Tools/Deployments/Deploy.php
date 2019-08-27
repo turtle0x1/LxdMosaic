@@ -8,6 +8,7 @@ use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 use dhope0000\LXDClient\Tools\Containers\CreateContainer;
 use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 use dhope0000\LXDClient\Tools\InstanceSettings\CreatePhoneHomeVendorString;
+use dhope0000\LXDClient\Tools\Deployments\Containers\StoreDeployedContainerNames;
 
 class Deploy
 {
@@ -16,13 +17,15 @@ class Deploy
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
         CreateContainer $createContainer,
         GetConfig $getConfig,
-        CreatePhoneHomeVendorString $createPhoneHomeVendorString
+        CreatePhoneHomeVendorString $createPhoneHomeVendorString,
+        StoreDeployedContainerNames $storeDeployedContainerNames
     ) {
         $this->deployToProfile = $deployToProfile;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
         $this->createContainer = $createContainer;
         $this->getConfig = $getConfig;
         $this->createPhoneHomeVendorString = $createPhoneHomeVendorString;
+        $this->storeDeployedContainerNames = $storeDeployedContainerNames;
     }
 
     public function deploy(int $deploymentId, array $instances)
@@ -34,7 +37,7 @@ class Deploy
 
         $revProfileNames = [];
 
-        $deployedContainerNames = [];
+        $deployedContainerInformation = [];
         $vendorData = $this->createPhoneHomeVendorString->create();
 
         foreach ($instances as $instance) {
@@ -66,13 +69,21 @@ class Deploy
                         $imageDetails[$instance["revId"]]
                     );
 
-                    $deployedContainerNames[] = $containerName;
+                    $deployedContainerInformation[] = [
+                        "hostId"=>$hostId,
+                        "name"=>$containerName
+                    ];
                 }
             }
         }
 
+        $this->storeDeployedContainerNames->store(
+            $deploymentId,
+            $deployedContainerInformation
+        );
+
         return [
-            "deployedContainerNames"=>$deployedContainerNames
+            "deployedContainerInformation"=>$deployedContainerInformation
         ];
     }
 
