@@ -232,14 +232,13 @@ app.post('/terminals', function(req, res) {
 
 app.post('/deploymentProgress', function(req, res) {
     let body = req.body;
-    console.log(body);
     if(body.hasOwnProperty("hostname") !== true){
         // https://stackoverflow.com/questions/3050518/what-http-status-response-code-should-i-use-if-the-request-is-missing-a-required
         res.statusMessage = "Please provide host name in req body";
         res.status(422).end()
+    }else{
+        operationSocket.emit("deploymentProgress", body);
     }
-
-    operationSocket.emit("deploymentProgress", body);
     // Send an empty response
     res.send()
 });

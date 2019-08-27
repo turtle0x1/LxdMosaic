@@ -7,6 +7,7 @@ use dhope0000\LXDClient\Tools\Utilities\StringTools;
 use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 use dhope0000\LXDClient\Tools\Containers\CreateContainer;
 use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
+use dhope0000\LXDClient\Tools\InstanceSettings\CreatePhoneHomeVendorString;
 
 class Deploy
 {
@@ -14,12 +15,14 @@ class Deploy
         DeployToProfile $deployToProfile,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
         CreateContainer $createContainer,
-        GetConfig $getConfig
+        GetConfig $getConfig,
+        CreatePhoneHomeVendorString $createPhoneHomeVendorString
     ) {
         $this->deployToProfile = $deployToProfile;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
         $this->createContainer = $createContainer;
         $this->getConfig = $getConfig;
+        $this->createPhoneHomeVendorString = $createPhoneHomeVendorString;
     }
 
     public function deploy(int $deploymentId, array $instances)
@@ -31,6 +34,9 @@ class Deploy
 
         $revProfileNames = [];
 
+        $deployedContainerNames = [];
+        $vendorData = $this->createPhoneHomeVendorString->create();
+
         foreach ($instances as $instance) {
             foreach ($instance["hosts"] as $hostId) {
                 $hostId = (int) $hostId;
@@ -41,7 +47,7 @@ class Deploy
                 );
 
                 if (!$profile && !isset($revProfileNames[$instance["revId"]])) {
-                    $profile = $this->deployProfile($hostId, $deploymentId, $instance["revId"]);
+                    $profile = $this->deployProfile($hostId, $deploymentId, $instance["revId"], $vendorData);
                 }
 
                 $profiles = [$profile];
@@ -59,12 +65,18 @@ class Deploy
                         [$hostId],
                         $imageDetails[$instance["revId"]]
                     );
+
+                    $deployedContainerNames[] = $containerName;
                 }
             }
         }
+
+        return [
+            "deployedContainerNames"=>$deployedContainerNames
+        ];
     }
 
-    private function deployProfile(int $hostId, int $deploymentId, int $revId)
+    private function deployProfile(int $hostId, int $deploymentId, int $revId, string $vendorData)
     {
         $profileName = StringTools::random(12);
         $revProfileNames[$instance["revId"]] = $profileName;
@@ -76,7 +88,8 @@ class Deploy
             [
                 "environment.deploymentId"=>"$deploymentId",
                 "environment.revId"=>"$revId"
-            ]
+            ],
+            $vendorData
         );
         return $profileName;
     }
@@ -84,9 +97,9 @@ class Deploy
     public function getImageDetails($revIds)
     {
         $imageDetails = [];
-        foreach($revIds as $revId){
+        foreach ($revIds as $revId) {
             $details = $this->getConfig->getImageDetailsByRevId($revId);
-            if(empty($details)){
+            if (empty($details)) {
                 throw new \Exception("Missing image from cloud config", 1);
             }
             $imageDetails[$revId] = json_decode($details, true)["details"];

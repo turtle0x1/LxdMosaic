@@ -20,12 +20,15 @@ class DeployToProfile
         array $hosts,
         int $cloudConfigId = null,
         int $cloudConfigRevId = null,
-        array $extraConfigParams = null
+        array $extraConfigParams = null,
+        string $vendorData = null
     ) {
         if (!is_numeric($cloudConfigId) && !is_numeric($cloudConfigRevId)) {
             throw new \Exception("Please provide either cloud config id or rev id", 1);
         } elseif (isset($extraConfigParams["user.user-data"])) {
             throw new \Exception("You can't provide user.user-data here", 1);
+        } elseif (isset($extraConfigParams["user.vendor-data"])) {
+            throw new \Exception("You can't provide vendor data here", 1);
         }
 
         $deployResults = [];
@@ -39,6 +42,7 @@ class DeployToProfile
         $config = is_array($extraConfigParams) ? $extraConfigParams : [];
 
         $config["user.user-data"] = $latestData["data"];
+        $config["user.vendor-data"] = $vendorData;
 
         foreach ($hosts as $hostId) {
             $client = $this->client->getANewClient($hostId);
