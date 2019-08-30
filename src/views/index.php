@@ -674,12 +674,14 @@ function createContainerTree(){
         </li>`;
         $.each(data, function(i, host){
             let disabled = "";
+            let listIsOpen = Object.keys(host.containers).length > 10 ? "" : "open";
+
             if(host.online == false){
                 disabled = "disabled text-warning";
                 i += " (Offline)";
             }
 
-            hosts += `<li class="nav-item nav-dropdown open">
+            hosts += `<li class="nav-item nav-dropdown ${listIsOpen}">
                 <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${i}
                 </a>

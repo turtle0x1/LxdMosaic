@@ -5,6 +5,7 @@ Fixed
 
 Changed
     Some ui tweaks including sidebar width
+    Collapse server by default when there is > 10 containers (#114)
 
 0.4.0
 
