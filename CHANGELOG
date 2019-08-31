@@ -4,8 +4,10 @@ Fixed
     Container snapshot breaks loading deployments
 
 Changed
-    Some ui tweaks including sidebar width
-    Collapse server by default when there is > 10 containers (#114)
+    UI tweaks including
+        - sidebar width
+        - Collapse server by default when there is > 10 containers (#114)
+        - Reload hosts + container tree on alias change
 
 0.4.0
 
