@@ -9,6 +9,7 @@ Changed
         Collapse server by default when there is > 10 containers (#114)
         Reload hosts + container tree on alias change
         Show cpu cores on the dashboard
+    Sort containers in alphabetical order (#115)
 
 Added
     Let user choose shell when opening container console session (#116)
