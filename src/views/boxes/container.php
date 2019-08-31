@@ -293,6 +293,55 @@ function renameContainerConfirm(hostId, container, reloadView)
     });
 }
 
+function snapshotContainerConfirm(hostId, container)
+{
+    $.confirm({
+        title: 'Snapshot Container - ' + container,
+        content: `
+            <div class="form-group">
+                <label> Snapshot Name </label>
+                <input class="form-control validateName" maxlength="63" name="name"/>
+            </div>`,
+        buttons: {
+            cancel: function(){},
+            rename: {
+                text: 'Take Snapshot',
+                btnClass: 'btn-blue',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
+
+                    let snapshotName = this.$content.find('input[name=name]').val();
+
+                    if(snapshotName == ""){
+                        $.alert('provide a snapshot name');
+                        return false;
+                    }
+
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Renaming..'); // let the user know
+                    modal.buttons.rename.disable();
+                    modal.buttons.cancel.disable();
+
+                    let x = {
+                        hostId: hostId,
+                        container: container,
+                        snapshotName: snapshotName
+                    }
+
+                    ajaxRequest(globalUrls.containers.snapShots.take, x, function(data){
+                        let x = makeToastr(data);
+                        if(x.state == "error"){
+                            return false;
+                        }
+                        modal.close();
+                    });
+                    return false;
+                }
+            },
+        }
+    });
+}
+
 function loadContainerView(data)
 {
     $("#containerConsole").hide();

@@ -449,6 +449,15 @@ $(function(){
     $.contextMenu({
             selector: '.view-container',
             items: {
+                "snapshot": {
+                    name: "Snapshot",
+                    icon: "picture",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        snapshotContainerConfirm(item.data("hostId"), item.data("container"));
+                        // $("#modal-container-snapshot").modal("show");
+                    }
+                },
                 "edit": {
                     name: "Rename",
                     icon: "edit",
