@@ -641,7 +641,7 @@ function loadServerOview()
 
 
             $(p).find(".memory").text(`${memoryUsed} / ${memoryTotal}`);
-            $(p).find(".cpuDetails").text(data.cpu.sockets[0][cpuIndentKey]);
+            $(p).find(".cpuDetails").text(`${data.cpu.sockets[0][cpuIndentKey]} - ${data.cpu.total} Cores`);
 
             if(data.extensions.resGpu && data.hasOwnProperty("gpu") && data.gpu.cards.length > 0){
                 let g = "";

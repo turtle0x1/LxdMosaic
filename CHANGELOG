@@ -5,9 +5,10 @@ Fixed
 
 Changed
     UI tweaks including
-        - sidebar width
-        - Collapse server by default when there is > 10 containers (#114)
-        - Reload hosts + container tree on alias change
+        sidebar width
+        Collapse server by default when there is > 10 containers (#114)
+        Reload hosts + container tree on alias change
+        Show cpu cores on the dashboard
 
 0.4.0
 
