@@ -62,7 +62,7 @@ function createExecOptions(host, container) {
     }
 }
 
-const lxdExecBody = JSON.stringify({
+const lxdExecBody = {
     "command": ["bash"],
     "environment": {
         "HOME": "/root",
@@ -71,7 +71,7 @@ const lxdExecBody = JSON.stringify({
     },
     "wait-for-websocket": true,
     "interactive": true,
-})
+}
 
 
 con.connect(function(err) {
@@ -139,7 +139,6 @@ app.get('/hosts/reload/', function(req, res) {
 });
 
 app.post('/hosts/message/', function(req, res) {
-    console.log(req.body.data);
     operationSocket.emit(req.body.type, req.body.data);
     res.send({
         success: "delivered"
@@ -155,6 +154,10 @@ var terminalsIo = io.of("/terminals");
 terminalsIo.on("connect", function(socket) {
 
     let indentifier = socket.handshake.query.pid;
+    let shell = socket.handshake.query.shell;
+    if(typeof shell == "string" && shell !== ""){
+        lxdExecBody.command = [shell];
+    }
 
     if(lxdConsoles[indentifier] == undefined) {
         let host = socket.handshake.query.hostId;
@@ -167,6 +170,8 @@ terminalsIo.on("connect", function(socket) {
             key: execOptions.key,
             rejectUnauthorized: false
         }
+
+
 
         const lxdReq = https.request(execOptions, res => {
             res.on('data', d => {
@@ -198,12 +203,16 @@ terminalsIo.on("connect", function(socket) {
                 lxdConsoles.push(lxdWs);
             });
         });
-        lxdReq.write(lxdExecBody);
+        lxdReq.write(JSON.stringify(lxdExecBody));
         lxdReq.end();
     }
 
     //NOTE When user inputs from browser
     socket.on('data', function(msg) {
+        if(lxdConsoles[indentifier] == undefined){
+            return;
+        }
+
         lxdConsoles[indentifier].send(msg, {
             binary: true
         }, () => {});

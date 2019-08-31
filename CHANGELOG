@@ -10,6 +10,9 @@ Changed
         Reload hosts + container tree on alias change
         Show cpu cores on the dashboard
 
+Added
+    Let user choose shell when opening container console session (#116)
+
 0.4.0
 
 Added

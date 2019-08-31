@@ -394,48 +394,78 @@ $("#containerBox").on("click", "#goToConsole", function() {
 
     if(!$.isNumeric(currentTerminalProcessId)){
         const terminalContainer = document.getElementById('terminal-container');
-
         // Clean terminal
         while (terminalContainer.children.length) {
             terminalContainer.removeChild(terminalContainer.children[0]);
         }
-        term = new Terminal({});
 
-        term.open(terminalContainer);
+        $.confirm({
+            title: 'Container Shell!',
+            content: `
+                <div class="form-group">
+                    <label> Shell </label>
+                    <input class="form-control" value="bash" maxlength="63" name="shell"/>
+                </div>
+                `,
+            buttons: {
+                cancel: function(){},
+                go: {
+                    text: "Go!",
+                    btnClass: "btn-primary",
+                    action: function(){
 
-        // fit is called within a setTimeout, cols and rows need this.
-        setTimeout(() => {
-            $.ajax({
-                type: "POST",
-                url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
-                data: {},
-                success: function(processId) {
-                    currentTerminalProcessId = processId;
-                    consoleSocket = io.connect("/terminals", {
-                        query: $.extend({
-                            pid: processId,
-                        }, currentContainerDetails)
-                    });
-                    consoleSocket.on('data', function(data) {
-                        term.write(data);
-                    });
 
-                    // Browser -> Backend
-                    term.on('data', function(data) {
-                        consoleSocket.emit('data', data);
-                    });
-                    // consoleSocket = new WebSocket(consoleSocketURL);
-                    consoleSocket.onopen = function() {
-                        term.attach(consoleSocket);
-                        term._initialized = true;
-                    };
-                },
-                error: function(){
-                    makeNodeMissingPopup();
-                },
-                dataType: "json"
-            });
-        }, 0);
+                        let shell = this.$content.find("input[name=shell]").val();
+
+                        if(shell == ""){
+                            $.alert("Please input a shell");
+                            return false;
+                        }
+
+                        term = new Terminal({});
+
+                        term.open(terminalContainer);
+
+                        // fit is called within a setTimeout, cols and rows need this.
+                        setTimeout(() => {
+                            $.ajax({
+                                type: "POST",
+                                url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
+                                data: {
+                                    hello: "hello"
+                                },
+                                success: function(processId) {
+                                    currentTerminalProcessId = processId;
+                                    consoleSocket = io.connect("/terminals", {
+                                        query: $.extend({
+                                            pid: processId,
+                                            shell: shell
+                                        }, currentContainerDetails)
+                                    });
+                                    consoleSocket.on('data', function(data) {
+                                        term.write(data);
+                                    });
+
+                                    // Browser -> Backend
+                                    term.on('data', function(data) {
+                                        consoleSocket.emit('data', data);
+                                    });
+                                    // consoleSocket = new WebSocket(consoleSocketURL);
+                                    consoleSocket.onopen = function() {
+                                        term.attach(consoleSocket);
+                                        term._initialized = true;
+                                    };
+                                },
+                                error: function(){
+                                    makeNodeMissingPopup();
+                                },
+                                dataType: "json"
+                            });
+                        }, 0);
+                    }
+                }
+            }
+        });
     }
 
 });
