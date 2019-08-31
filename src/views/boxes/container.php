@@ -209,6 +209,61 @@ function loadContainerTreeAfter(milSeconds = 2000)
     }, milSeconds);
 }
 
+function renameContainerConfirm(hostId, container, reloadView)
+{
+    $.confirm({
+        title: 'Rename Container!',
+        content: `
+            <div class="form-group">
+                <label> New Name </label>
+                <input class="form-control validateName" maxlength="63" name="name"/>
+            </div>`,
+        buttons: {
+            cancel: function(){},
+            rename: {
+                text: 'Rename',
+                btnClass: 'btn-blue',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
+
+                    let newName = this.$content.find('input[name=name]').val();
+
+                    if(newName == ""){
+                        $.alert('provide a new name');
+                        return false;
+                    }
+
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Renaming..'); // let the user know
+                    modal.buttons.rename.disable();
+                    modal.buttons.cancel.disable();
+
+                    let x = {
+                        newContainer: newName,
+                        hostId: hostId,
+                        container: container
+                    }
+
+                    ajaxRequest(globalUrls.containers.rename, x, function(data){
+                        let x = makeToastr(data);
+                        if(x.state == "error"){
+                            return false;
+                        }
+                        modal.close();
+                        createContainerTree();
+                        if(reloadView){
+                            currentContainerDetails.container = newName;
+                            loadContainerView(currentContainerDetails);
+                        }
+
+                    });
+                    return false;
+                }
+            },
+        }
+    });
+}
+
 function loadContainerView(data)
 {
     $("#containerConsole").hide();
@@ -326,52 +381,7 @@ function loadContainerView(data)
 }
 
 $("#containerBox").on("click", ".renameContainer", function(){
-    $.confirm({
-        title: 'Rename Container!',
-        content: `
-            <div class="form-group">
-                <label> New Name </label>
-                <input class="form-control validateName" maxlength="63" name="name"/>
-            </div>`,
-        buttons: {
-            cancel: function(){},
-            rename: {
-                text: 'Rename',
-                btnClass: 'btn-blue',
-                action: function () {
-                    let modal = this;
-                    let btn  = $(this);
-
-                    let newName = this.$content.find('input[name=name]').val();
-
-                    if(newName == ""){
-                        $.alert('provide a new name');
-                        return false;
-                    }
-
-                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Renaming..'); // let the user know
-                    modal.buttons.rename.disable();
-                    modal.buttons.cancel.disable();
-
-                    let x = $.extend({
-                        newContainer: newName
-                    }, currentContainerDetails);
-
-                    ajaxRequest(globalUrls.containers.rename, x, function(data){
-                        let x = makeToastr(data);
-                        if(x.state == "error"){
-                            return false;
-                        }
-                        modal.close();
-                        currentContainerDetails.container = newName;
-                        createContainerTree();
-                        loadContainerView(currentContainerDetails);
-                    });
-                    return false;
-                }
-            },
-        }
-    });
+    renameContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);
 });
 
 $("#containerBox").on("click", ".toggleCard", function(){
