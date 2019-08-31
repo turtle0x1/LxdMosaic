@@ -209,6 +209,35 @@ function loadContainerTreeAfter(milSeconds = 2000)
     }, milSeconds);
 }
 
+function deleteContainerConfirm(hostId, hostAlias, container)
+{
+    $.confirm({
+        title: 'Delete Container ' + hostAlias + '/' + container,
+        content: 'Are you sure you want to delete this container ?!',
+        buttons: {
+            cancel: function () {},
+            delete: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    let x = {
+                        hostId: hostId,
+                        container: container
+                    }
+                    ajaxRequest(globalUrls.containers.delete, x, function(data){
+                        let r = makeToastr(data);
+                        if(r.state == "success"){
+                            loadContainerTreeAfter();
+                        }
+                        currentContainerDetails = null;
+                        $("#overviewBox").show();
+                        $("#containerBox").hide();
+                    });
+                }
+            }
+        }
+    });
+}
+
 function renameContainerConfirm(hostId, container, reloadView)
 {
     $.confirm({
@@ -563,27 +592,7 @@ $("#containerBox").on("click", ".editContainerSettings", function(){
 });
 
 $("#containerBox").on("click", ".deleteContainer", function(){
-    $.confirm({
-        title: 'Delete Container ' + currentContainerDetails.alias + '/' + currentContainerDetails.container,
-        content: 'Are you sure you want to delete this container ?!',
-        buttons: {
-            cancel: function () {},
-            delete: {
-                btnClass: 'btn-danger',
-                action: function () {
-                    ajaxRequest(globalUrls.containers.delete, currentContainerDetails, function(data){
-                        let r = makeToastr(data);
-                        if(r.state == "success"){
-                            loadContainerTreeAfter();
-                        }
-                        currentContainerDetails = null;
-                        $("#overviewBox").show();
-                        $("#containerBox").hide();
-                    });
-                }
-            }
-        }
-    });
+    deleteContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.alias, currentContainerDetails.container);
 });
 
 $("#containerBox").on("change", "#container-changeState", function(){

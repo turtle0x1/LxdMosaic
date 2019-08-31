@@ -457,6 +457,14 @@ $(function(){
                         renameContainerConfirm(item.data("hostId"), item.data("container"));
                     }
                 },
+                "delete": {
+                    name: "Delete",
+                    icon: "delete",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        deleteContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"));
+                    }
+                },
             }
         });
 });
