@@ -13,6 +13,7 @@ Changed
 
 Added
     Let user choose shell when opening container console session (#116)
+    Right click context menu for containers (#118)
 
 0.4.0
 

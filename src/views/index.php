@@ -451,14 +451,14 @@ $(function(){
             items: {
                 "snapshot": {
                     name: "Snapshot",
-                    icon: "camera",
+                    icon: "fas fa-camera",
                     callback: function(key, opt, e){
                         let item = opt["$trigger"];
                         snapshotContainerConfirm(item.data("hostId"), item.data("container"));
                     }
                 },
                 "copy": {
-                    name: "copy",
+                    name: "Copy",
                     icon: "copy",
                     callback: function(key, opt, e){
                         let item = opt["$trigger"];
