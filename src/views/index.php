@@ -451,11 +451,18 @@ $(function(){
             items: {
                 "snapshot": {
                     name: "Snapshot",
-                    icon: "picture",
+                    icon: "camera",
                     callback: function(key, opt, e){
                         let item = opt["$trigger"];
                         snapshotContainerConfirm(item.data("hostId"), item.data("container"));
-                        // $("#modal-container-snapshot").modal("show");
+                    }
+                },
+                "copy": {
+                    name: "copy",
+                    icon: "copy",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        copyContainerConfirm(item.data("hostId"), item.data("container"));
                     }
                 },
                 "edit": {
