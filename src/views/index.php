@@ -67,6 +67,10 @@ if ($haveServers->haveAny() !== true) {
 
       <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
 
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+
       <script src="/assets/lxdMosaic/globalFunctions.js"></script>
       <script>
           var currentContainerDetails = null;
@@ -442,6 +446,43 @@ $(function(){
     $('[data-toggle="tooltip"]').tooltip({html: true})
     createContainerTree();
     loadServerOview();
+    $.contextMenu({
+            selector: '.view-container',
+            items: {
+                "snapshot": {
+                    name: "Snapshot",
+                    icon: "fas fa-camera",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        snapshotContainerConfirm(item.data("hostId"), item.data("container"));
+                    }
+                },
+                "copy": {
+                    name: "Copy",
+                    icon: "copy",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        copyContainerConfirm(item.data("hostId"), item.data("container"));
+                    }
+                },
+                "edit": {
+                    name: "Rename",
+                    icon: "edit",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        renameContainerConfirm(item.data("hostId"), item.data("container"));
+                    }
+                },
+                "delete": {
+                    name: "Delete",
+                    icon: "delete",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        deleteContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"));
+                    }
+                },
+            }
+        });
 });
 
 var unknownServerDetails = {
