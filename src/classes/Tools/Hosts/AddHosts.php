@@ -72,7 +72,9 @@ class AddHosts
             $parts["port"] = 8443;
         }
 
-        return $parts["scheme"] . $parts["path"] . ":" . $parts["port"];
+        $path = isset($parts["path"]) ? $parts["path"] : $parts["host"];
+
+        return $parts["scheme"] . $path . ":" . $parts["port"];
     }
 
     private function validateDetails($host)

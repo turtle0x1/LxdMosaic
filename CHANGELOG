@@ -2,6 +2,7 @@ Unreleased
 
 Fixed
     Container snapshot breaks loading deployments
+    Providing a port breaks adding host (#113)
 
 Changed
     UI tweaks including
