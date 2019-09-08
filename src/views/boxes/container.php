@@ -424,7 +424,7 @@ function loadContainerView(data)
             return false;
         }
 
-        addBreadcrumbs([data.alias, "container", data.container ], ["", "", "active"]);
+        addBreadcrumbs([data.alias, data.container ], ["", "active"]);
 
         let disableActions = x.state.status_code !== 102;
 
