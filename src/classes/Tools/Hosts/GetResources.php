@@ -60,7 +60,7 @@ class GetResources
         return $output;
     }
 
-    private function getDetails(Client $client)
+    public function getDetails(Client $client)
     {
         $details = $client->resources->info();
 

@@ -3,7 +3,7 @@
     "require": {
         "php-http/guzzle6-adapter": "^1.1",
         "php-di/php-di": "^5.4",
-        "dhope0000/lxd": "^0.12.3",
+        "dhope0000/lxd": "^0.13.0",
         "vlucas/phpdotenv": "^2.5",
         "symfony/http-foundation": "^4.2"
     },
