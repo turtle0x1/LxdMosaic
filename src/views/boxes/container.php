@@ -415,7 +415,7 @@ function loadContainerView(data)
         consoleSocket.emit("close", currentTerminalProcessId);
         currentTerminalProcessId = null;
     }
-
+    
     ajaxRequest(globalUrls.containers.getDetails, data, function(result){
         let x = $.parseJSON(result);
 
@@ -424,7 +424,9 @@ function loadContainerView(data)
             return false;
         }
 
-        addBreadcrumbs([data.alias, data.container ], ["", "active"]);
+        $("#sidebar-ul").find(".text-info").removeClass("text-info");
+
+        addBreadcrumbs([data.alias, data.container ], ["viewHost lookupId", "active"]);
 
         let disableActions = x.state.status_code !== 102;
 

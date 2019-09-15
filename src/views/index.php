@@ -705,7 +705,7 @@ function createContainerTree(){
                 i += " (Offline)";
             }
 
-            hosts += `<li class="nav-item nav-dropdown ${listIsOpen}">
+            hosts += `<li data-hostId="${host.hostId}" class="nav-item nav-dropdown ${listIsOpen}">
                 <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${i}
                 </a>
@@ -739,7 +739,13 @@ function createContainerTree(){
 }
 
 $(document).on("click", ".viewHost", function(){
-    let hostId = $(this).data("id");
+    let hostId = null;
+    if($(this).hasClass("lookupId")){
+        hostId = currentContainerDetails.hostId;
+    }else{
+        hostId = $(this).data("id");
+    }
+
     loadServerView(hostId);
 });
 

@@ -192,7 +192,6 @@ var scalesBytesCallbacks = {
 var toolTipsBytesCallbacks = {
     callbacks: {
         label: function(value, data) {
-            console.log(value);
             return formatBytes(value.value);
         }
     }

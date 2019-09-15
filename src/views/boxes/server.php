@@ -1,19 +1,6 @@
 <div id="serverBox" class="boxSlide">
     <div id="serverOverview" class="row">
         <div class="col-md-9">
-            <div class="row">
-                <div class="col-md-12">
-                  <div class="card bg-info">
-                      <div class="card-body">
-                          <h5>
-                            <a class="text-white">
-                              Server
-                            </a>
-                          </h5>
-                      </div>
-                  </div>
-                 </div>
-          </div>
           <div class="row">
               <div class="col-md-6">
                   <div class="card bg-dark">
@@ -21,7 +8,10 @@
                           Container Stats
                       </div>
                       <div class="card-body">
-                          <canvas id="containerStatsChart" style="width: 100%;">
+                          <canvas id="containerStatsChart" style="width: 100%;"></canvas>
+                          <div class="alert alert-info" id="noContainersWarning">
+                              There are no containers on the host
+                          </div>
                       </div>
                   </div>
               </div>
@@ -39,11 +29,11 @@
           <div class="row">
               <div class="col-md-12">
               <div class="card">
-                  <div class="card-header">
+                  <div class="card-header bg-dark">
                       <h4> Containers </h4>
                   </div>
-                  <div class="card-body">
-                      <table id="containerTable" class="table">
+                  <div class="card-body bg-dark">
+                      <table id="containerTable" class="table table-dark table-bordered">
                           <thead>
                               <tr>
                                   <td> Name </td>
@@ -71,7 +61,7 @@
                 <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
                   <div class="card-block bg-dark">
                       <button class="btn btn-block btn-danger" id="deleteHost">
-                          Delete
+                          Delete Host
                       </button>
                   </div>
                 </div>
@@ -84,60 +74,80 @@
 
 <script>
 
-var currentServer = {};
+var currentServer = {
+    hostId: null
+};
 
 function loadServerView(hostId)
 {
     $(".boxSlide, #serverDetails").hide();
     $("#serverOverview, #serverBox").show();
-    addBreadcrumbs(["Test Server"], ["active"]);
+
+    $("#sidebar-ul").find(".active").removeClass("active");
+    $("#sidebar-ul").find(`[data-hostId='${hostId}'] > a:eq(0)`).addClass("text-info");
+
+    currentServer.hostId = hostId;
+
     ajaxRequest(globalUrls.hosts.getHostOverview, {hostId: hostId}, (data)=>{
         data = $.parseJSON(data);
 
-        let containerHtml = "";
-        $.each(data.containers, function(state, containers){
-            containerHtml += `<tr>
-                <td class="text-center bg-info" colspan="999">
-                    <i class="${statusCodeIconMap[containers[Object.keys(containers)[0]].state.status_code]}"></i>
-                    ${state}
-                </td>
-            </tr>`;
-            $.each(containers, function(name, details){
-                let storageUsage = details.state.disk == null ? "N/A" : formatBytes(details.state.disk.root.usage);
+        let ident = data.header.alias == null ? data.header.urlAndPort : data.header.alias;
 
+        addBreadcrumbs([ident], ["active"]);
+
+        let containerHtml = "";
+
+        if(Object.keys(data.containers)){
+            $.each(data.containers, function(state, containers){
                 containerHtml += `<tr>
-                    <td>${name}</td>
-                    <td>${storageUsage}</td>
-                    <td>${formatBytes(details.state.memory.usage)}</td>
-                </tr>`
+                    <td class="text-center bg-info" colspan="999">
+                        <i class="${statusCodeIconMap[containers[Object.keys(containers)[0]].state.status_code]}"></i>
+                        ${state}
+                    </td>
+                </tr>`;
+                $.each(containers, function(name, details){
+                    let storageUsage = details.state.disk == null ? "N/A" : formatBytes(details.state.disk.root.usage);
+
+                    containerHtml += `<tr>
+                        <td>${name}</td>
+                        <td>${storageUsage}</td>
+                        <td>${formatBytes(details.state.memory.usage)}</td>
+                    </tr>`
+                });
             });
-        });
+
+            new Chart($("#containerStatsChart"), {
+                type: 'pie',
+                  data: {
+                    labels: ['Online', 'Offline'],
+                    datasets: [{
+                      label: '# of containers',
+                      data: [data.containerStats.online, data.containerStats.offline],
+                      backgroundColor: [
+                        'rgba(46, 204, 113, 1)',
+                        'rgba(189, 195, 199, 1)'
+                      ],
+                      borderColor: [
+                          'rgba(46, 204, 113, 1)',
+                          'rgba(189, 195, 199, 1)'
+                      ],
+                      borderWidth: 1
+                    }]
+                  },
+                  options: {
+                   	cutoutPercentage: 40,
+                    responsive: false,
+                  }
+            });
+            $("#noContainersWarning").hide();
+            $("#containerStatsChart").show();
+        }else{
+            $("#containerStatsChart").hide();
+            $("#noContainersWarning").show();
+            containerHtml = `<tr><td class="alert alert-info text-center" colspan="999">No Containers</td></tr>`
+        }
 
         $("#containerTable > tbody").empty().append(containerHtml);
-
-        new Chart($("#containerStatsChart"), {
-            type: 'pie',
-              data: {
-                labels: ['Online', 'Offline'],
-                datasets: [{
-                  label: '# of containers',
-                  data: [data.containerStats.online, data.containerStats.offline],
-                  backgroundColor: [
-                    'rgba(46, 204, 113, 1)',
-                    'rgba(189, 195, 199, 1)'
-                  ],
-                  borderColor: [
-                      'rgba(46, 204, 113, 1)',
-                      'rgba(189, 195, 199, 1)'
-                  ],
-                  borderWidth: 1
-                }]
-              },
-              options: {
-               	cutoutPercentage: 40,
-                responsive: false,
-              }
-        });
 
         new Chart($("#memoryStatsChart"), {
             type: 'pie',
@@ -180,7 +190,7 @@ $(document).on("click", "#deleteHost", function(){
                     this.buttons.yes.disable();
                     this.buttons.cancel.disable();
                     var modal = this;
-                    ajaxRequest(globalUrls.hosts.delete, {hostId: hostId}, (data)=>{
+                    ajaxRequest(globalUrls.hosts.delete, {hostId: currentServer.hostId}, (data)=>{
                         data = makeToastr(data);
                         if(data.state == "error"){
                             return false;
