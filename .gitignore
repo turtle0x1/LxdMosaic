@@ -6,3 +6,4 @@ build/**
 node_modules/**
 certs/**
 site/**
+test.php
