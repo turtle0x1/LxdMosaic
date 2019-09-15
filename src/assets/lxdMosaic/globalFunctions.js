@@ -178,3 +178,21 @@ function makeServerChangePopup(status, host)
 function getSum(total, num) {
     return parseInt(total) + parseInt(num);
 }
+
+var scalesBytesCallbacks = {
+  yAxes: [{
+    ticks: {
+      callback: function(value, index, values) {
+          return formatBytes(value);
+      }
+    }
+  }]
+};
+
+var toolTipsBytesCallbacks = {
+    callbacks: {
+        label: function(value, data) {
+            return formatBytes(value.value);
+        }
+    }
+};

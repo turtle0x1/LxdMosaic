@@ -23,8 +23,7 @@ class GetResources
 
     public function getHostExtended(int $hostId)
     {
-        $client = $this->client->getANewClient($hostId);
-        return $this->getDetails($client);
+        return $this->getDetails($hostId);
     }
 
     public function getAllHostRecourses()
@@ -47,8 +46,8 @@ class GetResources
                 continue;
             }
 
-            $client = $this->client->getANewClient($hostId);
-            $details = $this->getDetails($client);
+
+            $details = $this->getDetails($hostId);
 
             $details["alias"] = $alias;
             $details["currentProject"] = $currentProject;
@@ -60,8 +59,9 @@ class GetResources
         return $output;
     }
 
-    private function getDetails(Client $client)
+    private function getDetails(int $hostId)
     {
+        $client = $this->client->getANewClient($hostId);
         $details = $client->resources->info();
 
         $supportsProjects = $this->hasExtension->checkWithClient($client, "projects");
