@@ -157,7 +157,8 @@ if ($haveServers->haveAny() !== true) {
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
-                  delete: "/api/Hosts/DeleteHostController/delete"
+                  delete: "/api/Hosts/DeleteHostController/delete",
+                  getHostOverview: "/api/Hosts/GetHostOverviewController/get"
               },
               images: {
                   search: {
@@ -336,6 +337,7 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/deployments.php";
                     require __DIR__ . "/boxes/storage.php";
                     require __DIR__ . "/boxes/networks.php";
+                    require __DIR__ . "/boxes/server.php";
                 ?>
             </div>
             <div class="col-md-2">
@@ -553,25 +555,6 @@ function loadServerOview()
             }
         });
 
-        let toolTipsBytesCallbacks = {
-            callbacks: {
-                label: function(value, data) {
-                    return formatBytes(value.value);
-                }
-            }
-        };
-
-
-        let scalesBytesCallbacks = {
-          yAxes: [{
-            ticks: {
-              callback: function(value, index, values) {
-                  return formatBytes(value);
-              }
-            }
-          }]
-        };
-
         new Chart(mCtx, {
             type: 'line',
             data: {
@@ -642,13 +625,13 @@ function loadServerOview()
 
             let p = emptyServerBox();
             let indent = data.alias == "" ? host : data.alias + ` (${host})`;
-            $(p).find(".host").text(indent);
+
+            $(p).find(".host").text(indent).data("id", data.hostId)
             $(p).attr("id", data.hostId);
 
             if(data.online == false){
                 $(p).find(".host").text(indent + " (Offline)");
                 $(p).find(".bg-info").removeClass("bg-info").addClass("bg-danger");
-                $(p).find(".deleteHost").removeClass("btn-danger").addClass("btn-info")
                 $("#serverOverviewDetails").append(p);
                 $(p).find(".brand-card-body").remove();
                 return;
@@ -754,6 +737,11 @@ function createContainerTree(){
         $("#sidebar-ul").empty().append(hosts);
     });
 }
+
+$(document).on("click", ".viewHost", function(){
+    let hostId = $(this).data("id");
+    loadServerView(hostId);
+});
 
 $("#sidebar-ul").on("click", ".view-container", function(){
     setContDetsByTreeItem($(this));

@@ -11,6 +11,11 @@ li.breadcrumb-item:nth-child(1) {
     border: none;
 }
 
+.viewHost {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 #cloudConfig-editorCollapse {
     height: 550px;
 }
