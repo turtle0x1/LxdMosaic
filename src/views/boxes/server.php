@@ -96,8 +96,8 @@ function loadServerView(hostId)
         addBreadcrumbs([ident], ["active"]);
 
         let containerHtml = "";
-
-        if(Object.keys(data.containers)){
+        
+        if(Object.keys(data.containers).length > 0){
             $.each(data.containers, function(state, containers){
                 containerHtml += `<tr>
                     <td class="text-center bg-info" colspan="999">
