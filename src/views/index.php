@@ -154,6 +154,7 @@ if ($haveServers->haveAny() !== true) {
                   },
                   containers: {
                       getAll: "/api/Hosts/Containers/GetAllController/getAll",
+                      delete: "/api/Hosts/Containers/DeleteContainersController/delete"
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",

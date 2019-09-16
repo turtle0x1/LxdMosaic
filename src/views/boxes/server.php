@@ -30,12 +30,19 @@
               <div class="col-md-12">
               <div class="card">
                   <div class="card-header bg-dark">
-                      <h4> Containers </h4>
+                      <h4> Containers
+                          <select id="serverContainerActions" class="form-control-sm float-right">
+                              <option value="" selected></option>
+                              <option value="delete">Delete</option>
+                          </select>
+                      </h4>
+
                   </div>
                   <div class="card-body bg-dark">
                       <table id="containerTable" class="table table-dark table-bordered">
                           <thead>
                               <tr>
+                                  <td> <input type="checkbox" id="toggleAllContainers"> </td>
                                   <td> Name </td>
                                   <td> Disk Usage </td>
                                   <td> Memory Ussage </td>
@@ -60,6 +67,9 @@
                 </div>
                 <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
                   <div class="card-block bg-dark">
+                      <button class="btn btn-block btn-info" id="editHost">
+                          Change Alias
+                      </button>
                       <button class="btn btn-block btn-danger" id="deleteHost">
                           Delete Host
                       </button>
@@ -78,6 +88,66 @@ var currentServer = {
     hostId: null
 };
 
+$(document).on("change", ".toggleStatusContainer", function(){
+    let checked = $(this).is(":checked");
+    let tr = $(this).parents("tr");
+
+    $("#containerTable").find(`tr:gt(${tr.index() + 1})`).each(function(){
+        if($(this).hasClass("statusRow")){
+            return false;
+        }
+        $(this).find("input[name=containerCheckbox]").prop("checked", checked);
+    });
+});
+
+$(document).on("change", "#toggleAllContainers", function(){
+    let checked = $(this).is(":checked");
+    $("#containerTable").find("input[name=containerCheckbox]").each(function(){
+        $(this).prop("checked", checked);
+    });
+});
+
+$(document).on("change", "#serverContainerActions", function(){
+    let action = $(this).val();
+    if(action== ""){
+        return false;
+    }
+
+    let checkboxes = $("#containerTable").find("input[name=containerCheckbox]");
+
+    let selectedContainers = checkboxes.filter(":checked").map(function () {
+        return $(this).parents("tr").data("name");
+    }).get();
+
+
+    if(selectedContainers.length == 0){
+        $.alert("Please select atleast one container");
+        return false;
+    }
+
+    let details = {
+        hostId: currentServer.hostId,
+        containers: selectedContainers
+    };
+
+    let url = "";
+
+    if(action == "delete"){
+        url = globalUrls.hosts.containers.delete
+    }
+
+    ajaxRequest(url, details, (data)=>{
+        data = makeToastr(data);
+        loadServerView(details.hostId);
+        $("#serverContainerActions").find("option[value='']").prop("selected", true);
+    });
+});
+
+$(document).on("click", "#editHost", function(){
+    editHostDetailsObj.hostId = currentServer.hostId
+    $("#modal-hosts-edit").modal("show");
+});
+
 function loadServerView(hostId)
 {
     $(".boxSlide, #serverDetails").hide();
@@ -95,20 +165,24 @@ function loadServerView(hostId)
 
         addBreadcrumbs([ident], ["active"]);
 
+        $("#serverContainerActions").find("option[value='']").prop("selected", true);
+
         let containerHtml = "";
-        
+
         if(Object.keys(data.containers).length > 0){
             $.each(data.containers, function(state, containers){
-                containerHtml += `<tr>
+                containerHtml += `<tr class="statusRow">
                     <td class="text-center bg-info" colspan="999">
                         <i class="${statusCodeIconMap[containers[Object.keys(containers)[0]].state.status_code]}"></i>
                         ${state}
+                        <input class="toggleStatusContainer" type="checkbox"/>
                     </td>
                 </tr>`;
                 $.each(containers, function(name, details){
                     let storageUsage = details.state.disk == null ? "N/A" : formatBytes(details.state.disk.root.usage);
 
-                    containerHtml += `<tr>
+                    containerHtml += `<tr data-name="${name}">
+                        <td><input name="containerCheckbox" type="checkbox"/></td>
                         <td>${name}</td>
                         <td>${storageUsage}</td>
                         <td>${formatBytes(details.state.memory.usage)}</td>
