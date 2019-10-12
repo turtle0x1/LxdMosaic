@@ -71,12 +71,6 @@ var emptyServerBox = function(){
                 <select class="form-control projects changeHostProject"></select>
             </div>
         </div>
-        <div>
-            <div class="text-value text-white">Alias<i class="fas fa-passport"></i></div>
-                <button class="btn btn-xs-sm btn-primary editHost pull-right"><i class="fas fa-pencil-alt"></i></button>
-            </div>
-        </div>
-
       </div>
     </div>`);
 }
@@ -85,10 +79,6 @@ $(document).on("click", "#createContainer", function(){
     $("#modal-container-create").modal("show");
 });
 
-$(document).on("click", ".editHost", function(){
-    editHostDetailsObj.hostId = $(this).parents(".brand-card").attr("id");
-    $("#modal-hosts-edit").modal("show");
-});
 </script>
 
 <?php
