@@ -2,9 +2,21 @@ Unreleased
 
 Fixed
     Container snapshot breaks loading deployments
+    Providing a port breaks adding host (#113)
 
 Changed
-    Some ui tweaks including sidebar width
+    UI tweaks including
+        sidebar width
+        Collapse server by default when there is > 10 containers (#114)
+        Reload hosts + container tree on alias change
+        Show cpu cores on the dashboard
+    Sort containers in alphabetical order (#115)
+
+Added
+    Let user choose shell when opening container console session (#116)
+    Right click context menu for containers (#118)
+    A server overview page (#121)
+    Bulk delete containers (ground works there for more actions) on server
 
 0.4.0
 

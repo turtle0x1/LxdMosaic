@@ -50,10 +50,7 @@ var emptyServerBox = function(){
     return $(`
     <div class="brand-card" id="">
       <div class="brand-card-header bg-info">
-            <h4 class="host"></h4>
-            <button class="btn btn-sm btn-danger deleteHost pull-right">
-                <span class="fas fa-trash"></span>
-            </button>
+            <h4 class="host viewHost"></h4>
       </div>
       <div class="brand-card-body bg-dark text-white">
         <div>
@@ -74,12 +71,6 @@ var emptyServerBox = function(){
                 <select class="form-control projects changeHostProject"></select>
             </div>
         </div>
-        <div>
-            <div class="text-value text-white">Alias<i class="fas fa-passport"></i></div>
-                <button class="btn btn-xs-sm btn-primary editHost pull-right"><i class="fas fa-pencil-alt"></i></button>
-            </div>
-        </div>
-
       </div>
     </div>`);
 }
@@ -88,38 +79,6 @@ $(document).on("click", "#createContainer", function(){
     $("#modal-container-create").modal("show");
 });
 
-$(document).on("click", ".editHost", function(){
-    editHostDetailsObj.hostId = $(this).parents(".brand-card").attr("id");
-    $("#modal-hosts-edit").modal("show");
-});
-
-$(document).on("click", ".deleteHost", function(){
-    let hostId = $(this).parents(".brand-card").attr("id");
-    $.confirm({
-        title: 'Delete Host',
-        content: 'Are you sure you want to remove this host!',
-        buttons: {
-            cancel: function () {},
-            yes: {
-                btnClass: 'btn-danger',
-                action: function () {
-                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin"></i>Deleting..'); // let the user know
-                    this.buttons.yes.disable();
-                    this.buttons.cancel.disable();
-                    var modal = this;
-                    ajaxRequest(globalUrls.hosts.delete, {hostId: hostId}, (data)=>{
-                        data = makeToastr(data);
-                        if(data.state == "error"){
-                            return false;
-                        }
-                        location.reload();
-                    });
-                    return false;
-                }
-            }
-        }
-    });
-});
 </script>
 
 <?php

@@ -33,7 +33,11 @@ class LxdClient
         $certPath = $this->createFullcertPath($hostDetails["Host_Cert_Path"]);
         $config = $this->createConfigArray($certPath);
         $client = $this->createNewClient($hostDetails["Host_Url_And_Port"], $config);
-        $client->setProject($this->session->get("host/$hostId/project", "default"));
+        
+        if ($setProject) {
+            $client->setProject($this->session->get("host/$hostId/project", "default"));
+        }
+
         return $client;
     }
 
@@ -58,7 +62,7 @@ class LxdClient
             ]
         ];
 
-        if(file_exists("/etc/centos-release")){
+        if (file_exists("/etc/centos-release")) {
             $config["headers"] = [
                 'Connection' => 'close'
             ];

@@ -16,7 +16,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="edit">Add</button>
+        <button type="button" class="btn btn-primary" id="edit">Save</button>
       </div>
     </div>
   </div>
@@ -50,7 +50,9 @@ $("#modal-hosts-edit").on("click", "#edit", function(){
         if(data.state == "error"){
             return false;
         }
-
+        aInput.val("");
+        createContainerTree();
+        loadServerOview();
         $("#modal-hosts-edit").modal("hide");
     });
 });

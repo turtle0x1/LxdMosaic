@@ -27,18 +27,27 @@ class GetHostsContainers
                 continue;
             }
 
-            $client = $this->client->getANewClient($host["Host_ID"]);
-            $containers = $client->containers->all();
+            $containers = $this->getContainers($host["Host_ID"]);
+
             $details[$indent] = [
                 "online"=>true,
                 "hostId"=>$host["Host_ID"],
-                "containers"=>$this->getContainersState($client, $containers)
+                "containers"=>$containers
             ];
         }
         return $details;
     }
 
-    public function getContainersState($client, $containers)
+    public function getContainers(int $hostId)
+    {
+        $client = $this->client->getANewClient($hostId);
+        $containers = $client->containers->all();
+        $containers = $this->addContainersState($client, $containers);
+        ksort($containers, SORT_STRING | SORT_FLAG_CASE);
+        return $containers;
+    }
+
+    private function addContainersState($client, $containers)
     {
         $details = array();
         foreach ($containers as $container) {

@@ -67,6 +67,10 @@ if ($haveServers->haveAny() !== true) {
 
       <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
 
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+
       <script src="/assets/lxdMosaic/globalFunctions.js"></script>
       <script>
           var currentContainerDetails = null;
@@ -150,10 +154,12 @@ if ($haveServers->haveAny() !== true) {
                   },
                   containers: {
                       getAll: "/api/Hosts/Containers/GetAllController/getAll",
+                      delete: "/api/Hosts/Containers/DeleteContainersController/delete"
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
-                  delete: "/api/Hosts/DeleteHostController/delete"
+                  delete: "/api/Hosts/DeleteHostController/delete",
+                  getHostOverview: "/api/Hosts/GetHostOverviewController/get"
               },
               images: {
                   search: {
@@ -332,6 +338,7 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/deployments.php";
                     require __DIR__ . "/boxes/storage.php";
                     require __DIR__ . "/boxes/networks.php";
+                    require __DIR__ . "/boxes/server.php";
                 ?>
             </div>
             <div class="col-md-2">
@@ -446,6 +453,43 @@ $(function(){
     $('[data-toggle="tooltip"]').tooltip({html: true})
     createContainerTree();
     loadServerOview();
+    $.contextMenu({
+            selector: '.view-container',
+            items: {
+                "snapshot": {
+                    name: "Snapshot",
+                    icon: "fas fa-camera",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        snapshotContainerConfirm(item.data("hostId"), item.data("container"));
+                    }
+                },
+                "copy": {
+                    name: "Copy",
+                    icon: "copy",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        copyContainerConfirm(item.data("hostId"), item.data("container"));
+                    }
+                },
+                "edit": {
+                    name: "Rename",
+                    icon: "edit",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        renameContainerConfirm(item.data("hostId"), item.data("container"));
+                    }
+                },
+                "delete": {
+                    name: "Delete",
+                    icon: "delete",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        deleteContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"));
+                    }
+                },
+            }
+        });
 });
 
 var unknownServerDetails = {
@@ -515,25 +559,6 @@ function loadServerOview()
                 }
             }
         });
-
-        let toolTipsBytesCallbacks = {
-            callbacks: {
-                label: function(value, data) {
-                    return formatBytes(value.value);
-                }
-            }
-        };
-
-
-        let scalesBytesCallbacks = {
-          yAxes: [{
-            ticks: {
-              callback: function(value, index, values) {
-                  return formatBytes(value);
-              }
-            }
-          }]
-        };
 
         new Chart(mCtx, {
             type: 'line',
@@ -605,13 +630,13 @@ function loadServerOview()
 
             let p = emptyServerBox();
             let indent = data.alias == "" ? host : data.alias + ` (${host})`;
-            $(p).find(".host").text(indent);
+
+            $(p).find(".host").text(indent).data("id", data.hostId)
             $(p).attr("id", data.hostId);
 
             if(data.online == false){
                 $(p).find(".host").text(indent + " (Offline)");
                 $(p).find(".bg-info").removeClass("bg-info").addClass("bg-danger");
-                $(p).find(".deleteHost").removeClass("btn-danger").addClass("btn-info")
                 $("#serverOverviewDetails").append(p);
                 $(p).find(".brand-card-body").remove();
                 return;
@@ -645,7 +670,7 @@ function loadServerOview()
 
 
             $(p).find(".memory").text(`${memoryUsed} / ${memoryTotal}`);
-            $(p).find(".cpuDetails").text(data.cpu.sockets[0][cpuIndentKey]);
+            $(p).find(".cpuDetails").text(`${data.cpu.sockets[0][cpuIndentKey]} - ${data.cpu.total} Cores`);
 
             if(data.extensions.resGpu && data.hasOwnProperty("gpu") && data.gpu.cards.length > 0){
                 let g = "";
@@ -678,12 +703,14 @@ function createContainerTree(){
         </li>`;
         $.each(data, function(i, host){
             let disabled = "";
+            let listIsOpen = Object.keys(host.containers).length > 10 ? "" : "open";
+
             if(host.online == false){
                 disabled = "disabled text-warning";
                 i += " (Offline)";
             }
 
-            hosts += `<li class="nav-item nav-dropdown open">
+            hosts += `<li data-hostId="${host.hostId}" class="nav-item nav-dropdown ${listIsOpen}">
                 <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${i}
                 </a>
@@ -715,6 +742,17 @@ function createContainerTree(){
         $("#sidebar-ul").empty().append(hosts);
     });
 }
+
+$(document).on("click", ".viewHost", function(){
+    let hostId = null;
+    if($(this).hasClass("lookupId")){
+        hostId = currentContainerDetails.hostId;
+    }else{
+        hostId = $(this).data("id");
+    }
+
+    loadServerView(hostId);
+});
 
 $("#sidebar-ul").on("click", ".view-container", function(){
     setContDetsByTreeItem($(this));

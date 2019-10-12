@@ -209,6 +209,203 @@ function loadContainerTreeAfter(milSeconds = 2000)
     }, milSeconds);
 }
 
+function deleteContainerConfirm(hostId, hostAlias, container)
+{
+    $.confirm({
+        title: 'Delete Container ' + hostAlias + '/' + container,
+        content: 'Are you sure you want to delete this container ?!',
+        buttons: {
+            cancel: function () {},
+            delete: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    let x = {
+                        hostId: hostId,
+                        container: container
+                    }
+                    ajaxRequest(globalUrls.containers.delete, x, function(data){
+                        let r = makeToastr(data);
+                        if(r.state == "success"){
+                            loadContainerTreeAfter();
+                        }
+                        currentContainerDetails = null;
+                        $("#overviewBox").show();
+                        $("#containerBox").hide();
+                    });
+                }
+            }
+        }
+    });
+}
+
+function renameContainerConfirm(hostId, container, reloadView)
+{
+    $.confirm({
+        title: 'Rename Container!',
+        content: `
+            <div class="form-group">
+                <label> New Name </label>
+                <input class="form-control validateName" maxlength="63" name="name"/>
+            </div>`,
+        buttons: {
+            cancel: function(){},
+            rename: {
+                text: 'Rename',
+                btnClass: 'btn-blue',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
+
+                    let newName = this.$content.find('input[name=name]').val();
+
+                    if(newName == ""){
+                        $.alert('provide a new name');
+                        return false;
+                    }
+
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Renaming..'); // let the user know
+                    modal.buttons.rename.disable();
+                    modal.buttons.cancel.disable();
+
+                    let x = {
+                        newContainer: newName,
+                        hostId: hostId,
+                        container: container
+                    }
+
+                    ajaxRequest(globalUrls.containers.rename, x, function(data){
+                        let x = makeToastr(data);
+                        if(x.state == "error"){
+                            return false;
+                        }
+                        modal.close();
+                        createContainerTree();
+                        if(reloadView){
+                            currentContainerDetails.container = newName;
+                            loadContainerView(currentContainerDetails);
+                        }
+
+                    });
+                    return false;
+                }
+            },
+        }
+    });
+}
+
+function snapshotContainerConfirm(hostId, container)
+{
+    $.confirm({
+        title: 'Snapshot Container - ' + container,
+        content: `
+            <div class="form-group">
+                <label> Snapshot Name </label>
+                <input class="form-control validateName" maxlength="63" name="name"/>
+            </div>`,
+        buttons: {
+            cancel: function(){},
+            rename: {
+                text: 'Take Snapshot',
+                btnClass: 'btn-blue',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
+
+                    let snapshotName = this.$content.find('input[name=name]').val();
+
+                    if(snapshotName == ""){
+                        $.alert('provide a snapshot name');
+                        return false;
+                    }
+
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Renaming..'); // let the user know
+                    modal.buttons.rename.disable();
+                    modal.buttons.cancel.disable();
+
+                    let x = {
+                        hostId: hostId,
+                        container: container,
+                        snapshotName: snapshotName
+                    }
+
+                    ajaxRequest(globalUrls.containers.snapShots.take, x, function(data){
+                        let x = makeToastr(data);
+                        if(x.state == "error"){
+                            return false;
+                        }
+                        modal.close();
+                    });
+                    return false;
+                }
+            },
+        }
+    });
+}
+
+function copyContainerConfirm(hostId, container) {
+    $.confirm({
+        title: 'Copy Container!',
+        content: `
+            <div class="form-group">
+                <label> New Host </label>
+                <input class="form-control" maxlength="63" name="newHost"/>
+            </div>
+            <div class="form-group">
+                <label> Name </label>
+                <input class="form-control validateName" maxlength="63" name="name"/>
+            </div>`,
+        buttons: {
+            cancel: function(){},
+            copy: {
+                text: 'Copy',
+                btnClass: 'btn-blue',
+                action: function () {
+                    let modal = this;
+                    let d = this.$content.find("input[name=newHost]").tokenInput("get");
+                    let btn  = $(this);
+
+                    modal.buttons.copy.setText('<i class="fa fa-cog fa-spin"></i>Copying..'); // let the user know
+                    modal.buttons.copy.disable();
+                    modal.buttons.cancel.disable();
+
+                    if(d.length == 0){
+                        return false;
+                    }
+
+                    let x = {
+                        newContainer: modal.$content.find("input[name=name]").val(),
+                        newHostId: d[0].hostId,
+                        hostId: hostId,
+                        container: container
+                    };
+
+                    ajaxRequest(globalUrls.containers.copy, x, function(data){
+                        let x = makeToastr(data);
+                        if(x.state == "error"){
+                            return false;
+                        }
+                        loadContainerTreeAfter();
+                        modal.close();
+                    });
+                    return false;
+                }
+            },
+        },
+        onContentReady: function () {
+            // bind to events
+            var jc = this;
+            this.$content.find('input[name=newHost]').tokenInput(globalUrls.hosts.search.search, {
+                queryParam: "host",
+                propertyToSearch: "host",
+                tokenValue: "hostId",
+                preventDuplicates: false,
+                tokenLimit: 1,
+                theme: "facebook"
+            });
+        }
+    });
+}
+
 function loadContainerView(data)
 {
     $("#containerConsole").hide();
@@ -218,7 +415,7 @@ function loadContainerView(data)
         consoleSocket.emit("close", currentTerminalProcessId);
         currentTerminalProcessId = null;
     }
-
+    
     ajaxRequest(globalUrls.containers.getDetails, data, function(result){
         let x = $.parseJSON(result);
 
@@ -227,7 +424,9 @@ function loadContainerView(data)
             return false;
         }
 
-        addBreadcrumbs([data.alias, "container", data.container ], ["", "", "active"]);
+        $("#sidebar-ul").find(".text-info").removeClass("text-info");
+
+        addBreadcrumbs([data.alias, data.container ], ["viewHost lookupId", "active"]);
 
         let disableActions = x.state.status_code !== 102;
 
@@ -326,52 +525,7 @@ function loadContainerView(data)
 }
 
 $("#containerBox").on("click", ".renameContainer", function(){
-    $.confirm({
-        title: 'Rename Container!',
-        content: `
-            <div class="form-group">
-                <label> New Name </label>
-                <input class="form-control validateName" maxlength="63" name="name"/>
-            </div>`,
-        buttons: {
-            cancel: function(){},
-            rename: {
-                text: 'Rename',
-                btnClass: 'btn-blue',
-                action: function () {
-                    let modal = this;
-                    let btn  = $(this);
-
-                    let newName = this.$content.find('input[name=name]').val();
-
-                    if(newName == ""){
-                        $.alert('provide a new name');
-                        return false;
-                    }
-
-                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Renaming..'); // let the user know
-                    modal.buttons.rename.disable();
-                    modal.buttons.cancel.disable();
-
-                    let x = $.extend({
-                        newContainer: newName
-                    }, currentContainerDetails);
-
-                    ajaxRequest(globalUrls.containers.rename, x, function(data){
-                        let x = makeToastr(data);
-                        if(x.state == "error"){
-                            return false;
-                        }
-                        modal.close();
-                        currentContainerDetails.container = newName;
-                        createContainerTree();
-                        loadContainerView(currentContainerDetails);
-                    });
-                    return false;
-                }
-            },
-        }
-    });
+    renameContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);
 });
 
 $("#containerBox").on("click", ".toggleCard", function(){
@@ -394,48 +548,78 @@ $("#containerBox").on("click", "#goToConsole", function() {
 
     if(!$.isNumeric(currentTerminalProcessId)){
         const terminalContainer = document.getElementById('terminal-container');
-
         // Clean terminal
         while (terminalContainer.children.length) {
             terminalContainer.removeChild(terminalContainer.children[0]);
         }
-        term = new Terminal({});
 
-        term.open(terminalContainer);
+        $.confirm({
+            title: 'Container Shell!',
+            content: `
+                <div class="form-group">
+                    <label> Shell </label>
+                    <input class="form-control" value="bash" maxlength="63" name="shell"/>
+                </div>
+                `,
+            buttons: {
+                cancel: function(){},
+                go: {
+                    text: "Go!",
+                    btnClass: "btn-primary",
+                    action: function(){
 
-        // fit is called within a setTimeout, cols and rows need this.
-        setTimeout(() => {
-            $.ajax({
-                type: "POST",
-                url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
-                data: {},
-                success: function(processId) {
-                    currentTerminalProcessId = processId;
-                    consoleSocket = io.connect("/terminals", {
-                        query: $.extend({
-                            pid: processId,
-                        }, currentContainerDetails)
-                    });
-                    consoleSocket.on('data', function(data) {
-                        term.write(data);
-                    });
 
-                    // Browser -> Backend
-                    term.on('data', function(data) {
-                        consoleSocket.emit('data', data);
-                    });
-                    // consoleSocket = new WebSocket(consoleSocketURL);
-                    consoleSocket.onopen = function() {
-                        term.attach(consoleSocket);
-                        term._initialized = true;
-                    };
-                },
-                error: function(){
-                    makeNodeMissingPopup();
-                },
-                dataType: "json"
-            });
-        }, 0);
+                        let shell = this.$content.find("input[name=shell]").val();
+
+                        if(shell == ""){
+                            $.alert("Please input a shell");
+                            return false;
+                        }
+
+                        term = new Terminal({});
+
+                        term.open(terminalContainer);
+
+                        // fit is called within a setTimeout, cols and rows need this.
+                        setTimeout(() => {
+                            $.ajax({
+                                type: "POST",
+                                url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
+                                data: {
+                                    hello: "hello"
+                                },
+                                success: function(processId) {
+                                    currentTerminalProcessId = processId;
+                                    consoleSocket = io.connect("/terminals", {
+                                        query: $.extend({
+                                            pid: processId,
+                                            shell: shell
+                                        }, currentContainerDetails)
+                                    });
+                                    consoleSocket.on('data', function(data) {
+                                        term.write(data);
+                                    });
+
+                                    // Browser -> Backend
+                                    term.on('data', function(data) {
+                                        consoleSocket.emit('data', data);
+                                    });
+                                    // consoleSocket = new WebSocket(consoleSocketURL);
+                                    consoleSocket.onopen = function() {
+                                        term.attach(consoleSocket);
+                                        term._initialized = true;
+                                    };
+                                },
+                                error: function(){
+                                    makeNodeMissingPopup();
+                                },
+                                dataType: "json"
+                            });
+                        }, 0);
+                    }
+                }
+            }
+        });
     }
 
 });
@@ -449,65 +633,7 @@ $("#containerBox").on("click", ".toProfile", function(){
 });
 
 $("#containerBox").on("click", ".copyContainer", function(){
-    $.confirm({
-        title: 'Copy Container!',
-        content: `
-            <div class="form-group">
-                <label> New Host </label>
-                <input class="form-control" maxlength="63" name="newHost"/>
-            </div>
-            <div class="form-group">
-                <label> Name </label>
-                <input class="form-control validateName" maxlength="63" name="name"/>
-            </div>`,
-        buttons: {
-            cancel: function(){},
-            copy: {
-                text: 'Copy',
-                btnClass: 'btn-blue',
-                action: function () {
-                    let modal = this;
-                    let d = this.$content.find("input[name=newHost]").tokenInput("get");
-                    let btn  = $(this);
-
-                    modal.buttons.copy.setText('<i class="fa fa-cog fa-spin"></i>Copying..'); // let the user know
-                    modal.buttons.copy.disable();
-                    modal.buttons.cancel.disable();
-
-                    if(d.length == 0){
-                        return false;
-                    }
-
-                    let x = $.extend({
-                        newContainer: modal.$content.find("input[name=name]").val(),
-                        newHostId: d[0].hostId
-                    }, currentContainerDetails);
-
-                    ajaxRequest(globalUrls.containers.copy, x, function(data){
-                        let x = makeToastr(data);
-                        if(x.state == "error"){
-                            return false;
-                        }
-                        loadContainerTreeAfter();
-                        modal.close();
-                    });
-                    return false;
-                }
-            },
-        },
-        onContentReady: function () {
-            // bind to events
-            var jc = this;
-            this.$content.find('input[name=newHost]').tokenInput(globalUrls.hosts.search.search, {
-                queryParam: "host",
-                propertyToSearch: "host",
-                tokenValue: "hostId",
-                preventDuplicates: false,
-                tokenLimit: 1,
-                theme: "facebook"
-            });
-        }
-    });
+    copyContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);
 });
 
 $("#containerBox").on("click", ".migrateContainer", function(){
@@ -523,27 +649,7 @@ $("#containerBox").on("click", ".editContainerSettings", function(){
 });
 
 $("#containerBox").on("click", ".deleteContainer", function(){
-    $.confirm({
-        title: 'Delete Container ' + currentContainerDetails.alias + '/' + currentContainerDetails.container,
-        content: 'Are you sure you want to delete this container ?!',
-        buttons: {
-            cancel: function () {},
-            delete: {
-                btnClass: 'btn-danger',
-                action: function () {
-                    ajaxRequest(globalUrls.containers.delete, currentContainerDetails, function(data){
-                        let r = makeToastr(data);
-                        if(r.state == "success"){
-                            loadContainerTreeAfter();
-                        }
-                        currentContainerDetails = null;
-                        $("#overviewBox").show();
-                        $("#containerBox").hide();
-                    });
-                }
-            }
-        }
-    });
+    deleteContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.alias, currentContainerDetails.container);
 });
 
 $("#containerBox").on("change", "#container-changeState", function(){
