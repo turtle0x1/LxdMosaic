@@ -49,6 +49,10 @@ class GetAllClusters
 
             $client = $this->lxdClient->getANewClient($host["Host_ID"], true, false);
 
+            if (!$client->cluster->info()["enabled"]) {
+                continue;
+            }
+
             $clusterMembers = $client->cluster->members->all();
 
             foreach ($clusterMembers as $member) {
