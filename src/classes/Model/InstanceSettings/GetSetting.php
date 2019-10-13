@@ -16,7 +16,7 @@ class GetSetting
         $sql = "SELECT
                     `ISV_Value`
                 FROM
-                    `Instance_Settings_VAlues`
+                    `Instance_Settings_Values`
                 WHERE
                     `ISV_IS_ID` = :settingId
                 ORDER BY
