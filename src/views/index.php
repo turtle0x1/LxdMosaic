@@ -375,7 +375,11 @@ if(typeof io !== "undefined"){
     });
 
     socket.on("deploymentProgress", function(msg){
-        console.log(msg);
+        let tr = $("#deploymentContainersList").find("tr[data-deployment-container='" + msg.hostname + "']");
+        if(tr.length > 0){
+            $(tr).find("td:eq(5)").html(`<i class='fas fa-check'></i> ${moment().fromNow()}`);
+        }
+
     });
 
     socket.on('operationUpdate', function(msg){

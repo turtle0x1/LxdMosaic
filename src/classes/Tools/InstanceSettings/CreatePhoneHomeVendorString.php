@@ -12,14 +12,14 @@ class CreatePhoneHomeVendorString
         $this->getSetting = $getSetting;
     }
 
-    public function create() :string
+    public function create(int $deploymentId) :string
     {
         $phonehomeLocation = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::INSTANCE_IP);
 
         return "#cloud-config
 
         phone_home:
-            url: http://$phonehomeLocation:8001/deploymentProgress
+            url: http://$phonehomeLocation:8001/deploymentProgress/$deploymentId
             post: [ pub_key_dsa, pub_key_rsa, pub_key_ecdsa, instance_id, hostname, fqdn ]
             tries: 10
         ";

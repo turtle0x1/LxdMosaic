@@ -214,16 +214,16 @@ function viewDeployment(deploymentId)
                     let hasBeenSeenStarted = "<i class='fas fa-times'></i>";
 
                     if(container.hasOwnProperty("mosaicInfo")){
-                        if(container.mosaicInfo.hasPhonedHome){
-                            phonedHome = "<i class='fas fa-check'></i>";
+                        if(container.mosaicInfo.phoneHomeDate){
+                            phonedHome = `<i class='fas fa-check'></i> ${moment(container.mosaicInfo.phoneHomeDate).fromNow()}`;
                         }
 
                         if(container.mosaicInfo.lastStart){
-                            hasBeenSeenStarted = moment(container.mosaicInfo.lastStart).format("LLLL");
+                            hasBeenSeenStarted = moment(container.mosaicInfo.lastStart).fromNow();
                         }
                     }
 
-                    c += `<tr>
+                    c += `<tr data-deployment-container="${container.name}">
                         <td><i class='${statusCodeIconMap[container.statusCode]}'></i> ${container.name}</td>
                         <td>${container.type}</td>
                         <td>${formatBytes(container.state.memory.usage)}</td>

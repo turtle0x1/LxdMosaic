@@ -38,7 +38,7 @@ class Deploy
         $revProfileNames = [];
 
         $deployedContainerInformation = [];
-        $vendorData = $this->createPhoneHomeVendorString->create();
+        $vendorData = $this->createPhoneHomeVendorString->create($deploymentId);
 
         foreach ($instances as $instance) {
             foreach ($instance["hosts"] as $hostId) {

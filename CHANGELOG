@@ -17,6 +17,7 @@ Added
     Right click context menu for containers (#118)
     A server overview page (#121)
     Bulk delete containers (ground works there for more actions) on server
+    Phone home tracking for containers in a deployment
 
 0.4.0
 
