@@ -18,9 +18,9 @@ if ($haveServers->haveAny() !== true) {
 <html lang="en">
   <head>
       <script
-                  src="https://code.jquery.com/jquery-3.3.1.min.js"
-                  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-                  crossorigin="anonymous"></script>
+          src="https://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+          crossorigin="anonymous"></script>
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script>
 
@@ -372,6 +372,14 @@ if(typeof io !== "undefined"){
         let data = $.parseJSON(msg);
         let status = data.offline ? "offline" : "online";
         makeServerChangePopup(status, data.host);
+    });
+
+    socket.on("deploymentProgress", function(msg){
+        let tr = $("#deploymentContainersList").find("tr[data-deployment-container='" + msg.hostname + "']");
+        if(tr.length > 0){
+            $(tr).find("td:eq(5)").html(`<i class='fas fa-check'></i> ${moment().fromNow()}`);
+        }
+
     });
 
     socket.on('operationUpdate', function(msg){
