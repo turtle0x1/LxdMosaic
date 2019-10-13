@@ -55,6 +55,7 @@ function loadClusterOverview(){
     $(".boxSlide, #clusterContents").hide();
     $("#clusterBox, #clusterOverview").show();
     $("#sidebar-ul").empty();
+    $(".sidebar-lg-show").removeClass("sidebar-lg-show");
     loadClusterTree();
 }
 
@@ -83,19 +84,7 @@ function loadClusterTree()
 {
     ajaxRequest(globalUrls.clusters.getAll, null, function(data){
         var data = $.parseJSON(data);
-        let clusters = `
-        <li class="nav-item active viewClusters">
-            <a class="nav-link" href="#">
-                <i class="fas fa-tachometer-alt"></i> Overview
-            </a>
-        </li>`;
         $.each(data, function(i, cluster){
-            clusters += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle" href="#">
-                    <i class="nav-icon fas fa-caret-down"></i> Cluster ${i}
-                </a>
-                <ul class="nav-dropdown-items">`;
-
             let template = $(emptyClusterBoxTemplate);
 
             template.find(".clusterName").text(`Cluster ${i}`);
@@ -107,23 +96,12 @@ function loadClusterTree()
             $.each(cluster.members, function(o, z){
 
                 membersHtml += `<tr>
-                    <td>${z.server_name}</td>
+                    <td><a href="#" class="viewHost" data-id="${z.hostId}">${z.server_name}</a></td>
                     <td>${z.status}</td>
                     <td><i class="fas fa-${z.database ? "check-circle" : "times"}"</td>
                 </tr>`;
-
-                clusters += `<li class="nav-item view-cluster"
-                    data-id="${z.hostId}"
-                    data-name="${z.server_name}"
-                    data-cluster="${i}">
-                  <a class="nav-link" href="#">
-                    <i class="nav-icon fa fa-server"></i>
-                    ${z.server_name}
-                  </a>
-                </li>`;
             });
 
-            clusters += "</ul></li>";
             template.find(".memberTable > tbody").append(membersHtml);
 
             template.find(".statsTable .status").text(cluster.stats.status);
@@ -136,8 +114,6 @@ function loadClusterTree()
 
             $("#clusterList").empty().append(template);
         });
-
-        $("#sidebar-ul").empty().append(clusters);
     });
 }
 
@@ -145,5 +121,6 @@ $("#sidebar-ul").on("click", ".view-cluster", function(){
     addBreadcrumbs(["Cluster " + $(this).data("cluster"), $(this).data("name")], ["", "active"]);
     loadClusterView($(this).data("id"));
 });
+
 
 </script>

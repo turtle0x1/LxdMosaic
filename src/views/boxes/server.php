@@ -179,7 +179,8 @@ function loadServerView(hostId)
                     </td>
                 </tr>`;
                 $.each(containers, function(name, details){
-                    let storageUsage = details.state.disk == null ? "N/A" : formatBytes(details.state.disk.root.usage);
+                    
+                    let storageUsage = details.state.disk == null || details.state.disk.length == 0 ? "N/A" : formatBytes(details.state.disk.root.usage);
 
                     containerHtml += `<tr data-name="${name}">
                         <td><input name="containerCheckbox" type="checkbox"/></td>
