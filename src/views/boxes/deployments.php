@@ -102,6 +102,8 @@
                                     <th> Type </th>
                                     <th> Memory </th>
                                     <th> Network </th>
+                                    <th> Last Started </th>
+                                    <th> Phoned Home </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -207,7 +209,21 @@ function viewDeployment(deploymentId)
             $.each(data.containers, function(host, hostData){
                 c += `<tr><td class="text-center bg-secondary text-white" colspan="999"><h5> Host: ${host} </h5></td></tr>`;
                 $.each(hostData.containers, function(_, container){
-                    c += `<tr>
+
+                    let phonedHome = "<i class='fas fa-times'></i>";
+                    let hasBeenSeenStarted = "<i class='fas fa-times'></i>";
+
+                    if(container.hasOwnProperty("mosaicInfo")){
+                        if(container.mosaicInfo.phoneHomeDate){
+                            phonedHome = `<i class='fas fa-check'></i> ${moment(container.mosaicInfo.phoneHomeDate).fromNow()}`;
+                        }
+
+                        if(container.mosaicInfo.lastStart){
+                            hasBeenSeenStarted = moment(container.mosaicInfo.lastStart).fromNow();
+                        }
+                    }
+
+                    c += `<tr data-deployment-container="${container.name}">
                         <td><i class='${statusCodeIconMap[container.statusCode]}'></i> ${container.name}</td>
                         <td>${container.type}</td>
                         <td>${formatBytes(container.state.memory.usage)}</td>
@@ -218,7 +234,12 @@ function viewDeployment(deploymentId)
                         }
                         c += `${details.addresses[0].address}`
                     });
-                    c += `</td></tr>`
+
+
+                    c += `</td>
+                    <td>${hasBeenSeenStarted}</td>
+                    <td>${phonedHome}</td>
+                    </tr>`
                 });
             });
         }

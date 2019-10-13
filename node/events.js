@@ -3,11 +3,13 @@
 const fs = require('fs'),
     WebSocket = require('ws'),
     express = require('express'),
+    http = require("http"),
     https = require('https'),
     mysql = require('mysql'),
     expressWs = require('express-ws'),
     path = require('path'),
-    cors = require('cors');
+    cors = require('cors'),
+    request = require("request");
 
 const envImportResult = require('dotenv').config({
     path: "/var/www/LxdMosaic/.env"
@@ -35,6 +37,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
+var httpServer = http.createServer(app).listen(8001);
 var httpsServer = https.createServer(credentials, app);
 var io = require('socket.io')(httpsServer);
 
@@ -235,6 +238,36 @@ app.post('/terminals', function(req, res) {
     // Create a indentifier for the console, this should allow multiple consolses
     // per user
     res.send(lxdConsoles.length.toString());
+});
+
+app.post('/deploymentProgress/:deploymentId', function(req, res) {
+    let body = req.body;
+
+    body.deploymentId = req.params.deploymentId;
+
+    if(body.hasOwnProperty("hostname") !== true){
+        // https://stackoverflow.com/questions/3050518/what-http-status-response-code-should-i-use-if-the-request-is-missing-a-required
+        res.statusMessage = "Please provide host name in req body";
+        res.status(422).end()
+    }else{
+        request.post({
+
+            url: 'https://lxd.local/api/Deployments/UpdatePhoneHomeController/update',
+            formData: {
+                deploymentId: parseInt(body.deploymentId),
+                hostname: body.hostname
+            },
+            rejectUnauthorized: false
+        },
+        function (error, response, body) {
+            //TODO silent error failing
+        }
+        );
+
+        operationSocket.emit("deploymentProgress", body);
+    }
+    // Send an empty response
+    res.send()
 });
 
 

@@ -71,12 +71,6 @@ var emptyServerBox = function(){
                 <select class="form-control projects changeHostProject"></select>
             </div>
         </div>
-        <div>
-            <div class="text-value text-white">Alias<i class="fas fa-passport"></i></div>
-                <button class="btn btn-xs-sm btn-primary editHost pull-right"><i class="fas fa-pencil-alt"></i></button>
-            </div>
-        </div>
-
       </div>
     </div>`);
 }
