@@ -18,6 +18,13 @@ var emptyClusterBoxTemplate = `<div class="card">
         </div>
         <div class="card-body bg-dark text-white">
             <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-warning text-center twoMemberWarning">
+                        This cluster only has two members consinder adding a third!
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <h5 class="text-center">Members</h5>
                     <table class="table table-dark table-bordered table-bordered memberTable">
@@ -92,6 +99,10 @@ function loadClusterTree()
             template.find(".card-header").addClass(cluster.stats.status == "Online" ? "bg-success" : "bg-warning");
 
             let membersHtml = "";
+
+            if(cluster.members.length >= 3){
+                template.find(".twoMemberWarning").remove();
+            }
 
             $.each(cluster.members, function(o, z){
 
