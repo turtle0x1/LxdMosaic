@@ -188,6 +188,7 @@
 
     $(document).on("click", ".viewImages", function(){
         changeActiveNav(".viewImages");
+        $(".sidebar-fixed").addClass("sidebar-lg-show");
         loadLocalImages();
         $("#sidebar-ul").empty().append(`
             <li class="nav-item imageLink active" data-type="localImages">

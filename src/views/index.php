@@ -81,6 +81,10 @@ if ($haveServers->haveAny() !== true) {
               analytics: {
                   getLatestData: "/api/AnalyticData/GetLatestDataController/get"
               },
+              settings: {
+                getAll: "/api/InstanceSettings/GetAllSettingsController/getAll",
+                saveAll: "/api/InstanceSettings/SaveAllSettingsController/saveAll"
+              },
               networks: {
                   getAll: "/api/Networks/GetHostsNetworksController/get",
                   get: "/api/Networks/GetNetworkController/get",
@@ -301,6 +305,10 @@ if ($haveServers->haveAny() !== true) {
             <a class="nav-link viewNetwork">
               <i class="fas fa-network-wired"></i> Networks </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link viewSettings">
+              <i class="fas fa-wrench"></i> Settings </a>
+          </li>
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">
           <li class="nav-item px-3 btn btn-primary pull-right" id="addNewServer">
@@ -339,6 +347,7 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/storage.php";
                     require __DIR__ . "/boxes/networks.php";
                     require __DIR__ . "/boxes/server.php";
+                    require __DIR__ . "/boxes/settings.php";
                 ?>
             </div>
             <div class="col-md-2">
@@ -793,6 +802,7 @@ $(document).on("change", ".changeHostProject", function(){
 });
 
 $(document).on("click", ".overview, .container-overview", function(){
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
     currentContainerDetails = null;
     setBreadcrumb("Dashboard", "overview active");
     createContainerTree();
@@ -805,35 +815,47 @@ $(document).on("click", ".overview, .container-overview", function(){
 $(document).on("click", ".viewProfiles, .profile-overview", function(){
     setBreadcrumb("Profiles", "viewProfiles active");
     loadProfileView();
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewProfiles")
 });
 
 $(document).on("click", ".viewProjects, .projects-overview", function(){
     setBreadcrumb("Projects", "viewProjects active");
     loadProjectView();
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewProjects")
 });
 
 $(document).on("click", ".viewDeployments, .deployments-overview", function(){
     setBreadcrumb("Deployments", "viewDeployments active");
     loadDeploymentsView();
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewDeployments")
 });
 
 $(document).on("click", ".viewStorage, .storage-overview", function(){
     loadStorageView();
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewStorage")
 });
 
 $(document).on("click", ".viewNetwork, .network-overview", function(){
     loadNetworksView();
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewNetwork")
 });
 
 $(document).on("click", ".viewCloudConfigFiles, .cloudConfig-overview", function(){
     setBreadcrumb("Cloud Config", "viewCloudConfigFiles active");
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
     loadCloudConfigTree();
     changeActiveNav(".viewCloudConfigFiles")
+});
+
+$(document).on("click", ".viewSettings", function(){
+    setBreadcrumb("Settings", "active");
+    loadSettingsView();
+    changeActiveNav(".viewSettings")
 });
 </script>
 <?php

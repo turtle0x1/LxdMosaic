@@ -18,6 +18,7 @@ Added
     A server overview page (#121)
     Bulk delete containers (ground works there for more actions) on server
     Phone home tracking for containers in a deployment
+    A page to manage instance settings
 
 0.4.0
 
