@@ -57,7 +57,7 @@ class GetAllClusters
                 $hostId =  $this->getDetails->getIdByUrlMatch($info["url"]);
                 $memberClient = $this->lxdClient->getANewClient($hostId);
 
-                $info["resources"] = $this->getResources->getDetails($memberClient);
+                $info["resources"] = $this->getResources->getHostExtended($hostId);
                 $info["hostId"] = $hostId;
 
                 $clusters[$clusterId]["members"][] = $info;
