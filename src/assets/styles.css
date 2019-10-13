@@ -1,6 +1,210 @@
 body {
     background-color: #a8a8a8;
+    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
 }
+
+
+/* Core UI overrides  */
+
+.bg-info {
+    background-color: #17a2b8 !important;
+}
+
+.sidebar .nav-dropdown.open .nav-link {
+    color: #fff;
+}
+
+.sidebar .sidebar-nav {
+  position: relative;
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 300px;
+}
+.sidebar .nav {
+  width: 300px;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 0;
+}
+
+.sidebar-minimized .sidebar .nav-dropdown-items .nav-item {
+  width: 300px;
+}
+.sidebar-minimized .sidebar .nav-dropdown-items .nav-item .nav-link {
+  width: 300px;
+}
+
+.app-body .sidebar {
+  flex: 0 0 300px;
+  order: -1;
+}
+
+html:not([dir=rtl]) .sidebar {
+  margin-left: -300px;
+}
+
+html[dir=rtl] .sidebar {
+  margin-right: -300px;
+}
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        width: 300px;
+    }
+}
+
+@media (min-width: 992px) {
+  .sidebar-fixed .sidebar {
+    position: fixed;
+    z-index: 1019;
+    width: 300px;
+    height: 100vh;
+  }
+}
+
+@media (min-width: 576px) {
+    html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed .main,
+  html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed .app-footer,
+  html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
+  html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
+      margin-left: 300px;
+    }
+    html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed.sidebar-minimized .main,
+  html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed.sidebar-minimized .app-footer,
+  html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .main,
+  html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
+      margin-left: 300px;
+    }
+    html:not([dir=rtl]) .sidebar-sm-show.breadcrumb-fixed .breadcrumb,
+  html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
+      left: 300px;
+    }
+    html[dir=rtl] .sidebar-sm-show.sidebar-fixed .main,
+  html[dir=rtl] .sidebar-sm-show.sidebar-fixed .app-footer,
+  html[dir=rtl] .sidebar-show.sidebar-fixed .main,
+  html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
+      margin-right: 300px;
+    }
+    html[dir=rtl] .sidebar-sm-show.sidebar-fixed.sidebar-minimized .main,
+  html[dir=rtl] .sidebar-sm-show.sidebar-fixed.sidebar-minimized .app-footer,
+  html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .main,
+  html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
+      margin-right: 300px;
+    }
+    html[dir=rtl] .sidebar-sm-show.breadcrumb-fixed .breadcrumb,
+  html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
+      right: 300px;
+    }
+}
+
+@media (min-width: 768px) {
+  html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed .main,
+html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed .app-footer,
+html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
+html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
+    margin-left: 300px;
+  }
+ html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed.sidebar-minimized .main,
+html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed.sidebar-minimized .app-footer,
+html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .main,
+html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
+    margin-left: 300px;
+  }
+  html:not([dir=rtl]) .sidebar-md-show.breadcrumb-fixed .breadcrumb,
+html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
+    left: 300px;
+  }
+  html[dir=rtl] .sidebar-md-show.sidebar-fixed .main,
+html[dir=rtl] .sidebar-md-show.sidebar-fixed .app-footer,
+html[dir=rtl] .sidebar-show.sidebar-fixed .main,
+html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
+    margin-right: 300px;
+  }
+  html[dir=rtl] .sidebar-md-show.sidebar-fixed.sidebar-minimized .main,
+html[dir=rtl] .sidebar-md-show.sidebar-fixed.sidebar-minimized .app-footer,
+html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .main,
+html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
+    margin-right: 300px;
+  }
+  html[dir=rtl] .sidebar-md-show.breadcrumb-fixed .breadcrumb,
+html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
+    right: 300px;
+  }
+}
+
+@media (min-width: 992px) {
+  html:not([dir=rtl]) .sidebar-lg-show.sidebar-fixed .main,
+html:not([dir=rtl]) .sidebar-lg-show.sidebar-fixed .app-footer,
+html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
+html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
+    margin-left: 300px;
+  }
+  html:not([dir=rtl]) .sidebar-lg-show.breadcrumb-fixed .breadcrumb,
+html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
+    left: 300px;
+  }
+  html[dir=rtl] .sidebar-lg-show.sidebar-fixed .main,
+html[dir=rtl] .sidebar-lg-show.sidebar-fixed .app-footer,
+html[dir=rtl] .sidebar-show.sidebar-fixed .main,
+html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
+    margin-right: 300px;
+  }
+  html[dir=rtl] .sidebar-lg-show.breadcrumb-fixed .breadcrumb,
+html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
+    right: 300px;
+  }
+}
+
+@media (min-width: 1300px) {
+  html:not([dir=rtl]) .sidebar-xl-show.sidebar-fixed .main,
+html:not([dir=rtl]) .sidebar-xl-show.sidebar-fixed .app-footer,
+html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
+html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
+    margin-left: 300px;
+  }
+  html:not([dir=rtl]) .sidebar-xl-show.breadcrumb-fixed .breadcrumb,
+html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
+    left: 300px;
+  }
+  html[dir=rtl] .sidebar-xl-show.sidebar-fixed .main,
+html[dir=rtl] .sidebar-xl-show.sidebar-fixed .app-footer,
+html[dir=rtl] .sidebar-show.sidebar-fixed .main,
+html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
+    margin-right: 300px;
+  }
+  html[dir=rtl] .sidebar-xl-show.breadcrumb-fixed .breadcrumb,
+html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
+    right: 300px;
+  }
+}
+
+@media (min-width: 1300px) {
+  html:not([dir=rtl]) .sidebar-xl-show.sidebar-fixed .main,
+html:not([dir=rtl]) .sidebar-xl-show.sidebar-fixed .app-footer,
+html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
+html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
+    margin-left: 300px;
+  }
+  html:not([dir=rtl]) .sidebar-xl-show.breadcrumb-fixed .breadcrumb,
+html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
+    left: 300px;
+  }
+  html[dir=rtl] .sidebar-xl-show.sidebar-fixed .main,
+html[dir=rtl] .sidebar-xl-show.sidebar-fixed .app-footer,
+html[dir=rtl] .sidebar-show.sidebar-fixed .main,
+html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
+    margin-right: 300px;
+  }
+  html[dir=rtl] .sidebar-xl-show.breadcrumb-fixed .breadcrumb,
+html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
+    right: 300px;
+  }
+}
+
+
+/* End core ui over rides */
+
 
 li.breadcrumb-item:nth-child(1) {
     cursor: pointer;
@@ -131,15 +335,15 @@ body {
 }
 
 .fa-play, .fa-check {
-    color: green;
+    color: green !important;
 }
 
 .fa-snowflake {
-    color: blue;
+    color: blue !important;
 }
 
 .fa-stop-circle, .fa-exclamation-triangle {
-    color: red;
+    color: red !important;
 }
 
 .card-block {

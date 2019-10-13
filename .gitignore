@@ -7,3 +7,4 @@ node_modules/**
 certs/**
 site/**
 test.php
+src/assets/dist/**
