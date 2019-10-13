@@ -6,6 +6,7 @@ use dhope0000\LXDClient\Model\Hosts\AddHost as AddHostModel;
 use dhope0000\LXDClient\Tools\Hosts\GenerateCert;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Tools\Node\Hosts;
+use dhope0000\LXDClient\Model\Client\LxdClient;
 
 class AddHosts
 {
@@ -13,12 +14,14 @@ class AddHosts
         AddHostModel $addHost,
         GenerateCert $generateCert,
         GetDetails $getDetails,
-        Hosts $hosts
+        Hosts $hosts,
+        LxdClient $lxdClient
     ) {
         $this->generateCert = $generateCert;
         $this->addHost = $addHost;
         $this->getDetails = $getDetails;
         $this->hosts = $hosts;
+        $this->lxdClient = $lxdClient;
     }
 
     public function add(array $hostsDetails)
@@ -29,7 +32,7 @@ class AddHosts
             $hostName = $this->addSchemeAndDefaultPort($hostsDetail["name"]);
 
             if (!empty($this->getDetails->getIdByUrlMatch($hostName))) {
-                throw new \Exception("Already have host under " . $hostName, 1);
+                continue;
             }
 
             try {
@@ -52,11 +55,33 @@ class AddHosts
                     $alias
                 );
 
-                $this->hosts->reloadHosts();
+                $hostId = $this->addHost->getId();
+
+                $client = $this->lxdClient->getANewClient($hostId);
+
+                if ($client->cluster->info()["enabled"]) {
+                    $members = $client->cluster->members->all();
+                    $extraMembersToAdd = [];
+                    foreach ($members as $member) {
+                        $inf = $client->cluster->members->info($member);
+                        if ($hostName == $inf["url"]) {
+                            continue;
+                        }
+                        $extraMembersToAdd[] = [
+                            "name"=>$inf["url"],
+                            "trustPassword"=>$hostsDetail["trustPassword"],
+                            "alias"=>$member
+                        ];
+                    }
+                    $this->add($extraMembersToAdd);
+                }
             } catch (\Http\Client\Exception\NetworkException $e) {
-                throw new \Exception("Can't connect to host, is lxd running and the port open?", 1);
+                throw new \Exception("Can't connect to ". $hostsDetail['name'] . ", is lxd running and the port open?", 1);
             }
         }
+
+        $this->hosts->reloadHosts();
+
         return true;
     }
 
@@ -65,6 +90,8 @@ class AddHosts
         $parts = parse_url($name);
 
         if (!isset($parts["scheme"])) {
+            $parts["scheme"] = "https://";
+        } elseif ($parts["scheme"] == "https") {
             $parts["scheme"] = "https://";
         }
 

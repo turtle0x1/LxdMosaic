@@ -10,6 +10,10 @@
       </div>
       <div class="modal-body">
             <b> <u> Servers To Add </u> </b>
+            <div class="alert alert-info">
+                If a host is in a cluster LXDMosaic will find other cluster memebers
+                and try to import them with the same trust password!
+            </div>
             <button class="btn btn-sm pull-right btn-primary" id="addBox">
                 <i class="fa fa-plus"></i>
             </button>

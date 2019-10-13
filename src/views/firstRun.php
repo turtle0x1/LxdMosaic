@@ -11,7 +11,7 @@ if ($haveServers->haveAny() === true) {
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title>LXD Client</title>
+<title>LXD Mosaic</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -38,11 +38,16 @@ if ($haveServers->haveAny() === true) {
     <div class="row">
         <div class="col-md-12">
             <h1 class='text-center'><u> LXD Mosaic </u></h1>
+
             <h4 class=''> Add Your Hosts
                 <button class="btn btn-sm btn-primary" id="addServer">
                     <i class="fa fa-plus"></i>
                 </button>
             </h4>
+            <div class="alert alert-info">
+                If a host is in a cluster LXDMosaic will find other cluster memebers
+                and try to import them with the same trust password!
+            </div>
             <div id="serverGroups"></div>
             <div class="row">
                 <div class="col-md-12 text-center">

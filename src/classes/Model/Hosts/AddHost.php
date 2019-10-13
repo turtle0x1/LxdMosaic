@@ -38,4 +38,9 @@ class AddHost
         ]);
         return $do->rowCount() ? true : false;
     }
+
+    public function getId() :int
+    {
+        return $this->database->lastInsertId();
+    }
 }
