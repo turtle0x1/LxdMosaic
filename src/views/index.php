@@ -37,9 +37,6 @@ if ($haveServers->haveAny() !== true) {
 
       <link rel="stylesheet" href="/assets/styles.css">
 
-      <link rel="stylesheet" href="/assets/toastr.js/toastr.min.css">
-      <script src="/assets/toastr.js/toastr.min.js"></script>
-
       <base href="./">
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
