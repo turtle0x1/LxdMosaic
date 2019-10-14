@@ -7,7 +7,9 @@ function css(){
         "node_modules/@coreui/coreui/dist/css/coreui.css",
         "node_modules/jquery-confirm/dist/jquery-confirm.min.css",
         "node_modules/toastr/build/toastr.min.css",
-        "node_modules/xterm/dist/xterm.css"
+        "node_modules/xterm/dist/xterm.css",
+        "src/assets/token/styles/token-input.css",
+        "src/assets/token/styles/token-input-facebook.css"
 
     ])
     .pipe(concat("external.dist.css"))
@@ -16,9 +18,12 @@ function css(){
 
 function js(){
     return src([
-            "node_modules/ace-builds/src-min/*.js",
+            "node_modules/ace-builds/src-min/ace.js",
+            "node_modules/ace-builds/src-min/theme-monokai.js",
+            "node_modules/ace-builds/src-min/mode-yaml.js",
             "node_modules/jquery-confirm/dist/jquery-confirm.min.js",
             "node_modules/toastr/build/toastr.min.js",
+            "src/assets/token/src/jquery.tokeninput.js"
         ])
         .pipe(minify({
             noSource: true
