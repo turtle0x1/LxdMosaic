@@ -183,8 +183,8 @@
     <div id="terminal-container"></div>
 </div>
 </div>
-<script src="/assets/xterm/xterm.js"></script>
-<script src="/assets/xterm/addons/attach.js"></script>
+<script src="/assets/dist/xterm.js"></script>
+<!-- <script src="/assets/dist/xterm.attach.js"></script> -->
 <script>
 
 var term = new Terminal();

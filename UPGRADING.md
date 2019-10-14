@@ -5,6 +5,14 @@ You should only upgrade when a new version is tagged,
 Restarting the `pm2` and `apache2` process may interupt running process please
 be careful when upgrading!
 
+## 0.3.0 -> 0.4.0 [In Progress]
+
+The upgrade path is as folows
+
+```
+npm install -g gulp
+```
+
 ## 0.2.0 -> 0.3.0
 
 The upgrade path is as follows

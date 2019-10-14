@@ -27,23 +27,15 @@ if ($haveServers->haveAny() !== true) {
 
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-      <link rel="stylesheet" href="/assets/xterm/xterm.css" />
+      <!-- <link rel="stylesheet" href="/assets/xterm/xterm.css" /> -->
 
-      <!-- jqueryConfirm assets -->
-      <link rel="stylesheet" href="/assets/jqueryConfirm/dist/jquery-confirm.min.css">
-      <script src="/assets/jqueryConfirm/dist/jquery-confirm.min.js"></script>
-
-      <!-- Ace web editor  -->
-      <script src="/assets/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+      <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
 
       <!-- Main styles for this application-->
-      <link href="/assets/coreui/style.css" rel="stylesheet">
+      <link href="/assets/dist/external.dist.css" rel="stylesheet">
       <script src="https://unpkg.com/@coreui/coreui/dist/js/coreui.min.js"></script>
 
       <link rel="stylesheet" href="/assets/styles.css">
-
-      <link rel="stylesheet" href="/assets/toastr.js/toastr.min.css">
-      <script src="/assets/toastr.js/toastr.min.js"></script>
 
       <base href="./">
       <meta charset="utf-8">
@@ -55,10 +47,6 @@ if ($haveServers->haveAny() !== true) {
       <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
       <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
       <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
-
-      <script src="/assets/token/src/jquery.tokeninput.js"></script>
-      <link rel="stylesheet" type="text/css" href="/assets/token/styles/token-input.css" />
-      <link rel="stylesheet" type="text/css" href="/assets/token/styles/token-input-facebook.css" />
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
