@@ -29,7 +29,6 @@
     "express": "^4.16.4",
     "express-ws": "^4.0.0",
     "gulp": "^4.0.2",
-    "gulp-clean-css": "^4.2.0",
     "gulp-concat": "^2.6.1",
     "gulp-minify": "^3.1.0",
     "jquery-confirm": "^3.3.4",
@@ -39,5 +38,8 @@
     "toastr": "^2.1.4",
     "ws": "^6.1.2",
     "xterm": "^3.13.2"
+  },
+  "devDependencies": {
+    "gulp-clean-css": "^4.2.0"
   }
 }

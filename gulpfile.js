@@ -1,6 +1,7 @@
 const { src, dest, parallel } = require('gulp');
 const concat = require('gulp-concat');
 const minify = require('gulp-minify');
+const cleanCSS = require('gulp-clean-css');
 
 function css(){
     return src([
@@ -12,6 +13,7 @@ function css(){
         "src/assets/token/styles/token-input-facebook.css"
 
     ])
+    .pipe(cleanCSS({}))
     .pipe(concat("external.dist.css"))
     .pipe(dest('src/assets/dist'));
 }
