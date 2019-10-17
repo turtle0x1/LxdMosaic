@@ -207,7 +207,7 @@ function viewDeployment(deploymentId)
             c += `<tr><td class='text-center' colspan="999">No Containers Deployed Yet</td></tr>`;
         }else{
             $.each(data.containers, function(host, hostData){
-                c += `<tr><td class="text-center bg-secondary text-white" colspan="999"><h5> Host: ${host} </h5></td></tr>`;
+                c += `<tr><td class="text-center bg-secondary text-dark" colspan="999"><h5>Host: ${host}</h5></td></tr>`;
                 $.each(hostData.containers, function(_, container){
 
                     let phonedHome = "<i class='fas fa-times'></i>";
