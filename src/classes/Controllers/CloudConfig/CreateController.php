@@ -3,7 +3,7 @@ namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
 use dhope0000\LXDClient\Tools\CloudConfig\Create;
 
-class CreateController
+class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(Create $create)
     {

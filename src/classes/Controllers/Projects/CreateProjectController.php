@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Projects;
 
 use dhope0000\LXDClient\Tools\Projects\CreateProject;
 
-class CreateProjectController
+class CreateProjectController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(CreateProject $createProject)
     {

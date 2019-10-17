@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Deployments;
 
 use dhope0000\LXDClient\Tools\Deployments\CreateDeployment;
 
-class CreateController
+class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(CreateDeployment $createDeployment)
     {

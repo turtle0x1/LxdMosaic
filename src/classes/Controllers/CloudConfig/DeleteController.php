@@ -3,7 +3,7 @@ namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
 use dhope0000\LXDClient\Model\CloudConfig\DeleteCloudConfig;
 
-class DeleteController
+class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(DeleteCloudConfig $deleteCloudConfig)
     {

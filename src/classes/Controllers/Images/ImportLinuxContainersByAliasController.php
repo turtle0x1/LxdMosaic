@@ -3,7 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Images;
 
 use dhope0000\LXDClient\Tools\Images\ImportLinuxContainersByAlias;
 
-class ImportLinuxContainersByAliasController
+class ImportLinuxContainersByAliasController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(ImportLinuxContainersByAlias $importLinuxContainersByAlias)
     {

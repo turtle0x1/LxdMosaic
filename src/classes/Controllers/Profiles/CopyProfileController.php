@@ -3,7 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Tools\Profiles\Copy;
 
-class CopyProfileController
+class CopyProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(Copy $copy)
     {

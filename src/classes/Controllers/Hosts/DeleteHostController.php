@@ -3,7 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts;
 
 use dhope0000\LXDClient\Model\Hosts\DeleteHost;
 
-class DeleteHostController
+class DeleteHostController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(DeleteHost $deleteHost)
     {
