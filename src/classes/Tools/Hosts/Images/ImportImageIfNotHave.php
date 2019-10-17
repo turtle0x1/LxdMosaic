@@ -25,11 +25,15 @@ class ImportImageIfNotHave
         // linuxcontainers but the default method ) will be difficult
         // and need this work around if the host doesn't have the ubuntu
         // image
-        if ($imageDetails["alias"] == "default") {
+        if ($imageDetails["alias"] == "default" || $alias == null) {
             $detailsToUse = [
                 "fingerprint"=>$imageDetails["fingerprint"],
                 "protocol"=>$imageDetails["protocol"]
             ];
+
+            if (isset($imageDetails["provideMyHostsCert"]) &&  $imageDetails["provideMyHostsCert"] == true) {
+                $detailsToUse["certificate"] = $x = \dhope0000\LXDClient\Tools\Hosts\Certificates\GetHostCertificate::get(str_replace("https://", "", $imageDetails["server"]));
+            }
         }
 
         //NOTE we are using wait here so for large images this is blocking
