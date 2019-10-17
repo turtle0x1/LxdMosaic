@@ -42,7 +42,7 @@ class RouteApi
         $controller = $this->container->make($controllerStr);
 
         if ($controller instanceof \dhope0000\LXDClient\Interfaces\RecordAction) {
-            $this->recordAction->record($controllerStr, $params);
+            $this->recordAction->record($controllerStr . "\\" . $method, $params);
         }
 
         // TODO Pass provided arguments to controller
