@@ -70,6 +70,9 @@ if ($haveServers->haveAny() !== true) {
                   getLatestData: "/api/AnalyticData/GetLatestDataController/get"
               },
               settings: {
+                recordedActions: {
+                    getLastResults: "/api/InstanceSettings/RecordedActions/GetLastController/get"
+                },
                 getAll: "/api/InstanceSettings/GetAllSettingsController/getAll",
                 saveAll: "/api/InstanceSettings/SaveAllSettingsController/saveAll"
               },

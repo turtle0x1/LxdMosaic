@@ -2,14 +2,14 @@
     <div id="deploymentsOverview" class="row">
         <div class="col-md-9">
               <div class="card">
-                <div class="card-header bg-info" role="tab" id="headingOne">
+                <div class="card-header bg-info" role="tab" >
                   <h5>
                     <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
                       Deployments
                     </a>
                   </h5>
                 </div>
-                <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+                <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" >
                   <div class="card-block bg-dark">
                       Deployments are used to deploy multiple cloud configs to multiple
                       containers.
@@ -21,14 +21,14 @@
         </div>
         <div class="col-md-3">
               <div class="card">
-                <div class="card-header bg-info" role="tab" id="headingOne">
+                <div class="card-header bg-info" role="tab" >
                   <h5>
                     <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                       Actions
                     </a>
                   </h5>
                 </div>
-                <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+                <div id="collapseOne" class="collapse in show" role="tabpanel" >
                   <div class="card-block bg-dark">
                       <button class="btn btn-block btn-primary" id="createDeployment">
                           Create

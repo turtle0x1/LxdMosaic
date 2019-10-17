@@ -3,7 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Containers;
 
 use dhope0000\LXDClient\Tools\Containers\RenameContainer;
 
-class RenameContainerController
+class RenameContainerController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(RenameContainer $renameContainer)
     {

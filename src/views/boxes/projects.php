@@ -2,14 +2,14 @@
 <div id="projectsOverview" class="row">
     <div class="col-md-9">
           <div class="card">
-            <div class="card-header bg-info" role="tab" id="headingOne">
+            <div class="card-header bg-info" role="tab" >
               <h5>
                 <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
                   Projects
                 </a>
               </h5>
             </div>
-            <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+            <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" >
               <div class="card-block bg-dark">
                   Projects are used to split up an lxd server. You can read
                   more about them here<a href="https://lxd.readthedocs.io/en/latest/projects/">
@@ -20,14 +20,14 @@
     </div>
     <div class="col-md-3">
           <div class="card">
-            <div class="card-header bg-info" role="tab" id="headingOne">
+            <div class="card-header bg-info" role="tab" >
               <h5>
                 <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                   Actions
                 </a>
               </h5>
             </div>
-            <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+            <div id="collapseOne" class="collapse in show" role="tabpanel" >
               <div class="card-block bg-dark">
                   <button class="btn btn-block btn-primary" id="createProject">
                       Create
@@ -67,7 +67,7 @@
             </div>
             <div id="projectActions" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
               <div class="card-block bg-dark table-responsive">
-                  <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+                  <div id="collapseOne" class="collapse in show" role="tabpanel" >
                     <div class="card-block text-center">
                         <button class="btn btn-block btn-warning" id="renameProject">
                             Rename
@@ -91,7 +91,7 @@
             </div>
             <div id="projectConfig" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
               <div class="card-block bg-dark table-responsive">
-                  <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+                  <div id="collapseOne" class="collapse in show" role="tabpanel" >
                       <table class="table table-dark table-bordered" id="projectConfigTable">
                           <thead>
                               <tr>
@@ -119,7 +119,7 @@
           </div>
           <div id="projectUsedBy" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
             <div class="card-block bg-dark table-responsive">
-                <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+                <div id="collapseOne" class="collapse in show" role="tabpanel" >
                     <table class="table table-dark table-bordered" id="projectUsedByTable">
                         <thead>
                             <tr>

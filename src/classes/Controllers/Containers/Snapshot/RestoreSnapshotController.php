@@ -3,7 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Containers\Snapshot;
 
 use dhope0000\LXDClient\Tools\Containers\Snapshot\RestoreSnapshot;
 
-class RestoreSnapshotController
+class RestoreSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(RestoreSnapshot $restoreSnapshot)
     {

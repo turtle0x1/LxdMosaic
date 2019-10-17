@@ -2,14 +2,14 @@
 <div id="profileOverview" class="row">
     <div class="col-md-9">
           <div class="card">
-            <div class="card-header bg-info" role="tab" id="headingOne">
+            <div class="card-header bg-info" role="tab" >
               <h5>
                 <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
                   Profiles
                 </a>
               </h5>
             </div>
-            <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+            <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" >
               <div class="card-block bg-dark">
                   Profiles are used to store processes used with a container.
               </div>
@@ -30,7 +30,7 @@
         </div>
         <div id="profileActions" class="collapse show" role="tabpanel" aria-labelledby="profilesActionHeading">
           <div class="card-block bg-dark table-responsive">
-              <div id="collapseOne" class="collapse in show" role="tabpanel" aria-labelledby="headingOne">
+              <div id="collapseOne" class="collapse in show" role="tabpanel" >
                 <div class="card-block">
                     <button class="btn btn-block btn-primary" id="copyProfile">
                         Copy
