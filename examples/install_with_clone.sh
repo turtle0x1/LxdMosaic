@@ -38,6 +38,8 @@ chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/certs
 # Move in LxdManager
 cd /var/www/LxdMosaic || exit
 
+git checkout 0.5.0
+
 npm install
 
 # Install Dependecies
@@ -59,6 +61,7 @@ mysql < sql/seed.sql
 mysql < sql/0.1.0.sql
 mysql < sql/0.2.0.sql
 mysql < sql/0.3.0.sql
+mysql < sql/0.5.0.sql
 
 
 cp examples/lxd_manager.conf /etc/apache2/sites-available/
