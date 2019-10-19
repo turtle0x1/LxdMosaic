@@ -3,7 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts\Containers;
 
 use dhope0000\LXDClient\Tools\Containers\DeleteContainers;
 
-class DeleteContainersController
+class DeleteContainersController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(DeleteContainers $deleteContainers)
     {

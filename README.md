@@ -28,7 +28,7 @@ lxc config set core.trust_password some-secret-string #remember this you will be
 The preferred installation method is using a ubuntu container.
 
 ### Install script
-**Warning this installs apache, docker, mysql-server, php, git and other
+**Warning this installs apache, mysql-server, php, git and other
 dependencies its best to run in a container or an empty VM to avoid cluttering
 your system**
 

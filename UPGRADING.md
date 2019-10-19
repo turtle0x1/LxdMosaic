@@ -5,6 +5,30 @@ You should only upgrade when a new version is tagged,
 Restarting the `pm2` and `apache2` process may interupt running process please
 be careful when upgrading!
 
+## 0.4.0 -> 0.5.0 [WIP]
+
+The upgrade path is as follows for both ubuntu & centos
+
+```
+cd /var/www/LxdMosaic
+
+git pull
+
+mysql < 0.5.0.sql
+
+```
+
+
+## 0.3.0 -> 0.4.0
+
+The upgrade path is as follows for both ubuntu & centos
+
+```
+cd /var/www/LxdMosaic
+
+git pull
+```
+
 ## 0.2.0 -> 0.3.0
 
 The upgrade path is as follows

@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Projects;
 
 use dhope0000\LXDClient\Tools\Projects\DeleteProject;
 
-class DeleteProjectController
+class DeleteProjectController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(DeleteProject $deleteProject)
     {

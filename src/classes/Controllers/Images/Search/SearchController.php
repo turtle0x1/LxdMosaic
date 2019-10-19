@@ -16,14 +16,27 @@ class SearchController
         $allImages = $this->getAllImages->getAllHostImages();
         $output = [];
         $seenFingerPrints = [];
-        foreach ($allImages as $details) {
+        $unknownCount = 0;
+        foreach ($allImages as $host => $details) {
             foreach ($details["images"] as $image) {
                 if (in_array($image["fingerprint"], $seenFingerPrints)) {
                     continue;
                 }
 
+
+                if (!isset($image["properties"]["description"])) {
+                    $unknownCount++;
+                    $image["properties"]["description"] = "Unknown $unknownCount";
+                }
+
                 if (!isset($image["update_source"]) || empty($image["update_source"])) {
-                    continue;
+                    $image["update_source"] = [
+                        "protocol"=>"lxd",
+                        "server"=>$host,
+                        "provideMyHostsCert"=>true
+                    ];
+                } else {
+                    $image["update_source"]["provideMyHostsCert"] = false;
                 }
 
                 $output[] = [

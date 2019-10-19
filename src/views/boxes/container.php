@@ -113,7 +113,7 @@
              <i class="fas fa-users float-right"></i>
         </h5>
       </div>
-      <div class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+      <div class="collapse show" role="tabpanel" >
         <div class="card-block bg-dark table-responsive">
             <table class="table table-dark table-bordered"id="profileData">
                   <thead class="thead-inverse">
@@ -135,7 +135,7 @@
             <i class="fas fa-images float-right"></i>
         </h5>
       </div>
-      <div class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+      <div class="collapse show" role="tabpanel" >
         <div class="card-block bg-dark table-responsive">
             <table class="table table-dark table-bordered"id="snapshotData">
                   <thead class="thead-inverse">
@@ -152,7 +152,7 @@
 </div>
 <div class="col-md-6">
       <div class="card card-accent-success">
-        <div class="card-header bg-info" role="tab" id="headingOne">
+        <div class="card-header bg-info" role="tab" >
           <h5>
             <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               Memory Details
@@ -161,7 +161,7 @@
           </h5>
         </div>
 
-        <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+        <div id="collapseOne" class="collapse show" role="tabpanel" >
           <div class="card-block bg-dark">
               <table class="table table-dark table-bordered" id="memoryData">
                   <thead class="thead-inverse">
@@ -183,8 +183,8 @@
     <div id="terminal-container"></div>
 </div>
 </div>
-<script src="/assets/xterm/xterm.js"></script>
-<script src="/assets/xterm/addons/attach.js"></script>
+<script src="/assets/dist/xterm.js"></script>
+<!-- <script src="/assets/dist/xterm.attach.js"></script> -->
 <script>
 
 var term = new Terminal();

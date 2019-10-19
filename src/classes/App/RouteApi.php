@@ -2,12 +2,16 @@
 namespace dhope0000\LXDClient\App;
 
 use \DI\Container;
+use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\RecordAction;
 
 class RouteApi
 {
-    public function __construct(Container $container)
+    private $recordAction;
+
+    public function __construct(Container $container, RecordAction  $recordAction)
     {
         $this->container = $container;
+        $this->recordAction = $recordAction;
     }
 
     public function route($pathParts)
@@ -25,17 +29,21 @@ class RouteApi
 
         unset($pathParts[$methodkey]);
 
-        $controller = "dhope0000\\LXDClient\\Controllers\\" . implode($pathParts, "\\");
+        $controllerStr = "dhope0000\\LXDClient\\Controllers\\" . implode($pathParts, "\\");
 
-        if (!class_exists($controller)) {
+        if (!class_exists($controllerStr)) {
             throw new \Exception("End point not found", 1);
-        } elseif (method_exists($controller, $method) !== true) {
+        } elseif (method_exists($controllerStr, $method) !== true) {
             throw new \Exception("Method point not found");
         }
 
-        $params = $this->orderParams($_POST, $controller, $method);
+        $params = $this->orderParams($_POST, $controllerStr, $method);
 
-        $controller = $this->container->make($controller);
+        $controller = $this->container->make($controllerStr);
+
+        if ($controller instanceof \dhope0000\LXDClient\Interfaces\RecordAction) {
+            $this->recordAction->record($controllerStr . "\\" . $method, $params);
+        }
 
         // TODO Pass provided arguments to controller
         $data = call_user_func_array(array($controller, $method), $params);

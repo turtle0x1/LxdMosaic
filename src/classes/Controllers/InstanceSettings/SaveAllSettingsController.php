@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\InstanceSettings;
 
 use dhope0000\LXDClient\Tools\InstanceSettings\SaveSettings;
 
-class SaveAllSettingsController
+class SaveAllSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     private $saveSettings;
 

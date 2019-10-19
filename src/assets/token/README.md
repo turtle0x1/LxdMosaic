@@ -1,3 +1,8 @@
+Modified by turtle0x1
+
+I changed some defaults & methods, so until this library is completly replaced
+it cant be imported through npm
+
 jQuery Tokeninput: A Tokenizing Autocomplete Text Entry
 =======================================================
 

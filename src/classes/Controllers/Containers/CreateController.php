@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Containers;
 
 use dhope0000\LXDClient\Tools\Containers\CreateContainer;
 
-class CreateController
+class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(CreateContainer $createContainer)
     {

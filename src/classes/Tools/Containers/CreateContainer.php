@@ -87,7 +87,7 @@ class CreateContainer
             ];
         }
 
-        if(!empty($config)){
+        if (!empty($config)) {
             $x["config"] = $config;
         }
 
