@@ -69,6 +69,9 @@ if ($haveServers->haveAny() !== true) {
               analytics: {
                   getLatestData: "/api/AnalyticData/GetLatestDataController/get"
               },
+              clusters: {
+                getAll: "/api/Clusters/GetAllController/get"
+              },
               settings: {
                 recordedActions: {
                     getLastResults: "/api/InstanceSettings/RecordedActions/GetLastController/get"
@@ -272,6 +275,10 @@ if ($haveServers->haveAny() !== true) {
               <i class="fas fa-users"></i> Profiles</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link viewClusters">
+              <i class="far fa-object-group"></i> Clusters </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link viewCloudConfigFiles">
               <i class="fa fa-cogs"></i> Cloud Config</a>
           </li>
@@ -331,6 +338,7 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/overview.php";
                     require __DIR__ . "/boxes/container.php";
                     require __DIR__ . "/boxes/profile.php";
+                    require __DIR__ . "/boxes/cluster.php";
                     require __DIR__ . "/boxes/cloudConfig.php";
                     require __DIR__ . "/boxes/images.php";
                     require __DIR__ . "/boxes/projects.php";
@@ -808,6 +816,12 @@ $(document).on("click", ".viewProfiles, .profile-overview", function(){
     loadProfileView();
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewProfiles")
+});
+
+$(document).on("click", ".viewClusters, .cluster-overview", function(){
+    setBreadcrumb("Clusters", "viewClusters active");
+    loadClusterOverview();
+    changeActiveNav(".viewClusters")
 });
 
 $(document).on("click", ".viewProjects, .projects-overview", function(){

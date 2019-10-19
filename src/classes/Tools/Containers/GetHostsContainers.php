@@ -22,17 +22,22 @@ class GetHostsContainers
                 $details[$indent] = [
                     "online"=>false,
                     "hostId"=>$host["Host_ID"],
-                    "containers"=>[]
+                    "containers"=>[],
+                    "hostInfo"=>[]
                 ];
                 continue;
             }
+
+            $client = $this->client->getANewClient($host["Host_ID"]);
+            $hostInfo = $client->host->info();
 
             $containers = $this->getContainers($host["Host_ID"]);
 
             $details[$indent] = [
                 "online"=>true,
                 "hostId"=>$host["Host_ID"],
-                "containers"=>$containers
+                "containers"=>$containers,
+                "hostInfo"=>$hostInfo
             ];
         }
         return $details;
@@ -42,18 +47,26 @@ class GetHostsContainers
     {
         $client = $this->client->getANewClient($hostId);
         $containers = $client->containers->all();
-        $containers = $this->addContainersState($client, $containers);
+        $containers = $this->addContainersStateAndInfo($client, $containers);
         ksort($containers, SORT_STRING | SORT_FLAG_CASE);
         return $containers;
     }
 
-    private function addContainersState($client, $containers)
+    private function addContainersStateAndInfo($client, $containers)
     {
+        $hostInfo = $client->host->info();
         $details = array();
         foreach ($containers as $container) {
             $state = $client->containers->state($container);
+            $info = $client->containers->info($container);
+
+            if ($info["location"] !== "none" && $info["location"] !== $hostInfo["environment"]["server_name"]) {
+                continue;
+            }
+
             $details[$container] = [
-                "state"=>$state
+                "state"=>$state,
+                "info"=>$info
             ];
         }
         return $details;

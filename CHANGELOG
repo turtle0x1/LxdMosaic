@@ -20,6 +20,11 @@ Added
     Phone home tracking for containers in a deployment
     A page to manage instance settings
     Upgrading guide (#124)
+    Cluster support (#6) including:
+        Auto discover other hosts from cluster members
+        Cluster member roles
+        Cluster memory usage
+        Multiple clusters suport
     Recored actions (#127)
 
 0.4.0

@@ -41,8 +41,13 @@ class GetContainersInDeployment
                         if (!isset($output[$host])) {
                             $output[$host] = [
                                 "hostId"=>$data["hostId"],
-                                "containers"=>[]
+                                "containers"=>[],
+                                "hostInfo"=>$client->host->info()
                             ];
+                        }
+
+                        if ($output[$host]["hostInfo"]["environment"]["server_name"] !== $info["location"]) {
+                            continue;
                         }
 
                         $state = $client->containers->state($containerName);
