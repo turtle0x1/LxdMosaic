@@ -267,6 +267,7 @@ $("#cloudConfigBox").on("click", ".save", function(){
     x.imageDetails = image[0];
 
     let invalid = false;
+    let doesntStartWithEnvWarning = false;
     $("#cloudConfigEnvTable > tbody > tr").each(function(){
         let tr = $(this);
         let keyInput = tr.find("input[name=key]");
@@ -285,20 +286,48 @@ $("#cloudConfigBox").on("click", ".save", function(){
             return false;
         }
 
+        if(key.startsWith("environment.") !== true){
+            doesntStartWithEnvWarning = true;
+        }
+
         x.envVariables[key] = val;
     });
 
     if(invalid){
         return false;
     }
+    if(doesntStartWithEnvWarning){
+        $.confirm({
+            title: `Key Doesn't Start With enviroment.`,
+            content: `The key should probably start with "enviroment." to have the intened effect`,
+            buttons: {
+                cancel: {
+                    btnClass: "btn btn-primary",
+                    text: "go back"
+                },
+                ok: {
+                    btnClass: "btn btn-danger",
+                    text: "Continue Anyway",
+                    action: function(){
+                        sendCloduConfigUpdate(x);
+                    }
+                }
+            }
+        });
+    }else{
+        sendCloduConfigUpdate(x);
+    }
 
-    ajaxRequest(globalUrls.cloudConfig.update, x, function(response){
+});
+
+function sendCloduConfigUpdate(cloudConfig){
+    ajaxRequest(globalUrls.cloudConfig.update, cloudConfig, function(response){
         response = makeToastr(response);
         if(response.hasOwnProperty("error")){
             return false;
         }
     });
-});
+}
 
 $("#cloudConfigBox").on("click", "#deleteCloudConfig", function(){
     $.confirm({
