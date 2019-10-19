@@ -60,7 +60,7 @@ class GetHostsContainers
             $state = $client->containers->state($container);
             $info = $client->containers->info($container);
 
-            if ($info["location"] !== $hostInfo["environment"]["server_name"]) {
+            if ($info["location"] !== "none" && $info["location"] !== $hostInfo["environment"]["server_name"]) {
                 continue;
             }
 
