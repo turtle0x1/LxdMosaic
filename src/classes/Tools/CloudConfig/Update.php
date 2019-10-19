@@ -11,9 +11,14 @@ class Update
         $this->updateModel = $updateModel;
     }
 
-    public function update(int $cloudConfigId, string $code, array $imageDetails)
-    {
+    public function update(
+        int $cloudConfigId,
+        string $code,
+        array $imageDetails,
+        array $envVariables
+    ) {
         $imageDetails = json_encode($imageDetails);
-        return $this->updateModel->insert($cloudConfigId, $code, $imageDetails);
+        $envVariables = json_encode($envVariables);
+        return $this->updateModel->insert($cloudConfigId, $code, $imageDetails, $envVariables);
     }
 }

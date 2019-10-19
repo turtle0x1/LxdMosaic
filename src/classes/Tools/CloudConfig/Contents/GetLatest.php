@@ -19,15 +19,19 @@ class GetLatest
                 "revisionId"=>null,
                 "cloudConfigId"=>$cloudConfigId,
                 "data"=>"",
-                "imageDetails"=>[]
+                "imageDetails"=>[],
+                "envVariables"=>[]
             ];
         }
-        if(!empty($latest["imageDetails"])){
-            $latest["imageDetails"] = json_decode($latest["imageDetails"]);
-        }else{
-            $latest["imageDetails"] = [];
-        }
+        
+        $latest["imageDetails"] = $this->getJsonOrEmptyArray($latest, "imageDetails");
+        $latest["envVariables"] = $this->getJsonOrEmptyArray($latest, "envVariables");
 
         return $latest;
+    }
+
+    private function getJsonOrEmptyArray($array, $key) :array
+    {
+        return !empty($array[$key]) ? json_decode($array[$key], true) : [];
     }
 }

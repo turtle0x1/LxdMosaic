@@ -10,23 +10,30 @@ class Update
         $this->database = $database->dbObject;
     }
 
-    public function insert(int $cloudConfigId, string $codeJson, string $imageJson)
-    {
+    public function insert(
+        int $cloudConfigId,
+        string $codeJson,
+        string $imageJson,
+        string $envVariablesJson
+    ) {
         $sql = "INSERT INTO `Cloud_Config_Data`
                 (
                     `CCD_Cloud_Config_ID`,
                     `CCD_Data`,
-                        `CCD_Image_Details`
+                    `CCD_Image_Details`,
+                    `CCD_Enviroment_Variables`
                 ) VALUES(
                     :cloudConfigId,
                     :codeJson,
-                    :imageDetails
+                    :imageDetails,
+                    :envVariables
                 )";
         $do = $this->database->prepare($sql);
         $do->execute([
             ":cloudConfigId"=>$cloudConfigId,
             ":codeJson"=>$codeJson,
-            ":imageDetails"=>$imageJson
+            ":imageDetails"=>$imageJson,
+            ":envVariables"=>$envVariablesJson
         ]);
         return $do->rowCount() ? true : false;
     }

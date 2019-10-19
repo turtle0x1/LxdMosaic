@@ -10,9 +10,9 @@ class UpdateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->update = $update;
     }
 
-    public function update(int $cloudConfigId, string $code, array $imageDetails)
+    public function update(int $cloudConfigId, string $code, array $imageDetails, array $envVariables)
     {
-        $this->update->update($cloudConfigId, $code, $imageDetails);
+        $this->update->update($cloudConfigId, $code, $imageDetails, $envVariables);
         return ["state"=>"success", "message"=>"Save cloud config"];
     }
 }
