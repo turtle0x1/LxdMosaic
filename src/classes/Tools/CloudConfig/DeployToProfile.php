@@ -41,6 +41,8 @@ class DeployToProfile
 
         $config = is_array($extraConfigParams) ? $extraConfigParams : [];
 
+        $config = array_merge($config, $latestData["envVariables"] == "" ? [] : json_decode($latestData["envVariables"], true));
+
         $config["user.user-data"] = $latestData["data"];
         $config["user.vendor-data"] = $vendorData;
 

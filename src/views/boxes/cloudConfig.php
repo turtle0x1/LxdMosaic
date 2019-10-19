@@ -37,39 +37,77 @@
     </div>
 </div>
 <div class="row" id="cloudConfigContents">
-    <div class="col-md-9">
-        <div class="card">
-          <div class="card-header bg-info" role="tab" >
-            <h5>
-              <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                Image
-                <i class="fas float-right fa-image"></i>
-              </a>
-            </h5>
-          </div>
-          <div id="collapseOne" class="collapse in show" role="tabpanel" >
-            <div class="card-body bg-dark">
-                <input class="form-control" id="cloudConfigImage"/>
+    <div class="col-md-10">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header bg-info" role="tab" >
+                    <h5>
+                      <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Image
+                        <i class="fas float-right fa-image"></i>
+                      </a>
+                    </h5>
+                  </div>
+                  <div id="collapseOne" class="collapse in show" role="tabpanel" >
+                    <div class="card-body bg-dark">
+                        <input class="form-control" id="cloudConfigImage"/>
+                    </div>
+                  </div>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="card">
-          <div class="card-header bg-info" role="tab" id="cloudConfig-actionsHeading">
-            <h5>
-              <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-editorCollapse" aria-expanded="true" aria-controls="cloudConfig-editorCollapse">
-                Cloud Config File
-                <i class="fas float-right fa-file"></i>
-              </a>
-            </h5>
-          </div>
-          <div class="bg-dark" id="cloudConfig-editorCollapse" class="collapse show" role="tabpanel" aria-labelledby="cloudConfig-actionsHeading">
-            <div class="card-block bg-dark">
-                <div id="editor"></div>
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card">
+                  <div class="card-header bg-info" role="tab" id="cloudConfig-actionsHeading">
+                    <h5>
+                      <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-editorCollapse" aria-expanded="true" aria-controls="cloudConfig-editorCollapse">
+                        Cloud Config File
+                        <i class="fas float-right fa-file"></i>
+                      </a>
+                    </h5>
+                  </div>
+                  <div class="bg-dark" id="cloudConfig-editorCollapse" class="collapse show" role="tabpanel" aria-labelledby="cloudConfig-actionsHeading">
+                    <div class="card-block bg-dark">
+                        <div id="editor"></div>
+                    </div>
+                  </div>
+                </div>
             </div>
-          </div>
+            <div class="col-md-5">
+                <div class="card">
+                  <div class="card-header bg-info" role="tab">
+                    <h5>
+                      <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-envVariablesCollapse" aria-expanded="true" aria-controls="cloudConfig-envVariablesCollapse">
+                        Enviroment Variables
+                        <i class="fas float-right fa-file"></i>
+                      </a>
+                    </h5>
+                  </div>
+                  <div class="bg-dark" id="cloudConfig-envVariablesCollapse" class="collapse show" role="tabpanel" aria-labelledby="cloudConfig-actionsHeading">
+                    <div class="card-block bg-dark">
+                        <button class="btn btn-primary float-right mb-2" id="addEnvVariableRow">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <table class="table table-bordered table-dark text-white" id="cloudConfigEnvTable">
+                            <thead>
+                                <tr>
+                                    <th> Key </th>
+                                    <th> Value </th>
+                                    <th> Delete </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                  </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
           <div class="card">
             <div class="card-header bg-info" role="tab" >
               <h5>
@@ -108,6 +146,12 @@ $("#cloudConfigImage").tokenInput(globalUrls.images.search.searchAllHosts, {
     tokenValue: "details"
 });
 
+var envVariableTr = `<tr>
+    <td><input class="form-control" name="key"/></td>
+    <td><input class="form-control" name="value"/></td>
+    <td><button class="btn btn-danger deleteEnvRow"><i class="fas fa-trash-alt"></i></button></td>
+</tr>
+`;
 
 function loadCloudConfigView(cloudConfigId)
 {
@@ -125,6 +169,16 @@ function loadCloudConfigView(cloudConfigId)
         if(config.data.imageDetails.hasOwnProperty("description")){
             $("#cloudConfigImage").tokenInput("add", config.data.imageDetails);
         }
+
+
+        $("#cloudConfigEnvTable > tbody").empty();
+        $.each(config.data.envVariables, (key, val)=>{
+            let p = $(envVariableTr);
+            p.find("input[name=key]").val(key);
+            p.find("input[name=value]").val(val);
+            $("#cloudConfigEnvTable > tbody ").append(p);
+        });
+
 
 
         editor.setValue(config.data.data, -1);
@@ -179,6 +233,13 @@ function loadCloudConfigOverview(){
     $("#cloudConfigBox, #cloudConfigOverview").show();
 }
 
+$("#cloudConfigBox").on("click", ".deleteEnvRow", function(){
+    $(this).parents("tr").remove();
+});
+$("#cloudConfigBox").on("click", "#addEnvVariableRow", function(){
+    $("#cloudConfigEnvTable").append(envVariableTr);
+});
+
 $("#cloudConfigBox").on("click", "#createCloudConfig", function(){
     $("#modal-cloudConfig-create").modal("show");
 });
@@ -192,7 +253,8 @@ $("#cloudConfigBox").on("click", ".save", function(){
     var code = editor.getValue();
     let x = {
         code: code,
-        cloudConfigId: currentCloudConfigId
+        cloudConfigId: currentCloudConfigId,
+        envVariables: {}
     }
 
     let image = $("#cloudConfigImage").tokenInput("get");
@@ -204,13 +266,68 @@ $("#cloudConfigBox").on("click", ".save", function(){
 
     x.imageDetails = image[0];
 
-    ajaxRequest(globalUrls.cloudConfig.update, x, function(response){
+    let invalid = false;
+    let doesntStartWithEnvWarning = false;
+    $("#cloudConfigEnvTable > tbody > tr").each(function(){
+        let tr = $(this);
+        let keyInput = tr.find("input[name=key]");
+        let valInput = tr.find("input[name=value]");
+        let key = keyInput.val();
+        let val = valInput.val();
+        if(key == ""){
+            $.alert("Please input key");
+            keyInput.focus();
+            invalid = true;
+            return false;
+        } else if(val == ""){
+            $.alert("Please input value");
+            keyInput.focus();
+            invalid = true;
+            return false;
+        }
+
+        if(key.startsWith("environment.") !== true){
+            doesntStartWithEnvWarning = true;
+        }
+
+        x.envVariables[key] = val;
+    });
+
+    if(invalid){
+        return false;
+    }
+    if(doesntStartWithEnvWarning){
+        $.confirm({
+            title: `Key Doesn't Start With enviroment.`,
+            content: `The key should probably start with "enviroment." to have the intened effect`,
+            buttons: {
+                cancel: {
+                    btnClass: "btn btn-primary",
+                    text: "go back"
+                },
+                ok: {
+                    btnClass: "btn btn-danger",
+                    text: "Continue Anyway",
+                    action: function(){
+                        sendCloduConfigUpdate(x);
+                    }
+                }
+            }
+        });
+    }else{
+        sendCloduConfigUpdate(x);
+    }
+
+});
+
+function sendCloduConfigUpdate(cloudConfig){
+    ajaxRequest(globalUrls.cloudConfig.update, cloudConfig, function(response){
         response = makeToastr(response);
         if(response.hasOwnProperty("error")){
             return false;
         }
     });
-});
+}
 
 $("#cloudConfigBox").on("click", "#deleteCloudConfig", function(){
     $.confirm({
