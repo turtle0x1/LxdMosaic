@@ -7,17 +7,24 @@
         </u></h4>
     </div>
     <div class="row" id="containerViewBtns">
-        <div class="col-md-6 text-center">
+        <div class="col-md-4 text-center">
             <div class="card bg-primary card-hover-primary text-center toggleCard" id="goToDetails">
                 <div class="card-body">
                     Details
                 </div>
             </div>
         </div>
-        <div class="col-md-6 text-center">
+        <div class="col-md-4 text-center">
             <div class="card card-hover-primary text-center toggleCard" id="goToConsole">
                 <div class="card-body">
                     <i class="fas fa-terminal"></i>Console
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="card card-hover-primary text-center toggleCard" id="goToBackups">
+                <div class="card-body">
+                    <i class="fas fa-save"></i>Backups
                 </div>
             </div>
         </div>
@@ -182,9 +189,27 @@
 <div id="containerConsole">
     <div id="terminal-container"></div>
 </div>
+<div id="containerBackups">
+    <div class="card">
+        <div class="card-header">
+            Local Container Backups
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered" id="backupTable">
+                <thead>
+                    <tr>
+                        <th> Backup </th>
+                        <th> Date </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </div>
 <script src="/assets/dist/xterm.js"></script>
-<!-- <script src="/assets/dist/xterm.attach.js"></script> -->
 <script>
 
 var term = new Terminal();
@@ -415,7 +440,7 @@ function loadContainerView(data)
         consoleSocket.emit("close", currentTerminalProcessId);
         currentTerminalProcessId = null;
     }
-    
+
     ajaxRequest(globalUrls.containers.getDetails, data, function(result){
         let x = $.parseJSON(result);
 
@@ -518,6 +543,16 @@ function loadContainerView(data)
 
         $("#memoryData > tbody").empty().append(memoryHtml);
 
+        let localBackups = "";
+
+        $.each(x.backups.localBackups, function(_, item){
+            localBackups += `<tr>
+                <td>${item.backupName}</td>
+                <td>${moment(item.dateCreated).fromNow()}</td>
+            </tr>`
+        });
+        $("#backupTable > tbody").empty().append(localBackups);
+
         $(".boxSlide").hide();
         $("#containerBox").show();
         $('html, body').animate({scrollTop:0},500);
@@ -536,13 +571,18 @@ $("#containerBox").on("click", ".toggleCard", function(){
 
 $("#containerBox").on("click", "#goToDetails", function(){
     $("#containerDetails").show();
-    $("#containerConsole").hide();
+    $("#containerConsole, #containerBackups").hide();
+});
+
+$("#containerBox").on("click", "#goToBackups", function() {
+    $("#containerDetails, #containerConsole").hide();
+    $("#containerBackups").show();
 });
 
 $("#containerBox").on("click", "#goToConsole", function() {
     Terminal.applyAddon(attach);
 
-    $("#containerDetails").hide();
+    $("#containerDetails, #containerBackups").hide();
     $("#containerConsole").show();
 
 
