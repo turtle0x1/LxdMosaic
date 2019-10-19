@@ -304,6 +304,10 @@ if ($haveServers->haveAny() !== true) {
               <i class="fas fa-network-wired"></i> Networks </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link viewBackups">
+              <i class="fas fa-save"></i> Backups </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link viewSettings">
               <i class="fas fa-wrench"></i> Settings </a>
           </li>
@@ -346,6 +350,7 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/storage.php";
                     require __DIR__ . "/boxes/networks.php";
                     require __DIR__ . "/boxes/server.php";
+                    require __DIR__ . "/boxes/backups.php";
                     require __DIR__ . "/boxes/settings.php";
                 ?>
             </div>
@@ -861,6 +866,12 @@ $(document).on("click", ".viewSettings", function(){
     setBreadcrumb("Settings", "active");
     loadSettingsView();
     changeActiveNav(".viewSettings")
+});
+
+$(document).on("click", ".viewBackups", function(){
+    setBreadcrumb("Backups", "active");
+    loadBackupsView();
+    changeActiveNav(".viewBackups")
 });
 </script>
 <?php

@@ -1,5 +1,6 @@
 vendor/**
 src/sensitiveData/certs/**
+src/sensitiveData/backups/**
 .env
 build/**
 .php_cs.cache
