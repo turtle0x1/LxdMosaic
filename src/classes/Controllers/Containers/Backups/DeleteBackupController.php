@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Containers\Backups;
 
 use dhope0000\LXDClient\Tools\Containers\Backups\DeleteRemoteBackup;
 
-class DeleteBackupController
+class DeleteBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     private $deleteRemoteBackup;
 

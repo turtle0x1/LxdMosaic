@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Containers\Backups;
 
 use dhope0000\LXDClient\Tools\Containers\Backups\StoreBackupLocally;
 
-class ImportBackupController
+class ImportBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     public function __construct(StoreBackupLocally $storeBackupLocally)
     {

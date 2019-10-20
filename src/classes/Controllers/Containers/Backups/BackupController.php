@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Containers\Backups;
 
 use dhope0000\LXDClient\Tools\Containers\Backups\BackupContainer;
 
-class BackupController
+class BackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     private $backupContainer;
 
