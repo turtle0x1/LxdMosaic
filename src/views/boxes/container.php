@@ -747,26 +747,54 @@ $("#containerBox").on("click", ".deleteBackup", function(){
 });
 
 $("#containerBox").on("click", ".importBackup", function(){
-    let x = {
-        hostId: currentContainerDetails.hostId,
-        container: currentContainerDetails.container,
-        backup: $(this).parents("tr").data("name")
-    }
-    let btn = $(this);
-    btn.html('<i class="fa fa-cog fa-spin"></i>Importing..');
+    let tr =  $(this).parents("tr");
+    $.confirm({
+        title: `Import Backup - ${currentContainerDetails.alias} / ${currentContainerDetails.container} / ${tr.data("name")} `,
+        content: `
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" name="delete">
+              <label class="form-check-label" for="delete">Delete From Remote?</label>
+            </div>
+            `,
+        buttons: {
+            cancel: function(){},
+            rename: {
+                text: 'Import',
+                btnClass: 'btn-blue',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
 
-    btn.attr("disabled", true);
-    let tr = $(this).parents("tr");
-    tr.find(".deleteBackup").attr("disabled", true);
-    ajaxRequest(globalUrls.containers.backups.importContainerBackup, x, (data)=>{
-        data = makeToastr(data);
-        if(data.state == "error"){
-            btn.html('Import');
-            tr.find(".deleteBackup").attr("disabled", false);
-            btn.attr("disabled", false);
-            return false;
+                    let deleteFromRemote = this.$content.find('input[name=delete]').is(":checked") ? 1 : 0
+
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Importing..'); // let the user know
+                    modal.buttons.rename.disable();
+                    modal.buttons.cancel.disable();
+
+                    console.log(tr);
+
+                    let x = {
+                        hostId: currentContainerDetails.hostId,
+                        container: currentContainerDetails.container,
+                        backup: tr.data("name"),
+                        'delete': deleteFromRemote
+                    }
+
+                    ajaxRequest(globalUrls.containers.backups.importContainerBackup, x, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            modal.buttons.rename.setText('Importing'); // let the user know
+                            modal.buttons.rename.enable();
+                            modal.buttons.cancel.enable();
+                        }
+
+                        modal.close();
+                        loadContainerBackups();
+                    });
+                    return false;
+                }
+            },
         }
-        loadContainerBackups();
     });
 });
 

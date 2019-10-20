@@ -4,18 +4,19 @@ namespace dhope0000\LXDClient\Tools\Containers\Backups;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Containers\Backups\StoreBackupLocally;
-use dhope0000\LXDClient\Tools\Containers\Backups\DeleteRemoteBackup;
 
 class BackupContainer
 {
+    private $lxdClient;
+
+    private $storeBackupLocally;
+
     public function __construct(
         LxdClient $lxdClient,
-        StoreBackupLocally $storeBackupLocally,
-        DeleteRemoteBackup $deleteRemoteBackup
+        StoreBackupLocally $storeBackupLocally
     ) {
         $this->lxdClient = $lxdClient;
         $this->storeBackupLocally = $storeBackupLocally;
-        $this->deleteRemoteBackup = $deleteRemoteBackup;
     }
 
     public function create(
@@ -32,15 +33,13 @@ class BackupContainer
         if ($importAndDelete == true) {
             $wait = true;
         }
-        
+
         $client = $this->lxdClient->getANewClient($hostId);
 
         $response = $client->containers->backups->create($container, $backup, [], $wait);
 
         if ($importAndDelete) {
-            if ($this->storeBackupLocally->store($hostId, $container, $backup)) {
-                $this->deleteRemoteBackup->delete($hostId, $container, $backup);
-            }
+            $this->storeBackupLocally->store($hostId, $container, $backup, true);
         }
 
         return $response;

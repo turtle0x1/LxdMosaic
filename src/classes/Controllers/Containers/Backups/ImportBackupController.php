@@ -11,9 +11,9 @@ class ImportBackupController
         $this->storeBackupLocally = $storeBackupLocally;
     }
 
-    public function import(int $hostId, string $container, string $backup)
+    public function import(int $hostId, string $container, string $backup, int $delete)
     {
-        $this->storeBackupLocally->store($hostId, $container, $backup);
+        $this->storeBackupLocally->store($hostId, $container, $backup, (bool) $delete);
 
         return ["state"=>"success", "message"=>"Imported backup"];
     }
