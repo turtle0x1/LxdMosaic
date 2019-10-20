@@ -13,9 +13,20 @@ class BackupController
         $this->backupContainer = $backupContainer;
     }
 
-    public function backup(int $hostId, string $container, string $backup, $wait = true)
-    {
-        $lxdRespone = $this->backupContainer->create($hostId, $container, $backup, $wait);
+    public function backup(
+        int $hostId,
+        string $container,
+        string $backup,
+        $wait = true,
+        int $importAndDelete
+    ) {
+        $lxdRespone = $this->backupContainer->create(
+            $hostId,
+            $container,
+            $backup,
+            $wait,
+            (bool) $importAndDelete
+        );
 
         $status = $wait === "false" ? "Backing" : "Backed";
 

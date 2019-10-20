@@ -271,7 +271,12 @@ function backupContainerConfirm(hostId, hostAlias, container, callback = null, w
             <div class="form-group">
                 <label> Backup Name </label>
                 <input class="form-control validateName" maxlength="63" name="name"/>
-            </div>`,
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" name="importAndDelete">
+              <label class="form-check-label" for="importAndDelete">Import & Delete From Remote</label>
+            </div>
+            `,
         buttons: {
             cancel: function(){},
             rename: {
@@ -288,6 +293,8 @@ function backupContainerConfirm(hostId, hostAlias, container, callback = null, w
                         return false;
                     }
 
+                    let importAndDelete = this.$content.find('input[name=importAndDelete]').is(":checked") ? 1 : 0
+
                     modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Backing Up..'); // let the user know
                     modal.buttons.rename.disable();
                     modal.buttons.cancel.disable();
@@ -296,7 +303,8 @@ function backupContainerConfirm(hostId, hostAlias, container, callback = null, w
                         hostId: hostId,
                         container: container,
                         backup: backupName,
-                        wait: wait
+                        wait: wait,
+                        importAndDelete: importAndDelete
                     }
 
                     ajaxRequest(globalUrls.containers.backups.backup, x, function(data){
@@ -745,10 +753,16 @@ $("#containerBox").on("click", ".importBackup", function(){
         backup: $(this).parents("tr").data("name")
     }
     let btn = $(this);
+    btn.html('<i class="fa fa-cog fa-spin"></i>Importing..');
+
     btn.attr("disabled", true);
+    let tr = $(this).parents("tr");
+    tr.find(".deleteBackup").attr("disabled", true);
     ajaxRequest(globalUrls.containers.backups.importContainerBackup, x, (data)=>{
         data = makeToastr(data);
         if(data.state == "error"){
+            btn.html('Import');
+            tr.find(".deleteBackup").attr("disabled", false);
             btn.attr("disabled", false);
             return false;
         }
