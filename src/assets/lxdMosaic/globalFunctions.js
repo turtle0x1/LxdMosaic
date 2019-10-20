@@ -196,3 +196,17 @@ var toolTipsBytesCallbacks = {
         }
     }
 };
+
+var monthsNameArray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+https://stackoverflow.com/questions/1484506/random-color-generator/32124533
+function randomColor(format = 'hex') {
+    const rnd = Math.random().toString(16).slice(-6);
+    if (format === 'hex') {
+        return '#' + rnd;
+    }
+    if (format === 'rgb') {
+        const [r, g, b] = rnd.match(/.{2}/g).map(c=>parseInt(c, 16));
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+}

@@ -69,6 +69,9 @@ if ($haveServers->haveAny() !== true) {
               analytics: {
                   getLatestData: "/api/AnalyticData/GetLatestDataController/get"
               },
+              backups: {
+                  getOverview: "/api/Backups/GetBackupsOverviewController/get",
+              },
               clusters: {
                 getAll: "/api/Clusters/GetAllController/get"
               },
