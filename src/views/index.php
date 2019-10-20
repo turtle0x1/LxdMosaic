@@ -138,7 +138,13 @@ if ($haveServers->haveAny() !== true) {
                   },
                   settings: {
                       getAllAvailableSettings: "/api/Containers/Settings/GetAllAvailableSettingsController/getAll",
-                  }
+                  },
+                  backups: {
+                      backup: "/api/Containers/Backups/BackupController/backup",
+                      getContainerBackups: "/api/Containers/Backups/GetContainerBackupsController/get",
+                      deleteContainerBackup: "/api/Containers/Backups/DeleteBackupController/delete",
+                      importContainerBackup: "/api/Containers/Backups/ImportBackupController/import"
+                  },
               },
               hosts: {
                   gpu: {
@@ -503,6 +509,14 @@ $(function(){
                     callback: function(key, opt, e){
                         let item = opt["$trigger"];
                         deleteContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"));
+                    }
+                },
+                "backup": {
+                    name: "backup",
+                    icon: "fas fa-save",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        backupContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"), null, false);
                     }
                 },
             }

@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LXDClient\Tools\Backups;
+namespace dhope0000\LXDClient\Tools\Containers\Backups;
 
 use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
@@ -41,6 +41,8 @@ class StoreBackupLocally
             $backup,
             $backupInfo["backupFile"]
         );
+
+        return true;
     }
 
     private function downloadBackup(

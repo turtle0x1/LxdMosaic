@@ -23,6 +23,8 @@ class FetchContainerBackups
                     `CB_Container` = :container
                 AND
                     `CB_Host_ID` = :hostId
+                ORDER BY
+                    `dateCreated` DESC
                 ";
         $do = $this->database->prepare($sql);
         $do->execute([
