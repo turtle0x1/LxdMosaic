@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Model\Hosts\Backups\Containers\FetchContainerBackups;
 
 class GetContainerBackups
 {
+    private $lxdClient;
+    private $fetchContainerBackups;
     public function __construct(LxdClient $lxdClient, FetchContainerBackups $fetchContainerBackups)
     {
         $this->lxdClient = $lxdClient;

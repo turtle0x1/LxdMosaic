@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Client\LxdClient;
 
 class DeleteRemoteBackup
 {
+    private $lxdClient;
+    
     public function __construct(LxdClient $lxdClient)
     {
         $this->lxdClient = $lxdClient;
