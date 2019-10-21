@@ -16,6 +16,8 @@ class FetchBackups
         $sql = "SELECT
                     `CB_Date_Created` as `storedDateCreated`,
                     `CB_Backup_Date_Created` as `backupDateCreated`,
+                    `CB_Host_ID` as `hostId`,
+                    `CB_Container` as `container`,
                     `CB_Backup` as `name`,
                     `CB_Local_Path` as `localPath`
                 FROM

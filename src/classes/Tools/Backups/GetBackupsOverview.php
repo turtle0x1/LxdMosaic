@@ -3,14 +3,18 @@
 namespace dhope0000\LXDClient\Tools\Backups;
 
 use dhope0000\LXDClient\Model\Backups\FetchBackups;
+use dhope0000\LXDClient\Tools\Backups\GetHostContainerStatusForBackupSet;
 
 class GetBackupsOverview
 {
     private $fetchBackups;
 
-    public function __construct(FetchBackups $fetchBackups)
-    {
+    public function __construct(
+        FetchBackups $fetchBackups,
+        GetHostContainerStatusForBackupSet $getHostContainerStatusForBackupSet
+    ) {
         $this->fetchBackups = $fetchBackups;
+        $this->getHostContainerStatusForBackupSet = $getHostContainerStatusForBackupSet;
     }
 
     public function get()
@@ -18,9 +22,12 @@ class GetBackupsOverview
         $allBackups = $this->fetchBackups->fetchAll();
         $properties = $this->getProperties($allBackups);
 
+        $noBackups = $this->getHostContainerStatusForBackupSet->get($allBackups);
+
         return [
             "sizeByMonthYear"=>$properties["sizeByMonthYear"],
-            "filesByMonthYear"=>$properties["filesByMonthYear"]
+            "filesByMonthYear"=>$properties["filesByMonthYear"],
+            "noBackups"=>$noBackups
         ];
     }
 
