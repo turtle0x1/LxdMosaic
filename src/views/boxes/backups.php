@@ -74,12 +74,24 @@ function makeLineData(data){
     return dataByYearMonth;
 }
 
+$(document).on("click", ".createBackup", function(){
+    backupContainerConfirm(
+        $(this).data("hostId"),
+        $(this).data("hostAlias"),
+        $(this).data("container"),
+        loadBackupsOverview
+    );
+});
+
 function loadBackupsView() {
     $(".boxSlide, #backupContents").hide();
     $("#backupsBox, #backupsOverview").show();
     $("#sidebar-ul").empty();
     $(".sidebar-lg-show").removeClass("sidebar-lg-show");
+    loadBackupsOverview();
+}
 
+function loadBackupsOverview() {
     ajaxRequest(globalUrls.backups.getOverview, {}, (data)=>{
         data = makeToastr(data);
 
@@ -101,6 +113,7 @@ function loadBackupsView() {
                     <td>${date}</td>
                     <td><button
                         class="btn btn-primary createBackup"
+                        data-host-alias="${hostDetails.host}"
                         data-host-id="${hostDetails.hostId}"
                         data-container="${container.name}">
                         Backup!
