@@ -7,17 +7,24 @@
         </u></h4>
     </div>
     <div class="row" id="containerViewBtns">
-        <div class="col-md-6 text-center">
+        <div class="col-md-4 text-center">
             <div class="card bg-primary card-hover-primary text-center toggleCard" id="goToDetails">
                 <div class="card-body">
                     Details
                 </div>
             </div>
         </div>
-        <div class="col-md-6 text-center">
+        <div class="col-md-4 text-center">
             <div class="card card-hover-primary text-center toggleCard" id="goToConsole">
                 <div class="card-body">
                     <i class="fas fa-terminal"></i>Console
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="card card-hover-primary text-center toggleCard" id="goToBackups">
+                <div class="card-body">
+                    <i class="fas fa-save"></i>Backups
                 </div>
             </div>
         </div>
@@ -182,9 +189,56 @@
 <div id="containerConsole">
     <div id="terminal-container"></div>
 </div>
+<div id="containerBackups" class="card-group">
+    <div class="col-md-6">
+        <div class="card card-accent-success">
+            <div class="card-header bg-info">
+                <h4> LXDMosaic Container Backups </h4>
+            </div>
+            <div class="card-body bg-dark">
+                <table class="table table-bordered table-dark" id="localBackupTable">
+                    <thead>
+                        <tr>
+                            <th> Backup </th>
+                            <th> Date </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-accent-success">
+            <div class="card-header bg-info">
+                <h4>
+                    LXD Container Backups
+                    <button class="btn btn-success float-right" id="createBackup">
+                        Create
+                    </button>
+                </h4>
+            </div>
+            <div class="card-body bg-dark">
+                <table class="table table-bordered table-dark" id="remoteBackupTable">
+                    <thead>
+                        <tr>
+                            <th> Backup </th>
+                            <th> Date </th>
+                            <th> Stored Locally </th>
+                            <th> Import </th>
+                            <th> Delete </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 <script src="/assets/dist/xterm.js"></script>
-<!-- <script src="/assets/dist/xterm.attach.js"></script> -->
 <script>
 
 var term = new Terminal();
@@ -207,6 +261,70 @@ function loadContainerTreeAfter(milSeconds = 2000)
     setTimeout(function(){
         createContainerTree();
     }, milSeconds);
+}
+
+function backupContainerConfirm(hostId, hostAlias, container, callback = null, wait = true)
+{
+    $.confirm({
+        title: `Backup Container - ${hostAlias} / ${container} `,
+        content: `
+            <div class="form-group">
+                <label> Backup Name </label>
+                <input class="form-control validateName" maxlength="63" name="name"/>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" name="importAndDelete">
+              <label class="form-check-label" for="importAndDelete">Import & Delete From Remote</label>
+            </div>
+            `,
+        buttons: {
+            cancel: function(){},
+            rename: {
+                text: 'Backup',
+                btnClass: 'btn-blue',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
+
+                    let backupName = this.$content.find('input[name=name]').val();
+
+                    if(backupName == ""){
+                        $.alert('provide a backup name');
+                        return false;
+                    }
+
+                    let importAndDelete = this.$content.find('input[name=importAndDelete]').is(":checked") ? 1 : 0
+
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Backing Up..'); // let the user know
+                    modal.buttons.rename.disable();
+                    modal.buttons.cancel.disable();
+
+                    let x = {
+                        hostId: hostId,
+                        container: container,
+                        backup: backupName,
+                        wait: wait,
+                        importAndDelete: importAndDelete
+                    }
+
+                    ajaxRequest(globalUrls.containers.backups.backup, x, function(data){
+                        let x = makeToastr(data);
+                        if(x.state == "error"){
+                            modal.buttons.rename.setText('Backup'); // let the user know
+                            modal.buttons.rename.enable();
+                            modal.buttons.cancel.enable();
+                            return false;
+                        }
+                        if($.isFunction(callback)){
+                            callback.call();
+                        }
+                        modal.close();
+                    });
+                    return false;
+                }
+            },
+        }
+    });
 }
 
 function deleteContainerConfirm(hostId, hostAlias, container)
@@ -406,6 +524,58 @@ function copyContainerConfirm(hostId, container) {
     });
 }
 
+function loadContainerBackups()
+{
+    ajaxRequest(globalUrls.containers.backups.getContainerBackups, currentContainerDetails, (data)=>{
+        x = makeToastr(data);
+
+        let localBackups = "";
+
+        if(x.localBackups.length > 0 ){
+            $.each(x.localBackups, function(_, item){
+                localBackups += `<tr>
+                    <td>${item.backupName}</td>
+                    <td>${moment(item.dateCreated).fromNow()}</td>
+                </tr>`
+            });
+        } else{
+            localBackups = `<tr><td colspan="999" class="text-center text-info">No backups</td></tr>`
+        }
+
+        $("#localBackupTable > tbody").empty().append(localBackups);
+
+        let remoteBackups = "";
+        if(x.remoteBackups.length > 0){
+            $.each(x.remoteBackups, function(_, item){
+
+                let trClass = 'danger',
+                    downloadedLocallySym = '<i class="fas fa-times-circle"></i>',
+                    importHtml = `<button class="btn btn-primary importBackup">Import</button>`;
+
+                if(item.storedLocally){
+                    trClass = 'success';
+                    downloadedLocallySym = '<i class="fas fa-check-circle"></i>';
+                    importHtml = "<b class='text-info'>Already Imported</b>"
+                }
+
+                remoteBackups += `<tr data-name="${item.name}" class="alert alert-${trClass}">
+                    <td>${item.name}</td>
+                    <td>${moment(item.created_at).fromNow()}</td>
+                    <td>${downloadedLocallySym}</td>
+                    <td>${importHtml}</td>
+                    <td><button class='btn btn-danger deleteBackup'><i class="fas fa-trash"></i></button></td>
+                </tr>`
+            });
+        }else{
+            remoteBackups = `<tr><td colspan="999" class="text-center text-info">No backups</td></tr>`
+        }
+
+
+        $("#remoteBackupTable > tbody").empty().append(remoteBackups);
+    });
+
+}
+
 function loadContainerView(data)
 {
     $("#containerConsole").hide();
@@ -415,7 +585,7 @@ function loadContainerView(data)
         consoleSocket.emit("close", currentTerminalProcessId);
         currentTerminalProcessId = null;
     }
-    
+
     ajaxRequest(globalUrls.containers.getDetails, data, function(result){
         let x = $.parseJSON(result);
 
@@ -524,6 +694,110 @@ function loadContainerView(data)
     });
 }
 
+$("#containerBox").on("click", "#createBackup", function(){
+    backupContainerConfirm(
+        currentContainerDetails.hostId,
+        currentContainerDetails.alias,
+        currentContainerDetails.container,
+        loadContainerBackups
+    );
+});
+
+$("#containerBox").on("click", ".deleteBackup", function(){
+
+    let x = {
+        hostId: currentContainerDetails.hostId,
+        container: currentContainerDetails.container,
+        backup: $(this).parents("tr").data("name")
+    }
+
+    $.confirm({
+        title: `Delete Backup - ${currentContainerDetails.alias} / ${currentContainerDetails.container} / ${x.backup} `,
+        content: ``,
+        buttons: {
+            cancel: function(){},
+            delete: {
+                text: 'Delete Backup',
+                btnClass: 'btn-danger',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
+
+                    modal.buttons.delete.setText('<i class="fa fa-cog fa-spin"></i>Deleting..'); // let the user know
+                    modal.buttons.delete.disable();
+                    modal.buttons.cancel.disable();
+
+                    ajaxRequest(globalUrls.containers.backups.deleteContainerBackup, x, (data)=>{
+                        data = makeToastr(data);
+                        if(x.state == "error"){
+                            modal.buttons.delete.setText('Delete Backup'); // let the user know
+                            modal.buttons.delete.enable();
+                            modal.buttons.cancel.enable();
+                            return false;
+                        }else{
+                            modal.close();
+                            loadContainerBackups();
+                        }
+                    });
+                    return false;
+                }
+            }
+        }
+    });
+});
+
+$("#containerBox").on("click", ".importBackup", function(){
+    let tr =  $(this).parents("tr");
+    $.confirm({
+        title: `Import Backup - ${currentContainerDetails.alias} / ${currentContainerDetails.container} / ${tr.data("name")} `,
+        content: `
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" name="delete">
+              <label class="form-check-label" for="delete">Delete From Remote?</label>
+            </div>
+            `,
+        buttons: {
+            cancel: function(){},
+            rename: {
+                text: 'Import',
+                btnClass: 'btn-blue',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
+
+                    let deleteFromRemote = this.$content.find('input[name=delete]').is(":checked") ? 1 : 0
+
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Importing..'); // let the user know
+                    modal.buttons.rename.disable();
+                    modal.buttons.cancel.disable();
+
+                    console.log(tr);
+
+                    let x = {
+                        hostId: currentContainerDetails.hostId,
+                        container: currentContainerDetails.container,
+                        backup: tr.data("name"),
+                        'delete': deleteFromRemote
+                    }
+
+                    ajaxRequest(globalUrls.containers.backups.importContainerBackup, x, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            modal.buttons.rename.setText('Importing'); // let the user know
+                            modal.buttons.rename.enable();
+                            modal.buttons.cancel.enable();
+                        }
+
+                        modal.close();
+                        loadContainerBackups();
+                    });
+                    return false;
+                }
+            },
+        }
+    });
+});
+
 $("#containerBox").on("click", ".renameContainer", function(){
     renameContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);
 });
@@ -536,13 +810,19 @@ $("#containerBox").on("click", ".toggleCard", function(){
 
 $("#containerBox").on("click", "#goToDetails", function(){
     $("#containerDetails").show();
-    $("#containerConsole").hide();
+    $("#containerConsole, #containerBackups").hide();
+});
+
+$("#containerBox").on("click", "#goToBackups", function() {
+    loadContainerBackups();
+    $("#containerDetails, #containerConsole").hide();
+    $("#containerBackups").show();
 });
 
 $("#containerBox").on("click", "#goToConsole", function() {
     Terminal.applyAddon(attach);
 
-    $("#containerDetails").hide();
+    $("#containerDetails, #containerBackups").hide();
     $("#containerConsole").show();
 
 

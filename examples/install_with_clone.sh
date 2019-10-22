@@ -33,7 +33,8 @@ cd /var/www || exit
 git clone https://github.com/turtle0x1/LxdMosaic.git
 
 mkdir -p /var/www/LxdMosaic/src/sensitiveData/certs
-chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/certs
+mkdir -p /var/www/LxdMosaic/src/sensitiveData/backups
+chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/
 
 # Move in LxdManager
 cd /var/www/LxdMosaic || exit

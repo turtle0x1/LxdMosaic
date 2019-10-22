@@ -12,11 +12,15 @@ class GetHostsContainers
         $this->client = $lxdClient;
     }
 
-    public function getHostsContainers()
+    public function getHostsContainers($skipOffline = false)
     {
         $details = array();
         foreach ($this->hostList->getHostListWithDetails() as $host) {
             $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
+
+            if (!$host["Host_Online"] && $skipOffline) {
+                continue;
+            }
 
             if ($host["Host_Online"] != true) {
                 $details[$indent] = [

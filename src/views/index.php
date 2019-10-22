@@ -69,6 +69,9 @@ if ($haveServers->haveAny() !== true) {
               analytics: {
                   getLatestData: "/api/AnalyticData/GetLatestDataController/get"
               },
+              backups: {
+                  getOverview: "/api/Backups/GetBackupsOverviewController/get",
+              },
               clusters: {
                 getAll: "/api/Clusters/GetAllController/get"
               },
@@ -138,7 +141,13 @@ if ($haveServers->haveAny() !== true) {
                   },
                   settings: {
                       getAllAvailableSettings: "/api/Containers/Settings/GetAllAvailableSettingsController/getAll",
-                  }
+                  },
+                  backups: {
+                      backup: "/api/Containers/Backups/BackupController/backup",
+                      getContainerBackups: "/api/Containers/Backups/GetContainerBackupsController/get",
+                      deleteContainerBackup: "/api/Containers/Backups/DeleteBackupController/delete",
+                      importContainerBackup: "/api/Containers/Backups/ImportBackupController/import"
+                  },
               },
               hosts: {
                   gpu: {
@@ -304,6 +313,10 @@ if ($haveServers->haveAny() !== true) {
               <i class="fas fa-network-wired"></i> Networks </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link viewBackups">
+              <i class="fas fa-save"></i> Backups </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link viewSettings">
               <i class="fas fa-wrench"></i> Settings </a>
           </li>
@@ -346,6 +359,7 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/storage.php";
                     require __DIR__ . "/boxes/networks.php";
                     require __DIR__ . "/boxes/server.php";
+                    require __DIR__ . "/boxes/backups.php";
                     require __DIR__ . "/boxes/settings.php";
                 ?>
             </div>
@@ -498,6 +512,14 @@ $(function(){
                     callback: function(key, opt, e){
                         let item = opt["$trigger"];
                         deleteContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"));
+                    }
+                },
+                "backup": {
+                    name: "backup",
+                    icon: "fas fa-save",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        backupContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"), null, false);
                     }
                 },
             }
@@ -861,6 +883,12 @@ $(document).on("click", ".viewSettings", function(){
     setBreadcrumb("Settings", "active");
     loadSettingsView();
     changeActiveNav(".viewSettings")
+});
+
+$(document).on("click", ".viewBackups", function(){
+    setBreadcrumb("Backups", "active");
+    loadBackupsView();
+    changeActiveNav(".viewBackups")
 });
 </script>
 <?php

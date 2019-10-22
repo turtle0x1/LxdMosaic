@@ -17,6 +17,7 @@ class GetContainer
         $details = $client->containers->info($containerName);
         $state = $client->containers->state($containerName);
         $snapshots = $client->containers->snapshots->all($containerName);
+
         return [
             "details"=>$details,
             "state"=>$state,
