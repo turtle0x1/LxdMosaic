@@ -6,7 +6,9 @@
         "dhope0000/lxd": "^0.13.0",
         "vlucas/phpdotenv": "^2.5",
         "symfony/http-foundation": "^4.2",
-        "symfony/filesystem": "^4.3"
+        "symfony/filesystem": "^4.3",
+        "symfony/cache": "^4.3",
+        "php-http/cache-plugin": "^1.6"
     },
     "autoload": {
         "psr-4": {

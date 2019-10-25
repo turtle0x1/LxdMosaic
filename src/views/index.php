@@ -148,6 +148,10 @@ if ($haveServers->haveAny() !== true) {
                       deleteContainerBackup: "/api/Containers/Backups/DeleteBackupController/delete",
                       importContainerBackup: "/api/Containers/Backups/ImportBackupController/import"
                   },
+                  files: {
+                      delete: '/api/Containers/Files/DeletePathController/delete',
+                      getPath: '/api/Containers/Files/GetPathController/get'
+                  }
               },
               hosts: {
                   gpu: {
@@ -263,6 +267,13 @@ if ($haveServers->haveAny() !== true) {
       </script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+      <form style="display: none;" method="POST" id="testSubmit" action="/api/Containers/Files/GetPathController/get">
+          <input value="" name="hostId"/>
+          <input value="" name="path"/>
+          <input value="" name="container"/>
+          <input value="1" type="number" name="download"/>
+
+      </form>
     <header class="app-header navbar navbar-dark bg-dark">
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <i class="fas fa-bars" style="color: #dd4814;"></i>
@@ -522,6 +533,20 @@ $(function(){
                         backupContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"), null, false);
                     }
                 },
+            }
+        });
+
+        $.contextMenu({
+            selector: '.filesystemObject',
+            items: {
+                "delete": {
+                    name: "Delete",
+                    icon: "delete",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        deleteFilesystemObjectConfirm(item.data("path"), loadFileSystemPath);
+                    }
+                }
             }
         });
 });
