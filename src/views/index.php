@@ -71,6 +71,7 @@ if ($haveServers->haveAny() !== true) {
               },
               backups: {
                   getOverview: "/api/Backups/GetBackupsOverviewController/get",
+                  restore: '/api/Backups/RestoreBackupController/restore'
               },
               clusters: {
                 getAll: "/api/Clusters/GetAllController/get"

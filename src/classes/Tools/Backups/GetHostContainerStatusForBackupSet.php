@@ -33,20 +33,38 @@ class GetHostContainerStatusForBackupSet
                 continue;
             }
 
+            $backupsToSearch = [];
+
+            if (isset($backupsByHostId[$host["hostId"]])) {
+                $backupsToSearch = $backupsByHostId[$host["hostId"]];
+            }
+
             $containers = [];
+            $seenContainerNames = [];
 
             foreach ($host["containers"] as $name => $container) {
-                $backupsToSearch = [];
-
-                if (isset($backupsByHostId[$host["hostId"]])) {
-                    $backupsToSearch = $backupsByHostId[$host["hostId"]];
-                }
-
                 $lastBackup = $this->findLastBackup($name, $backupsToSearch);
                 $container = $this->extractContainerInfo($name, $container);
+                $allBackups = $this->findAllBackups($name, $backupsToSearch);
 
+                $container["containerExists"] = true;
                 $container["lastBackup"] = $lastBackup;
+                $container["allBackups"] = $allBackups;
+
                 $containers[] = $container;
+                $seenContainerNames[] = $name;
+            }
+
+            foreach ($backupsToSearch as $backup) {
+                if (!in_array($backup["container"], $seenContainerNames)) {
+                    $containers[] = [
+                        "name"=>$backup["container"],
+                        "containerExists"=>false,
+                        "lastBackup"=>$this->findLastBackup($backup["container"], $backupsToSearch),
+                        "allBackups"=>$this->findAllBackups($backup["container"], $backupsToSearch)
+                    ];
+                    $seenContainerNames[] = $backup["container"];
+                }
             }
 
             $host["containers"] = $containers;
@@ -70,12 +88,21 @@ class GetHostContainerStatusForBackupSet
         return $backupsByHostId;
     }
 
+    private function findAllBackups(string $container, array $hostBackups)
+    {
+        $output = [];
+        foreach ($hostBackups as $backup) {
+            if ($backup["container"] == $container) {
+                $output[] = $backup;
+            }
+        }
+        return $output;
+    }
+
     private function findLastBackup(string $container, ?array $hostBackups)
     {
         $x = [
-            "neverBackedUp"=>true,
-            "containerExists"=>true // This is for later when we offer restoring
-                                    // backups for deleted containers
+            "neverBackedUp"=>true
         ];
 
         if (empty($hostBackups)) {

@@ -4,14 +4,14 @@ namespace dhope0000\LXDClient\Model\Backups;
 
 use dhope0000\LXDClient\Model\Database\Database;
 
-class FetchBackups
+class FetchBackup
 {
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function fetchAll()
+    public function fetch(int $backupId)
     {
         $sql = "SELECT
                     `CB_ID` as `id`,
@@ -22,11 +22,16 @@ class FetchBackups
                     `CB_Backup` as `name`,
                     `CB_Local_Path` as `localPath`
                 FROM
-                `Container_Backups`
+                    `Container_Backups`
+                WHERE
+                    `CB_ID` = :backupId
                 ORDER BY
                     `storedDateCreated` ASC
                 ";
-        $do = $this->database->query($sql);
-        return $do->fetchAll(\PDO::FETCH_ASSOC);
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":backupId"=>$backupId
+        ]);
+        return $do->fetch(\PDO::FETCH_ASSOC);
     }
 }

@@ -22,12 +22,12 @@ class GetBackupsOverview
         $allBackups = $this->fetchBackups->fetchAll();
         $properties = $this->getProperties($allBackups);
 
-        $noBackups = $this->getHostContainerStatusForBackupSet->get($allBackups);
+        $allBackups = $this->getHostContainerStatusForBackupSet->get($allBackups);
 
         return [
             "sizeByMonthYear"=>$properties["sizeByMonthYear"],
             "filesByMonthYear"=>$properties["filesByMonthYear"],
-            "noBackups"=>$noBackups
+            "allBackups"=>$allBackups
         ];
     }
 

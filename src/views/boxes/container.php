@@ -208,6 +208,7 @@
                         <tr>
                             <th> Backup </th>
                             <th> Date </th>
+                            <th> Restore </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -327,6 +328,72 @@ function deleteFilesystemObjectConfirm(path)
                     return false;
                 }
             },
+        }
+    });
+}
+function restoreBackupContainerConfirm(backupId, hostAlias, container, callback = null, wait = true)
+{
+    $.confirm({
+        title: `Backup Container - ${hostAlias} / ${container} `,
+        content: `
+            <div class="form-group">
+                <label> Target Host </label>
+                <input class="form-control" name="targetHost"/>
+            </div>
+            `,
+        buttons: {
+            cancel: function(){},
+            rename: {
+                text: 'Restore',
+                btnClass: 'btn-warning',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
+
+                    let targetHost = this.$content.find('input[name=targetHost]').tokenInput("get");
+
+                    if(targetHost.length == 0){
+                        $.alert("Please select target host");
+                        return false;
+                    }
+
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Restoring..'); // let the user know
+                    modal.buttons.rename.disable();
+                    modal.buttons.cancel.disable();
+
+                    let x = {
+                        backupId: backupId,
+                        targetHost: targetHost[0].hostId
+                    }
+
+                    ajaxRequest(globalUrls.backups.restore, x, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            modal.buttons.rename.setText('Backup'); // let the user know
+                            modal.buttons.rename.enable();
+                            modal.buttons.cancel.enable();
+                            return false;
+                        }
+                        if($.isFunction(callback)){
+                            callback.call();
+                        }
+                        modal.close();
+                    });
+                    return false;
+                }
+            },
+        },
+        onContentReady: function () {
+            // bind to events
+            var jc = this;
+            this.$content.find('input[name=targetHost]').tokenInput(globalUrls.hosts.search.search, {
+                queryParam: "host",
+                propertyToSearch: "host",
+                tokenValue: "hostId",
+                preventDuplicates: false,
+                tokenLimit: 1,
+                theme: "facebook"
+            });
         }
     });
 }
@@ -600,9 +667,10 @@ function loadContainerBackups()
 
         if(x.localBackups.length > 0 ){
             $.each(x.localBackups, function(_, item){
-                localBackups += `<tr>
+                localBackups += `<tr data-backup-id="${item.id}">
                     <td>${item.backupName}</td>
                     <td>${moment(item.dateCreated).fromNow()}</td>
+                    <td><button class='btn btn-warning containerRestoreBackup'>Restore</button></td>
                 </tr>`
             });
         } else{
@@ -768,6 +836,17 @@ $("#containerBox").on("click", "#createBackup", function(){
         currentContainerDetails.container,
         loadContainerBackups
     );
+});
+
+$("#containerBox").on("click", ".containerRestoreBackup", function(){
+    let backupId = $(this).parents("tr").data("backupId");
+
+    restoreBackupContainerConfirm(
+        backupId,
+        currentContainerDetails.alias,
+        currentContainerDetails.container
+    );
+
 });
 
 $("#containerBox").on("click", ".deleteBackup", function(){
