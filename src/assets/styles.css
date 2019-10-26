@@ -3,6 +3,16 @@ body {
     font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
 }
 
+
+.toggleCard {
+    cursor: pointer;
+}
+
+
+.disabled {
+    cursor: not-allowed;
+}
+
 .token-input-dropdown-facebook {
     z-index: 999999999 !important;
 }

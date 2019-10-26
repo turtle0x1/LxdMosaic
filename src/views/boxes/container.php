@@ -182,50 +182,56 @@
     <div id="terminal-container"></div>
 </div>
 <div id="containerBackups" class="card-group">
-    <div class="col-md-6">
-        <div class="card card-accent-success">
-            <div class="card-header bg-info">
-                <h4> LXDMosaic Container Backups </h4>
-            </div>
-            <div class="card-body bg-dark">
-                <table class="table table-bordered table-dark" id="localBackupTable">
-                    <thead>
-                        <tr>
-                            <th> Backup </th>
-                            <th> Date </th>
-                            <th> Restore </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
+    <div class="row" id="backupErrorRow">
+        <div class="col-md-12 alert alert-danger" id="backupErrorMessage">
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card card-accent-success">
-            <div class="card-header bg-info">
-                <h4>
-                    LXD Container Backups
-                    <button class="btn btn-success float-right" id="createBackup">
-                        Create
-                    </button>
-                </h4>
+    <div class="row" id="backupDetailsRow">
+        <div class="col-md-6">
+            <div class="card card-accent-success">
+                <div class="card-header bg-info">
+                    <h4> LXDMosaic Container Backups </h4>
+                </div>
+                <div class="card-body bg-dark">
+                    <table class="table table-bordered table-dark" id="localBackupTable">
+                        <thead>
+                            <tr>
+                                <th> Backup </th>
+                                <th> Date </th>
+                                <th> Restore </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="card-body bg-dark">
-                <table class="table table-bordered table-dark" id="remoteBackupTable">
-                    <thead>
-                        <tr>
-                            <th> Backup </th>
-                            <th> Date </th>
-                            <th> Stored Locally </th>
-                            <th> Import </th>
-                            <th> Delete </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-accent-success">
+                <div class="card-header bg-info">
+                    <h4>
+                        LXD Container Backups
+                        <button class="btn btn-success float-right" id="createBackup">
+                            Create
+                        </button>
+                    </h4>
+                </div>
+                <div class="card-body bg-dark">
+                    <table class="table table-bordered table-dark" id="remoteBackupTable">
+                        <thead>
+                            <tr>
+                                <th> Backup </th>
+                                <th> Date </th>
+                                <th> Stored Locally </th>
+                                <th> Import </th>
+                                <th> Delete </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -647,6 +653,14 @@ function loadContainerBackups()
 {
     ajaxRequest(globalUrls.containers.backups.getContainerBackups, currentContainerDetails, (data)=>{
         x = makeToastr(data);
+        $("#backupDetailsRow").show();
+        $("#backupErrorRow").hide()
+        if(x.hasOwnProperty("state") && x.state == "error"){
+            $("#backupErrorRow").show()
+            $("#backupErrorMessage").text(x.message);
+            $("#backupDetailsRow").hide();
+            return false;
+        }
 
         let localBackups = "";
 
@@ -725,6 +739,12 @@ function loadContainerView(data)
 
         $("#container-currentState").html(`<i class="` + statusCodeIconMap[x.state.status_code] +`"></i>`);
         $("#container-changeState").val("");
+
+        if(x.backupsSupported){
+            $("#goToBackups").removeClass("bg-dark disabled");
+        }else{
+            $("#goToBackups").addClass("bg-dark disabled");
+        }
 
         //NOTE Read more here https://github.com/lxc/pylxd/issues/242
         let containerCpuTime = nanoSecondsToHourMinutes(x.state.cpu.usage);
@@ -962,6 +982,10 @@ $("#containerBox").on("click", ".renameContainer", function(){
 });
 
 $("#containerBox").on("click", ".toggleCard", function(){
+    if($(this).attr("id") == "goToBackups" && $(this).hasClass("disabled")){
+        return false;
+    }
+
     $("#containerViewBtns").find(".bg-primary").removeClass("bg-primary");
     $(this).addClass("bg-primary");
 });
@@ -1063,6 +1087,9 @@ $("#containerBox").on("click", "#goToDetails", function(){
 });
 
 $("#containerBox").on("click", "#goToBackups", function() {
+    if($(this).hasClass("disabled")){
+        return false;
+    }
     loadContainerBackups();
     $("#containerDetails, #containerConsole, #containerFiles").hide();
     $("#containerBackups").show();
@@ -1091,7 +1118,9 @@ $("#containerBox").on("click", "#goToConsole", function() {
                 </div>
                 `,
             buttons: {
-                cancel: function(){},
+                cancel: function(){
+                    $("#goToDetails").trigger("click");
+                },
                 go: {
                     text: "Go!",
                     btnClass: "btn-primary",

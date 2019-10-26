@@ -170,14 +170,19 @@ function loadBackupsOverview() {
 
                 let createdDate = container.containerExists ? moment(container.created).fromNow() : "Deleted";
                 let date = "Never";
-                let viewButton = `<button
-                    class="btn btn-primary viewContainerBackups"
-                    data-host-alias="${host}"
-                    data-host-id="${hostDetails.hostId}"
-                    data-container-index="${containerIndex}"
-                    data-container="${container.name}">
-                    View!
-                </button>`;
+                let viewButton = "Host Doesn't support backups";
+
+                if(hostDetails.supportsBackups){
+                    viewButton = `<button
+                        class="btn btn-primary viewContainerBackups"
+                        data-host-alias="${host}"
+                        data-host-id="${hostDetails.hostId}"
+                        data-container-index="${containerIndex}"
+                        data-container="${container.name}">
+                        View!
+                    </button>`;
+                }
+
 
                 if(container.lastBackup.hasOwnProperty("backupDateCreated")){
                     date = moment(container.lastBackup.backupDateCreated).fromNow()
