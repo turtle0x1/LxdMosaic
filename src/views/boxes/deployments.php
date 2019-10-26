@@ -139,7 +139,7 @@ var emptyDeploymentBox = function(){
     </div>`);
 }
 
-function loadDeploymentsView()
+function loadDeploymentsView(deploymentId = null)
 {
     $(".boxSlide, #depoymentDetails").hide();
     $("#deploymentsOverview, #deploymentsBox").show();
@@ -155,7 +155,7 @@ function loadDeploymentsView()
         }
 
         let hosts = `
-        <li class="nav-item active deployments-overview">
+        <li class="nav-item ${$.isNumeric(deploymentId) ? "" : "active"} deployments-overview">
             <a class="nav-link" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
@@ -170,13 +170,17 @@ function loadDeploymentsView()
             box.find(".memory").text(formatBytes(item.containerDetails.totalMem));
             box.find(".containers").text(item.containerDetails.totalContainers);
             $("#deploymentList").append(box);
-            hosts += `<li class="nav-item view-deployment" data-id="${item.id}" >
+            let active = item.id == deploymentId ? "active" : "";
+            hosts += `<li class="nav-item view-deployment ${active}" data-id="${item.id}" >
                 <a class="nav-link" href="#">
                     <i class="nav-icon fas fa-space-shuttle"></i> ${item.name}
                 </a>
             </li>`
         });
         $("#sidebar-ul").empty().append(hosts);
+        if($.isNumeric(deploymentId)){
+            $(`.view-deployment[data-id=${deploymentId}]`).trigger("click");
+        }
     });
 }
 

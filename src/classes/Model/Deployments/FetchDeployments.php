@@ -41,4 +41,31 @@ class FetchDeployments
         ]);
         return $do->fetch(\PDO::FETCH_ASSOC);
     }
+
+    public function byHostContainer(int $hostId, string $container)
+    {
+        $sql = "SELECT
+                    `Deployment_ID` as `id`,
+                    `Deployment_Name` as `name`
+                FROM
+                    `Deployments`
+                WHERE
+                    `Deployment_ID` = (
+                        SELECT
+                            `DC_Deployment_ID`
+                        FROM
+                            `Deployment_Containers`
+                        WHERE
+                            `DC_Host_ID` = :hostId
+                        AND
+                            `DC_Name` = :container
+                    )
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId,
+            ":container"=>$container
+        ]);
+        return $do->fetch(\PDO::FETCH_ASSOC);
+    }
 }

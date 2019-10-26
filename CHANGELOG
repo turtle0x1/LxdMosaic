@@ -4,9 +4,10 @@ Added
     Store enviorment variable with cloud-config rev (#70)
     Backup & Restore Containers (#89)
     Browse, upload & delete container files (#132)
+    Show if container is in deployment with link to deployment on container view
 
 Changed
-    Show memory as graph instead of as table 
+    Show memory as graph instead of as table
 
 0.5.0
 

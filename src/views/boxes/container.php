@@ -53,6 +53,8 @@
               Created: <span id="container-createdAt"></span>
               <br/>
               Up Time: <span id="container-upTime"></span>
+              <br/>
+              Deployment: <span id="container-deployment"></span>
           </div>
         </div>
     </div>
@@ -759,6 +761,14 @@ function loadContainerView(data)
             $("#container-upTime").text("LXD Extension Missing");
         }
 
+        let deployment = "Not In Deployment";
+
+        if(x.deploymentDetails !== false){
+            deployment = `<a href="#" data-deployment-id="${x.deploymentDetails.id}" class="toDeployment">${x.deploymentDetails.name}</a>`
+        }
+
+        $("#container-deployment").html(deployment);
+
         let snapshotTrHtml = "";
 
         if(x.snapshots.length == 0){
@@ -1143,12 +1153,17 @@ $("#containerBox").on("click", "#goToConsole", function() {
 
 });
 
+$("#containerBox").on("click", ".toDeployment", function(){
+    let deploymentId = $(this).data("deploymentId");
+    loadDeploymentsView(deploymentId);
+    changeActiveNav(".viewDeployments")
+})
+
 $("#containerBox").on("click", ".toProfile", function(){
     let profile = $(this).text();
     loadProfileView(profile, currentContainerDetails.hostId, function(){
         viewProfile(profile, currentContainerDetails.alias, currentContainerDetails.hostId);
     });
-
 });
 
 $("#containerBox").on("click", ".copyContainer", function(){
