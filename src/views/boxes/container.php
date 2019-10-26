@@ -254,6 +254,11 @@
         This will also probably <b> underperform or break </b> on large directories until
         LXD changes the directory struct indictating if its a file or directory
     </div>
+    <div class="alert alert-info">
+        You can right click to delete a file / folder
+        <br/>
+        You can right click between the files /  folders to upload new files
+    </div>
     <div class="card-columns" id="filesystemTable">
     </div>
 </div>
