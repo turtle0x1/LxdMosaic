@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b4901a5c2025c3e10c94e3be672dfa6",
+    "content-hash": "9d328032b15a26e3287cb053046f4e19",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -91,20 +91,21 @@
         },
         {
             "name": "dhope0000/lxd",
-            "version": "v0.13.1",
+            "version": "v0.13.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/turtle0x1/php-lxd.git",
-                "reference": "df652dee376feb3ee14f224248812f35481ed36f"
+                "reference": "9f2455ca865ccd7820309a0cda916489815f538d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/df652dee376feb3ee14f224248812f35481ed36f",
-                "reference": "df652dee376feb3ee14f224248812f35481ed36f",
+                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/9f2455ca865ccd7820309a0cda916489815f538d",
+                "reference": "9f2455ca865ccd7820309a0cda916489815f538d",
                 "shasum": ""
             },
             "require": {
                 "php": "~5.5|~7.0",
+                "php-http/cache-plugin": "^1.6",
                 "php-http/client-common": "^1.1",
                 "php-http/client-implementation": "^1.0",
                 "php-http/discovery": "^1.0",
@@ -156,7 +157,7 @@
                 "lxd",
                 "wrapper"
             ],
-            "time": "2019-10-25T12:00:14+00:00"
+            "time": "2019-10-26T02:43:21+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
