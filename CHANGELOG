@@ -3,6 +3,7 @@ Unreleased
 Added
     Store enviorment variable with cloud-config rev (#70)
     Backup Containers (#89)
+    Browse, upload & delete container files (#132)
 
 0.5.0
 
