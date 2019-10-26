@@ -165,31 +165,14 @@
     </div>
 </div>
 <div class="col-md-6">
-      <div class="card card-accent-success">
-        <div class="card-header bg-info" role="tab" >
-          <h5>
-            <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              Memory Details
-              <i class="fas fa-memory float-right"></i>
-            </a>
-          </h5>
+    <div class="card bg-dark">
+        <div class="card-header">
+            Memory Details
         </div>
-
-        <div id="collapseOne" class="collapse show" role="tabpanel" >
-          <div class="card-block bg-dark">
-              <table class="table table-dark table-bordered" id="memoryData">
-                  <thead class="thead-inverse">
-                      <tr>
-                          <th> Family </th>
-                          <th> Ussage </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-              </table>
-          </div>
+        <div class="card-body">
+            <canvas id="memoryData" style="width: 100%;"></canvas>
         </div>
-      </div>
+    </div>
 </div>
 </div>
 </div>
@@ -815,13 +798,35 @@ function loadContainerView(data)
         });
         $("#networkDetails").empty().append(networkData);
 
-        let memoryHtml = "";
+        let memoryLabels = [],
+            memoryColors = [],
+            memoryData = [];
 
         $.each(x.state.memory, function(i, item){
-            memoryHtml += `<tr><td>${i}</td><td>${formatBytes(item)}</tr>`;
+            memoryLabels.push(i);
+            memoryColors.push(randomColor());
+            memoryData.push(item);
         });
 
-        $("#memoryData > tbody").empty().append(memoryHtml);
+        new Chart($("#memoryData"), {
+            type: "bar",
+            data: {
+                labels: memoryLabels,
+                datasets: [{
+                  label: 'Memory',
+                  data: memoryData,
+                  backgroundColor: memoryColors,
+                  borderColor: memoryColors,
+                  borderWidth: 1
+              }]
+            },
+            options: {
+              cutoutPercentage: 40,
+              responsive: false,
+              scales: scalesBytesCallbacks,
+              tooltips: toolTipsBytesCallbacks
+            }
+        });
 
         $(".boxSlide").hide();
         $("#containerBox").show();
