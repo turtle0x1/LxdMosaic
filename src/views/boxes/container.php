@@ -7,24 +7,31 @@
         </u></h4>
     </div>
     <div class="row" id="containerViewBtns">
-        <div class="col-md-4 text-center">
+        <div class="col-md-3 text-center">
             <div class="card bg-primary card-hover-primary text-center toggleCard" id="goToDetails">
                 <div class="card-body">
                     Details
                 </div>
             </div>
         </div>
-        <div class="col-md-4 text-center">
+        <div class="col-md-3 text-center">
             <div class="card card-hover-primary text-center toggleCard" id="goToConsole">
                 <div class="card-body">
                     <i class="fas fa-terminal"></i>Console
                 </div>
             </div>
         </div>
-        <div class="col-md-4 text-center">
+        <div class="col-md-3 text-center">
             <div class="card card-hover-primary text-center toggleCard" id="goToBackups">
                 <div class="card-body">
                     <i class="fas fa-save"></i>Backups
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 text-center">
+            <div class="card card-hover-primary text-center toggleCard" id="goToFiles">
+                <div class="card-body">
+                    <i class="fas fa-save"></i>Files
                 </div>
             </div>
         </div>
@@ -237,6 +244,24 @@
         </div>
     </div>
 </div>
+<div id="containerFiles"  class="col-md-12">
+    <div class="alert alert-danger">
+        Do not use this over metered intnernet connections
+        To Correctly indentify the whether the something is a dir or a file
+        we have to get the file and check the response, so the file is "downloaded".
+        <br/>
+        <br/>
+        This will also probably <b> underperform or break </b> on large directories until
+        LXD changes the directory struct indictating if its a file or directory
+    </div>
+    <div class="alert alert-info">
+        You can right click to delete a file / folder
+        <br/>
+        You can right click between the files /  folders to upload new files
+    </div>
+    <div class="card-columns" id="filesystemTable">
+    </div>
+</div>
 </div>
 <script src="/assets/dist/xterm.js"></script>
 <script>
@@ -263,6 +288,48 @@ function loadContainerTreeAfter(milSeconds = 2000)
     }, milSeconds);
 }
 
+function deleteFilesystemObjectConfirm(path)
+{
+    $.confirm({
+        title: `Delete From - ${currentContainerDetails.alias} / ${currentContainerDetails.container} `,
+        content: `
+            ${path}
+            `,
+        buttons: {
+            cancel: function(){},
+            rename: {
+                text: 'Delete',
+                btnClass: 'btn-danger',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
+
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Deleeting..'); // let the user know
+                    modal.buttons.rename.disable();
+                    modal.buttons.cancel.disable();
+
+                    let x = {
+                        ...{path: path},
+                        ...currentContainerDetails
+                    };
+
+                    ajaxRequest(globalUrls.containers.files.delete, x, function(data){
+                        let x = makeToastr(data);
+                        if(x.state == "error"){
+                            modal.buttons.rename.setText('Delete'); // let the user know
+                            modal.buttons.rename.enable();
+                            modal.buttons.cancel.enable();
+                            return false;
+                        }
+                        loadFileSystemPath(currentPath);
+                        modal.close();
+                    });
+                    return false;
+                }
+            },
+        }
+    });
+}
 function backupContainerConfirm(hostId, hostAlias, container, callback = null, wait = true)
 {
     $.confirm({
@@ -771,8 +838,6 @@ $("#containerBox").on("click", ".importBackup", function(){
                     modal.buttons.rename.disable();
                     modal.buttons.cancel.disable();
 
-                    console.log(tr);
-
                     let x = {
                         hostId: currentContainerDetails.hostId,
                         container: currentContainerDetails.container,
@@ -807,22 +872,112 @@ $("#containerBox").on("click", ".toggleCard", function(){
     $(this).addClass("bg-primary");
 });
 
+var currentPath = "/";
+var currentRequest = null;
+
+function loadFileSystemPath(path){
+    let reqData = {
+        ...currentContainerDetails,
+        ...{path: path, download: 0}
+    };
+
+    currentRequest = $.ajax({
+         type: 'POST',
+         data: reqData,
+         url: globalUrls.containers.files.getPath,
+         beforeSend : function()    {
+            if(currentRequest != null) {
+                currentRequest.abort();
+            }
+         },
+         success: function(data){
+             currentRequest = null;
+             data = makeToastr(data);
+
+
+             if(data.hasOwnProperty("state") && data.state == "error"){
+                 // pathHistory[pathHistory.length - 1].directory = false;
+                 return false;
+             }
+
+             if(data.isDirectory){
+                 currentPath = path;
+                 let h = "";
+                 if(path.endsWith("/") !== true){
+                     path += "/";
+                 }
+                 if(path !== "/"){
+
+                     h = `<div class="card bg-dark w-10 goUpDirectory">
+                        <div class="card-body text-center">
+                            <i class="fas fa-circle fa-3x"></i>
+                            <i class="fas fa-circle fa-3x"></i>
+                            <h4>Back</h4>
+                        </div>
+                      </div>`;
+                 }
+                 $.each(data.contents, function(_, item){
+                     let icon = `<i class="fas fa-3x fa-${item.isDirectory ? "folder" : "file"}"></i>`
+
+                     h += `
+                     <div class="card filesystemObject bg-dark w-10" data-name="${item.name}" data-path="${path}${item.name}">
+                        <div class="card-body text-center">
+                            ${icon}
+                            <h4>${item.name}</h4>
+                        </div>
+                      </div>
+                     `
+                 });
+                 $("#filesystemTable").empty().append(h);
+             }else {
+                 $("#downloadContainerFileForm").find("input[name=hostId]").val(currentContainerDetails.hostId);
+                 $("#downloadContainerFileForm").find("input[name=path]").val(path);
+                 $("#downloadContainerFileForm").find("input[name=container]").val(currentContainerDetails.container);
+                 $("#downloadContainerFileForm").trigger("submit");
+             }
+         }
+     });
+}
+
+$("#containerBox").on("click", "#goToFiles", function(){
+    $("#containerFiles").show();
+    $("#containerConsole, #containerBackups, #containerDetails").hide();
+    loadFileSystemPath("/");
+});
+
+$(document).on("click", ".filesystemObject", function(){
+    loadFileSystemPath($(this).data("path"));
+});
+
+$(document).on("click", ".goUpDirectory", function(){
+    let parts = currentPath.split("/").filter(word => word.length > 0);
+
+    if(parts.length > 1){
+        parts.pop();
+    }else{
+        parts = ["/"];
+    }
+
+    let p = parts.join("/")
+
+    loadFileSystemPath(p);
+});
 
 $("#containerBox").on("click", "#goToDetails", function(){
     $("#containerDetails").show();
-    $("#containerConsole, #containerBackups").hide();
+    $("#containerConsole, #containerBackups, #containerFiles").hide();
 });
 
 $("#containerBox").on("click", "#goToBackups", function() {
     loadContainerBackups();
-    $("#containerDetails, #containerConsole").hide();
+    $("#containerDetails, #containerConsole, #containerFiles").hide();
     $("#containerBackups").show();
 });
 
 $("#containerBox").on("click", "#goToConsole", function() {
     Terminal.applyAddon(attach);
 
-    $("#containerDetails, #containerBackups").hide();
+    $("#containerDetails, #containerBackups, #containerFiles").hide();
     $("#containerConsole").show();
 
 
@@ -952,4 +1107,5 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
     require __DIR__ . "/../modals/containers/restoreSnapshot.php";
     require __DIR__ . "/../modals/containers/createContainer.php";
     require __DIR__ . "/../modals/containers/editSettings.php";
+    require __DIR__ . "/../modals/containers/files/uploadFile.php";
 ?>

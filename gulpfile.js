@@ -10,7 +10,10 @@ function css(){
         "node_modules/toastr/build/toastr.min.css",
         "node_modules/xterm/dist/xterm.css",
         "src/assets/token/styles/token-input.css",
-        "src/assets/token/styles/token-input-facebook.css"
+        "src/assets/token/styles/token-input-facebook.css",
+        "node_modules/dropzone/dist/min/basic.min.css",
+        "node_modules/dropzone/dist/min/dropzone.min.css"
+
 
     ])
     .pipe(cleanCSS({}))
@@ -25,7 +28,8 @@ function js(){
             "node_modules/ace-builds/src-min/mode-yaml.js",
             "node_modules/jquery-confirm/dist/jquery-confirm.min.js",
             "node_modules/toastr/build/toastr.min.js",
-            "src/assets/token/src/jquery.tokeninput.js"
+            "src/assets/token/src/jquery.tokeninput.js",
+            "node_modules/dropzone/dist/min/dropzone.min.js"
         ])
         .pipe(minify({
             noSource: true

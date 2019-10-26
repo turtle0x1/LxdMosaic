@@ -3,6 +3,14 @@ body {
     font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
 }
 
+.filesystemObject {
+    cursor: pointer;
+}
+
+.goUpDirectory {
+    cursor: pointer;
+}
+
 
 /* Core UI overrides  */
 

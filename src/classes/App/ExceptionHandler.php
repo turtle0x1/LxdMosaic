@@ -13,7 +13,7 @@ class ExceptionHandler
         echo json_encode(
             [
                 "state"=>"error",
-                "message"=>$exception->getMessage()
+                "message"=>$exception->getMessage() . " " . $exception->getFile() . " " . $exception->getLine()
             ]
         );
     }
