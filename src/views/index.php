@@ -149,6 +149,7 @@ if ($haveServers->haveAny() !== true) {
                       importContainerBackup: "/api/Containers/Backups/ImportBackupController/import"
                   },
                   files: {
+                      uploadFiles: '/api/Containers/Files/UploadFilesToPathController/upload',
                       delete: '/api/Containers/Files/DeletePathController/delete',
                       getPath: '/api/Containers/Files/GetPathController/get'
                   }
@@ -267,7 +268,7 @@ if ($haveServers->haveAny() !== true) {
       </script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-      <form style="display: none;" method="POST" id="testSubmit" action="/api/Containers/Files/GetPathController/get">
+      <form style="display: none;" method="POST" id="downloadContainerFileForm" action="/api/Containers/Files/GetPathController/get">
           <input value="" name="hostId"/>
           <input value="" name="path"/>
           <input value="" name="container"/>
@@ -544,7 +545,20 @@ $(function(){
                     icon: "delete",
                     callback: function(key, opt, e){
                         let item = opt["$trigger"];
-                        deleteFilesystemObjectConfirm(item.data("path"), loadFileSystemPath);
+                        deleteFilesystemObjectConfirm(item.data("path"));
+                    }
+                }
+            }
+        });
+        $.contextMenu({
+            selector: '#filesystemTable',
+            items: {
+                "upload": {
+                    name: "Upload",
+                    icon: "upload",
+                    callback: function(key, opt, e){
+                        let item = opt["$trigger"];
+                        $("#modal-container-files-upload").modal("show");
                     }
                 }
             }

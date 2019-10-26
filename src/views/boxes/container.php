@@ -283,7 +283,7 @@ function loadContainerTreeAfter(milSeconds = 2000)
     }, milSeconds);
 }
 
-function deleteFilesystemObjectConfirm(path, callback = null)
+function deleteFilesystemObjectConfirm(path)
 {
     $.confirm({
         title: `Delete From - ${currentContainerDetails.alias} / ${currentContainerDetails.container} `,
@@ -316,9 +316,7 @@ function deleteFilesystemObjectConfirm(path, callback = null)
                             modal.buttons.cancel.enable();
                             return false;
                         }
-                        if($.isFunction(callback)){
-                            callback.call();
-                        }
+                        loadFileSystemPath(currentPath);
                         modal.close();
                     });
                     return false;
@@ -869,16 +867,10 @@ $("#containerBox").on("click", ".toggleCard", function(){
     $(this).addClass("bg-primary");
 });
 
-var pathHistory = [];
+var currentPath = "/";
+var currentRequest = null;
 
-function getLastPathHistory() {
-    return pathHistory[pathHistory.length - 1].path;
-}
-
- var currentRequest = null;
-
-function loadFileSystemPath(){
-    let path = getLastPathHistory();
+function loadFileSystemPath(path){
     let reqData = {
         ...currentContainerDetails,
         ...{path: path, download: 0}
@@ -890,29 +882,28 @@ function loadFileSystemPath(){
          url: globalUrls.containers.files.getPath,
          beforeSend : function()    {
             if(currentRequest != null) {
-                if(pathHistory.length == 1){
-                    pathHistory.pop();
-                }else{
-                    let cur = pathHistory.pop();
-                    pathHistory.pop();
-                    pathHistory.push(cur);
-                }
-
                 currentRequest.abort();
             }
          },
          success: function(data){
+             currentRequest = null;
              data = makeToastr(data);
 
+
              if(data.hasOwnProperty("state") && data.state == "error"){
-                 pathHistory[pathHistory.length - 1].directory = false;
+                 // pathHistory[pathHistory.length - 1].directory = false;
                  return false;
              }
 
              if(data.isDirectory){
+                 currentPath = path;
                  let h = "";
+                 if(path.endsWith("/") !== true){
+                     path += "/";
+                 }
                  if(path !== "/"){
-                     h = `<div class="card goUpDirectory bg-dark w-10">
+
+                     h = `<div class="card bg-dark w-10 goUpDirectory">
                         <div class="card-body text-center">
                             <i class="fas fa-circle fa-3x"></i>
                             <i class="fas fa-circle fa-3x"></i>
@@ -922,8 +913,9 @@ function loadFileSystemPath(){
                  }
                  $.each(data.contents, function(_, item){
                      let icon = `<i class="fas fa-3x fa-${item.isDirectory ? "folder" : "file"}"></i>`
+
                      h += `
-                     <div class="card filesystemObject bg-dark w-10" data-name="${item.name}" data-path="${pathHistory[pathHistory.length - 1].path}/${item.name}">
+                     <div class="card filesystemObject bg-dark w-10" data-name="${item.name}" data-path="${path}${item.name}">
                         <div class="card-body text-center">
                             ${icon}
                             <h4>${item.name}</h4>
@@ -933,77 +925,37 @@ function loadFileSystemPath(){
                  });
                  $("#filesystemTable").empty().append(h);
              }else {
-                 $("#testSubmit").find("input[name=hostId]").val(currentContainerDetails.hostId);
-                 $("#testSubmit").find("input[name=path]").val(getLastPathHistory());
-                 $("#testSubmit").find("input[name=container]").val(currentContainerDetails.container);
-                 $("#testSubmit").trigger("submit");
-                 pathHistory[pathHistory.length - 1].directory = false;
+                 $("#downloadContainerFileForm").find("input[name=hostId]").val(currentContainerDetails.hostId);
+                 $("#downloadContainerFileForm").find("input[name=path]").val(path);
+                 $("#downloadContainerFileForm").find("input[name=container]").val(currentContainerDetails.container);
+                 $("#downloadContainerFileForm").trigger("submit");
              }
-
-             currentRequest = null;
          }
      });
 }
 
 $("#containerBox").on("click", "#goToFiles", function(){
-    pathHistory.push({directory: true, path : "/"});
     $("#containerFiles").show();
     $("#containerConsole, #containerBackups, #containerDetails").hide();
-    loadFileSystemPath();
+    loadFileSystemPath("/");
 });
 
 $(document).on("click", ".filesystemObject", function(){
-    let object = $(this).data("name");
-
-    let p = pathHistory.slice().reverse();
-
-    let lastDirectory = {};
-
-    $.each(p, function(i, item){
-        if(item.directory ){
-            lastDirectory = item;
-            return false;
-        }
-    });
-
-    let lastPath = lastDirectory.path;
-    let path = "";
-    if(lastPath == "/"){
-        path = "/" + object;
-    }else{
-        path = lastPath + "/" + object
-    }
-
-    pathHistory.push({directory: true, path: path});
-
-    loadFileSystemPath();
+    loadFileSystemPath($(this).data("path"));
 });
 
 $(document).on("click", ".goUpDirectory", function(){
-    let lastPath = getLastPathHistory();
-    if(lastPath == "/"){
-        loadFileSystemPath();
-        return;
+    let parts = currentPath.split("/").filter(word => word.length > 0);
+
+    if(parts.length > 1){
+        parts.pop();
+    }else{
+        parts = ["/"];
     }
 
-    let p = pathHistory.slice().reverse();
+    let p = parts.join("/")
 
-    $.each(p, function(i, item){
-        if(i > 0 && item.directory && item.path !== lastPath ){
-            if(item.path !== "/"){
-                item.path = item.path.substr(0, item.path.lastIndexOf("/"));
-            }
-
-            if(item.path == ""){
-                item.path = "/";
-            }
-
-            pathHistory.push(item);
-            return false;
-        }
-    });
-
-    loadFileSystemPath();
+    loadFileSystemPath(p);
 });
 
 $("#containerBox").on("click", "#goToDetails", function(){
@@ -1150,4 +1102,5 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
     require __DIR__ . "/../modals/containers/restoreSnapshot.php";
     require __DIR__ . "/../modals/containers/createContainer.php";
     require __DIR__ . "/../modals/containers/editSettings.php";
+    require __DIR__ . "/../modals/containers/files/uploadFile.php";
 ?>
