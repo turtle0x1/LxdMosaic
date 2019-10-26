@@ -10,6 +10,8 @@ use dhope0000\LXDClient\Tools\Containers\Backups\DeleteRemoteBackup;
 
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use dhope0000\LXDClient\Tools\Hosts\HasExtension;
+use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
 class StoreBackupLocally
 {
@@ -18,13 +20,15 @@ class StoreBackupLocally
     private $filesystem;
     private $insertContainerBackup;
     private $deleteRemoteBackup;
+    private $hasExtension;
 
     public function __construct(
         GetSetting $getSetting,
         LxdClient $lxdClient,
         Filesystem $filesystem,
         InsertContainerBackup $insertContainerBackup,
-        DeleteRemoteBackup $deleteRemoteBackup
+        DeleteRemoteBackup $deleteRemoteBackup,
+        HasExtension $hasExtension
     ) {
         $this->getSetting = $getSetting;
         $this->lxdClient = $lxdClient;
@@ -35,6 +39,10 @@ class StoreBackupLocally
 
     public function store(int $hostId, string $container, string $backup, bool $deleteRemote)
     {
+        if ($this->hasExtension->hasWithHostId($hostId, LxdApiExtensions::CONTAINER_BACKUP) !== true) {
+            throw new \Exception("Host doesn't support backups", 1);
+        }
+
         $backupDir = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::BACKUP_DIRECTORY);
         $backupDir = $this->makeDirectory($backupDir, $hostId, $container);
 

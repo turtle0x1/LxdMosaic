@@ -3,13 +3,16 @@ namespace dhope0000\LXDClient\Tools\Containers;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Hosts\HasExtension;
+use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
 class GetHostsContainers
 {
-    public function __construct(LxdClient $lxdClient, HostList $hostList)
+    public function __construct(LxdClient $lxdClient, HostList $hostList, HasExtension $hasExtension)
     {
         $this->hostList = $hostList;
         $this->client = $lxdClient;
+        $this->hasExtension = $hasExtension;
     }
 
     public function getHostsContainers($skipOffline = false)
@@ -27,7 +30,8 @@ class GetHostsContainers
                     "online"=>false,
                     "hostId"=>$host["Host_ID"],
                     "containers"=>[],
-                    "hostInfo"=>[]
+                    "hostInfo"=>[],
+                    "supportsBackups"=>false
                 ];
                 continue;
             }
@@ -37,11 +41,14 @@ class GetHostsContainers
 
             $containers = $this->getContainers($host["Host_ID"]);
 
+            $supportsBackups = $this->hasExtension->checkWithClient($client, LxdApiExtensions::CONTAINER_BACKUP);
+
             $details[$indent] = [
                 "online"=>true,
                 "hostId"=>$host["Host_ID"],
                 "containers"=>$containers,
-                "hostInfo"=>$hostInfo
+                "hostInfo"=>$hostInfo,
+                "supportsBackups"=>$supportsBackups
             ];
         }
         return $details;

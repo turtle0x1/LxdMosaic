@@ -4,6 +4,8 @@ namespace dhope0000\LXDClient\Tools\Containers\Backups;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Containers\Backups\StoreBackupLocally;
+use dhope0000\LXDClient\Tools\Hosts\HasExtension;
+use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
 class BackupContainer
 {
@@ -11,12 +13,16 @@ class BackupContainer
 
     private $storeBackupLocally;
 
+    private $hasExtension;
+
     public function __construct(
         LxdClient $lxdClient,
-        StoreBackupLocally $storeBackupLocally
+        StoreBackupLocally $storeBackupLocally,
+        HasExtension $hasExtension
     ) {
         $this->lxdClient = $lxdClient;
         $this->storeBackupLocally = $storeBackupLocally;
+        $this->hasExtension = $hasExtension;
     }
 
     public function create(
@@ -35,6 +41,10 @@ class BackupContainer
         }
 
         $client = $this->lxdClient->getANewClient($hostId);
+
+        if ($this->hasExtension->checkWithClient($client, LxdApiExtensions::CONTAINER_BACKUP) !== true) {
+            throw new \Exception("Host doesn't support backups", 1);
+        }
 
         $response = $client->containers->backups->create($container, $backup, [], $wait);
 
