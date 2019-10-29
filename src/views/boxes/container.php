@@ -10,28 +10,28 @@
         <div class="col-md-3 text-center">
             <div class="card bg-primary card-hover-primary text-center toggleCard" id="goToDetails">
                 <div class="card-body">
-                    Details
+                    <i class="fas fa-info pr-2"></i>Details
                 </div>
             </div>
         </div>
         <div class="col-md-3 text-center">
             <div class="card card-hover-primary text-center toggleCard" id="goToConsole">
                 <div class="card-body">
-                    <i class="fas fa-terminal"></i>Console
+                    <i class="fas fa-terminal pr-2"></i>Console
                 </div>
             </div>
         </div>
         <div class="col-md-3 text-center">
             <div class="card card-hover-primary text-center toggleCard" id="goToBackups">
                 <div class="card-body">
-                    <i class="fas fa-save"></i>Backups
+                    <i class="fas fa-save pr-2"></i>Backups
                 </div>
             </div>
         </div>
         <div class="col-md-3 text-center">
             <div class="card card-hover-primary text-center toggleCard" id="goToFiles">
                 <div class="card-body">
-                    <i class="fas fa-save"></i>Files
+                    <i class="fas fa-save pr-2"></i>Files
                 </div>
             </div>
         </div>
