@@ -30,13 +30,14 @@
 </div>
 <script>
 
-let inputTemplate = '<div class="input-group mb-3 serverGroup">' +
-    '<input placeholder="ip / hostname"  name="connectDetails" class="form-control"/>' +
-    '<input placeholder="trust password" name="trustPassword"  type="password" class="form-control"/>' +
-    '<div class="input-group-append">' +
-    '<button class="btn btn-danger removeRow" type="button"><i class="fa fa-trash"></i></button>' +
-    '</div>' +
-    '</button></div>';
+let inputTemplate = `<div class="input-group mb-3 serverGroup">
+    <input placeholder="ip / hostname"  name="connectDetails" class="form-control"/>
+    <input placeholder="trust password" name="trustPassword"  type="password" class="form-control"/>
+    <input placeholder="alias" name="alias"  class="form-control"/>
+    <div class="input-group-append">
+    <button class="btn btn-danger removeRow" type="button"><i class="fa fa-trash"></i></button>
+    </div>
+    </button></div>`;
 
 $("#modal-hosts-add").on("shown.bs.modal", function(){
     $('[data-toggle="tooltip"]').tooltip()
@@ -64,6 +65,8 @@ $("#modal-hosts-add").on("click", "#addHosts", function(){
         let connectDetailsInputVal = connectDetailsInput.val();
         let trustPasswordInputVal = trustPasswordInput.val();
 
+        let alias = $(this).find("input[name=alias]").val();
+
         if(connectDetailsInputVal == ""){
             connectDetailsInput.focus();
             toastr["error"]("Please provide connection details");
@@ -76,7 +79,8 @@ $("#modal-hosts-add").on("click", "#addHosts", function(){
 
         details.hostsDetails.push({
             name: connectDetailsInputVal,
-            trustPassword: trustPasswordInputVal
+            trustPassword: trustPasswordInputVal,
+            alias: alias
         });
     });
 
