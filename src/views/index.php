@@ -741,6 +741,8 @@ function loadServerOview()
                             ${project}</option>`;
                 });
                 $(p).find(".projects").append(projects)
+            }else{
+                $(p).find(".projectGroup").remove();
             }
 
 

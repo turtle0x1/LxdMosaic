@@ -65,7 +65,7 @@ var emptyServerBox = function(){
           <div class="text-value text-white">GPU's<i class="fab fa-megaport"></i></div>
           <div class="text-uppercase text-muted gpuDetails text-white"></div>
         </div>
-        <div>
+        <div class='projectGroup'>
             <div class="text-value text-white">Project <i class="fas fa-project-diagram"></i></div>
             <div class="form-group projectFormGroup">
                 <select class="form-control projects changeHostProject"></select>

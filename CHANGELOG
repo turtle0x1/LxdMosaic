@@ -10,6 +10,7 @@ Added
 Changed
     Show memory as graph instead of as table
     Dont show nav text on devices < 1500px
+    Hide project group if host doesn't support projects
 
 0.5.0
 
