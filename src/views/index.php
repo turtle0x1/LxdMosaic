@@ -289,49 +289,53 @@ if ($haveServers->haveAny() !== true) {
       <ul class="navbar-nav mr-auto d-md-down-none" id="mainNav">
           <li class="nav-item active">
             <a class="nav-link overview">
-              <i class="fas fa-tachometer-alt"></i> Dashboard
+              <i class="fas fa-tachometer-alt"></i>
+              <span class="hideNavText"> Dashboard </span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewProfiles">
-              <i class="fas fa-users"></i> Profiles</a>
+              <i class="fas fa-users"></i>
+              <span class="hideNavText"> Profiles </span>
+            </a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewClusters">
-              <i class="far fa-object-group"></i> Clusters </a>
+              <i class="far fa-object-group"></i>
+              <span class="hideNavText"> Clusters </span>
           </li>
           <li class="nav-item">
             <a class="nav-link viewCloudConfigFiles">
-              <i class="fa fa-cogs"></i> Cloud Config</a>
+              <i class="fa fa-cogs"></i> <span class="hideNavText"> Cloud Config </span></a>
           </li>
 
           <li class="nav-item">
             <a class="nav-link viewImages">
-              <i class="fa fa-images"></i> Images</a>
+              <i class="fa fa-images"></i> <span class="hideNavText"> Images </span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewProjects">
-              <i class="fas fa-project-diagram"></i> Projects</a>
+              <i class="fas fa-project-diagram"></i> <span class="hideNavText"> Projects </span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewDeployments">
-              <i class="fas fa-rocket"></i> Deployments</a>
+              <i class="fas fa-rocket"></i> <span class="hideNavText"> Deployments </span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewStorage">
-              <i class="fas fa-hdd"></i> Storage </a>
+              <i class="fas fa-hdd"></i> <span class="hideNavText"> Storage </span> </a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewNetwork">
-              <i class="fas fa-network-wired"></i> Networks </a>
+              <i class="fas fa-network-wired"></i> <span class="hideNavText"> Networks </span> </a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewBackups">
-              <i class="fas fa-save"></i> Backups </a>
+              <i class="fas fa-save"></i> <span class="hideNavText"> Backups </span> </a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewSettings">
-              <i class="fas fa-wrench"></i> Settings </a>
+              <i class="fas fa-wrench"></i> <span class="hideNavText"> Settings </span> </a>
           </li>
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">

@@ -5,9 +5,11 @@ Added
     Backup & Restore Containers (#89)
     Browse, upload & delete container files (#132)
     Show if container is in deployment with link to deployment on container view
+    Allow setting server alias when adding (#134)
 
 Changed
     Show memory as graph instead of as table
+    Dont show nav text on devices < 1500px
 
 0.5.0
 
