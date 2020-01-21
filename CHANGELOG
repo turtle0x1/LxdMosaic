@@ -1,3 +1,13 @@
+0.5.2
+
+Fixed
+    Settings don't clear properly between containers (#143)
+
+0.5.1
+
+Fix an issue with standalone (not clustered) hosts running 3.0.3
+
+
 0.5.0
 
 Fixed
