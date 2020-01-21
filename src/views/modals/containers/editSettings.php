@@ -69,6 +69,8 @@
                     </div>`;
                 });
                 $("#editSettings-list").empty().append(existingSettingsHtml);
+            }else{
+                $("#editSettings-list").empty()
             }
 
             if(!$.isEmptyObject(data.remainingSettings)){
