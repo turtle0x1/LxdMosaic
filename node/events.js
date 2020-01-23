@@ -196,13 +196,9 @@ terminalsIo.on("connect", function(socket) {
             lxdWs.on('error', error => console.log(error));
 
             lxdWs.on('message', data => {
-                try {
-                    const buf = Buffer.from(data);
-                    data = buf.toString();
-                    socket.emit("data", data);
-                } catch (ex) {
-                    // The WebSocket is not open, ignore
-                }
+                const buf = Buffer.from(data);
+                data = buf.toString();
+                socket.emit("data", data);
             });
             lxdConsoles[identifier] = lxdWs;
         }).catch((error)=>{
