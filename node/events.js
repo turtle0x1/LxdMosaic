@@ -88,6 +88,10 @@ function createWebSockets() {
         if (err) {
             throw err;
         }
+        // Clear host details on reload of hosts to prevent deleted hosts
+        // persisting
+        hostDetails = {};
+
         for (i = 0; i < result.length; i++) {
             let lxdClientCert = certDir + result[i].Host_Cert_Only_File
             let lxdClientKey = certDir + result[i].Host_Key_File
