@@ -9,8 +9,8 @@ const fs = require('fs'),
     expressWs = require('express-ws'),
     path = require('path'),
     cors = require('cors'),
-    request = require("request"),
-    uuidv1 = require('uuid/v1');
+    uuidv1 = require('uuid/v1'),
+    rp = require('request-promise');
 
 const envImportResult = require('dotenv').config({
     path: "/var/www/LxdMosaic/.env"
@@ -57,12 +57,11 @@ var hostDetails = {};
 function createExecOptions(host, container) {
     return {
         method: 'POST',
-        host: hostDetails[host].hostWithOutProtoOrPort,
-        port: hostDetails[host].port,
-        path: '/1.0/containers/' + container + '/exec',
+        uri: `https://${hostDetails[host].hostWithOutProtoOrPort}:${hostDetails[host].port}/1.0/containers/${container}/exec`,
         cert: fs.readFileSync(hostDetails[host].cert),
         key: fs.readFileSync(hostDetails[host].key),
-        rejectUnauthorized: false
+        rejectUnauthorized: false,
+        json: true
     }
 }
 
@@ -161,13 +160,13 @@ var terminalsIo = io.of("/terminals");
 
 terminalsIo.on("connect", function(socket) {
 
-    let indentifier = socket.handshake.query.pid;
+    let identifier = socket.handshake.query.pid;
     let shell = socket.handshake.query.shell;
     if(typeof shell == "string" && shell !== ""){
         lxdExecBody.command = [shell];
     }
 
-    if(lxdConsoles[indentifier] == undefined) {
+    if(lxdConsoles[identifier] == undefined) {
         let host = socket.handshake.query.hostId;
         let container = socket.handshake.query.container;
 
@@ -179,68 +178,65 @@ terminalsIo.on("connect", function(socket) {
             rejectUnauthorized: false
         }
 
+        execOptions.body = lxdExecBody;
 
+        rp(execOptions).then((output)=>{
+            if(output.hasOwnProperty("error") && output.error !== ""){
+                socket.emit("data", "Container Offline");
+                return false;
+            }
 
-        const lxdReq = https.request(execOptions, res => {
-            res.on('data', d => {
+            let url = `wss://${hostDetails[host].hostWithOutProtoOrPort}:${hostDetails[host].port}`;
 
-                const output = JSON.parse(d);
+            const lxdWs = new WebSocket(url + output.operation +
+                '/websocket?secret=' + output.metadata.metadata.fds['0'],
+                wsoptions
+            );
 
-                if(output.hasOwnProperty("error") && output.error !== ""){
-                    socket.emit("data", "Container Offline");
-                    return false;
+            lxdWs.on('error', error => console.log(error));
+
+            lxdWs.on('message', data => {
+                try {
+                    const buf = Buffer.from(data);
+                    data = buf.toString();
+                    socket.emit("data", data);
+                } catch (ex) {
+                    // The WebSocket is not open, ignore
                 }
-
-                const lxdWs = new WebSocket('wss://' +
-                    execOptions.host + ':' + execOptions.port + output.operation +
-                    '/websocket?secret=' + output.metadata.metadata.fds['0'],
-                    wsoptions
-                );
-
-                lxdWs.on('error', error => console.log(error));
-
-                lxdWs.on('message', data => {
-                    try {
-                        const buf = Buffer.from(data);
-                        data = buf.toString();
-                        socket.emit("data", data);
-                    } catch (ex) {
-                        // The WebSocket is not open, ignore
-                    }
-                });
-                lxdConsoles[indentifier] = lxdWs;
             });
-        });
-        lxdReq.write(JSON.stringify(lxdExecBody));
-        lxdReq.end();
+            lxdConsoles[identifier] = lxdWs;
+        }).catch((error)=>{
+            // Until we work out what to do here
+            throw error
+        })
     }
 
     //NOTE When user inputs from browser
     socket.on('data', function(msg) {
-        if(lxdConsoles[indentifier] == undefined){
+        if(lxdConsoles[identifier] == undefined){
             return;
         }
 
-        lxdConsoles[indentifier].send(msg, {
+        lxdConsoles[identifier].send(msg, {
             binary: true
         }, () => {});
     });
 
-    socket.on('close', function(indentifier) {
+    socket.on('close', function(identifier) {
         setTimeout(() => {
-            if(lxdConsoles[indentifier] == undefined){
+            if(lxdConsoles[identifier] == undefined){
                 return
             }
-             lxdConsoles[indentifier].send('exit  \r', { binary: true }, function(){
-                lxdConsoles[indentifier].close();
-                delete lxdConsoles[indentifier];
+             lxdConsoles[identifier].send('exit  \r', { binary: true }, function(){
+                lxdConsoles[identifier].close();
+                delete lxdConsoles[identifier];
             });
          }, 100);
     });
 });
 
 app.post('/terminals', function(req, res) {
-    // Create a indentifier for the console, this should allow multiple consolses
+    // Create a identifier for the console, this should allow multiple consolses
     // per user
     res.json({processId: uuidv1()});
     res.send();
@@ -256,19 +252,17 @@ app.post('/deploymentProgress/:deploymentId', function(req, res) {
         res.statusMessage = "Please provide host name in req body";
         res.status(422).end()
     }else{
-        request.post({
-
-            url: 'https://lxd.local/api/Deployments/UpdatePhoneHomeController/update',
-            formData: {
+        let d = {
+            uri: 'https://lxd.local/api/Deployments/UpdatePhoneHomeController/update',
+            form: {
                 deploymentId: parseInt(body.deploymentId),
                 hostname: body.hostname
             },
             rejectUnauthorized: false
-        },
-        function (error, response, body) {
-            //TODO silent error failing
         }
-        );
+
+        // send to LXDMosaic the phone-home event, error checking ?
+        rp(d).then(()=>{}).cactch(()=>{});
 
         operationSocket.emit("deploymentProgress", body);
     }
