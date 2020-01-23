@@ -29,6 +29,7 @@
     "mysql": "^2.16.0",
     "request": "^2.88.0",
     "socket.io": "^2.2.0",
+    "uuid": "^3.4.0",
     "ws": "^6.1.2"
   },
   "devDependencies": {

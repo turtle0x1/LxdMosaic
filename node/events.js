@@ -9,7 +9,8 @@ const fs = require('fs'),
     expressWs = require('express-ws'),
     path = require('path'),
     cors = require('cors'),
-    request = require("request");
+    request = require("request"),
+    uuidv1 = require('uuid/v1');
 
 const envImportResult = require('dotenv').config({
     path: "/var/www/LxdMosaic/.env"
@@ -23,7 +24,7 @@ if (envImportResult.error) {
 var privateKey = fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
     certificate = fs.readFileSync(process.env.CERT_PATH, 'utf8');
     certDir = "/var/www/LxdMosaic/src/sensitiveData/certs/",
-    lxdConsoles = [],
+    lxdConsoles = {},
     credentials = {
         key: privateKey,
         cert: certificate
@@ -207,7 +208,7 @@ terminalsIo.on("connect", function(socket) {
                         // The WebSocket is not open, ignore
                     }
                 });
-                lxdConsoles.push(lxdWs);
+                lxdConsoles[indentifier] = lxdWs;
             });
         });
         lxdReq.write(JSON.stringify(lxdExecBody));
@@ -241,7 +242,8 @@ terminalsIo.on("connect", function(socket) {
 app.post('/terminals', function(req, res) {
     // Create a indentifier for the console, this should allow multiple consolses
     // per user
-    res.send(lxdConsoles.length.toString());
+    res.json({processId: uuidv1()});
+    res.send();
 });
 
 app.post('/deploymentProgress/:deploymentId', function(req, res) {
