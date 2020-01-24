@@ -1146,11 +1146,14 @@ $("#containerBox").on("click", "#goToConsole", function() {
                                 data: {
                                     hello: "hello"
                                 },
-                                success: function(processId) {
-                                    currentTerminalProcessId = processId;
+                                success: function(data) {
+                                    
+                                    currentTerminalProcessId = data.processId;
+
                                     consoleSocket = io.connect("/terminals", {
+
                                         query: $.extend({
-                                            pid: processId,
+                                            pid: data.processId,
                                             shell: shell
                                         }, currentContainerDetails)
                                     });

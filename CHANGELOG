@@ -11,6 +11,7 @@ Changed
     Show memory as graph instead of as table
     Dont show nav text on devices < 1500px
     Hide project group if host doesn't support projects
+    Made some general improvements to the node script
 
 Fixed
     Settings don't clear properly between containers (#143)
