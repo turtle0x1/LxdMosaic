@@ -303,6 +303,7 @@ if ($haveServers->haveAny() !== true) {
             <a class="nav-link viewClusters">
               <i class="far fa-object-group"></i>
               <span class="hideNavText"> Clusters </span>
+            </a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewCloudConfigFiles">
