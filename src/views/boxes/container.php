@@ -625,6 +625,9 @@ function copyContainerConfirm(hostId, container) {
                     ajaxRequest(globalUrls.containers.copy, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
+                            modal.buttons.copy.enable();
+                            modal.buttons.cancel.enable();
+                            modal.buttons.copy.setText('Copy'); // let the user know
                             return false;
                         }
                         loadContainerTreeAfter();
