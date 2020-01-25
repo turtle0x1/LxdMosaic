@@ -21,6 +21,13 @@
           <b> Hosts </b>
           <input class="form-control" name="hosts"  id="newVmHosts"/>
       </div>
+      <div class="alert alert-info">
+          Default password ubuntu. <b> You should wait 30~ seconds before attempting to access
+          the console </b> as cloud-init has to install the lxd-agent and reboot
+          the vm.
+
+          <b> Password ssh is not enabled by default </b>
+      </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -72,7 +79,7 @@ $("#modal-vms-create").on("click", "#createVm", function(){
     ajaxRequest(globalUrls.instances.virtualMachines.create, x, (data)=>{
         data = makeToastr(data);
         if(data.state == "success"){
-            $("#modal-vms-create").modal("toggle");
+            $("#modal-vms-create").modal("hide");
         }
     });
 });
