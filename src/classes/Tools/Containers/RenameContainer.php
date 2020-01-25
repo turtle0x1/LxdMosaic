@@ -12,7 +12,7 @@ class RenameContainer
 
     public function rename(int $hostId, string $container, string $newContainer)
     {
-        $lxd = $this->lxdClient->getANewClient($hostId);
-        return $lxd->containers->rename($container, $newContainer, true);
+        $client = $this->lxdClient->getANewClient($hostId);
+        return $client->instances->rename($container, $newContainer, true);
     }
 }

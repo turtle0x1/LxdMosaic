@@ -15,7 +15,7 @@ class HostsHaveContainer
     {
         foreach ($hostIds as $hostId) {
             $client = $this->client->getANewClient($hostId);
-            $allContainers = $client->containers->all();
+            $allContainers = $client->instances->all();
             if (in_array($name, $allContainers)) {
                 throw new \Exception("$host has a container with the name $name", 1);
             }

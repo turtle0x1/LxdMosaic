@@ -12,7 +12,7 @@ class DeleteContainer
 
     public function delete(int $hostId, string $container)
     {
-        $lxd = $this->lxdClient->getANewClient($hostId);
-        return $lxd->containers->remove($container);
+        $client = $this->lxdClient->getANewClient($hostId);
+        return $client->instances->remove($container);
     }
 }

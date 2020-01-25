@@ -17,6 +17,6 @@ class DeletePath
     {
         $client = $this->lxdClient->getANewClient($hostId);
 
-        return $client->containers->files->remove($container, $path);
+        return $client->instances->files->remove($container, $path);
     }
 }

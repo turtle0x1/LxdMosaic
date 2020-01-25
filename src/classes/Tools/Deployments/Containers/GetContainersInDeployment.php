@@ -37,7 +37,7 @@ class GetContainersInDeployment
                             continue;
                         }
 
-                        $info = $client->containers->info($containerName);
+                        $info = $client->instances->info($containerName);
                         if (!isset($output[$host])) {
                             $output[$host] = [
                                 "hostId"=>$data["hostId"],
@@ -50,7 +50,7 @@ class GetContainersInDeployment
                             continue;
                         }
 
-                        $state = $client->containers->state($containerName);
+                        $state = $client->instances->state($containerName);
                         $output[$host]["containers"][] = [
                             "createdAt"=>$info["created_at"],
                             "statusCode"=>$info["status_code"],

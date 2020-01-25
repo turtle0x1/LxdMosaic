@@ -75,8 +75,7 @@ class LxdClient
     {
         $guzzle = new GuzzleClient($config);
         $adapter = new GuzzleAdapter($guzzle);
-        $client = new Client($adapter);
-        $client->setUrl($urlAndPort);
+        $client = new Client($adapter, null, $urlAndPort);
         $this->clientBag[$urlAndPort] = $client;
         return $client;
     }

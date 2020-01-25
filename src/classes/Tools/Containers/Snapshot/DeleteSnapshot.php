@@ -13,6 +13,6 @@ class DeleteSnapshot
     public function deleteSnapshot(int $hostId, string $container, string $snapshotName)
     {
         $client = $this->lxdClient->getANewClient($hostId);
-        return $client->containers->snapshots->remove($container, $snapshotName);
+        return $client->instances->snapshots->remove($container, $snapshotName);
     }
 }

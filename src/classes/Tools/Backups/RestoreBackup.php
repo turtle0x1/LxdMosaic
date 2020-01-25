@@ -22,7 +22,7 @@ class RestoreBackup
 
         $client = $this->lxdClient->getANewClient($targetHost);
 
-        return $client->containers->create("", [
+        return $client->instances->create("", [
             "source"=>"backup",
             "file"=>file_get_contents($backup["localPath"])
         ], true);

@@ -44,10 +44,10 @@ class GetContainerBackups
 
     private function getRemoteBackups($client, string $container, array $localBackups)
     {
-        $backups = $client->containers->backups->all($container);
+        $backups = $client->instances->backups->all($container);
 
         foreach ($backups as $index => $backupName) {
-            $info = $client->containers->backups->info($container, $backupName);
+            $info = $client->instances->backups->info($container, $backupName);
             $info["storedLocally"] = $this->backupDownloadedLocally($localBackups, $backupName, $info["created_at"]);
             $backups[$index] = $info;
         }

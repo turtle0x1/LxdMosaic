@@ -20,7 +20,7 @@ class UploadFiles
         foreach ($files as $file) {
             $content = file_get_contents($file['tmp_name']);
             $localPath = $path . "/" . $file["name"];
-            $response = $client->containers->files->write($container, $localPath, $content);
+            $response = $client->instances->files->write($container, $localPath, $content);
         }
 
         return true;

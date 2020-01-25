@@ -53,7 +53,7 @@ class CreateContainer
             $client = $this->client->getANewClient($host);
             $this->importImageIfNotHave->importIfNot($client, $imageDetails);
 
-            $response = $client->containers->create($name, $options, true);
+            $response = $client->instances->create($name, $options, true);
 
             if ($response["status_code"] == 400) {
                 throw new \Exception("Host: $host " . $response["err"], 1);

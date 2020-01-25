@@ -14,7 +14,7 @@ class SetContainerSettings
     public function set(int $hostId, string $container, array $settings)
     {
         $client = $this->client->getANewClient($hostId);
-        $client->containers->update($container, ["config"=>$settings]);
+        $client->instances->update($container, ["config"=>$settings]);
         return true;
     }
 }
