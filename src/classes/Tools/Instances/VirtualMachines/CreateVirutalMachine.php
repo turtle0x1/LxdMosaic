@@ -61,8 +61,6 @@ class CreateVirutalMachine
     private function getVendorData(string $username)
     {
         return '#cloud-config
-            ssh_pwauth: yes
-
             users:
              - name: ' . $username . '
                passwd: "$6$iBF0eT1/6UPE2u$V66Rk2BMkR09pHTzW2F.4GHYp3Mb8eu81Sy9srZf5sVzHRNpHP99JhdXEVeN0nvjxXVmoA6lcVEhOOqWEd3Wm0"
@@ -70,7 +68,6 @@ class CreateVirutalMachine
                groups: lxd
                shell: /bin/bash
                sudo: ALL=(ALL) NOPASSWD:ALL
-
 
             runcmd:
              - mount -t 9p config /mnt/
