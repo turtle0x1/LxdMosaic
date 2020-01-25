@@ -4,6 +4,7 @@ module.exports = class Hosts {
     this.fs = filesystem;
     this.rp = rp;
     this.hostDetails = {};
+    this.certDir = __dirname + '/../src/sensitiveData/certs/'
   }
 
   getHosts() {
@@ -39,8 +40,8 @@ module.exports = class Hosts {
           continue;
         }
 
-        let lxdClientCert = certDir + results[i].Host_Cert_Only_File;
-        let lxdClientKey = certDir + results[i].Host_Key_File;
+        let lxdClientCert = this.certDir + results[i].Host_Cert_Only_File;
+        let lxdClientKey = this.certDir + results[i].Host_Key_File;
 
         let stringUrl = results[i].Host_Url_And_Port;
         let urlURL = new URL(results[i].Host_Url_And_Port);

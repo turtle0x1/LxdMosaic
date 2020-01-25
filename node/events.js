@@ -29,10 +29,15 @@ var con = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
+con.connect(function(err) {
+  if (err) {
+    throw err;
+  }
+});
+
 // Https certificate and key file location for secure websockets + https server
 var privateKey = fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
   certificate = fs.readFileSync(process.env.CERT_PATH, 'utf8');
-(certDir = '/var/www/LxdMosaic/src/sensitiveData/certs/'),
   (lxdConsoles = {}),
   (credentials = {
     key: privateKey,
@@ -86,11 +91,7 @@ const lxdExecBody = {
   interactive: true,
 };
 
-con.connect(function(err) {
-  if (err) {
-    throw err;
-  }
-});
+
 
 function createWebSockets() {
   hosts.loadHosts().then(hostDetails => {
@@ -201,7 +202,7 @@ terminalsIo.on('connect', function(socket) {
       if (lxdConsoles[identifier] == undefined) {
         return;
       }
-      lxdConsoles[identifier].send('exit  \r', { binary: true }, function() {
+      lxdConsoles[identifier].send('exit\r\n', { binary: true }, function() {
         lxdConsoles[identifier].close();
         delete lxdConsoles[identifier];
       });
