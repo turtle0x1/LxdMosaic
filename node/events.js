@@ -5,12 +5,14 @@ const fs = require('fs'),
   express = require('express'),
   http = require('http'),
   https = require('https'),
-  mysql = require('mysql'),
   expressWs = require('express-ws'),
   path = require('path'),
   cors = require('cors'),
   uuidv1 = require('uuid/v1'),
-  rp = require('request-promise');
+  rp = require('request-promise'),
+  mysql = require('mysql'),
+  Hosts = require('./Hosts');
+HostOperations = require('./HostOperations');
 
 const envImportResult = require('dotenv').config({
   path: '/var/www/LxdMosaic/.env',
@@ -19,6 +21,13 @@ const envImportResult = require('dotenv').config({
 if (envImportResult.error) {
   throw envImportResult.error;
 }
+
+var con = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+});
 
 // Https certificate and key file location for secure websockets + https server
 var privateKey = fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
@@ -46,21 +55,19 @@ var httpsServer = https.createServer(credentials, app);
 var io = require('socket.io')(httpsServer);
 
 var operationSocket = io.of('/operations');
-// expressWs(app, httpsServer);
 
-var con = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-});
-
-var hostDetails = {};
+hosts = new Hosts(con, fs, rp);
+hostOperations = new HostOperations(fs);
 
 function createExecOptions(host, container) {
+  let hostDetails = hosts.getHosts();
+  if (hostDetails == undefined) {
+    return false;
+  }
+  let url = hostDetails[host].supportsVms ? 'instances' : 'containers';
   return {
     method: 'POST',
-    uri: `https://${hostDetails[host].hostWithOutProtoOrPort}:${hostDetails[host].port}/1.0/containers/${container}/exec`,
+    uri: `https://${hostDetails[host].hostWithOutProtoOrPort}:${hostDetails[host].port}/1.0/${url}/${container}/exec`,
     cert: fs.readFileSync(hostDetails[host].cert),
     key: fs.readFileSync(hostDetails[host].key),
     rejectUnauthorized: false,
@@ -86,56 +93,8 @@ con.connect(function(err) {
 });
 
 function createWebSockets() {
-  con.query('SELECT * FROM Hosts', function(err, result, fields) {
-    if (err) {
-      throw err;
-    }
-    // Clear host details on reload of hosts to prevent deleted hosts
-    // persisting
-    hostDetails = {};
-
-    for (i = 0; i < result.length; i++) {
-      let lxdClientCert = certDir + result[i].Host_Cert_Only_File;
-      let lxdClientKey = certDir + result[i].Host_Key_File;
-
-      if (result[i].Host_Online == 0) {
-        continue;
-      }
-
-      // Connecting to the lxd server/s
-      const wsoptions = {
-        cert: fs.readFileSync(lxdClientCert),
-        key: fs.readFileSync(lxdClientKey),
-        rejectUnauthorized: false,
-      };
-
-      var portRegex = /:[0-9]+/;
-
-      let stringUrl = result[i].Host_Url_And_Port;
-      let urlURL = new URL(result[i].Host_Url_And_Port);
-
-      let hostWithOutProto = stringUrl.replace('https://', '');
-      let hostWithOutProtoOrPort = hostWithOutProto.replace(portRegex, '');
-
-      hostDetails[result[i].Host_ID] = {
-        cert: lxdClientCert,
-        key: lxdClientKey,
-        hostWithOutProtoOrPort: hostWithOutProtoOrPort,
-        port: urlURL.port,
-      };
-
-      var ws = new WebSocket(
-        'wss://' + hostWithOutProto + '/1.0/events?type=operation',
-        wsoptions
-      );
-
-      ws.on('message', function(data, flags) {
-        var buf = Buffer.from(data);
-        let message = JSON.parse(data.toString());
-        message.host = hostWithOutProtoOrPort;
-        operationSocket.emit('operationUpdate', message);
-      });
-    }
+  hosts.loadHosts().then(hostDetails => {
+    hostOperations.setupWebsockets(hostDetails, operationSocket);
   });
 }
 
@@ -162,6 +121,8 @@ app.get('/', function(req, res) {
 var terminalsIo = io.of('/terminals');
 
 terminalsIo.on('connect', function(socket) {
+  //TODO Map pid to lxd operation id so on-reconnects they connect back
+  //     to the same socket to prevent lots of dead sockets
   let identifier = socket.handshake.query.pid;
   let shell = socket.handshake.query.shell;
   if (typeof shell == 'string' && shell !== '') {
@@ -173,6 +134,10 @@ terminalsIo.on('connect', function(socket) {
     let container = socket.handshake.query.container;
 
     let execOptions = createExecOptions(host, container);
+
+    if (execOptions == false) {
+      lxdConsoles[identifier].close();
+    }
 
     const wsoptions = {
       cert: execOptions.cert,
@@ -188,6 +153,8 @@ terminalsIo.on('connect', function(socket) {
           socket.emit('data', 'Container Offline');
           return false;
         }
+
+        let hostDetails = hosts.getHosts();
 
         let url = `wss://${hostDetails[host].hostWithOutProtoOrPort}:${hostDetails[host].port}`;
 
@@ -242,6 +209,8 @@ terminalsIo.on('connect', function(socket) {
   });
 });
 
+var terminalCache = {};
+
 app.post('/terminals', function(req, res) {
   // Create a identifier for the console, this should allow multiple consolses
   // per user
@@ -280,3 +249,14 @@ app.post('/deploymentProgress/:deploymentId', function(req, res) {
 });
 
 createWebSockets();
+
+process.on('SIGINT', function() {
+  hostOperations.closeSockets();
+
+  let keys = Object.keys(lxdConsoles);
+
+  for (let i = 0; i < keys.length; i++) {
+    lxdConsoles[keys[i]].close();
+  }
+  process.exit();
+});
