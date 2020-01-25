@@ -68,8 +68,8 @@ function createExecOptions(host, container) {
   return {
     method: 'POST',
     uri: `https://${hostDetails[host].hostWithOutProtoOrPort}:${hostDetails[host].port}/1.0/${url}/${container}/exec`,
-    cert: fs.readFileSync(hostDetails[host].cert),
-    key: fs.readFileSync(hostDetails[host].key),
+    cert: hostDetails[host].cert,
+    key: hostDetails[host].key,
     rejectUnauthorized: false,
     json: true,
   };

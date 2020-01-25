@@ -16,8 +16,8 @@ module.exports = class HostOperations {
         let details = hostDetails[keys[i]];
 
         const wsoptions = {
-          cert: this.fs.readFileSync(details.cert),
-          key: this.fs.readFileSync(details.key),
+          cert: details.cert,
+          key: details.key,
           rejectUnauthorized: false,
         };
         // Only create a socket if we don't already have one for the host

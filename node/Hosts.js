@@ -45,12 +45,11 @@ module.exports = class Hosts {
         let stringUrl = results[i].Host_Url_And_Port;
         let urlURL = new URL(results[i].Host_Url_And_Port);
 
+        results[i].cert = this.fs.readFileSync(lxdClientCert);
+        results[i].key = this.fs.readFileSync(lxdClientKey);
+
         promises.push(
-          this.getServerInfo(
-            stringUrl,
-            this.fs.readFileSync(lxdClientCert),
-            this.fs.readFileSync(lxdClientKey)
-          )
+          this.getServerInfo(stringUrl, results[i].cert, results[i].key)
         );
       }
 
@@ -61,8 +60,6 @@ module.exports = class Hosts {
             continue;
           }
 
-          let lxdClientCert = certDir + results[i].Host_Cert_Only_File;
-          let lxdClientKey = certDir + results[i].Host_Key_File;
           var portRegex = /:[0-9]+/;
 
           let stringUrl = results[i].Host_Url_And_Port;
@@ -75,8 +72,8 @@ module.exports = class Hosts {
 
           output[results[i].Host_ID] = {
             hostId: results[i].Host_ID,
-            cert: lxdClientCert,
-            key: lxdClientKey,
+            cert: results[i].cert,
+            key: results[i].key,
             hostWithOutProto: hostWithOutProto,
             hostWithOutProtoOrPort: hostWithOutProtoOrPort,
             port: urlURL.port,
