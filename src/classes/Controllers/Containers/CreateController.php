@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Containers;
 
 use dhope0000\LXDClient\Tools\Containers\CreateContainer;
+use dhope0000\LXDClient\Constants\LxdInstanceTypes;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -22,6 +23,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         array $config = []
     ) {
         $lxdResponses = $this->createContainer->create(
+            LxdInstanceTypes::CONTAINER,
             $name,
             $profileIds,
             $hosts,

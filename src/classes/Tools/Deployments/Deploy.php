@@ -9,6 +9,7 @@ use dhope0000\LXDClient\Tools\Containers\CreateContainer;
 use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 use dhope0000\LXDClient\Tools\InstanceSettings\CreatePhoneHomeVendorString;
 use dhope0000\LXDClient\Tools\Deployments\Containers\StoreDeployedContainerNames;
+use dhope0000\LXDClient\Constants\LxdInstanceTypes;
 
 class Deploy
 {
@@ -63,6 +64,7 @@ class Deploy
                     $containerName = StringTools::random(12);
 
                     $this->createContainer->create(
+                        LxdInstanceTypes::CONTAINER,
                         $containerName,
                         $profiles,
                         [$hostId],

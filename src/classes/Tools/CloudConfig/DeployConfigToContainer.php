@@ -5,6 +5,7 @@ namespace dhope0000\LXDClient\Tools\CloudConfig;
 use dhope0000\LXDClient\Tools\CloudConfig\DeployToProfile;
 use dhope0000\LXDClient\Tools\Containers\CreateContainer;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
+use dhope0000\LXDClient\Constants\LxdInstanceTypes;
 
 class DeployConfigToContainer
 {
@@ -41,6 +42,7 @@ class DeployConfigToContainer
         );
 
         return $this->createContainer->create(
+            LxdInstanceTypes::CONTAINER,
             $containerName,
             $additionalProfiles,
             $hostUrls,

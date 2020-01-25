@@ -22,6 +22,7 @@ class CreateContainer
      * TODO Find out the $server param and send it to space
      */
     public function create(
+        string $type,
         string $name,
         array $profiles,
         array $hosts,
@@ -37,6 +38,7 @@ class CreateContainer
         $profiles = $this->createProfileNameArray($profiles, $profileNames);
 
         $options = $this->createOptionsArray(
+            $type,
             $profiles,
             $imageDetails,
             $server,
@@ -65,6 +67,7 @@ class CreateContainer
 
 
     private function createOptionsArray(
+        $type,
         $profiles,
         $imageDetails,
         $server = "",
@@ -73,6 +76,7 @@ class CreateContainer
         array $config = []
     ) {
         $x = [
+            "type"=>$type,
             "fingerprint"=>$imageDetails["fingerprint"],
             "profiles"=>$profiles,
             "server"=>$server,

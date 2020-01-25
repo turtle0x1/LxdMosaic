@@ -1239,4 +1239,5 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
     require __DIR__ . "/../modals/containers/createContainer.php";
     require __DIR__ . "/../modals/containers/editSettings.php";
     require __DIR__ . "/../modals/containers/files/uploadFile.php";
+    require __DIR__ . "/../modals/instances/vms/createVm.php";
 ?>
