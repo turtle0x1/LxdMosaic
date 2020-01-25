@@ -1,10 +1,7 @@
-// require WebSocket = require('ws');
-
 var WebSocket = require('ws');
 
 module.exports = class HostOperations {
   constructor(fs, webSocket) {
-    this.websocket = WebSocket;
     this.fs = fs;
     this.operationSockets = {};
   }
@@ -22,7 +19,7 @@ module.exports = class HostOperations {
         };
         // Only create a socket if we don't already have one for the host
         if (!this.operationSockets.hasOwnProperty(details.hostId)) {
-          this.operationSockets[details.hostId] = new this.websocket(
+          this.operationSockets[details.hostId] = new WebSocket(
             'wss://' + details.hostWithOutProto + '/1.0/events?type=operation',
             wsoptions
           );

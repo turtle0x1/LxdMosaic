@@ -87,8 +87,8 @@ module.exports = class Terminals {
         .then(openResult => {
           let url = `wss://${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}`;
 
-          // If the server dies but there are active clients they will be
-          // re-connct sending there process-id but it wont be in the internalUuidMap
+          // If the server dies but there are active clients they will re-connect
+          // with their process-id but it wont be in the internalUuidMap
           // so we need to re add it
           if (!this.internalUuidMap.hasOwnProperty(`${host}.${container}`)) {
             this.internalUuidMap[`${host}.${container}`] = internalUuid;
