@@ -5,14 +5,36 @@ You should only upgrade when a new version is tagged,
 Restarting the `pm2` and `apache2` process may interupt running process please
 be careful when upgrading!
 
-## 0.5.0 -> 0.6.0 [WIP]
+## 0.5.X -> 0.6.0
 
 ```
-# Required for downloading backups
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout 0.6.0
+
+mkdir -p /var/www/LxdMosaic/src/sensitiveData/backups
+
+chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/backups
+
+npm i
+
+composer install
+
+mysql < sql/0.6.0.sql
+
+# Required for downloading backups (Ubuntu)
 sed -i 's/memory_limit\s*=.*/memory_limit=1024M/g' /etc/php/7.2/apache2/php.ini
+# Required for downloading backups (Centos)
+sed -i 's/memory_limit\s*=.*/memory_limit=1024M/g' /etc/php.ini
 
+pm2 restart all
+
+#Ubuntu
 systemctl restart apache2
-
+#Centos
+systemctl restart httpd
 ```
 
 ## 0.4.0 -> 0.5.0

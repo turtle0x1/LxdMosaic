@@ -35,11 +35,12 @@ git clone https://github.com/turtle0x1/LxdMosaic.git
 mkdir -p /var/www/LxdMosaic/src/sensitiveData/certs
 mkdir -p /var/www/LxdMosaic/src/sensitiveData/backups
 chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/
+chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/backups
 
 # Move in LxdManager
 cd /var/www/LxdMosaic || exit
 
-git checkout 0.5.0
+git checkout 0.6.0
 
 npm install
 

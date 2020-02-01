@@ -1,4 +1,4 @@
-Unreleased
+0.6.0 - 01/02/2020
 
 Added
     Store enviorment variable with cloud-config rev (#70)
