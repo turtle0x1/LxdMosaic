@@ -76,9 +76,11 @@ class GetHostsContainers
         foreach ($containers as $container) {
             $state = $client->instances->state($container);
             $info = $client->instances->info($container);
-
-            if ($info["location"] !== "none" && $info["location"] !== $hostInfo["environment"]["server_name"]) {
-                continue;
+            
+            if ($info["location"] !== "") {
+                if ($info["location"] !== "none" && $info["location"] !== $hostInfo["environment"]["server_name"]) {
+                    continue;
+                }
             }
 
             $details[$container] = [
