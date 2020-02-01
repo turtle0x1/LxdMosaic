@@ -27,6 +27,7 @@
     "express": "^4.16.4",
     "express-ws": "^4.0.0",
     "mysql": "^2.16.0",
+    "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "socket.io": "^2.2.0",
     "uuid": "^3.4.0",
