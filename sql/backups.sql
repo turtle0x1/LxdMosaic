@@ -1,9 +1,0 @@
-CREATE TABLE `Container_Backups` (
-    `CB_ID` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `CB_Date_Created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `CB_Backup_Date_Created` DATETIME NOT NULL,
-    `CB_Host_ID` INT(11) NOT NULL,
-    `CB_Container` VARCHAR(255) NOT NULL,
-    `CB_Backup` VARCHAR(255) NOT NULL,
-    `CB_Local_Path` VARCHAR(255) NOT NULL
-);
