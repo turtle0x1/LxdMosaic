@@ -1145,16 +1145,19 @@ $("#containerBox").on("click", "#goToConsole", function() {
                         setTimeout(() => {
                             $.ajax({
                                 type: "POST",
+                                dataType: 'json',
+                                contentType: 'application/json',
                                 url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
-                                data: {
-                                    hello: "hello"
-                                },
+                                data: JSON.stringify({
+                                    host: currentContainerDetails.hostId,
+                                    container: currentContainerDetails.container
+                                }),
                                 success: function(data) {
-                                    
+
                                     currentTerminalProcessId = data.processId;
 
                                     consoleSocket = io.connect("/terminals", {
-
+                                        reconnection: false,
                                         query: $.extend({
                                             pid: data.processId,
                                             shell: shell
@@ -1168,7 +1171,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
                                     term.on('data', function(data) {
                                         consoleSocket.emit('data', data);
                                     });
-                                    // consoleSocket = new WebSocket(consoleSocketURL);
+
                                     consoleSocket.onopen = function() {
                                         term.attach(consoleSocket);
                                         term._initialized = true;
@@ -1242,4 +1245,5 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
     require __DIR__ . "/../modals/containers/createContainer.php";
     require __DIR__ . "/../modals/containers/editSettings.php";
     require __DIR__ . "/../modals/containers/files/uploadFile.php";
+    require __DIR__ . "/../modals/instances/vms/createVm.php";
 ?>

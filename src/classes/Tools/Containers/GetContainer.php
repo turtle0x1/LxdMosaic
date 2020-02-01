@@ -25,9 +25,9 @@ class GetContainer
     {
         $client = $this->client->getANewClient($hostId);
 
-        $details = $client->containers->info($container);
-        $state = $client->containers->state($container);
-        $snapshots = $client->containers->snapshots->all($container);
+        $details = $client->instances->info($container);
+        $state = $client->instances->state($container);
+        $snapshots = $client->instances->snapshots->all($container);
         $deploymentDetails = $this->fetchDeployments->byHostContainer($hostId, $container);
         $hostSupportsBackups = $this->hasExtension->checkWithClient($client, LxdApiExtensions::CONTAINER_BACKUP);
 

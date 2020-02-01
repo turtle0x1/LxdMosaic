@@ -22,6 +22,7 @@ class CreateContainer
      * TODO Find out the $server param and send it to space
      */
     public function create(
+        string $type,
         string $name,
         array $profiles,
         array $hosts,
@@ -37,6 +38,7 @@ class CreateContainer
         $profiles = $this->createProfileNameArray($profiles, $profileNames);
 
         $options = $this->createOptionsArray(
+            $type,
             $profiles,
             $imageDetails,
             $server,
@@ -51,7 +53,7 @@ class CreateContainer
             $client = $this->client->getANewClient($host);
             $this->importImageIfNotHave->importIfNot($client, $imageDetails);
 
-            $response = $client->containers->create($name, $options, true);
+            $response = $client->instances->create($name, $options, true);
 
             if ($response["status_code"] == 400) {
                 throw new \Exception("Host: $host " . $response["err"], 1);
@@ -65,6 +67,7 @@ class CreateContainer
 
 
     private function createOptionsArray(
+        $type,
         $profiles,
         $imageDetails,
         $server = "",
@@ -73,6 +76,7 @@ class CreateContainer
         array $config = []
     ) {
         $x = [
+            "type"=>$type,
             "fingerprint"=>$imageDetails["fingerprint"],
             "profiles"=>$profiles,
             "server"=>$server,

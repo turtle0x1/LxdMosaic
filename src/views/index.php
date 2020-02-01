@@ -64,6 +64,11 @@ if ($haveServers->haveAny() !== true) {
           var currentContainerDetails = null;
 
           var globalUrls = {
+              instances: {
+                  virtualMachines: {
+                      create: "/api/Instances/VirtualMachines/CreateController/create"
+                  }
+              },
               //NOTE The url can't be "Analytics" because some ad blockers
               //     will block it by default
               analytics: {
@@ -341,10 +346,13 @@ if ($haveServers->haveAny() !== true) {
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">
           <li class="nav-item px-3 btn btn-primary pull-right" id="addNewServer">
-                <a> Add A Server </a>
+                <a> <i class="fas fa-plus"></i> Server </a>
            </li>
           <li class="nav-item px-3 btn btn-success pull-right" id="createContainer">
-                <a> Create Container </a>
+                <a> <i class="fas fa-plus"></i> Container </a>
+           </li>
+          <li class="nav-item px-3 btn btn-success pull-right" id="createVm">
+                <a> <i class="fas fa-plus"></i> VM </a>
            </li>
       </ul>
     </header>
@@ -806,12 +814,19 @@ function createContainerTree(){
                     }
                 }
 
+                let typeFa = "box";
+
+                if(details.info.hasOwnProperty("type") && details.info.type == "virtual-machine"){
+                    typeFa = "vr-cardboard";
+                }
+
                 hosts += `<li class="nav-item view-container ${active}"
                     data-host-id="${host.hostId}"
                     data-container="${containerName}"
                     data-alias="${i}">
                   <a class="nav-link" href="#">
                     <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
+                    <i class="nav-icon fas fa-${typeFa}"></i>
                     ${containerName}
                   </a>
                 </li>`;

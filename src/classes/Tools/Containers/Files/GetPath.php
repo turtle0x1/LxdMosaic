@@ -26,7 +26,7 @@ class GetPath
 
         $client->addCache($this->cache, []);
 
-        $response = $client->containers->files->read($container, $path);
+        $response = $client->instances->files->read($container, $path);
 
         $cacheKey = hash("sha1", "GET " . $client->getUrl() . "/1.0/containers/$container/files?path=$path");
 
@@ -58,7 +58,7 @@ class GetPath
         foreach ($contents as $index => $content) {
             $contentPath = $path == "/" ? "/$content" : "$path/$content";
 
-            $response = $client->containers->files->read($container, $contentPath);
+            $response = $client->instances->files->read($container, $contentPath);
             $cacheKey = hash("sha1", "GET " . $client->getUrl() . "/1.0/containers/$container/files?path=$contentPath");
             $contents[$index] = [
                 "name"=>$content,

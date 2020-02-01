@@ -75,6 +75,10 @@ var emptyServerBox = function(){
     </div>`);
 }
 
+$(document).on("click", "#createVm", function(){
+    $("#modal-vms-create").modal("show");
+});
+
 $(document).on("click", "#createContainer", function(){
     $("#modal-container-create").modal("show");
 });

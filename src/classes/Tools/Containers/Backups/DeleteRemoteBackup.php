@@ -28,6 +28,6 @@ class DeleteRemoteBackup
             throw new \Exception("Host doesn't support backups", 1);
         }
 
-        return $client->containers->backups->remove($container, $backup, [], true);
+        return $client->instances->backups->remove($container, $backup, [], true);
     }
 }

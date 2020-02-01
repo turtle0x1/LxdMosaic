@@ -46,7 +46,7 @@ class BackupContainer
             throw new \Exception("Host doesn't support backups", 1);
         }
 
-        $response = $client->containers->backups->create($container, $backup, [], $wait);
+        $response = $client->instances->backups->create($container, $backup, [], $wait);
 
         if ($importAndDelete) {
             $this->storeBackupLocally->store($hostId, $container, $backup, true);

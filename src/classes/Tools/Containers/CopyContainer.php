@@ -26,8 +26,8 @@ class CopyContainer
                 $newContainerName
             );
         }
-        $lxd = $this->lxdClient->getANewClient($hostId);
-        $r = $lxd->containers->copy($container, $newContainerName, [], true);
+        $client = $this->lxdClient->getANewClient($hostId);
+        $r = $client->instances->copy($container, $newContainerName, [], true);
         // There is some error that is not being caught here so added this checking
         if (isset($r["err"]) && !empty($r["err"])) {
             throw new \Exception($r["err"], 1);

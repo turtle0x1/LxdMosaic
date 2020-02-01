@@ -18,7 +18,7 @@ class GetContainerSettings
     public function get(int $hostId, string $container)
     {
         $client = $this->client->getANewClient($hostId);
-        $info = $client->containers->info($container);
+        $info = $client->instances->info($container);
         $enabledConfigs = $this->getSettings->getAllEnabledNamesAndDefaults();
         $enabledConfigNames = array_column($enabledConfigs, "key");
         $output = [];

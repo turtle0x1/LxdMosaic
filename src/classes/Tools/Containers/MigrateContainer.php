@@ -19,7 +19,7 @@ class MigrateContainer
         $hostClient = $this->lxdClient->getANewClient($hostId);
         $destinationClient = $this->lxdClient->getANewClient($newHostId);
 
-        $hostClient->containers->migrate($destinationClient, $container, $newContainerName, true);
+        $hostClient->instances->migrate($destinationClient, $container, $newContainerName, true);
         return true;
     }
 }

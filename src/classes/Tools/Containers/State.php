@@ -12,7 +12,7 @@ class State
 
     public function change(int $hostId, string $container, string $state)
     {
-        $hostClient = $this->lxdClient->getANewClient($hostId);
-        return $hostClient->containers->{$state}($container);
+        $client = $this->lxdClient->getANewClient($hostId);
+        return $client->instances->{$state}($container);
     }
 }

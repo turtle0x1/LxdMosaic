@@ -20,7 +20,7 @@ class RouteController
     public function routeRequest($explodedPath)
     {
         if (!isset($explodedPath[0]) || (
-                $explodedPath[0] == "index" ||
+            $explodedPath[0] == "index" ||
                 $explodedPath[0] == "views"
         )) {
             $this->routeView->route($explodedPath);
@@ -28,7 +28,6 @@ class RouteController
             $this->routeApi->route($explodedPath, $_POST);
         } elseif ($explodedPath[0] == "assets") {
             $this->routeAssets->route($explodedPath);
-
         } elseif ($explodedPath[0] == "terminals?cols=80&rows=24") {
             $port = '3000';
 
@@ -39,18 +38,20 @@ class RouteController
             $ch = curl_init();
 
             //set the url, number of POST vars, POST data
-            curl_setopt($ch,CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, "");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents('php://input'));
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json'
+            ));
 
             $server_output = curl_exec($ch);
-            curl_close ($ch);
+            curl_close($ch);
 
             echo $server_output;
-
         } else {
             throw new \Exception("Dont understand the path", 1);
         }

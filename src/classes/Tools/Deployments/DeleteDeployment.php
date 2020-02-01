@@ -29,8 +29,8 @@ class DeleteDeployment
         foreach ($containers as $host => $details) {
             $client = $this->client->getANewClient($details["hostId"]);
             foreach ($details["containers"] as $container) {
-                $client->containers->setState($container["name"], "stop", 30, true, false, true);
-                $client->containers->remove($container["name"], true);
+                $client->instances->setState($container["name"], "stop", 30, true, false, true);
+                $client->instances->remove($container["name"], true);
             }
         }
 

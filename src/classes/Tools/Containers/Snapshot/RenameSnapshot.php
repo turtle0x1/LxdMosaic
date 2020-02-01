@@ -17,7 +17,7 @@ class RenameSnapshot
         string $newSnapshotName
     ) {
         $client = $this->lxdClient->getANewClient($hostId);
-        return $client->containers->snapshots->rename(
+        return $client->instances->snapshots->rename(
             $container,
             $snapshotName,
             $newSnapshotName,

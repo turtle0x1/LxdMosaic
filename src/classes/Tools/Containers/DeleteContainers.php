@@ -12,16 +12,16 @@ class DeleteContainers
 
     public function delete(int $hostId, array $containers)
     {
-        $lxd = $this->lxdClient->getANewClient($hostId);
+        $client = $this->lxdClient->getANewClient($hostId);
 
-        foreach($containers as $container){
-            $state = $lxd->containers->state($container);
+        foreach ($containers as $container) {
+            $state = $client->instances->state($container);
 
-            if($state["status_code"] == 103){
-                $lxd->containers->setState($container, "stop");
+            if ($state["status_code"] == 103) {
+                $client->instances->setState($container, "stop");
             }
 
-            $lxd->containers->remove($container, true);
+            $client->instances->remove($container, true);
         }
 
         return true;

@@ -71,7 +71,7 @@ class StoreBackupLocally
     ) :array {
         $client = $this->lxdClient->getANewClient($hostId);
 
-        $backupInfo = $client->containers->backups->info($container, $backup);
+        $backupInfo = $client->instances->backups->info($container, $backup);
 
         $backupFileName = "backup." . $backupInfo['created_at'] .".tar.gz";
 
@@ -79,7 +79,7 @@ class StoreBackupLocally
 
         $this->filesystem->touch($backupFilePath);
 
-        $this->filesystem->appendToFile($backupFilePath, $client->containers->backups->export($container, $backup));
+        $this->filesystem->appendToFile($backupFilePath, $client->instances->backups->export($container, $backup));
 
         return [
             "backupFile"=>$backupFilePath,

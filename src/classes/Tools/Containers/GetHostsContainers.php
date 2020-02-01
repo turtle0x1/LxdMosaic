@@ -39,7 +39,7 @@ class GetHostsContainers
             $client = $this->client->getANewClient($host["Host_ID"]);
             $hostInfo = $client->host->info();
 
-            $containers = $this->getContainers($host["Host_ID"]);
+            $containers = $this->getContainers($host["Host_ID"], $client);
 
             $supportsBackups = $this->hasExtension->checkWithClient($client, LxdApiExtensions::CONTAINER_BACKUP);
 
@@ -54,10 +54,16 @@ class GetHostsContainers
         return $details;
     }
 
-    public function getContainers(int $hostId)
+    public function getContainers(int $hostId, $client = null)
     {
-        $client = $this->client->getANewClient($hostId);
-        $containers = $client->containers->all();
+        if (is_null($client)) {
+            $client = $this->client->getANewClient($hostId);
+        }
+
+        $supportsVms = $this->hasExtension->checkWithClient($client, LxdApiExtensions::VIRTUAL_MACHINES);
+
+        $containers = $client->instances->all();
+
         $containers = $this->addContainersStateAndInfo($client, $containers);
         ksort($containers, SORT_STRING | SORT_FLAG_CASE);
         return $containers;
@@ -68,8 +74,8 @@ class GetHostsContainers
         $hostInfo = $client->host->info();
         $details = array();
         foreach ($containers as $container) {
-            $state = $client->containers->state($container);
-            $info = $client->containers->info($container);
+            $state = $client->instances->state($container);
+            $info = $client->instances->info($container);
 
             if ($info["location"] !== "none" && $info["location"] !== $hostInfo["environment"]["server_name"]) {
                 continue;
