@@ -813,12 +813,19 @@ function createContainerTree(){
                     }
                 }
 
+                let typeFa = "box";
+
+                if(details.info.hasOwnProperty("type") && details.info.type == "virtual-machine"){
+                    typeFa = "vr-cardboard";
+                }
+
                 hosts += `<li class="nav-item view-container ${active}"
                     data-host-id="${host.hostId}"
                     data-container="${containerName}"
                     data-alias="${i}">
                   <a class="nav-link" href="#">
                     <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
+                    <i class="nav-icon fas fa-${typeFa}"></i>
                     ${containerName}
                   </a>
                 </li>`;
