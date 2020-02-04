@@ -47,7 +47,9 @@ class GetContainerBackups
         $backups = $client->instances->backups->all($container);
 
         foreach ($backups as $index => $backupName) {
+            // var_dump($backupName);
             $info = $client->instances->backups->info($container, $backupName);
+
             $info["storedLocally"] = $this->backupDownloadedLocally($localBackups, $backupName, $info["created_at"]);
             $backups[$index] = $info;
         }
