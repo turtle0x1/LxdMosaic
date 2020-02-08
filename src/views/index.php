@@ -65,6 +65,11 @@ if ($haveServers->haveAny() !== true) {
 
           var globalUrls = {
               instances: {
+                  metrics: {
+                      getGraphData: "/api/Instances/Metrics/GetGraphDataController/get",
+                      getAllTypes: "/api/Instances/Metrics/GetGraphDataController/getAllTypes",
+                      getTypeFilters: "/api/Instances/Metrics/GetGraphDataController/getTypeFilters",
+                  },
                   virtualMachines: {
                       create: "/api/Instances/VirtualMachines/CreateController/create"
                   }

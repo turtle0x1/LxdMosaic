@@ -7,31 +7,38 @@
         </u></h4>
     </div>
     <div class="row" id="containerViewBtns">
-        <div class="col-md-3 text-center">
+        <div class="col-md-2 text-center">
             <div class="card bg-primary card-hover-primary text-center toggleCard" id="goToDetails">
                 <div class="card-body">
                     <i class="fas fa-info pr-2"></i>Details
                 </div>
             </div>
         </div>
-        <div class="col-md-3 text-center">
+        <div class="col-md-2 text-center">
             <div class="card card-hover-primary text-center toggleCard" id="goToConsole">
                 <div class="card-body">
                     <i class="fas fa-terminal pr-2"></i>Console
                 </div>
             </div>
         </div>
-        <div class="col-md-3 text-center">
+        <div class="col-md-2 text-center">
             <div class="card card-hover-primary text-center toggleCard" id="goToBackups">
                 <div class="card-body">
                     <i class="fas fa-save pr-2"></i>Backups
                 </div>
             </div>
         </div>
-        <div class="col-md-3 text-center">
+        <div class="col-md-2 text-center">
             <div class="card card-hover-primary text-center toggleCard" id="goToFiles">
                 <div class="card-body">
                     <i class="fas fa-save pr-2"></i>Files
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="card card-hover-primary text-center toggleCard" id="goToMetrics">
+                <div class="card-body">
+                    <i class="fas fa-chart-bar pr-2"></i>Metrics
                 </div>
             </div>
         </div>
@@ -253,6 +260,22 @@
     </div>
     <div class="card-columns" id="filesystemTable">
     </div>
+</div>
+<div id="containerMetrics"  class="col-md-12">
+    <div class="card">
+        <div class="card-header bg-primary">
+            Metric Graph
+            <select class="form-control-sm float-right" id="metricTypeFilterSelect">
+            </select>
+            <select class="form-control-sm float-right" id="metricTypeSelect">
+            </select>
+
+        </div>
+        <div class="card-body bg-dark">
+            <canvas id="metricGraph" style="width: 100%;"></canvas>
+        </div>
+    </div>
+
 </div>
 </div>
 <script src="/assets/dist/xterm.js"></script>
@@ -1064,6 +1087,63 @@ $("#containerBox").on("click", "#goToFiles", function(){
     $("#containerFiles").show();
     $("#containerConsole, #containerBackups, #containerDetails").hide();
     loadFileSystemPath("/");
+});
+
+$("#containerBox").on("change", "#metricTypeSelect", function(){
+    let type = $(this).val();
+    let x = {...{type: type}, ...currentContainerDetails}
+    ajaxRequest(globalUrls.instances.metrics.getTypeFilters, x, (data)=>{
+        data = $.parseJSON(data);
+        let html = "<option value=''>Please select</option>";
+        $.each(data, (_, filter)=>{
+            html += `<option value='${filter}'>${filter}</option>`
+        });
+        $("#metricTypeFilterSelect").empty().append(html);
+    });
+});
+$("#containerBox").on("change", "#metricTypeFilterSelect", function(){
+    let filter = $(this).val();
+    let type = $("#metricTypeSelect").val();
+    let x = {...{type: type, filter: filter}, ...currentContainerDetails}
+    ajaxRequest(globalUrls.instances.metrics.getGraphData, x, (data)=>{
+        let color = randomColor();
+        data = $.parseJSON(data);
+        new Chart($("#metricGraph"), {
+            type: "line",
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: `Data`,
+                    fill: false,
+                    borderColor: color,
+                    pointHoverBackgroundColor: color,
+                    backgroundColor: color,
+                    pointHoverBorderColor: color,
+                    data: data.data
+                }]
+            },
+            options: {
+              cutoutPercentage: 40,
+              responsive: false,
+            }
+        });
+    });
+});
+
+$("#containerBox").on("click", "#goToMetrics", function(){
+    $("#containerMetrics").show();
+    $("#containerConsole, #containerBackups, #containerDetails").hide();
+    let x = {...{type: 1}, ...currentContainerDetails}
+
+    ajaxRequest(globalUrls.instances.metrics.getAllTypes, currentContainerDetails, (data)=>{
+        data = $.parseJSON(data);
+        let html = "<option value=''>Please select</option>";
+        $.each(data, (_, item)=>{
+            html += `<option value='${item.typeId}'>${item.type}</option>`
+        });
+        $("#metricTypeSelect").empty().append(html);
+    });
+
 });
 
 $(document).on("click", ".filesystemObject", function(){
