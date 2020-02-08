@@ -69,6 +69,8 @@ if ($haveServers->haveAny() !== true) {
                       getGraphData: "/api/Instances/Metrics/GetGraphDataController/get",
                       getAllTypes: "/api/Instances/Metrics/GetGraphDataController/getAllTypes",
                       getTypeFilters: "/api/Instances/Metrics/GetGraphDataController/getTypeFilters",
+                      getAllInstancesSettings: "/api/Instances/Metrics/GetAllInstancesSettings/get",
+                      enablePullGathering: "/api/Instances/Metrics/EnablePullGatheringController/enable",
                   },
                   virtualMachines: {
                       create: "/api/Instances/VirtualMachines/CreateController/create"
@@ -345,6 +347,10 @@ if ($haveServers->haveAny() !== true) {
               <i class="fas fa-save"></i> <span class="hideNavText"> Backups </span> </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link viewMetricSettings">
+              <i class="fas fa-chart-bar"></i> <span class="hideNavText"> Metric Settings </span> </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link viewSettings">
               <i class="fas fa-wrench"></i> <span class="hideNavText"> Settings </span> </a>
           </li>
@@ -391,6 +397,7 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/networks.php";
                     require __DIR__ . "/boxes/server.php";
                     require __DIR__ . "/boxes/backups.php";
+                    require __DIR__ . "/boxes/metrics.php";
                     require __DIR__ . "/boxes/settings.php";
                 ?>
             </div>
@@ -944,6 +951,11 @@ $(document).on("click", ".viewCloudConfigFiles, .cloudConfig-overview", function
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     loadCloudConfigTree();
     changeActiveNav(".viewCloudConfigFiles")
+});
+
+$(document).on("click", ".viewMetricSettings", function(){
+    loadMetricsView();
+    changeActiveNav(".viewMetricSettings")
 });
 
 $(document).on("click", ".viewSettings", function(){

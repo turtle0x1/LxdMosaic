@@ -16,7 +16,7 @@ $hostList = $container->make("dhope0000\LXDClient\Model\Hosts\HostList");
 $getP = $container->make("dhope0000\LXDClient\Tools\Profiles\GetAllProfiles");
 $import = $container->make("dhope0000\LXDClient\Tools\Instances\Metrics\ImportHostInsanceMetrics");
 
-$allProfiles =$getP->getAllProfiles();
+$allProfiles = $getP->getAllProfiles();
 
 foreach($allProfiles as $host => $details){
     $instancesToScan = [];
@@ -30,7 +30,7 @@ foreach($allProfiles as $host => $details){
 
         $config = $pDetails["config"];
 
-        if(!isset($config["environment.lxdMosaicMetrics"])){
+        if(!isset($config["environment.lxdMosaicPullMetrics"])){
             continue;
         }
 
