@@ -1,7 +1,9 @@
 # LXD Mosaic
+<a href="https://github.com/turtle0x1/LxdMosaic/labels/more%20input%20required">I want <b>YOUR</b> input :loudspeaker:</a> 
 
-This is an application you can use to do basic management for multiple instances
-of LXD
+<a href="https://github.com/turtle0x1/LxdMosaic/issues/new?assignees=&labels=&template=feature_request.md&title=">I want <b>YOUR</b> ideas :thought_balloon:</a> 
+
+I also like stars, I you find yourself that way inclinded :angel:
 
 
 <img src="https://i.imgur.com/Rc2Hupi.png" width="428"> <img src="https://i.imgur.com/mRfbtOP.png" width="428">
