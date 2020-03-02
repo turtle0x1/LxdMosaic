@@ -17,7 +17,7 @@ class UserSession
 
     public function isAdminOrThrow()
     {
-        if ($_SESSION["isAdmin"] !== tue) {
+        if ((bool) $_SESSION["isAdmin"] !== true) {
             throw new \Exception("Lacking permision", 1);
         }
         return true;
@@ -25,6 +25,6 @@ class UserSession
 
     public function isAdmin()
     {
-        return $_SESSION["isAdmin"];
+        return (bool) $_SESSION["isAdmin"];
     }
 }

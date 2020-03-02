@@ -3,7 +3,9 @@ $haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList"
 
 $userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
 
-$isAdmin = $userSession->isAdmin();
+$isAdmin = (int) $userSession->isAdmin();
+
+
 
 echo "<script>var userDetails = {isAdmin: $isAdmin} </script>";
 
