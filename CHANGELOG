@@ -2,6 +2,7 @@ Unreleased
 
 Fixed
     Cant add more than one GPU
+    CoreUI bug preventing collapse's from working
 
 0.6.0 - 01/02/2020
 

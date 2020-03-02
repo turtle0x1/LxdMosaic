@@ -33,7 +33,6 @@ if ($haveServers->haveAny() !== true) {
 
       <!-- Main styles for this application-->
       <link href="/assets/dist/external.dist.css" rel="stylesheet">
-      <script src="https://unpkg.com/@coreui/coreui/dist/js/coreui.min.js"></script>
 
       <link rel="stylesheet" href="/assets/styles.css">
 
