@@ -4,14 +4,20 @@ namespace dhope0000\LXDClient\App;
 use dhope0000\LXDClient\App\RouteApi;
 use dhope0000\LXDClient\App\RouteView;
 use dhope0000\LXDClient\App\RouteAssets;
+use dhope0000\LXDClient\Tools\User\UserSession;
+use dhope0000\LXDClient\Tools\User\LogUserIn;
 
 class RouteController
 {
     public function __construct(
+        UserSession $userSession,
+        LogUserIn $logUserIn,
         RouteApi $routeApi,
         RouteView $routeView,
         RouteAssets $routeAssets
     ) {
+        $this->userSession = $userSession;
+        $this->logUserIn = $logUserIn;
         $this->routeApi = $routeApi;
         $this->routeView = $routeView;
         $this->routeAssets = $routeAssets;
@@ -19,9 +25,23 @@ class RouteController
 
     public function routeRequest($explodedPath)
     {
+        if ($this->userSession->isLoggedIn() !== true && !isset($_POST["login"])) {
+            http_response_code(403);
+            require __DIR__ . "/../../views/login.php";
+            exit;
+        } elseif (isset($_POST["login"])) {
+            if ($this->logUserIn->login($_POST["username"], $_POST["password"]) !== true) {
+                // Should never fire login throws exceptions
+                throw new \Exception("Couldn't login", 1);
+            }
+        } elseif (isset($explodedPath[0]) && $explodedPath[0] == "logout") {
+            $this->userSession->logout();
+            header("Location: /");
+            exit;
+        }
+
         if (!isset($explodedPath[0]) || (
-            $explodedPath[0] == "index" ||
-                $explodedPath[0] == "views"
+            $explodedPath[0] == "index" || ($explodedPath[0] == "login" || $explodedPath[0] == "views")
         )) {
             $this->routeView->route($explodedPath);
         } elseif ($explodedPath[0] == "api") {
