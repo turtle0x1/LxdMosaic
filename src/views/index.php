@@ -85,6 +85,7 @@ if ($haveServers->haveAny() !== true) {
                     getLastResults: "/api/InstanceSettings/RecordedActions/GetLastController/get"
                 },
                 users: {
+                    add: '/api/InstanceSettings/Users/AddUserController/add',
                     getAll: '/api/InstanceSettings/Users/GetUsersController/getAll',
                 },
                 getAll: "/api/InstanceSettings/GetAllSettingsController/getAll",

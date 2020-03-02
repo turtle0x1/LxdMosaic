@@ -68,7 +68,7 @@
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
                           Users
                         </a>
-                        <button class="btn btn-warning float-right" id="loadMoreRecordedActions">
+                        <button class="btn btn-warning float-right" id="addUser">
                             Add
                         </button>
                       </h5>
@@ -205,6 +205,50 @@ $("#settingsOverview").on("click", "#loadMoreRecordedActions", function(){
         });
     }
 });
+});
+
+$("#settingsOverview").on("click", "#addUser", function(){
+    $.confirm({
+        title: 'Create user!',
+        content: `<form action="" class="formName">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" name="username" required />
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password" required />
+            </div>
+        </form>`,
+        buttons: {
+            formSubmit: {
+                text: 'Submit',
+                btnClass: 'btn-blue',
+                action: function () {
+                    let username = this.$content.find('input[name=username]').val().trim();
+                    let password = this.$content.find('input[name=password]').val().trim();
+                    if(username == ""){
+                        $.alert('provide a username');
+                        return false;
+                    } else if(password == ""){
+                        $.alert('provide a password');
+                        return false;
+                    }
+
+                    ajaxRequest(globalUrls.settings.users.add, {username: username, password: password}, (data)=>{
+                        data = makeToastr(data);
+                        if(data.hasOwnProperty("state") && data.state == "error"){
+                            return false;
+                        }
+                        loadUsers();
+                    });
+                }
+            },
+            cancel: function () {
+                //close
+            },
+        }
+    });
 });
 
 $("#settingsOverview").on("click", "#saveSettings", function(){
