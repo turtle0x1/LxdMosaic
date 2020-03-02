@@ -251,6 +251,43 @@ $("#settingsOverview").on("click", "#addUser", function(){
     });
 });
 
+$("#settingsOverview").on("click", ".resetPassword", function(){
+    let targetUser = $(this).parents("tr").data("userId");
+    $.confirm({
+        title: 'Reset password!',
+        content: `<form action="" class="formName">
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password" required />
+            </div>
+        </form>`,
+        buttons: {
+            formSubmit: {
+                text: 'Submit',
+                btnClass: 'btn-blue',
+                action: function () {
+                    let password = this.$content.find('input[name=password]').val().trim();
+                    if(password == ""){
+                        $.alert('provide a password');
+                        return false;
+                    }
+
+                    ajaxRequest(globalUrls.settings.users.resetPassword, {targetUser: targetUser, newPassword: password}, (data)=>{
+                        data = makeToastr(data);
+                        if(data.hasOwnProperty("state") && data.state == "error"){
+                            return false;
+                        }
+                        loadUsers();
+                    });
+                }
+            },
+            cancel: function () {
+                //close
+            },
+        }
+    });
+});
+
 $("#settingsOverview").on("click", "#saveSettings", function(){
     let settings = [];
     $("#settingListTable > tbody > tr").each(function(){
