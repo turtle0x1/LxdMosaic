@@ -21,7 +21,10 @@ class LogUserIn
             throw new \Exception("Password incorrect", 1);
         }
 
-        $_SESSION["userId"] = $this->fetchUserDetails->fetchId($username);
+        $userId = $this->fetchUserDetails->fetchId($username);
+
+        $_SESSION["userId"] = $userId;
+        $_SESSION["isAdmin"] = $this->fetchUserDetails->isAdmin($userId);
 
         header("Location: /");
 

@@ -42,4 +42,20 @@ class FetchUserDetails
         ]);
         return $do->fetchColumn();
     }
+
+    public function isAdmin(int $userId)
+    {
+        $sql = "SELECT
+                    `User_Admin`
+                FROM
+                    `Users`
+                WHERE
+                    `User_ID` = :userId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":userId"=>$userId
+        ]);
+        return $do->fetchColumn();
+    }
 }

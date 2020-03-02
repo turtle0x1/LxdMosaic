@@ -14,4 +14,12 @@ class UserSession
         $_SESSION = [];
         return true;
     }
+
+    public function isAdminOrThrow()
+    {
+        if ($_SESSION["isAdmin"] !== tue) {
+            throw new \Exception("Lacking permision", 1);
+        }
+        return true;
+    }
 }
