@@ -84,6 +84,9 @@ if ($haveServers->haveAny() !== true) {
                 recordedActions: {
                     getLastResults: "/api/InstanceSettings/RecordedActions/GetLastController/get"
                 },
+                users: {
+                    getAll: '/api/InstanceSettings/Users/GetUsersController/getAll',
+                },
                 getAll: "/api/InstanceSettings/GetAllSettingsController/getAll",
                 saveAll: "/api/InstanceSettings/SaveAllSettingsController/saveAll"
               },
