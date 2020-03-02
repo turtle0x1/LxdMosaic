@@ -33,7 +33,7 @@
          </div>
          <div class="row">
              <div class="col-md-6">
-                  <div class="card">
+                  <div class="card" id="recordedActionsCard">
                     <div class="card-header bg-info" role="tab" >
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#lastRecordedActions" aria-expanded="true" aria-controls="lastRecordedActions">
@@ -62,7 +62,7 @@
                   </div>
             </div>
              <div class="col-md-6">
-                  <div class="card">
+                  <div class="card" id="usersCard">
                     <div class="card-header bg-info" role="tab" >
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
@@ -94,6 +94,7 @@
 
     </div>
 </div>
+</div>
 
 <script>
 
@@ -102,6 +103,14 @@ function loadSettingsView()
     $(".boxSlide").hide();
     $("#settingsOverview, #settingsBox").show();
     $(".sidebar-lg-show").removeClass("sidebar-lg-show");
+
+    if(!userDetails.isAdmin){
+        $("#saveSettings, #addUser, #recordedActionsCard, #usersCard").remove();
+    }else{
+        loadRecordedActions();
+        loadUsers();
+    }
+
     setBreadcrumb("Settings", "viewSettings active");
 
     ajaxRequest(globalUrls.settings.getAll, {}, (data)=>{
@@ -116,8 +125,7 @@ function loadSettingsView()
         });
         $("#settingListTable > tbody").empty().append(trs);
     });
-    loadRecordedActions();
-    loadUsers();
+
 }
 
 function loadRecordedActions(ammount = 30){

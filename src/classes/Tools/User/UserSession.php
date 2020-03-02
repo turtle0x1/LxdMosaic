@@ -22,4 +22,9 @@ class UserSession
         }
         return true;
     }
+
+    public function isAdmin()
+    {
+        return $_SESSION["isAdmin"];
+    }
 }

@@ -2,19 +2,19 @@
 
 namespace dhope0000\LXDClient\Controllers\InstanceSettings\RecordedActions;
 
-use dhope0000\LXDClient\Model\InstanceSettings\RecordActions\FetchRecordedActions;
+use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\GetActions;
 
 class GetLastController
 {
     private $fetchRecordedActions;
 
-    public function __construct(FetchRecordedActions  $fetchRecordedActions)
+    public function __construct(GetActions $getActions)
     {
-        $this->fetchRecordedActions = $fetchRecordedActions;
+        $this->getActions = $getActions;
     }
 
     public function get(int $ammount)
     {
-        return $this->fetchRecordedActions->fetch($ammount);
+        return $this->getActions->get($ammount);
     }
 }

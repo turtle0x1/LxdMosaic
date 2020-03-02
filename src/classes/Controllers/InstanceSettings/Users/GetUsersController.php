@@ -2,19 +2,19 @@
 
 namespace dhope0000\LXDClient\Controllers\InstanceSettings\Users;
 
-use dhope0000\LXDClient\Model\Users\FetchUsers;
+use dhope0000\LXDClient\Tools\User\GetUsers;
 
 class GetUsersController
 {
-    private $fetchUsers;
+    private $getUsers;
 
-    public function __construct(FetchUsers $fetchUsers)
+    public function __construct(GetUsers $getUsers)
     {
-        $this->fetchUsers = $fetchUsers;
+        $this->getUsers = $getUsers;
     }
 
     public function getAll()
     {
-        return $this->fetchUsers->fetchAll();
+        return $this->getUsers->getAll();
     }
 }

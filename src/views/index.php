@@ -1,6 +1,12 @@
 <?php
 $haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
 
+$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
+
+$isAdmin = $userSession->isAdmin();
+
+echo "<script>var userDetails = {isAdmin: $isAdmin} </script>";
+
 if ($haveServers->haveAny() !== true) {
     header("Location: /views/firstRun");
     exit;
