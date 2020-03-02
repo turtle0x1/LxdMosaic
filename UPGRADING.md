@@ -5,6 +5,16 @@ You should only upgrade when a new version is tagged,
 Restarting the `pm2` and `apache2` process may interupt running process please
 be careful when upgrading!
 
+## 0.6.0 -> 0.6.1
+
+```
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout v0.6.1
+
+```
 ## 0.5.X -> 0.6.0
 
 ```
