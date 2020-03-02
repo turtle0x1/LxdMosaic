@@ -1,3 +1,15 @@
+Unreleased
+
+Added
+    Access control - This will break any existing scripts that you may have,
+        it uses sessions for everything which isn't good API design (stateful)
+        so ill have to roll some sort of API key's functionality at some point
+        (ping if this is usefull or it will end in backlog).
+
+        This includes the basic functionality to login, add users & reset passwords
+        it doesn't add any kind of restrictions, I want to improve the UI
+        & other basic functionality before adding the above.
+
 0.6.1 - 02/03/2020
 
 Fixed

@@ -1,6 +1,14 @@
 <?php
 $haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
 
+$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
+
+$isAdmin = (int) $userSession->isAdmin();
+
+
+
+echo "<script>var userDetails = {isAdmin: $isAdmin} </script>";
+
 if ($haveServers->haveAny() !== true) {
     header("Location: /views/firstRun");
     exit;
@@ -83,6 +91,11 @@ if ($haveServers->haveAny() !== true) {
               settings: {
                 recordedActions: {
                     getLastResults: "/api/InstanceSettings/RecordedActions/GetLastController/get"
+                },
+                users: {
+                    resetPassword: '/api/InstanceSettings/Users/ResetPasswordController/reset',
+                    add: '/api/InstanceSettings/Users/AddUserController/add',
+                    getAll: '/api/InstanceSettings/Users/GetUsersController/getAll',
                 },
                 getAll: "/api/InstanceSettings/GetAllSettingsController/getAll",
                 saveAll: "/api/InstanceSettings/SaveAllSettingsController/saveAll"
