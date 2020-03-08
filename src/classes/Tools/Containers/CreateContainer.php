@@ -82,7 +82,7 @@ class CreateContainer
             "server"=>$server,
             "instance_type"=>$instanceType
         ];
-        if(is_array($gpus)){
+        if (is_array($gpus) && !empty($gpus)) {
             $x["devices"] = [];
             foreach ($gpus as $index => $id) {
                 $x["devices"]["gpu_$index"] = [
