@@ -1,8 +1,6 @@
 <div id="clusterBox" class="boxSlide">
 <div id="clusterOverview" class="row">
-    <div class="col-md-9">
-          <div id="clusterList">
-          </div>
+    <div class="card-deck col-md-12" id="clusterList">
     </div>
 </div>
 <div class="row" id="clusterContents">
@@ -89,9 +87,12 @@ function loadClusterView(clusterId)
 
 function loadClusterTree()
 {
+    $("#clusterList").empty()
     ajaxRequest(globalUrls.clusters.getAll, null, function(data){
         var data = $.parseJSON(data);
+
         $.each(data, function(i, cluster){
+
             let template = $(emptyClusterBoxTemplate);
 
             template.find(".clusterName").text(`Cluster ${i}`);
@@ -123,7 +124,7 @@ function loadClusterTree()
                  formatBytes(cluster.stats.totalMemory)
              );
 
-            $("#clusterList").empty().append(template);
+            $("#clusterList").append(template);
         });
     });
 }
