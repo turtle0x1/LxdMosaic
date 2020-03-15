@@ -15,6 +15,7 @@ Added
 Fixed
     Cant create a container with no devices (#158)
     All clusters not showing on cluster overview (#151)
+    Cant access files on new versions of LXD
 
 0.6.1 - 02/03/2020
 

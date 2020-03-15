@@ -94,6 +94,10 @@ class GetPath
 
         $response = $response->get()["response"];
 
+        if ($response === null) {
+            return false;
+        }
+
         $headers = $response->getHeaders();
 
         if (isset($headers["X-Lxd-Type"]) && $headers["X-Lxd-Type"][0] == "directory") {
