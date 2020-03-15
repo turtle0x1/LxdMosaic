@@ -51,7 +51,7 @@ $("#modal-hosts-edit").on("click", "#edit", function(){
             return false;
         }
         aInput.val("");
-        createContainerTree();
+        createHostsTree();
         loadServerOview();
         $("#modal-hosts-edit").modal("hide");
     });

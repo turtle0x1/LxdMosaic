@@ -273,10 +273,11 @@ function loadContainerViewAfter(data = null, milSeconds = 2000)
     }, 2000);
 }
 
-function loadContainerTreeAfter(milSeconds = 2000)
+function loadContainerTreeAfter(milSeconds = 2000, hostId = null)
 {
     setTimeout(function(){
-        createContainerTree();
+        let p = $.isNumeric(hostId) ? hostId : currentContainerDetails.hostId;
+        addHostContainerList(p);
     }, milSeconds);
 }
 
@@ -469,7 +470,7 @@ function deleteContainerConfirm(hostId, hostAlias, container)
                     ajaxRequest(globalUrls.containers.delete, x, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
-                            loadContainerTreeAfter();
+                            loadContainerTreeAfter(1000, currentContainerDetails.hostId);
                         }
                         currentContainerDetails = null;
                         $("#overviewBox").show();
@@ -481,7 +482,7 @@ function deleteContainerConfirm(hostId, hostAlias, container)
     });
 }
 
-function renameContainerConfirm(hostId, container, reloadView)
+function renameContainerConfirm(hostId, container, reloadView, hostAlias)
 {
     $.confirm({
         title: 'Rename Container!',
@@ -522,7 +523,7 @@ function renameContainerConfirm(hostId, container, reloadView)
                             return false;
                         }
                         modal.close();
-                        createContainerTree();
+                        addHostContainerList(hostId, hostAlias);
                         if(reloadView){
                             currentContainerDetails.container = newName;
                             loadContainerView(currentContainerDetails);
@@ -981,7 +982,7 @@ $("#containerBox").on("click", ".importBackup", function(){
 });
 
 $("#containerBox").on("click", ".renameContainer", function(){
-    renameContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);
+    renameContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container, true, currentContainerDetails.alias);
 });
 
 $("#containerBox").on("click", ".toggleCard", function(){

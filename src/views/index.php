@@ -309,7 +309,7 @@ if ($haveServers->haveAny() !== true) {
       </button>
       <ul class="navbar-nav mr-auto d-md-down-none" id="mainNav">
           <li class="nav-item active">
-            <a class="nav-link overview">
+            <a class="nav-link overview createHostTre">
               <i class="fas fa-tachometer-alt"></i>
               <span class="hideNavText"> Dashboard </span>
             </a>
@@ -519,7 +519,7 @@ var editor = ace.edit("editor");
 
 $(function(){
     $('[data-toggle="tooltip"]').tooltip({html: true})
-    createContainerTree();
+    createHostsTree();
     loadServerOview();
     $.contextMenu({
             selector: '.view-container',
@@ -545,7 +545,7 @@ $(function(){
                     icon: "edit",
                     callback: function(key, opt, e){
                         let item = opt["$trigger"];
-                        renameContainerConfirm(item.data("hostId"), item.data("container"));
+                        renameContainerConfirm(item.data("hostId"), item.data("container"), false, item.data("alias"));
                     }
                 },
                 "delete": {
@@ -733,6 +733,7 @@ function loadServerOview()
 
             let p = emptyServerBox();
             let indent = data.alias == "" ? host : data.alias + ` (${host})`;
+            let alias = data.alias == "" ? host : data.alias;
 
             $(p).find(".host").text(indent).data("id", data.hostId)
             $(p).attr("id", data.hostId);
@@ -761,7 +762,7 @@ function loadServerOview()
                 let projects = "";
                 $.each(data.projects, function(o, project){
                     let selected = project == data.currentProject ? "selected" : "";
-                        projects += `<option data-host='${data.hostId}'
+                        projects += `<option data-alias="${alias}" data-host='${data.hostId}'
                             value='${project}' ${selected}>
                             ${project}</option>`;
                 });
@@ -795,68 +796,85 @@ function loadServerOview()
     });
 }
 
-$(document).on("click", ".serverToggle", function(){
-    let parentLi = $(this).parents("li");
-    let hostId = parentLi.data("hostid");
-    let hostAlias = $(this).text();
-
+function addHostContainerList(hostId, hostAlias) {
     ajaxRequest(globalUrls.hosts.containers.getHostContainers, {hostId: hostId}, (data)=>{
         data = makeToastr(data);
         let containers = "";
-        $.each(data, function(containerName, details){
-            let active = "";
-            if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
-                if(i == currentContainerDetails.alias && containerName == currentContainerDetails.container){
-                    active = "active"
+        if(Object.keys(data).length > 0){
+            $.each(data, function(containerName, details){
+                let active = "";
+                if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
+                    if(hostId == currentContainerDetails.hostId && containerName == currentContainerDetails.container){
+                        active = "active"
+                    }
                 }
-            }
 
-            let typeFa = "box";
+                let typeFa = "box";
 
-            if(details.info.hasOwnProperty("type") && details.info.type == "virtual-machine"){
-                typeFa = "vr-cardboard";
-            }
+                if(details.info.hasOwnProperty("type") && details.info.type == "virtual-machine"){
+                    typeFa = "vr-cardboard";
+                }
 
-            containers += `<li class="nav-item view-container ${active}"
-                data-host-id="${hostId}"
-                data-container="${containerName}"
-                data-alias="${hostAlias}">
-              <a class="nav-link" href="#">
-                <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
-                <i class="nav-icon fas fa-${typeFa}"></i>
-                ${containerName}
-              </a>
-            </li>`;
-        });
-        parentLi.find("ul").empty().append(containers);
+                containers += `<li class="nav-item view-container ${active}"
+                    data-host-id="${hostId}"
+                    data-container="${containerName}"
+                    data-alias="${hostAlias}">
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
+                    <i class="nav-icon fas fa-${typeFa}"></i>
+                    ${containerName}
+                  </a>
+                </li>`;
+            });
+        }else {
+            containers += `<li class="nav-item text-center text-warning">No Instances</li>`;
+        }
+
+        $("#sidebar-ul").find("li[data-hostid=" + hostId + "] ul").empty().append(containers);
     });
+}
+
+$(document).on("click", ".serverToggle", function(){
+    let parentLi = $(this).parents("li");
+
+    if(parentLi.hasClass("open")){
+        parentLi.find("ul").empty();
+        return;
+    }
+
+    let hostId = parentLi.data("hostid");
+    let hostAlias = parentLi.data("alias");
+
+    currentContainerDetails = null;
+
+    loadServerView(hostId);
+    addHostContainerList(hostId, hostAlias);
 });
 
-function createContainerTree(){
+function createHostsTree(){
     ajaxRequest(globalUrls.dashboard.get, {}, (data)=>{
         data = makeToastr(data);
 
         let hosts = `
-            <li class="nav-item container-overview">
+            <li class="nav-item container-overview active">
                 <a class="nav-link" href="#">
                     <i class="fas fa-tachometer-alt"></i> Overview
                 </a>
             </li>`;
 
         $.each(data.clustersAndHosts.clusters, function(i, item){
-            hosts += `<li class="c-sidebar-nav-title text-primary pl-1 pt-2">Cluster ${i}</li>`;
+            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
 
             $.each(item.members, function(_, host){
                 let disabled = "";
 
                 if(host.status !== "Online"){
-                    disabled = "disabled text-warning";
-                    i += " (Offline)";
+                    disabled = "disabled text-warning text-strikethrough";
                 }
 
                 let name = host.Host_Alias == null ? host.Host_Url_And_Port : host.Host_Alias;
 
-                hosts += `<li data-hostId="${host.hostId}" class="nav-item  nav-dropdown">
+                hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle serverToggle ${disabled}" href="#">
                         <i class="fas fa-server"></i> ${host.server_name}
                     </a>
@@ -867,7 +885,7 @@ function createContainerTree(){
 
         });
 
-        hosts += `<li class="c-sidebar-nav-title text-primary pl-1 pt-2">Standalone Hosts</li>`;
+        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
 
         $.each(data.clustersAndHosts.standalone, function(_, host){
             let disabled = "";
@@ -875,11 +893,10 @@ function createContainerTree(){
             let name = host.Host_Alias == null ? host.Host_Url_And_Port : host.Host_Alias;
 
             if(host.Host_Online == false){
-                disabled = "disabled text-warning";
-                name += " (Offline)";
+                disabled = "disabled text-warning text-strikethrough";
             }
 
-            hosts += `<li data-hostId="${host.Host_ID}" class="nav-item nav-dropdown">
+            hosts += `<li data-hostId="${host.Host_ID}" data-alias="${name}" class="nav-item containerList nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle serverToggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${name}
                 </a>
@@ -931,7 +948,7 @@ $(document).on("change", ".changeHostProject", function(){
 
     ajaxRequest(globalUrls.user.setHostProject, x, function(data){
         makeToastr(data);
-        createContainerTree();
+        addHostContainerList(x.hostId, selected.data("alias"));
     })
 
 });
@@ -940,9 +957,17 @@ $(document).on("click", ".overview, .container-overview", function(){
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     currentContainerDetails = null;
     setBreadcrumb("Dashboard", "overview active");
-    createContainerTree();
+
+    if($(this).hasClass("createHostTre")){
+        createHostsTree();
+    }
+
     loadServerOview();
     changeActiveNav(".overview")
+    $("#sidebar-ul").find(".active").removeClass("active");
+    $("#sidebar-ul").find(".text-info").removeClass("text-info");
+    $("#sidebar-ul").find(".container-overview").addClass("active");
+
     $(".boxSlide").hide();
     $("#overviewBox").show();
 });

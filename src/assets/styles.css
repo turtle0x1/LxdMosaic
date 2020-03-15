@@ -3,6 +3,9 @@ body {
     font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
 }
 
+.text-strikethrough {
+    text-decoration: line-through !important;
+}
 
 .toggleCard {
     cursor: pointer;
