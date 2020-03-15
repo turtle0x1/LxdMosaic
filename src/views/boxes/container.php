@@ -565,7 +565,7 @@ function snapshotContainerConfirm(hostId, container)
                         return false;
                     }
 
-                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Renaming..'); // let the user know
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Taking snapshot..'); // let the user know
                     modal.buttons.rename.disable();
                     modal.buttons.cancel.disable();
 
