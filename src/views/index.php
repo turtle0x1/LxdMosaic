@@ -722,7 +722,7 @@ function loadDashboard(){
                     projects += "</select>";
                 }
 
-                let name = host.hostIpAndAlias.alias == null ? host.hostIpAndAlias.urlAndPort : host.hostIpAndAlias.alias;
+                let name = host.alias == null ? host.urlAndPort : host.alias;
                 hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
 
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
@@ -769,28 +769,28 @@ function loadDashboard(){
         $.each(data.clustersAndHosts.standalone, function(_, host){
             let disabled = "";
 
-            let name = host.Host_Alias == null ? host.Host_Url_And_Port : host.Host_Alias;
+            let name = host.alias == null ? host.urlAndPort : host.alias;
 
-            if(host.Host_Online == false){
+            if(host.hostOnline == false){
                 disabled = "disabled text-warning text-strikethrough";
             }
 
             let projects = "<b> Not Available </b>";
 
 
-            if(host.Host_Online == 1 && host.resources.extensions.supportsProjects){
+            if(host.hostOnline == 1 && host.resources.extensions.supportsProjects){
                 projects = "<select class='form-control changeHostProject'>";
                 $.each(host.resources.projects, function(o, project){
                     let selected = project == data.currentProject ? "selected" : "";
-                        projects += `<option data-alias="${alias}" data-host='${data.hostId}'
+                        projects += `<option data-alias="${alias}" data-host='${host.hostId}'
                             value='${project}' ${selected}>
                             ${project}</option>`;
                 });
                 projects += "</select>";
             }
-            hostsTrs += `<tr data-host-id="${host.Host_ID}"><td><a data-id="${host.Host_ID}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
+            hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
 
-            hosts += `<li data-hostId="${host.Host_ID}" data-alias="${name}" class="nav-item containerList nav-dropdown">
+            hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle serverToggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${name}
                 </a>

@@ -63,7 +63,9 @@ class GetAllClusters
 
                 $info["resources"] = $this->getResources->getHostExtended($hostId);
                 $info["hostId"] = $hostId;
-                $info["hostIpAndAlias"] = $this->getDetails->getIpAndAlias($hostId);
+                $ipAndAlias = $this->getDetails->getIpAndAlias($hostId);
+                $info["alias"] = $ipAndAlias["alias"];
+                $info["urlAndPort"] = $ipAndAlias["urlAndPort"];
 
                 $clusters[$clusterId]["members"][] = $info;
                 $hostClusterRelationship[] = $info["url"];

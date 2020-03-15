@@ -66,10 +66,10 @@ class HostList
     {
         $qMarks = join(',', array_fill(0, count($hostIds), '?'));
         $sql = "SELECT
-                    `Host_ID`,
-                    `Host_Url_And_Port`,
-                    `Host_Alias`,
-                    `Host_Online`
+                    `Host_ID` as `hostId`,
+                    `Host_Url_And_Port` as `urlAndPort`,
+                    `Host_Alias` as `alias`,
+                    `Host_Online` as `hostOnline`
                 FROM
                     `Hosts`
                 WHERE
