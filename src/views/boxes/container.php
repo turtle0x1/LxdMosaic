@@ -1,12 +1,49 @@
 <div id="containerBox" class="boxSlide">
+    <div class="row border-bottom mb-2">
     <div class="col-md-12 text-center">
-        <h4> <u>
-            <span id="container-currentState"></span>
-            <span id="container-containerNameDisplay"></span>
-            <span id="container-imageDescription"></span>
-        </u></h4>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+              <select class="form-control" style="max-width: 150px;" id="container-changeState">
+                  <option value="" selected="selected"> Change State </option>
+                  <option value="startContainer"> Start </option>
+                  <option value="stopContainer"> Stop </option>
+                  <option value="restartContainer"> Restart </option>
+                  <option value="freezeContainer"> Freeze </option>
+                  <option value="unfreezeContainer"> Unfreeze </option>
+              </select>
+
+            <h4 class="pt-1"> <u>
+                <span id="container-currentState"></span>
+                <span id="container-containerNameDisplay"></span>
+                <span id="container-imageDescription"></span>
+            </u></h4>
+            <div class="btn-toolbar float-right">
+              <div class="btn-group mr-2">
+
+                  <button data-toggle="tooltip" data-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
+                      <i class="fas fa-cog"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Snapshot" class="btn btn-sm btn-success takeSnapshot">
+                      <i class="fas fa-camera"></i>
+                  </button>
+                  <hr/>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Copy Instance" class="btn btn-sm btn-info copyContainer">
+                      <i class="fas fa-copy"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Migrate Instance" class="btn btn-sm btn-primary migrateContainer">
+                      <i class="fas fa-people-carry"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Rename Instance" class="btn btn-sm btn-warning renameContainer">
+                      <i class="fas fa-edit"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Delete" class="btn btn-sm btn-danger deleteContainer">
+                      <i class="fas fa-trash"></i>
+                  </button>
+              </div>
+            </div>
+        </div>
     </div>
-    <div class="row" id="containerViewBtns">
+    </div>
+    <div class="row border-bottom mb-2 pt-2" id="containerViewBtns">
         <div class="col-md-3 text-center">
             <div class="card bg-primary card-hover-primary text-center toggleCard" id="goToDetails">
                 <div class="card-body">
@@ -38,7 +75,7 @@
     </div>
 <div id="containerDetails">
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-5">
         <div class="card text-white bg-deepblue">
           <div class="card-body">
               <h5> <u> Container Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
@@ -57,8 +94,6 @@
               Deployment: <span id="container-deployment"></span>
           </div>
         </div>
-    </div>
-    <div class="col-md-6">
         <div class="card text-white bg-primary">
           <div class="card-body">
             <h5> <u> Network Information <i class="fas float-right fa-network-wired"></i> </u> </h5>
@@ -66,119 +101,53 @@
                 </div>
 
           </div>
-        </div>
-    </div>
-
 </div>
-<br/>
-<div class="row">
-<!-- <h4> Container: <`span id="containerName"></span> </h4> -->
-<div class="col-md-3">
-    <div class="card card-accent-danger">
-      <div class="card-header bg-info" role="tab" id="container-actionsHeading">
-        <h5>
-          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#actionsCollapse" aria-expanded="true" aria-controls="container-actionsCollapse">
-            Actions
-            <i class="fas fa-edit float-right"></i>
-          </a>
-        </h5>
-      </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-dark">
+            <div class="card-body" id="memoryDataCard">
 
-      <div id="actionsCollapse" class="collapsed show" aria-expanded="true" role="tabpanel" aria-labelledby="container-actionsHeading">
-        <div class="card-block bg-dark">
-            <div class="form-group">
-                <label><u> Change State </u></label>
-                <select class="form-control" id="container-changeState">
-                    <option value="" selected="selected">  </option>
-                    <option value="startContainer"> Start </option>
-                    <option value="stopContainer"> Stop </option>
-                    <option value="restartContainer"> Restart </option>
-                    <option value="freezeContainer"> Freeze </option>
-                    <option value="unfreezeContainer"> Unfreeze </option>
-                </select>
             </div>
-            <hr/>
-            <button class="btn btn-block btn-primary editContainerSettings">
-                Settings
-            </button>
-            <button class="btn btn-block btn-success takeSnapshot">
-                Snapshot
-            </button>
-            <hr/>
-            <button class="btn btn-block btn-info copyContainer">
-                Copy
-            </button>
-            <button class="btn btn-block btn-primary migrateContainer">
-                Migrate
-            </button>
-            <button class="btn btn-block btn-warning renameContainer">
-                Rename
-            </button>
-            <button class="btn btn-block btn-danger deleteContainer">
-                Delete
-            </button>
         </div>
-      </div>
-    </div>
-</div>
-<div class="col-md-3">
-    <div class="card border-primary">
-      <div class="card-header bg-info" role="tab">
-        <h5 class="text-white">
-            Profiles
-             <i class="fas fa-users float-right"></i>
-        </h5>
-      </div>
-      <div class="collapse show" role="tabpanel" >
-        <div class="card-block bg-dark table-responsive">
-            <table class="table table-dark table-bordered"id="profileData">
-                  <thead class="thead-inverse">
-                      <tr>
-                          <th> Name </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-            </table>
-        </div>
-      </div>
-    </div>
-    <br/>
-    <div class="card bg-dark">
-      <div class="card-header bg-info" role="tab">
-        <h5 class="text-white">
-            Snapshots
-            <i class="fas fa-images float-right"></i>
-        </h5>
-      </div>
-      <div class="collapse show" role="tabpanel" >
-        <div class="card-block table-responsive">
-            <table class="table table-dark table-bordered"id="snapshotData">
-                  <thead class="thead-inverse">
-                      <tr>
-                          <th> Name </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-            </table>
-        </div>
-      </div>
-    </div>
-</div>
-<div class="col-md-6">
-    <div class="card bg-dark">
-        <div class="card-header bg-info" role="tab">
-          <h5 class="text-white">
-              Memory Usage
-              <i class="fas fa-memory float-right"></i>
-          </h5>
-        </div>
-        <div class="card-body" id="memoryDataCard">
 
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark">
+
+            <div class="card-body table-responsive">
+                <h5 class="text-white">
+                    <u> Profiles </u>
+                    <i class="fas fa-users float-right"></i>
+                </h5>
+                <table class="table table-dark table-bordered"id="profileData">
+                      <thead class="thead-inverse">
+                          <tr>
+                              <th> Name </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card bg-dark">
+            <div class="card-body table-responsive">
+                <h5 class="text-white">
+                    <u>Snapshots</u>
+                    <i class="fas fa-images float-right"></i>
+                </h5>
+                <table class="table table-dark table-bordered"id="snapshotData">
+                      <thead class="thead-inverse">
+                          <tr>
+                              <th> Name </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                </table>
+          </div>
         </div>
     </div>
-</div>
 </div>
 </div>
 <div id="containerConsole">
@@ -846,7 +815,12 @@ function loadContainerView(data)
         });
 
         if(x.state.status_code == 103){
-            $("#memoryDataCard").empty().append(`<canvas id="memoryData" style="width: 100%;"></canvas>`);
+            $("#memoryDataCard").empty().append(`
+                <h5 class="text-white">
+                    <u> Memory Usage </u>
+                    <i class="fas fa-memory float-right"></i>
+                </h5>
+                <canvas id="memoryData" style="width: 100%;"></canvas>`);
 
             new Chart($("#memoryData"), {
                 type: "bar",

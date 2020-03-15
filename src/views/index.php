@@ -380,13 +380,13 @@ if ($haveServers->haveAny() !== true) {
           </li>
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">
-          <li class="nav-item px-3 btn btn-primary pull-right" id="addNewServer">
+          <li class="nav-item px-3 btn btn-outline-primary pull-right" id="addNewServer">
                 <a> <i class="fas fa-plus"></i> Server </a>
            </li>
-          <li class="nav-item px-3 btn btn-success pull-right" id="createContainer">
+          <li class="nav-item px-3 btn btn-outline-success pull-right" id="createContainer">
                 <a> <i class="fas fa-plus"></i> Container </a>
            </li>
-          <li class="nav-item px-3 btn btn-success pull-right" id="createVm">
+          <li class="nav-item px-3 btn btn-outline-success pull-right" id="createVm">
                 <a> <i class="fas fa-plus"></i> VM </a>
            </li>
       </ul>
