@@ -144,7 +144,7 @@
       </div>
     </div>
     <br/>
-    <div class="card border-primary">
+    <div class="card bg-dark">
       <div class="card-header bg-info" role="tab">
         <h5 class="text-white">
             Snapshots
@@ -152,7 +152,7 @@
         </h5>
       </div>
       <div class="collapse show" role="tabpanel" >
-        <div class="card-block bg-dark table-responsive">
+        <div class="card-block table-responsive">
             <table class="table table-dark table-bordered"id="snapshotData">
                   <thead class="thead-inverse">
                       <tr>
@@ -168,11 +168,14 @@
 </div>
 <div class="col-md-6">
     <div class="card bg-dark">
-        <div class="card-header">
-            Memory Details
+        <div class="card-header bg-info" role="tab">
+          <h5 class="text-white">
+              Memory Usage
+              <i class="fas fa-memory float-right"></i>
+          </h5>
         </div>
-        <div class="card-body">
-            <canvas id="memoryData" style="width: 100%;"></canvas>
+        <div class="card-body" id="memoryDataCard">
+
         </div>
     </div>
 </div>
@@ -842,25 +845,33 @@ function loadContainerView(data)
             memoryData.push(item);
         });
 
-        new Chart($("#memoryData"), {
-            type: "bar",
-            data: {
-                labels: memoryLabels,
-                datasets: [{
-                  label: 'Memory',
-                  data: memoryData,
-                  backgroundColor: memoryColors,
-                  borderColor: memoryColors,
-                  borderWidth: 1
-              }]
-            },
-            options: {
-              cutoutPercentage: 40,
-              responsive: false,
-              scales: scalesBytesCallbacks,
-              tooltips: toolTipsBytesCallbacks
-            }
-        });
+        if(x.state.status_code == 103){
+            $("#memoryDataCard").empty().append(`<canvas id="memoryData" style="width: 100%;"></canvas>`);
+
+            new Chart($("#memoryData"), {
+                type: "bar",
+                data: {
+                    labels: memoryLabels,
+                    datasets: [{
+                      label: 'Memory',
+                      data: memoryData,
+                      backgroundColor: memoryColors,
+                      borderColor: memoryColors,
+                      borderWidth: 1
+                  }]
+                },
+                options: {
+                  cutoutPercentage: 40,
+                  responsive: false,
+                  scales: scalesBytesCallbacks,
+                  tooltips: toolTipsBytesCallbacks
+                }
+            });
+        }else{
+            $("#memoryDataCard").empty().append(`<div class="alert alert-info text-center">Instance Not Running</div>`);
+        }
+
+
 
         $(".boxSlide").hide();
         $("#containerBox").show();
