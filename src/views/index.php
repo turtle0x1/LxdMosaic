@@ -71,6 +71,9 @@ if ($haveServers->haveAny() !== true) {
           var currentContainerDetails = null;
 
           var globalUrls = {
+              dashboard: {
+                get: "/api/Dashboard/GetController/get"
+              },
               instances: {
                   virtualMachines: {
                       create: "/api/Instances/VirtualMachines/CreateController/create"
@@ -184,7 +187,8 @@ if ($haveServers->haveAny() !== true) {
                   },
                   containers: {
                       getAll: "/api/Hosts/Containers/GetAllController/getAll",
-                      delete: "/api/Hosts/Containers/DeleteContainersController/delete"
+                      delete: "/api/Hosts/Containers/DeleteContainersController/delete",
+                      getHostContainers: "/api/Hosts/Containers/GetHostsContainersController/get"
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
@@ -791,59 +795,95 @@ function loadServerOview()
     });
 }
 
-function createContainerTree(){
-    ajaxRequest(globalUrls.hosts.containers.getAll, {}, (data)=>{
-        data = $.parseJSON(data);
-        let treeData = [];
-        let active = $.isPlainObject(currentContainerDetails) && currentContainerDetails.hasOwnProperty("container") ? "" : "active";
-        let hosts = `
-        <li class="nav-item container-overview ${active}">
-            <a class="nav-link" href="#">
-                <i class="fas fa-tachometer-alt"></i> Overview
-            </a>
-        </li>`;
-        $.each(data, function(i, host){
-            let disabled = "";
-            let listIsOpen = Object.keys(host.containers).length > 10 ? "" : "open";
+$(document).on("click", ".serverToggle", function(){
+    let parentLi = $(this).parents("li");
+    let hostId = parentLi.data("hostid");
+    let hostAlias = $(this).text();
 
-            if(host.online == false){
-                disabled = "disabled text-warning";
-                i += " (Offline)";
+    ajaxRequest(globalUrls.hosts.containers.getHostContainers, {hostId: hostId}, (data)=>{
+        data = makeToastr(data);
+        let containers = "";
+        $.each(data, function(containerName, details){
+            let active = "";
+            if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
+                if(i == currentContainerDetails.alias && containerName == currentContainerDetails.container){
+                    active = "active"
+                }
             }
 
-            hosts += `<li data-hostId="${host.hostId}" class="nav-item nav-dropdown ${listIsOpen}">
-                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
-                    <i class="fas fa-server"></i> ${i}
+            let typeFa = "box";
+
+            if(details.info.hasOwnProperty("type") && details.info.type == "virtual-machine"){
+                typeFa = "vr-cardboard";
+            }
+
+            containers += `<li class="nav-item view-container ${active}"
+                data-host-id="${hostId}"
+                data-container="${containerName}"
+                data-alias="${hostAlias}">
+              <a class="nav-link" href="#">
+                <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
+                <i class="nav-icon fas fa-${typeFa}"></i>
+                ${containerName}
+              </a>
+            </li>`;
+        });
+        parentLi.find("ul").empty().append(containers);
+    });
+});
+
+function createContainerTree(){
+    ajaxRequest(globalUrls.dashboard.get, {}, (data)=>{
+        data = makeToastr(data);
+
+        let hosts = `
+            <li class="nav-item container-overview">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-tachometer-alt"></i> Overview
                 </a>
-                <ul class="nav-dropdown-items">`;
+            </li>`;
 
-            let containers = [];
-            $.each(host.containers, function(containerName, details){
-                let active = "";
-                if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
-                    if(i == currentContainerDetails.alias && containerName == currentContainerDetails.container){
-                        active = "active"
-                    }
+        $.each(data.clustersAndHosts.clusters, function(i, item){
+            hosts += `<li class="c-sidebar-nav-title text-primary pl-1 pt-2">Cluster ${i}</li>`;
+
+            $.each(item.members, function(_, host){
+                let disabled = "";
+
+                if(host.status !== "Online"){
+                    disabled = "disabled text-warning";
+                    i += " (Offline)";
                 }
 
-                let typeFa = "box";
+                let name = host.Host_Alias == null ? host.Host_Url_And_Port : host.Host_Alias;
 
-                if(details.info.hasOwnProperty("type") && details.info.type == "virtual-machine"){
-                    typeFa = "vr-cardboard";
-                }
-
-                hosts += `<li class="nav-item view-container ${active}"
-                    data-host-id="${host.hostId}"
-                    data-container="${containerName}"
-                    data-alias="${i}">
-                  <a class="nav-link" href="#">
-                    <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
-                    <i class="nav-icon fas fa-${typeFa}"></i>
-                    ${containerName}
-                  </a>
-                </li>`;
+                hosts += `<li data-hostId="${host.hostId}" class="nav-item  nav-dropdown">
+                    <a class="nav-link nav-dropdown-toggle serverToggle ${disabled}" href="#">
+                        <i class="fas fa-server"></i> ${host.server_name}
+                    </a>
+                    <ul class="nav-dropdown-items">`;
+                hosts += `</ul>
+                    </li>`
             });
 
+        });
+
+        hosts += `<li class="c-sidebar-nav-title text-primary pl-1 pt-2">Standalone Hosts</li>`;
+
+        $.each(data.clustersAndHosts.standalone, function(_, host){
+            let disabled = "";
+
+            let name = host.Host_Alias == null ? host.Host_Url_And_Port : host.Host_Alias;
+
+            if(host.Host_Online == false){
+                disabled = "disabled text-warning";
+                name += " (Offline)";
+            }
+
+            hosts += `<li data-hostId="${host.Host_ID}" class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle serverToggle ${disabled}" href="#">
+                    <i class="fas fa-server"></i> ${name}
+                </a>
+                <ul class="nav-dropdown-items">`;
             hosts += `</ul>
                 </li>`
         });

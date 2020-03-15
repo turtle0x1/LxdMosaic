@@ -61,4 +61,24 @@ class HostList
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function fetchHostsNotInList(array $hostIds)
+    {
+        $qMarks = join(',', array_fill(0, count($hostIds), '?'));
+        $sql = "SELECT
+                    `Host_ID`,
+                    `Host_Url_And_Port`,
+                    `Host_Alias`,
+                    `Host_Online`
+                FROM
+                    `Hosts`
+                WHERE
+                    `Host_ID` NOT IN ($qMarks)
+                ORDER BY
+                    `Host_ID` DESC
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute($hostIds);
+        return $do->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

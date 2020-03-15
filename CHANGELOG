@@ -12,6 +12,9 @@ Added
 
     Logo created by my buddy Josh
 
+Changed
+    Indicate cluster groups & standalone hosts on dashboard (#150)
+
 Fixed
     Cant create a container with no devices (#158)
     All clusters not showing on cluster overview (#151)

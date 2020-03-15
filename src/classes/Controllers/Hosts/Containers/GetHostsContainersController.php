@@ -3,14 +3,14 @@ namespace dhope0000\LXDClient\Controllers\Hosts\Containers;
 
 use dhope0000\LXDClient\Tools\Containers\GetHostsContainers;
 
-class GetAllController
+class GetHostsContainersController
 {
     public function __construct(GetHostsContainers $getHostsContainers)
     {
         $this->getHostsContainers = $getHostsContainers;
     }
-    public function getAll()
+    public function get(int $hostId)
     {
-        return $this->getHostsContainers->getHostsContainers();
+        return $this->getHostsContainers->getContainers($hostId);
     }
 }
