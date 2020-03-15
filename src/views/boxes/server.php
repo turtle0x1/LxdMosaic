@@ -22,7 +22,7 @@
                     </h4>
 
                 </div>
-                <div class="card-body bg-dark">
+                <div class="card-body table-responsive bg-dark">
                     <table id="containerTable" class="table table-dark table-bordered">
                         <thead>
                             <tr>
