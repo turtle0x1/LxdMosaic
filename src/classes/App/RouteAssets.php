@@ -5,7 +5,8 @@ class RouteAssets
 {
     private $extensionMapping = [
         "css"=>"text/css",
-        "js"=>"text/javascript"
+        "js"=>"text/javascript",
+        "png"=>"image/png"
     ];
 
     public function route($path)
@@ -39,8 +40,8 @@ class RouteAssets
         }
 
         $extension = pathinfo($path, PATHINFO_EXTENSION);
-        
-        if(!isset($this->extensionMapping[$extension])){
+
+        if (!isset($this->extensionMapping[$extension])) {
             throw new \Exception("Can't map this file type to content-type", 1);
         }
 

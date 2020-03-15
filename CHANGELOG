@@ -10,6 +10,8 @@ Added
         it doesn't add any kind of restrictions, I want to improve the UI
         & other basic functionality before adding the above.
 
+    Logo created by my buddy Josh
+
 Fixed
     Cant create a container with no devices (#158)
     All clusters not showing on cluster overview (#151)

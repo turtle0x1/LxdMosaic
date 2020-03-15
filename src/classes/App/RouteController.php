@@ -25,7 +25,9 @@ class RouteController
 
     public function routeRequest($explodedPath)
     {
-        if ($this->userSession->isLoggedIn() !== true && !isset($_POST["login"])) {
+        $logoReq = implode("/", $explodedPath) === "assets/lxdMosaic/logo.png";
+
+        if ($this->userSession->isLoggedIn() !== true && !isset($_POST["login"]) && !$logoReq) {
             http_response_code(403);
             require __DIR__ . "/../../views/login.php";
             exit;
