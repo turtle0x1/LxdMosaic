@@ -518,9 +518,9 @@ var editor = ace.edit("editor");
   editor.getSession().setMode("ace/mode/yaml");
 
 $(function(){
+    Chart.defaults.global.defaultFontColor='white';
     $('[data-toggle="tooltip"]').tooltip({html: true})
-    createHostsTree();
-    loadServerOview();
+    loadDashboard();
     $.contextMenu({
             selector: '.view-container',
             items: {
@@ -606,196 +606,6 @@ var unknownServerDetails = {
     }
 };
 
-function loadServerOview()
-{
-    Chart.defaults.global.defaultFontColor='white';
-
-    setBreadcrumb("Dashboard", "active overview");
-
-    ajaxRequest(globalUrls.analytics.getLatestData, {}, function(data){
-        data = $.parseJSON(data);
-
-        if(data.hasOwnProperty("warning")){
-            $("#memoryUsage, #activeContainers, #totalStorageUsage").hide().parents(".card-body").find(".notEnoughData").show();
-            return false;
-        }
-
-        $("#memoryUsage, #activeContainers, #totalStorageUsage").show().parents(".card-body").find(".notEnoughData").hide();
-
-        var mCtx = $('#memoryUsage');
-        var acCtx = $('#activeContainers');
-        var tsuCtx = $('#totalStorageUsage');
-
-        let sum = data.activeContainers.data.reduce(getSum);
-
-        let scaleStep = sum > 30 ? 10 : 1;
-
-        new Chart(acCtx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: "Fleet Active Containers",
-                        borderColor: '#00aced',
-                        pointBackgroundColor: "#ed4100",
-                        pointBorderColor: "#ed4100",
-                        data: data.activeContainers.data,
-                    }
-                ],
-                labels: data.activeContainers.labels
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Fleet Active Containers'
-                },
-                legend: {
-                    display: false
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: scaleStep
-                        }
-                    }]
-                }
-            }
-        });
-
-        new Chart(mCtx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: "Memory Usage",
-                        borderColor: '#00aced',
-                        pointBackgroundColor: "#ed4100",
-                        pointBorderColor: "#ed4100",
-                        data: data.memory.data,
-                    }
-                ],
-                labels: data.memory.labels
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Fleet Memory Usage'
-                },
-                legend: {
-                    display: false
-                },
-                scales: scalesBytesCallbacks,
-                tooltips: toolTipsBytesCallbacks
-            }
-        });
-
-        new Chart(tsuCtx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: "Storage Usage",
-                        borderColor: '#00aced',
-                        pointBackgroundColor: "#ed4100",
-                        pointBorderColor: "#ed4100",
-                        data: data.storageUsage.data,
-                    }
-                ],
-                labels: data.storageUsage.labels
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Fleet Storage Usage'
-                },
-                legend: {
-                    display: false
-                },
-                scales: scalesBytesCallbacks,
-                tooltips: toolTipsBytesCallbacks
-          }
-      });
-
-    });
-
-    ajaxRequest(globalUrls.hosts.getOverview, null, function(data){
-        let x = $.parseJSON(data);
-        if(x.hasOwnProperty("error")){
-            makeToastr(data);
-            return false;
-        }
-        let html = "";
-        $("#serverOverviewDetails").empty();
-
-        $.each(x, function(host, data){
-
-
-            let p = emptyServerBox();
-            let indent = data.alias == "" ? host : data.alias + ` (${host})`;
-            let alias = data.alias == "" ? host : data.alias;
-
-            $(p).find(".host").text(indent).data("id", data.hostId)
-            $(p).attr("id", data.hostId);
-
-            if(data.online == false){
-                $(p).find(".host").text(indent + " (Offline)");
-                $(p).find(".bg-info").removeClass("bg-info").addClass("bg-danger");
-                $("#serverOverviewDetails").append(p);
-                $(p).find(".brand-card-body").remove();
-                return;
-            }
-
-            let memoryUsed = unknownServerDetails.memory.used;
-            let memoryTotal = unknownServerDetails.memory.total;
-
-            if(data.hasOwnProperty("memory")){
-                memoryUsed = formatBytes(data.memory.used);
-                memoryTotal = formatBytes(data.memory.total);
-            }
-
-            if(!data.hasOwnProperty("cpu")){
-                data = unknownServerDetails;
-            }
-
-            if(data.extensions.supportsProjects){
-                let projects = "";
-                $.each(data.projects, function(o, project){
-                    let selected = project == data.currentProject ? "selected" : "";
-                        projects += `<option data-alias="${alias}" data-host='${data.hostId}'
-                            value='${project}' ${selected}>
-                            ${project}</option>`;
-                });
-                $(p).find(".projects").append(projects)
-            }else{
-                $(p).find(".projectGroup").remove();
-            }
-
-
-            let cpuIndentKey = data.extensions.resCpuSocket ? "name" : "vendor";
-
-
-            $(p).find(".memory").text(`${memoryUsed} / ${memoryTotal}`);
-            $(p).find(".cpuDetails").text(`${data.cpu.sockets[0][cpuIndentKey]} - ${data.cpu.total} Cores`);
-
-            if(data.extensions.resGpu && data.hasOwnProperty("gpu") && data.gpu.cards.length > 0){
-                let g = "";
-                $.each(data.gpu.cards, function(i, gpu){
-                    g += `${gpu.product} <br/>`
-                });
-
-                $(p).find(".gpuDetails").html(g);
-            }else{
-                $(p).find(".gpuGroup").remove();
-            }
-
-            $("#serverOverviewDetails").append(p);
-        });
-        $(".boxSlide").hide();
-        $("#overviewBox").show();
-    });
-}
-
 function addHostContainerList(hostId, hostAlias) {
     ajaxRequest(globalUrls.hosts.containers.getHostContainers, {hostId: hostId}, (data)=>{
         data = makeToastr(data);
@@ -851,7 +661,11 @@ $(document).on("click", ".serverToggle", function(){
     addHostContainerList(hostId, hostAlias);
 });
 
-function createHostsTree(){
+function loadDashboard(){
+    $(".boxSlide").hide();
+    $("#overviewBox").show();
+    setBreadcrumb("Dashboard", "active overview");
+
     ajaxRequest(globalUrls.dashboard.get, {}, (data)=>{
         data = makeToastr(data);
 
@@ -862,8 +676,12 @@ function createHostsTree(){
                 </a>
             </li>`;
 
+        let hostsTrs = "";
+
         $.each(data.clustersAndHosts.clusters, function(i, item){
             hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
+
+            hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
 
             $.each(item.members, function(_, host){
                 let disabled = "";
@@ -872,20 +690,62 @@ function createHostsTree(){
                     disabled = "disabled text-warning text-strikethrough";
                 }
 
-                let name = host.Host_Alias == null ? host.Host_Url_And_Port : host.Host_Alias;
+                let projects = "Not Available";
+
+                if(host.resources.extensions.supportsProjects){
+                    projects = "<select class='form-control changeHostProject'>";
+                    $.each(host.resources.projects, function(o, project){
+                        let selected = project == data.currentProject ? "selected" : "";
+                            projects += `<option data-alias="${alias}" data-host='${data.hostId}'
+                                value='${project}' ${selected}>
+                                ${project}</option>`;
+                    });
+                    projects += "</select>";
+                }
+
+                let name = host.hostIpAndAlias.alias == null ? host.hostIpAndAlias.urlAndPort : host.hostIpAndAlias.alias;
+                hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
 
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle serverToggle ${disabled}" href="#">
-                        <i class="fas fa-server"></i> ${host.server_name}
+                        <i class="fas fa-server"></i> ${name}
                     </a>
-                    <ul class="nav-dropdown-items">`;
-                hosts += `</ul>
-                    </li>`
+                    <ul class="nav-dropdown-items">
+                    </ul>
+                </li>`;
             });
+        });
 
+
+        $("#currentMemoryUsageCardBody").empty().append('<canvas class="ml-auto mr-auto" id="currentMemoryUsageGraph" height="179"></canvas>');
+
+        new Chart($("#currentMemoryUsageGraph"), {
+            type: 'pie',
+              data: {
+                labels: ['Used', 'Free'],
+                datasets: [{
+                  label: 'Total Memory Used',
+                  data: [data.stats.memory.used, (data.stats.memory.total - data.stats.memory.used)],
+                  backgroundColor: [
+                    'rgba(46, 204, 113, 1)',
+                    'rgba(189, 195, 199, 1)'
+                  ],
+                  borderColor: [
+                      'rgba(46, 204, 113, 1)',
+                      'rgba(189, 195, 199, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                cutoutPercentage: 40,
+                responsive: false,
+                tooltips: toolTipsBytesCallbacks
+              }
         });
 
         hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+        hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Standalone Hosts</td></tr>`
 
         $.each(data.clustersAndHosts.standalone, function(_, host){
             let disabled = "";
@@ -896,15 +756,125 @@ function createHostsTree(){
                 disabled = "disabled text-warning text-strikethrough";
             }
 
+            let projects = "<b> Not Available </b>";
+
+
+            if(host.Host_Online == 1 && host.resources.extensions.supportsProjects){
+                projects = "<select class='form-control changeHostProject'>";
+                $.each(host.resources.projects, function(o, project){
+                    let selected = project == data.currentProject ? "selected" : "";
+                        projects += `<option data-alias="${alias}" data-host='${data.hostId}'
+                            value='${project}' ${selected}>
+                            ${project}</option>`;
+                });
+                projects += "</select>";
+            }
+            hostsTrs += `<tr data-host-id="${host.Host_ID}"><td><a data-id="${host.Host_ID}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
+
             hosts += `<li data-hostId="${host.Host_ID}" data-alias="${name}" class="nav-item containerList nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle serverToggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${name}
                 </a>
-                <ul class="nav-dropdown-items">`;
-            hosts += `</ul>
-                </li>`
+                <ul class="nav-dropdown-items">
+                </ul>
+            </li>`;
         });
+        $("#dashboardHostTable > tbody").empty().append(hostsTrs);
         $("#sidebar-ul").empty().append(hosts);
+
+        if(data.analyticsData.hasOwnProperty("warning")){
+            $("#memoryUsage, #activeContainers, #totalStorageUsage").hide().parents(".card-body").find(".notEnoughData").show();
+            return false;
+        }
+
+        $("#memoryUsage, #activeContainers, #totalStorageUsage").show().parents(".card-body").find(".notEnoughData").hide();
+
+        var mCtx = $('#memoryUsage');
+        var acCtx = $('#activeContainers');
+        var tsuCtx = $('#totalStorageUsage');
+
+        let sum = data.analyticsData.activeContainers.data.reduce(getSum);
+
+        let scaleStep = sum > 30 ? 10 : 1;
+
+        new Chart(acCtx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: "Fleet Active Containers",
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                        pointBorderColor: "rgba(46, 204, 113, 1)",
+                        data: data.analyticsData.activeContainers.data,
+                    }
+                ],
+                labels: data.analyticsData.activeContainers.labels
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: scaleStep
+                        }
+                    }]
+                }
+            }
+        });
+
+        new Chart(mCtx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: "Memory Usage",
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                        pointBorderColor: "rgba(46, 204, 113, 1)",
+                        data: data.analyticsData.memory.data,
+                    }
+                ],
+                labels: data.analyticsData.memory.labels
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                scales: scalesBytesCallbacks,
+                tooltips: toolTipsBytesCallbacks
+            }
+        });
+
+        new Chart(tsuCtx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: "Storage Usage",
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                        pointBorderColor: "rgba(46, 204, 113, 1)",
+                        data: data.analyticsData.storageUsage.data,
+                    }
+                ],
+                labels: data.analyticsData.storageUsage.labels
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Fleet Storage Usage'
+                },
+                legend: {
+                    display: false
+                },
+                scales: scalesBytesCallbacks,
+                tooltips: toolTipsBytesCallbacks
+          }
+        });
     });
 }
 
@@ -942,7 +912,7 @@ $(document).on("change", ".changeHostProject", function(){
     let selected = $(this).find(":selected");
 
     let x = {
-        hostId: selected.data("host"),
+        hostId: selected.parents("tr").data("hostId"),
         project: selected.val()
     };
 
@@ -959,10 +929,9 @@ $(document).on("click", ".overview, .container-overview", function(){
     setBreadcrumb("Dashboard", "overview active");
 
     if($(this).hasClass("createHostTre")){
-        createHostsTree();
+        loadDashboard();
     }
 
-    loadServerOview();
     changeActiveNav(".overview")
     $("#sidebar-ul").find(".active").removeClass("active");
     $("#sidebar-ul").find(".text-info").removeClass("text-info");

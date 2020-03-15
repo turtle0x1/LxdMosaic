@@ -1,82 +1,109 @@
 <div id="serverBox" class="boxSlide">
     <div id="serverOverview" class="row">
-        <div class="col-md-9">
-          <div class="row">
-              <div class="col-md-6">
-                  <div class="card bg-dark">
-                      <div class="card-header">
-                          Container Stats
-                      </div>
-                      <div class="card-body">
-                          <canvas id="containerStatsChart" style="width: 100%;"></canvas>
-                          <div class="alert alert-info" id="noContainersWarning">
-                              There are no containers on the host
-                          </div>
-                      </div>
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 id="serverHeading"></h1>
+                <div class="btn-toolbar float-right">
+                  <div class="btn-group mr-2">
+                    <button class="btn btn-primary" id="editHost">Change Alias</button>
+                    <button class="btn btn-danger" id="deleteHost">Delete</button>
                   </div>
-              </div>
-              <div class="col-md-6">
-                  <div class="card bg-dark">
-                      <div class="card-header">
-                          Memory Stats
-                      </div>
-                      <div class="card-body">
-                          <canvas id="memoryStatsChart" style="width: 100%;">
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-md-12">
-              <div class="card">
-                  <div class="card-header bg-dark">
-                      <h4> Containers
-                          <select id="serverContainerActions" class="form-control-sm float-right">
-                              <option value="" selected></option>
-                              <option value="delete">Delete</option>
-                          </select>
-                      </h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-dark">
+                    <h4> Containers
+                        <select id="serverContainerActions" class="form-control-sm float-right">
+                            <option value="" selected></option>
+                            <option value="delete">Delete</option>
+                        </select>
+                    </h4>
 
-                  </div>
-                  <div class="card-body bg-dark">
-                      <table id="containerTable" class="table table-dark table-bordered">
-                          <thead>
-                              <tr>
-                                  <td> <input type="checkbox" id="toggleAllContainers"> </td>
-                                  <td> Name </td>
-                                  <td> Disk Usage </td>
-                                  <td> Memory Ussage </td>
-                              </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                      </table>
-                  </div>
-              </div>
-              </div>
-              </div>
-        </div>
-        <div class="col-md-3">
-              <div class="card">
-                <div class="card-header bg-info" role="tab" >
-                  <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Actions
-                    </a>
-                  </h5>
                 </div>
-                <div id="collapseOne" class="collapse in show" role="tabpanel" >
-                  <div class="card-block bg-dark">
-                      <button class="btn btn-block btn-info" id="editHost">
-                          Change Alias
-                      </button>
-                      <button class="btn btn-block btn-danger" id="deleteHost">
-                          Delete Host
-                      </button>
-                  </div>
+                <div class="card-body bg-dark">
+                    <table id="containerTable" class="table table-dark table-bordered">
+                        <thead>
+                            <tr>
+                                <td> <input type="checkbox" id="toggleAllContainers"> </td>
+                                <td> Name </td>
+                                <td> Disk Usage </td>
+                                <td> Memory Ussage </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
-              </div>
+            </div>
         </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card bg-dark">
+                        <div class="card-header">
+                            Container Stats
+                        </div>
+                        <div class="card-body">
+                            <canvas id="containerStatsChart" style="width: 100%;"></canvas>
+                            <div class="alert alert-info" id="noContainersWarning">
+                                There are no containers on the host
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="card bg-dark">
+                        <div class="card-header">
+                            Memory Stats
+                        </div>
+                        <div class="card-body">
+                            <canvas id="memoryStatsChart" style="width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card bg-dark">
+                        <div class="card-header">
+                            <h4>CPU Details</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-dark" id="hostCpuTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Cores</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card bg-dark">
+                        <div class="card-header">
+                            <h4>GPU Details</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-dark" id="hostGpuTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
     </div>
     <div id="serverDetails">
     </div>
@@ -166,9 +193,35 @@ function loadServerView(hostId)
 
         addBreadcrumbs([ident], ["active"]);
 
+        $("#serverHeading").text(ident);
+
         $("#serverContainerActions").find("option[value='']").prop("selected", true);
 
-        let containerHtml = "";
+        let containerHtml, cpuTrs, gpuTrs = "";
+
+        let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
+
+        $.each(data.resources.cpu.sockets, (_, item)=>{
+
+            cpuTrs += `<tr>
+                <td>${item[cpuIndentKey]}</td>
+                <td>${item.cores.length}</td>
+            </tr>`
+        });
+
+        $("#hostCpuTable > tbody").empty().append(cpuTrs);
+
+        if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
+            $.each(data.resources.gpu.cards, function(i, gpu){
+                gpuTrs += `<tr><td>${gpu.product}</td></tr>`;
+            });
+        }else{
+            gpuTrs += `<tr><td class="text-center">No GPU's</td></tr>`;
+        }
+
+        $("#hostGpuTable > tbody").empty().append(gpuTrs);
+
+
 
         if(Object.keys(data.containers).length > 0){
             $.each(data.containers, function(state, containers){
@@ -180,7 +233,7 @@ function loadServerView(hostId)
                     </td>
                 </tr>`;
                 $.each(containers, function(name, details){
-                    
+
                     let storageUsage = details.state.disk == null || details.state.disk.length == 0 ? "N/A" : formatBytes(details.state.disk.root.usage);
 
                     containerHtml += `<tr data-name="${name}">

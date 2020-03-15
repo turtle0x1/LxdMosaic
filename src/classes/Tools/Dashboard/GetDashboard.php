@@ -4,26 +4,58 @@ namespace dhope0000\LXDClient\Tools\Dashboard;
 
 use dhope0000\LXDClient\Tools\Clusters\GetAllClusters;
 use dhope0000\LXDClient\Model\Hosts\HostList;
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Tools\Analytics\GetLatestData;
+use dhope0000\LXDClient\Tools\Hosts\GetResources;
 
 class GetDashboard
 {
     public function __construct(
         GetAllClusters $getAllClusters,
         HostList $hostList,
-        LxdClient $lxdClient
+        GetLatestData $getLatestData,
+        GetResources  $getResources
     ) {
         $this->getAllClusters = $getAllClusters;
         $this->hostList = $hostList;
-        $this->lxdClient = $lxdClient;
+        $this->getLatestData = $getLatestData;
+        $this->getResources = $getResources;
     }
 
     public function get()
     {
         $clustersAndHosts = $this->getClustersAndStandaloneHosts();
+        $stats = $this->getStatsFromClustersAndHosts($clustersAndHosts);
+        $analyticsData = $this->getLatestData->get();
 
         return [
-            "clustersAndHosts"=>$clustersAndHosts
+            "clustersAndHosts"=>$clustersAndHosts,
+            "stats"=>$stats,
+            "analyticsData"=>$analyticsData
+        ];
+    }
+
+    private function getStatsFromClustersAndHosts(array $clustersAndHosts)
+    {
+        $memory = [
+            "total"=>0,
+            "used"=>0
+        ];
+
+        foreach ($clustersAndHosts["clusters"] as $cluster) {
+            $memory["total"] += $cluster["stats"]["totalMemory"];
+            $memory["used"] += $cluster["stats"]["usedMemory"];
+        }
+
+        foreach ($clustersAndHosts["standalone"] as $host) {
+            if ((int)$host["Host_Online"] === 0) {
+                continue;
+            }
+            $memory["total"] += $host["resources"]["memory"]["total"];
+            $memory["used"] += $host["resources"]["memory"]["used"];
+        }
+
+        return [
+            "memory"=>$memory
         ];
     }
 
@@ -45,9 +77,8 @@ class GetDashboard
             if ((int)$host["Host_Online"] === 0) {
                 continue;
             }
-            
-            $client = $this->lxdClient->getANewClient($host["Host_ID"]);
-            $info = $client->resources->info();
+
+            $info = $this->getResources->getHostExtended($host["Host_ID"]);
             $standaloneHosts[$index]["resources"] = $info;
         }
 
