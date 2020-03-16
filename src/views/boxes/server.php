@@ -46,7 +46,8 @@
                             Container Stats
                         </div>
                         <div class="card-body">
-                            <canvas id="containerStatsChart" style="width: 100%;"></canvas>
+                            <div id="serverInstancesOnlineBox">
+                            </div>
                             <div class="alert alert-info" id="noContainersWarning">
                                 There are no containers on the host
                             </div>
@@ -60,7 +61,8 @@
                             Memory Stats
                         </div>
                         <div class="card-body">
-                            <canvas id="memoryStatsChart" style="width: 100%;">
+                            <div id="serverMemoryUsageBox">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -245,6 +247,8 @@ function loadServerView(hostId)
                 });
             });
 
+            $("#serverInstancesOnlineBox").empty().append(`<canvas id="containerStatsChart" style="width: 100%;"></canvas>`);
+
             new Chart($("#containerStatsChart"), {
                 type: 'pie',
                   data: {
@@ -269,14 +273,16 @@ function loadServerView(hostId)
                   }
             });
             $("#noContainersWarning").hide();
-            $("#containerStatsChart").show();
+            $("#serverInstancesOnlineBox").show();
         }else{
-            $("#containerStatsChart").hide();
+            $("#serverInstancesOnlineBox").hide();
             $("#noContainersWarning").show();
             containerHtml = `<tr><td class="alert alert-info text-center" colspan="999">No Containers</td></tr>`
         }
 
         $("#containerTable > tbody").empty().append(containerHtml);
+
+        $("#serverMemoryUsageBox").empty().append(`<canvas id="memoryStatsChart" style="width: 100%;"></canvas>`);
 
         new Chart($("#memoryStatsChart"), {
             type: 'pie',

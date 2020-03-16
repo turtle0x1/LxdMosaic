@@ -33,7 +33,8 @@
                       <div class="alert alert-warning text-center notEnoughData">
                           Not enough data check again in 10 minutes
                       </div>
-                      <canvas id="memoryUsage" style="height: 300px"></canvas>
+                      <div id="dashboardMemoryHistoryBox">
+                      </div>
                   </div>
               </div>
               <div class="card bg-dark">
@@ -44,7 +45,8 @@
                       <div class="alert alert-warning text-center notEnoughData">
                           Not enough data check again in 10 minutes
                       </div>
-                      <canvas id="activeContainers" style="height: 300px"></canvas>
+                      <div id="dashboardRunningInstancesBox">
+                      </div>
                   </div>
               </div>
               <div class="card bg-dark">
@@ -55,7 +57,8 @@
                       <div class="alert alert-warning text-center notEnoughData">
                           Not enough data check again in 10 minutes
                       </div>
-                      <canvas id="totalStorageUsage" style="height: 300px"></canvas>
+                      <div id="dashboardStorageHistoryBox">
+                      </div>
                   </div>
               </div>
           </div>

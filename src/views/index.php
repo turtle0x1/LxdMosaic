@@ -806,7 +806,12 @@ function loadDashboard(){
             return false;
         }
 
-        $("#memoryUsage, #activeContainers, #totalStorageUsage").show().parents(".card-body").find(".notEnoughData").hide();
+        $("#dashboardMemoryHistoryBox, #dashboardRunningInstancesBox, #dashboardStorageHistoryBox").show().parents(".card-body").find(".notEnoughData").hide();
+
+
+        $("#dashboardStorageHistoryBox").empty().append(`<canvas id="totalStorageUsage" style="height: 300px"></canvas>`);
+        $("#dashboardRunningInstancesBox").empty().append(`<canvas id="activeContainers" style="height: 300px"></canvas>`);
+        $("#dashboardMemoryHistoryBox").empty().append(`<canvas id="memoryUsage" style="height: 300px"></canvas>`);
 
         var mCtx = $('#memoryUsage');
         var acCtx = $('#activeContainers');
