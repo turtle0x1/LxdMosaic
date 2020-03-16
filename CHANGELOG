@@ -18,6 +18,7 @@ Changed
     Indicate cluster groups & standalone hosts on profiles
     Indicate cluster groups & standalone hosts on storage
     Indicate cluster groups & standalone hosts on networks
+    Indicate cluster groups & standalone hosts on projects
 
 Fixed
     Cant create a container with no devices (#158)
