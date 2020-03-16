@@ -26,7 +26,7 @@ class GetAllProfiles
         $client = $this->client->getANewClient($host["hostId"]);
 
         $profiles = $client->profiles->all();
-        
+
         return [
             "hostAlias"=>$indent,
             "online"=>true,
@@ -47,8 +47,8 @@ class GetAllProfiles
             }
         }
 
-        foreach ($clustersAndHosts["standalone"] as $index => $host) {
-            $clustersAndHosts["standalone"][$index] =  $this->getProfiles($host);
+        foreach ($clustersAndHosts["standalone"]["members"] as $index => $host) {
+            $clustersAndHosts["standalone"]["members"][$index] =  $this->getProfiles($host);
         }
 
         return $clustersAndHosts;

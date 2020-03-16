@@ -41,6 +41,10 @@ class GetClustersAndStandaloneHosts
             $standaloneHosts[$index]["resources"] = $info;
         }
 
+        $standaloneHosts = [
+            "members"=>$standaloneHosts
+        ];
+        
         return [
             "clusters"=>$clusters,
             "standalone"=>$standaloneHosts

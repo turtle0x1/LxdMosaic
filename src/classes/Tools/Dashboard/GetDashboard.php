@@ -40,7 +40,7 @@ class GetDashboard
             $memory["used"] += $cluster["stats"]["usedMemory"];
         }
 
-        foreach ($clustersAndHosts["standalone"] as $host) {
+        foreach ($clustersAndHosts["standalone"]["members"] as $host) {
             if ((int)$host["hostOnline"] === 0) {
                 continue;
             }

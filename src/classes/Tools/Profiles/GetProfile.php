@@ -2,7 +2,6 @@
 namespace dhope0000\LXDClient\Tools\Profiles;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
 
 class GetProfile
 {

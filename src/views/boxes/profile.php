@@ -189,7 +189,7 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
 
         hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
 
-        $.each(data.standalone, (_, host)=>{
+        $.each(data.standalone.members, (_, host)=>{
             hosts = makeHostHtml(hosts, host, selectedProfile, selectedHost)
         });
 

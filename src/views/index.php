@@ -793,7 +793,7 @@ function loadDashboard(){
         hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
         hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Standalone Hosts</td></tr>`
 
-        $.each(data.clustersAndHosts.standalone, function(_, host){
+        $.each(data.clustersAndHosts.standalone.members, function(_, host){
             let disabled = "";
 
             let name = host.alias == null ? host.urlAndPort : host.alias;
