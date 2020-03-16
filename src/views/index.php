@@ -341,27 +341,8 @@ if ($haveServers->haveAny() !== true) {
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link viewClusters">
-              <i class="far fa-object-group"></i>
-              <span class="hideNavText"> Clusters </span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewCloudConfigFiles">
-              <i class="fa fa-cogs"></i> <span class="hideNavText"> Cloud Config </span></a>
-          </li>
-
-          <li class="nav-item">
             <a class="nav-link viewImages">
               <i class="fa fa-images"></i> <span class="hideNavText"> Images </span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewProjects">
-              <i class="fas fa-project-diagram"></i> <span class="hideNavText"> Projects </span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewDeployments">
-              <i class="fas fa-rocket"></i> <span class="hideNavText"> Deployments </span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewStorage">
@@ -372,8 +353,27 @@ if ($haveServers->haveAny() !== true) {
               <i class="fas fa-network-wired"></i> <span class="hideNavText"> Networks </span> </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link viewProjects">
+              <i class="fas fa-project-diagram"></i> <span class="hideNavText"> Projects </span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link viewCloudConfigFiles">
+              <i class="fa fa-cogs"></i> <span class="hideNavText"> Cloud Config </span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link viewDeployments">
+              <i class="fas fa-rocket"></i> <span class="hideNavText"> Deployments </span></a>
+          </li>
+
+          <li class="nav-item">
             <a class="nav-link viewBackups">
               <i class="fas fa-save"></i> <span class="hideNavText"> Backups </span> </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link viewClusters">
+              <i class="far fa-object-group"></i>
+              <span class="hideNavText"> Clusters </span>
+            </a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewSettings">
