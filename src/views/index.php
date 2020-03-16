@@ -663,12 +663,19 @@ function addHostContainerList(hostId, hostAlias) {
     });
 }
 
-$(document).on("click", ".serverToggle", function(){
+$(document).on("click", ".showServerInstances", function(e){
+    e.preventDefault();
+
     let parentLi = $(this).parents("li");
 
     if(parentLi.hasClass("open")){
         parentLi.find("ul").empty();
-        return;
+        parentLi.removeClass("open");
+        $(this).html('<i class="fas fa-caret-left"></i>')
+        return false;
+    }else{
+        $(this).html('<i class="fas fa-caret-down"></i>')
+        parentLi.addClass("open");
     }
 
     let hostId = parentLi.data("hostid");
@@ -676,8 +683,21 @@ $(document).on("click", ".serverToggle", function(){
 
     currentContainerDetails = null;
 
-    loadServerView(hostId);
     addHostContainerList(hostId, hostAlias);
+
+    return false;
+});
+
+$(document).on("click", ".serverToggle", function(){
+
+    let parentLi = $(this).parents("li");
+
+    let hostId = parentLi.data("hostid");
+    let hostAlias = parentLi.data("alias");
+
+    currentContainerDetails = null;
+
+    loadServerView(hostId);
 });
 
 function loadDashboard(){
@@ -726,8 +746,9 @@ function loadDashboard(){
                 hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
 
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
-                    <a class="nav-link nav-dropdown-toggle serverToggle ${disabled}" href="#">
+                    <a class="nav-link serverToggle ${disabled}" href="#">
                         <i class="fas fa-server"></i> ${name}
+                        <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
                     </a>
                     <ul class="nav-dropdown-items">
                     </ul>
@@ -791,8 +812,9 @@ function loadDashboard(){
             hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
 
             hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle serverToggle ${disabled}" href="#">
+                <a class="nav-link serverToggle ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${name}
+                    <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
                 </a>
                 <ul class="nav-dropdown-items">
                 </ul>
