@@ -292,8 +292,12 @@ li.breadcrumb-item:nth-child(1) {
     color: white;
 }
 
+.sidebar .nav-link {
+    outline: 0;
+}
 .sidebar .nav-link:hover {
-    background-color: #167495;
+    color: #167495;
+    background-color: rgba(0,0,0,0);
 }
 
 .sidebar .nav-item.active {

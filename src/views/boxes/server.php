@@ -183,7 +183,7 @@ function loadServerView(hostId)
     $("#serverOverview, #serverBox").show();
 
     $("#sidebar-ul").find(".active").removeClass("active");
-    $("#sidebar-ul").find(".serverToggle").removeClass("text-info");
+    $("#sidebar-ul").find(".text-info").removeClass("text-info");
     $("#sidebar-ul").find(`[data-hostId='${hostId}'] > a:eq(0)`).addClass("text-info");
 
     currentServer.hostId = hostId;

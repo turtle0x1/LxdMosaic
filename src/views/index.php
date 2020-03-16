@@ -444,8 +444,8 @@ $("#sidebar-ul").on("click", ".nav-item", function(){
     if($(this).hasClass("nav-dropdown")){
         return;
     }
-    $("#sidebar-ul").find(".active").removeClass("active");
-    $(this).addClass("active");
+    $("#sidebar-ul").find(".text-info").removeClass("text-info");
+    $(this).find(".nav-link").addClass("text-info");
 })
 
 if(typeof io !== "undefined"){
@@ -688,15 +688,13 @@ $(document).on("click", ".showServerInstances", function(e){
     return false;
 });
 
-$(document).on("click", ".serverToggle", function(){
-
+$(document).on("click", ".viewServer", function(){
     let parentLi = $(this).parents("li");
 
     let hostId = parentLi.data("hostid");
     let hostAlias = parentLi.data("alias");
 
     currentContainerDetails = null;
-
     loadServerView(hostId);
 });
 
@@ -709,8 +707,8 @@ function loadDashboard(){
         data = makeToastr(data);
 
         let hosts = `
-            <li class="nav-item container-overview active">
-                <a class="nav-link" href="#">
+            <li class="nav-item container-overview">
+                <a class="nav-link text-info" href="#">
                     <i class="fas fa-tachometer-alt"></i> Overview
                 </a>
             </li>`;
@@ -746,7 +744,7 @@ function loadDashboard(){
                 hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
 
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
-                    <a class="nav-link serverToggle ${disabled}" href="#">
+                    <a class="nav-link viewServer ${disabled}" href="#">
                         <i class="fas fa-server"></i> ${name}
                         <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
                     </a>
@@ -812,7 +810,7 @@ function loadDashboard(){
             hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
 
             hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
-                <a class="nav-link serverToggle ${disabled}" href="#">
+                <a class="nav-link viewServer ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${name}
                     <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
                 </a>
@@ -979,9 +977,6 @@ $(document).on("click", ".overview, .container-overview", function(){
     }
 
     changeActiveNav(".overview")
-    $("#sidebar-ul").find(".active").removeClass("active");
-    $("#sidebar-ul").find(".text-info").removeClass("text-info");
-    $("#sidebar-ul").find(".container-overview").addClass("active");
 
     $(".boxSlide").hide();
     $("#overviewBox").show();

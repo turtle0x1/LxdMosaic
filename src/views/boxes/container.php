@@ -704,8 +704,6 @@ function loadContainerView(data)
             return false;
         }
 
-        $("#sidebar-ul").find(".text-info").removeClass("text-info");
-
         addBreadcrumbs([data.alias, data.container ], ["viewHost lookupId", "active"]);
 
         let disableActions = x.state.status_code !== 102;
