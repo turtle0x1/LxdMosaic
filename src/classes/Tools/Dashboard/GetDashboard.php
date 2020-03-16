@@ -41,7 +41,7 @@ class GetDashboard
         }
 
         foreach ($clustersAndHosts["standalone"] as $host) {
-            if ((int)$host["Host_Online"] === 0) {
+            if ((int)$host["hostOnline"] === 0) {
                 continue;
             }
             $memory["total"] += $host["resources"]["memory"]["total"];
