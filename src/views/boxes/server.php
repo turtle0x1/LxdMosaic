@@ -205,7 +205,7 @@ function loadServerView(hostId)
 
             cpuTrs += `<tr>
                 <td>${item[cpuIndentKey]}</td>
-                <td>${item.cores.length}</td>
+                <td>${$.isNumeric(item.cores) ? item.cores : item.cores.length}</td>
             </tr>`
         });
 
