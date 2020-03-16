@@ -14,8 +14,9 @@ Added
 
 Changed
     Indicate cluster groups & standalone hosts on dashboard (#150)
-    Updated the profile view
     Load profile on click instead of passing around an array containing profile data
+    Indicate cluster groups & standalone hosts on profiles
+    Indicate cluster groups & standalone hosts on storage
 
 Fixed
     Cant create a container with no devices (#158)
