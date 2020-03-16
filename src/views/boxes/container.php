@@ -43,49 +43,36 @@
         </div>
     </div>
     </div>
-    <div class="row border-bottom mb-2 pt-2" id="containerViewBtns">
-        <div class="col-md-3 text-center">
-            <div class="card bg-primary card-hover-primary text-center toggleCard" id="goToDetails">
-                <div class="card-body">
-                    <i class="fas fa-info pr-2"></i>Details
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 text-center">
-            <div class="card card-hover-primary text-center toggleCard" id="goToConsole">
-                <div class="card-body">
-                    <i class="fas fa-terminal pr-2"></i>Console
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 text-center">
-            <div class="card card-hover-primary text-center toggleCard" id="goToBackups">
-                <div class="card-body">
-                    <i class="fas fa-save pr-2"></i>Backups
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 text-center">
-            <div class="card card-hover-primary text-center toggleCard" id="goToFiles">
-                <div class="card-body">
-                    <i class="fas fa-save pr-2"></i>Files
-                </div>
+    <div class="row border-bottom mb-2 pb-2" id="containerViewBtns">
+        <div class="col-md-12 text-center justify-content">
+            <button type="button" class="btn text-white btn-outline-primary active" id="goToDetails">
+                <i class="fas fa-info pr-2"></i>Details
+            </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToConsole">
+                <i class="fas fa-terminal pr-2"></i>Console
+            </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToBackups">
+                <i class="fas fa-save pr-2"></i>Backups
+            </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToFiles">
+                <i class="fas fa-save pr-2"></i>Files
+            </button>
+            <div class="btn-toolbar  mb-2 mb-md-0">
+
             </div>
         </div>
     </div>
 <div id="containerDetails">
 <div class="row">
     <div class="col-md-5">
-        <div class="card text-white bg-deepblue">
+        <div class="card text-white bg-dark">
           <div class="card-body">
               <h5> <u> Container Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
               Host: <span id="container-hostNameDisplay"></span>
               <br/>
               <a
                   href="https://github.com/lxc/pylxd/issues/242#issuecomment-323272318"
-                  target="_blank">
-                  CPU Time:
-              </a><span id="container-cpuTime"></span>
+                  target="_blank">CPU Time:</a> <span id="container-cpuTime"></span>
               <br/>
               Created: <span id="container-createdAt"></span>
               <br/>
@@ -94,7 +81,7 @@
               Deployment: <span id="container-deployment"></span>
           </div>
         </div>
-        <div class="card text-white bg-primary">
+        <div class="card text-white bg-dark">
           <div class="card-body">
             <h5> <u> Network Information <i class="fas float-right fa-network-wired"></i> </u> </h5>
                 <div class="col-md-12" id="networkDetails">
@@ -715,9 +702,9 @@ function loadContainerView(data)
         $("#container-changeState").val("");
 
         if(x.backupsSupported){
-            $("#goToBackups").removeClass("bg-dark disabled");
+            $("#goToBackups").removeClass("bg-dark disabled").css("cursor", "pointer");
         }else{
-            $("#goToBackups").addClass("bg-dark disabled");
+            $("#goToBackups").addClass("bg-dark disabled").css("cursor", "not-allowed");
         }
 
         //NOTE Read more here https://github.com/lxc/pylxd/issues/242
@@ -818,7 +805,8 @@ function loadContainerView(data)
                     <u> Memory Usage </u>
                     <i class="fas fa-memory float-right"></i>
                 </h5>
-                <canvas id="memoryData" style="width: 100%;"></canvas>`);
+                <div style="width: 100%;">
+                <canvas id="memoryData"></canvas></div>`);
 
             new Chart($("#memoryData"), {
                 type: "bar",
@@ -968,13 +956,13 @@ $("#containerBox").on("click", ".renameContainer", function(){
     renameContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container, true, currentContainerDetails.alias);
 });
 
-$("#containerBox").on("click", ".toggleCard", function(){
+$("#containerViewBtns").on("click", ".btn", function(){
     if($(this).attr("id") == "goToBackups" && $(this).hasClass("disabled")){
         return false;
     }
 
-    $("#containerViewBtns").find(".bg-primary").removeClass("bg-primary");
-    $(this).addClass("bg-primary");
+    $("#containerViewBtns").find(".active").removeClass("active");
+    $(this).addClass("active");
 });
 
 var currentPath = "/";
