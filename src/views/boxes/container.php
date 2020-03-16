@@ -722,7 +722,7 @@ function loadContainerView(data)
         $("#container-containerNameDisplay").text(data.container);
         $("#container-imageDescription").html(` - ${os} (${version})`);
         $("#container-cpuTime").text(containerCpuTime);
-        $("#container-createdAt").text(moment(x.details.create_at).format("MMM DD YYYY h:mm A"));
+        $("#container-createdAt").text(moment(x.details.created_at).format("MMM DD YYYY h:mm A"));
 
         if(x.details.hasOwnProperty("last_used_at")){
             let last_used_at = moment(x.details.last_used_at);
