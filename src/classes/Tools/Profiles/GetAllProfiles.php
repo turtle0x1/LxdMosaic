@@ -2,39 +2,56 @@
 namespace dhope0000\LXDClient\Tools\Profiles;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
 
 class GetAllProfiles
 {
-    public function __construct(LxdClient $lxdClient, HostList $hostList)
+    public function __construct(LxdClient $lxdClient, GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts)
     {
         $this->client = $lxdClient;
-        $this->hostList = $hostList;
+        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
     }
+
+    private function getProfiles($host)
+    {
+        $indent = is_null($host["alias"]) ? $host["urlAndPort"] : $host["alias"];
+
+        if (isset($host["online"]) && $host["online"] != true) {
+            return [
+                "online"=>false,
+                "hostId"=>$host["hostId"]
+            ];
+        }
+
+        $client = $this->client->getANewClient($host["hostId"]);
+
+        $profiles = $client->profiles->all();
+        
+        return [
+            "hostAlias"=>$indent,
+            "online"=>true,
+            "hostId"=>$host["hostId"],
+            "profiles"=>$this->getProfileDetails($client, $profiles)
+        ];
+    }
+
 
     public function getAllProfiles()
     {
-        $details = array();
-        foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
+        $clustersAndHosts = $this->getClustersAndStandaloneHosts->get();
 
-            if ($host["Host_Online"] != true) {
-                $details[$indent] = [
-                    "online"=>false,
-                    "hostId"=>$host["Host_ID"]
-                ];
-                continue;
+        foreach ($clustersAndHosts["clusters"] as $clusterIndex => $cluster) {
+            foreach ($cluster["members"] as $hostIndex => $host) {
+                $profiles = $this->getProfiles($host);
+                $clustersAndHosts["clusters"][$clusterIndex]["members"][$hostIndex] = $profiles;
             }
-            $client = $this->client->getANewClient($host["Host_ID"]);
-
-            $profiles = $client->profiles->all();
-            $details[$indent] = [
-                "online"=>true,
-                "hostId"=>$host["Host_ID"],
-                "profiles"=>$this->getProfileDetails($client, $profiles)
-            ];
         }
-        return $details;
+
+        foreach ($clustersAndHosts["standalone"] as $index => $host) {
+            $clustersAndHosts["standalone"][$index] =  $this->getProfiles($host);
+        }
+
+        return $clustersAndHosts;
     }
 
     public function getHostProfilesWithDetails(int $hostId)

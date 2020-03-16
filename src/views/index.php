@@ -147,6 +147,7 @@ if ($haveServers->haveAny() !== true) {
                   search:{
                       getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles"
                   },
+                  getProfile: '/api/Profiles/GetProfileController/get',
                   getAllProfiles: '/api/Profiles/GetAllProfilesController/getAllProfiles',
                   delete: '/api/Profiles/DeleteProfileController/delete',
                   rename: '/api/Profiles/RenameProfileController/rename',
@@ -334,7 +335,7 @@ if ($haveServers->haveAny() !== true) {
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link viewProfiles">
+            <a class="nav-link viewProfiles callFunc">
               <i class="fas fa-users"></i>
               <span class="hideNavText"> Profiles </span>
             </a>
@@ -694,6 +695,12 @@ $(document).on("click", ".viewServer", function(){
     let hostId = parentLi.data("hostid");
     let hostAlias = parentLi.data("alias");
 
+
+    $("#dashboardStorageHistoryBox").empty();
+    $("#dashboardRunningInstancesBox").empty();
+    $("#dashboardMemoryHistoryBox").empty();
+    $("#currentMemoryUsageCardBody").empty();
+
     currentContainerDetails = null;
     loadServerView(hostId);
 });
@@ -702,6 +709,7 @@ function loadDashboard(){
     $(".boxSlide").hide();
     $("#overviewBox").show();
     setBreadcrumb("Dashboard", "active overview");
+    changeActiveNav(".overview")
 
     ajaxRequest(globalUrls.dashboard.get, {}, (data)=>{
         data = makeToastr(data);
@@ -970,23 +978,23 @@ $(document).on("change", ".changeHostProject", function(){
 $(document).on("click", ".overview, .container-overview", function(){
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     currentContainerDetails = null;
-    setBreadcrumb("Dashboard", "overview active");
 
-    if($(this).hasClass("createHostTre")){
-        loadDashboard();
-    }
-
-    changeActiveNav(".overview")
-
-    $(".boxSlide").hide();
-    $("#overviewBox").show();
+    loadDashboard();
 });
 
 $(document).on("click", ".viewProfiles, .profile-overview", function(){
     setBreadcrumb("Profiles", "viewProfiles active");
-    loadProfileView();
+
+
     $(".sidebar-fixed").addClass("sidebar-lg-show");
-    changeActiveNav(".viewProfiles")
+    changeActiveNav(".viewProfiles");
+
+    $(".boxSlide, #profileDetails").hide();
+    $("#profileOverview, #profileBox").show();
+
+    if($(this).hasClass("callFunc")){
+        loadProfileView();
+    }
 });
 
 $(document).on("click", ".viewClusters, .cluster-overview", function(){

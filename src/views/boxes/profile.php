@@ -125,13 +125,44 @@
 </div>
 
 <script>
-//TODO Refactor this away
-var profileData = null;
 
 var currentProfileDetails = {
     profile: null,
     host: null
 };
+
+function makeHostHtml(hosthtml, host, selectedProfile = null, selectedHost = null){
+    let disabled = "";
+    if(host.online == false){
+        disabled = "disabled text-warning text-strikethrough";
+    }
+
+    hosthtml += `<li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+            <i class="fas fa-server"></i> ${host.hostAlias}
+        </a>
+        <ul class="nav-dropdown-items">`;
+
+    $.each(host.profiles, function(profileName, details){
+        let active = "";
+        if(host.hostId == selectedHost && profileName == selectedProfile ){
+            active = "text-info";
+        }
+
+        hosthtml += `<li class="nav-item view-profile ${active}"
+            data-host-id="${host.hostId}"
+            data-profile="${profileName}"
+            data-alias="${host.hostAlias}"
+            >
+          <a class="nav-link" href="#">
+            <i class="nav-icon fa fa-user"></i>
+            ${profileName}
+          </a>
+        </li>`;
+    });
+    hosthtml += "</ul></li>";
+    return hosthtml;
+}
 
 
 function loadProfileView(selectedProfile = null, selectedHost = null, callback = null)
@@ -140,49 +171,30 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
     ajaxRequest(globalUrls.profiles.getAllProfiles, null, function(data){
         var data = $.parseJSON(data);
 
-        let a = selectedProfile == null ? "active" : "";
+        let a = selectedProfile == null ? "text-info" : "";
         let hosts = `
-        <li class="nav-item ${a} profile-overview">
-            <a class="nav-link" href="#">
+        <li class="nav-item profile-overview">
+            <a class="nav-link ${a}" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;
-        $.each(data, function(hostName, host){
-            let disabled = "";
-            if(host.online == false){
-                disabled = "disabled text-warning";
-                hostName += " (Offline)";
-            }
 
-            hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
-                    <i class="fas fa-server"></i> ${hostName}
-                </a>
-                <ul class="nav-dropdown-items">`;
 
-            $.each(host.profiles, function(profileName, details){
-                let active = "";
-                if(host.hostId == selectedHost && profileName == selectedProfile ){
-                    active = "active";
-                }
-
-                hosts += `<li class="nav-item view-profile ${active}"
-                    data-host-id="${host.hostId}"
-                    data-profile="${profileName}"
-                    data-alias="${hostName}">
-                  <a class="nav-link" href="#">
-                    <i class="nav-icon fa fa-user"></i>
-                    ${profileName}
-                  </a>
-                </li>`;
-            });
-            hosts += "</ul></li>";
+        $.each(data.clusters, (clusterIndex, cluster)=>{
+            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            $.each(cluster.members, (_, host)=>{
+                hosts = makeHostHtml(hosts, host, selectedProfile, selectedHost)
+            })
         });
-        $(".boxSlide, #profileDetails").hide();
-        $("#profileOverview, #profileBox").show();
+
+        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+
+        $.each(data.standalone, (_, host)=>{
+            hosts = makeHostHtml(hosts, host, selectedProfile, selectedHost)
+        });
+
         $("#sidebar-ul").empty().append(hosts);
 
-        profileData = data;
         if($.isFunction(callback)){
             callback();
         }
@@ -194,44 +206,48 @@ $("#sidebar-ul").on("click", ".view-profile", function(){
 })
 
 function viewProfile(profileId, hostAlias, hostId){
+
     currentProfileDetails.profile = profileId;
     currentProfileDetails.hostAlias = hostAlias;
     currentProfileDetails.hostId = hostId;
-    let details = profileData[hostAlias].profiles[profileId].details;
-    let deviceTableRows = createTableRowsHtml(details.devices);
 
+    ajaxRequest(globalUrls.profiles.getProfile, {hostId: hostId, profile: profileId}, (data)=>{
+        let details = $.parseJSON(data);
 
-    $("#profileNameTitle").text(profileId);
+        let deviceTableRows = createTableRowsHtml(details.devices);
 
-    addBreadcrumbs(["Profiles", hostAlias, profileId], ["viewProfiles", "", "active"], false);
+        $("#profileNameTitle").text(profileId);
 
-    let usedBy = ["Couldn't get profiles uesd by (api version probably)"];
+        addBreadcrumbs(["Profiles", hostAlias, profileId], ["viewProfiles", "", "active"], false);
 
-    if(details.hasOwnProperty("used_by")){
-        usedBy = details.used_by;
-    }
+        let usedBy = ["Couldn't get profiles uesd by (api version probably)"];
 
-    let profileUsedByHtml = "";
+        if(details.hasOwnProperty("used_by")){
+            usedBy = details.used_by;
+        }
 
-    $.each(usedBy, function(_, instance){
-        profileUsedByHtml += `<tr><td>${instance}</td></tr>`;
-    })
+        let profileUsedByHtml = "";
 
-    let configTr = createTableRowsHtml(details.config);
+        $.each(usedBy, function(_, instance){
+            profileUsedByHtml += `<tr><td>${instance}</td></tr>`;
+        })
 
-    let collpaseDetailsFunc = $.isEmptyObject(details.devices) ? "hide" : "show";
-    let collpaseConfigFunc = $.isEmptyObject(details.config) ? "hide" : "show";
+        let configTr = createTableRowsHtml(details.config);
 
-    $("#profileDevicesCard").collapse(collpaseDetailsFunc);
-    $("#configDeviceCard").collapse(collpaseConfigFunc);
+        let collpaseDetailsFunc = $.isEmptyObject(details.devices) ? "hide" : "show";
+        let collpaseConfigFunc = $.isEmptyObject(details.config) ? "hide" : "show";
 
-    $("#profileBox #deleteProfile").attr("disabled", usedBy.length > 0);
-    $("#profile-deviceData > tbody").empty().html(deviceTableRows);
-    $("#profile-usedByData > tbody").empty().html(profileUsedByHtml);
-    $("#profile-configData > tbody").empty().html(configTr);
-    $("#profileOverview").hide();
-    $(".boxSlide").hide();
-    $("#profileDetails, #profileBox").show();
+        $("#profileDevicesCard").collapse(collpaseDetailsFunc);
+        $("#configDeviceCard").collapse(collpaseConfigFunc);
+
+        $("#profileBox #deleteProfile").attr("disabled", usedBy.length > 0);
+        $("#profile-deviceData > tbody").empty().html(deviceTableRows);
+        $("#profile-usedByData > tbody").empty().html(profileUsedByHtml);
+        $("#profile-configData > tbody").empty().html(configTr);
+        $("#profileOverview").hide();
+        $(".boxSlide").hide();
+        $("#profileDetails, #profileBox").show();
+    });
 }
 
 
