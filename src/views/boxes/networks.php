@@ -83,6 +83,36 @@
 
 var currentNetwork = {};
 
+function makeNetworkHostSidebarHtml(hosthtml, host){
+    let disabled = "";
+    if(host.online == false){
+        disabled = "disabled text-warning text-strikethrough";
+    }
+
+    hosthtml += `<li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+            <i class="fas fa-server"></i> ${host.alias}
+        </a>
+        <ul class="nav-dropdown-items">`;
+
+
+
+    $.each(host.networks, function(_, network){
+        hosthtml += `<li class="nav-item view-network"
+            data-host-id="${host.hostId}"
+            data-network="${network}"
+            data-alias="${host.alias}">
+            <a class="nav-link" href="#">
+            <i class="fas fa-ethernet"></i>
+            ${network}
+            </a>
+        </li>`;
+
+    });
+    hosthtml += "</ul></li>";
+    return hosthtml;
+}
+
 function loadNetworksView()
 {
     $(".boxSlide, #networkInfo").hide();
@@ -92,38 +122,28 @@ function loadNetworksView()
     ajaxRequest(globalUrls.networks.getAll, {}, (data)=>{
         data = $.parseJSON(data);
 
+
         let hosts = `
-        <li class="nav-item active network-overview">
-            <a class="nav-link" href="#">
+        <li class="nav-item network-overview">
+            <a class="nav-link text-info" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;
 
-        $.each(data, function(hostName, data){
-            let disabled = "";
-            if(data.online == false){
-                disabled = "disabled text-warning";
-                hostName += " (Offline)";
-            }
-            hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
-                    <i class="fas fa-server"></i> ${hostName}
-                </a>
-                <ul class="nav-dropdown-items">`;
 
-            $.each(data.networks, function(i, network){
-                hosts += `<li class="nav-item view-network"
-                    data-host-id="${data.hostId}"
-                    data-network="${network}"
-                    data-alias="${hostName}">
-                  <a class="nav-link" href="#">
-                    <i class="fas fa-ethernet"></i>
-                    ${network}
-                  </a>
-                </li>`;
-            });
-                hosts += "</ul></li>";
+        $.each(data.clusters, (clusterIndex, cluster)=>{
+            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            $.each(cluster.members, (_, host)=>{
+                hosts = makeNetworkHostSidebarHtml(hosts, host)
+            })
         });
+
+        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+
+        $.each(data.standalone.members, (_, host)=>{
+            hosts = makeNetworkHostSidebarHtml(hosts, host)
+        });
+
         $("#sidebar-ul").empty().append(hosts);
     });
 }

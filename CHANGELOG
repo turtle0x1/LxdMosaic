@@ -17,6 +17,7 @@ Changed
     Load profile on click instead of passing around an array containing profile data
     Indicate cluster groups & standalone hosts on profiles
     Indicate cluster groups & standalone hosts on storage
+    Indicate cluster groups & standalone hosts on networks
 
 Fixed
     Cant create a container with no devices (#158)
