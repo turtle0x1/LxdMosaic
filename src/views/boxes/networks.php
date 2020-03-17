@@ -1,40 +1,25 @@
 <div id="networkBox" class="boxSlide">
-    <div id="networkOverview" class="row">
-        <div class="col-md-9">
-              <div class="card bg-info">
-                <div class="card-body">
-                  <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
-                      Networks
-                    </a>
-                  </h5>
+    <div id="networkOverview">
+        <div class="row border-bottom mb-2">
+            <div class="col-md-12 text-center">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                    <h4> Networks </h4>
+                    <div class="btn-toolbar float-right">
+                      <div class="btn-group mr-2">
+                          <button data-toggle="tooltip" data-placement="bottom" title="Create network" class="btn btn-sm btn-primary" id="createNetwork">
+                              <i class="fas fa-plus"></i>
+                          </button>
+                      </div>
+                    </div>
                 </div>
-              </div>
-        </div>
-        <div class="col-md-3">
-              <div class="card">
-                <div class="card-header bg-info" role="tab" >
-                  <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Actions
-                    </a>
-                  </h5>
-                </div>
-                <div id="collapseOne" class="collapse in show" role="tabpanel" >
-                  <div class="card-block bg-dark">
-                      <button class="btn btn-block btn-primary" id="createNetwork">
-                          Create
-                      </button>
-                  </div>
-                </div>
-              </div>
+            </div>
         </div>
     </div>
     <div id="networkInfo">
         <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
             <div class="col-md-12">
                 <h4>
-                    <span class="text-white" id="networkName"></span>
+                    <span  id="networkName"></span>
                     <button class="btn btn-danger float-right" id="deleteNetwork">Delete Network</button>
                 </h4>
             </div>

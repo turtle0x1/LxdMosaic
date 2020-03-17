@@ -717,7 +717,7 @@ function loadDashboard(){
         let hosts = `
             <li class="nav-item container-overview">
                 <a class="nav-link text-info" href="#">
-                    <i class="fas fa-tachometer-alt"></i> Overview
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>`;
 

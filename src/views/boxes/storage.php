@@ -1,15 +1,21 @@
 <div id="storageBox" class="boxSlide">
-    <div id="storageOverview" class="row">
+    <div id="storageOverview">
+        <div class="row border-bottom mb-2">
+            <div class="col-md-12 text-center">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                    <h4> Storage </h4>
+                    <div class="btn-toolbar float-right">
+                      <div class="btn-group mr-2">
+                          <button data-toggle="tooltip" data-placement="bottom" title="Create storage pool" class="btn btn-sm btn-primary" id="createPool">
+                              <i class="fas fa-plus"></i>
+                          </button>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
         <div class="col-md-9">
-              <div class="card bg-info">
-                  <div class="card-body">
-                      <h5>
-                        <a class="text-white">
-                          Storage
-                        </a>
-                      </h5>
-                  </div>
-              </div>
               <div class="card">
                 <div class="card-header bg-info" role="tab" >
                   <h5>
@@ -35,23 +41,6 @@
                 </div>
               </div>
         </div>
-        <div class="col-md-3">
-              <div class="card">
-                <div class="card-header bg-info" role="tab" >
-                  <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Actions
-                    </a>
-                  </h5>
-                </div>
-                <div id="collapseOne" class="collapse in show" role="tabpanel" >
-                  <div class="card-block bg-dark">
-                      <button class="btn btn-block btn-primary" id="createPool">
-                          Create
-                      </button>
-                  </div>
-                </div>
-              </div>
         </div>
     </div>
     <div id="storageDetails">
