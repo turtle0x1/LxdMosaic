@@ -762,33 +762,28 @@ function loadDashboard(){
             });
         });
 
+        let memoryWidth = ((data.stats.memory.used / data.stats.memory.total) * 100)
+        let storageWidth = ((data.analyticsData.storageUsage.used / data.analyticsData.storageUsage.available) * 100)
 
-        $("#currentMemoryUsageCardBody").empty().append('<canvas class="ml-auto mr-auto" id="currentMemoryUsageGraph" height="179"></canvas>');
 
-        new Chart($("#currentMemoryUsageGraph"), {
-            type: 'pie',
-              data: {
-                labels: ['Used', 'Free'],
-                datasets: [{
-                  label: 'Total Memory Used',
-                  data: [data.stats.memory.used, (data.stats.memory.total - data.stats.memory.used)],
-                  backgroundColor: [
-                    'rgba(46, 204, 113, 1)',
-                    'rgba(189, 195, 199, 1)'
-                  ],
-                  borderColor: [
-                      'rgba(46, 204, 113, 1)',
-                      'rgba(189, 195, 199, 1)'
-                  ],
-                  borderWidth: 1
-                }]
-              },
-              options: {
-                cutoutPercentage: 40,
-                responsive: false,
-                tooltips: toolTipsBytesCallbacks
-              }
-        });
+        $("#currentMemoryUsageCardBody").empty().append(
+            `
+            <div class="mb-2">
+                <label>Memory</label>
+                <div class="progress">
+                    <div data-toggle="tooltip" data-placement="bottom" title="${formatBytes(data.stats.memory.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.stats.memory.used}" aria-valuemin="0" aria-valuemax="${(data.stats.memory.total - data.stats.memory.used)}"></div>
+                </div>
+            </div>
+            <div>
+                <label>Storage</label>
+                <div class="progress">
+                    <div data-toggle="tooltip" data-placement="bottom" title="${formatBytes(data.analyticsData.storageUsage.used)}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${data.stats.memory.used}" aria-valuemin="0" aria-valuemax="${(data.stats.memory.total - data.stats.memory.used)}"></div>
+                    </div>
+            </div>
+            `
+        );
+
+        $('[data-toggle="tooltip"]').tooltip({html: true})
 
         hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
         hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Standalone Hosts</td></tr>`
@@ -830,20 +825,20 @@ function loadDashboard(){
         $("#sidebar-ul").empty().append(hosts);
 
         if(data.analyticsData.hasOwnProperty("warning")){
-            $("#memoryUsage, #activeContainers, #totalStorageUsage").hide().parents(".card-body").find(".notEnoughData").show();
+            $("#memoryUsage, #activeContainers, #recentStorageCanvas. #stroageUsage").hide().parents(".card-body").find(".notEnoughData").show();
             return false;
         }
 
-        $("#dashboardMemoryHistoryBox, #dashboardRunningInstancesBox, #dashboardStorageHistoryBox").show().parents(".card-body").find(".notEnoughData").hide();
+        $("#dashboardMemoryHistoryBox, #dashboardRunningInstancesBox, #dashboardStorageHistoryBox, #dashboardStorageUsageBox").show().parents(".card-body").find(".notEnoughData").hide();
 
 
-        $("#dashboardStorageHistoryBox").empty().append(`<canvas id="totalStorageUsage" style="height: 300px"></canvas>`);
+        $("#dashboardStorageHistoryBox").empty().append(`<canvas id="recentStorageCanvas" style="height: 300px"></canvas>`);
         $("#dashboardRunningInstancesBox").empty().append(`<canvas id="activeContainers" style="height: 300px"></canvas>`);
         $("#dashboardMemoryHistoryBox").empty().append(`<canvas id="memoryUsage" style="height: 300px"></canvas>`);
 
         var mCtx = $('#memoryUsage');
         var acCtx = $('#activeContainers');
-        var tsuCtx = $('#totalStorageUsage');
+        var tsuCtx = $('#recentStorageCanvas');
 
         let sum = data.analyticsData.activeContainers.data.reduce(getSum);
 
@@ -910,10 +905,10 @@ function loadDashboard(){
                         borderColor: 'rgba(46, 204, 113, 1)',
                         pointBackgroundColor: "rgba(46, 204, 113, 1)",
                         pointBorderColor: "rgba(46, 204, 113, 1)",
-                        data: data.analyticsData.storageUsage.data,
+                        data: data.analyticsData.recentStorageUsage.data,
                     }
                 ],
-                labels: data.analyticsData.storageUsage.labels
+                labels: data.analyticsData.recentStorageUsage.labels
             },
             options: {
                 title: {

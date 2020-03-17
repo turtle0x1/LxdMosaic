@@ -11,22 +11,29 @@ class StoreFleetAnalytics
         $this->database = $database->dbObject;
     }
 
-    public function store(int $totalMemory, int $activeContainers, int $totalStorageUsage)
-    {
+    public function store(
+        int $totalMemory,
+        int $activeContainers,
+        int $totalStorageUsage,
+        int $totalStorageAvailable
+    ) {
         $sql = "INSERT INTO `Fleet_Analytics` (
                     `FA_Total_Memory_Usage`,
                     `FA_Active_Containers`,
-                    `FA_Total_Storage_Usage`
+                    `FA_Total_Storage_Usage`,
+                    `FA_Total_Storage_Available`
                 ) VALUES (
                     :memoryUsage,
                     :activeContainers,
-                    :totalStorageUsage
+                    :totalStorageUsage,
+                    :totalStorageAvailable
                 )";
         $do = $this->database->prepare($sql);
         $do->execute([
             ":memoryUsage"=>$totalMemory,
             ":activeContainers"=>$activeContainers,
-            ":totalStorageUsage"=>$totalStorageUsage
+            ":totalStorageUsage"=>$totalStorageUsage,
+            ":totalStorageAvailable"=>$totalStorageAvailable
         ]);
         return $do->rowCount() ? true : false;
     }

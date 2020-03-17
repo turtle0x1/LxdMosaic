@@ -16,11 +16,13 @@ $storeDetails = $container->make("dhope0000\LXDClient\Model\Analytics\StoreFleet
 $storagePools = $getStorageDetails->getAll();
 
 $totalStorageUsage = 0;
+$totalStorageAvailable = 0;
 
 foreach ($storagePools["clusters"] as $cluster) {
     foreach ($cluster["members"] as $host) {
         foreach ($host["pools"] as $pool) {
             $totalStorageUsage += $pool["resources"]["space"]["used"];
+            $totalStorageAvailable += $pool["resources"]["space"]["total"];
         }
     }
 }
@@ -28,6 +30,7 @@ foreach ($storagePools["clusters"] as $cluster) {
 foreach ($storagePools["standalone"]["members"] as $host) {
     foreach ($host["pools"] as $pool) {
         $totalStorageUsage += $pool["resources"]["space"]["used"];
+        $totalStorageAvailable += $pool["resources"]["space"]["total"];
     }
 }
 
@@ -53,6 +56,6 @@ foreach ($containersByHost as $host) {
     }
 }
 
-$storeDetails->store($totalMemory, $activeContainers, $totalStorageUsage);
+$storeDetails->store($totalMemory, $activeContainers, $totalStorageUsage, $totalStorageAvailable);
 
 exit(0);

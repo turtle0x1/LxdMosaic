@@ -19,7 +19,27 @@ class GetLatestData
             return ["warning"=>"Not Enough Data, 10 minutes is minimum time"];
         }
 
-        return $this->prepareForGraphs($latestData);
+        $graphData = $this->prepareForGraphs($latestData);
+
+        $graphData = $this->addStorageUsage($graphData);
+
+        return $graphData;
+    }
+
+    private function addStorageUsage(array $graphData)
+    {
+        $lastEntry = $this->fetchLatestData->lastEntry();
+
+        if ($lastEntry["storageAvailable"] == null) {
+            $lastEntry["storageAvailable"] = 0;
+        }
+
+        $graphData["storageUsage"] = [
+            "used"=>$lastEntry["storageUsage"],
+            "available"=>$lastEntry["storageAvailable"] - $lastEntry["storageUsage"]
+        ];
+
+        return $graphData;
     }
 
     private function prepareForGraphs($data)
@@ -33,21 +53,22 @@ class GetLatestData
                 "data"=>[],
                 "labels"=>[]
             ],
-            "storageUsage"=>[
+            "recentStorageUsage"=>[
                 "data"=>[],
                 "labels"=>[]
             ]
         ];
+
         foreach ($data as $entry) {
             $output["memory"]["data"][] = $entry["memoryUsage"];
             $output["activeContainers"]["data"][] = $entry["activeContainers"];
-            $output["storageUsage"]["data"][] = $entry["storageUsage"];
+            $output["recentStorageUsage"]["data"][] = $entry["storageUsage"];
 
             $date = (new \DateTime($entry["dateTime"]))->format("H:i");
 
             $output["memory"]["labels"][] = $date;
             $output["activeContainers"]["labels"][] = $date;
-            $output["storageUsage"]["labels"][] = $date;
+            $output["recentStorageUsage"]["labels"][] = $date;
         }
         return $output;
     }

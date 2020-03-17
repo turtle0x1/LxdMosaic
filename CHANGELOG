@@ -11,6 +11,7 @@ Added
         & other basic functionality before adding the above.
 
     Logo created by my buddy Josh
+    Total storage available to fleet analytics
 
 Changed
     Indicate cluster groups & standalone hosts on dashboard (#150)
