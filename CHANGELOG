@@ -23,6 +23,7 @@ Changed
 Fixed
     Cant create a container with no devices (#158)
     All clusters not showing on cluster overview (#151)
+    Cant store backup locally because of missing class property (#164)
 
 0.6.1 - 02/03/2020
 
