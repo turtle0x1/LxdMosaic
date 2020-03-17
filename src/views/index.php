@@ -25,6 +25,24 @@ if ($haveServers->haveAny() !== true) {
 
 <html lang="en">
   <head>
+      <link rel="apple-touch-icon" sizes="57x57" href="/assets/lxdMosaic/favicons/apple-icon-57x57.png">
+      <link rel="apple-touch-icon" sizes="60x60" href="/assets/lxdMosaic/favicons/apple-icon-60x60.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="/assets/lxdMosaic/favicons/apple-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="76x76" href="/assets/lxdMosaic/favicons/apple-icon-76x76.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="/assets/lxdMosaic/favicons/apple-icon-114x114.png">
+      <link rel="apple-touch-icon" sizes="120x120" href="/assets/lxdMosaic/favicons/apple-icon-120x120.png">
+      <link rel="apple-touch-icon" sizes="144x144" href="/assets/lxdMosaic/favicons/apple-icon-144x144.png">
+      <link rel="apple-touch-icon" sizes="152x152" href="/assets/lxdMosaic/favicons/apple-icon-152x152.png">
+      <link rel="apple-touch-icon" sizes="180x180" href="/assets/lxdMosaic/favicons/apple-icon-180x180.png">
+      <link rel="icon" type="image/png" sizes="192x192"  href="/assets/lxdMosaic/favicons/android-icon-192x192.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="/assets/lxdMosaic/favicons/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="96x96" href="/assets/lxdMosaic/favicons/favicon-96x96.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="/assets/lxdMosaic/favicons/favicon-16x16.png">
+      <link rel="manifest" href="/assets/lxdMosaic/favicons/manifest.json">
+      <meta name="msapplication-TileColor" content="#ffffff">
+      <meta name="msapplication-TileImage" content="/assets/lxdMosaic/favicons/ms-icon-144x144.png">
+      <meta name="theme-color" content="#ffffff">
+
       <script
           src="https://code.jquery.com/jquery-3.3.1.min.js"
           integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -71,6 +89,9 @@ if ($haveServers->haveAny() !== true) {
           var currentContainerDetails = null;
 
           var globalUrls = {
+              dashboard: {
+                get: "/api/Dashboard/GetController/get"
+              },
               instances: {
                   virtualMachines: {
                       create: "/api/Instances/VirtualMachines/CreateController/create"
@@ -126,6 +147,7 @@ if ($haveServers->haveAny() !== true) {
                   search:{
                       getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles"
                   },
+                  getProfile: '/api/Profiles/GetProfileController/get',
                   getAllProfiles: '/api/Profiles/GetAllProfilesController/getAllProfiles',
                   delete: '/api/Profiles/DeleteProfileController/delete',
                   rename: '/api/Profiles/RenameProfileController/rename',
@@ -184,7 +206,8 @@ if ($haveServers->haveAny() !== true) {
                   },
                   containers: {
                       getAll: "/api/Hosts/Containers/GetAllController/getAll",
-                      delete: "/api/Hosts/Containers/DeleteContainersController/delete"
+                      delete: "/api/Hosts/Containers/DeleteContainersController/delete",
+                      getHostContainers: "/api/Hosts/Containers/GetHostsContainersController/get"
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
@@ -298,6 +321,7 @@ if ($haveServers->haveAny() !== true) {
         <i class="fas fa-bars" style="color: #dd4814;"></i>
       </button>
       <a class="navbar-brand" href="#">
+             <img src="/assets/lxdMosaic/logo.png" style="width: 25px; height: 25px; margin-left: 1px; margin-right: 5px;" alt="">
         LXD Mosaic
       </a>
       <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
@@ -305,39 +329,20 @@ if ($haveServers->haveAny() !== true) {
       </button>
       <ul class="navbar-nav mr-auto d-md-down-none" id="mainNav">
           <li class="nav-item active">
-            <a class="nav-link overview">
+            <a class="nav-link overview createHostTre">
               <i class="fas fa-tachometer-alt"></i>
               <span class="hideNavText"> Dashboard </span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link viewProfiles">
+            <a class="nav-link viewProfiles callFunc">
               <i class="fas fa-users"></i>
               <span class="hideNavText"> Profiles </span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link viewClusters">
-              <i class="far fa-object-group"></i>
-              <span class="hideNavText"> Clusters </span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewCloudConfigFiles">
-              <i class="fa fa-cogs"></i> <span class="hideNavText"> Cloud Config </span></a>
-          </li>
-
-          <li class="nav-item">
             <a class="nav-link viewImages">
               <i class="fa fa-images"></i> <span class="hideNavText"> Images </span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewProjects">
-              <i class="fas fa-project-diagram"></i> <span class="hideNavText"> Projects </span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewDeployments">
-              <i class="fas fa-rocket"></i> <span class="hideNavText"> Deployments </span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewStorage">
@@ -348,8 +353,27 @@ if ($haveServers->haveAny() !== true) {
               <i class="fas fa-network-wired"></i> <span class="hideNavText"> Networks </span> </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link viewProjects">
+              <i class="fas fa-project-diagram"></i> <span class="hideNavText"> Projects </span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link viewCloudConfigFiles">
+              <i class="fa fa-cogs"></i> <span class="hideNavText"> Cloud Config </span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link viewDeployments">
+              <i class="fas fa-rocket"></i> <span class="hideNavText"> Deployments </span></a>
+          </li>
+
+          <li class="nav-item">
             <a class="nav-link viewBackups">
               <i class="fas fa-save"></i> <span class="hideNavText"> Backups </span> </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link viewClusters">
+              <i class="far fa-object-group"></i>
+              <span class="hideNavText"> Clusters </span>
+            </a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewSettings">
@@ -357,13 +381,13 @@ if ($haveServers->haveAny() !== true) {
           </li>
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">
-          <li class="nav-item px-3 btn btn-primary pull-right" id="addNewServer">
+          <li class="nav-item px-3 btn btn-outline-primary pull-right" id="addNewServer">
                 <a> <i class="fas fa-plus"></i> Server </a>
            </li>
-          <li class="nav-item px-3 btn btn-success pull-right" id="createContainer">
+          <li class="nav-item px-3 btn btn-outline-success pull-right" id="createContainer">
                 <a> <i class="fas fa-plus"></i> Container </a>
            </li>
-          <li class="nav-item px-3 btn btn-success pull-right" id="createVm">
+          <li class="nav-item px-3 btn btn-outline-success pull-right" id="createVm">
                 <a> <i class="fas fa-plus"></i> VM </a>
            </li>
       </ul>
@@ -421,8 +445,8 @@ $("#sidebar-ul").on("click", ".nav-item", function(){
     if($(this).hasClass("nav-dropdown")){
         return;
     }
-    $("#sidebar-ul").find(".active").removeClass("active");
-    $(this).addClass("active");
+    $("#sidebar-ul").find(".text-info").removeClass("text-info");
+    $(this).find(".nav-link").addClass("text-info");
 })
 
 if(typeof io !== "undefined"){
@@ -514,9 +538,9 @@ var editor = ace.edit("editor");
   editor.getSession().setMode("ace/mode/yaml");
 
 $(function(){
+    Chart.defaults.global.defaultFontColor='white';
     $('[data-toggle="tooltip"]').tooltip({html: true})
-    createContainerTree();
-    loadServerOview();
+    loadDashboard();
     $.contextMenu({
             selector: '.view-container',
             items: {
@@ -541,7 +565,7 @@ $(function(){
                     icon: "edit",
                     callback: function(key, opt, e){
                         let item = opt["$trigger"];
-                        renameContainerConfirm(item.data("hostId"), item.data("container"));
+                        renameContainerConfirm(item.data("hostId"), item.data("container"), false, item.data("alias"));
                     }
                 },
                 "delete": {
@@ -602,27 +626,226 @@ var unknownServerDetails = {
     }
 };
 
-function loadServerOview()
-{
-    Chart.defaults.global.defaultFontColor='white';
+function addHostContainerList(hostId, hostAlias) {
+    ajaxRequest(globalUrls.hosts.containers.getHostContainers, {hostId: hostId}, (data)=>{
+        data = makeToastr(data);
+        let containers = "";
+        if(Object.keys(data).length > 0){
+            $.each(data, function(containerName, details){
+                let active = "";
+                if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
+                    if(hostId == currentContainerDetails.hostId && containerName == currentContainerDetails.container){
+                        active = "active"
+                    }
+                }
 
+                let typeFa = "box";
+
+                if(details.info.hasOwnProperty("type") && details.info.type == "virtual-machine"){
+                    typeFa = "vr-cardboard";
+                }
+
+                containers += `<li class="nav-item view-container ${active}"
+                    data-host-id="${hostId}"
+                    data-container="${containerName}"
+                    data-alias="${hostAlias}">
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
+                    <i class="nav-icon fas fa-${typeFa}"></i>
+                    ${containerName}
+                  </a>
+                </li>`;
+            });
+        }else {
+            containers += `<li class="nav-item text-center text-warning">No Instances</li>`;
+        }
+
+        $("#sidebar-ul").find("li[data-hostid=" + hostId + "] ul").empty().append(containers);
+    });
+}
+
+$(document).on("click", ".showServerInstances", function(e){
+    e.preventDefault();
+
+    let parentLi = $(this).parents("li");
+
+    if(parentLi.hasClass("open")){
+        parentLi.find("ul").empty();
+        parentLi.removeClass("open");
+        $(this).html('<i class="fas fa-caret-left"></i>')
+        return false;
+    }else{
+        $(this).html('<i class="fas fa-caret-down"></i>')
+        parentLi.addClass("open");
+    }
+
+    let hostId = parentLi.data("hostid");
+    let hostAlias = parentLi.data("alias");
+
+    currentContainerDetails = null;
+
+    addHostContainerList(hostId, hostAlias);
+
+    return false;
+});
+
+$(document).on("click", ".viewServer", function(){
+    let parentLi = $(this).parents("li");
+
+    let hostId = parentLi.data("hostid");
+    let hostAlias = parentLi.data("alias");
+
+
+    $("#dashboardStorageHistoryBox").empty();
+    $("#dashboardRunningInstancesBox").empty();
+    $("#dashboardMemoryHistoryBox").empty();
+    $("#currentMemoryUsageCardBody").empty();
+
+    currentContainerDetails = null;
+    loadServerView(hostId);
+});
+
+function loadDashboard(){
+    $(".boxSlide").hide();
+    $("#overviewBox").show();
     setBreadcrumb("Dashboard", "active overview");
+    changeActiveNav(".overview")
 
-    ajaxRequest(globalUrls.analytics.getLatestData, {}, function(data){
-        data = $.parseJSON(data);
+    ajaxRequest(globalUrls.dashboard.get, {}, (data)=>{
+        data = makeToastr(data);
 
-        if(data.hasOwnProperty("warning")){
+        let hosts = `
+            <li class="nav-item container-overview">
+                <a class="nav-link text-info" href="#">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>`;
+
+        let hostsTrs = "";
+
+        $.each(data.clustersAndHosts.clusters, function(i, item){
+            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
+
+            hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
+
+            $.each(item.members, function(_, host){
+                let disabled = "";
+
+                if(host.status !== "Online"){
+                    disabled = "disabled text-warning text-strikethrough";
+                }
+
+                let projects = "Not Available";
+
+                if(host.resources.extensions.supportsProjects){
+                    projects = "<select class='form-control changeHostProject'>";
+                    $.each(host.resources.projects, function(o, project){
+                        let selected = project == data.currentProject ? "selected" : "";
+                            projects += `<option data-alias="${alias}" data-host='${data.hostId}'
+                                value='${project}' ${selected}>
+                                ${project}</option>`;
+                    });
+                    projects += "</select>";
+                }
+
+                let name = host.alias == null ? host.urlAndPort : host.alias;
+                hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
+
+                hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
+                    <a class="nav-link viewServer ${disabled}" href="#">
+                        <i class="fas fa-server"></i> ${name}
+                        <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                    </a>
+                    <ul class="nav-dropdown-items">
+                    </ul>
+                </li>`;
+            });
+        });
+
+
+        $("#currentMemoryUsageCardBody").empty().append('<canvas class="ml-auto mr-auto" id="currentMemoryUsageGraph" height="179"></canvas>');
+
+        new Chart($("#currentMemoryUsageGraph"), {
+            type: 'pie',
+              data: {
+                labels: ['Used', 'Free'],
+                datasets: [{
+                  label: 'Total Memory Used',
+                  data: [data.stats.memory.used, (data.stats.memory.total - data.stats.memory.used)],
+                  backgroundColor: [
+                    'rgba(46, 204, 113, 1)',
+                    'rgba(189, 195, 199, 1)'
+                  ],
+                  borderColor: [
+                      'rgba(46, 204, 113, 1)',
+                      'rgba(189, 195, 199, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                cutoutPercentage: 40,
+                responsive: false,
+                tooltips: toolTipsBytesCallbacks
+              }
+        });
+
+        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+        hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Standalone Hosts</td></tr>`
+
+        $.each(data.clustersAndHosts.standalone.members, function(_, host){
+            let disabled = "";
+
+            let name = host.alias == null ? host.urlAndPort : host.alias;
+
+            if(host.hostOnline == false){
+                disabled = "disabled text-warning text-strikethrough";
+            }
+
+            let projects = "<b> Not Available </b>";
+
+
+            if(host.hostOnline == 1 && host.resources.extensions.supportsProjects){
+                projects = "<select class='form-control changeHostProject'>";
+                $.each(host.resources.projects, function(o, project){
+                    let selected = project == data.currentProject ? "selected" : "";
+                        projects += `<option data-alias="${alias}" data-host='${host.hostId}'
+                            value='${project}' ${selected}>
+                            ${project}</option>`;
+                });
+                projects += "</select>";
+            }
+            hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
+
+            hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
+                <a class="nav-link viewServer ${disabled}" href="#">
+                    <i class="fas fa-server"></i> ${name}
+                    <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                </a>
+                <ul class="nav-dropdown-items">
+                </ul>
+            </li>`;
+        });
+        $("#dashboardHostTable > tbody").empty().append(hostsTrs);
+        $("#sidebar-ul").empty().append(hosts);
+
+        if(data.analyticsData.hasOwnProperty("warning")){
             $("#memoryUsage, #activeContainers, #totalStorageUsage").hide().parents(".card-body").find(".notEnoughData").show();
             return false;
         }
 
-        $("#memoryUsage, #activeContainers, #totalStorageUsage").show().parents(".card-body").find(".notEnoughData").hide();
+        $("#dashboardMemoryHistoryBox, #dashboardRunningInstancesBox, #dashboardStorageHistoryBox").show().parents(".card-body").find(".notEnoughData").hide();
+
+
+        $("#dashboardStorageHistoryBox").empty().append(`<canvas id="totalStorageUsage" style="height: 300px"></canvas>`);
+        $("#dashboardRunningInstancesBox").empty().append(`<canvas id="activeContainers" style="height: 300px"></canvas>`);
+        $("#dashboardMemoryHistoryBox").empty().append(`<canvas id="memoryUsage" style="height: 300px"></canvas>`);
 
         var mCtx = $('#memoryUsage');
         var acCtx = $('#activeContainers');
         var tsuCtx = $('#totalStorageUsage');
 
-        let sum = data.activeContainers.data.reduce(getSum);
+        let sum = data.analyticsData.activeContainers.data.reduce(getSum);
 
         let scaleStep = sum > 30 ? 10 : 1;
 
@@ -632,19 +855,15 @@ function loadServerOview()
                 datasets: [
                     {
                         label: "Fleet Active Containers",
-                        borderColor: '#00aced',
-                        pointBackgroundColor: "#ed4100",
-                        pointBorderColor: "#ed4100",
-                        data: data.activeContainers.data,
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                        pointBorderColor: "rgba(46, 204, 113, 1)",
+                        data: data.analyticsData.activeContainers.data,
                     }
                 ],
-                labels: data.activeContainers.labels
+                labels: data.analyticsData.activeContainers.labels
             },
             options: {
-                title: {
-                    display: true,
-                    text: 'Fleet Active Containers'
-                },
                 legend: {
                     display: false
                 },
@@ -665,19 +884,15 @@ function loadServerOview()
                 datasets: [
                     {
                         label: "Memory Usage",
-                        borderColor: '#00aced',
-                        pointBackgroundColor: "#ed4100",
-                        pointBorderColor: "#ed4100",
-                        data: data.memory.data,
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                        pointBorderColor: "rgba(46, 204, 113, 1)",
+                        data: data.analyticsData.memory.data,
                     }
                 ],
-                labels: data.memory.labels
+                labels: data.analyticsData.memory.labels
             },
             options: {
-                title: {
-                    display: true,
-                    text: 'Fleet Memory Usage'
-                },
                 legend: {
                     display: false
                 },
@@ -692,13 +907,13 @@ function loadServerOview()
                 datasets: [
                     {
                         label: "Storage Usage",
-                        borderColor: '#00aced',
-                        pointBackgroundColor: "#ed4100",
-                        pointBorderColor: "#ed4100",
-                        data: data.storageUsage.data,
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                        pointBorderColor: "rgba(46, 204, 113, 1)",
+                        data: data.analyticsData.storageUsage.data,
                     }
                 ],
-                labels: data.storageUsage.labels
+                labels: data.analyticsData.storageUsage.labels
             },
             options: {
                 title: {
@@ -711,143 +926,7 @@ function loadServerOview()
                 scales: scalesBytesCallbacks,
                 tooltips: toolTipsBytesCallbacks
           }
-      });
-
-    });
-
-    ajaxRequest(globalUrls.hosts.getOverview, null, function(data){
-        let x = $.parseJSON(data);
-        if(x.hasOwnProperty("error")){
-            makeToastr(data);
-            return false;
-        }
-        let html = "";
-        $("#serverOverviewDetails").empty();
-
-        $.each(x, function(host, data){
-
-
-            let p = emptyServerBox();
-            let indent = data.alias == "" ? host : data.alias + ` (${host})`;
-
-            $(p).find(".host").text(indent).data("id", data.hostId)
-            $(p).attr("id", data.hostId);
-
-            if(data.online == false){
-                $(p).find(".host").text(indent + " (Offline)");
-                $(p).find(".bg-info").removeClass("bg-info").addClass("bg-danger");
-                $("#serverOverviewDetails").append(p);
-                $(p).find(".brand-card-body").remove();
-                return;
-            }
-
-            let memoryUsed = unknownServerDetails.memory.used;
-            let memoryTotal = unknownServerDetails.memory.total;
-
-            if(data.hasOwnProperty("memory")){
-                memoryUsed = formatBytes(data.memory.used);
-                memoryTotal = formatBytes(data.memory.total);
-            }
-
-            if(!data.hasOwnProperty("cpu")){
-                data = unknownServerDetails;
-            }
-
-            if(data.extensions.supportsProjects){
-                let projects = "";
-                $.each(data.projects, function(o, project){
-                    let selected = project == data.currentProject ? "selected" : "";
-                        projects += `<option data-host='${data.hostId}'
-                            value='${project}' ${selected}>
-                            ${project}</option>`;
-                });
-                $(p).find(".projects").append(projects)
-            }else{
-                $(p).find(".projectGroup").remove();
-            }
-
-
-            let cpuIndentKey = data.extensions.resCpuSocket ? "name" : "vendor";
-
-
-            $(p).find(".memory").text(`${memoryUsed} / ${memoryTotal}`);
-            $(p).find(".cpuDetails").text(`${data.cpu.sockets[0][cpuIndentKey]} - ${data.cpu.total} Cores`);
-
-            if(data.extensions.resGpu && data.hasOwnProperty("gpu") && data.gpu.cards.length > 0){
-                let g = "";
-                $.each(data.gpu.cards, function(i, gpu){
-                    g += `${gpu.product} <br/>`
-                });
-
-                $(p).find(".gpuDetails").html(g);
-            }else{
-                $(p).find(".gpuGroup").remove();
-            }
-
-            $("#serverOverviewDetails").append(p);
         });
-        $(".boxSlide").hide();
-        $("#overviewBox").show();
-    });
-}
-
-function createContainerTree(){
-    ajaxRequest(globalUrls.hosts.containers.getAll, {}, (data)=>{
-        data = $.parseJSON(data);
-        let treeData = [];
-        let active = $.isPlainObject(currentContainerDetails) && currentContainerDetails.hasOwnProperty("container") ? "" : "active";
-        let hosts = `
-        <li class="nav-item container-overview ${active}">
-            <a class="nav-link" href="#">
-                <i class="fas fa-tachometer-alt"></i> Overview
-            </a>
-        </li>`;
-        $.each(data, function(i, host){
-            let disabled = "";
-            let listIsOpen = Object.keys(host.containers).length > 10 ? "" : "open";
-
-            if(host.online == false){
-                disabled = "disabled text-warning";
-                i += " (Offline)";
-            }
-
-            hosts += `<li data-hostId="${host.hostId}" class="nav-item nav-dropdown ${listIsOpen}">
-                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
-                    <i class="fas fa-server"></i> ${i}
-                </a>
-                <ul class="nav-dropdown-items">`;
-
-            let containers = [];
-            $.each(host.containers, function(containerName, details){
-                let active = "";
-                if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
-                    if(i == currentContainerDetails.alias && containerName == currentContainerDetails.container){
-                        active = "active"
-                    }
-                }
-
-                let typeFa = "box";
-
-                if(details.info.hasOwnProperty("type") && details.info.type == "virtual-machine"){
-                    typeFa = "vr-cardboard";
-                }
-
-                hosts += `<li class="nav-item view-container ${active}"
-                    data-host-id="${host.hostId}"
-                    data-container="${containerName}"
-                    data-alias="${i}">
-                  <a class="nav-link" href="#">
-                    <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
-                    <i class="nav-icon fas fa-${typeFa}"></i>
-                    ${containerName}
-                  </a>
-                </li>`;
-            });
-
-            hosts += `</ul>
-                </li>`
-        });
-        $("#sidebar-ul").empty().append(hosts);
     });
 }
 
@@ -885,13 +964,13 @@ $(document).on("change", ".changeHostProject", function(){
     let selected = $(this).find(":selected");
 
     let x = {
-        hostId: selected.data("host"),
+        hostId: selected.parents("tr").data("hostId"),
         project: selected.val()
     };
 
     ajaxRequest(globalUrls.user.setHostProject, x, function(data){
         makeToastr(data);
-        createContainerTree();
+        addHostContainerList(x.hostId, selected.data("alias"));
     })
 
 });
@@ -899,19 +978,23 @@ $(document).on("change", ".changeHostProject", function(){
 $(document).on("click", ".overview, .container-overview", function(){
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     currentContainerDetails = null;
-    setBreadcrumb("Dashboard", "overview active");
-    createContainerTree();
-    loadServerOview();
-    changeActiveNav(".overview")
-    $(".boxSlide").hide();
-    $("#overviewBox").show();
+
+    loadDashboard();
 });
 
 $(document).on("click", ".viewProfiles, .profile-overview", function(){
     setBreadcrumb("Profiles", "viewProfiles active");
-    loadProfileView();
+
+
     $(".sidebar-fixed").addClass("sidebar-lg-show");
-    changeActiveNav(".viewProfiles")
+    changeActiveNav(".viewProfiles");
+
+    $(".boxSlide, #profileDetails").hide();
+    $("#profileOverview, #profileBox").show();
+
+    if($(this).hasClass("callFunc")){
+        loadProfileView();
+    }
 });
 
 $(document).on("click", ".viewClusters, .cluster-overview", function(){

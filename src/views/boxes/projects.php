@@ -145,54 +145,67 @@ var currentProject = {
     project: null
 };
 
+function makeProjectHostSidebarHtml(hosthtml, host){
+    let disabled = "";
+    if(host.online == false){
+        disabled = "disabled text-warning text-strikethrough";
+    }
+
+    hosthtml += `<li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+            <i class="fas fa-server"></i> ${host.alias}
+        </a>
+        <ul class="nav-dropdown-items">`;
+
+    if(host.projects.length > 0){
+        $.each(host.projects, function(_, project){
+            hosthtml += `<li class="nav-item view-project"
+                data-host-id="${host.hostId}"
+                data-project="${project}"
+                data-alias="${host.alias}">
+              <a class="nav-link" href="#">
+                <i class="nav-icon fa fa-project-diagram"></i>
+                ${project}
+              </a>
+            </li>`;
+        });
+    }else{
+        hosthtml += `<li class="nav-item text-center text-warning">No Projects</li>`;
+    }
+
+    hosthtml += "</ul></li>";
+    return hosthtml;
+}
+
 function loadProjectView()
 {
+    $(".boxSlide, #projectDetails").hide();
+    $("#projectsOverview, #projectsBox").show();
     ajaxRequest(globalUrls.projects.getAllFromHosts, {}, function(data){
-        var treeData = [{
-            text: "Overview",
-            icon: "fa fa-home",
-            type: "projectsOverview",
-            state: {
-                selected: true
-            }
-        }];
+
+        data = $.parseJSON(data);
 
         let hosts = `
-        <li class="nav-item active projects-overview">
-            <a class="nav-link" href="#">
+        <li class="nav-item projects-overview">
+            <a class="nav-link text-info" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;
 
-        $(".boxSlide, #projectDetails").hide();
-        $("#projectsOverview, #projectsBox").show();
-        data = $.parseJSON(data);
-        $.each(data, function(hostName, data){
-            let disabled = "";
-            if(data.online == false){
-                disabled = "disabled text-warning";
-                hostName += " (Offline)";
-            }
-
-            hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
-                    <i class="fas fa-server"></i> ${hostName}
-                </a>
-                <ul class="nav-dropdown-items">`;
-
-            $.each(data.projects, function(i, projectName){
-                hosts += `<li class="nav-item view-project"
-                    data-host-id="${data.hostId}"
-                    data-project="${projectName}"
-                    data-alias="${hostName}">
-                  <a class="nav-link" href="#">
-                    <i class="nav-icon fa fa-project-diagram"></i>
-                    ${projectName}
-                  </a>
-                </li>`;
-            });
-            hosts += "</ul></li>";
+        $.each(data.clusters, (clusterIndex, cluster)=>{
+            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            $.each(cluster.members, (_, host)=>{
+                hosts = makeProjectHostSidebarHtml(hosts, host)
+            })
         });
+
+        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+
+        $.each(data.standalone.members, (_, host)=>{
+            hosts = makeProjectHostSidebarHtml(hosts, host)
+        });
+
+
         $("#sidebar-ul").empty().append(hosts);
     });
 }

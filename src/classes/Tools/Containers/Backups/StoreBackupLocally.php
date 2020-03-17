@@ -30,6 +30,7 @@ class StoreBackupLocally
         DeleteRemoteBackup $deleteRemoteBackup,
         HasExtension $hasExtension
     ) {
+        $this->hasExtension = $hasExtension;
         $this->getSetting = $getSetting;
         $this->lxdClient = $lxdClient;
         $this->filesystem = $filesystem;

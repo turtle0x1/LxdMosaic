@@ -17,8 +17,16 @@ $storagePools = $getStorageDetails->getAll();
 
 $totalStorageUsage = 0;
 
-foreach($storagePools as $host => $details){
-    foreach($details["pools"] as $pool){
+foreach ($storagePools["clusters"] as $cluster) {
+    foreach ($cluster["members"] as $host) {
+        foreach ($host["pools"] as $pool) {
+            $totalStorageUsage += $pool["resources"]["space"]["used"];
+        }
+    }
+}
+
+foreach ($storagePools["standalone"]["members"] as $host) {
+    foreach ($host["pools"] as $pool) {
         $totalStorageUsage += $pool["resources"]["space"]["used"];
     }
 }
@@ -27,6 +35,9 @@ $resourcesByHost = $getResources->getAllHostRecourses();
 $totalMemory = 0;
 
 foreach ($resourcesByHost as $host) {
+    if (isset($host["online"]) && $host["online"] == false) {
+        continue;
+    }
     $totalMemory += $host["memory"]["used"];
 }
 

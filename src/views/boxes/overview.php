@@ -1,79 +1,72 @@
 <div id="overviewBox" class="boxSlide">
-    <div class="row" id="serverOverviewGraphs">
-      <!-- /.col-->
-          <div class="col-lg-4">
-              <div class="card">
-                  <div class="card-body bg-dark">
-                      <div class="alert alert-warning text-center notEnoughData">
-                          <b> <u> Memory Ussage Chart </u> </b><br/>
-                          Not enough data check again in 10 minutes
-                      </div>
-                      <canvas id="memoryUsage" height="200"></canvas>
-                  </div>
-              </div>
-          </div>
-          <div class="col-lg-4">
-              <div class="card">
-                  <div class="card-body bg-dark">
-                      <div class="alert alert-warning text-center notEnoughData">
-                          <b> <u> Active Containers Chart </u> </b><br/>
-                          Not enough data check again in 10 minutes
-                      </div>
-                      <canvas id="activeContainers" height="200"></canvas>
-                  </div>
-              </div>
-          </div>
-          <div class="col-lg-4">
-              <div class="card">
-                  <div class="card-body bg-dark">
-                      <div class="alert alert-warning text-center notEnoughData">
-                          <b> <u> Total Storage Used </u> </b><br/>
-                          Not enough data check again in 10 minutes
-                      </div>
-                      <canvas id="totalStorageUsage" height="200"></canvas>
-                  </div>
-              </div>
-          </div>
-      <!-- /.col-->
-    </div>
     <div class="row">
-      <!-- /.col-->
-      <div class="col-sm-12 col-lg-12" id="serverOverviewDetails">
-      </div>
+          <div class="col-lg-12 card-columns">
+              <div class="card bg-dark">
+                  <div class="card-header">
+                      <h4>Hosts</h4>
+                  </div>
+                  <div class="card-body table-responsive text-white">
+                      <table class="table table-sm table-dark table-bordered" id="dashboardHostTable">
+                          <thead>
+                              <tr>
+                                  <th> Name </th>
+                                  <th> Project </th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+              <div class="card bg-dark">
+                  <div class="card-header">
+                      <h4>Current Memory Usage</h4>
+                  </div>
+                  <div class="card-body" id="currentMemoryUsageCardBody">
+                  </div>
+              </div>
+              <div class="card bg-dark">
+                  <div class="card-header">
+                      <h4> Recent Memory Usage </h4>
+                  </div>
+                  <div class="card-body" >
+                      <div class="alert alert-warning text-center notEnoughData">
+                          Not enough data check again in 10 minutes
+                      </div>
+                      <div id="dashboardMemoryHistoryBox">
+                      </div>
+                  </div>
+              </div>
+              <div class="card bg-dark">
+                  <div class="card-header">
+                      <h4> Recent Running Instances </h4>
+                  </div>
+                  <div class="card-body" >
+                      <div class="alert alert-warning text-center notEnoughData">
+                          Not enough data check again in 10 minutes
+                      </div>
+                      <div id="dashboardRunningInstancesBox">
+                      </div>
+                  </div>
+              </div>
+              <div class="card bg-dark">
+                  <div class="card-header">
+                      <h4>Recent Storage Usage</h4>
+                  </div>
+                  <div class="card-body" >
+                      <div class="alert alert-warning text-center notEnoughData">
+                          Not enough data check again in 10 minutes
+                      </div>
+                      <div id="dashboardStorageHistoryBox">
+                      </div>
+                  </div>
+              </div>
+          </div>
       <!-- /.col-->
     </div>
 </div>
 
 <script>
-
-var emptyServerBox = function(){
-    return $(`
-    <div class="brand-card" id="">
-      <div class="brand-card-header bg-info">
-            <h4 class="host viewHost"></h4>
-      </div>
-      <div class="brand-card-body bg-dark text-white">
-        <div>
-          <div class="text-value text-white">CPU <i class="fas fa-microchip"></i></div>
-          <div class="text-uppercase text-muted cpuDetails">CPU Details</div>
-        </div>
-        <div>
-          <div class="text-value text-white">Memory <i class="fas fa-memory"></i></div>
-          <div class="text-uppercase text-muted memory"></div>
-        </div>
-        <div class='gpuGroup d-md-down-none'>
-          <div class="text-value text-white">GPU's<i class="fab fa-megaport"></i></div>
-          <div class="text-uppercase text-muted gpuDetails text-white"></div>
-        </div>
-        <div class='projectGroup'>
-            <div class="text-value text-white">Project <i class="fas fa-project-diagram"></i></div>
-            <div class="form-group projectFormGroup">
-                <select class="form-control projects changeHostProject"></select>
-            </div>
-        </div>
-      </div>
-    </div>`);
-}
 
 $(document).on("click", "#createVm", function(){
     $("#modal-vms-create").modal("show");

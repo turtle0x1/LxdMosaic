@@ -1,40 +1,25 @@
 <div id="networkBox" class="boxSlide">
-    <div id="networkOverview" class="row">
-        <div class="col-md-9">
-              <div class="card bg-info">
-                <div class="card-body">
-                  <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
-                      Networks
-                    </a>
-                  </h5>
+    <div id="networkOverview">
+        <div class="row border-bottom mb-2">
+            <div class="col-md-12 text-center">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                    <h4> Networks </h4>
+                    <div class="btn-toolbar float-right">
+                      <div class="btn-group mr-2">
+                          <button data-toggle="tooltip" data-placement="bottom" title="Create network" class="btn btn-sm btn-primary" id="createNetwork">
+                              <i class="fas fa-plus"></i>
+                          </button>
+                      </div>
+                    </div>
                 </div>
-              </div>
-        </div>
-        <div class="col-md-3">
-              <div class="card">
-                <div class="card-header bg-info" role="tab" >
-                  <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Actions
-                    </a>
-                  </h5>
-                </div>
-                <div id="collapseOne" class="collapse in show" role="tabpanel" >
-                  <div class="card-block bg-dark">
-                      <button class="btn btn-block btn-primary" id="createNetwork">
-                          Create
-                      </button>
-                  </div>
-                </div>
-              </div>
+            </div>
         </div>
     </div>
     <div id="networkInfo">
         <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
             <div class="col-md-12">
                 <h4>
-                    <span class="text-white" id="networkName"></span>
+                    <span  id="networkName"></span>
                     <button class="btn btn-danger float-right" id="deleteNetwork">Delete Network</button>
                 </h4>
             </div>
@@ -83,6 +68,36 @@
 
 var currentNetwork = {};
 
+function makeNetworkHostSidebarHtml(hosthtml, host){
+    let disabled = "";
+    if(host.online == false){
+        disabled = "disabled text-warning text-strikethrough";
+    }
+
+    hosthtml += `<li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+            <i class="fas fa-server"></i> ${host.alias}
+        </a>
+        <ul class="nav-dropdown-items">`;
+
+
+
+    $.each(host.networks, function(_, network){
+        hosthtml += `<li class="nav-item view-network"
+            data-host-id="${host.hostId}"
+            data-network="${network}"
+            data-alias="${host.alias}">
+            <a class="nav-link" href="#">
+            <i class="fas fa-ethernet"></i>
+            ${network}
+            </a>
+        </li>`;
+
+    });
+    hosthtml += "</ul></li>";
+    return hosthtml;
+}
+
 function loadNetworksView()
 {
     $(".boxSlide, #networkInfo").hide();
@@ -92,38 +107,28 @@ function loadNetworksView()
     ajaxRequest(globalUrls.networks.getAll, {}, (data)=>{
         data = $.parseJSON(data);
 
+
         let hosts = `
-        <li class="nav-item active network-overview">
-            <a class="nav-link" href="#">
+        <li class="nav-item network-overview">
+            <a class="nav-link text-info" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;
 
-        $.each(data, function(hostName, data){
-            let disabled = "";
-            if(data.online == false){
-                disabled = "disabled text-warning";
-                hostName += " (Offline)";
-            }
-            hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
-                    <i class="fas fa-server"></i> ${hostName}
-                </a>
-                <ul class="nav-dropdown-items">`;
 
-            $.each(data.networks, function(i, network){
-                hosts += `<li class="nav-item view-network"
-                    data-host-id="${data.hostId}"
-                    data-network="${network}"
-                    data-alias="${hostName}">
-                  <a class="nav-link" href="#">
-                    <i class="fas fa-ethernet"></i>
-                    ${network}
-                  </a>
-                </li>`;
-            });
-                hosts += "</ul></li>";
+        $.each(data.clusters, (clusterIndex, cluster)=>{
+            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            $.each(cluster.members, (_, host)=>{
+                hosts = makeNetworkHostSidebarHtml(hosts, host)
+            })
         });
+
+        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+
+        $.each(data.standalone.members, (_, host)=>{
+            hosts = makeNetworkHostSidebarHtml(hosts, host)
+        });
+
         $("#sidebar-ul").empty().append(hosts);
     });
 }

@@ -1,15 +1,21 @@
 <div id="storageBox" class="boxSlide">
-    <div id="storageOverview" class="row">
+    <div id="storageOverview">
+        <div class="row border-bottom mb-2">
+            <div class="col-md-12 text-center">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                    <h4> Storage </h4>
+                    <div class="btn-toolbar float-right">
+                      <div class="btn-group mr-2">
+                          <button data-toggle="tooltip" data-placement="bottom" title="Create storage pool" class="btn btn-sm btn-primary" id="createPool">
+                              <i class="fas fa-plus"></i>
+                          </button>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
         <div class="col-md-9">
-              <div class="card bg-info">
-                  <div class="card-body">
-                      <h5>
-                        <a class="text-white">
-                          Storage
-                        </a>
-                      </h5>
-                  </div>
-              </div>
               <div class="card">
                 <div class="card-header bg-info" role="tab" >
                   <h5>
@@ -35,23 +41,6 @@
                 </div>
               </div>
         </div>
-        <div class="col-md-3">
-              <div class="card">
-                <div class="card-header bg-info" role="tab" >
-                  <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Actions
-                    </a>
-                  </h5>
-                </div>
-                <div id="collapseOne" class="collapse in show" role="tabpanel" >
-                  <div class="card-block bg-dark">
-                      <button class="btn btn-block btn-primary" id="createPool">
-                          Create
-                      </button>
-                  </div>
-                </div>
-              </div>
         </div>
     </div>
     <div id="storageDetails">
@@ -124,6 +113,44 @@
 
 var currentPool = {};
 
+function makeStorageHostSidebarHtml(hosthtml, host, tableListHtml){
+    let disabled = "";
+    if(host.online == false){
+        disabled = "disabled text-warning text-strikethrough";
+    }
+
+    hosthtml += `<li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+            <i class="fas fa-server"></i> ${host.alias}
+        </a>
+        <ul class="nav-dropdown-items">`;
+
+     tableListHtml += `<tr><td class='bg-info text-white text-center' colspan='3'><h5>${host.alias}</h5></td></tr>`;
+
+    $.each(host.pools, function(i, pool){
+        hosthtml += `<li class="nav-item view-storagePool"
+            data-host-id="${host.hostId}"
+            data-pool-name="${pool.name}"
+            >
+          <a class="nav-link" href="#">
+            <i class="nav-icon fa fa-hdd"></i>
+            ${pool.name}
+          </a>
+        </li>`;
+        tableListHtml += `<tr>
+            <td>${pool.name}</td>
+            <td>${formatBytes(pool.resources.space.used)}</td>
+            <td>${formatBytes(pool.resources.space.total)}</td>
+        </tr>`;
+    });
+    hosthtml += "</ul></li>";
+    return {
+        hosthtml: hosthtml,
+        tableListHtml: tableListHtml
+    };
+}
+
+
 function loadStorageView()
 {
     $(".boxSlide, #storageDetails").hide();
@@ -134,46 +161,31 @@ function loadStorageView()
         data = $.parseJSON(data);
 
         let hosts = `
-        <li class="nav-item active storage-overview">
-            <a class="nav-link" href="#">
+        <li class="nav-item storage-overview">
+            <a class="nav-link text-info" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;
 
         let tableList = "";
 
-        $.each(data, function(hostName, data){
-            let disabled = "";
-            if(data.online == false){
-                disabled = "disabled text-warning";
-                hostName += " (Offline)";
-            }
-            hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
-                    <i class="fas fa-server"></i> ${hostName}
-                </a>
-                <ul class="nav-dropdown-items">`;
-
-            tableList += `<tr><td class='bg-info text-white text-center' colspan='3'><h5>${hostName}</h5></td></tr>`;
-
-            $.each(data.pools, function(i, pool){
-                hosts += `<li class="nav-item view-storagePool"
-                    data-host-id="${data.hostId}"
-                    data-pool-name="${pool.name}"
-                    data-alias="${pool.name}">
-                  <a class="nav-link" href="#">
-                    <i class="nav-icon fa fa-hdd"></i>
-                    ${pool.name}
-                  </a>
-                </li>`;
-                tableList += `<tr>
-                    <td>${pool.name}</td>
-                    <td>${formatBytes(pool.resources.space.used)}</td>
-                    <td>${formatBytes(pool.resources.space.total)}</td>
-                    </tr>`;
-            });
-                hosts += "</ul></li>";
+        $.each(data.clusters, (clusterIndex, cluster)=>{
+            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            $.each(cluster.members, (_, host)=>{
+                let html = makeStorageHostSidebarHtml(hosts, host, tableList)
+                hosts = html.hosthtml;
+                tableList = html.tableListHtml;
+            })
         });
+
+        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+
+        $.each(data.standalone.members, (_, host)=>{
+            let html = makeStorageHostSidebarHtml(hosts, host, tableList)
+            hosts = html.hosthtml;
+            tableList = html.tableListHtml;
+        });
+
         $("#sidebar-ul").empty().append(hosts);
         $("#poolListTable > tbody").empty().append(tableList);
     });

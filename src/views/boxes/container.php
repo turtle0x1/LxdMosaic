@@ -1,54 +1,78 @@
 <div id="containerBox" class="boxSlide">
+    <div class="row border-bottom mb-2">
     <div class="col-md-12 text-center">
-        <h4> <u>
-            <span id="container-currentState"></span>
-            <span id="container-containerNameDisplay"></span>
-            <span id="container-imageDescription"></span>
-        </u></h4>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+              <select class="form-control" style="max-width: 150px;" id="container-changeState">
+                  <option value="" selected="selected"> Change State </option>
+                  <option value="startContainer"> Start </option>
+                  <option value="stopContainer"> Stop </option>
+                  <option value="restartContainer"> Restart </option>
+                  <option value="freezeContainer"> Freeze </option>
+                  <option value="unfreezeContainer"> Unfreeze </option>
+              </select>
+
+            <h4 class="pt-1"> <u>
+                <span id="container-currentState"></span>
+                <span id="container-containerNameDisplay"></span>
+                <span id="container-imageDescription"></span>
+            </u></h4>
+            <div class="btn-toolbar float-right">
+              <div class="btn-group mr-2">
+
+                  <button data-toggle="tooltip" data-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
+                      <i class="fas fa-cog"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Snapshot" class="btn btn-sm btn-success takeSnapshot">
+                      <i class="fas fa-camera"></i>
+                  </button>
+                  <hr/>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Copy Instance" class="btn btn-sm btn-info copyContainer">
+                      <i class="fas fa-copy"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Migrate Instance" class="btn btn-sm btn-primary migrateContainer">
+                      <i class="fas fa-people-carry"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Rename Instance" class="btn btn-sm btn-warning renameContainer">
+                      <i class="fas fa-edit"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Delete" class="btn btn-sm btn-danger deleteContainer">
+                      <i class="fas fa-trash"></i>
+                  </button>
+              </div>
+            </div>
+        </div>
     </div>
-    <div class="row" id="containerViewBtns">
-        <div class="col-md-3 text-center">
-            <div class="card bg-primary card-hover-primary text-center toggleCard" id="goToDetails">
-                <div class="card-body">
-                    <i class="fas fa-info pr-2"></i>Details
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 text-center">
-            <div class="card card-hover-primary text-center toggleCard" id="goToConsole">
-                <div class="card-body">
-                    <i class="fas fa-terminal pr-2"></i>Console
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 text-center">
-            <div class="card card-hover-primary text-center toggleCard" id="goToBackups">
-                <div class="card-body">
-                    <i class="fas fa-save pr-2"></i>Backups
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 text-center">
-            <div class="card card-hover-primary text-center toggleCard" id="goToFiles">
-                <div class="card-body">
-                    <i class="fas fa-save pr-2"></i>Files
-                </div>
+    </div>
+    <div class="row border-bottom mb-2 pb-2" id="containerViewBtns">
+        <div class="col-md-12 text-center justify-content">
+            <button type="button" class="btn text-white btn-outline-primary active" id="goToDetails">
+                <i class="fas fa-info pr-2"></i>Details
+            </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToConsole">
+                <i class="fas fa-terminal pr-2"></i>Console
+            </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToBackups">
+                <i class="fas fa-save pr-2"></i>Backups
+            </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToFiles">
+                <i class="fas fa-save pr-2"></i>Files
+            </button>
+            <div class="btn-toolbar  mb-2 mb-md-0">
+
             </div>
         </div>
     </div>
 <div id="containerDetails">
 <div class="row">
-    <div class="col-md-6">
-        <div class="card text-white bg-deepblue">
+    <div class="col-md-5">
+        <div class="card text-white bg-dark">
           <div class="card-body">
               <h5> <u> Container Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
               Host: <span id="container-hostNameDisplay"></span>
               <br/>
               <a
                   href="https://github.com/lxc/pylxd/issues/242#issuecomment-323272318"
-                  target="_blank">
-                  CPU Time:
-              </a><span id="container-cpuTime"></span>
+                  target="_blank">CPU Time:</a> <span id="container-cpuTime"></span>
               <br/>
               Created: <span id="container-createdAt"></span>
               <br/>
@@ -57,125 +81,60 @@
               Deployment: <span id="container-deployment"></span>
           </div>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card text-white bg-primary">
+        <div class="card text-white bg-dark">
           <div class="card-body">
             <h5> <u> Network Information <i class="fas float-right fa-network-wired"></i> </u> </h5>
                 <div class="col-md-12" id="networkDetails">
                 </div>
 
           </div>
-        </div>
-    </div>
-
 </div>
-<br/>
-<div class="row">
-<!-- <h4> Container: <`span id="containerName"></span> </h4> -->
-<div class="col-md-3">
-    <div class="card card-accent-danger">
-      <div class="card-header bg-info" role="tab" id="container-actionsHeading">
-        <h5>
-          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#actionsCollapse" aria-expanded="true" aria-controls="container-actionsCollapse">
-            Actions
-            <i class="fas fa-edit float-right"></i>
-          </a>
-        </h5>
-      </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-dark">
+            <div class="card-body" id="memoryDataCard">
 
-      <div id="actionsCollapse" class="collapsed show" aria-expanded="true" role="tabpanel" aria-labelledby="container-actionsHeading">
-        <div class="card-block bg-dark">
-            <div class="form-group">
-                <label><u> Change State </u></label>
-                <select class="form-control" id="container-changeState">
-                    <option value="" selected="selected">  </option>
-                    <option value="startContainer"> Start </option>
-                    <option value="stopContainer"> Stop </option>
-                    <option value="restartContainer"> Restart </option>
-                    <option value="freezeContainer"> Freeze </option>
-                    <option value="unfreezeContainer"> Unfreeze </option>
-                </select>
             </div>
-            <hr/>
-            <button class="btn btn-block btn-primary editContainerSettings">
-                Settings
-            </button>
-            <button class="btn btn-block btn-success takeSnapshot">
-                Snapshot
-            </button>
-            <hr/>
-            <button class="btn btn-block btn-info copyContainer">
-                Copy
-            </button>
-            <button class="btn btn-block btn-primary migrateContainer">
-                Migrate
-            </button>
-            <button class="btn btn-block btn-warning renameContainer">
-                Rename
-            </button>
-            <button class="btn btn-block btn-danger deleteContainer">
-                Delete
-            </button>
         </div>
-      </div>
+
     </div>
-</div>
-<div class="col-md-3">
-    <div class="card border-primary">
-      <div class="card-header bg-info" role="tab">
-        <h5 class="text-white">
-            Profiles
-             <i class="fas fa-users float-right"></i>
-        </h5>
-      </div>
-      <div class="collapse show" role="tabpanel" >
-        <div class="card-block bg-dark table-responsive">
-            <table class="table table-dark table-bordered"id="profileData">
-                  <thead class="thead-inverse">
-                      <tr>
-                          <th> Name </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-            </table>
+    <div class="col-md-3">
+        <div class="card bg-dark">
+
+            <div class="card-body table-responsive">
+                <h5 class="text-white">
+                    <u> Profiles </u>
+                    <i class="fas fa-users float-right"></i>
+                </h5>
+                <table class="table table-dark table-bordered"id="profileData">
+                      <thead class="thead-inverse">
+                          <tr>
+                              <th> Name </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                </table>
+            </div>
         </div>
-      </div>
-    </div>
-    <br/>
-    <div class="card border-primary">
-      <div class="card-header bg-info" role="tab">
-        <h5 class="text-white">
-            Snapshots
-            <i class="fas fa-images float-right"></i>
-        </h5>
-      </div>
-      <div class="collapse show" role="tabpanel" >
-        <div class="card-block bg-dark table-responsive">
-            <table class="table table-dark table-bordered"id="snapshotData">
-                  <thead class="thead-inverse">
-                      <tr>
-                          <th> Name </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-            </table>
-        </div>
-      </div>
-    </div>
-</div>
-<div class="col-md-6">
-    <div class="card bg-dark">
-        <div class="card-header">
-            Memory Details
-        </div>
-        <div class="card-body">
-            <canvas id="memoryData" style="width: 100%;"></canvas>
+        <div class="card bg-dark">
+            <div class="card-body table-responsive">
+                <h5 class="text-white">
+                    <u>Snapshots</u>
+                    <i class="fas fa-images float-right"></i>
+                </h5>
+                <table class="table table-dark table-bordered"id="snapshotData">
+                      <thead class="thead-inverse">
+                          <tr>
+                              <th> Name </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                </table>
+          </div>
         </div>
     </div>
-</div>
 </div>
 </div>
 <div id="containerConsole">
@@ -273,10 +232,11 @@ function loadContainerViewAfter(data = null, milSeconds = 2000)
     }, 2000);
 }
 
-function loadContainerTreeAfter(milSeconds = 2000)
+function loadContainerTreeAfter(milSeconds = 2000, hostId = null)
 {
     setTimeout(function(){
-        createContainerTree();
+        let p = $.isNumeric(hostId) ? hostId : currentContainerDetails.hostId;
+        addHostContainerList(p);
     }, milSeconds);
 }
 
@@ -469,7 +429,7 @@ function deleteContainerConfirm(hostId, hostAlias, container)
                     ajaxRequest(globalUrls.containers.delete, x, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
-                            loadContainerTreeAfter();
+                            loadContainerTreeAfter(1000, currentContainerDetails.hostId);
                         }
                         currentContainerDetails = null;
                         $("#overviewBox").show();
@@ -481,7 +441,7 @@ function deleteContainerConfirm(hostId, hostAlias, container)
     });
 }
 
-function renameContainerConfirm(hostId, container, reloadView)
+function renameContainerConfirm(hostId, container, reloadView, hostAlias)
 {
     $.confirm({
         title: 'Rename Container!',
@@ -522,7 +482,7 @@ function renameContainerConfirm(hostId, container, reloadView)
                             return false;
                         }
                         modal.close();
-                        createContainerTree();
+                        addHostContainerList(hostId, hostAlias);
                         if(reloadView){
                             currentContainerDetails.container = newName;
                             loadContainerView(currentContainerDetails);
@@ -561,7 +521,7 @@ function snapshotContainerConfirm(hostId, container)
                         return false;
                     }
 
-                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Renaming..'); // let the user know
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Taking snapshot..'); // let the user know
                     modal.buttons.rename.disable();
                     modal.buttons.cancel.disable();
 
@@ -731,8 +691,6 @@ function loadContainerView(data)
             return false;
         }
 
-        $("#sidebar-ul").find(".text-info").removeClass("text-info");
-
         addBreadcrumbs([data.alias, data.container ], ["viewHost lookupId", "active"]);
 
         let disableActions = x.state.status_code !== 102;
@@ -744,9 +702,9 @@ function loadContainerView(data)
         $("#container-changeState").val("");
 
         if(x.backupsSupported){
-            $("#goToBackups").removeClass("bg-dark disabled");
+            $("#goToBackups").removeClass("bg-dark disabled").css("cursor", "pointer");
         }else{
-            $("#goToBackups").addClass("bg-dark disabled");
+            $("#goToBackups").addClass("bg-dark disabled").css("cursor", "not-allowed");
         }
 
         //NOTE Read more here https://github.com/lxc/pylxd/issues/242
@@ -764,7 +722,7 @@ function loadContainerView(data)
         $("#container-containerNameDisplay").text(data.container);
         $("#container-imageDescription").html(` - ${os} (${version})`);
         $("#container-cpuTime").text(containerCpuTime);
-        $("#container-createdAt").text(moment(x.details.create_at).format("MMM DD YYYY h:mm A"));
+        $("#container-createdAt").text(moment(x.details.created_at).format("MMM DD YYYY h:mm A"));
 
         if(x.details.hasOwnProperty("last_used_at")){
             let last_used_at = moment(x.details.last_used_at);
@@ -841,25 +799,39 @@ function loadContainerView(data)
             memoryData.push(item);
         });
 
-        new Chart($("#memoryData"), {
-            type: "bar",
-            data: {
-                labels: memoryLabels,
-                datasets: [{
-                  label: 'Memory',
-                  data: memoryData,
-                  backgroundColor: memoryColors,
-                  borderColor: memoryColors,
-                  borderWidth: 1
-              }]
-            },
-            options: {
-              cutoutPercentage: 40,
-              responsive: false,
-              scales: scalesBytesCallbacks,
-              tooltips: toolTipsBytesCallbacks
-            }
-        });
+        if(x.state.status_code == 103){
+            $("#memoryDataCard").empty().append(`
+                <h5 class="text-white">
+                    <u> Memory Usage </u>
+                    <i class="fas fa-memory float-right"></i>
+                </h5>
+                <div style="width: 100%;">
+                <canvas id="memoryData"></canvas></div>`);
+
+            new Chart($("#memoryData"), {
+                type: "bar",
+                data: {
+                    labels: memoryLabels,
+                    datasets: [{
+                      label: 'Memory',
+                      data: memoryData,
+                      backgroundColor: memoryColors,
+                      borderColor: memoryColors,
+                      borderWidth: 1
+                  }]
+                },
+                options: {
+                  cutoutPercentage: 40,
+                  responsive: false,
+                  scales: scalesBytesCallbacks,
+                  tooltips: toolTipsBytesCallbacks
+                }
+            });
+        }else{
+            $("#memoryDataCard").empty().append(`<div class="alert alert-info text-center">Instance Not Running</div>`);
+        }
+
+
 
         $(".boxSlide").hide();
         $("#containerBox").show();
@@ -981,16 +953,16 @@ $("#containerBox").on("click", ".importBackup", function(){
 });
 
 $("#containerBox").on("click", ".renameContainer", function(){
-    renameContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);
+    renameContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container, true, currentContainerDetails.alias);
 });
 
-$("#containerBox").on("click", ".toggleCard", function(){
+$("#containerViewBtns").on("click", ".btn", function(){
     if($(this).attr("id") == "goToBackups" && $(this).hasClass("disabled")){
         return false;
     }
 
-    $("#containerViewBtns").find(".bg-primary").removeClass("bg-primary");
-    $(this).addClass("bg-primary");
+    $("#containerViewBtns").find(".active").removeClass("active");
+    $(this).addClass("active");
 });
 
 var currentPath = "/";

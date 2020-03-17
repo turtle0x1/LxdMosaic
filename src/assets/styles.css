@@ -3,6 +3,9 @@ body {
     font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
 }
 
+.text-strikethrough {
+    text-decoration: line-through !important;
+}
 
 .toggleCard {
     cursor: pointer;
@@ -289,8 +292,12 @@ li.breadcrumb-item:nth-child(1) {
     color: white;
 }
 
+.sidebar .nav-link {
+    outline: 0;
+}
 .sidebar .nav-link:hover {
-    background-color: #167495;
+    color: #167495;
+    background-color: rgba(0,0,0,0);
 }
 
 .sidebar .nav-item.active {
@@ -315,15 +322,6 @@ a:hover {
 .card-hover-primary:hover{
     background-color: #20a8d8;
     color: white;
-}
-
-.bg-deepblue {
-  background-color: #167495 !important;
-}
-
-.bg-deepblue  a {
-    color: #3a4149;
-    text-decoration: underline;
 }
 
 .breadcrumb {

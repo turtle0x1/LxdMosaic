@@ -3,45 +3,51 @@
 namespace dhope0000\LXDClient\Tools\Projects;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
+use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
 
 class GetHostsProjects
 {
     public function __construct(
-        HostList $hostList,
+        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts,
         LxdClient $lxdClient,
         HasExtension $hasExtension
     ) {
-        $this->hostList = $hostList;
+        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
         $this->lxdClient = $lxdClient;
         $this->hasExtension = $hasExtension;
     }
 
     public function getAll()
     {
-        $details = array();
-        foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
-            $details[$indent] = [
-                "online"=>(bool) $host["Host_Online"],
-                "projects"=>[]
-            ];
-            if ($host["Host_Online"] != true) {
-                continue;
+        $clusters = $this->getClustersAndStandaloneHosts->get();
+
+        foreach ($clusters["clusters"] as $clusterIndex => $cluster) {
+            foreach ($cluster["members"] as $hostIndex => $host) {
+                $clusters["clusters"][$clusterIndex]["members"][$hostIndex]["projects"] = $this->getHostProjects($host);
             }
-            $client = $this->lxdClient->getANewClient($host["Host_ID"]);
-
-            if(!$this->hasExtension->checkWithClient($client, "projects")){
-                continue;
-            }
-
-            $projects = $client->projects->all();
-
-
-            $details[$indent]["hostId"] = $host["Host_ID"];
-            $details[$indent]["projects"] = $projects;
         }
-        return $details;
+
+        foreach ($clusters["standalone"]["members"] as $hostIndex => $host) {
+            $clusters["standalone"]["members"][$hostIndex]["projects"] = $this->getHostProjects($host);
+        }
+
+        return $clusters;
+    }
+
+
+    private function getHostProjects($host)
+    {
+        if (isset($host["hostOnline"]) && $host["hostOnline"] != true) {
+            return [];
+        }
+
+        $client = $this->lxdClient->getANewClient($host["hostId"]);
+
+        if (!$this->hasExtension->checkWithClient($client, "projects")) {
+            return [];
+        }
+
+        return $client->projects->all();
     }
 }

@@ -45,7 +45,7 @@
                       </h5>
                     </div>
                     <div id="lastRecordedActions" class="collapse in show" role="tabpanel">
-                      <div class="card-block bg-dark">
+                      <div class="card-block table-responsive bg-dark">
                         <table class="table table-dark table-bordered" id="recordedActionsTable">
                             <thead>
                                 <tr>
@@ -138,7 +138,7 @@ function loadRecordedActions(ammount = 30){
                 trs += `<tr>
                     <td>${moment(item.date).fromNow()}</td>
                     <td>${item.controller}</td>
-                    <td>${item.params}</td>
+                    <td class="text-break">${item.params}</td>
                 </tr>`;
             });
         }else{

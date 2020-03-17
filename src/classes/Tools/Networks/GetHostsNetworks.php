@@ -3,32 +3,43 @@
 namespace dhope0000\LXDClient\Tools\Networks;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
 
 class GetHostsNetworks
 {
-    public function __construct(HostList $hostList, LxdClient $lxdClient)
-    {
-        $this->hostList = $hostList;
+    public function __construct(
+        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts,
+        LxdClient $lxdClient
+    ) {
+        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
         $this->lxdClient = $lxdClient;
     }
 
     public function getAll()
     {
-        $details = array();
-        foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
-            $details[$indent] = [
-                "hostId"=>$host["Host_ID"],
-                "online"=>(bool) $host["Host_Online"],
-                "networks"=>[]
-            ];
-            if ($host["Host_Online"] != true) {
-                continue;
+        $clusters = $this->getClustersAndStandaloneHosts->get();
+
+        foreach ($clusters["clusters"] as $clusterIndex => $cluster) {
+            foreach ($cluster["members"] as $hostIndex => $host) {
+                $clusters["clusters"][$clusterIndex]["members"][$hostIndex]["networks"] = $this->getHostNetwork($host);
             }
-            $client = $this->lxdClient->getANewClient($host["Host_ID"]);
-            $details[$indent]["networks"] = $client->networks->all();
         }
-        return $details;
+
+        foreach ($clusters["standalone"]["members"] as $hostIndex => $host) {
+            $clusters["standalone"]["members"][$hostIndex]["networks"] = $this->getHostNetwork($host);
+        }
+
+        return $clusters;
+    }
+
+    private function getHostNetwork(array $host)
+    {
+        $indent = is_null($host["alias"]) ? $host["urlAndPort"] : $host["alias"];
+
+        if (isset($host["hostOnline"]) && $host["hostOnline"] != true) {
+            return [];
+        }
+        $client = $this->lxdClient->getANewClient($host["hostId"]);
+        return $client->networks->all();
     }
 }

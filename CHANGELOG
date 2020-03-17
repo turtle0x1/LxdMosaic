@@ -12,9 +12,18 @@ Added
 
     Logo created by my buddy Josh
 
+Changed
+    Indicate cluster groups & standalone hosts on dashboard (#150)
+    Load profile on click instead of passing around an array containing profile data
+    Indicate cluster groups & standalone hosts on profiles
+    Indicate cluster groups & standalone hosts on storage
+    Indicate cluster groups & standalone hosts on networks
+    Indicate cluster groups & standalone hosts on projects
+
 Fixed
     Cant create a container with no devices (#158)
     All clusters not showing on cluster overview (#151)
+    Cant store backup locally because of missing class property (#164)
     Cant access files on new versions of LXD
 
 0.6.1 - 02/03/2020

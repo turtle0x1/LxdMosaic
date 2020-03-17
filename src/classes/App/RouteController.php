@@ -42,9 +42,9 @@ class RouteController
             exit;
         }
 
-        if (!isset($explodedPath[0]) || (
-            $explodedPath[0] == "index" || ($explodedPath[0] == "login" || $explodedPath[0] == "views")
-        )) {
+        $routesForViewRoute = ["index", "login", "views"];
+
+        if (!isset($explodedPath[0]) || in_array($explodedPath[0], $routesForViewRoute)) {
             $this->routeView->route($explodedPath);
         } elseif ($explodedPath[0] == "api") {
             $this->routeApi->route($explodedPath, $_POST);

@@ -13,7 +13,7 @@
             <b> On Host: </b> <span id="editSettings-currentHost"></span>
         </h5>
         <div class="alert alert-warning">
-            This uses the update stragery so its currently <b> not possible to
+            This uses the update strategy so its currently <b> not possible to
             delete existing keys. </b>
         </div>
         <div id="editSettings-list"></div>
