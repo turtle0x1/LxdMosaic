@@ -763,7 +763,15 @@ function loadDashboard(){
         });
 
         let memoryWidth = ((data.stats.memory.used / data.stats.memory.total) * 100)
-        let storageWidth = ((data.analyticsData.storageUsage.used / data.analyticsData.storageUsage.available) * 100)
+
+        let storageWidth = 0;
+        let formatedStorageTitle = "Not Enough Data"
+
+        if(data.analyticsData.hasOwnProperty("storageUsage")){
+            storageWidth = ((data.analyticsData.storageUsage.used / data.analyticsData.storageUsage.available) * 100)
+            formatedStorageTitle = formatBytes(data.analyticsData.storageUsage.used);
+        }
+
 
 
         $("#currentMemoryUsageCardBody").empty().append(
@@ -777,7 +785,7 @@ function loadDashboard(){
             <div>
                 <label>Storage</label>
                 <div class="progress">
-                    <div data-toggle="tooltip" data-placement="bottom" title="${formatBytes(data.analyticsData.storageUsage.used)}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${data.stats.memory.used}" aria-valuemin="0" aria-valuemax="${(data.stats.memory.total - data.stats.memory.used)}"></div>
+                    <div data-toggle="tooltip" data-placement="bottom" title="${formatedStorageTitle}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${data.stats.memory.used}" aria-valuemin="0" aria-valuemax="${(data.stats.memory.total - data.stats.memory.used)}"></div>
                     </div>
             </div>
             `
