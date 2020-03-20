@@ -28,7 +28,12 @@ class GetClustersAndStandaloneHosts
             $hostsInClusterGroups = array_merge($hostsInClusterGroups, array_column($cluster["members"], "hostId"));
         }
 
-        $standaloneHosts = $this->hostList->fetchHostsNotInList($hostsInClusterGroups);
+        if (empty($hostsInClusterGroups)) {
+            $standaloneHosts = $this->hostList->fetchAllHosts();
+        } else {
+            $standaloneHosts = $this->hostList->fetchHostsNotInList($hostsInClusterGroups);
+        }
+
 
         foreach ($standaloneHosts as $index => $host) {
             $standaloneHosts[$index]["resources"] = [];
@@ -44,7 +49,7 @@ class GetClustersAndStandaloneHosts
         $standaloneHosts = [
             "members"=>$standaloneHosts
         ];
-        
+
         return [
             "clusters"=>$clusters,
             "standalone"=>$standaloneHosts
