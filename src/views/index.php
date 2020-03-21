@@ -210,6 +210,7 @@ if ($haveServers->haveAny() !== true) {
                       getHostContainers: "/api/Hosts/Containers/GetHostsContainersController/get"
                   },
                   instances: {
+                      addProxyDevice: "/api/Hosts/Instances/AddProxyDeviceController/add",
                       getAllProxyDevices: "/api/Hosts/Instances/GetAllProxyDevicesController/get"
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",

@@ -124,7 +124,11 @@
             <div class="col-md-12">
                 <div class="card bg-dark">
                     <div class="card-header text-center text-white">
-                        <h4>Proxy Devices</h4>
+                        <h4>Proxy Devices
+                        <button class="btn btn-sm btn-primary float-right" id="addProxyDevice">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        </h4>
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered table-dark" id="serverProxyTable">
@@ -163,6 +167,11 @@ $(document).on("change", ".toggleStatusContainer", function(){
         }
         $(this).find("input[name=containerCheckbox]").prop("checked", checked);
     });
+});
+
+$(document).on("click", "#addProxyDevice", function(){
+    addProxyDeviceObj.hostId = currentServer.hostId;
+    $("#modal-hosts-instnaces-addProxyDevice").modal("show");
 });
 
 $(document).on("click", "#serverDetailsBtn, #serverProxyDevicesBtn", function(){
@@ -403,3 +412,7 @@ $(document).on("click", "#deleteHost", function(){
     });
 });
 </script>
+
+<?php
+    require __DIR__ . "/../modals/hosts/instances/addProxyDevices.php";
+?>
