@@ -69,6 +69,11 @@
         theme: "facebook"
     });
 
+    $("#modal-projects-create").on("hide.bs.modal",  function(){
+        $("#modal-projects-create input, #modal-projects-create textarea").val("");
+        $("#newProjectHosts").tokenInput("clear");
+    });
+
     $("#modal-projects-create").on("click", "#createProject", function(){
         let hosts = mapObjToSignleDimension($("#newProjectHosts").tokenInput("get"), "hostId");
 

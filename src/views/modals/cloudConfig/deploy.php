@@ -80,6 +80,13 @@ $("#deployCloudConfigImage").tokenInput(globalUrls.images.search.searchAllHosts,
 });
 
 
+$("#modal-cloudConfig-deploy").on("hide.bs.modal", function(){
+    $("#modal-cloudConfig-deploy input").val("");
+    $("#deployCloudConfigProfiles").tokenInput("clear");
+    $("#deployCloudConfigHosts").tokenInput("clear");
+    $("#deployCloudConfigImage").tokenInput("clear");
+});
+
 $("#modal-cloudConfig-deploy").on("shown.bs.modal", function(){
     if(!$.isNumeric(deployCloudConfigObj.cloudConfigId)){
         makeToastr(JSON.stringify({state: "error", message: "Developer fail - set cloud config id to open this modal"}));

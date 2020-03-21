@@ -33,6 +33,11 @@
 
     var reamingSettingSelectOptions = "";
 
+    $("#modal-container-editSettings").on("hide.bs.modal", function(){
+        $("#editSettings-currentHost").text("");
+        $("#editSettings-list").empty();
+    });
+
     $("#modal-container-editSettings").on("shown.bs.modal", function(){
 
         reamingSettingSelectOptions = "";

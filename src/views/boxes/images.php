@@ -4,7 +4,7 @@
     <div class="card bg-dark">
       <div class="card-header" role="tab" id="container-imagesHeading">
         <h5>
-          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#container-imagesCollapse" aria-expanded="true" aria-controls="container-imagesCollapse">
+          <a class="text-white">
             Images Overview
             <button class="btn btn-danger float-right deleteImages" id="deleteImagesBtn"> Delete </button>
             <button class="btn btn-primary float-right" id="importImagesBtn"> Import </button>
@@ -52,7 +52,7 @@
         }, milSeconds);
     }
 
-    $("#imagesOverviewDetails").on("click", ".deleteImages", function(){
+    $(document).on("click", ".deleteImages", function(){
         let trs = $("#imagesTable > tbody > tr");
         let data = [];
         $(trs).each(function(){
@@ -73,13 +73,15 @@
         });
     });
 
-    $("#imagesOverviewDetails").on("click", "#importImagesBtn", function(){
+    $(document).on("click", "#importImagesBtn", function(e){
+        e.preventDefault();
         let imagesToImport = []
         $.each($("input[name=imageToImport]:checked"), function(){
             imagesToImport.push($(this).val());
         });
         imageAliasesToImport = imagesToImport;
         $("#modal-hosts-addImages").modal("show");
+        return false;
     });
 
     function showLocalImages(){

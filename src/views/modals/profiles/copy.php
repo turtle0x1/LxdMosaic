@@ -45,6 +45,11 @@ $("#profileCopyTargets").tokenInput(globalUrls.hosts.search.search, {
     theme: "facebook"
 });
 
+$("#modal-profile-copy").on("hide.bs.modal",  function(){
+    $("#modal-profile-copy input").val("");
+    $("#profileCopyTargets").tokenInput("clear");
+});
+
 $("#modal-profile-copy").on("shown.bs.modal", function(){
     $("#modal-profile-copy #hostAlias").text(copyProfileData.hostAlias);
     $("#modal-profile-copy #profileName").text(copyProfileData.profile);

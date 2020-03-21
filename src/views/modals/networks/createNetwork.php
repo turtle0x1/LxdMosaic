@@ -59,6 +59,12 @@
         theme: "facebook"
     });
 
+    $("#modal-networks-create").on("hide.bs.modal",  function(){
+        $("#modal-networks-create input").val("");
+        $("#newNetworkHosts").tokenInput("clear");
+        $("#networkConfigTable > tbody > tr").not(":last").remove();
+    });
+
     $("#modal-networks-create").on("click", ".removeRow", function(){
         $(this).parents("tr").remove();
     });

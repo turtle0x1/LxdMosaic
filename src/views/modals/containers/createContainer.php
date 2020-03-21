@@ -1,9 +1,9 @@
     <!-- Modal -->
-<div class="modal fade" id="modal-container-create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="modal-container-create" tabindex="-1" role="dialog"  aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Create Container</h5>
+        <h5 class="modal-title">Create Container</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -84,7 +84,6 @@
             <tbody>
             </tbody>
         </table>
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -150,6 +149,14 @@
     });
 
     var containerSettingRow = "";
+
+    $("#modal-container-create").on("hide.bs.modal", function(){
+        $("#newContainerName").val("");
+        $("#newContainerGpus, #newContainerSettings > tbody").empty()
+        $("#newContainerProfiles").tokenInput("clear");
+        $("#newContainerHosts").tokenInput("clear");
+        $("#newContainerImage").tokenInput("clear");
+    });
 
     $("#modal-container-create").on("shown.bs.modal", function(){
         ajaxRequest(globalUrls.containers.settings.getAllAvailableSettings, {}, function(data){

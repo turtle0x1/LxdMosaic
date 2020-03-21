@@ -19,7 +19,7 @@
           </div>
           <div class="form-group">
               <b> Driver </b>
-              <select class="form-control" name="driver">
+              <select class="form-control" name="driver" id="newStorageDriver">
                   <option value="">Please Select </option>
                   <option value="zfs">ZFS</option>
                   <option value="Btrfs">BTRFS</option>
@@ -72,6 +72,13 @@
         tokenValue: "hostId",
         preventDuplicates: false,
         theme: "facebook"
+    });
+
+    $("#modal-storage-createPool").on("hide.bs.modal",  function(){
+        $("#modal-storage-createPool input, #modal-storage-createPool textarea").val("");
+        $("#storageConfigTable > tbody > tr").not(":last").remove();
+        $("#newStoragePoolHosts").tokenInput("clear");
+        $("#newStorageDriver").val("")
     });
 
     $("#modal-storage-createPool").on("click", ".removeRow", function(){

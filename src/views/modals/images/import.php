@@ -37,6 +37,10 @@
         preventDuplicates: false
     });
 
+    $("#modal-hosts-addImages").on("hide.bs.modal", function(){
+        $("#hostsToImportImagesTo").tokenInput("clear");
+    });
+
     $("#modal-hosts-addImages").on("shown.bs.modal", function(){
         let imageHtml = "";
         $.each(imageAliasesToImport, function(i, item){

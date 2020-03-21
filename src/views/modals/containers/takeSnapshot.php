@@ -33,6 +33,10 @@
   </div>
 </div>
 <script>
+    $("#modal-container-snapshot").on("hide.bs.modal", function(){
+        $("#snapshotModal-snapshotName").val("");
+    });
+
     $("#modal-container-snapshot").on("shown.bs.modal", function(){
 
         if(!$.isPlainObject(currentContainerDetails)){

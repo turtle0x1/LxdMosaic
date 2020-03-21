@@ -93,6 +93,11 @@
         theme: "facebook"
     });
 
+    $("#modal-container-restoreSnapshot").on("hide.bs.modal", function(){
+        $("#modal-container-restoreSnapshot-newTargetHost").tokenInput("clear");
+        $("#modal-container-restoreSnapshot input").val("");
+    });
+
     $("#modal-container-restoreSnapshot").on("show.bs.modal", function(){
         if(!$.isPlainObject(currentContainerDetails)){
             $("#modal-container-migrate").modal("toggle");

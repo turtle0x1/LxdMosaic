@@ -46,6 +46,11 @@ $("#newVmHosts").tokenInput(globalUrls.hosts.search.search, {
     theme: "facebook"
 });
 
+$("#modal-vms-create").on("hide.bs.modal", function(){
+    $("#modal-vms-create input").val("");
+    $("#newVmHosts").tokenInput("clear");
+});
+
 $("#modal-vms-create").on("click", "#createVm", function(){
     let hosts = mapObjToSignleDimension($("#newVmHosts").tokenInput("get"), "hostId");
 

@@ -27,6 +27,10 @@ var renameProjectObj = {
     project: null
 }
 
+$("#modal-projects-rename").on("hide.bs.modal",  function(){
+    $("#modal-projects-rename input").val("");
+});
+
 $("#modal-projects-rename").on("shown.bs.modal", function(){
     if(renameProjectObj.hostId == null || renameProjectObj.hostId == ""){
         $("#modal-projects-rename").modal("toggle");

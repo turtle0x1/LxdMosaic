@@ -3,7 +3,7 @@
 <div class="modal-dialog" role="document">
 <div class="modal-content">
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLongTitle">Add Proxy Devices</h5>
+    <h5 class="modal-title" id="exampleModalLongTitle">Add Proxy Device</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -46,6 +46,12 @@
     var addProxyDeviceObj = {
         hostId: null
     }
+
+    $("#modal-hosts-instnaces-addProxyDevice").on("hide.bs.modal", function(){
+        $("#modal-hosts-instnaces-addProxyDevice input").val("");
+        $("#proxyDeviceInstance").empty();
+    });
+
     $("#modal-hosts-instnaces-addProxyDevice").on("shown.bs.modal", function(){
         if(!$.isNumeric(addProxyDeviceObj.hostId)){
             makeToastr(JSON.stringify({state: "error", message: "Developer Fail - Please provide host id"}));

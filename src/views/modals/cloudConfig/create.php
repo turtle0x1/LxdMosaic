@@ -30,8 +30,11 @@
   </div>
 </div>
 <script>
-$("#modal-cloudConfig-create").on("click", "#createCloudConfig", function(){
+$("#modal-cloudConfig-create").on("hide.bs.modal",  function(){
+    $("#modal-cloudConfig-create input, #modal-cloudConfig-create textarea").val("");
+});
 
+$("#modal-cloudConfig-create").on("click", "#createCloudConfig", function(){
     let nameInput =   $("#modal-cloudConfig-create input[name=name]");
     let namespaceInput =   $("#modal-cloudConfig-create input[name=namespace]");
     let descriptionInput = $("#modal-cloudConfig-create textarea[name=description]");
