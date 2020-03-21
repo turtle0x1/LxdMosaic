@@ -18,9 +18,8 @@
                 <thead>
                     <th>  </th>
                     <th> OS </th>
-                    <th> Description </th>
-                    <th> Aliases </th>
                     <th> Release </th>
+                    <th> Aliases </th>
                     <th> Auto update </th>
                     <th> Created </th>
                     <th> Size </th>
@@ -167,9 +166,8 @@
                     trs += `<tr>
                         <td><input data-host='${hostDetails.hostId}' id='${data.fingerprint}' name='imageSelect' type='checkbox' /></td>
                         <td>${data.properties.os} </td>
-                        <td>${data.properties.description} </td>
-                        <td>${a}</td>
                         <td>${data.properties.release}</td>
+                        <td>${a}</td>
                         <td>${data.auto_update}</td>
                         <td>${moment(data.created_at).format("DD-MM-YYYY")}</td>
                         <td>${formatBytes(data.size)}</td>
