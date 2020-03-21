@@ -340,12 +340,6 @@ if ($haveServers->haveAny() !== true) {
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link viewProfiles callFunc">
-              <i class="fas fa-users"></i>
-              <span class="hideNavText"> Profiles </span>
-            </a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link viewImages">
               <i class="fa fa-images"></i> <span class="hideNavText"> Images </span></a>
           </li>
@@ -353,9 +347,16 @@ if ($haveServers->haveAny() !== true) {
             <a class="nav-link viewStorage">
               <i class="fas fa-hdd"></i> <span class="hideNavText"> Storage </span> </a>
           </li>
+
           <li class="nav-item">
             <a class="nav-link viewNetwork">
               <i class="fas fa-network-wired"></i> <span class="hideNavText"> Networks </span> </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link viewProfiles callFunc">
+              <i class="fas fa-users"></i>
+              <span class="hideNavText"> Profiles </span>
+            </a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewProjects">
