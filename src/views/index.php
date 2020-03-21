@@ -838,7 +838,7 @@ function loadDashboard(){
         $("#sidebar-ul").empty().append(hosts);
 
         if(data.analyticsData.hasOwnProperty("warning")){
-            $("#memoryUsage, #activeContainers, #recentStorageCanvas. #stroageUsage").hide().parents(".card-body").find(".notEnoughData").show();
+            $("#memoryUsage, #activeContainers, #recentStorageCanvas, #stroageUsage").hide().parents(".card-body").find(".notEnoughData").show();
             return false;
         }
 
