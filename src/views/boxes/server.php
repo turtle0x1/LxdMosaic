@@ -1,16 +1,29 @@
 <div id="serverBox" class="boxSlide">
-    <div id="serverOverview" class="row">
-        <div class="col-md-12">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 id="serverHeading"></h1>
-                <div class="btn-toolbar float-right">
-                  <div class="btn-group mr-2">
-                    <button class="btn btn-primary" id="editHost">Change Alias</button>
-                    <button class="btn btn-danger" id="deleteHost">Delete</button>
-                  </div>
+    <div id="serverOverview">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 id="serverHeading"></h1>
+                    <div class="btn-toolbar float-right">
+                      <div class="btn-group mr-2">
+                        <button class="btn btn-primary" id="editHost">Change Alias</button>
+                        <button class="btn btn-danger" id="deleteHost">Delete</button>
+                      </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="row border-bottom pb-2 mb-2">
+                <div class="col-md-12 text-center justify-content">
+                    <button type="button" class="btn text-white btn-outline-primary active" id="serverDetailsBtn" data-view="serverInfoBox">
+                        <i class="fas fa-info pr-2"></i>Details
+                    </button>
+                    <button type="button" class="btn text-white btn-outline-primary" id="serverProxyDevicesBtn" data-view="serverProxyBox">
+                        <i class="fas fa-exchange-alt pr-2"></i>Proxy Devices
+                    </button>
+                </div>
+        </div>
+        <div class="row serverViewBox" id="serverInfoBox">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header bg-dark">
@@ -106,6 +119,34 @@
                 </div>
             </div>
             </div>
+        </div>
+        <div class="row serverViewBox" id="serverProxyBox">
+            <div class="col-md-12">
+                <div class="card bg-dark">
+                    <div class="card-header text-center text-white">
+                        <h4>Proxy Devices
+                        <button class="btn btn-sm btn-primary float-right" id="addProxyDevice">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-dark" id="serverProxyTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Source</th>
+                                    <th>Destination</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="serverDetails">
     </div>
@@ -127,6 +168,68 @@ $(document).on("change", ".toggleStatusContainer", function(){
         }
         $(this).find("input[name=containerCheckbox]").prop("checked", checked);
     });
+});
+
+$(document).on("click", ".deleteProxy", function(){
+    let btn = $(this);
+    btn.attr("disabled", true);
+    btn.html('<i class="fas fa-spinner fa-spin"></i>');
+    let tr = btn.parents("tr");
+    let x = $.extend(btn.data(), currentServer);
+    ajaxRequest(globalUrls.hosts.instances.deleteProxyDevice, x, (data)=>{
+        data = makeToastr(data)
+        if(data.hasOwnProperty("state") && data.state == "success"){
+            $("#serverProxyDevicesBtn").trigger("click");
+        }else{
+            btn.attr("disabled", false);
+            btn.html('<i class="fas fa-trash"></i>');
+        }
+    });
+});
+
+$(document).on("click", "#addProxyDevice", function(){
+    addProxyDeviceObj.hostId = currentServer.hostId;
+    $("#modal-hosts-instnaces-addProxyDevice").modal("show");
+});
+
+$(document).on("click", "#serverDetailsBtn, #serverProxyDevicesBtn", function(){
+    $("#serverDetailsBtn, #serverProxyDevicesBtn").removeClass("active")
+    $(this).addClass("active")
+    $(".serverViewBox").hide();
+    $(`#${$(this).data("view")}`).show();
+
+    if($(this).data("view") == "serverProxyBox"){
+        ajaxRequest(globalUrls.hosts.instances.getAllProxyDevices, currentServer, (data)=>{
+            data = makeToastr(data);
+
+            let x = "";
+            if(Object.keys(data).length){
+                $.each(data, (container, proxies)=>{
+                    x += `<tr><td colspan="999" class="bg-primary text-white text-center">${container}</td></tr>`
+                    $.each(proxies, (name, device)=>{
+                        x += `<tr>
+                            <td>${name}</td>
+                            <td>${device.listen}</td>
+                            <td>${device.connect}</td>
+                            <td>
+                                <button
+                                    class="btn btn-danger deleteProxy"
+                                    data-instance="${container}"
+                                    data-device="${name}"
+                                >
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>`
+                    });
+                });
+            }else{
+                x += `<tr><td colspan="999" class="text-center text-info">No Proxy Devices</td></tr>`
+            }
+
+            $("#serverProxyTable > tbody").empty().append(x);
+        });
+    }
 });
 
 $(document).on("change", "#toggleAllContainers", function(){
@@ -179,8 +282,8 @@ $(document).on("click", "#editHost", function(){
 
 function loadServerView(hostId)
 {
-    $(".boxSlide, #serverDetails").hide();
-    $("#serverOverview, #serverBox").show();
+    $(".boxSlide, #serverDetails, #serverProxyBox").hide();
+    $("#serverOverview, #serverBox, #serverInfoBox").show();
 
     $("#sidebar-ul").find(".active").removeClass("active");
     $("#sidebar-ul").find(".text-info").removeClass("text-info");
@@ -339,3 +442,7 @@ $(document).on("click", "#deleteHost", function(){
     });
 });
 </script>
+
+<?php
+    require __DIR__ . "/../modals/hosts/instances/addProxyDevices.php";
+?>

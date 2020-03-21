@@ -13,6 +13,8 @@ Added
     Logo created by my buddy Josh
     Total storage available to fleet analytics
 
+    View, create & delete proxy devices on a host (#165)
+
 Changed
     Indicate cluster groups & standalone hosts on dashboard (#150)
     Load profile on click instead of passing around an array containing profile data
