@@ -137,6 +137,7 @@
                                     <th>Name</th>
                                     <th>Source</th>
                                     <th>Destination</th>
+                                    <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -169,6 +170,23 @@ $(document).on("change", ".toggleStatusContainer", function(){
     });
 });
 
+$(document).on("click", ".deleteProxy", function(){
+    let btn = $(this);
+    btn.attr("disabled", true);
+    btn.html('<i class="fas fa-spinner fa-spin"></i>');
+    let tr = btn.parents("tr");
+    let x = $.extend(btn.data(), currentServer);
+    ajaxRequest(globalUrls.hosts.instances.deleteProxyDevice, x, (data)=>{
+        data = makeToastr(data)
+        if(data.hasOwnProperty("state") && data.state == "success"){
+            $("#serverProxyDevicesBtn").trigger("click");
+        }else{
+            btn.attr("disabled", false);
+            btn.html('<i class="fas fa-trash"></i>');
+        }
+    });
+});
+
 $(document).on("click", "#addProxyDevice", function(){
     addProxyDeviceObj.hostId = currentServer.hostId;
     $("#modal-hosts-instnaces-addProxyDevice").modal("show");
@@ -185,18 +203,30 @@ $(document).on("click", "#serverDetailsBtn, #serverProxyDevicesBtn", function(){
             data = makeToastr(data);
 
             let x = "";
-            $.each(data, (container, proxies)=>{
-
-                x += `<tr><td colspan="999" class="bg-primary text-white text-center">${container}</td></tr>`
-
-                $.each(proxies, (name, device)=>{
-                    x += `<tr>
-                        <td>${name}</td>
-                        <td>${device.listen}</td>
-                        <td>${device.connect}</td>
-                    </tr>`
+            if(Object.keys(data).length){
+                $.each(data, (container, proxies)=>{
+                    x += `<tr><td colspan="999" class="bg-primary text-white text-center">${container}</td></tr>`
+                    $.each(proxies, (name, device)=>{
+                        x += `<tr>
+                            <td>${name}</td>
+                            <td>${device.listen}</td>
+                            <td>${device.connect}</td>
+                            <td>
+                                <button
+                                    class="btn btn-danger deleteProxy"
+                                    data-instance="${container}"
+                                    data-device="${name}"
+                                >
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>`
+                    });
                 });
-            });
+            }else{
+                x += `<tr><td colspan="999" class="text-center text-info">No Proxy Devices</td></tr>`
+            }
+
             $("#serverProxyTable > tbody").empty().append(x);
         });
     }
