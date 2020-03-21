@@ -10,7 +10,7 @@
 </div>
 <script>
 
-var emptyClusterBoxTemplate = `<div class="card">
+var emptyClusterBoxTemplate = `<div class="card bg-dark">
         <div class="card-header">
             <h4 class="clusterName"></h4>
         </div>

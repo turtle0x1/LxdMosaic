@@ -6,8 +6,12 @@
                     <h1 id="serverHeading"></h1>
                     <div class="btn-toolbar float-right">
                       <div class="btn-group mr-2">
-                        <button class="btn btn-primary" id="editHost">Change Alias</button>
-                        <button class="btn btn-danger" id="deleteHost">Delete</button>
+                        <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Host" id="editHost">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Delete Host" id="deleteHost">
+                            <i class="fas fa-trash"></i>
+                        </button>
                       </div>
                     </div>
                 </div>
@@ -25,7 +29,7 @@
         </div>
         <div class="row serverViewBox" id="serverInfoBox">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card bg-dark">
                 <div class="card-header bg-dark">
                     <h4> Containers
                         <select id="serverContainerActions" class="form-control-sm float-right">
@@ -123,7 +127,7 @@
         <div class="row serverViewBox" id="serverProxyBox">
             <div class="col-md-12">
                 <div class="card bg-dark">
-                    <div class="card-header text-center text-white">
+                    <div class="card-header text-white">
                         <h4>Proxy Devices
                         <button class="btn btn-sm btn-primary float-right" id="addProxyDevice">
                             <i class="fas fa-plus"></i>

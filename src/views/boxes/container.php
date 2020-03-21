@@ -148,7 +148,7 @@
     <div class="row" id="backupDetailsRow">
         <div class="col-md-6">
             <div class="card card-accent-success">
-                <div class="card-header bg-info">
+                <div class="card-header bg-dark">
                     <h4> LXDMosaic Container Backups </h4>
                 </div>
                 <div class="card-body bg-dark">
@@ -168,7 +168,7 @@
         </div>
         <div class="col-md-6">
             <div class="card card-accent-success">
-                <div class="card-header bg-info">
+                <div class="card-header bg-dark">
                     <h4>
                         LXD Container Backups
                         <button class="btn btn-success float-right" id="createBackup">

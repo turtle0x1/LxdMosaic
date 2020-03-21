@@ -69,7 +69,7 @@
   <body class="text-center">
       <form class="form-signin" action="/" method="POST">
         <img class="mb-4" src="/assets/lxdMosaic/logo.png" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <h1 class="h3 mb-3 font-weight-normal">LXD Mosaic</h1>
         <label for="inputEmail" class="sr-only">Username</label>
         <input id="username" class="form-control" placeholder="Username" name="username" required="" autofocus="">
         <label for="inputPassword" class="sr-only">Password</label>

@@ -6,7 +6,7 @@
                     <h4> Networks </h4>
                     <div class="btn-toolbar float-right">
                       <div class="btn-group mr-2">
-                          <button data-toggle="tooltip" data-placement="bottom" title="Create network" class="btn btn-sm btn-primary" id="createNetwork">
+                          <button data-toggle="tooltip" data-placement="bottom" title="Create network" class="btn btn-primary" id="createNetwork">
                               <i class="fas fa-plus"></i>
                           </button>
                       </div>
@@ -20,14 +20,16 @@
             <div class="col-md-12">
                 <h4>
                     <span  id="networkName"></span>
-                    <button class="btn btn-danger float-right" id="deleteNetwork">Delete Network</button>
+                    <button class="btn btn-danger float-right" id="deleteNetwork">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </h4>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
-                  <div class="card">
-                    <div class="card-header text-center bg-info" role="tab" id="deploymentCloudConfigHeading">
+                  <div class="card bg-dark">
+                    <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
                         Config
@@ -43,8 +45,8 @@
                   </div>
             </div>
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header bg-info text-center">
+                <div class="card bg-dark">
+                    <div class="card-header bg-dark">
                         <h5> <a> Used By </a> </h5>
                     </div>
                     <div class="card-body bg-dark">

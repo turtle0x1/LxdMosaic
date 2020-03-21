@@ -6,7 +6,7 @@
                     <h4> Storage </h4>
                     <div class="btn-toolbar float-right">
                       <div class="btn-group mr-2">
-                          <button data-toggle="tooltip" data-placement="bottom" title="Create storage pool" class="btn btn-sm btn-primary" id="createPool">
+                          <button data-toggle="tooltip" data-placement="bottom" title="Create storage pool" class="btn btn-primary" id="createPool">
                               <i class="fas fa-plus"></i>
                           </button>
                       </div>
@@ -16,15 +16,15 @@
         </div>
         <div class="row">
         <div class="col-md-9">
-              <div class="card">
-                <div class="card-header bg-info" role="tab" >
+              <div class="card bg-dark">
+                <div class="card-header " role="tab" >
                   <h5>
                     <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
-                      Pool List
+                        All Pools
                     </a>
                   </h5>
                 </div>
-                <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" >
+                <div class="collapse in show" role="tabpanel" >
                   <div class="card-block bg-dark">
                     <table class="table table-dark table-bordered" id="poolListTable">
                         <thead>
@@ -48,14 +48,16 @@
             <div class="col-md-12">
                 <h4>
                     <span class="text-white" id="storagePoolName"></span>
-                    <button class="btn btn-danger float-right" id="deletePool">Delete Pool</button>
+                    <button class="btn btn-danger float-right" id="deletePool">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </h4>
             </div>
         </div>
         <div class="row">
             <div class="col-md-3">
-                  <div class="card">
-                    <div class="card-header text-center bg-info" role="tab" id="deploymentCloudConfigHeading">
+                  <div class="card bg-dark">
+                    <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
                         Config
@@ -71,8 +73,8 @@
                   </div>
             </div>
             <div class="col-md-3">
-                  <div class="card">
-                    <div class="card-header text-center bg-info" role="tab" id="deploymentCloudConfigHeading">
+                  <div class="card bg-dark">
+                    <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
                         Usage
@@ -88,8 +90,8 @@
                   </div>
             </div>
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-info text-center">
+                <div class="card bg-dark">
+                    <div class="card-header bg-dark">
                         <h5> <a> Used By </a> </h5>
                     </div>
                     <div class="card-body table-responsive  bg-dark">
@@ -125,7 +127,7 @@ function makeStorageHostSidebarHtml(hosthtml, host, tableListHtml){
         </a>
         <ul class="nav-dropdown-items">`;
 
-     tableListHtml += `<tr><td class='bg-info text-white text-center' colspan='3'><h5>${host.alias}</h5></td></tr>`;
+     tableListHtml += `<tr><td class='bg-success text-white text-center' colspan='3'><h5>${host.alias}</h5></td></tr>`;
 
     $.each(host.pools, function(i, pool){
         hosthtml += `<li class="nav-item view-storagePool"

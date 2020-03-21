@@ -1,24 +1,19 @@
 <div id="imagesBox" class="boxSlide">
 <!-- <h4> Container: <`span id="containerName"></span> </h4> -->
 <div class="col-md-12">
-    <div class="card">
-      <div class="card-header bg-info" role="tab" id="container-imagesHeading">
+    <div class="card bg-dark">
+      <div class="card-header" role="tab" id="container-imagesHeading">
         <h5>
           <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#container-imagesCollapse" aria-expanded="true" aria-controls="container-imagesCollapse">
             Images Overview
+            <button class="btn btn-danger float-right deleteImages" id="deleteImagesBtn"> Delete </button>
+            <button class="btn btn-primary float-right" id="importImagesBtn"> Import </button>
           </a>
         </h5>
       </div>
 
       <div id="container-imagesCollapse" class="collapsed show" aria-expanded="true" role="tabpanel" aria-labelledby="container-imagesHeading">
         <div id="imagesOverviewDetails" class="card-block bg-dark table-responsive">
-            <div class="row">
-                <div class="col-md-12">
-                    <button class="btn btn-danger deleteImages" id="deleteImagesBtn"> Delete </button>
-                    <button class="btn btn-primary" id="importImagesBtn"> Import </button>
-                </div>
-            </div>
-            <br/>
             <table class="table table-dark table-bordered" id="imagesTable">
                 <thead>
                     <th>  </th>
@@ -89,7 +84,7 @@
 
     function showLocalImages(){
         loadLocalImages();
-        $(".showLocal, .showRemotes").toggleClass("active");
+
         $("#deleteImagesBtn").show()
         $("#imagesTable").show();
         $("#importImagesBtn, #remoteImagesTableBox").hide()
@@ -148,7 +143,7 @@
             }
             let trs = "";
             $.each(x, function(host, hostDetails){
-                trs += `<tr class='bg-info'><td colspan='999' class='text-center'>${host}</td></tr>`;
+                trs += `<tr class='bg-success'><td colspan='999' class='text-center'>${host}</td></tr>`;
                 if(hostDetails.images.length == 0){
                     if(hostDetails.online){
                         trs += `<tr><td colspan="999" class="text-center"><b>No Images</b></td></tr>`;
@@ -187,12 +182,12 @@
     }
 
     $(document).on("click", ".viewImages", function(){
-        changeActiveNav(".viewImages");
         $(".sidebar-fixed").addClass("sidebar-lg-show");
+        changeActiveNav(".viewImages")
         loadLocalImages();
         $("#sidebar-ul").empty().append(`
-            <li class="nav-item imageLink active" data-type="localImages">
-                <a class="nav-link" href="#">
+            <li class="nav-item imageLink" data-type="localImages">
+                <a class="nav-link text-info" href="#">
                     <i class="nav-icon fa fa-home"></i> Local Images
                 </a>
             </li>

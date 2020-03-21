@@ -1,87 +1,43 @@
 <div id="projectsBox" class="boxSlide">
-<div id="projectsOverview" class="row">
-    <div class="col-md-9">
-          <div class="card">
-            <div class="card-header bg-info" role="tab" >
-              <h5>
-                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
-                  Projects
-                </a>
-              </h5>
+<div id="projectsOverview">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h4> Projects </h4>
+                <div class="btn-toolbar float-right">
+                  <div class="btn-group mr-2">
+                      <button data-toggle="tooltip" data-placement="bottom" title="Create Project" class="btn btn-primary" id="createProject">
+                          <i class="fas fa-plus"></i>
+                      </button>
+                  </div>
+                </div>
             </div>
-            <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" >
-              <div class="card-block bg-dark">
-                  Projects are used to split up an lxd server. You can read
-                  more about them here<a href="https://lxd.readthedocs.io/en/latest/projects/">
-                  here in the lxd docs. </a>
-              </div>
-            </div>
-          </div>
-    </div>
-    <div class="col-md-3">
-          <div class="card">
-            <div class="card-header bg-info" role="tab" >
-              <h5>
-                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Actions
-                </a>
-              </h5>
-            </div>
-            <div id="collapseOne" class="collapse in show" role="tabpanel" >
-              <div class="card-block bg-dark">
-                  <button class="btn btn-block btn-primary" id="createProject">
-                      Create
-                  </button>
-              </div>
-            </div>
-          </div>
-    </div>
-</div>
-<div id="projectDetails">
-<div class="row" style="margin-bottom: 10px;">
-    <div class="col-md-12">
-        <div class="card">
-          <div class="card-header bg-info" role="tab" id="projectsActionHeading">
-            <h5>
-              <a class="text-white" id="projectName" data-toggle="collapse" data-parent="#accordion" href="#projectDetailsHeading" aria-expanded="true" aria-controls="projectDetailsHeading">
-              </a>
-            </h5>
-          </div>
-          <div id="projectDetailsHeading" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
-            <div class="card-block bg-dark" id="projectDescription">
-            </div>
-          </div>
         </div>
     </div>
 </div>
+<div id="projectDetails">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h4 id="projectName"></h4>
+                <small id="projectDescription"></small>
+                <div class="btn-toolbar float-right">
+                  <div class="btn-group mr-2">
+                      <button data-toggle="tooltip" data-placement="bottom" title="Rename Project"  class="btn btn-success" id="renameProject">
+                          <i class="fas fa-edit"></i>
+                      </button>
+                      <button data-toggle="tooltip" data-placement="bottom" title="Delete Project"  class="btn btn-danger" id="deleteProject">
+                          <i class="fas fa-trash"></i>
+                      </button>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <div class="row">
     <div class="col-md-3">
-          <div class="card">
-            <div class="card-header bg-info" role="tab" id="projectsActionHeading">
-              <h5>
-                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectActions" aria-expanded="true" aria-controls="projectActions">
-                  Actions
-                  <i class="float-right fas fa-edit"></i>
-                </a>
-              </h5>
-            </div>
-            <div id="projectActions" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
-              <div class="card-block bg-dark table-responsive">
-                  <div id="collapseOne" class="collapse in show" role="tabpanel" >
-                    <div class="card-block text-center">
-                        <button class="btn btn-block btn-warning" id="renameProject">
-                            Rename
-                        </button>
-                        <button class="btn btn-block btn-danger" id="deleteProject">
-                            Delete
-                        </button>
-                    </div>
-                  </div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header bg-info" role="tab" id="projectsActionHeading">
+          <div class="card bg-dark">
+            <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
               <h5>
                 <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
                   Config
@@ -108,8 +64,8 @@
           </div>
     </div>
     <div class="col-md-9">
-        <div class="card">
-          <div class="card-header bg-info" role="tab" id="projectsActionHeading">
+        <div class="card bg-dark">
+          <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
             <h5>
               <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
                 Used By

@@ -1,20 +1,11 @@
 <div id="profileBox" class="boxSlide">
-<div id="profileOverview" class="row">
-    <div class="col-md-9">
-          <div class="card">
-            <div class="card-header bg-info" role="tab" >
-              <h5>
-                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
-                  Profiles
-                </a>
-              </h5>
+<div id="profileOverview">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h4> Profiles </h4>
             </div>
-            <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" >
-              <div class="card-block bg-dark">
-                  Profiles are used to store processes used with a container.
-              </div>
-            </div>
-          </div>
+        </div>
     </div>
 </div>
 <div id="profileDetails">
@@ -25,14 +16,14 @@
             </u></h4>
             <div class="btn-toolbar float-right">
               <div class="btn-group mr-2">
-                  <button class="btn btn-primary" id="copyProfile">
-                      Copy
+                  <button data-toggle="tooltip" data-placement="bottom" title="Copy Profile" class="btn btn-primary" id="copyProfile">
+                      <i class="fas fa-copy"></i>
                   </button>
-                  <button class="btn btn-warning" id="renameProfile">
-                      Rename
+                  <button data-toggle="tooltip" data-placement="bottom" title="Rename Profile" class="btn btn-warning" id="renameProfile">
+                      <i class="fa fa-edit"></i>
                   </button>
-                  <button class="btn btn-danger" id="deleteProfile">
-                      Delete
+                  <button data-toggle="tooltip" data-placement="bottom" title="Delete Profile" class="btn btn-danger" id="deleteProfile">
+                      <i class="fas fa-trash"></i>
                   </button>
               </div>
             </div>
@@ -41,8 +32,8 @@
     </div>
     <div class="row mt-2">
 <div class="col-md-4">
-      <div class="card">
-        <div class="card-header bg-info" role="tab" id="profileDevicesHeading">
+      <div class="card bg-dark">
+        <div class="card-header bg-dark" role="tab" id="profileDevicesHeading">
           <h5>
             <a id="devicesAriaToggle" class="text-white" data-toggle="collapse" data-parent="#profileDevicesHeading" href="#profileDevicesCard" aria-expanded="true" aria-controls="profileDevicesCard">
               Devices
@@ -68,8 +59,8 @@
       <br/>
 </div>
 <div class="col-md-5">
-    <div class="card">
-      <div class="card-header bg-info" role="tab" id="configDeviceCardHeading">
+    <div class="card bg-dark">
+      <div class="card-header bg-dark" role="tab" id="configDeviceCardHeading">
         <h5>
           <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#configDeviceCard" aria-expanded="true" aria-controls="configDeviceCard">
             Configuration
@@ -95,8 +86,8 @@
     </div>
 </div>
 <div class="col-md-3">
-      <div class="card">
-        <div class="card-header bg-info" role="tab" id="usedByCard">
+      <div class="card bg-dark">
+        <div class="card-header bg-dark" role="tab" id="usedByCard">
           <h5>
             <a data-toggle="collapse" class="text-white" data-parent="#accordion" href="#usedByCollapse" aria-expanded="true" aria-controls="usedByCollapse">
               Used By

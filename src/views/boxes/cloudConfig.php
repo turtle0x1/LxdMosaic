@@ -1,47 +1,41 @@
 <div id="cloudConfigBox" class="boxSlide">
 <div id="cloudConfigOverview" class="row">
-    <div class="col-md-9">
-          <div class="card">
-            <div class="card-header bg-info" role="tab" >
-              <h5>
-                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
-                  Cloud Config
-                </a>
-              </h5>
-            </div>
-            <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" >
-              <div class="card-block bg-dark">
-                  Cloud config files are scripts or controllers that run when
-                  a container is first created to set it up for a particular task.
-              </div>
-            </div>
+    <div class="col-md-12">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h4>Cloud Config</h4>
+        <div class="btn-toolbar float-right">
+          <div class="btn-group mr-2">
+              <button data-toggle="tooltip" data-placement="bottom" title="Create Cloud Config" class="btn btn-block btn-primary" id="createCloudConfig">
+                  <i class="fa fa-plus"></i>
+              </button>
           </div>
+        </div>
     </div>
-    <div class="col-md-3">
-          <div class="card">
-            <div class="card-header bg-info" role="tab" >
-              <h5>
-                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Actions
-                </a>
-              </h5>
-            </div>
-            <div id="collapseOne" class="collapse in show" role="tabpanel" >
-              <div class="card-block bg-dark">
-                  <button class="btn btn-block btn-primary" id="createCloudConfig">
-                      Create
-                  </button>
-              </div>
-            </div>
-          </div>
     </div>
 </div>
-<div class="row" id="cloudConfigContents">
-    <div class="col-md-10">
+<div  id="cloudConfigContents">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1></h1>
+        <div class="btn-toolbar float-right">
+          <div class="btn-group mr-2">
+              <button data-toggle="tooltip" data-placement="bottom" title="Save Cloud Config" class="btn btn-success save">
+                  <i class="fas fa-save"></i>
+              </button>
+              <hr/>
+              <button data-toggle="tooltip" data-placement="bottom" title="Deploy Cloud Config" class="btn btn-primary" id="deployCloudConfig">
+                  <i class="fas fa-play" style="color: white !important;"></i>
+              </button>
+              <button data-toggle="tooltip" data-placement="bottom" title="Delete Cloud Config" class="btn btn-danger" id="deleteCloudConfig">
+                  <i class="fas fa-trash"></i>
+              </button>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-12">
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header bg-info" role="tab" >
+                <div class="card bg-dark">
+                  <div class="card-header bg-dark" role="tab" >
                     <h5>
                       <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                         Image
@@ -59,8 +53,8 @@
         </div>
         <div class="row">
             <div class="col-md-7">
-                <div class="card">
-                  <div class="card-header bg-info" role="tab" id="cloudConfig-actionsHeading">
+                <div class="card bg-dark">
+                  <div class="card-header bg-dark" role="tab" id="cloudConfig-actionsHeading">
                     <h5>
                       <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-editorCollapse" aria-expanded="true" aria-controls="cloudConfig-editorCollapse">
                         Cloud Config File
@@ -76,8 +70,8 @@
                 </div>
             </div>
             <div class="col-md-5">
-                <div class="card">
-                  <div class="card-header bg-info" role="tab">
+                <div class="card bg-dark">
+                  <div class="card-header bg-dark" role="tab">
                     <h5>
                       <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-envVariablesCollapse" aria-expanded="true" aria-controls="cloudConfig-envVariablesCollapse">
                         Enviroment Variables
@@ -106,31 +100,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-2">
-          <div class="card">
-            <div class="card-header bg-info" role="tab" >
-              <h5>
-                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Actions
-                </a>
-              </h5>
-            </div>
-            <div class="bg-dark" id="collapseOne" class="collapse in show" role="tabpanel" >
-              <div class="card-block">
-                  <button class="btn btn-block btn-success save">
-                      Save
-                  </button>
-                  <hr/>
-                  <button class="btn btn-block btn-primary" id="deployCloudConfig">
-                      Deploy
-                  </button>
-                  <button class="btn btn-block btn-danger" id="deleteCloudConfig">
-                      Delete
-                  </button>
-              </div>
-            </div>
-          </div>
     </div>
 </div>
 </div>
@@ -193,8 +162,8 @@ function loadCloudConfigTree()
         loadCloudConfigOverview();
         var data = $.parseJSON(data);
         let hosts = `
-        <li class="nav-item active cloudConfig-overview">
-            <a class="nav-link" href="#">
+        <li class="nav-item cloudConfig-overview">
+            <a class="nav-link text-info" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;

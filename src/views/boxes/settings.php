@@ -1,20 +1,20 @@
 <div id="settingsBox" class="boxSlide">
-    <div id="settingsOverview" class="row">
+    <div id="settingsOverview">
         <div class="row">
             <div class="col-md-12">
-                  <div class="card">
-                    <div class="card-header bg-info" role="tab" >
+                  <div class="card bg-dark">
+                    <div class="card-header bg-dark" role="tab" >
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
-                          Current Instance Settings
+                          Current Settings
                         </a>
                         <button class="btn btn-success float-right" id="saveSettings">
-                            Save
+                            <i class="fas fa-save"></i>
                         </button>
                       </h5>
                     </div>
                     <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
-                      <div class="card-block bg-dark">
+                      <div class="card-body bg-dark">
                         <table class="table table-dark table-bordered" id="settingListTable">
                             <thead>
                                 <tr>
@@ -33,19 +33,19 @@
          </div>
          <div class="row">
              <div class="col-md-6">
-                  <div class="card" id="recordedActionsCard">
-                    <div class="card-header bg-info" role="tab" >
+                  <div class="card bg-dark" id="recordedActionsCard">
+                    <div class="card-header bg-dark" role="tab" >
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#lastRecordedActions" aria-expanded="true" aria-controls="lastRecordedActions">
-                          Showing Last <span id="actionCount"></span> Recorded Actions
+                          Last <span id="actionCount"></span> Recorded Actions
                         </a>
-                        <button class="btn btn-warning float-right" id="loadMoreRecordedActions">
-                            Load More
+                        <button class="btn btn-primary float-right" id="loadMoreRecordedActions">
+                            <i class="fas fa-search-plus"></i>
                         </button>
                       </h5>
                     </div>
                     <div id="lastRecordedActions" class="collapse in show" role="tabpanel">
-                      <div class="card-block table-responsive bg-dark">
+                      <div class="card-body table-responsive bg-dark">
                         <table class="table table-dark table-bordered" id="recordedActionsTable">
                             <thead>
                                 <tr>
@@ -62,19 +62,19 @@
                   </div>
             </div>
              <div class="col-md-6">
-                  <div class="card" id="usersCard">
-                    <div class="card-header bg-info" role="tab" >
+                  <div class="card bg-dark" id="usersCard">
+                    <div class="card-header" role="tab" >
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
                           Users
                         </a>
-                        <button class="btn btn-warning float-right" id="addUser">
-                            Add
+                        <button class="btn btn-primary float-right" id="addUser">
+                            <i class="fas fa-plus"></i>
                         </button>
                       </h5>
                     </div>
                     <div id="users" class="collapse in show" role="tabpanel">
-                      <div class="card-block bg-dark">
+                      <div class="card-body">
                         <table class="table table-dark table-bordered" id="usersTable">
                             <thead>
                                 <tr>
@@ -142,7 +142,7 @@ function loadRecordedActions(ammount = 30){
                 </tr>`;
             });
         }else{
-            trs += `<tr><td colspan="999" class="text-info">No Recorded Actions</td></tr>`
+            trs += `<tr><td colspan="999" class="text-info text-center">No Recorded Actions</td></tr>`
         }
         $("#recordedActionsTable > tbody").empty().append(trs);
     });
