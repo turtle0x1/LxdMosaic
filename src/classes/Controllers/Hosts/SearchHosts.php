@@ -20,7 +20,7 @@ class SearchHosts
             }
 
             $alias = is_null($server["Host_Alias"]) ? $server['Host_Url_And_Port'] : $server["Host_Alias"];
-            if (strpos($alias, $host) !== false) {
+            if (stripos($alias, $host) !== false) {
                 $output[] = [
                     "host"=>$alias,
                     "hostId"=>$server["Host_ID"]
