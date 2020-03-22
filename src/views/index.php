@@ -456,7 +456,7 @@ $("#sidebar-ul").on("click", ".nav-item", function(){
 })
 
 if(typeof io !== "undefined"){
-    var socket = io.connect("/operations");
+    var socket = io.connect("/operations?ws_token=<?=$_SESSION['wsToken']?>&user_id=<?=$_SESSION['userId']?>");
 
     socket.on('hostChange', function(msg){
         let data = $.parseJSON(msg);
