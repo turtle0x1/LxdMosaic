@@ -10,12 +10,14 @@ const fs = require('fs'),
   rp = require('request-promise'),
   mysql = require('mysql'),
   Hosts = require('./Hosts');
+  WsTokens = require('./WsTokens');
 (HostOperations = require('./HostOperations')),
   (Terminals = require('./Terminals')),
   (bodyParser = require('body-parser')),
   (hosts = null),
   (hostOperations = null),
-  (terminals = null);
+  (terminals = null),
+  (wsTokens = null);
 
 const envImportResult = require('dotenv').config({
   path: __dirname + '/../.env',
@@ -154,7 +156,19 @@ con.connect(function(err) {
   }
 });
 
+io.use(async (socket, next) => {
+  let token = socket.handshake.query.ws_token;
+  let userId = socket.handshake.query.user_id;
+  let isValid = await wsTokens.isValid(token, userId);
+
+  if (isValid) {
+    return next();
+  }
+  return next(new Error('authentication error'));
+});
+
 hosts = new Hosts(con, fs, rp);
+wsTokens = new WsTokens(con);
 hostOperations = new HostOperations(fs);
 terminals = new Terminals(rp);
 
