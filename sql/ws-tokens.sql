@@ -5,6 +5,5 @@ CREATE TABLE `User_Api_Tokens` (
     `UAT_Created_At` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `UAT_User_ID` INT(11),
     `UAT_Token` TEXT NOT NULL,
-    `UAT_Last_Used` DATETIME,
     `UAT_Permanent` TINYINT NOT NULL DEFAULT 0
 );
