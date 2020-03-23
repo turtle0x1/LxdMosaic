@@ -18,7 +18,7 @@ class UserSession
 
     public function logout()
     {
-        $this->invalidateToken->invalidate($_SESSION["userId"]);
+        $this->invalidateToken->invalidate($_SESSION["userId"], $_SESSION["wsToken"]);
 
         $_SESSION = [];
         return true;

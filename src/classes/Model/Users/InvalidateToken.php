@@ -11,19 +11,21 @@ class InvalidateToken
         $this->database = $database->dbObject;
     }
 
-    public function invalidate(int $userId)
+    public function invalidate(int $userId, string $token)
     {
-        $sql = "UPDATE
+        $sql = "DELETE FROM
                     `User_Api_Tokens`
-                SET
-                    `UAT_Last_Used` = NOW()
-		WHERE
-                    `UAT_Last_Used` IS NULL
+                WHERE
+                    `UAT_Token` = :token
                 AND
-                    `UAT_User_ID` = :user_id";
+                    `UAT_User_ID` = :user_id
+		AND
+                    `UAT_Permanent` = 0"
+		;
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":user_id"=>$userId
+            ":user_id" => $userId,
+	    ":token"   => $token
         ]);
         return $do->rowCount() ? true : false;
     }
