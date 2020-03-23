@@ -11,12 +11,12 @@ class InsertToken
         $this->database = $database->dbObject;
     }
 
-    public function insert(string $token, string $userId)
+    public function insert(string $userId, string $token)
     {
-        $sql = "INSERT INTO ws_tokens
+        $sql = "INSERT INTO `User_Api_Tokens`
                 (
-                    token,
-                    user_id
+                    `UAT_Token`,
+                    `UAT_User_ID`
                 ) VALUES (
                     :token,
                     :user_id

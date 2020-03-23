@@ -30,7 +30,7 @@ class LogUserIn
         $_SESSION["isAdmin"] = $this->fetchUserDetails->isAdmin($userId);
 
         $_SESSION["wsToken"] = StringTools::random(256);
-        $this->insertToken->insert($_SESSION["wsToken"], $userId);
+        $this->insertToken->insert($userId, $_SESSION["wsToken"]);
 
         header("Location: /");
 

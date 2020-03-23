@@ -4,23 +4,23 @@ namespace dhope0000\LXDClient\Model\Users;
 
 use dhope0000\LXDClient\Model\Database\Database;
 
-class UpdateToken
+class InvalidateToken
 {
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function update(int $userId)
+    public function invalidate(int $userId)
     {
         $sql = "UPDATE
-                    ws_tokens
+                    `User_Api_Tokens`
                 SET
-                    used = NOW()
+                    `UAT_Last_Used` = NOW()
 		WHERE
-                    used IS NULL
+                    `UAT_Last_Used` IS NULL
                 AND
-                    user_id = :user_id";
+                    `UAT_User_ID` = :user_id";
         $do = $this->database->prepare($sql);
         $do->execute([
             ":user_id"=>$userId

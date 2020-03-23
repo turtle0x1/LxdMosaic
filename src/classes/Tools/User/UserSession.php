@@ -2,11 +2,15 @@
 
 namespace dhope0000\LXDClient\Tools\User;
 
-use dhope0000\LXDClient\Model\Users\UpdateToken;
-use dhope0000\LXDClient\Model\Database\Database;
+use dhope0000\LXDClient\Model\Users\InvalidateToken;
 
 class UserSession
 {
+    public function __construct(InvalidateToken $invalidateToken)
+    {
+        $this->invalidateToken = $invalidateToken;
+    }
+
     public function isLoggedIn()
     {
         return isset($_SESSION["userId"]) && !empty($_SESSION["userId"]);
@@ -14,8 +18,7 @@ class UserSession
 
     public function logout()
     {
-        $updateToken = new UpdateToken(new Database);
-        $updateToken->update($_SESSION["userId"]);
+        $this->invalidateToken->invalidate($_SESSION["userId"]);
 
         $_SESSION = [];
         return true;

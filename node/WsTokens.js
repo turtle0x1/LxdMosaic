@@ -5,14 +5,10 @@ module.exports = class WsTokens {
 
   isValid(token, userId) {
     return new Promise((resolve, reject) => {
-      this.con.query('SELECT count(*) AS count FROM ws_tokens WHERE token = ? AND user_id = ?;',
+      this.con.query('SELECT count(*) AS count FROM `User_Api_Tokens` WHERE `UAT_Token` = ? AND `UAT_User_ID` = ? AND (`UAT_Last_Used` IS NULL || `UAT_Permanent` <> 0);',
 	  [token, userId],
 	  function (err, results) {
-         if (results[0].count <= 0) {
-           resolve(false);
-	 } else {
-           resolve(true);
-	 }
+        resolve(results[0].count > 0);
       });
     });
   }
