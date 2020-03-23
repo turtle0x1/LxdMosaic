@@ -51,11 +51,11 @@ cp .env.dist .env
 
 # Update env values
 ## DB Host
-sed -i -e 's/DB_HOST=/DB_HOST=localhost/g' .env
+sed -i -e 's/DB_HOST=.*/DB_HOST=localhost/g' .env
 ## DB User
-sed -i -e 's/DB_USER=/DB_USER=lxd/g' .env
+sed -i -e 's/DB_USER=.*/DB_USER=lxd/g' .env
 ## DB Pass
-sed -i -e 's/DB_PASS=/DB_PASS=lxdManagerPasswordComplex321/g' .env
+sed -i -e 's/DB_PASS=.*/DB_PASS=lxdManagerPasswordComplex321/g' .env
 
 # Import data into mysql
 mysql < sql/users.sql

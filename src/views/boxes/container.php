@@ -1128,7 +1128,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
 
                                     currentTerminalProcessId = data.processId;
 
-                                    consoleSocket = io.connect("/terminals", {
+                                    consoleSocket = io.connect("/terminals?ws_token=<?=$_SESSION['wsToken']?>&user_id=<?=$_SESSION['userId']?>", {
                                         reconnection: false,
                                         query: $.extend({
                                             pid: data.processId,

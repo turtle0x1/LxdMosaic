@@ -2,8 +2,15 @@
 
 namespace dhope0000\LXDClient\Tools\User;
 
+use dhope0000\LXDClient\Model\Users\InvalidateToken;
+
 class UserSession
 {
+    public function __construct(InvalidateToken $invalidateToken)
+    {
+        $this->invalidateToken = $invalidateToken;
+    }
+
     public function isLoggedIn()
     {
         return isset($_SESSION["userId"]) && !empty($_SESSION["userId"]);
@@ -11,6 +18,8 @@ class UserSession
 
     public function logout()
     {
+        $this->invalidateToken->invalidate($_SESSION["userId"], $_SESSION["wsToken"]);
+
         $_SESSION = [];
         return true;
     }
