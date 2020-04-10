@@ -96,6 +96,11 @@
 
             </div>
         </div>
+        <div class="card bg-dark">
+            <div class="card-body" id="storageDataCard">
+
+            </div>
+        </div>
 
     </div>
     <div class="col-md-3">
@@ -822,6 +827,42 @@ function loadContainerView(data)
                 },
                 options: {
                   cutoutPercentage: 40,
+                  responsive: false,
+                  scales: scalesBytesCallbacks,
+                  tooltips: toolTipsBytesCallbacks
+                }
+            });
+
+            $("#storageDataCard").empty().append(`
+                <h5 class="text-white">
+                    <u> Disk Usage </u>
+                    <i class="fas fa-hdd float-right"></i>
+                </h5>
+                <div style="width: 100%;">
+                <canvas id="storageData"></canvas></div>`);
+
+
+            let storageKeys = Object.keys(x.state.disk);
+            let storageColors = [];
+            let storageLabels = storageKeys;
+            let storageData = storageKeys.map((key)=>{
+                storageColors.push(randomColor());
+                return x.state.disk[key].usage;
+            });
+
+            new Chart($("#storageData"), {
+                type: "bar",
+                data: {
+                    labels: storageLabels,
+                    datasets: [{
+                      label: 'Memory',
+                      data: storageData,
+                      backgroundColor: storageColors,
+                      borderColor: storageColors,
+                      borderWidth: 1
+                  }]
+                },
+                options: {
                   responsive: false,
                   scales: scalesBytesCallbacks,
                   tooltips: toolTipsBytesCallbacks
