@@ -1169,7 +1169,12 @@ $("#containerBox").on("click", "#goToConsole", function() {
 
                                     currentTerminalProcessId = data.processId;
 
-                                    consoleSocket = io.connect("/terminals?ws_token=<?=$_SESSION['wsToken']?>&user_id=<?=$_SESSION['userId']?>", {
+                                    // Theoretically no need to inject credentials
+                                    // here as auth is only called when a socket
+                                    // is first connected (in this case when the
+                                    // operations socket is setup - which will
+                                    // always come before this) but to be safe ...
+                                    consoleSocket = io.connect(`/terminals?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}`, {
                                         reconnection: false,
                                         query: $.extend({
                                             pid: data.processId,

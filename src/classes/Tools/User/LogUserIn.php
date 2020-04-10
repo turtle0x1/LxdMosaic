@@ -5,13 +5,18 @@ namespace dhope0000\LXDClient\Tools\User;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Model\Users\InsertToken;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class LogUserIn
 {
-    public function __construct(FetchUserDetails $fetchUserDetails, InsertToken $insertToken)
-    {
+    public function __construct(
+        FetchUserDetails $fetchUserDetails,
+        InsertToken $insertToken,
+        Session $session
+    ) {
         $this->fetchUserDetails = $fetchUserDetails;
         $this->insertToken = $insertToken;
+        $this->session = $session;
     }
 
     public function login(string $username, string $password)
@@ -26,11 +31,12 @@ class LogUserIn
 
         $userId = $this->fetchUserDetails->fetchId($username);
 
-        $_SESSION["userId"] = $userId;
-        $_SESSION["isAdmin"] = $this->fetchUserDetails->isAdmin($userId);
+        $token = StringTools::random(256);
 
-        $_SESSION["wsToken"] = StringTools::random(256);
-        $this->insertToken->insert($userId, $_SESSION["wsToken"]);
+        $this->session->set("userId", $userId);
+        $this->session->set("isAdmin", $this->fetchUserDetails->isAdmin($userId));
+        $this->session->set("wsToken", $token);
+        $this->insertToken->insert($userId, $token);
 
         header("Location: /");
 

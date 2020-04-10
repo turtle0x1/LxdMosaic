@@ -4,10 +4,14 @@ $haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList"
 $userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
 
 $isAdmin = (int) $userSession->isAdmin();
+$apiToken = $userSession->getToken();
+$userId = $userSession->getUserId();
 
-
-
-echo "<script>var userDetails = {isAdmin: $isAdmin} </script>";
+echo "<script>var userDetails = {
+    isAdmin: $isAdmin,
+    apiToken: '$apiToken',
+    userId: $userId
+} </script>";
 
 if ($haveServers->haveAny() !== true) {
     header("Location: /views/firstRun");
@@ -456,7 +460,7 @@ $("#sidebar-ul").on("click", ".nav-item", function(){
 })
 
 if(typeof io !== "undefined"){
-    var socket = io.connect("/operations?ws_token=<?=$_SESSION['wsToken']?>&user_id=<?=$_SESSION['userId']?>");
+    var socket = io.connect(`/operations?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}`);
 
     socket.on('hostChange', function(msg){
         let data = $.parseJSON(msg);
