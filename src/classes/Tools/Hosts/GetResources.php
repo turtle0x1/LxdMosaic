@@ -67,6 +67,10 @@ class GetResources
         $resCpuSocket = $this->hasExtension->checkWithClient($client, "resources_cpu_socket");
         $resGpu = $this->hasExtension->checkWithClient($client, "resources_gpu");
 
+        $currentProject = $this->session->get("host/$hostId/project");
+
+        $details["currentProject"] = $currentProject;
+
         $details["extensions"] = [
             "supportsProjects"=>$supportsProjects,
             "resCpuSocket"=>$resCpuSocket,
