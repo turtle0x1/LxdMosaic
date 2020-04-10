@@ -33,7 +33,7 @@ class HostList
         $sql = "SELECT
                     `Host_ID`,
                     `Host_Url_And_Port`,
-                    `Host_Alias`,
+                    COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `Host_Alias`,
                     `Host_Online`
                 FROM
                     `Hosts`
@@ -49,7 +49,7 @@ class HostList
         $sql = "SELECT
                     `Host_ID`,
                     `Host_Url_And_Port`,
-                    `Host_Alias`,
+                    COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `Host_Alias`,
                     `Host_Online`
                 FROM
                     `Hosts`
@@ -72,7 +72,7 @@ class HostList
         $sql = "SELECT
                     `Host_ID` as `hostId`,
                     `Host_Url_And_Port` as `urlAndPort`,
-                    `Host_Alias` as `alias`,
+                    COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
                     `Host_Online` as `hostOnline`
                 FROM
                     `Hosts`
@@ -91,7 +91,7 @@ class HostList
         $sql = "SELECT
                     `Host_ID` as `hostId`,
                     `Host_Url_And_Port` as `urlAndPort`,
-                    `Host_Alias` as `alias`,
+                    COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
                     `Host_Online` as `hostOnline`
                 FROM
                     `Hosts`

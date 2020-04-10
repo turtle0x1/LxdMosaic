@@ -16,10 +16,8 @@ class GetAllImages
     {
         $output = array();
         foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
-
             if ($host["Host_Online"] != true) {
-                $output[$indent] = [
+                $output[$host["Host_Alias"]] = [
                     "hostId"=>$host["Host_ID"],
                     "online"=>false,
                     "images"=>[]
@@ -35,7 +33,7 @@ class GetAllImages
                 $details[] = $client->images->info($fingerprint);
             }
 
-            $output[$indent] = [
+            $output[$host["Host_Alias"]] = [
                 "online"=>true,
                 "images"=>$details,
                 "hostId"=>$host["Host_ID"]

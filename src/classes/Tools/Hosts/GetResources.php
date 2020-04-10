@@ -33,13 +33,12 @@ class GetResources
             $hostId = $host["Host_ID"];
             $details = [];
 
-            $alias = !is_null($host["Host_Alias"]) ? $host["Host_Alias"] : $host["Host_Url_And_Port"];
             $currentProject = $this->session->get("host/$hostId/project");
 
             if ($host["Host_Online"] != true) {
                 $output[$host["Host_Url_And_Port"]] = [
                     "online"=>false,
-                    "alias"=>$alias,
+                    "alias"=>$host["Host_Alias"],
                     "currentProject"=>$currentProject,
                     "hostId"=>$hostId
                 ];
@@ -49,7 +48,7 @@ class GetResources
 
             $details = $this->getDetails($hostId);
 
-            $details["alias"] = $alias;
+            $details["alias"] = $host["Host_Alias"];
             $details["currentProject"] = $currentProject;
             $details["hostId"] = $hostId;
 

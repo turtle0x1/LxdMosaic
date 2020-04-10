@@ -14,7 +14,7 @@ class GetDetails
     {
         $sql = "SELECT
                     `Host_Url_And_Port` as `urlAndPort`,
-                    `Host_Alias` as `alias`
+                    COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`
                 FROM
                     `Hosts`
                 WHERE

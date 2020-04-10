@@ -19,14 +19,12 @@ class GetHostsContainers
     {
         $details = array();
         foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
-
             if (!$host["Host_Online"] && $skipOffline) {
                 continue;
             }
 
             if ($host["Host_Online"] != true) {
-                $details[$indent] = [
+                $details[$host["Host_Alias"]] = [
                     "online"=>false,
                     "hostId"=>$host["Host_ID"],
                     "containers"=>[],
@@ -43,7 +41,7 @@ class GetHostsContainers
 
             $supportsBackups = $this->hasExtension->checkWithClient($client, LxdApiExtensions::CONTAINER_BACKUP);
 
-            $details[$indent] = [
+            $details[$host["Host_Alias"]] = [
                 "online"=>true,
                 "hostId"=>$host["Host_ID"],
                 "containers"=>$containers,
