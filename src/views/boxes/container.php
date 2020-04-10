@@ -869,7 +869,15 @@ function loadContainerView(data)
                 }
             });
         }else{
-            $("#memoryDataCard").empty().append(`<div class="alert alert-info text-center">Instance Not Running</div>`);
+            $("#memoryDataCard").empty().append(`<h5 class="text-white">
+                <u> Memory Usage </u>
+                <i class="fas fa-memory float-right"></i>
+            </h5>
+            <div class="alert alert-info text-center">Instance Not Running</div>`);
+            $("#storageDataCard").empty().append(`<h5 class="text-white">
+                            <u> Disk Usage </u>
+                            <i class="fas fa-hdd float-right"></i>
+                        </h5><div class="alert alert-info text-center">Instance Not Running</div>`);
         }
 
 
