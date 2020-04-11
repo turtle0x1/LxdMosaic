@@ -15,6 +15,8 @@ Added
 
     View, create & delete proxy devices on a host (#165)
 
+    Instance network's bytes sent / recieved to server overview (#169)
+
 Changed
     Indicate cluster groups & standalone hosts on dashboard (#150)
     Load profile on click instead of passing around an array containing profile data

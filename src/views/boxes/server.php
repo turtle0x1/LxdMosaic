@@ -46,7 +46,8 @@
                                 <td> <input type="checkbox" id="toggleAllContainers"> </td>
                                 <td> Name </td>
                                 <td> Disk Usage </td>
-                                <td> Memory Ussage </td>
+                                <td> Memory Usage </td>
+                                <td> <a href="#" data-toggle="tooltip" data-placement="bottom" title="Excluding local interface bytes sent & received"> Network Usage </a> </td>
                             </tr>
                         </thead>
                         <tbody>
@@ -345,11 +346,23 @@ function loadServerView(hostId)
 
                     let storageUsage = details.state.disk == null || details.state.disk.length == 0 ? "N/A" : formatBytes(details.state.disk.root.usage);
 
+                    let bytesSent = 0, bytesRecieved = 0;
+
+                    $.each(details.state.network, (networkName, network)=>{
+                        if(networkName == "lo"){
+                            return true;
+                        }
+
+                        bytesSent += network.counters.bytes_sent;
+                        bytesRecieved += network.counters.bytes_received;
+                    });
+
                     containerHtml += `<tr data-name="${name}">
                         <td><input name="containerCheckbox" type="checkbox"/></td>
                         <td>${name}</td>
                         <td>${storageUsage}</td>
                         <td>${formatBytes(details.state.memory.usage)}</td>
+                        <td>R: ${formatBytes(bytesRecieved)} <br/> S: ${formatBytes(bytesSent)}</td>
                     </tr>`
                 });
             });
