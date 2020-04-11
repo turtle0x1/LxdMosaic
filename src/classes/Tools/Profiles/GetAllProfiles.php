@@ -23,7 +23,7 @@ class GetAllProfiles
             ];
         }
 
-        $client = $this->client->getANewClient($host["hostId"]);
+        $client = $this->client->getANewClient($host["hostId"], false);
 
         $profiles = $client->profiles->all();
 

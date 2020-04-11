@@ -25,7 +25,7 @@ class GetAllImages
                 continue;
             }
 
-            $client = $this->client->getANewClient($host["Host_ID"]);
+            $client = $this->client->getANewClient($host["Host_ID"], false);
             $ids = $client->images->all();
             $details = [];
 
