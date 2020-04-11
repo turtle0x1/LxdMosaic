@@ -220,6 +220,7 @@ if ($haveServers->haveAny() !== true) {
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
+                  getClustersAndStandloneHosts: "/api/Hosts/GetClustersAndStandloneHostsController/get",
                   delete: "/api/Hosts/DeleteHostController/delete",
                   getHostOverview: "/api/Hosts/GetHostOverviewController/get"
               },
@@ -635,6 +636,61 @@ var unknownServerDetails = {
         total: "Uknown Memory Total"
     }
 };
+
+function createDashboardSidebar()
+{
+    ajaxRequest(globalUrls.hosts.getClustersAndStandloneHosts, {}, (data)=>{
+        data = $.parseJSON(data);
+        let hosts = `
+            <li class="nav-item container-overview">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>`;
+        $.each(data.clusters, function(i, item){
+            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
+
+            $.each(item.members, function(_, host){
+                let disabled = "";
+
+                if(host.status !== "Online"){
+                    disabled = "disabled text-warning text-strikethrough";
+                }
+
+                let name = host.alias == null ? host.urlAndPort : host.alias;
+
+                hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
+                    <a class="nav-link viewServer ${disabled}" href="#">
+                        <i class="fas fa-server"></i> ${name}
+                        <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                    </a>
+                    <ul class="nav-dropdown-items">
+                    </ul>
+                </li>`;
+            });
+        });
+        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+        $.each(data.standalone.members, function(_, host){
+            let disabled = "";
+
+            let name = host.alias == null ? host.urlAndPort : host.alias;
+
+            if(host.hostOnline == false){
+                disabled = "disabled text-warning text-strikethrough";
+            }
+
+            hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
+                <a class="nav-link viewServer ${disabled}" href="#">
+                    <i class="fas fa-server"></i> ${name}
+                    <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                </a>
+                <ul class="nav-dropdown-items">
+                </ul>
+            </li>`;
+        });
+        $("#sidebar-ul").empty().append(hosts);
+    });
+}
 
 function addHostContainerList(hostId, hostAlias) {
     ajaxRequest(globalUrls.hosts.containers.getHostContainers, {hostId: hostId}, (data)=>{
