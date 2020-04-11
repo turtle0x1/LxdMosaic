@@ -186,8 +186,8 @@ function viewProject(project, hostId, hostAlias){
         $("#projectDescription").html(description);
         $("#projectDetailsHeading").collapse(collapseDescription);
         let projectUsedBy = "";
-        let emptyProject = data.used_by.length == 0;
-        if(emptyProject){
+        let emptyProject = data.used_by.length < 2;
+        if(data.used_by.length == 0){
             projectUsedBy += "<tr><td class='text-center'><b style='color: red;'>Not Used</b></td></tr>"
         }else{
             $.each(data.used_by, function(i, item){
