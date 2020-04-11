@@ -25,4 +25,57 @@ class StringTools
         }
         return implode('', $pieces);
     }
+
+    public static function usedByStringsToLinks(
+        int $hostId,
+        array $usedBy,
+        string $hostAlias = ""
+    ) {
+        foreach ($usedBy as $index => $item) {
+            $parts = parse_url($item);
+            parse_str($parts['query'], $query);
+
+            $explodedPath = explode("/", $parts["path"]);
+
+            $lastItem = array_pop($explodedPath);
+
+            $project = "";
+
+            if (isset($query["project"])) {
+                $project = $query["project"];
+            }
+
+            $icon = "";
+            $class = "";
+            $data = " data-project='$project' data-host-id='$hostId' data-alias='$hostAlias' ";
+
+
+            if (strpos($item, '/snapshots/') !== false) {
+                $container = $explodedPath[count($explodedPath) - 2];
+                $lastItem =  $container . "/" . $lastItem;
+                $data .= "data-container='$container' ";
+                $class = 'goToInstance';
+                $icon = "camera";
+            } elseif (strpos($item, '/instances/') !== false || strpos($item, '/containers/') !== false) {
+                $data .= "data-container='$lastItem' ";
+                $class = 'goToInstance';
+                $icon = "box";
+            } elseif (strpos($item, '/profiles/') !== false) {
+                $class = 'toProfile';
+                $data .= "data-profile='$lastItem'";
+                $icon = "users";
+            } elseif (strpos($item, '/images/') !== false) {
+                $class = 'viewImages';
+                $icon = "images";
+            }
+
+            $item = "<a href='#' class='$class' $data>
+                <i class='fas fa-$icon'></i>
+                $lastItem
+            </a>";
+
+            $usedBy[$index] = $item;
+        }
+        return $usedBy;
+    }
 }

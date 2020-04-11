@@ -17,6 +17,8 @@ Added
 
     Instance network's bytes sent / recieved to server overview (#169)
 
+    Jump between instances, snapshots, images, & profiles from used_by tables
+
 Changed
     Indicate cluster groups & standalone hosts on dashboard (#150)
     Load profile on click instead of passing around an array containing profile data

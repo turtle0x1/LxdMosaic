@@ -695,8 +695,8 @@ function loadContainerView(data)
             makeToastr(result);
             return false;
         }
-
-        addBreadcrumbs([data.alias, data.container ], ["viewHost lookupId", "active"]);
+        changeActiveNav(".overview");
+        addBreadcrumbs(["Dashboard", data.alias, data.container ], ["overview", "viewHost lookupId", "active"], false);
 
         let disableActions = x.state.status_code !== 102;
 
@@ -773,7 +773,7 @@ function loadContainerView(data)
             profileTrHtml = "<tr><td colspan='999' class='text-center'> No Profiles </td></tr>"
         }else{
             $.each(x.details.profiles, function(i, item){
-                profileTrHtml += `<tr><td><a href='#' class='toProfile'>${item}</a></td></tr>`;
+                profileTrHtml += `<tr><td><a href='#' data-profile=${item} class='toProfile'>${item}</a></td></tr>`;
             });
         }
 
@@ -1222,13 +1222,6 @@ $("#containerBox").on("click", ".toDeployment", function(){
     loadDeploymentsView(deploymentId);
     changeActiveNav(".viewDeployments")
 })
-
-$("#containerBox").on("click", ".toProfile", function(){
-    let profile = $(this).text();
-    loadProfileView(profile, currentContainerDetails.hostId, function(){
-        viewProfile(profile, currentContainerDetails.alias, currentContainerDetails.hostId);
-    });
-});
 
 $("#containerBox").on("click", ".copyContainer", function(){
     copyContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);

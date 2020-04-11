@@ -27,6 +27,22 @@ class GetDetails
         return $do->fetch(\PDO::FETCH_ASSOC);
     }
 
+    public function fetchAlias(int $hostId)
+    {
+        $sql = "SELECT
+                    COALESCE(`Host_Alias`, `Host_Url_And_Port`)
+                FROM
+                    `Hosts`
+                WHERE
+                    `Host_ID` = :hostId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId
+        ]);
+        return $do->fetchColumn();
+    }
+
     public function getAll($hostId)
     {
         $sql = "SELECT

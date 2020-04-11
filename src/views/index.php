@@ -316,6 +316,24 @@ if ($haveServers->haveAny() !== true) {
           $(document).on("keyup", ".validateName", function(){
               this.value = this.value.replace(/[^-a-zA-Z0-9]+/g,'');
           })
+
+          $(document).on("click", ".goToInstance", function(){
+              currentContainerDetails = $(this).data();
+              createDashboardSidebar();
+              loadContainerView($(this).data());
+          });
+
+          $(document).on("click", ".toProfile", function(){
+              let profile = $(this).data("profile");
+
+              if(Object.keys($(this).data()).includes("hostId")){
+                  currentContainerDetails = $(this).data();
+              }
+
+              loadProfileView(profile, currentContainerDetails.hostId, function(){
+                  viewProfile(profile, currentContainerDetails.alias, currentContainerDetails.hostId);
+              });
+          });
       </script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
@@ -339,7 +357,7 @@ if ($haveServers->haveAny() !== true) {
       </button>
       <ul class="navbar-nav mr-auto d-md-down-none" id="mainNav">
           <li class="nav-item active">
-            <a class="nav-link overview createHostTre">
+            <a class="nav-link overview">
               <i class="fas fa-tachometer-alt"></i>
               <span class="hideNavText"> Dashboard </span>
             </a>
