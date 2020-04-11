@@ -290,6 +290,9 @@ function loadServerView(hostId)
     $(".boxSlide, #serverDetails, #serverProxyBox").hide();
     $("#serverOverview, #serverBox, #serverInfoBox").show();
 
+    $("#serverDetailsBtn, #serverProxyDevicesBtn").removeClass("active");
+    $("#serverDetailsBtn").addClass("active");
+
     $("#sidebar-ul").find(".active").removeClass("active");
     $("#sidebar-ul").find(".text-info").removeClass("text-info");
     $("#sidebar-ul").find(`[data-hostId='${hostId}'] > a:eq(0)`).addClass("text-info");

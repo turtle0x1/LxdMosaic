@@ -401,7 +401,7 @@ if ($haveServers->haveAny() !== true) {
           <li class="nav-item">
             <a class="nav-link viewBackups">
               <i class="fas fa-save"></i> <span class="hideNavText"> Backups </span> </a>
-          </li> 
+          </li>
           <li class="nav-item">
             <a class="nav-link viewSettings">
               <i class="fas fa-wrench"></i> <span class="hideNavText"> Settings </span> </a>
@@ -717,7 +717,7 @@ function addHostContainerList(hostId, hostAlias) {
                 let active = "";
                 if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
                     if(hostId == currentContainerDetails.hostId && containerName == currentContainerDetails.container){
-                        active = "active"
+                        active = "text-info"
                     }
                 }
 
@@ -727,11 +727,11 @@ function addHostContainerList(hostId, hostAlias) {
                     typeFa = "vr-cardboard";
                 }
 
-                containers += `<li class="nav-item view-container ${active}"
+                containers += `<li class="nav-item view-container"
                     data-host-id="${hostId}"
                     data-container="${containerName}"
                     data-alias="${hostAlias}">
-                  <a class="nav-link" href="#">
+                  <a class="nav-link ${active}" href="#">
                     <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
                     <i class="nav-icon fas fa-${typeFa}"></i>
                     ${containerName}

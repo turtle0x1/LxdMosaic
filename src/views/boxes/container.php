@@ -237,11 +237,12 @@ function loadContainerViewAfter(data = null, milSeconds = 2000)
     }, 2000);
 }
 
-function loadContainerTreeAfter(milSeconds = 2000, hostId = null)
+function loadContainerTreeAfter(milSeconds = 2000, hostId = null, hostAlias = null)
 {
     setTimeout(function(){
         let p = $.isNumeric(hostId) ? hostId : currentContainerDetails.hostId;
-        addHostContainerList(p);
+        let a = hostAlias == null ? currentContainerDetails.alias : hostAlias;
+        addHostContainerList(p, a);
     }, milSeconds);
 }
 
