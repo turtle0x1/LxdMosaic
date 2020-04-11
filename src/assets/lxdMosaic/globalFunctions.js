@@ -80,6 +80,9 @@ function ajaxRequest(url, data, callback){
              callback(data);
          },
          error: function(data){
+             if(data.status == 403){
+                 location.reload();
+             }
              callback(data);
          }
      });
