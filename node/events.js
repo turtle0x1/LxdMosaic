@@ -165,18 +165,19 @@ io.use(async (socket, next) => {
   if (isValid) {
     return next();
   }
-  return next(new Error('authentication error'));
+  return next(new Error("authentication error"));
 });
 
 hosts = new Hosts(con, fs, rp);
 wsTokens = new WsTokens(con);
-hostOperations = new HostOperations(fs);
 terminals = new Terminals(rp, con);
+hostOperations = new HostOperations(fs, terminals);
+
 
 createWebSockets();
 httpsServer.listen(3000, function() {});
 
-process.on('SIGINT', function() {
+process.on("SIGINT", function() {
   hostOperations.closeSockets();
   terminals.closeAll();
   process.exit();
