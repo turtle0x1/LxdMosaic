@@ -10,7 +10,7 @@
                     <table class="table table-bordered table-dark" id="containerBackupTable">
                         <thead>
                             <tr>
-                                <th>Container</th>
+                                <th>Instance</th>
                                 <th>Created</th>
                                 <th>Last Backed Up</th>
                                 <th>View</th>

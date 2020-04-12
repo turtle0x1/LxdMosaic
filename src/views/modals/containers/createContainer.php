@@ -70,7 +70,7 @@
             </div>
         </div>
         <label for="newContainerSettings">
-            Container Settings(Optional)
+            Settings(Optional)
             <button id="addNewContainerSetting" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
         </label>
         <table class="table table-borered" id="newContainerSettings">

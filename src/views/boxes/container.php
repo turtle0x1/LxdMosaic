@@ -67,7 +67,7 @@
     <div class="col-md-5">
         <div class="card text-white bg-dark">
           <div class="card-body">
-              <h5> <u> Container Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
+              <h5> <u> Instance Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
               Host: <span id="container-hostNameDisplay"></span>
               <br/>
               <a
@@ -154,7 +154,7 @@
         <div class="col-md-6">
             <div class="card card-accent-success">
                 <div class="card-header bg-dark">
-                    <h4> LXDMosaic Container Backups </h4>
+                    <h4> LXDMosaic Instance Backups </h4>
                 </div>
                 <div class="card-body bg-dark">
                     <table class="table table-bordered table-dark" id="localBackupTable">
@@ -175,7 +175,7 @@
             <div class="card card-accent-success">
                 <div class="card-header bg-dark">
                     <h4>
-                        LXD Container Backups
+                        LXD Instance Backups
                         <button class="btn btn-success float-right" id="createBackup">
                             Create
                         </button>
@@ -291,7 +291,7 @@ function deleteFilesystemObjectConfirm(path)
 function restoreBackupContainerConfirm(backupId, hostAlias, container, callback = null, wait = true)
 {
     $.confirm({
-        title: `Backup Container - ${hostAlias} / ${container} `,
+        title: `Backup Instance - ${hostAlias} / ${container} `,
         content: `
             <div class="form-group">
                 <label> Target Host </label>
@@ -357,7 +357,7 @@ function restoreBackupContainerConfirm(backupId, hostAlias, container, callback 
 function backupContainerConfirm(hostId, hostAlias, container, callback = null, wait = true)
 {
     $.confirm({
-        title: `Backup Container - ${hostAlias} / ${container} `,
+        title: `Backup Instance - ${hostAlias} / ${container} `,
         content: `
             <div class="form-group">
                 <label> Backup Name </label>
@@ -421,8 +421,8 @@ function backupContainerConfirm(hostId, hostAlias, container, callback = null, w
 function deleteContainerConfirm(hostId, hostAlias, container)
 {
     $.confirm({
-        title: 'Delete Container ' + hostAlias + '/' + container,
-        content: 'Are you sure you want to delete this container ?!',
+        title: 'Delete Instance ' + hostAlias + '/' + container,
+        content: 'Are you sure you want to delete this instance ?!',
         buttons: {
             cancel: function () {},
             delete: {
@@ -505,7 +505,7 @@ function renameContainerConfirm(hostId, container, reloadView, hostAlias)
 function snapshotContainerConfirm(hostId, container)
 {
     $.confirm({
-        title: 'Snapshot Container - ' + container,
+        title: 'Snapshot Instance - ' + container,
         content: `
             <div class="form-group">
                 <label> Snapshot Name </label>
@@ -1135,7 +1135,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
         }
 
         $.confirm({
-            title: 'Container Shell!',
+            title: 'Instance Shell!',
             content: `
                 <div class="form-group">
                     <label> Shell </label>

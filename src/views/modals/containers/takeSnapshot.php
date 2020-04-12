@@ -17,7 +17,7 @@
             Snapshots take "pictures" of the current state of your container
         </div>
         <h5>
-            <b> Container </b> <span class="snapshotModal-containerName"></span> <br/>
+            <b> Instance </b> <span class="snapshotModal-containerName"></span> <br/>
             <b> Host: </b> <span id="snapshotModal-currentHost"></span>
         </h5>
         <div class="form-group">

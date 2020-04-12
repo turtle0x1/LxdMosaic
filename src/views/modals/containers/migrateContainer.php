@@ -3,7 +3,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Migrate Container <b><span class="migrateModal-containerName"></span></b></h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Migrate Instance<b><span class="migrateModal-containerName"></span></b></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -13,7 +13,7 @@
             This falty at best (avoid using this if possible)
         </div>
         <div class="alert alert-info ">
-            Migrating a container will <b> move </b> it from one host to another
+            Migrating a instance will <b> move </b> it from one host to another
         </div>
         <h5>
             <b> Moving </b> <span class="migrateModal-containerName"></span> <br/>
