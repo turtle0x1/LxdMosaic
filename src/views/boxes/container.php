@@ -689,7 +689,7 @@ function loadContainerView(data)
         currentTerminalProcessId = null;
     }
 
-    ajaxRequest(globalUrls.containers.getDetails, data, function(result){
+    ajaxRequest(globalUrls.instances.getInstance, data, function(result){
         let x = $.parseJSON(result);
 
         if(x.state == "error"){

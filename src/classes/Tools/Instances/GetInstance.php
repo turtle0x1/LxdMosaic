@@ -1,13 +1,13 @@
 <?php
 
-namespace dhope0000\LXDClient\Tools\Containers;
+namespace dhope0000\LXDClient\Tools\Instances;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Deployments\FetchDeployments;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
-class GetContainer
+class GetInstance
 {
     private $hasExtension;
 
