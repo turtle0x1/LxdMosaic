@@ -1,14 +1,14 @@
 # LXD Mosaic
-<a href="https://github.com/turtle0x1/LxdMosaic/labels/more%20input%20required">I want <b>YOUR</b> input :loudspeaker:</a> 
+<a href="https://github.com/turtle0x1/LxdMosaic/labels/more%20input%20required">I want <b>YOUR</b> input :loudspeaker:</a>
 
-<a href="https://github.com/turtle0x1/LxdMosaic/issues/new?assignees=&labels=&template=feature_request.md&title=">I want <b>YOUR</b> ideas :thought_balloon:</a> 
+<a href="https://github.com/turtle0x1/LxdMosaic/issues/new?assignees=&labels=&template=feature_request.md&title=">I want <b>YOUR</b> ideas :thought_balloon:</a>
 
 I also like stars, I you find yourself that way inclinded :angel:
 
 
-<img src="https://i.imgur.com/Rc2Hupi.png" width="428"> <img src="https://i.imgur.com/mRfbtOP.png" width="428">
+<img src="https://i.imgur.com/vnhrSDW.png" width="428"> <img src="https://i.imgur.com/xHSjw3J.png" width="428">
 
-<img src="https://i.imgur.com/AhkgYnG.png" width="428"><img src="https://i.imgur.com/dY3ArHg.png" width="428">
+<img src="https://i.imgur.com/YRRWcsj.png" width="428"><img src="https://i.imgur.com/sj5pAYi.png" width="428">
 
 ## Documentation
 

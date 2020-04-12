@@ -5,6 +5,27 @@ You should only upgrade when a new version is tagged,
 Restarting the `pm2` and `apache2` process may interupt running process please
 be careful when upgrading!
 
+## 0.6.X -> 0.7.0
+
+```
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout v0.7.0
+
+npm i
+
+composer install
+
+mysql < sql/0.7.0.sql
+
+#Ubuntu
+systemctl restart apache2
+#Centos
+systemctl restart httpd
+```
+
 ## 0.6.0 -> 0.6.1
 
 ```
