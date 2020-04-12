@@ -1,15 +1,15 @@
 <?php
 
-namespace dhope0000\LXDClient\Controllers\Containers;
+namespace dhope0000\LXDClient\Controllers\Instances;
 
-use dhope0000\LXDClient\Tools\Containers\CreateContainer;
+use dhope0000\LXDClient\Tools\Instances\CreateInstance;
 use dhope0000\LXDClient\Constants\LxdInstanceTypes;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    public function __construct(CreateContainer $createContainer)
+    public function __construct(CreateInstance $createInstance)
     {
-        $this->createContainer = $createContainer;
+        $this->createInstance = $createInstance;
     }
 
     public function create(
@@ -22,7 +22,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         array $gpus = [],
         array $config = []
     ) {
-        $lxdResponses = $this->createContainer->create(
+        $lxdResponses = $this->createInstance->create(
             LxdInstanceTypes::CONTAINER,
             $name,
             $profileIds,

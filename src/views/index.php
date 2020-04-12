@@ -132,6 +132,7 @@ if ($haveServers->haveAny() !== true) {
                   migrate: "/api/Instances/MigrateInstanceController/migrate",
                   getCurrentSettings: "/api/Instances/GetCurrentInstanceSettingsController/get",
                   setSettings: "/api/Instances/SetSettingsController/set",
+                  create: "/api/Instances/CreateController/create",
               },
               //NOTE The url can't be "Analytics" because some ad blockers
               //     will block it by default
@@ -190,8 +191,6 @@ if ($haveServers->haveAny() !== true) {
                   copy: '/api/Profiles/CopyProfileController/copyProfile',
               },
               containers:{
-                  create: "/api/Containers/CreateController/create",
-
                   instanceTypes: {
                       getInstanceTypes: "/api/Containers/InstanceTypes/GetAllController/getAll"
                   },

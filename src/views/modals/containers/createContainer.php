@@ -254,7 +254,7 @@
             config: config
         };
 
-        ajaxRequest(globalUrls.containers.create, x, function(data){
+        ajaxRequest(globalUrls.instances.create, x, function(data){
             let x = makeToastr(data);
             if(x.state == "error"){
                 return false;
