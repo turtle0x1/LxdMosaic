@@ -83,7 +83,7 @@
                 $.each(data.remainingSettings, function(i, item){
                     reamingSettingSelectOptions += `<option
                         data-default='${item.value}'
-                        data-description='${item.description}'
+                        data-description="${item.description}"
                         value='${item.key}'>
                             ${item.key}
                         </option>`;

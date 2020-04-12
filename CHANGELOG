@@ -13,6 +13,7 @@ Changed
 
 Fixed
     Terminal sessions not opening properly
+    Some instance settings can't be properly set (close #192)
 
 0.7.0 - 12/04/2020
 
