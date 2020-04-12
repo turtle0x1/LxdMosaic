@@ -11,6 +11,9 @@ Changed
     When creating a usedBy link fetch image details and show user freindly name
     instead of fingerprint (#186)
 
+Fixed
+    Terminal sessions not opening properly
+
 0.7.0 - 12/04/2020
 
 Added
