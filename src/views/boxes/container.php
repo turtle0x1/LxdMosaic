@@ -588,7 +588,7 @@ function copyContainerConfirm(hostId, container) {
                         container: container
                     };
 
-                    ajaxRequest(globalUrls.containers.copy, x, function(data){
+                    ajaxRequest(globalUrls.instances.copy, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.copy.enable();

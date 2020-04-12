@@ -1,9 +1,9 @@
 <?php
-namespace dhope0000\LXDClient\Tools\Containers;
+namespace dhope0000\LXDClient\Tools\Instances;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 
-class MigrateContainer
+class Migrate
 {
     public function __construct(LxdClient $lxdClient)
     {

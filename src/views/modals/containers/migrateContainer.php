@@ -63,8 +63,8 @@
             destination: $("#migrateModal-targetHost").val()
         }, currentContainerDetails);
 
-        ajaxRequest(globalUrls.containers.migrate, x, function(data){
-            console.log(data);
+        ajaxRequest(globalUrls.instances.migrate, x, function(data){
+            makeToastr(data);
         });
     });
 </script>
