@@ -81,7 +81,6 @@ app.get('/', function(req, res) {
 app.post('/terminals', function(req, res) {
   // Create a identifier for the console, this should allow multiple consolses
   // per user
-  console.log(req.body);
   uuid = terminals.getInternalUuid(req.body.host, req.body.container);
   res.json({ processId: uuid });
   res.send();
