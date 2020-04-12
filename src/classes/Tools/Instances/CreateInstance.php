@@ -2,7 +2,7 @@
 
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Tools\Hosts\HostsHaveContainer;
+use dhope0000\LXDClient\Tools\Hosts\Instances\HostsHaveInstance;
 use dhope0000\LXDClient\Tools\Hosts\Images\ImportImageIfNotHave;
 use dhope0000\LXDClient\Model\Client\LxdClient;
 
@@ -10,11 +10,11 @@ class CreateInstance
 {
     public function __construct(
         LxdClient $lxdClient,
-        HostsHaveContainer $hostsHaveContainer,
+        HostsHaveInstance $hostsHaveInstance,
         ImportImageIfNotHave $importImageIfNotHave
     ) {
         $this->client = $lxdClient;
-        $this->hostsHaveContainer = $hostsHaveContainer;
+        $this->hostsHaveInstance = $hostsHaveInstance;
         $this->importImageIfNotHave = $importImageIfNotHave;
     }
     /**
@@ -33,7 +33,7 @@ class CreateInstance
         array $gpus = null,
         array $config = []
     ) {
-        $this->hostsHaveContainer->ifHostInListHasContainerNameThrow($hosts, $name);
+        $this->hostsHaveInstance->ifHostInListHasContainerNameThrow($hosts, $name);
 
         $profiles = $this->createProfileNameArray($profiles, $profileNames);
 

@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
-class GetHostsContainers
+class GetHostsInstances
 {
     public function __construct(LxdClient $lxdClient, HostList $hostList, HasExtension $hasExtension)
     {
@@ -15,7 +15,7 @@ class GetHostsContainers
         $this->hasExtension = $hasExtension;
     }
 
-    public function getHostsContainers($skipOffline = false)
+    public function getAll($skipOffline = false)
     {
         $details = array();
         foreach ($this->hostList->getHostListWithDetails() as $host) {
@@ -58,16 +58,14 @@ class GetHostsContainers
             $client = $this->client->getANewClient($hostId);
         }
 
-        $supportsVms = $this->hasExtension->checkWithClient($client, LxdApiExtensions::VIRTUAL_MACHINES);
-
         $instances = $client->instances->all();
 
-        $instances = $this->addContainersStateAndInfo($client, $instances);
+        $instances = $this->addInstancesStateAndInfo($client, $instances);
         ksort($instances, SORT_STRING | SORT_FLAG_CASE);
         return $instances;
     }
 
-    private function addContainersStateAndInfo($client, $instances)
+    private function addInstancesStateAndInfo($client, $instances)
     {
         $hostInfo = $client->host->info();
         $details = array();

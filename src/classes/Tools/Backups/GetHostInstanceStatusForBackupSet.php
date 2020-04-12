@@ -3,24 +3,24 @@
 namespace dhope0000\LXDClient\Tools\Backups;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Tools\Instances\GetHostsContainers;
+use dhope0000\LXDClient\Tools\Instances\GetHostsInstances;
 
-class GetHostContainerStatusForBackupSet
+class GetHostInstanceStatusForBackupSet
 {
-    private $getHostsContainers;
+    private $getHostsInstances;
     private $lxdClient;
 
     public function __construct(
-        GetHostsContainers $getHostsContainers,
+        GetHostsInstances $getHostsInstances,
         LxdClient $lxdClient
     ) {
-        $this->getHostsContainers = $getHostsContainers;
+        $this->getHostsInstances = $getHostsInstances;
         $this->lxdClient = $lxdClient;
     }
 
     public function get(array $backups)
     {
-        $hostsContainers = $this->getHostsContainers->getHostsContainers(true);
+        $hostsContainers = $this->getHostsInstances->getAll(true);
 
         $backupHostIds = array_unique(array_column($backups, "hostId"));
 
