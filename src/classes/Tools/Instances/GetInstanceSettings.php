@@ -1,11 +1,11 @@
 <?php
 
-namespace dhope0000\LXDClient\Tools\Containers;
+namespace dhope0000\LXDClient\Tools\Instances;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Containers\Settings\GetSettings;
 
-class GetContainerSettings
+class GetInstanceSettings
 {
     public function __construct(
         LxdClient $lxdClient,
