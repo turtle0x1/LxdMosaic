@@ -18,7 +18,7 @@ class GetPath
 
     public function get(
         int $hostId,
-        string $container,
+        string $instance,
         string $path,
         string $download
     ) {
@@ -26,11 +26,11 @@ class GetPath
 
         $client->addCache($this->cache, []);
 
-        $response = $client->instances->files->read($container, $path);
+        $response = $client->instances->files->read($instance, $path);
 
         $this->instanceUrlKey = str_replace("/", "", $client->instances->getEndpoint());
 
-        $cacheKey = hash("sha1", "GET " . $client->getUrl() . "/1.0/$this->instanceUrlKey/$container/files?path=$path");
+        $cacheKey = hash("sha1", "GET " . $client->getUrl() . "/1.0/$this->instanceUrlKey/$instance/files?path=$path");
 
         if ($response == null) {
             $isDirectory = $this->isCachedResponsePathDirectory($cacheKey);
@@ -47,7 +47,7 @@ class GetPath
         }
 
         // We dont send the output of files here as its not required
-        $contents = is_string($response) ? null : $this->labelDirContents($client, $container, $path, $response);
+        $contents = is_string($response) ? null : $this->labelDirContents($client, $instance, $path, $response);
 
         return [
             "isDirectory"=>$isDirectory,
@@ -55,13 +55,13 @@ class GetPath
         ];
     }
 
-    private function labelDirContents($client, $container, $path, $contents)
+    private function labelDirContents($client, $instance, $path, $contents)
     {
         foreach ($contents as $index => $content) {
             $contentPath = $path == "/" ? "/$content" : "$path/$content";
 
-            $response = $client->instances->files->read($container, $contentPath);
-            $cacheKey = hash("sha1", "GET " . $client->getUrl() . "/1.0/$this->instanceUrlKey/$container/files?path=$contentPath");
+            $response = $client->instances->files->read($instance, $contentPath);
+            $cacheKey = hash("sha1", "GET " . $client->getUrl() . "/1.0/$this->instanceUrlKey/$instance/files?path=$contentPath");
             $contents[$index] = [
                 "name"=>$content,
                 "isDirectory"=>$this->isCachedResponsePathDirectory($cacheKey)
