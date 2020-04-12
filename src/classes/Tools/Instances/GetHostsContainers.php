@@ -1,5 +1,5 @@
 <?php
-namespace dhope0000\LXDClient\Tools\Containers;
+namespace dhope0000\LXDClient\Tools\Instances;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Hosts\HostList;
@@ -74,7 +74,7 @@ class GetHostsContainers
         foreach ($containers as $container) {
             $state = $client->instances->state($container);
             $info = $client->instances->info($container);
-            
+
             if ($info["location"] !== "") {
                 if ($info["location"] !== "none" && $info["location"] !== $hostInfo["environment"]["server_name"]) {
                     continue;

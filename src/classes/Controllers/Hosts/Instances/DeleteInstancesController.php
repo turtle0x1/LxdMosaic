@@ -1,5 +1,5 @@
 <?php
-namespace dhope0000\LXDClient\Controllers\Hosts\Containers;
+namespace dhope0000\LXDClient\Controllers\Hosts\Instances;
 
 use dhope0000\LXDClient\Tools\Instances\DeleteInstances;
 

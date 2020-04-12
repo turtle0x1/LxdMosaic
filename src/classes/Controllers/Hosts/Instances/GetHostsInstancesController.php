@@ -1,9 +1,9 @@
 <?php
-namespace dhope0000\LXDClient\Controllers\Hosts\Containers;
+namespace dhope0000\LXDClient\Controllers\Hosts\Instances;
 
-use dhope0000\LXDClient\Tools\Containers\GetHostsContainers;
+use dhope0000\LXDClient\Tools\Instances\GetHostsContainers;
 
-class GetHostsContainersController
+class GetHostsInstancesController
 {
     public function __construct(GetHostsContainers $getHostsContainers)
     {

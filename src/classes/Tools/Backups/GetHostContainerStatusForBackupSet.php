@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Tools\Backups;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Tools\Containers\GetHostsContainers;
+use dhope0000\LXDClient\Tools\Instances\GetHostsContainers;
 
 class GetHostContainerStatusForBackupSet
 {

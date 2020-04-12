@@ -206,15 +206,12 @@ if ($haveServers->haveAny() !== true) {
                   search: {
                       search: "/api/Hosts/SearchHosts/search"
                   },
-                  containers: {
-                      getAll: "/api/Hosts/Containers/GetAllController/getAll",
-                      delete: "/api/Hosts/Containers/DeleteInstancesController/delete",
-                      getHostContainers: "/api/Hosts/Containers/GetHostsContainersController/get"
-                  },
                   instances: {
                       deleteProxyDevice: "/api/Hosts/Instances/DeleteProxyDeviceController/delete",
                       addProxyDevice: "/api/Hosts/Instances/AddProxyDeviceController/add",
-                      getAllProxyDevices: "/api/Hosts/Instances/GetAllProxyDevicesController/get"
+                      getAllProxyDevices: "/api/Hosts/Instances/GetAllProxyDevicesController/get",
+                      delete: "/api/Hosts/Instances/DeleteInstancesController/delete",
+                      getHostContainers: "/api/Hosts/Instances/GetHostsInstancesController/get"
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
@@ -707,7 +704,7 @@ function createDashboardSidebar()
 }
 
 function addHostContainerList(hostId, hostAlias) {
-    ajaxRequest(globalUrls.hosts.containers.getHostContainers, {hostId: hostId}, (data)=>{
+    ajaxRequest(globalUrls.hosts.instances.getHostContainers, {hostId: hostId}, (data)=>{
         data = makeToastr(data);
         let containers = "";
         if(Object.keys(data).length > 0){

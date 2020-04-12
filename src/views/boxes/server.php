@@ -270,7 +270,7 @@ $(document).on("change", "#serverContainerActions", function(){
     let url = "";
 
     if(action == "delete"){
-        url = globalUrls.hosts.containers.delete
+        url = globalUrls.hosts.instances.delete
     }
 
     ajaxRequest(url, details, (data)=>{

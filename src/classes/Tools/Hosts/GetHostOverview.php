@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Tools\Hosts;
 
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
-use dhope0000\LXDClient\Tools\Containers\GetHostsContainers;
+use dhope0000\LXDClient\Tools\Instances\GetHostsContainers;
 use dhope0000\LXDClient\Tools\Hosts\GetResources;
 
 class GetHostOverview
