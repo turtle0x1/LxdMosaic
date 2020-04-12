@@ -202,7 +202,7 @@
 </div>
 <div id="containerFiles"  class="col-md-12">
     <div class="alert alert-danger">
-        Do not use this over metered intnernet connections
+        Do not use this over a metered internet connection.
         To Correctly indentify the whether the something is a dir or a file
         we have to get the file and check the response, so the file is "downloaded".
         <br/>
