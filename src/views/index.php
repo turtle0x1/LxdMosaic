@@ -100,6 +100,13 @@ if ($haveServers->haveAny() !== true) {
                   virtualMachines: {
                       create: "/api/Instances/VirtualMachines/CreateController/create"
                   },
+                  state:{
+                      start: "/api/Instances/StateController/start",
+                      stop: "/api/Instances/StateController/stop",
+                      restart: "/api/Instances/StateController/restart",
+                      freeze: "/api/Instances/StateController/freeze",
+                      unfreeze: "/api/Instances/StateController/unfreeze",
+                  },
                   delete: "/api/Instances/DeleteInstanceController/delete",
                   getInstance: "/api/Instances/GetInstanceController/get",
                   rename: "/api/Instances/RenameInstanceController/rename",
@@ -168,13 +175,6 @@ if ($haveServers->haveAny() !== true) {
                   setSettings: "/api/Containers/SetSettingsController/set",
                   instanceTypes: {
                       getInstanceTypes: "/api/Containers/InstanceTypes/GetAllController/getAll"
-                  },
-                  state:{
-                      startContainer: "/api/Containers/StateController/startContainer",
-                      stopContainer: "/api/Containers/StateController/stopContainer",
-                      restartContainer: "/api/Containers/StateController/restartContainer",
-                      freezeContainer: "/api/Containers/StateController/freezeContainer",
-                      unfreezeContainer: "/api/Containers/StateController/unfreezeContainer",
                   },
                   snapShots: {
                       take: "/api/Containers/Snapshot/TakeSnapshotController/takeSnapshot",

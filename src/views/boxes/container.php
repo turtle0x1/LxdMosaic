@@ -4,11 +4,11 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
               <select class="form-control" style="max-width: 150px;" id="container-changeState">
                   <option value="" selected="selected"> Change State </option>
-                  <option value="startContainer"> Start </option>
-                  <option value="stopContainer"> Stop </option>
-                  <option value="restartContainer"> Restart </option>
-                  <option value="freezeContainer"> Freeze </option>
-                  <option value="unfreezeContainer"> Unfreeze </option>
+                  <option value="start"> Start </option>
+                  <option value="stop"> Stop </option>
+                  <option value="restart"> Restart </option>
+                  <option value="freeze"> Freeze </option>
+                  <option value="unfreeze"> Unfreeze </option>
               </select>
 
             <h4 class="pt-1"> <u>
@@ -1245,7 +1245,7 @@ $("#containerBox").on("click", ".deleteContainer", function(){
 });
 
 $("#containerBox").on("change", "#container-changeState", function(){
-    let url = globalUrls.containers.state[$(this).val()];
+    let url = globalUrls.instances.state[$(this).val()];
     ajaxRequest(url, currentContainerDetails, function(data){
         let result = makeToastr(data);
         loadContainerTreeAfter();
