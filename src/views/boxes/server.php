@@ -34,6 +34,7 @@
                     <h4> Instances
                         <select id="serverContainerActions" class="form-control-sm float-right">
                             <option value="" selected></option>
+                            <option value="start">Start</option>
                             <option value="stop">Stop</option>
                             <option value="delete">Delete</option>
                         </select>
