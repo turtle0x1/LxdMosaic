@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LXDClient\Model\Hosts\Backups\Containers;
+namespace dhope0000\LXDClient\Model\Hosts\Backups\Instances;
 
 use dhope0000\LXDClient\Model\Database\Database;
 

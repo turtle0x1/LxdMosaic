@@ -1,7 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Instances\Settings;
 
-use dhope0000\LXDClient\Model\Containers\Settings\GetSettings;
+use dhope0000\LXDClient\Model\Instances\Settings\GetSettings;
 
 class GetAllAvailableSettingsController
 {

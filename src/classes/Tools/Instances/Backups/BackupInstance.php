@@ -27,7 +27,7 @@ class BackupInstance
 
     public function create(
         int $hostId,
-        string $container,
+        string $instance,
         string $backup,
         $wait,
         bool $importAndDelete
@@ -46,10 +46,10 @@ class BackupInstance
             throw new \Exception("Host doesn't support backups", 1);
         }
 
-        $response = $client->instances->backups->create($container, $backup, [], $wait);
+        $response = $client->instances->backups->create($instance, $backup, [], $wait);
 
         if ($importAndDelete) {
-            $this->storeBackupLocally->store($hostId, $container, $backup, true);
+            $this->storeBackupLocally->store($hostId, $instance, $backup, true);
         }
 
         return $response;

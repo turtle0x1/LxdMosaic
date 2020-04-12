@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Tools\Instances;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Containers\Settings\GetSettings;
+use dhope0000\LXDClient\Model\Instances\Settings\GetSettings;
 
 class GetInstanceSettings
 {

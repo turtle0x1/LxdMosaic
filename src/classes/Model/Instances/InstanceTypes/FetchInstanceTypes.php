@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LXDClient\Model\Containers\InstanceTypes;
+namespace dhope0000\LXDClient\Model\Instances\InstanceTypes;
 
 use dhope0000\LXDClient\Model\Database\Database;
 

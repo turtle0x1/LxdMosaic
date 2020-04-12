@@ -17,7 +17,7 @@ class DeleteRemoteBackup
         $this->hasExtension = $hasExtension;
     }
 
-    public function delete(int $hostId, string $container, string $backup)
+    public function delete(int $hostId, string $instance, string $backup)
     {
         $client = $this->lxdClient->getANewClient($hostId);
 
@@ -28,6 +28,6 @@ class DeleteRemoteBackup
             throw new \Exception("Host doesn't support backups", 1);
         }
 
-        return $client->instances->backups->remove($container, $backup, [], true);
+        return $client->instances->backups->remove($instance, $backup, [], true);
     }
 }

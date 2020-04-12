@@ -5,7 +5,7 @@ namespace dhope0000\LXDClient\Tools\Instances\Backups;
 use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\Backups\Containers\InsertContainerBackup;
+use dhope0000\LXDClient\Model\Hosts\Backups\Instances\InsertInstanceBackup;
 use dhope0000\LXDClient\Tools\Instances\Backups\DeleteRemoteBackup;
 
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
@@ -18,7 +18,7 @@ class StoreBackupLocally
     private $getSetting;
     private $lxdClient;
     private $filesystem;
-    private $insertContainerBackup;
+    private $insertInstanceBackup;
     private $deleteRemoteBackup;
     private $hasExtension;
 
@@ -26,7 +26,7 @@ class StoreBackupLocally
         GetSetting $getSetting,
         LxdClient $lxdClient,
         Filesystem $filesystem,
-        InsertContainerBackup $insertContainerBackup,
+        InsertInstanceBackup $insertInstanceBackup,
         DeleteRemoteBackup $deleteRemoteBackup,
         HasExtension $hasExtension
     ) {
@@ -34,31 +34,31 @@ class StoreBackupLocally
         $this->getSetting = $getSetting;
         $this->lxdClient = $lxdClient;
         $this->filesystem = $filesystem;
-        $this->insertContainerBackup = $insertContainerBackup;
+        $this->insertInstanceBackup = $insertInstanceBackup;
         $this->deleteRemoteBackup = $deleteRemoteBackup;
     }
 
-    public function store(int $hostId, string $container, string $backup, bool $deleteRemote)
+    public function store(int $hostId, string $instance, string $backup, bool $deleteRemote)
     {
         if ($this->hasExtension->hasWithHostId($hostId, LxdApiExtensions::CONTAINER_BACKUP) !== true) {
             throw new \Exception("Host doesn't support backups", 1);
         }
 
         $backupDir = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::BACKUP_DIRECTORY);
-        $backupDir = $this->makeDirectory($backupDir, $hostId, $container);
+        $backupDir = $this->makeDirectory($backupDir, $hostId, $instance);
 
-        $backupInfo = $this->downloadBackup($backupDir, $hostId, $container, $backup);
+        $backupInfo = $this->downloadBackup($backupDir, $hostId, $instance, $backup);
 
-        $this->insertContainerBackup->insert(
+        $this->insertInstanceBackup->insert(
             (new \DateTime($backupInfo["created"])),
             $hostId,
-            $container,
+            $instance,
             $backup,
             $backupInfo["backupFile"]
         );
 
         if ($deleteRemote) {
-            $this->deleteRemoteBackup->delete($hostId, $container, $backup);
+            $this->deleteRemoteBackup->delete($hostId, $instance, $backup);
         }
 
         return true;
@@ -67,12 +67,12 @@ class StoreBackupLocally
     private function downloadBackup(
         string $backupDir,
         int $hostId,
-        string $container,
+        string $instance,
         string $backup
     ) :array {
         $client = $this->lxdClient->getANewClient($hostId);
 
-        $backupInfo = $client->instances->backups->info($container, $backup);
+        $backupInfo = $client->instances->backups->info($instance, $backup);
 
         $backupFileName = "backup." . $backupInfo['created_at'] .".tar.gz";
 
@@ -80,7 +80,7 @@ class StoreBackupLocally
 
         $this->filesystem->touch($backupFilePath);
 
-        $this->filesystem->appendToFile($backupFilePath, $client->instances->backups->export($container, $backup));
+        $this->filesystem->appendToFile($backupFilePath, $client->instances->backups->export($instance, $backup));
 
         return [
             "backupFile"=>$backupFilePath,
@@ -88,11 +88,11 @@ class StoreBackupLocally
         ];
     }
 
-    private function makeDirectory(string $backupDir, int $hostId, string $container) :string
+    private function makeDirectory(string $backupDir, int $hostId, string $instance) :string
     {
         try {
             $this->filesystem = new Filesystem();
-            $path = "$backupDir/$hostId/$container";
+            $path = "$backupDir/$hostId/$instance";
 
             if ($this->filesystem->exists($path)) {
                 return $path;

@@ -2,7 +2,7 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\InstanceTypes;
 
-use dhope0000\LXDClient\Model\Containers\InstanceTypes\FetchInstanceTypes;
+use dhope0000\LXDClient\Model\Instances\InstanceTypes\FetchInstanceTypes;
 
 class GetInstanceTypes
 {

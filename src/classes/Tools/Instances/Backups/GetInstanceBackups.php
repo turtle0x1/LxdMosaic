@@ -3,27 +3,27 @@
 namespace dhope0000\LXDClient\Tools\Instances\Backups;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\Backups\Containers\FetchContainerBackups;
+use dhope0000\LXDClient\Model\Hosts\Backups\Instances\FetchInstanceBackups;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
 class GetInstanceBackups
 {
     private $lxdClient;
-    private $fetchContainerBackups;
+    private $fetchInstanceBackups;
     private $hasExtension;
 
     public function __construct(
         LxdClient $lxdClient,
-        FetchContainerBackups $fetchContainerBackups,
+        FetchInstanceBackups $fetchInstanceBackups,
         HasExtension $hasExtension
     ) {
         $this->lxdClient = $lxdClient;
-        $this->fetchContainerBackups = $fetchContainerBackups;
+        $this->fetchInstanceBackups = $fetchInstanceBackups;
         $this->hasExtension = $hasExtension;
     }
 
-    public function get(int $hostId, string $container)
+    public function get(int $hostId, string $instance)
     {
         $client = $this->lxdClient->getANewClient($hostId);
 
@@ -31,9 +31,9 @@ class GetInstanceBackups
             throw new \Exception("Host doesn't support backups", 1);
         }
 
-        $localBackups = $this->fetchContainerBackups->fetchAll($hostId, $container);
+        $localBackups = $this->fetchInstanceBackups->fetchAll($hostId, $instance);
 
-        $remoteBackups = $this->getRemoteBackups($client, $container, $localBackups);
+        $remoteBackups = $this->getRemoteBackups($client, $instance, $localBackups);
 
         return [
             "localBackups"=>$localBackups,
@@ -42,9 +42,9 @@ class GetInstanceBackups
     }
 
 
-    private function getRemoteBackups($client, string $container, array $localBackups)
+    private function getRemoteBackups($client, string $instance, array $localBackups)
     {
-        $backups = $client->instances->backups->all($container);
+        $backups = $client->instances->backups->all($instance);
 
         foreach ($backups as $index => $backupName) {
             $info = $client->instances->backups->info("music2", $backupName);
