@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LXDClient\Tools\Containers\Files;
+namespace dhope0000\LXDClient\Tools\Instances\Files;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;

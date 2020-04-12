@@ -1,8 +1,8 @@
 <?php
 
-namespace dhope0000\LXDClient\Controllers\Containers\Files;
+namespace dhope0000\LXDClient\Controllers\Instances\Files;
 
-use \dhope0000\LXDClient\Tools\Containers\Files\UploadFiles;
+use \dhope0000\LXDClient\Tools\Instances\Files\UploadFiles;
 
 class UploadFilesToPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {

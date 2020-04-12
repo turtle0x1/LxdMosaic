@@ -1,8 +1,8 @@
 <?php
 
-namespace dhope0000\LXDClient\Controllers\Containers\Files;
+namespace dhope0000\LXDClient\Controllers\Instances\Files;
 
-use dhope0000\LXDClient\Tools\Containers\Files\GetPath;
+use dhope0000\LXDClient\Tools\Instances\Files\GetPath;
 
 class GetPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {

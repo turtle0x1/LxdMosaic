@@ -1,8 +1,8 @@
 <?php
 
-namespace dhope0000\LXDClient\Controllers\Containers\Files;
+namespace dhope0000\LXDClient\Controllers\Instances\Files;
 
-use dhope0000\LXDClient\Tools\Containers\Files\DeletePath;
+use dhope0000\LXDClient\Tools\Instances\Files\DeletePath;
 
 class DeletePathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {

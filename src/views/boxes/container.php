@@ -271,7 +271,7 @@ function deleteFilesystemObjectConfirm(path)
                         ...currentContainerDetails
                     };
 
-                    ajaxRequest(globalUrls.containers.files.delete, x, function(data){
+                    ajaxRequest(globalUrls.instances.files.delete, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.rename.setText('Delete'); // let the user know
@@ -1027,7 +1027,7 @@ function loadFileSystemPath(path){
     currentRequest = $.ajax({
          type: 'POST',
          data: reqData,
-         url: globalUrls.containers.files.getPath,
+         url: globalUrls.instances.files.getPath,
          beforeSend : function()    {
             if(currentRequest != null) {
                 currentRequest.abort();
