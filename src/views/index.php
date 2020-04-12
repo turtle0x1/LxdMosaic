@@ -99,7 +99,8 @@ if ($haveServers->haveAny() !== true) {
               instances: {
                   virtualMachines: {
                       create: "/api/Instances/VirtualMachines/CreateController/create"
-                  }
+                  },
+                  delete: "/api/Instances/DeleteInstanceController/delete",
               },
               //NOTE The url can't be "Analytics" because some ad blockers
               //     will block it by default
@@ -159,7 +160,6 @@ if ($haveServers->haveAny() !== true) {
               },
               containers:{
                   create: "/api/Containers/CreateController/create",
-                  delete: "/api/Containers/DeleteContainerController/deleteContainer",
                   getDetails: "/api/Containers/GetContainerDetailsController/get",
                   getCurrentSettings: "/api/Containers/GetCurrentContainerSettingsController/get",
                   migrate: "/api/Containers/MigrateContainerController/migrateContainer",

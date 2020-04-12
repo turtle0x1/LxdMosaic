@@ -432,7 +432,7 @@ function deleteContainerConfirm(hostId, hostAlias, container)
                         hostId: hostId,
                         container: container
                     }
-                    ajaxRequest(globalUrls.containers.delete, x, function(data){
+                    ajaxRequest(globalUrls.instances.delete, x, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
                             loadContainerTreeAfter(1000, currentContainerDetails.hostId);
