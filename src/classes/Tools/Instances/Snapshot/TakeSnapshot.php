@@ -10,9 +10,9 @@ class TakeSnapshot
         $this->lxdClient = $lxdClient;
     }
 
-    public function takeSnapshot(int $hostId, string $container, string $snapshotName)
+    public function takeSnapshot(int $hostId, string $instance, string $snapshotName)
     {
         $client = $this->lxdClient->getANewClient($hostId);
-        return $client->instances->snapshots->create($container, $snapshotName, false, true);
+        return $client->instances->snapshots->create($instance, $snapshotName, false, true);
     }
 }

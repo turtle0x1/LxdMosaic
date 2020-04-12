@@ -10,9 +10,9 @@ class RestoreSnapshot
         $this->lxdClient = $lxdClient;
     }
 
-    public function restoreSnapshot(int $hostId, string $container, string $snapshotName)
+    public function restoreSnapshot(int $hostId, string $instance, string $snapshotName)
     {
         $client = $this->lxdClient->getANewClient($hostId);
-        return $client->instances->snapshots->restore($container, $snapshotName, true);
+        return $client->instances->snapshots->restore($instance, $snapshotName, true);
     }
 }

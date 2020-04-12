@@ -12,13 +12,13 @@ class RenameSnapshot
 
     public function rename(
         int $hostId,
-        string $container,
+        string $instance,
         string $snapshotName,
         string $newSnapshotName
     ) {
         $client = $this->lxdClient->getANewClient($hostId);
         return $client->instances->snapshots->rename(
-            $container,
+            $instance,
             $snapshotName,
             $newSnapshotName,
             true
