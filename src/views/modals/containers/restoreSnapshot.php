@@ -136,7 +136,7 @@
             $(".createFromSnapshot").html('<i class="fa fa-cog fa-spin"></i>Creating...')
         }
 
-        ajaxRequest(globalUrls.containers.snapShots.createFrom, x, function(data){
+        ajaxRequest(globalUrls.instances.snapShots.createFrom, x, function(data){
             data = makeToastr(data);
             $(".createFromSnapshot").text("Create Container");
             if(data.state == "error"){
@@ -153,7 +153,7 @@
             snapshotName: snapshotDetails.snapshotName,
             newSnapshotName: nm
         }, currentContainerDetails);
-        ajaxRequest(globalUrls.containers.snapShots.rename, x, function(data){
+        ajaxRequest(globalUrls.instances.snapShots.rename, x, function(data){
             let x = makeToastr(data);
             if(x.hasOwnProperty("error")){
                 return false;
@@ -167,7 +167,7 @@
 
     $("#modal-container-restoreSnapshot").on("click", ".restoreSnapToOrigin", function(){
         let x = $.extend(snapshotDetails, currentContainerDetails);
-        ajaxRequest(globalUrls.containers.snapShots.restore, x, function(data){
+        ajaxRequest(globalUrls.instances.snapShots.restore, x, function(data){
             let x = makeToastr(data);
             if(x.hasOwnProperty("error")){
                 return false;
@@ -178,7 +178,7 @@
 
     $("#modal-container-restoreSnapshot").on("click", ".deleteSnap", function(){
         let x = $.extend(snapshotDetails, currentContainerDetails);
-        ajaxRequest(globalUrls.containers.snapShots.delete, x, function(data){
+        ajaxRequest(globalUrls.instances.snapShots.delete, x, function(data){
             let r = makeToastr(data);
             if(r.state == "error"){
                 return false;

@@ -1,7 +1,7 @@
 <?php
-namespace dhope0000\LXDClient\Controllers\Containers\Snapshot;
+namespace dhope0000\LXDClient\Controllers\Instances\Snapshot;
 
-use dhope0000\LXDClient\Tools\Containers\Snapshot\TakeSnapshot;
+use dhope0000\LXDClient\Tools\Instances\Snapshot\TakeSnapshot;
 
 class TakeSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {

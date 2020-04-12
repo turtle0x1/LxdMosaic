@@ -1,7 +1,7 @@
 <?php
-namespace dhope0000\LXDClient\Controllers\Containers\Snapshot;
+namespace dhope0000\LXDClient\Controllers\Instances\Snapshot;
 
-use dhope0000\LXDClient\Tools\Containers\Snapshot\DeleteSnapshot;
+use dhope0000\LXDClient\Tools\Instances\Snapshot\DeleteSnapshot;
 
 class DeleteSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {

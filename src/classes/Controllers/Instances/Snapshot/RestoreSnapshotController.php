@@ -1,7 +1,7 @@
 <?php
-namespace dhope0000\LXDClient\Controllers\Containers\Snapshot;
+namespace dhope0000\LXDClient\Controllers\Instances\Snapshot;
 
-use dhope0000\LXDClient\Tools\Containers\Snapshot\RestoreSnapshot;
+use dhope0000\LXDClient\Tools\Instances\Snapshot\RestoreSnapshot;
 
 class RestoreSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {

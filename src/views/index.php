@@ -112,6 +112,13 @@ if ($haveServers->haveAny() !== true) {
                       delete: '/api/Instances/Files/DeletePathController/delete',
                       getPath: '/api/Instances/Files/GetPathController/get'
                   },
+                  snapShots: {
+                      take: "/api/Instances/Snapshot/TakeSnapshotController/takeSnapshot",
+                      delete: "/api/Instances/Snapshot/DeleteSnapshotController/deleteSnapshot",
+                      restore: "/api/Instances/Snapshot/RestoreSnapshotController/restoreSnapshot",
+                      rename: "/api/Instances/Snapshot/RenameSnapshotController/renameSnapshot",
+                      createFrom: "/api/Instances/CopyInstanceController/copy",
+                  },
                   delete: "/api/Instances/DeleteInstanceController/delete",
                   getInstance: "/api/Instances/GetInstanceController/get",
                   rename: "/api/Instances/RenameInstanceController/rename",
@@ -181,13 +188,6 @@ if ($haveServers->haveAny() !== true) {
 
                   instanceTypes: {
                       getInstanceTypes: "/api/Containers/InstanceTypes/GetAllController/getAll"
-                  },
-                  snapShots: {
-                      take: "/api/Containers/Snapshot/TakeSnapshotController/takeSnapshot",
-                      delete: "/api/Containers/Snapshot/DeleteSnapshotController/deleteSnapshot",
-                      restore: "/api/Containers/Snapshot/RestoreSnapshotController/restoreSnapshot",
-                      rename: "/api/Containers/Snapshot/RenameSnapshotController/renameSnapshot",
-                      createFrom: "/api/Containers/CopyContainerController/copyContainer",
                   },
                   settings: {
                       getAllAvailableSettings: "/api/Containers/Settings/GetAllAvailableSettingsController/getAll",

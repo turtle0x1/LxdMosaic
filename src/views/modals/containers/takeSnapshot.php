@@ -58,7 +58,7 @@
             snapshotName: $("#snapshotModal-snapshotName").val()
         }, currentContainerDetails);
 
-        ajaxRequest(globalUrls.containers.snapShots.take, x, function(data){
+        ajaxRequest(globalUrls.instances.snapShots.take, x, function(data){
             let x = makeToastr(data);
             if(x.state == "error"){
                 return false;
