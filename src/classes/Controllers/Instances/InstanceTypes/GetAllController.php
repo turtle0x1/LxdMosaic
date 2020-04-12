@@ -1,8 +1,8 @@
 <?php
 
-namespace dhope0000\LXDClient\Controllers\Containers\InstanceTypes;
+namespace dhope0000\LXDClient\Controllers\Instances\InstanceTypes;
 
-use dhope0000\LXDClient\Tools\Containers\InstanceTypes\GetInstanceTypes;
+use dhope0000\LXDClient\Tools\Instances\InstanceTypes\GetInstanceTypes;
 
 class GetAllController
 {

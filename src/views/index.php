@@ -125,6 +125,12 @@ if ($haveServers->haveAny() !== true) {
                       deleteContainerBackup: "/api/Instances/Backups/DeleteBackupController/delete",
                       importContainerBackup: "/api/Instances/Backups/ImportBackupController/import"
                   },
+                  instanceTypes: {
+                      getInstanceTypes: "/api/Instances/InstanceTypes/GetAllController/getAll"
+                  },
+                  settings: {
+                      getAllAvailableSettings: "/api/Instances/Settings/GetAllAvailableSettingsController/getAll",
+                  },
                   delete: "/api/Instances/DeleteInstanceController/delete",
                   getInstance: "/api/Instances/GetInstanceController/get",
                   rename: "/api/Instances/RenameInstanceController/rename",
@@ -189,15 +195,6 @@ if ($haveServers->haveAny() !== true) {
                   delete: '/api/Profiles/DeleteProfileController/delete',
                   rename: '/api/Profiles/RenameProfileController/rename',
                   copy: '/api/Profiles/CopyProfileController/copyProfile',
-              },
-              containers:{
-                  instanceTypes: {
-                      getInstanceTypes: "/api/Containers/InstanceTypes/GetAllController/getAll"
-                  },
-                  settings: {
-                      getAllAvailableSettings: "/api/Containers/Settings/GetAllAvailableSettingsController/getAll",
-                  },
-
               },
               hosts: {
                   gpu: {

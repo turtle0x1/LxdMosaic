@@ -159,7 +159,7 @@
     });
 
     $("#modal-container-create").on("shown.bs.modal", function(){
-        ajaxRequest(globalUrls.containers.settings.getAllAvailableSettings, {}, function(data){
+        ajaxRequest(globalUrls.instances.settings.getAllAvailableSettings, {}, function(data){
             data = $.parseJSON(data);
             let selectHtml = "<select name='key' class='form-control containerSetting'><option value=''>Please Select</option>";
             $.each(data, function(i, item){
@@ -175,7 +175,7 @@
         });
 
         $("#gpuWarning").hide();
-        ajaxRequest(globalUrls.containers.instanceTypes.getInstanceTypes, {}, function(data){
+        ajaxRequest(globalUrls.instances.instanceTypes.getInstanceTypes, {}, function(data){
             data = $.parseJSON(data);
             let h = "<option value=''>Please Select</option>";
             $.each(data, function(provider, templates){
