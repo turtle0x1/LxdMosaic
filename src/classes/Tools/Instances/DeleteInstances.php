@@ -10,18 +10,18 @@ class DeleteInstances
         $this->lxdClient = $lxdClient;
     }
 
-    public function delete(int $hostId, array $containers)
+    public function delete(int $hostId, array $instances)
     {
         $client = $this->lxdClient->getANewClient($hostId);
 
-        foreach ($containers as $container) {
-            $state = $client->instances->state($container);
+        foreach ($instances as $instance) {
+            $state = $client->instances->state($instance);
 
             if ($state["status_code"] == 103) {
-                $client->instances->setState($container, "stop");
+                $client->instances->setState($instance, "stop");
             }
 
-            $client->instances->remove($container, true);
+            $client->instances->remove($instance, true);
         }
 
         return true;

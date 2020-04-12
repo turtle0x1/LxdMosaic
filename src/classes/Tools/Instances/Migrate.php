@@ -12,14 +12,14 @@ class Migrate
 
     public function migrate(
         int $hostId,
-        string $container,
+        string $instance,
         int $newHostId,
         string $newContainerName
     ) {
         $hostClient = $this->lxdClient->getANewClient($hostId);
         $destinationClient = $this->lxdClient->getANewClient($newHostId);
 
-        $hostClient->instances->migrate($destinationClient, $container, $newContainerName, true);
+        $hostClient->instances->migrate($destinationClient, $instance, $newContainerName, true);
         return true;
     }
 }

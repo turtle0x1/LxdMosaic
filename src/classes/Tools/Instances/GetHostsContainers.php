@@ -37,14 +37,14 @@ class GetHostsContainers
             $client = $this->client->getANewClient($host["Host_ID"]);
             $hostInfo = $client->host->info();
 
-            $containers = $this->getContainers($host["Host_ID"], $client);
+            $instances = $this->getContainers($host["Host_ID"], $client);
 
             $supportsBackups = $this->hasExtension->checkWithClient($client, LxdApiExtensions::CONTAINER_BACKUP);
 
             $details[$host["Host_Alias"]] = [
                 "online"=>true,
                 "hostId"=>$host["Host_ID"],
-                "containers"=>$containers,
+                "containers"=>$instances,
                 "hostInfo"=>$hostInfo,
                 "supportsBackups"=>$supportsBackups
             ];
@@ -60,20 +60,20 @@ class GetHostsContainers
 
         $supportsVms = $this->hasExtension->checkWithClient($client, LxdApiExtensions::VIRTUAL_MACHINES);
 
-        $containers = $client->instances->all();
+        $instances = $client->instances->all();
 
-        $containers = $this->addContainersStateAndInfo($client, $containers);
-        ksort($containers, SORT_STRING | SORT_FLAG_CASE);
-        return $containers;
+        $instances = $this->addContainersStateAndInfo($client, $instances);
+        ksort($instances, SORT_STRING | SORT_FLAG_CASE);
+        return $instances;
     }
 
-    private function addContainersStateAndInfo($client, $containers)
+    private function addContainersStateAndInfo($client, $instances)
     {
         $hostInfo = $client->host->info();
         $details = array();
-        foreach ($containers as $container) {
-            $state = $client->instances->state($container);
-            $info = $client->instances->info($container);
+        foreach ($instances as $instance) {
+            $state = $client->instances->state($instance);
+            $info = $client->instances->info($instance);
 
             if ($info["location"] !== "") {
                 if ($info["location"] !== "none" && $info["location"] !== $hostInfo["environment"]["server_name"]) {
@@ -81,7 +81,7 @@ class GetHostsContainers
                 }
             }
 
-            $details[$container] = [
+            $details[$instance] = [
                 "state"=>$state,
                 "info"=>$info
             ];

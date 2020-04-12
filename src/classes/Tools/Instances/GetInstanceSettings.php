@@ -15,10 +15,10 @@ class GetInstanceSettings
         $this->getSettings = $getSettings;
     }
 
-    public function get(int $hostId, string $container)
+    public function get(int $hostId, string $instance)
     {
         $client = $this->client->getANewClient($hostId);
-        $info = $client->instances->info($container);
+        $info = $client->instances->info($instance);
         $enabledConfigs = $this->getSettings->getAllEnabledNamesAndDefaults();
         $enabledConfigNames = array_column($enabledConfigs, "key");
         $output = [];

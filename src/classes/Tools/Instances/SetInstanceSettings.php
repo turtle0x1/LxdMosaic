@@ -11,10 +11,10 @@ class SetInstanceSettings
         $this->client = $lxdClient;
     }
 
-    public function set(int $hostId, string $container, array $settings)
+    public function set(int $hostId, string $instance, array $settings)
     {
         $client = $this->client->getANewClient($hostId);
-        $client->instances->update($container, ["config"=>$settings]);
+        $client->instances->update($instance, ["config"=>$settings]);
         return true;
     }
 }

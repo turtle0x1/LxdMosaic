@@ -21,14 +21,14 @@ class GetInstance
         $this->hasExtension = $hasExtension;
     }
 
-    public function get(string $hostId, string $container)
+    public function get(string $hostId, string $instance)
     {
         $client = $this->client->getANewClient($hostId);
 
-        $details = $client->instances->info($container);
-        $state = $client->instances->state($container);
-        $snapshots = $client->instances->snapshots->all($container);
-        $deploymentDetails = $this->fetchDeployments->byHostContainer($hostId, $container);
+        $details = $client->instances->info($instance);
+        $state = $client->instances->state($instance);
+        $snapshots = $client->instances->snapshots->all($instance);
+        $deploymentDetails = $this->fetchDeployments->byHostContainer($hostId, $instance);
         $hostSupportsBackups = $this->hasExtension->checkWithClient($client, LxdApiExtensions::CONTAINER_BACKUP);
 
         return [
