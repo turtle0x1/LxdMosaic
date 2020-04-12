@@ -1,0 +1,10 @@
+use `LXD_Manager`;
+
+CREATE TABLE `Terminal_Sessions` (
+    `TS_ID` INT(11) NOT NULL PRIMARY KEY,
+    `TS_Date_Created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `TS_User_ID` INT(11) NOT NULL,
+    `TS_Host_ID` INT(11) NOT NULL,
+    `TS_Instace` VARCHAR(255) NOT NULL,
+    `TS_LXD_Operation_ID` VARCHAR(255) NOT NULL
+);
