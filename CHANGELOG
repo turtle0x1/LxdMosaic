@@ -3,21 +3,20 @@ Unreleased
 Added
     Access control - This will break any existing scripts that you may have,
         it uses sessions for everything which isn't good API design (stateful)
-        so ill have to roll some sort of API key's functionality at some point
-        (ping if this is usefull or it will end in backlog).
+        so ill have to switch to using the tokens to authenticate the API
 
         This includes the basic functionality to login, add users & reset passwords
-        it doesn't add any kind of restrictions, I want to improve the UI
-        & other basic functionality before adding the above.
+        it doesn't add any kind of per user restrictions!
+
+        Thanks to Shem Pasamba (@shemgp) for implementing the user token
+        functionality for the node server and that will be used for api requests
+        in the future.
 
     Logo created by my buddy Josh
     Total storage available to fleet analytics
-
     View, create & delete proxy devices on a host (#165)
-
     Instance network's bytes sent / recieved to server overview (#169)
-
-    Jump between instances, snapshots, images, & profiles from used_by tables
+    Jump between instances, snapshots, images, & profiles from used by tables
 
 Changed
     Indicate cluster groups & standalone hosts on dashboard (#150)
@@ -27,6 +26,7 @@ Changed
     Indicate cluster groups & standalone hosts on networks
     Indicate cluster groups & standalone hosts on projects
     Clear modals on hidden (#164)
+    Quite a lot of the UI was updated (to what I think is better)
 
 Fixed
     Cant create a container with no devices (#158)
