@@ -34,6 +34,7 @@
                     <h4> Instances
                         <select id="serverContainerActions" class="form-control-sm float-right">
                             <option value="" selected></option>
+                            <option value="stop">Stop</option>
                             <option value="delete">Delete</option>
                         </select>
                     </h4>
@@ -267,11 +268,8 @@ $(document).on("change", "#serverContainerActions", function(){
         containers: selectedContainers
     };
 
-    let url = "";
+    let url = globalUrls.hosts.instances[action]
 
-    if(action == "delete"){
-        url = globalUrls.hosts.instances.delete
-    }
 
     ajaxRequest(url, details, (data)=>{
         data = makeToastr(data);

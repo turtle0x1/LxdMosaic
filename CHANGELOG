@@ -1,5 +1,8 @@
 Unreleased
 
+Added
+    Bulk action to stop containers (#184)
+
 Changed
     Renamespaced & updated class names for lots of "Containers" to "Instances"
     to be consistent with the way we use LXD API, this will break any scripts
