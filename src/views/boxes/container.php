@@ -1183,11 +1183,16 @@ $("#containerBox").on("click", "#goToConsole", function() {
                                     // is first connected (in this case when the
                                     // operations socket is setup - which will
                                     // always come before this) but to be safe ...
-                                    consoleSocket = io.connect(`/terminals?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}`, {
+                                    consoleSocket = io.connect(`/terminals`, {
                                         reconnection: false,
                                         query: $.extend({
+                                            ws_token: userDetails.apiToken,
+                                            user_id: userDetails.userId,
                                             pid: data.processId,
-                                            shell: shell
+                                            shell: shell,
+                                            userId: userDetails.userId,
+                                            host: currentContainerDetails.hostId,
+                                            container: currentContainerDetails.container
                                         }, currentContainerDetails)
                                     });
                                     consoleSocket.on('data', function(data) {
