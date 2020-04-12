@@ -450,7 +450,7 @@ function deleteContainerConfirm(hostId, hostAlias, container)
 function renameContainerConfirm(hostId, container, reloadView, hostAlias)
 {
     $.confirm({
-        title: 'Rename Container!',
+        title: 'Rename Instance!',
         content: `
             <div class="form-group">
                 <label> New Name </label>
@@ -482,7 +482,7 @@ function renameContainerConfirm(hostId, container, reloadView, hostAlias)
                         container: container
                     }
 
-                    ajaxRequest(globalUrls.containers.rename, x, function(data){
+                    ajaxRequest(globalUrls.instances.rename, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             return false;

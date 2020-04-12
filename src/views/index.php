@@ -102,6 +102,7 @@ if ($haveServers->haveAny() !== true) {
                   },
                   delete: "/api/Instances/DeleteInstanceController/delete",
                   getInstance: "/api/Instances/GetInstanceController/get",
+                  rename: "/api/Instances/RenameInstanceController/rename",
               },
               //NOTE The url can't be "Analytics" because some ad blockers
               //     will block it by default
@@ -164,7 +165,6 @@ if ($haveServers->haveAny() !== true) {
                   getCurrentSettings: "/api/Containers/GetCurrentContainerSettingsController/get",
                   migrate: "/api/Containers/MigrateContainerController/migrateContainer",
                   copy: "/api/Containers/CopyContainerController/copyContainer",
-                  rename: "/api/Containers/RenameContainerController/renameContainer",
                   setSettings: "/api/Containers/SetSettingsController/set",
                   instanceTypes: {
                       getInstanceTypes: "/api/Containers/InstanceTypes/GetAllController/getAll"
