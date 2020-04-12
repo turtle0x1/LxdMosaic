@@ -29,11 +29,19 @@ class StringTools
     public static function usedByStringsToLinks(
         int $hostId,
         array $usedBy,
-        string $hostAlias = ""
+        string $hostAlias = "",
+        $client = null
     ) {
         foreach ($usedBy as $index => $item) {
             $parts = parse_url($item);
-            parse_str($parts['query'], $query);
+
+            $query = [];
+
+            if (isset($parts["query"])) {
+                parse_str($parts['query'], $query);
+            }
+
+
 
             $explodedPath = explode("/", $parts["path"]);
 
@@ -65,6 +73,16 @@ class StringTools
                 $data .= "data-profile='$lastItem'";
                 $icon = "users";
             } elseif (strpos($item, '/images/') !== false) {
+                if ($client !== null) {
+                    $imageDetails = $client->images->info($lastItem);
+
+                    $lastItem = $imageDetails["properties"]["os"] . " " . $imageDetails["properties"]["release"] . "({$imageDetails['type']})";
+
+                    if (!empty($imageDetails["aliases"])) {
+                        $lastItem = implode(",", array_column($imageDetails["aliases"], "name")) . "({$imageDetails['type']})";
+                    }
+                }
+
                 $class = 'viewImages';
                 $icon = "images";
             }

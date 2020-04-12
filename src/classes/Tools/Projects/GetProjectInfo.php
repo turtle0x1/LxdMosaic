@@ -21,7 +21,8 @@ class GetProjectInfo
         $project["used_by"] = StringTools::usedByStringsToLinks(
             $hostId,
             $project["used_by"],
-            $this->getDetails->fetchAlias($hostId)
+            $this->getDetails->fetchAlias($hostId),
+            $client
         );
         return $project;
     }

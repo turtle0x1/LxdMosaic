@@ -8,6 +8,9 @@ Changed
     Renamespaced & updated class names for lots of "Containers" to "Instances"
     to be consistent with the way we use LXD API, this will break any scripts
 
+    When creating a usedBy link fetch image details and show user freindly name
+    instead of fingerprint (#186)
+
 0.7.0 - 12/04/2020
 
 Added
