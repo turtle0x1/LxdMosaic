@@ -1,13 +1,13 @@
 <?php
 
-namespace dhope0000\LXDClient\Tools\Containers\Backups;
+namespace dhope0000\LXDClient\Tools\Instances\Backups;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Hosts\Backups\Containers\FetchContainerBackups;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
-class GetContainerBackups
+class GetInstanceBackups
 {
     private $lxdClient;
     private $fetchContainerBackups;
@@ -47,8 +47,8 @@ class GetContainerBackups
         $backups = $client->instances->backups->all($container);
 
         foreach ($backups as $index => $backupName) {
-            // var_dump($backupName);
-            $info = $client->instances->backups->info($container, $backupName);
+            $info = $client->instances->backups->info("music2", $backupName);
+
 
             $info["storedLocally"] = $this->backupDownloadedLocally($localBackups, $backupName, $info["created_at"]);
             $backups[$index] = $info;

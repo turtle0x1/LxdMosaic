@@ -1,16 +1,16 @@
 <?php
 
-namespace dhope0000\LXDClient\Controllers\Containers\Backups;
+namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
-use dhope0000\LXDClient\Tools\Containers\Backups\BackupContainer;
+use dhope0000\LXDClient\Tools\Instances\Backups\BackupInstance;
 
 class BackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $backupContainer;
+    private $backupInstance;
 
-    public function __construct(BackupContainer $backupContainer)
+    public function __construct(BackupInstance $backupInstance)
     {
-        $this->backupContainer = $backupContainer;
+        $this->backupInstance = $backupInstance;
     }
 
     public function backup(
@@ -20,7 +20,7 @@ class BackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $wait = true,
         int $importAndDelete
     ) {
-        $lxdRespone = $this->backupContainer->create(
+        $lxdRespone = $this->backupInstance->create(
             $hostId,
             $container,
             $backup,

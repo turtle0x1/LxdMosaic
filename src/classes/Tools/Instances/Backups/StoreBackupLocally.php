@@ -1,12 +1,12 @@
 <?php
 
-namespace dhope0000\LXDClient\Tools\Containers\Backups;
+namespace dhope0000\LXDClient\Tools\Instances\Backups;
 
 use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Hosts\Backups\Containers\InsertContainerBackup;
-use dhope0000\LXDClient\Tools\Containers\Backups\DeleteRemoteBackup;
+use dhope0000\LXDClient\Tools\Instances\Backups\DeleteRemoteBackup;
 
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;

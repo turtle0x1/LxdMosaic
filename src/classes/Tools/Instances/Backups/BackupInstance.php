@@ -1,13 +1,13 @@
 <?php
 
-namespace dhope0000\LXDClient\Tools\Containers\Backups;
+namespace dhope0000\LXDClient\Tools\Instances\Backups;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Tools\Containers\Backups\StoreBackupLocally;
+use dhope0000\LXDClient\Tools\Instances\Backups\StoreBackupLocally;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
-class BackupContainer
+class BackupInstance
 {
     private $lxdClient;
 

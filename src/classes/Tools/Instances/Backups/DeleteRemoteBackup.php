@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LXDClient\Tools\Containers\Backups;
+namespace dhope0000\LXDClient\Tools\Instances\Backups;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;

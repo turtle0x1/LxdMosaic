@@ -398,7 +398,7 @@ function backupContainerConfirm(hostId, hostAlias, container, callback = null, w
                         importAndDelete: importAndDelete
                     }
 
-                    ajaxRequest(globalUrls.containers.backups.backup, x, function(data){
+                    ajaxRequest(globalUrls.instances.backups.backup, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.rename.setText('Backup'); // let the user know
@@ -620,7 +620,7 @@ function copyContainerConfirm(hostId, container) {
 
 function loadContainerBackups()
 {
-    ajaxRequest(globalUrls.containers.backups.getContainerBackups, currentContainerDetails, (data)=>{
+    ajaxRequest(globalUrls.instances.backups.getContainerBackups, currentContainerDetails, (data)=>{
         x = makeToastr(data);
         $("#backupDetailsRow").show();
         $("#backupErrorRow").hide()
@@ -933,7 +933,7 @@ $("#containerBox").on("click", ".deleteBackup", function(){
                     modal.buttons.delete.disable();
                     modal.buttons.cancel.disable();
 
-                    ajaxRequest(globalUrls.containers.backups.deleteContainerBackup, x, (data)=>{
+                    ajaxRequest(globalUrls.instances.backups.deleteContainerBackup, x, (data)=>{
                         data = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.delete.setText('Delete Backup'); // let the user know
@@ -984,7 +984,7 @@ $("#containerBox").on("click", ".importBackup", function(){
                         'delete': deleteFromRemote
                     }
 
-                    ajaxRequest(globalUrls.containers.backups.importContainerBackup, x, (data)=>{
+                    ajaxRequest(globalUrls.instances.backups.importContainerBackup, x, (data)=>{
                         data = makeToastr(data);
                         if(data.state == "error"){
                             modal.buttons.rename.setText('Importing'); // let the user know
