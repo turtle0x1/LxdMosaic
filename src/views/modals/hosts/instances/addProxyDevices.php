@@ -59,7 +59,7 @@
             return false;
         }
 
-        ajaxRequest(globalUrls.hosts.containers.getHostContainers, addProxyDeviceObj, (data)=>{
+        ajaxRequest(globalUrls.hosts.instances.getHostContainers, addProxyDeviceObj, (data)=>{
             data = makeToastr(data);
             let html = "";
             $.each(data, (container, details)=>{

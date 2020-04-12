@@ -4,16 +4,16 @@ namespace dhope0000\LXDClient\Tools\Instances\VirtualMachines;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Constants\LxdInstanceTypes;
-use dhope0000\LXDClient\Tools\Containers\CreateContainer;
+use dhope0000\LXDClient\Tools\Instances\CreateInstance;
 
 class CreateVirutalMachine
 {
     public function __construct(
         LxdClient $lxdClient,
-        CreateContainer $createContainer
+        CreateInstance $createInstance
     ) {
         $this->lxdClient = $lxdClient;
-        $this->createContainer = $createContainer;
+        $this->createInstance = $createInstance;
     }
 
     public function create(string $name, string $username, array $hostIds)
@@ -47,7 +47,7 @@ class CreateVirutalMachine
             "protocol"=>"simplestreams"
         ];
 
-        $this->createContainer->create(
+        $this->createInstance->create(
             LxdInstanceTypes::VM,
             $name,
             [$profileName, "default"],

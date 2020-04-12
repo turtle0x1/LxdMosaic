@@ -1,3 +1,9 @@
+Unreleased
+
+Changed
+    Renamespaced & updated class names for lots of "Containers" to "Instances"
+    to be consistent with the way we use LXD API, this will break any scripts
+
 0.7.0 - 12/04/2020
 
 Added

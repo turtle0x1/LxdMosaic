@@ -31,7 +31,7 @@
         <div class="col-md-6">
             <div class="card bg-dark">
                 <div class="card-header bg-dark">
-                    <h4> Containers
+                    <h4> Instances
                         <select id="serverContainerActions" class="form-control-sm float-right">
                             <option value="" selected></option>
                             <option value="delete">Delete</option>
@@ -61,13 +61,13 @@
                 <div class="col-md-6">
                     <div class="card bg-dark">
                         <div class="card-header">
-                            Container Stats
+                            Instance Stats
                         </div>
                         <div class="card-body">
                             <div id="serverInstancesOnlineBox">
                             </div>
                             <div class="alert alert-info" id="noContainersWarning">
-                                There are no containers on the host
+                                There are no instances on the host
                             </div>
                         </div>
                     </div>
@@ -270,7 +270,7 @@ $(document).on("change", "#serverContainerActions", function(){
     let url = "";
 
     if(action == "delete"){
-        url = globalUrls.hosts.containers.delete
+        url = globalUrls.hosts.instances.delete
     }
 
     ajaxRequest(url, details, (data)=>{
@@ -400,7 +400,7 @@ function loadServerView(hostId)
         }else{
             $("#serverInstancesOnlineBox").hide();
             $("#noContainersWarning").show();
-            containerHtml = `<tr><td class="alert alert-info text-center" colspan="999">No Containers</td></tr>`
+            containerHtml = `<tr><td class="alert alert-info text-center" colspan="999">No Instances</td></tr>`
         }
 
         $("#containerTable > tbody").empty().append(containerHtml);

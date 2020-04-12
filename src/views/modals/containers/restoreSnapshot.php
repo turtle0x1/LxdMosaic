@@ -14,7 +14,7 @@
       </div>
       <div class="modal-body">
         <dl class="row">
-            <dt class="col-sm-6"> Original Container </dt>
+            <dt class="col-sm-6"> Original Instance </dt>
             <dd class="col-sm-6 restoreSnapshotModal-containerName"></dd>
             <dt class="col-sm-6"> Host: </dt>
             <dd class="col-sm-6" id="restoreSnapshotModal-currentHost"></dd>
@@ -25,7 +25,7 @@
             <div class="col-md-6 text-center">
                 <h5 clas="pull-left"><u> Restore To Origin </u></h5>
                 <div class="alert alert-danger">
-                    Restoring a snapshot to an existing container will
+                    Restoring a snapshot to an existing instance will
                     overwrite any changed data
                 </div>
                 <button class="btn btn-primary restoreSnapToOrigin">
@@ -48,9 +48,9 @@
                     data-toggle="tooltip"
                     data-placement="top"
                     data-animation="false"
-                    title='You can create new containers from a snapshot instaed of
-                    restoring "on top off" an existing container'>
-                    <u> New Container </u>
+                    title='You can create new instances from a snapshot instaed of
+                    restoring "on top off" an existing instance'>
+                    <u> New Instance </u>
                     <i class="fas fa-question-circle"></i>
                 </h5>
                 <div class="form-group">
@@ -58,7 +58,7 @@
                     <input class="form-control" id="modal-container-restoreSnapshot-newTargetHost" type="string" />
                 </div>
                 <div class="form-group">
-                    <label> New Container Name </label>
+                    <label> New Instance Name </label>
                     <input class="form-control" id="modal-container-restoreSnapshot-newName" type="string" />
                 </div>
                 <button class="btn btn-primary createFromSnapshot">
@@ -136,7 +136,7 @@
             $(".createFromSnapshot").html('<i class="fa fa-cog fa-spin"></i>Creating...')
         }
 
-        ajaxRequest(globalUrls.containers.snapShots.createFrom, x, function(data){
+        ajaxRequest(globalUrls.instances.snapShots.createFrom, x, function(data){
             data = makeToastr(data);
             $(".createFromSnapshot").text("Create Container");
             if(data.state == "error"){
@@ -153,7 +153,7 @@
             snapshotName: snapshotDetails.snapshotName,
             newSnapshotName: nm
         }, currentContainerDetails);
-        ajaxRequest(globalUrls.containers.snapShots.rename, x, function(data){
+        ajaxRequest(globalUrls.instances.snapShots.rename, x, function(data){
             let x = makeToastr(data);
             if(x.hasOwnProperty("error")){
                 return false;
@@ -167,7 +167,7 @@
 
     $("#modal-container-restoreSnapshot").on("click", ".restoreSnapToOrigin", function(){
         let x = $.extend(snapshotDetails, currentContainerDetails);
-        ajaxRequest(globalUrls.containers.snapShots.restore, x, function(data){
+        ajaxRequest(globalUrls.instances.snapShots.restore, x, function(data){
             let x = makeToastr(data);
             if(x.hasOwnProperty("error")){
                 return false;
@@ -178,7 +178,7 @@
 
     $("#modal-container-restoreSnapshot").on("click", ".deleteSnap", function(){
         let x = $.extend(snapshotDetails, currentContainerDetails);
-        ajaxRequest(globalUrls.containers.snapShots.delete, x, function(data){
+        ajaxRequest(globalUrls.instances.snapShots.delete, x, function(data){
             let r = makeToastr(data);
             if(r.state == "error"){
                 return false;

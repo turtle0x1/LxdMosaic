@@ -5,7 +5,7 @@ namespace dhope0000\LXDClient\Tools\Deployments;
 use dhope0000\LXDClient\Tools\CloudConfig\DeployToProfile;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
 use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
-use dhope0000\LXDClient\Tools\Containers\CreateContainer;
+use dhope0000\LXDClient\Tools\Instances\CreateInstance;
 use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 use dhope0000\LXDClient\Tools\InstanceSettings\CreatePhoneHomeVendorString;
 use dhope0000\LXDClient\Tools\Deployments\Containers\StoreDeployedContainerNames;
@@ -16,14 +16,14 @@ class Deploy
     public function __construct(
         DeployToProfile $deployToProfile,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
-        CreateContainer $createContainer,
+        CreateInstance $createInstance,
         GetConfig $getConfig,
         CreatePhoneHomeVendorString $createPhoneHomeVendorString,
         StoreDeployedContainerNames $storeDeployedContainerNames
     ) {
         $this->deployToProfile = $deployToProfile;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
-        $this->createContainer = $createContainer;
+        $this->createInstance = $createInstance;
         $this->getConfig = $getConfig;
         $this->createPhoneHomeVendorString = $createPhoneHomeVendorString;
         $this->storeDeployedContainerNames = $storeDeployedContainerNames;
@@ -63,7 +63,7 @@ class Deploy
                 for ($i = 0; $i < $instance["qty"]; $i++) {
                     $containerName = StringTools::random(12);
 
-                    $this->createContainer->create(
+                    $this->createInstance->create(
                         LxdInstanceTypes::CONTAINER,
                         $containerName,
                         $profiles,

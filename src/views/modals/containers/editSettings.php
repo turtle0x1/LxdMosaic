@@ -52,7 +52,7 @@
             return false;
         }
 
-        ajaxRequest(globalUrls.containers.getCurrentSettings, currentContainerDetails, function(data){
+        ajaxRequest(globalUrls.instances.getCurrentSettings, currentContainerDetails, function(data){
             data = $.parseJSON(data);
             if(data.existingSettings.length > 0){
                 let existingSettingsHtml = "";
@@ -138,7 +138,7 @@
         }
 
         data = $.extend(data, currentContainerDetails);
-        ajaxRequest(globalUrls.containers.setSettings, data, function(data){
+        ajaxRequest(globalUrls.instances.setSettings, data, function(data){
             data = makeToastr(data);
             if(data.state == "success"){
                 $("#modal-container-editSettings").modal("toggle");

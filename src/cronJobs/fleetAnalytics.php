@@ -9,7 +9,7 @@ $env = new Dotenv\Dotenv(__DIR__ . "/../../");
 $env->load();
 
 $getResources = $container->make("dhope0000\LXDClient\Tools\Hosts\GetResources");
-$getAllContainers = $container->make("dhope0000\LXDClient\Tools\Containers\GetHostsContainers");
+$getAllContainers = $container->make("dhope0000\LXDClient\Tools\Instances\GetHostsInstances");
 $getStorageDetails = $container->make("dhope0000\LXDClient\Tools\Storage\GetHostsStorage");
 $storeDetails = $container->make("dhope0000\LXDClient\Model\Analytics\StoreFleetAnalytics");
 
@@ -44,7 +44,7 @@ foreach ($resourcesByHost as $host) {
     $totalMemory += $host["memory"]["used"];
 }
 
-$containersByHost = $getAllContainers->getHostsContainers();
+$containersByHost = $getAllContainers->getAll();
 
 $activeContainers = 0;
 

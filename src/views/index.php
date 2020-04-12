@@ -99,7 +99,46 @@ if ($haveServers->haveAny() !== true) {
               instances: {
                   virtualMachines: {
                       create: "/api/Instances/VirtualMachines/CreateController/create"
-                  }
+                  },
+                  state:{
+                      start: "/api/Instances/StateController/start",
+                      stop: "/api/Instances/StateController/stop",
+                      restart: "/api/Instances/StateController/restart",
+                      freeze: "/api/Instances/StateController/freeze",
+                      unfreeze: "/api/Instances/StateController/unfreeze",
+                  },
+                  files: {
+                      uploadFiles: '/api/Instances/Files/UploadFilesToPathController/upload',
+                      delete: '/api/Instances/Files/DeletePathController/delete',
+                      getPath: '/api/Instances/Files/GetPathController/get'
+                  },
+                  snapShots: {
+                      take: "/api/Instances/Snapshot/TakeSnapshotController/takeSnapshot",
+                      delete: "/api/Instances/Snapshot/DeleteSnapshotController/deleteSnapshot",
+                      restore: "/api/Instances/Snapshot/RestoreSnapshotController/restoreSnapshot",
+                      rename: "/api/Instances/Snapshot/RenameSnapshotController/renameSnapshot",
+                      createFrom: "/api/Instances/CopyInstanceController/copy",
+                  },
+                  backups: {
+                      backup: "/api/Instances/Backups/BackupController/backup",
+                      getContainerBackups: "/api/Instances/Backups/GetInstanceBackupsController/get",
+                      deleteContainerBackup: "/api/Instances/Backups/DeleteBackupController/delete",
+                      importContainerBackup: "/api/Instances/Backups/ImportBackupController/import"
+                  },
+                  instanceTypes: {
+                      getInstanceTypes: "/api/Instances/InstanceTypes/GetAllController/getAll"
+                  },
+                  settings: {
+                      getAllAvailableSettings: "/api/Instances/Settings/GetAllAvailableSettingsController/getAll",
+                  },
+                  delete: "/api/Instances/DeleteInstanceController/delete",
+                  getInstance: "/api/Instances/GetInstanceController/get",
+                  rename: "/api/Instances/RenameInstanceController/rename",
+                  copy: "/api/Instances/CopyInstanceController/copy",
+                  migrate: "/api/Instances/MigrateInstanceController/migrate",
+                  getCurrentSettings: "/api/Instances/GetCurrentInstanceSettingsController/get",
+                  setSettings: "/api/Instances/SetSettingsController/set",
+                  create: "/api/Instances/CreateController/create",
               },
               //NOTE The url can't be "Analytics" because some ad blockers
               //     will block it by default
@@ -157,47 +196,6 @@ if ($haveServers->haveAny() !== true) {
                   rename: '/api/Profiles/RenameProfileController/rename',
                   copy: '/api/Profiles/CopyProfileController/copyProfile',
               },
-              containers:{
-                  create: "/api/Containers/CreateController/create",
-                  delete: "/api/Containers/DeleteContainerController/deleteContainer",
-                  getDetails: "/api/Containers/GetContainerDetailsController/get",
-                  getCurrentSettings: "/api/Containers/GetCurrentContainerSettingsController/get",
-                  migrate: "/api/Containers/MigrateContainerController/migrateContainer",
-                  copy: "/api/Containers/CopyContainerController/copyContainer",
-                  rename: "/api/Containers/RenameContainerController/renameContainer",
-                  setSettings: "/api/Containers/SetSettingsController/set",
-                  instanceTypes: {
-                      getInstanceTypes: "/api/Containers/InstanceTypes/GetAllController/getAll"
-                  },
-                  state:{
-                      startContainer: "/api/Containers/StateController/startContainer",
-                      stopContainer: "/api/Containers/StateController/stopContainer",
-                      restartContainer: "/api/Containers/StateController/restartContainer",
-                      freezeContainer: "/api/Containers/StateController/freezeContainer",
-                      unfreezeContainer: "/api/Containers/StateController/unfreezeContainer",
-                  },
-                  snapShots: {
-                      take: "/api/Containers/Snapshot/TakeSnapshotController/takeSnapshot",
-                      delete: "/api/Containers/Snapshot/DeleteSnapshotController/deleteSnapshot",
-                      restore: "/api/Containers/Snapshot/RestoreSnapshotController/restoreSnapshot",
-                      rename: "/api/Containers/Snapshot/RenameSnapshotController/renameSnapshot",
-                      createFrom: "/api/Containers/CopyContainerController/copyContainer",
-                  },
-                  settings: {
-                      getAllAvailableSettings: "/api/Containers/Settings/GetAllAvailableSettingsController/getAll",
-                  },
-                  backups: {
-                      backup: "/api/Containers/Backups/BackupController/backup",
-                      getContainerBackups: "/api/Containers/Backups/GetContainerBackupsController/get",
-                      deleteContainerBackup: "/api/Containers/Backups/DeleteBackupController/delete",
-                      importContainerBackup: "/api/Containers/Backups/ImportBackupController/import"
-                  },
-                  files: {
-                      uploadFiles: '/api/Containers/Files/UploadFilesToPathController/upload',
-                      delete: '/api/Containers/Files/DeletePathController/delete',
-                      getPath: '/api/Containers/Files/GetPathController/get'
-                  }
-              },
               hosts: {
                   gpu: {
                     getAll: "/api/Hosts/GPU/GetAllController/getAll"
@@ -208,15 +206,12 @@ if ($haveServers->haveAny() !== true) {
                   search: {
                       search: "/api/Hosts/SearchHosts/search"
                   },
-                  containers: {
-                      getAll: "/api/Hosts/Containers/GetAllController/getAll",
-                      delete: "/api/Hosts/Containers/DeleteContainersController/delete",
-                      getHostContainers: "/api/Hosts/Containers/GetHostsContainersController/get"
-                  },
                   instances: {
                       deleteProxyDevice: "/api/Hosts/Instances/DeleteProxyDeviceController/delete",
                       addProxyDevice: "/api/Hosts/Instances/AddProxyDeviceController/add",
-                      getAllProxyDevices: "/api/Hosts/Instances/GetAllProxyDevicesController/get"
+                      getAllProxyDevices: "/api/Hosts/Instances/GetAllProxyDevicesController/get",
+                      delete: "/api/Hosts/Instances/DeleteInstancesController/delete",
+                      getHostContainers: "/api/Hosts/Instances/GetHostsInstancesController/get"
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
@@ -337,7 +332,7 @@ if ($haveServers->haveAny() !== true) {
       </script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-      <form style="display: none;" method="POST" id="downloadContainerFileForm" action="/api/Containers/Files/GetPathController/get">
+      <form style="display: none;" method="POST" id="downloadContainerFileForm" action="/api/Instances/Files/GetPathController/get">
           <input value="" name="hostId"/>
           <input value="" name="path"/>
           <input value="" name="container"/>
@@ -709,7 +704,7 @@ function createDashboardSidebar()
 }
 
 function addHostContainerList(hostId, hostAlias) {
-    ajaxRequest(globalUrls.hosts.containers.getHostContainers, {hostId: hostId}, (data)=>{
+    ajaxRequest(globalUrls.hosts.instances.getHostContainers, {hostId: hostId}, (data)=>{
         data = makeToastr(data);
         let containers = "";
         if(Object.keys(data).length > 0){

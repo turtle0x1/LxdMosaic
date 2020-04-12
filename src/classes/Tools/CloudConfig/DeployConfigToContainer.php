@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Tools\CloudConfig;
 
 use dhope0000\LXDClient\Tools\CloudConfig\DeployToProfile;
-use dhope0000\LXDClient\Tools\Containers\CreateContainer;
+use dhope0000\LXDClient\Tools\Instances\CreateInstance;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
 use dhope0000\LXDClient\Constants\LxdInstanceTypes;
 
@@ -11,10 +11,10 @@ class DeployConfigToContainer
 {
     public function __construct(
         DeployToProfile $deployToProfile,
-        CreateContainer $createContainer
+        CreateInstance $createInstance
     ) {
         $this->deployToProfile = $deployToProfile;
-        $this->createContainer = $createContainer;
+        $this->createInstance = $createInstance;
     }
 
     public function deploy(
@@ -41,7 +41,7 @@ class DeployConfigToContainer
             $cloudConfigRevId
         );
 
-        return $this->createContainer->create(
+        return $this->createInstance->create(
             LxdInstanceTypes::CONTAINER,
             $containerName,
             $additionalProfiles,

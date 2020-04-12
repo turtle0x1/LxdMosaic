@@ -4,11 +4,11 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
               <select class="form-control" style="max-width: 150px;" id="container-changeState">
                   <option value="" selected="selected"> Change State </option>
-                  <option value="startContainer"> Start </option>
-                  <option value="stopContainer"> Stop </option>
-                  <option value="restartContainer"> Restart </option>
-                  <option value="freezeContainer"> Freeze </option>
-                  <option value="unfreezeContainer"> Unfreeze </option>
+                  <option value="start"> Start </option>
+                  <option value="stop"> Stop </option>
+                  <option value="restart"> Restart </option>
+                  <option value="freeze"> Freeze </option>
+                  <option value="unfreeze"> Unfreeze </option>
               </select>
 
             <h4 class="pt-1"> <u>
@@ -67,7 +67,7 @@
     <div class="col-md-5">
         <div class="card text-white bg-dark">
           <div class="card-body">
-              <h5> <u> Container Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
+              <h5> <u> Instance Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
               Host: <span id="container-hostNameDisplay"></span>
               <br/>
               <a
@@ -154,7 +154,7 @@
         <div class="col-md-6">
             <div class="card card-accent-success">
                 <div class="card-header bg-dark">
-                    <h4> LXDMosaic Container Backups </h4>
+                    <h4> LXDMosaic Instance Backups </h4>
                 </div>
                 <div class="card-body bg-dark">
                     <table class="table table-bordered table-dark" id="localBackupTable">
@@ -175,7 +175,7 @@
             <div class="card card-accent-success">
                 <div class="card-header bg-dark">
                     <h4>
-                        LXD Container Backups
+                        LXD Instance Backups
                         <button class="btn btn-success float-right" id="createBackup">
                             Create
                         </button>
@@ -271,7 +271,7 @@ function deleteFilesystemObjectConfirm(path)
                         ...currentContainerDetails
                     };
 
-                    ajaxRequest(globalUrls.containers.files.delete, x, function(data){
+                    ajaxRequest(globalUrls.instances.files.delete, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.rename.setText('Delete'); // let the user know
@@ -291,7 +291,7 @@ function deleteFilesystemObjectConfirm(path)
 function restoreBackupContainerConfirm(backupId, hostAlias, container, callback = null, wait = true)
 {
     $.confirm({
-        title: `Backup Container - ${hostAlias} / ${container} `,
+        title: `Backup Instance - ${hostAlias} / ${container} `,
         content: `
             <div class="form-group">
                 <label> Target Host </label>
@@ -357,7 +357,7 @@ function restoreBackupContainerConfirm(backupId, hostAlias, container, callback 
 function backupContainerConfirm(hostId, hostAlias, container, callback = null, wait = true)
 {
     $.confirm({
-        title: `Backup Container - ${hostAlias} / ${container} `,
+        title: `Backup Instance - ${hostAlias} / ${container} `,
         content: `
             <div class="form-group">
                 <label> Backup Name </label>
@@ -398,7 +398,7 @@ function backupContainerConfirm(hostId, hostAlias, container, callback = null, w
                         importAndDelete: importAndDelete
                     }
 
-                    ajaxRequest(globalUrls.containers.backups.backup, x, function(data){
+                    ajaxRequest(globalUrls.instances.backups.backup, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.rename.setText('Backup'); // let the user know
@@ -421,8 +421,8 @@ function backupContainerConfirm(hostId, hostAlias, container, callback = null, w
 function deleteContainerConfirm(hostId, hostAlias, container)
 {
     $.confirm({
-        title: 'Delete Container ' + hostAlias + '/' + container,
-        content: 'Are you sure you want to delete this container ?!',
+        title: 'Delete Instance ' + hostAlias + '/' + container,
+        content: 'Are you sure you want to delete this instance ?!',
         buttons: {
             cancel: function () {},
             delete: {
@@ -432,7 +432,7 @@ function deleteContainerConfirm(hostId, hostAlias, container)
                         hostId: hostId,
                         container: container
                     }
-                    ajaxRequest(globalUrls.containers.delete, x, function(data){
+                    ajaxRequest(globalUrls.instances.delete, x, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
                             loadContainerTreeAfter(1000, currentContainerDetails.hostId);
@@ -450,7 +450,7 @@ function deleteContainerConfirm(hostId, hostAlias, container)
 function renameContainerConfirm(hostId, container, reloadView, hostAlias)
 {
     $.confirm({
-        title: 'Rename Container!',
+        title: 'Rename Instance!',
         content: `
             <div class="form-group">
                 <label> New Name </label>
@@ -482,7 +482,7 @@ function renameContainerConfirm(hostId, container, reloadView, hostAlias)
                         container: container
                     }
 
-                    ajaxRequest(globalUrls.containers.rename, x, function(data){
+                    ajaxRequest(globalUrls.instances.rename, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             return false;
@@ -505,7 +505,7 @@ function renameContainerConfirm(hostId, container, reloadView, hostAlias)
 function snapshotContainerConfirm(hostId, container)
 {
     $.confirm({
-        title: 'Snapshot Container - ' + container,
+        title: 'Snapshot Instance - ' + container,
         content: `
             <div class="form-group">
                 <label> Snapshot Name </label>
@@ -537,7 +537,7 @@ function snapshotContainerConfirm(hostId, container)
                         snapshotName: snapshotName
                     }
 
-                    ajaxRequest(globalUrls.containers.snapShots.take, x, function(data){
+                    ajaxRequest(globalUrls.instances.snapShots.take, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             return false;
@@ -588,7 +588,7 @@ function copyContainerConfirm(hostId, container) {
                         container: container
                     };
 
-                    ajaxRequest(globalUrls.containers.copy, x, function(data){
+                    ajaxRequest(globalUrls.instances.copy, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.copy.enable();
@@ -620,7 +620,7 @@ function copyContainerConfirm(hostId, container) {
 
 function loadContainerBackups()
 {
-    ajaxRequest(globalUrls.containers.backups.getContainerBackups, currentContainerDetails, (data)=>{
+    ajaxRequest(globalUrls.instances.backups.getContainerBackups, currentContainerDetails, (data)=>{
         x = makeToastr(data);
         $("#backupDetailsRow").show();
         $("#backupErrorRow").hide()
@@ -689,7 +689,7 @@ function loadContainerView(data)
         currentTerminalProcessId = null;
     }
 
-    ajaxRequest(globalUrls.containers.getDetails, data, function(result){
+    ajaxRequest(globalUrls.instances.getInstance, data, function(result){
         let x = $.parseJSON(result);
 
         if(x.state == "error"){
@@ -933,7 +933,7 @@ $("#containerBox").on("click", ".deleteBackup", function(){
                     modal.buttons.delete.disable();
                     modal.buttons.cancel.disable();
 
-                    ajaxRequest(globalUrls.containers.backups.deleteContainerBackup, x, (data)=>{
+                    ajaxRequest(globalUrls.instances.backups.deleteContainerBackup, x, (data)=>{
                         data = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.delete.setText('Delete Backup'); // let the user know
@@ -984,7 +984,7 @@ $("#containerBox").on("click", ".importBackup", function(){
                         'delete': deleteFromRemote
                     }
 
-                    ajaxRequest(globalUrls.containers.backups.importContainerBackup, x, (data)=>{
+                    ajaxRequest(globalUrls.instances.backups.importContainerBackup, x, (data)=>{
                         data = makeToastr(data);
                         if(data.state == "error"){
                             modal.buttons.rename.setText('Importing'); // let the user know
@@ -1027,7 +1027,7 @@ function loadFileSystemPath(path){
     currentRequest = $.ajax({
          type: 'POST',
          data: reqData,
-         url: globalUrls.containers.files.getPath,
+         url: globalUrls.instances.files.getPath,
          beforeSend : function()    {
             if(currentRequest != null) {
                 currentRequest.abort();
@@ -1135,7 +1135,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
         }
 
         $.confirm({
-            title: 'Container Shell!',
+            title: 'Instance Shell!',
             content: `
                 <div class="form-group">
                     <label> Shell </label>
@@ -1245,7 +1245,7 @@ $("#containerBox").on("click", ".deleteContainer", function(){
 });
 
 $("#containerBox").on("change", "#container-changeState", function(){
-    let url = globalUrls.containers.state[$(this).val()];
+    let url = globalUrls.instances.state[$(this).val()];
     ajaxRequest(url, currentContainerDetails, function(data){
         let result = makeToastr(data);
         loadContainerTreeAfter();

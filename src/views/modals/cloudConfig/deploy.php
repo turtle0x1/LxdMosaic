@@ -11,7 +11,7 @@
       <div class="modal-body">
 
           <div class="form-group">
-              <label> Container Name </label>
+              <label> Instance Name </label>
               <input class="form-control" name="containerName" />
           </div>
           <div class="form-group">
@@ -105,7 +105,7 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
     let image = $("#deployCloudConfigImage").tokenInput("get");
 
     if(containerName == ""){
-        makeToastr(JSON.stringify({state: "error", message: "Please provide container name"}));
+        makeToastr(JSON.stringify({state: "error", message: "Please provide instance name"}));
         containerNameInput.focus()
         return false;
     } else if(hosts.length == 0){
