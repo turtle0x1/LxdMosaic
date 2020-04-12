@@ -81,7 +81,7 @@ app.get('/', function(req, res) {
 app.post('/terminals', function(req, res) {
   // Create a identifier for the console, this should allow multiple consolses
   // per user
-  uuid = terminals.getInternalUuid(req.body.host, req.body.container);
+  uuid = terminals.getInternalUuid(req.body.userId, req.body.host, req.body.container);
   res.json({ processId: uuid });
   res.send();
 });
@@ -120,12 +120,13 @@ var terminalsIo = io.of('/terminals');
 
 terminalsIo.on('connect', function(socket) {
   let host = socket.handshake.query.hostId,
+    userId = socket.handshake.query.userId,
     container = socket.handshake.query.container,
     uuid = socket.handshake.query.pid,
     shell = socket.handshake.query.shell;
 
   terminals
-    .createTerminalIfReq(socket, hosts.getHosts(), host, container, uuid, shell)
+    .createTerminalIfReq(userId, socket, hosts.getHosts(), host, container, uuid, shell)
     .then(() => {
       //NOTE When user inputs from browser
       socket.on('data', function(msg) {
@@ -136,7 +137,8 @@ terminalsIo.on('connect', function(socket) {
         terminals.close(uuid);
       });
     })
-    .catch(() => {
+    .catch((error) => {
+        console.log(error);
       // Prevent the browser re-trying (this maybe can be changed later)
       socket.disconnect();
     });
@@ -169,7 +171,7 @@ io.use(async (socket, next) => {
 hosts = new Hosts(con, fs, rp);
 wsTokens = new WsTokens(con);
 hostOperations = new HostOperations(fs);
-terminals = new Terminals(rp);
+terminals = new Terminals(rp, con);
 
 createWebSockets();
 httpsServer.listen(3000, function() {});

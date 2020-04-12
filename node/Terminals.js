@@ -2,14 +2,15 @@ var WebSocket = require('ws');
 var internalUuidv1 = require('uuid/v1');
 
 module.exports = class Terminals {
-  constructor(rp) {
+  constructor(rp, mysqlCon) {
     this.rp = rp;
+    this.mysql = mysqlCon;
     this.activeTerminals = {};
     this.internalUuidMap = {};
   }
 
-  getInternalUuid(host, container) {
-    let key = `${host}.${container}`;
+  getInternalUuid(userId, host, container) {
+    let key = `${userId}.${host}.${container}`;
     if (this.internalUuidMap.hasOwnProperty(key)) {
       return this.internalUuidMap[key];
     }
@@ -58,6 +59,7 @@ module.exports = class Terminals {
   }
 
   createTerminalIfReq(
+    userId,
     socket,
     hosts,
     host,
@@ -87,11 +89,13 @@ module.exports = class Terminals {
         .then(openResult => {
           let url = `wss://${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}`;
 
+          let key = `${userId}.${host}.${container}`
+
           // If the server dies but there are active clients they will re-connect
           // with their process-id but it wont be in the internalUuidMap
           // so we need to re add it
-          if (!this.internalUuidMap.hasOwnProperty(`${host}.${container}`)) {
-            this.internalUuidMap[`${host}.${container}`] = internalUuid;
+          if (!this.internalUuidMap.hasOwnProperty(key)) {
+            this.internalUuidMap[key] = internalUuid;
           }
 
           const wsoptions = {

@@ -1172,7 +1172,8 @@ $("#containerBox").on("click", "#goToConsole", function() {
                                 url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
                                 data: JSON.stringify({
                                     host: currentContainerDetails.hostId,
-                                    container: currentContainerDetails.container
+                                    container: currentContainerDetails.container,
+                                    userId: userDetails.userId
                                 }),
                                 success: function(data) {
 
