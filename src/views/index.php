@@ -208,7 +208,7 @@ if ($haveServers->haveAny() !== true) {
                   },
                   containers: {
                       getAll: "/api/Hosts/Containers/GetAllController/getAll",
-                      delete: "/api/Hosts/Containers/DeleteContainersController/delete",
+                      delete: "/api/Hosts/Containers/DeleteInstancesController/delete",
                       getHostContainers: "/api/Hosts/Containers/GetHostsContainersController/get"
                   },
                   instances: {
