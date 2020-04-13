@@ -14,6 +14,8 @@ I also like stars, I you find yourself that way inclinded :angel:
 
 Please refer to the documentation <a href="https://lxdmosaic.readthedocs.io/en/latest/"> here </a>
 
+**Default username & password is admin test123 - Change the password in settings ASAP** 
+
 ## Installation
 
 ### Prep LXD Instances
@@ -33,8 +35,6 @@ The preferred installation method is using a ubuntu container.
 **Warning this installs apache, mysql-server, php, git and other
 dependencies its best to run in a container or an empty VM to avoid cluttering
 your system**
-
-**Default username & password is admin test123 - Change the password in settings ASAP** 
 
 In examples you will find an bash script called install_with_clone.sh this will
 handle the installation of dependencies and setup this program.
