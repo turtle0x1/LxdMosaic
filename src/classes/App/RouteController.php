@@ -6,6 +6,7 @@ use dhope0000\LXDClient\App\RouteView;
 use dhope0000\LXDClient\App\RouteAssets;
 use dhope0000\LXDClient\Tools\User\UserSession;
 use dhope0000\LXDClient\Tools\User\LogUserIn;
+use dhope0000\LXDClient\Tools\User\ValidateToken;
 
 class RouteController
 {
@@ -14,8 +15,10 @@ class RouteController
         LogUserIn $logUserIn,
         RouteApi $routeApi,
         RouteView $routeView,
-        RouteAssets $routeAssets
+        RouteAssets $routeAssets,
+        ValidateToken $validateToken
     ) {
+        $this->validateToken = $validateToken;
         $this->userSession = $userSession;
         $this->logUserIn = $logUserIn;
         $this->routeApi = $routeApi;
@@ -25,13 +28,33 @@ class RouteController
 
     public function routeRequest($explodedPath)
     {
+        if ($explodedPath[0] == "api") {
+            $headers = getallheaders();
+            if (!isset($headers["userId"]) || !isset($headers["apiToken"])) {
+                http_response_code(403);
+                echo json_encode(["error"=>"Missing either user id or token"]);
+                exit;
+            }
+
+            if (!$this->validateToken->validate($headers["userId"], $headers["apiToken"])) {
+                http_response_code(403);
+                echo json_encode(["error"=>"Not valid token"]);
+                exit;
+            }
+
+            $this->routeApi->route($explodedPath, $headers["userId"]);
+            exit;
+        }
+
         $logoReq = implode("/", $explodedPath) === "assets/lxdMosaic/logo.png";
 
-        if ($this->userSession->isLoggedIn() !== true && !isset($_POST["login"]) && !$logoReq) {
+        $loginSet = isset($_POST["login"]);
+
+        if ($this->userSession->isLoggedIn() !== true && !$loginSet && !$logoReq) {
             http_response_code(403);
             require __DIR__ . "/../../views/login.php";
             exit;
-        } elseif (isset($_POST["login"])) {
+        } elseif ($loginSet) {
             if ($this->logUserIn->login($_POST["username"], $_POST["password"]) !== true) {
                 // Should never fire login throws exceptions
                 throw new \Exception("Couldn't login", 1);
@@ -46,8 +69,6 @@ class RouteController
 
         if (!isset($explodedPath[0]) || in_array($explodedPath[0], $routesForViewRoute)) {
             $this->routeView->route($explodedPath);
-        } elseif ($explodedPath[0] == "api") {
-            $this->routeApi->route($explodedPath, $_POST);
         } elseif ($explodedPath[0] == "assets") {
             $this->routeAssets->route($explodedPath);
         } elseif ($explodedPath[0] == "terminals?cols=80&rows=24") {

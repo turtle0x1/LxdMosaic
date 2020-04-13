@@ -14,7 +14,7 @@ class RouteApi
         $this->recordAction = $recordAction;
     }
 
-    public function route($pathParts)
+    public function route($pathParts, $userId)
     {
         if (count($pathParts) < 3) {
             throw new \Exception("Api String Not Long Enough", 1);
@@ -42,7 +42,9 @@ class RouteApi
         $controller = $this->container->make($controllerStr);
 
         if ($controller instanceof \dhope0000\LXDClient\Interfaces\RecordAction) {
+            $params["userId"] = $userId;
             $this->recordAction->record($controllerStr . "\\" . $method, $params);
+            unset($params["userId"]);
         }
 
         // TODO Pass provided arguments to controller

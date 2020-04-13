@@ -72,6 +72,12 @@ function createTableRowsHtml(data, childPropertyToSearch)
 
 
 function ajaxRequest(url, data, callback){
+    if (typeof userDetails == "object") {
+        $.ajaxSetup({
+            headers: userDetails
+        })
+    }
+
     $.ajax({
          type: 'POST',
          data: data,
