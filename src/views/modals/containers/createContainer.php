@@ -259,7 +259,7 @@
             if(x.state == "error"){
                 return false;
             }
-            $("#modal-container-create").modal("toggle");
+            $("#modal-container-create").modal("hide");
             loadContainerTreeAfter();
         });
     });

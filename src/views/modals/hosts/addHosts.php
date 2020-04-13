@@ -40,7 +40,6 @@ let inputTemplate = `<div class="input-group mb-3 serverGroup">
     </button></div>`;
 
 $("#modal-hosts-add").on("shown.bs.modal", function(){
-    $('[data-toggle="tooltip"]').tooltip()
     $("#inputBoxes").empty().append(inputTemplate);
 });
 
