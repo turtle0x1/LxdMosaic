@@ -2,8 +2,6 @@
 
 require __DIR__ . "/../../vendor/autoload.php";
 
-use dhope0000\LXDClient\Constants\Constants;
-
 $builder = new \DI\ContainerBuilder();
 $container = $builder->build();
 
@@ -22,7 +20,7 @@ $allHosts = $hostList->getHostListWithDetails();
 foreach ($allHosts as $host) {
     try {
         $pathToCert = $details->getCertificate($host["Host_ID"]);
-        $pathToCert = Constants::CERTS_DIR . "/$pathToCert";
+        $pathToCert = $_ENV["LXD_CERTS_DIR"] . "$pathToCert";
         $config = $clients->createConfigArray($pathToCert);
         $config["timeout"] = 2;
         $lxd = $clients->createNewClient($host["Host_Url_And_Port"], $config);

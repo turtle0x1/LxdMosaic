@@ -1,5 +1,7 @@
 0.7.1 - 12/04/2020
 
+    Use ENV for sensitiveData/certs directory for snap
+
 Fixed
     Terminal sessions not starting properly
 
