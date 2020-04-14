@@ -5,6 +5,20 @@ You should only upgrade when a new version is tagged,
 Restarting the `pm2` and `apache2` process may interupt running process please
 be careful when upgrading!
 
+# 0.7.X ->  > 0.7.2
+
+```
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout v0.7.2
+
+Add the following to /var/www/LxdMosaic/.env
+
+LXD_CERTS_DIR=/var/www/LxdMosaic/sensitiveData/certs/
+```
+
 ## 0.6.X -> 0.7.0
 
 ```
