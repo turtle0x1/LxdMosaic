@@ -7,6 +7,19 @@ if ($haveServers->haveAny() === true) {
     header("Location: /");
     exit;
 }
+
+$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
+
+$isAdmin = (int) $userSession->isAdmin();
+$apiToken = $userSession->getToken();
+$userId = $userSession->getUserId();
+
+echo "<script>var userDetails = {
+    isAdmin: $isAdmin,
+    apiToken: '$apiToken',
+    userId: $userId
+} </script>";
+
 ?>
 <!DOCTYPE html>
 <head>
@@ -122,6 +135,7 @@ $(document).on("click", "#addServers", function(){
 
     $.ajax({
          type: 'POST',
+         headers: userDetails,
          data: details,
          url: "/api/Hosts/AddHostsController/add",
          success: function(data){
