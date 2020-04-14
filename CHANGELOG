@@ -19,6 +19,8 @@ Changed
     Bump bootstrap version to 4.4.1 and made some changes to the way tooltips
     are initialized to fix modals not hiding (#177)
 
+    Use ENV for sensitiveData/certs directory for snap
+
 Fixed
     Terminal sessions not opening properly
     Some instance settings can't be properly set (close #192)
