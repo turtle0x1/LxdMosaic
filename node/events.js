@@ -19,9 +19,14 @@ const fs = require('fs'),
   (terminals = null),
   (wsTokens = null);
 
-const envImportResult = require('dotenv').config({
+var dotenv = require('dotenv')
+var dotenvExpand = require('dotenv-expand')
+
+var envImportResult = dotenv.config({
   path: __dirname + '/../.env',
 });
+
+dotenvExpand(envImportResult)
 
 if (envImportResult.error) {
   throw envImportResult.error;
