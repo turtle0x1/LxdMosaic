@@ -4,7 +4,7 @@ module.exports = class Hosts {
     this.fs = filesystem;
     this.rp = rp;
     this.hostDetails = {};
-    this.certDir = __dirname + '/../src/sensitiveData/certs/';
+    this.certDir = process.env.LXD_CERTS_DIR;
   }
 
   getHosts() {
