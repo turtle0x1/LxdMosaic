@@ -32,6 +32,26 @@ if (envImportResult.error) {
   throw envImportResult.error;
 }
 
+
+if(!fs.existsSync(process.env.CERT_PATH)){
+    console.log("waiting 10 seconds to see if a certificate gets created");
+}
+
+var startDate = new Date();
+
+while (!fs.existsSync(process.env.CERT_PATH)) {
+    var seconds = (new Date().getTime() - startDate.getTime()) / 1000;
+    if(seconds > 10){
+        break;
+    }
+}
+
+if(!fs.existsSync(process.env.CERT_PATH)){
+    console.log("couldn't read certificate file");
+    process.exit(1);
+}
+
+
 // Https certificate and key file location for secure websockets + https server
 var privateKey = fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
   certificate = fs.readFileSync(process.env.CERT_PATH, 'utf8');
