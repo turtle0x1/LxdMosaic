@@ -176,7 +176,17 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
   if (err) {
-    throw err;
+      if(process.env.hasOwnProperty("SNAP")){
+          console.log("delaying restart 10 seconds to because we are in a snap");
+          var startDate = new Date();
+          while (true) {
+              var seconds = (new Date().getTime() - startDate.getTime()) / 1000;
+              if(seconds > 10){
+                  break;
+              }
+          }
+      }
+      throw err;
   }
 });
 
