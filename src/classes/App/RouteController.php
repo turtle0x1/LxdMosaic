@@ -30,19 +30,23 @@ class RouteController
     {
         if ($explodedPath[0] == "api") {
             $headers = getallheaders();
-            if (!isset($headers["userId"]) || !isset($headers["apiToken"])) {
+
+            // PHP-FPM strikes again
+            $headers = array_change_key_case($headers);
+
+            if (!isset($headers["userid"]) || !isset($headers["apitoken"])) {
                 http_response_code(403);
                 echo json_encode(["error"=>"Missing either user id or token"]);
                 exit;
             }
 
-            if (!$this->validateToken->validate($headers["userId"], $headers["apiToken"])) {
+            if (!$this->validateToken->validate($headers["userid"], $headers["apitoken"])) {
                 http_response_code(403);
                 echo json_encode(["error"=>"Not valid token"]);
                 exit;
             }
 
-            $this->routeApi->route($explodedPath, $headers["userId"]);
+            $this->routeApi->route($explodedPath, $headers["userid"]);
             exit;
         }
 
