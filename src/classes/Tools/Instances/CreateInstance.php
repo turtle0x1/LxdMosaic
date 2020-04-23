@@ -2,6 +2,7 @@
 
 namespace dhope0000\LXDClient\Tools\Instances;
 
+use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Tools\Hosts\Instances\HostsHaveInstance;
 use dhope0000\LXDClient\Tools\Hosts\Images\ImportImageIfNotHave;
 use dhope0000\LXDClient\Model\Client\LxdClient;
@@ -11,11 +12,13 @@ class CreateInstance
     public function __construct(
         LxdClient $lxdClient,
         HostsHaveInstance $hostsHaveInstance,
-        ImportImageIfNotHave $importImageIfNotHave
+        ImportImageIfNotHave $importImageIfNotHave,
+        GetDetails $getDetails
     ) {
         $this->client = $lxdClient;
         $this->hostsHaveInstance = $hostsHaveInstance;
         $this->importImageIfNotHave = $importImageIfNotHave;
+        $this->getDetails = $getDetails;
     }
     /**
      * TODO Combine the two profiles array
@@ -52,8 +55,13 @@ class CreateInstance
         foreach ($hosts as $host) {
             $client = $this->client->getANewClient($host);
             $this->importImageIfNotHave->importIfNot($client, $imageDetails);
+            $alias = "";
+            // Thats expensive
+            if ($client->cluster->info()["enabled"]) {
+                $alias = $this->getDetails->fetchAlias($host);
+            }
 
-            $response = $client->instances->create($name, $options, true);
+            $response = $client->instances->create($name, $options, true, [], $alias);
 
             if ($response["status_code"] == 400) {
                 throw new \Exception("Host: $host " . $response["err"], 1);
