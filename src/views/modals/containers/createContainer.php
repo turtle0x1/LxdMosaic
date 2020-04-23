@@ -127,7 +127,7 @@
                     //TODO if len == 0
                     let gpus = "";
                     $.each(data, function(i, item){
-                        gpus += `<option value="${item.id}">${item.product}</option>`
+                        gpus += `<option value="${item.pci_address}">${item.product}</option>`
                     });
                     $("#newContainerGpus").empty().append(gpus);
                 });

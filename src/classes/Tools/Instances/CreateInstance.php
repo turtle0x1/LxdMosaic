@@ -87,7 +87,7 @@ class CreateInstance
             foreach ($gpus as $index => $id) {
                 $x["devices"]["gpu_$index"] = [
                     "type"=>"gpu",
-                    "id"=>$id
+                    "pci"=>$id
                 ];
             }
         }
