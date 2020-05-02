@@ -16,7 +16,7 @@ fi
 curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
 
 # Install Dependecies
-apt-get install apache2 php7.2 php7.2-cli php7.2-json php7.2-mysql php7.2-dom php7.2-curl unzip zip mysql-server git nodejs -y
+apt-get install apache2 php php-cli php-json php-mysql php-dom php-curl unzip zip mysql-server git nodejs -y
 
 npm -g install pm2
 
