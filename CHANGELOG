@@ -3,6 +3,7 @@ Unreleased
 Added
     Bulk action to stop containers (#184)
     Bulk action to start containers (#185)
+    Add (optional) select GPU when deploying a cloud config (#199)
 
 Changed
     Renamespaced & updated class names for lots of "Containers" to "Instances"

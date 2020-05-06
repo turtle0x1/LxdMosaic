@@ -24,7 +24,8 @@ class DeployConfigToContainer
         string $profileName = "",
         array $additionalProfiles = [],
         int $cloudConfigId = null,
-        int $cloudConfigRevId = null
+        int $cloudConfigRevId = null,
+        array $gpus = []
     ) {
         if (!is_numeric($cloudConfigId) && !is_numeric($cloudConfigRevId)) {
             throw new \Exception("Please provide cloud config id or a rev id", 1);
@@ -48,7 +49,9 @@ class DeployConfigToContainer
             $hostUrls,
             $imageDetails,
             "",
-            [$profileName]
+            [$profileName],
+            "",
+            $gpus
         );
     }
 }
