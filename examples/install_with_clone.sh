@@ -100,8 +100,5 @@ a2ensite lxd_manager
 systemctl restart apache2
 
 printf "${grn}\nInstallation successfull \n\n"
-printf  "You now need to point your browser at ${blu}https://this_hosts_ip_address:3000${end} ${red}and accept the self signed certificate${end} \n\n"
-printf  "${grn}then point your browser at ${blu}https://this_hosts_ip${end} ${red}and accept the self signed certificate${end} \n"
-printf  "${grn} \n or \n\nyou could add lxd.local to your hosts file (on your pc) E.G \n"
-printf  " \n this_hosts_ip_address lxd.local \n\n"
-printf  "ServerName for LxdManager can be changed in /etc/apache2/sites-available/lxd_manager.conf, followed by an apache restart (systemctl restart apache2) \n${end}"
+printf  "You now need to point your browser at ${blu}https://this_hosts_ip_address${end} ${grn}and accept the self signed certificate${end} \n\n"
+printf  "ServerName for LxdManager can be changed in /etc/apache2/sites-available/lxd_manager.conf, followed by an apache restart (systemctl restart apache2) \n\n${end}"
