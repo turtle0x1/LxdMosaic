@@ -27,6 +27,10 @@ curl -sS https://getcomposer.org/installer -o composer-setup.php
 ## Install
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
+## Move the default apache files
+a2dissite 000-default
+a2dissite default-ssl
+
 # Move to www & clone repository
 cd /var/www || exit
 
