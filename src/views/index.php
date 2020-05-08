@@ -162,7 +162,8 @@ if ($haveServers->haveAny() !== true) {
                     getAll: '/api/InstanceSettings/Users/GetUsersController/getAll',
                 },
                 getAll: "/api/InstanceSettings/GetAllSettingsController/getAll",
-                saveAll: "/api/InstanceSettings/SaveAllSettingsController/saveAll"
+                saveAll: "/api/InstanceSettings/SaveAllSettingsController/saveAll",
+                getOverview: "/api/InstanceSettings/GetSettingsOverviewController/get"
               },
               networks: {
                   getAll: "/api/Networks/GetHostsNetworksController/get",

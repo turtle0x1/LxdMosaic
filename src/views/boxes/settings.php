@@ -1,7 +1,7 @@
 <div id="settingsBox" class="boxSlide">
     <div id="settingsOverview">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                   <div class="card bg-dark">
                     <div class="card-header bg-dark" role="tab" >
                       <h5>
@@ -24,6 +24,33 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            <div class="col-md-4">
+                  <div class="card bg-dark">
+                    <div class="card-header bg-dark" role="tab" >
+                      <h5>
+                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+                          LXDMosaic Details
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
+                      <div class="card-body bg-dark">
+                        <table class="table table-dark table-bordered" id="">
+                            <tbody>
+                                <tr>
+                                    <th>Current Version</th>
+                                    <td id="currentVersion"></td>
+                                </tr>
+                                <tr>
+                                    <th>New Version</th>
+                                    <td id="newVersion"></td>
+                                </tr>
                             </tbody>
                         </table>
                       </div>
@@ -124,6 +151,33 @@ function loadSettingsView()
                 </tr>`
         });
         $("#settingListTable > tbody").empty().append(trs);
+    });
+
+    ajaxRequest(globalUrls.settings.getOverview, {}, (data)=>{
+        data = makeToastr(data);
+        if(data.hasOwnProperty("state") && data.state == "error"){
+            return false;
+        }
+
+        if(data.versionDetails.cantSeeGithub){
+            $("#currentVersion").text("Cant see github");
+            $("#newVersion").text("Cant see github");
+            return false;
+        }
+
+        $("#currentVersion").text(data.versionDetails.currentVersion);
+
+        let newVersion = "";
+
+        if(data.versionDetails.newVersionUrl !== false){
+            newVersion = `<a target="_blank" href="${data.versionDetails.newVersionUrl}">${data.versionDetails.newVersion}</a>`;
+        } else if(data.versionDetails.master == true){
+            newVersion = "N/A - You are on the master branch";
+        } else if(data.versionDetails.snap == true){
+            newVersion = "N/A - Snap will keep you up to date";
+        }
+
+        $("#newVersion").html(newVersion);
     });
 
 }
