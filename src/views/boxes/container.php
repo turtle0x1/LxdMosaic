@@ -1073,10 +1073,34 @@ function loadFileSystemPath(path){
                  });
                  $("#filesystemTable").empty().append(h);
              }else {
-                 $("#downloadContainerFileForm").find("input[name=hostId]").val(currentContainerDetails.hostId);
-                 $("#downloadContainerFileForm").find("input[name=path]").val(path);
-                 $("#downloadContainerFileForm").find("input[name=container]").val(currentContainerDetails.container);
-                 $("#downloadContainerFileForm").trigger("submit");
+                 var formData = new FormData();
+
+                 let parts = path.split("/")
+                 let fileName = parts[parts.length - 1];
+
+                formData.append("hostId", currentContainerDetails.hostId);
+                formData.append("path", path);
+                formData.append("container", currentContainerDetails.container);
+                formData.append("download", 1);
+                // Stolen straight from stackoverflow
+                 fetch('/api/Instances/Files/GetPathController/get', {
+                     method: 'POST',
+                     headers: userDetails,
+                     body: formData
+                 })
+                  .then(resp => resp.blob())
+                  .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    // the filename you want
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                  })
+                  .catch(() => alert('oh no something went wrong!'));
              }
          }
      });
