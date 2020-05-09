@@ -13,9 +13,9 @@ class ResetPasswordController
         $this->resetPassword = $resetPassword;
     }
 
-    public function reset(int $targetUser, string $newPassword)
+    public function reset(int $userId, int $targetUser, string $newPassword)
     {
-        $this->resetPassword->reset($targetUser, $newPassword);
+        $this->resetPassword->reset($userId, $targetUser, $newPassword);
         return ["state"=>"success", "message"=>"Updated password"];
     }
 }

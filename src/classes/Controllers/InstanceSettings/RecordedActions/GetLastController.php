@@ -13,8 +13,8 @@ class GetLastController
         $this->getActions = $getActions;
     }
 
-    public function get(int $ammount)
+    public function get(int $userId, int $ammount)
     {
-        return $this->getActions->get($ammount);
+        return $this->getActions->get($userId, $ammount);
     }
 }

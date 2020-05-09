@@ -37,23 +37,24 @@ class RouteApi
             throw new \Exception("Method point not found");
         }
 
-        $params = $this->orderParams($_POST, $controllerStr, $method);
+        $params = $this->orderParams($_POST, $controllerStr, $method, $userId);
 
         $controller = $this->container->make($controllerStr);
 
         if ($controller instanceof \dhope0000\LXDClient\Interfaces\RecordAction) {
-            $params["userId"] = $userId;
-            $this->recordAction->record($controllerStr . "\\" . $method, $params);
-            unset($params["userId"]);
+            $x = $params;
+            $x["userId"] = $userId;
+            $this->recordAction->record($controllerStr . "\\" . $method, $x);
         }
 
         // TODO Pass provided arguments to controller
         $data = call_user_func_array(array($controller, $method), $params);
+
         //TODO So lazy
         echo json_encode($data);
     }
 
-    public function orderParams($passedArguments, $class, $method)
+    public function orderParams($passedArguments, $class, $method, int $userId)
     {
         $reflectedMethod = new \ReflectionMethod($class, $method);
         $paramaters = $reflectedMethod->getParameters();
@@ -62,13 +63,15 @@ class RouteApi
             $name = $param->getName();
             $hasDefault = $param->isDefaultValueAvailable();
 
-            if (!$hasDefault && !isset($passedArguments[$name])) {
+            if ($name === "userId") {
+                $o[$name] = $userId;
+                continue;
+            } elseif (!$hasDefault && !isset($passedArguments[$name])) {
                 throw new \Exception("Missing Paramater $name", 1);
             } elseif ($hasDefault && !isset($passedArguments[$name])) {
                 $o[$name] = $param->getDefaultValue();
                 continue;
             }
-
             $o[$name] = $passedArguments[$name];
         }
         return $o;

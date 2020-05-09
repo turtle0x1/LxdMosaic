@@ -28,7 +28,7 @@ class RouteController
 
     public function routeRequest($explodedPath)
     {
-        if ($explodedPath[0] == "api") {
+        if (isset($explodedPath[0]) && $explodedPath[0] == "api") {
             $headers = getallheaders();
 
             // PHP-FPM strikes again

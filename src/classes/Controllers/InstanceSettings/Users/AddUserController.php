@@ -13,9 +13,9 @@ class AddUserController
         $this->addUser = $addUser;
     }
 
-    public function add(string $username, string $password)
+    public function add(int $userId, string $username, string $password)
     {
-        $this->addUser->add($username, $password);
+        $this->addUser->add($userId, $username, $password);
         return ["state"=>"success", "message"=>"Addded user"];
     }
 }

@@ -13,9 +13,9 @@ class SaveAllSettingsController implements \dhope0000\LXDClient\Interfaces\Recor
         $this->saveSettings = $saveSettings;
     }
 
-    public function saveAll(array $settings)
+    public function saveAll($userId, $settings)
     {
-        $this->saveSettings->save($settings);
+        $this->saveSettings->save($userId, $settings);
         return ["state"=>"success", "message"=>"Saved Settings"];
     }
 }

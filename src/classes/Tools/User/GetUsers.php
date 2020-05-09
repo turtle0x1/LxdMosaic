@@ -2,20 +2,20 @@
 
 namespace dhope0000\LXDClient\Tools\User;
 
-use dhope0000\LXDClient\Tools\User\UserSession;
+use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 use dhope0000\LXDClient\Model\Users\FetchUsers;
 
 class GetUsers
 {
-    public function __construct(UserSession $userSession, FetchUsers $fetchUsers)
+    public function __construct(ValidatePermissions $validatePermissions, FetchUsers $fetchUsers)
     {
-        $this->userSession = $userSession;
+        $this->validatePermissions = $validatePermissions;
         $this->fetchUsers = $fetchUsers;
     }
 
-    public function getAll()
+    public function getAll($userId)
     {
-        $this->userSession->isAdminOrThrow();
+        $this->validatePermissions->isAdminOrThrow($userId);
 
         return $this->fetchUsers->fetchAll();
     }

@@ -13,8 +13,8 @@ class GetUsersController
         $this->getUsers = $getUsers;
     }
 
-    public function getAll()
+    public function getAll(int $userId)
     {
-        return $this->getUsers->getAll();
+        return $this->getUsers->getAll($userId);
     }
 }

@@ -25,19 +25,6 @@ class UserSession
         return true;
     }
 
-    public function isAdminOrThrow()
-    {
-        if ((bool) $this->session->get("isAdmin") !== true) {
-            throw new \Exception("Lacking permision", 1);
-        }
-        return true;
-    }
-
-    public function isAdmin()
-    {
-        return (bool) $this->session->get("isAdmin");
-    }
-
     public function getToken()
     {
         return $this->session->get("wsToken");

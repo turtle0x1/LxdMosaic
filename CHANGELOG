@@ -3,6 +3,12 @@ Unreleased
 Added
     Version check showing if there is an update available (#191)
 
+Changed
+    Inject userId if requested by controller so the $userId variable in a
+    controller will always be locked to the user using the app
+
+    Use DB for validing if user is admin instead of session (#194)
+
 0.8.0 - 09/05/2020
 
 Added

@@ -2,10 +2,12 @@
 $haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
 
 $userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
+$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions");
 
-$isAdmin = (int) $userSession->isAdmin();
-$apiToken = $userSession->getToken();
 $userId = $userSession->getUserId();
+$isAdmin = (int) $validatePermissions->isAdmin($userId);
+$apiToken = $userSession->getToken();
+
 
 echo "<script>var userDetails = {
     isAdmin: $isAdmin,
