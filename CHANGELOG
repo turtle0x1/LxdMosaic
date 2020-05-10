@@ -11,6 +11,9 @@ Changed
 
     Use DB for validing if user is admin instead of session (#194)
 
+Fixed
+    Cant add more than one profile to deploy cloud config (#198)
+
 0.8.0 - 09/05/2020
 
 Added

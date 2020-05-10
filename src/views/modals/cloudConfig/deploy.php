@@ -19,12 +19,16 @@
               <input class="form-control" id="deployCloudConfigHosts" />
           </div>
           <div class="form-group">
-              <label> Image </label>
+              <label
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Currently an image needs to have been imported into atleast
+                  one server on the network to use it here! Images will be downloaded
+                  onto hosts that dont have the selected image.">
+                  Image
+                  <i class="fas fa-question-circle"></i>
+              </label>
               <input class="form-control" id="deployCloudConfigImage" />
-              <div class="alert alert-info">
-                  Currently an image needs to have been imported into atleast
-                  one server on the network to use it here!
-              </div>
           </div>
           <div class="form-group">
               <label> Profile Name (Optional) </label>
@@ -32,14 +36,17 @@
           </div>
 
           <div class="form-group">
-              <label> Additonal Profiles </label>
+              <label
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Only profiles on all hosts will appear!
+                      <br/>
+                      <br/>
+                      Remember the default profile usually contains storage information & network details!">
+                  Additional Profiles
+                  <i class="fas fa-question-circle"></i>
+              </label>
               <input class="form-control" id="deployCloudConfigProfiles"/>
-              <div class="alert alert-info">
-                  Only profiles on all hosts will appear
-                  <br/>
-                  Remember the default profile usually contains storage information &
-                  network details!
-              </div>
           </div>
           <div class="form-group">
               <label> GPU's (Optional) </label>
@@ -69,7 +76,9 @@ $("#deployCloudConfigProfiles").tokenInput(globalUrls.profiles.search.getCommonP
     queryParam: "profile",
     propertyToSearch: "profile",
     theme: "facebook",
-    tokenValue: "Profile_ID"
+    tokenValue: "Profile_ID",
+    limit: 999,
+    preventDuplicates: false
 });
 
 $("#deployCloudConfigHosts").tokenInput(globalUrls.hosts.search.search, {
@@ -128,6 +137,7 @@ $("#modal-cloudConfig-deploy").on("hide.bs.modal", function(){
 });
 
 $("#modal-cloudConfig-deploy").on("shown.bs.modal", function(){
+    $("#deployContainerGpuWarning").hide();
     if(!$.isNumeric(deployCloudConfigObj.cloudConfigId)){
         makeToastr(JSON.stringify({state: "error", message: "Developer fail - set cloud config id to open this modal"}));
         return false;
