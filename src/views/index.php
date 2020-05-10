@@ -225,8 +225,19 @@ if ($haveServers->haveAny() !== true) {
                   getHostOverview: "/api/Hosts/GetHostOverviewController/get"
               },
               images: {
+                  aliases: {
+                      create: "/api/Images/Aliases/CreateController/create",
+                      delete: "/api/Images/Aliases/DeleteController/delete",
+                      rename: "/api/Images/Aliases/RenameController/rename",
+                      updateDescription: "/api/Images/Aliases/UpdateDescriptionController/update"
+                  },
                   search: {
                       searchAllHosts: "/api/Images/Search/SearchController/getAllAvailableImages",
+                  },
+                  proprties: {
+                      getFiltertedList: '/api/Images/GetImagePropertiesController/getFiltertedList',
+                      update: '/api/Images/UpdateImagePropertiesController/update',
+                      get: '/api/Images/GetImagePropertiesController/getAll'
                   },
                   getLinuxContainersOrgImages: "/api/Images/GetLinuxContainersOrgImagesController/get",
                   delete: "/api/Images/DeleteImagesController/delete",
