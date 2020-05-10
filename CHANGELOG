@@ -2,6 +2,7 @@ Unreleased
 
 Added
     Version check showing if there is an update available (#191)
+    CRUD operations for image aliases (#170)
 
 Changed
     Inject userId if requested by controller so the $userId variable in a
