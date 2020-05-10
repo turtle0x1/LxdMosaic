@@ -78,8 +78,6 @@
 
     var dataTable = null;
 
-    var imageByHostId = {}
-
     var currentImageDetails = {
         hostId: null,
         fingerprint: null
@@ -112,12 +110,6 @@
 
         $.each(host.images, function(_, image){
             let active = "";
-
-            if(!imageByHostId.hasOwnProperty(host.hostId)){
-                imageByHostId[host.hostId]  = {};
-            }
-
-            imageByHostId[host.hostId][image.fingerprint] = image;
 
             let imageName = makeImageName(image);
 
@@ -492,81 +484,86 @@
         $("#imageSplash").hide();
         $("#imageDetailsView").show();
 
-
-        let image = imageByHostId[d.hostId][d.fingerprint];
-        let imageName =  makeImageName(image);
-        addBreadcrumbs([d.hostAlias, imageName], ["", "active"], true)
-
-        $("#imageName").text(imageName);
-
-        let trs = "";
-
-        $.each(image.properties, (name, value)=>{
-            name = name.replace(/_/g, " ");
-            trs += `<tr><th style='text-transform: capitalize;'>${name}</th><td>${value}</td></tr>`;
-        });
-
-        $("#imagePropertiesTable > tbody").empty().append(trs);
-
-        trs = "";
-
-        if(image.aliases.length){
-            $.each(image.aliases, (_, alias)=>{
-                trs += `<div class="row alias-box border-bottom mb-1 pb-1" data-name=${alias.name}>
-                    <div class="col-md-12">
-                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
-                            <b><u class='alias-name'>${alias.name}</u></b>
-                            <div class="btn-toolbar">
-                              <div class="btn-group mr-2">
-                                  <button data-toggle="tooltip" data-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
-                                  <button data-toggle="tooltip" data-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
-                                  <button data-toggle="tooltip" data-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>
-                              </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 alias-description">
-                        ${alias.description == "" ? "<b class='text-info'>No Description</b>"  : nl2br(alias.description)}
-                    </div>
-                </div>`;
-            });
-        }else{
-            trs = "<tr><td>No Aliases</td></tr>"
-        }
-
-        $("#imageAliasesCardBody").empty().append(trs);
-        $("#imageAliasesCardBody").find('[data-toggle="tooltip"]').tooltip({html: true});
-
-        trs = "";
-
-        let toGet = [
-            "created_at",
-            "last_used_at",
-            "uploaded_at",
-            "expires_at",
-            "size",
-            "auto_update",
-            "public",
-            "fingerprint",
-            "architecture",
-            "type",
-        ]
-
-        $.each(toGet, (_, key)=>{
-            let val = image[key];
-
-            if(["created_at", "last_used_at", "uploaded_at", "expires_at"].includes(key)){
-                val = moment(val).format("llll");
-            }else if(key == "size"){
-                val = formatBytes(val);
+        ajaxRequest(globalUrls.images.proprties.get, currentImageDetails, (data)=>{
+            data = makeToastr(data);
+            if(data.state == "error"){
+                return false;
             }
 
-            let prettyName = key.replace(/_/g, " ");
+            let image = data;
+            let imageName =  makeImageName(image);
+            addBreadcrumbs([d.hostAlias, imageName], ["", "active"], true)
 
-            trs += `<tr><th style='text-transform: capitalize;'>${prettyName}</th><td class='td-${key}'>${val}</td></tr>`;
+            $("#imageName").text(imageName);
+
+            let trs = "";
+
+            $.each(image.properties, (name, value)=>{
+                name = name.replace(/_/g, " ");
+                trs += `<tr><th style='text-transform: capitalize;'>${name}</th><td>${value}</td></tr>`;
+            });
+
+            $("#imagePropertiesTable > tbody").empty().append(trs);
+
+            trs = "";
+
+            if(image.aliases.length){
+                $.each(image.aliases, (_, alias)=>{
+                    trs += `<div class="row alias-box border-bottom mb-1 pb-1" data-name=${alias.name}>
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                                <b><u class='alias-name'>${alias.name}</u></b>
+                                <div class="btn-toolbar">
+                                  <div class="btn-group mr-2">
+                                      <button data-toggle="tooltip" data-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
+                                      <button data-toggle="tooltip" data-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
+                                      <button data-toggle="tooltip" data-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 alias-description">
+                            ${alias.description == "" ? "<b class='text-info'>No Description</b>"  : nl2br(alias.description)}
+                        </div>
+                    </div>`;
+                });
+            }else{
+                trs = "<tr><td>No Aliases</td></tr>"
+            }
+
+            $("#imageAliasesCardBody").empty().append(trs);
+            $("#imageAliasesCardBody").find('[data-toggle="tooltip"]').tooltip({html: true});
+
+            trs = "";
+
+            let toGet = [
+                "created_at",
+                "last_used_at",
+                "uploaded_at",
+                "expires_at",
+                "size",
+                "auto_update",
+                "public",
+                "fingerprint",
+                "architecture",
+                "type",
+            ]
+
+            $.each(toGet, (_, key)=>{
+                let val = image[key];
+
+                if(["created_at", "last_used_at", "uploaded_at", "expires_at"].includes(key)){
+                    val = moment(val).format("llll");
+                }else if(key == "size"){
+                    val = formatBytes(val);
+                }
+
+                let prettyName = key.replace(/_/g, " ");
+
+                trs += `<tr><th style='text-transform: capitalize;'>${prettyName}</th><td class='td-${key}'>${val}</td></tr>`;
+            });
+
+            $("#imageExtendedDetailsTable > tbody").empty().append(trs);
         });
-
-        $("#imageExtendedDetailsTable > tbody").empty().append(trs);
-
     });
 </script>

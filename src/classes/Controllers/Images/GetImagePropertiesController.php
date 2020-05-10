@@ -10,6 +10,12 @@ class GetImagePropertiesController
         $this->getImageProperties = $getImageProperties;
     }
 
+
+    public function getAll(int $hostId, string $fingerprint)
+    {
+        return $this->getImageProperties->getAll($hostId, $fingerprint);
+    }
+    
     /**
      * This is the list of proprties we support updating for an image
      */

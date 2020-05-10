@@ -236,7 +236,8 @@ if ($haveServers->haveAny() !== true) {
                   },
                   proprties: {
                       getFiltertedList: '/api/Images/GetImagePropertiesController/getFiltertedList',
-                      update: '/api/Images/UpdateImagePropertiesController/update'
+                      update: '/api/Images/UpdateImagePropertiesController/update',
+                      get: '/api/Images/GetImagePropertiesController/getAll'
                   },
                   getLinuxContainersOrgImages: "/api/Images/GetLinuxContainersOrgImagesController/get",
                   delete: "/api/Images/DeleteImagesController/delete",
