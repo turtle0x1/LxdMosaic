@@ -1,38 +1,74 @@
 <div id="imagesBox" class="boxSlide">
 <!-- <h4> Container: <`span id="containerName"></span> </h4> -->
-<div class="col-md-12">
+<div class="col-md-12" id="imageSplash">
     <div class="card bg-dark">
       <div class="card-header" role="tab" id="container-imagesHeading">
         <h5>
           <a class="text-white">
-            Images Overview
-            <button class="btn btn-danger float-right deleteImages" id="deleteImagesBtn"> Delete </button>
+            <a href="https://images.linuxcontainers.org" target="_blank">Available To Import</a>
             <button class="btn btn-primary float-right" id="importImagesBtn"> Import </button>
           </a>
         </h5>
       </div>
-
-      <div id="container-imagesCollapse" class="collapsed show" aria-expanded="true" role="tabpanel" aria-labelledby="container-imagesHeading">
-        <div id="imagesOverviewDetails" class="card-block bg-dark table-responsive">
-            <table class="table table-dark table-bordered" id="imagesTable">
-                <thead>
-                    <th>  </th>
-                    <th> OS </th>
-                    <th> Release </th>
-                    <th> Aliases </th>
-                    <th> Auto update </th>
-                    <th> Created </th>
-                    <th> Size </th>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+      <div id="imagesOverviewDetails" class="card-body bg-dark table-responsive">
             <div id="remoteImagesTableBox">
-                <table class="table table-dark table-bordered" id="remoteImagesTable">
+                <table class="table mt-2 table-dark table-bordered" id="remoteImagesTable">
                 </table>
             </div>
         </div>
-      </div>
+    </div>
+</div>
+<div class="col-md-12" id="imageDetailsView">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+            <h4 id="imageName"> <u>
+            </u></h4>
+            <div class="btn-toolbar float-right">
+              <div class="btn-group mr-2">
+                  <button data-toggle="tooltip" data-placement="bottom" title="Delete Profile" class="btn btn-danger" id="deleteImage">
+                      <i class="fas fa-trash"></i>
+                  </button>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-columns">
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h4>Properties</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark table-bordered" id="imagePropertiesTable">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h4>Aliases</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark table-bordered" id="imageAliasesTable">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h4>Extended Details</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive table-dark table-bordered" id="imageExtendedDetailsTable">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 </div>
@@ -40,35 +76,86 @@
 
     var dataTable = null;
 
-    $(function(){
-        $("#importImagesBtn").hide();
+    var imageByHostId = {}
+
+    var currentDetails = {
+        hostId: null,
+        fingerprint: null
+    }
+
+    $(document).on("click", ".viewImages", function(){
+        $(".sidebar-fixed").addClass("sidebar-lg-show");
+        changeActiveNav(".viewImages")
+        loadImageOverview();
     });
 
-    function loadLocalImagesAfter(milSeconds = 2000)
+    function makeImageName(image){
+        let version = "Unknown Version";
+        if(image.properties.hasOwnProperty("version")){
+            version = image.properties.version;
+        }else if(image.properties.hasOwnProperty("release")){
+            version = image.properties.release;
+        }
+        return image.aliases.length == 0 ? `${image.properties.os}-${version}` : image.aliases[0];
+    }
+
+    function makeImagesHtml(hosthtml, host, selectedProfile = null, selectedHost = null){
+        let disabled = "";
+
+        hosthtml += `<li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+                <i class="fas fa-server"></i> ${host.hostAlias}
+            </a>
+            <ul class="nav-dropdown-items">`;
+
+        $.each(host.images, function(_, image){
+            let active = "";
+
+
+
+            if(!imageByHostId.hasOwnProperty(host.hostId)){
+                imageByHostId[host.hostId]  = {};
+            }
+
+            imageByHostId[host.hostId][image.fingerprint] = image;
+
+            let imageName = makeImageName(image);
+
+            let icon = image.hasOwnProperty("type") && image.type == "container" ? "box" : "vr-cardboard";
+
+            hosthtml += `<li class="nav-item view-image ${active}"
+                data-host-id="${host.hostId}"
+                data-fingerprint="${image.fingerprint}"
+                data-alias="${host.hostAlias}"
+                >
+              <a class="nav-link" href="#">
+                <i class="nav-icon fa fa-${icon}"></i>
+                ${imageName}
+              </a>
+            </li>`;
+        });
+        hosthtml += "</ul></li>";
+        return hosthtml;
+    }
+
+    function loadImageOverviewAfter(milSeconds = 2000)
     {
         setTimeout(function(){
-            showLocalImages();
+            loadImageOverview();
         }, milSeconds);
     }
 
-    $(document).on("click", ".deleteImages", function(){
-        let trs = $("#imagesTable > tbody > tr");
-        let data = [];
-        $(trs).each(function(){
-            let input = $(this).find("input[name=imageSelect]");
-            if($(input).is(":checked")){
-                data.push({
-                    hostId: $(input).attr("data-host"),
-                    fingerprint: $(input).attr("id")
-                })
-            }
-        });
+    $(document).on("click", "#deleteImage", function(){
         let x = {
-            imageData: data
+            imageData: [currentDetails]
         };
         ajaxRequest(globalUrls.images.delete, x, function(data){
             makeToastr(data);
-            loadLocalImagesAfter();
+            loadImageOverviewAfter();
+            currentDetails = {
+                hostId: null,
+                fingerprint: null
+            }
         });
     });
 
@@ -83,19 +170,7 @@
         return false;
     });
 
-    function showLocalImages(){
-        loadLocalImages();
-
-        $("#deleteImagesBtn").show()
-        $("#imagesTable").show();
-        $("#importImagesBtn, #remoteImagesTableBox").hide()
-    }
-
     function showRemoteImages(){
-        $("#deleteImagesBtn").hide();
-        $("#importImagesBtn").show()
-        $("#remoteImagesTableBox").show();
-        addBreadcrumbs(["Images", "Remote Images"], ["viewImages", "active"], false)
         ajaxRequest(globalUrls.images.getLinuxContainersOrgImages, "POST", function(data){
             let x = $.parseJSON(data);
             if(x.hasOwnProperty("error")){
@@ -116,13 +191,12 @@
                 html += "</tr>";
             });
             html += "</tbody>";
-            $("#imagesTable").hide();
             if(dataTable !== null){
                 dataTable.clear();
                 dataTable.destroy();
             }
 
-            $("#remoteImagesTable").empty().append(html).show();
+            $("#remoteImagesTable").empty().append(html)
             dataTable = $("#remoteImagesTable").DataTable({
                 drawCallback: function( settings, json ) {
                     $('#remoteImagesTable td').css({
@@ -134,78 +208,105 @@
         });
     }
 
-    function loadLocalImages()
+    function loadImageOverview()
     {
-        addBreadcrumbs(["Images", "Local Images"], ["", "active"], false)
+        addBreadcrumbs(["Images"], ["", "active"], false)
         ajaxRequest(globalUrls.images.getAll, null, function(data){
-            let x = $.parseJSON(data);
-            if(x.hasOwnProperty("error")){
-                return false;
-            }
-            let trs = "";
-            $.each(x, function(host, hostDetails){
-                trs += `<tr class='bg-success'><td colspan='999' class='text-center'>${host}</td></tr>`;
-                if(hostDetails.images.length == 0){
-                    if(hostDetails.online){
-                        trs += `<tr><td colspan="999" class="text-center"><b>No Images</b></td></tr>`;
-                    }else{
-                        trs += `<tr><td colspan="999" class="text-center"><b class="text-danger">Host Offline</b></td></tr>`;
-                    }
+            data = $.parseJSON(data);
+            let a = "text-info";
+            let hosts = `
+            <li class="nav-item viewImages">
+                <a class="nav-link ${a}" href="#">
+                    <i class="fas fa-tachometer-alt"></i> Overview
+                </a>
+            </li>`;
 
-                    return;
-                }
-                $.each(hostDetails.images, function(i, data){
-                    let a = "-";
-                    if(data.aliases.length > 0){
-                        a = ""
-                        $.each(data.aliases, function(i, item){
-                            a += `${item.name} <br/>`;
-                        });
-                    }
 
-                    trs += `<tr>
-                        <td><input data-host='${hostDetails.hostId}' id='${data.fingerprint}' name='imageSelect' type='checkbox' /></td>
-                        <td>${data.properties.os} </td>
-                        <td>${data.properties.release}</td>
-                        <td>${a}</td>
-                        <td>${data.auto_update}</td>
-                        <td>${moment(data.created_at).format("DD-MM-YYYY")}</td>
-                        <td>${formatBytes(data.size)}</td>
-                    </tr>`;
-                });
-            })
+            $.each(data.clusters, (clusterIndex, cluster)=>{
+                hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+                $.each(cluster.members, (_, host)=>{
+                    hosts = makeImagesHtml(hosts, host)
+                })
+            });
 
-            $("#imagesTable > tbody").empty().append(trs);
-            $(".boxSlide").hide();
-            $("#imagesBox").show();
+            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+
+            $.each(data.standalone.members, (_, host)=>{
+                hosts = makeImagesHtml(hosts, host)
+            });
+
+            $("#sidebar-ul").empty().append(hosts);
+
+            $(".boxSlide, #imageDetailsView").hide();
+            $("#imagesBox, #imageSplash").show();
+            showRemoteImages();
         });
     }
 
-    $(document).on("click", ".viewImages", function(){
-        $(".sidebar-fixed").addClass("sidebar-lg-show");
-        changeActiveNav(".viewImages")
-        loadLocalImages();
-        $("#sidebar-ul").empty().append(`
-            <li class="nav-item imageLink" data-type="localImages">
-                <a class="nav-link text-info" href="#">
-                    <i class="nav-icon fa fa-home"></i> Local Images
-                </a>
-            </li>
-            <li class="nav-item imageLink" data-type="linuxContainersOrg">
-                <a class="nav-link" href="#">
-                    <i class="nav-icon fas fa-cloud-download-alt"></i> Linux Containers Org
-                </a>
-            </li>
-            `);
-    });
+    $(document).on("click", ".view-image", function(){
+        let d = $(this).data();
+        currentDetails = d;
+        $("#imageSplash").hide();
+        $("#imageDetailsView").show();
 
-    $("#sidebar-ul").on("click", ".imageLink", function(){
-        let type = $(this).data("type");
-        if(type == "localImages"){
-            showLocalImages();
-        }else if(type == "linuxContainersOrg"){
-            showRemoteImages();
+
+        let image = imageByHostId[d.hostId][d.fingerprint];
+        let imageName =  makeImageName(image);
+        addBreadcrumbs([d.alias, imageName], ["", "active"], true)
+
+        $("#imageName").text(imageName);
+
+        let trs = "";
+
+        $.each(image.properties, (name, value)=>{
+            name = name.replace(/_/g, " ");
+            trs += `<tr><th style='text-transform: capitalize;'>${name}</th><td>${value}</td></tr>`;
+        });
+
+        $("#imagePropertiesTable > tbody").empty().append(trs);
+
+        trs = "";
+
+        if(image.aliases.length){
+            $.each(image.aliases, (_, alias)=>{
+                trs += `<tr><td>${alias}</td></tr>`;
+            });
+        }else{
+            trs = "<tr><td>No Aliases</td></tr>"
         }
-    });
 
+        $("#imageAliasesTable > tbody").empty().append(trs);
+
+        trs = "";
+
+        let toGet = [
+            "created_at",
+            "last_used_at",
+            "uploaded_at",
+            "expires_at",
+            "size",
+            "auto_update",
+            "public",
+            "fingerprint",
+            "architecture",
+            "type",
+        ]
+
+        $.each(toGet, (_, key)=>{
+            let val = image[key];
+
+            if(["created_at", "last_used_at", "uploaded_at", "expires_at"].includes(key)){
+                val = moment(val).format("llll");
+            }else if(key == "size"){
+                val = formatBytes(val);
+            }
+
+            key = key.replace(/_/g, " ");
+
+            trs += `<tr><th style='text-transform: capitalize;'>${key}</th><td>${val}</td></tr>`;
+        });
+
+        $("#imageExtendedDetailsTable > tbody").empty().append(trs);
+
+    });
 </script>
