@@ -25,7 +25,10 @@
             </u></h4>
             <div class="btn-toolbar float-right">
               <div class="btn-group mr-2">
-                  <button data-toggle="tooltip" data-placement="bottom" title="Delete Profile" class="btn btn-danger" id="deleteImage">
+                  <button data-toggle="tooltip" data-placement="bottom" title="Update Image" class="btn btn-sm btn-info" id="updateImageProperties">
+                      <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Delete Image" class="btn btn-sm btn-danger" id="deleteImage">
                       <i class="fas fa-trash"></i>
                   </button>
               </div>
@@ -48,7 +51,7 @@
         <div class="card bg-dark text-white">
             <div class="card-header">
                 <h4>Aliases
-                    <button class="btn btn-primary float-right" id="createAlias">
+                    <button class="btn btn-sm btn-outline-primary float-right" id="createAlias">
                         <i class="fas fa-plus"></i>
                     </button>
                 </h4>
@@ -141,6 +144,73 @@
             loadImageOverview();
         }, milSeconds);
     }
+
+    $(document).on("click", "#updateImageProperties", function(){
+        $.confirm({
+            title: `Updating Image!`,
+            content: '',
+            onOpen: function(){
+                let body = this.$content
+                ajaxRequest(globalUrls.images.proprties.getFiltertedList, currentImageDetails, (data)=>{
+                    data = makeToastr(data);
+                    let x = "";
+                    $.each(data, (key, val)=>{
+                        x += `<form action="" class="formName">
+                        <div class="form-group">
+                            <b>${key.replace(/_/g, " ")}</b>
+                            <input type="text" name="${key}" value="${val}" class="form-control" required />
+                        </div>
+                        </form>`
+                    });
+                    this.$content.append(x);
+                });
+            },
+            buttons: {
+                cancel: function () {
+                    //close
+                },
+                update: {
+                    text: 'Update',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        let settings = {};
+                        let invalid = false;
+                        $.each(this.$content.find("input"), function(){
+                            let key = $(this).attr("name");
+                            let val = $(this).val().trim();
+                            if(val == ""){
+                                return false;
+                            }
+                            settings[key] = val;
+                        });
+
+                        if(invalid){
+                            $.alert("All inputs must have a value");
+                            return false;
+                        }
+
+                        let x = {
+                            ...{
+                                settings: settings
+                            },
+                            ...currentImageDetails
+                        };
+
+                        ajaxRequest(globalUrls.images.proprties.update, x, (data)=>{
+                            data = makeToastr(data);
+                            if(data.state == "error"){
+                                return false;
+                            }
+                            $.each(settings, (key, val)=>{
+                                $(`.td-${key}`).text(val);
+                            });
+                        });
+                    }
+                }
+            }
+        });
+
+    });
 
     $(document).on("click", "#deleteImage", function(){
         let x = {
@@ -491,9 +561,9 @@
                 val = formatBytes(val);
             }
 
-            key = key.replace(/_/g, " ");
+            let prettyName = key.replace(/_/g, " ");
 
-            trs += `<tr><th style='text-transform: capitalize;'>${key}</th><td>${val}</td></tr>`;
+            trs += `<tr><th style='text-transform: capitalize;'>${prettyName}</th><td class='td-${key}'>${val}</td></tr>`;
         });
 
         $("#imageExtendedDetailsTable > tbody").empty().append(trs);

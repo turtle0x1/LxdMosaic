@@ -234,6 +234,10 @@ if ($haveServers->haveAny() !== true) {
                   search: {
                       searchAllHosts: "/api/Images/Search/SearchController/getAllAvailableImages",
                   },
+                  proprties: {
+                      getFiltertedList: '/api/Images/GetImagePropertiesController/getFiltertedList',
+                      update: '/api/Images/UpdateImagePropertiesController/update'
+                  },
                   getLinuxContainersOrgImages: "/api/Images/GetLinuxContainersOrgImagesController/get",
                   delete: "/api/Images/DeleteImagesController/delete",
                   getAll: "/api/Images/GetImagesController/getAllHostImages",
