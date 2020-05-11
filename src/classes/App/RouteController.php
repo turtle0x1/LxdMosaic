@@ -7,6 +7,9 @@ use dhope0000\LXDClient\App\RouteAssets;
 use dhope0000\LXDClient\Tools\User\UserSession;
 use dhope0000\LXDClient\Tools\User\LogUserIn;
 use dhope0000\LXDClient\Tools\User\ValidateToken;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
+use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
 
 class RouteController
 {
@@ -24,6 +27,7 @@ class RouteController
         $this->routeApi = $routeApi;
         $this->routeView = $routeView;
         $this->routeAssets = $routeAssets;
+        $this->session = new Session(new NativeSessionStorage(), new NamespacedAttributeBag());
     }
 
     public function routeRequest($explodedPath)
@@ -52,6 +56,8 @@ class RouteController
 
         $logoReq = implode("/", $explodedPath) === "assets/lxdMosaic/logo.png";
 
+        $this->session->start();
+        
         $loginSet = isset($_POST["login"]);
 
         if ($this->userSession->isLoggedIn() !== true && !$loginSet && !$logoReq) {

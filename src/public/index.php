@@ -1,9 +1,5 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
-use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
-
 require __DIR__ . "/../../vendor/autoload.php";
 
 $builder = new \DI\ContainerBuilder();
@@ -15,9 +11,6 @@ $exceptionHandler->register();
 $env = new Dotenv\Dotenv(__DIR__ . "/../../");
 $env->load();
 $env->required(['DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME']);
-
-$session = new Session(new NativeSessionStorage(), new NamespacedAttributeBag());
-$session->start();
 
 $router = $container->make("dhope0000\LXDClient\App\RouteController");
 
