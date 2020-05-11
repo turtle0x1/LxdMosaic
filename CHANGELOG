@@ -12,6 +12,9 @@ Changed
 
     Use DB for validing if user is admin instead of session (#194)
 
+    Re-purpose the cluster page, access it by clicking a cluster on the dashboard
+    sidebar (#183)
+
 Fixed
     Cant add more than one profile to deploy cloud config (#198)
 

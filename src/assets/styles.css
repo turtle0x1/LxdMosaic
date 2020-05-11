@@ -3,11 +3,19 @@ body {
     font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
 }
 
+.cluster-title:hover {
+    color: #167495 !important; /* Eugh */
+}
+
+.text-underline {
+    text-decoration: underline;
+}
+
 .text-strikethrough {
     text-decoration: line-through !important;
 }
 
-.toggleCard {
+.toggleCard, .cluster-title {
     cursor: pointer;
 }
 

@@ -152,7 +152,8 @@ if ($haveServers->haveAny() !== true) {
                   restore: '/api/Backups/RestoreBackupController/restore'
               },
               clusters: {
-                getAll: "/api/Clusters/GetAllController/get"
+                getAll: "/api/Clusters/GetAllController/get",
+                getCluster: "/api/Clusters/GetClusterController/get"
               },
               settings: {
                 recordedActions: {
@@ -376,12 +377,6 @@ if ($haveServers->haveAny() !== true) {
           <li class="nav-item">
             <a class="nav-link viewCloudConfigFiles">
               <i class="fa fa-cogs"></i> <span class="hideNavText"> Cloud Config </span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewClusters">
-              <i class="far fa-object-group"></i>
-              <span class="hideNavText"> Clusters </span>
-            </a>
           </li>
           <li class="nav-item">
               <a class="nav-link viewDeployments">
@@ -675,7 +670,7 @@ function createDashboardSidebar()
                 </a>
             </li>`;
         $.each(data.clusters, function(i, item){
-            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
+            hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
 
             $.each(item.members, function(_, host){
                 let disabled = "";
@@ -757,6 +752,14 @@ function addHostContainerList(hostId, hostAlias) {
     });
 }
 
+$(document).on("click", ".cluster-title", function(e){
+    let x = $(this).data();
+    $("#sidebar-ul").find(".text-info").removeClass("text-info");
+    $("#sidebar-ul").find(".active").removeClass("active");
+    $(this).addClass("text-info");
+    loadClusterView(x.cluster);
+});
+
 $(document).on("click", ".showServerInstances", function(e){
     e.preventDefault();
 
@@ -817,7 +820,7 @@ function loadDashboard(){
         let hostsTrs = "";
 
         $.each(data.clustersAndHosts.clusters, function(i, item){
-            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
+            hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
 
             hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
 
@@ -1091,12 +1094,6 @@ $(document).on("click", ".viewProfiles, .profile-overview", function(){
     if($(this).hasClass("callFunc")){
         loadProfileView();
     }
-});
-
-$(document).on("click", ".viewClusters, .cluster-overview", function(){
-    setBreadcrumb("Clusters", "viewClusters active");
-    loadClusterOverview();
-    changeActiveNav(".viewClusters")
 });
 
 $(document).on("click", ".viewProjects, .projects-overview", function(){
