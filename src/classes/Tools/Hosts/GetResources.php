@@ -4,7 +4,6 @@ namespace dhope0000\LXDClient\Tools\Hosts;
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
-use Symfony\Component\HttpFoundation\Session\Session;
 use \Opensaucesystems\Lxd\Client;
 
 class GetResources
@@ -12,13 +11,11 @@ class GetResources
     public function __construct(
         LxdClient $lxdClient,
         HostList $hostList,
-        HasExtension $hasExtension,
-        Session $session
+        HasExtension $hasExtension
     ) {
         $this->client = $lxdClient;
         $this->hostList = $hostList;
         $this->hasExtension = $hasExtension;
-        $this->session = $session;
     }
 
     public function getHostExtended(int $hostId)
@@ -33,13 +30,10 @@ class GetResources
             $hostId = $host["Host_ID"];
             $details = [];
 
-            $currentProject = $this->session->get("host/$hostId/project");
-
             if ($host["Host_Online"] != true) {
                 $output[$host["Host_Url_And_Port"]] = [
                     "online"=>false,
                     "alias"=>$host["Host_Alias"],
-                    "currentProject"=>$currentProject,
                     "hostId"=>$hostId
                 ];
                 continue;
@@ -49,7 +43,6 @@ class GetResources
             $details = $this->getDetails($hostId);
 
             $details["alias"] = $host["Host_Alias"];
-            $details["currentProject"] = $currentProject;
             $details["hostId"] = $hostId;
 
 
@@ -66,10 +59,6 @@ class GetResources
         $supportsProjects = $this->hasExtension->checkWithClient($client, "projects");
         $resCpuSocket = $this->hasExtension->checkWithClient($client, "resources_cpu_socket");
         $resGpu = $this->hasExtension->checkWithClient($client, "resources_gpu");
-
-        $currentProject = $this->session->get("host/$hostId/project");
-
-        $details["currentProject"] = $currentProject;
 
         $details["extensions"] = [
             "supportsProjects"=>$supportsProjects,

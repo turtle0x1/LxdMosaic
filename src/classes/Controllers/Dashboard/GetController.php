@@ -11,8 +11,8 @@ class GetController
         $this->getDashboard = $getDashboard;
     }
 
-    public function get()
+    public function get($userId)
     {
-        return $this->getDashboard->get();
+        return $this->getDashboard->get($userId);
     }
 }

@@ -2,22 +2,26 @@
 
 namespace dhope0000\LXDClient\Tools\Dashboard;
 
+use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
 use dhope0000\LXDClient\Tools\Analytics\GetLatestData;
 
 class GetDashboard
 {
     public function __construct(
+        FetchUserProject $fetchUserProject,
         GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts,
         GetLatestData $getLatestData
     ) {
+        $this->fetchUserProject = $fetchUserProject;
         $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
         $this->getLatestData = $getLatestData;
     }
 
-    public function get()
+    public function get($userId)
     {
         $clustersAndHosts = $this->getClustersAndStandaloneHosts->get();
+        $clustersAndHosts = $this->addCurrentProjects($userId, $clustersAndHosts);
         $stats = $this->getStatsFromClustersAndHosts($clustersAndHosts);
         $analyticsData = $this->getLatestData->get();
 
@@ -26,6 +30,21 @@ class GetDashboard
             "stats"=>$stats,
             "analyticsData"=>$analyticsData
         ];
+    }
+
+    private function addCurrentProjects($userId, $clustersAndHosts)
+    {
+        foreach ($clustersAndHosts["clusters"] as $index => $cluster) {
+            foreach ($cluster["members"] as $memIndex => $member) {
+                $project = $this->fetchUserProject->fetchOrDefault($userId, $member["hostId"]);
+                $clustersAndHosts["clusters"][$index]["members"][$memIndex]["currentProject"] = $project;
+            }
+        }
+        foreach ($clustersAndHosts["standalone"]["members"] as $index => $member) {
+            $project = $this->fetchUserProject->fetchOrDefault($userId, $member["hostId"]);
+            $clustersAndHosts["standalone"]["members"][$index]["currentProject"] = $project;
+        }
+        return $clustersAndHosts;
     }
 
     private function getStatsFromClustersAndHosts(array $clustersAndHosts)

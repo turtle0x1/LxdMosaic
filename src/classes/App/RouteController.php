@@ -46,7 +46,7 @@ class RouteController
                 exit;
             }
 
-            $this->routeApi->route($explodedPath, $headers["userid"]);
+            $this->routeApi->route($explodedPath, $headers);
             exit;
         }
 

@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\RecordAction;
 class RouteApi
 {
     private $recordAction;
+    private $project;
+    private $userId;
 
     public function __construct(Container $container, RecordAction  $recordAction)
     {
@@ -14,8 +16,23 @@ class RouteApi
         $this->recordAction = $recordAction;
     }
 
-    public function route($pathParts, $userId)
+    public function getRequestedProject()
     {
+        return $this->project;
+    }
+
+    public function getUserId() :int
+    {
+        return $this->userId;
+    }
+
+    public function route($pathParts, $headers)
+    {
+        $userId = $headers["userid"];
+
+        $this->project = isset($headers["project"]) && !empty($headers["project"]) ? $headers["project"] : null;
+        $this->userId = $userId;
+
         if (count($pathParts) < 3) {
             throw new \Exception("Api String Not Long Enough", 1);
         }

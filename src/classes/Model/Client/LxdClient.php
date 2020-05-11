@@ -5,16 +5,21 @@ use GuzzleHttp\Client as GuzzleClient;
 use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 use \Opensaucesystems\Lxd\Client;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
-use Symfony\Component\HttpFoundation\Session\Session;
+use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
+use dhope0000\LXDClient\App\RouteApi;
 
 class LxdClient
 {
     private $clientBag = [];
 
-    public function __construct(GetDetails $getDetails, Session $session)
-    {
+    public function __construct(
+        GetDetails $getDetails,
+        FetchUserProject $fetchUserProject,
+        RouteApi $routeApi
+    ) {
         $this->getDetails = $getDetails;
-        $this->session = $session;
+        $this->fetchUserProject = $fetchUserProject;
+        $this->routeApi = $routeApi;
     }
 
     public function getANewClient($hostId, $checkCache = true, $setProject = true)
@@ -34,7 +39,13 @@ class LxdClient
         $client = $this->createNewClient($hostDetails["Host_Url_And_Port"], $config);
 
         if ($setProject) {
-            $client->setProject($this->session->get("host/$hostId/project", "default"));
+            $project = $this->routeApi->getRequestedProject();
+
+            if ($project == null) {
+                $userId = $this->routeApi->getUserId();
+                $project = $this->fetchUserProject->fetchOrDefault($userId, $hostId);
+            }
+            $client->setProject($project);
         }
 
         return $client;

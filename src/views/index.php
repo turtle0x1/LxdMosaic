@@ -258,7 +258,7 @@ if ($haveServers->haveAny() !== true) {
                   getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
               },
               user: {
-                  setHostProject: '/api/User/SetSessionHostProjectController/set'
+                  setHostProject: '/api/User/SetHostProjectController/set'
               },
               projects: {
                   create: '/api/Projects/CreateProjectController/create',
@@ -836,7 +836,7 @@ function loadDashboard(){
                 if(host.resources.extensions.supportsProjects){
                     projects = "<select class='form-control changeHostProject'>";
                     $.each(host.resources.projects, function(o, project){
-                        let selected = project == host.resources.currentProject ? "selected" : "";
+                        let selected = project == host.currentProject ? "selected" : "";
                             projects += `<option data-alias="${alias}" data-host='${data.hostId}'
                                 value='${project}' ${selected}>
                                 ${project}</option>`;
@@ -907,7 +907,7 @@ function loadDashboard(){
             if(host.hostOnline == 1 && host.resources.extensions.supportsProjects){
                 projects = "<select class='form-control changeHostProject'>";
                 $.each(host.resources.projects, function(o, project){
-                    let selected = project == host.resources.currentProject ? "selected" : "";
+                    let selected = project == host.currentProject ? "selected" : "";
                         projects += `<option data-alias="${alias}" data-host='${host.hostId}'
                             value='${project}' ${selected}>
                             ${project}</option>`;
