@@ -4,6 +4,7 @@ Added
     Version check showing if there is an update available (#191)
     CRUD operations for image aliases (#170)
     Update image "public" & "auto update" properties (#170)
+    Display some of the system details provided in LXD >= 4.1 (#206)
 
 Changed
     Inject userId if requested by controller so the $userId variable in a

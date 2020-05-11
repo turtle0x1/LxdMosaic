@@ -91,33 +91,10 @@
                 <div class="col-md-12">
                     <div class="card bg-dark">
                         <div class="card-header">
-                            <h4>CPU Details</h4>
+                            <h4>Host Details & Devices</h4>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered table-dark" id="hostCpuTable">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Cores</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="card bg-dark">
-                        <div class="card-header">
-                            <h4>GPU Details</h4>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-bordered table-dark" id="hostGpuTable">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-
-                                    </tr>
-                                </thead>
+                            <table class="table table-bordered table-dark" id="hostDetailsTable">
                                 <tbody>
                                 </tbody>
                             </table>
@@ -309,29 +286,63 @@ function loadServerView(hostId)
 
         $("#serverContainerActions").find("option[value='']").prop("selected", true);
 
-        let containerHtml, cpuTrs, gpuTrs = "";
+        let containerHtml, hostDetailsTrs = "";
 
         let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
 
-        $.each(data.resources.cpu.sockets, (_, item)=>{
+        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white">CPU'S</td></tr>`
 
-            cpuTrs += `<tr>
+        $.each(data.resources.cpu.sockets, (_, item)=>{
+            hostDetailsTrs += `<tr>
                 <td>${item[cpuIndentKey]}</td>
-                <td>${$.isNumeric(item.cores) ? item.cores : item.cores.length}</td>
+                <td>${$.isNumeric(item.cores) ? item.cores : item.cores.length} Cores</td>
             </tr>`
         });
-
-        $("#hostCpuTable > tbody").empty().append(cpuTrs);
+        
+        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white">GPU'S</td></tr>`
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
             $.each(data.resources.gpu.cards, function(i, gpu){
-                gpuTrs += `<tr><td>${gpu.product}</td></tr>`;
+                hostDetailsTrs += `<tr><td colspan="999">${gpu.product}</td></tr>`;
             });
         }else{
-            gpuTrs += `<tr><td class="text-center">No GPU's</td></tr>`;
+            hostDetailsTrs += `<tr><td colspan="999" class="text-center">No GPU's</td></tr>`;
         }
 
-        $("#hostGpuTable > tbody").empty().append(gpuTrs);
+        if(data.resources.hasOwnProperty("system")){
+            hostDetailsTrs += `
+                <tr>
+                    <td colspan="999" class="bg-info text-center text-white">System Details</td>
+                </tr>
+                <tr>
+                    <td>Motherboard</td>
+                    <td>${data.resources.system.motherboard.product}</td>
+                </tr>
+                <tr>
+                    <td>Type</td>
+                    <td>${data.resources.system.type}</td>
+                </tr>
+                <tr>
+                    <td>Chasis Type</td>
+                    <td>${data.resources.system.chassis.type}</td>
+                </tr>
+                <tr>
+                    <td>System Firmware</td>
+                    <td>
+                        ${data.resources.system.firmware.vendor}
+                        -
+                        ${data.resources.system.firmware.version}
+                        (${data.resources.system.firmware.date})
+                    </td>
+                </tr>
+                <tr>
+                    <td>UUID</td>
+                    <td>${data.resources.system.uuid}</td>
+                </tr>
+            `;
+        }
+
+        $("#hostDetailsTable > tbody").empty().append(hostDetailsTrs);
 
 
 
