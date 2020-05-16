@@ -26,7 +26,7 @@ class HostHaveDeploymentProfiles
     {
         $allProfiles = $this->getAllProfiles->getAllProfiles();
         $output = [];
-        foreach ($allProfiles as $host => $data) {
+        foreach ($allProfiles["standalone"]["members"] as $host => $data) {
             foreach ($data["profiles"] as $profile) {
                 if ($profile["details"]["name"] == "default") {
                     continue;

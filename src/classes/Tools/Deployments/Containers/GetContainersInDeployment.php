@@ -21,7 +21,7 @@ class GetContainersInDeployment
             $client = $this->client->getANewClient($data["hostId"]);
             foreach ($data["profiles"] as $profile) {
                 foreach ($profile["usedBy"] as $item) {
-                    if (strpos($item, "/1.0/containers") !== false) {
+                    if (strpos($item, "/1.0/containers") !== false || strpos($item, "/1.0/instances") !== false) {
                         $revId = $profile["revId"];
 
                         if (isset($revDetails[$revId])) {
@@ -32,6 +32,7 @@ class GetContainersInDeployment
                         }
 
                         $containerName = str_replace("/1.0/containers/", "", $item);
+                        $containerName = str_replace("/1.0/instances/", "", $item);
 
                         if (count(explode("/", $containerName)) > 1) {
                             continue;
@@ -46,8 +47,10 @@ class GetContainersInDeployment
                             ];
                         }
 
-                        if ($output[$host]["hostInfo"]["environment"]["server_name"] !== $info["location"]) {
-                            continue;
+                        if ($info["location"] !== "none") {
+                            if ($output[$host]["hostInfo"]["environment"]["server_name"] !== $info["location"]) {
+                                continue;
+                            }
                         }
 
                         $state = $client->instances->state($containerName);

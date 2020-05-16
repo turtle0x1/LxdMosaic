@@ -52,6 +52,7 @@ class Deploy
 
                 if (!$profile && !isset($revProfileNames[$instance["revId"]])) {
                     $profile = $this->deployProfile($hostId, $deploymentId, $instance["revId"], $vendorData);
+                    $revProfileNames[$instance["revId"]] = $profile;
                 }
 
                 $profiles = [$profile];
@@ -92,7 +93,6 @@ class Deploy
     private function deployProfile(int $hostId, int $deploymentId, int $revId, string $vendorData)
     {
         $profileName = StringTools::random(12);
-        $revProfileNames[$instance["revId"]] = $profileName;
         $this->deployToProfile->deployToHosts(
             $profileName,
             [$hostId],
