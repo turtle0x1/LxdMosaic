@@ -51,8 +51,8 @@
                 <h4 class="pt-1" id="actionSeriesName"></h4>
                 <div class="btn-toolbar float-right">
                   <div class="btn-group mr-2">
-                      <button data-toggle="tooltip" data-placement="bottom" title="Delete" class="btn btn-sm btn-danger deleteContainer">
-                          <i class="fas fa-trash"></i>
+                      <button data-toggle="tooltip" data-placement="bottom" title="Delete" class="btn btn-sm btn-primary" id="startActionSeries">
+                          <i class="fas fa-play"></i>
                       </button>
                   </div>
                 </div>
@@ -85,8 +85,14 @@
         </div>
     </div>
 </div>
-
+<?php
+    require_once __DIR__ . "/../modals/actionSeries/startActionSeries.php";
+ ?>
 <script>
+
+var currentSeries = {
+    actionSeries: null
+}
 
 function loadActionSeriesView(){
     changeActiveNav(".viewImages");
@@ -113,8 +119,14 @@ function loadActionSeriesView(){
     });
 }
 
+$(document).on("click", "#startActionSeries", function(){
+    startActionSeries.actionSeries = currentSeries.actionSeries
+    $("#modal-actionSeries-start").modal("toggle");
+});
+
 $("#sidebar-ul").on("click", ".viewSeries", function(){
     let actionSeries = $(this).attr("id");
+    currentSeries.actionSeries = actionSeries;
     ajaxRequest(globalUrls.actionSeries.getSeriesOverview, {actionSeries: actionSeries}, (data)=>{
         data = makeToastr(data);
         addBreadcrumbs(["Action Series", data.details.name], ["", "active"], false);

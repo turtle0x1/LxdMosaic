@@ -41,6 +41,7 @@ class StartRun
             // $this->updateRun->setFailed($runId);
         } finally {
             $this->updateRun->closeRun($this->runId);
+            return true;
         }
     }
 

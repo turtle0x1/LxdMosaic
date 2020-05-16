@@ -98,6 +98,7 @@ if ($haveServers->haveAny() !== true) {
               actionSeries: {
                 getOverview: '/api/ActionSeries/GetOverviewController/get',
                 getSeriesOverview: '/api/ActionSeries/GetSeriesOverviewController/get',
+                startRun: '/api/ActionSeries/StartRunController/start'
               },
               dashboard: {
                 get: "/api/Dashboard/GetController/get"
@@ -226,6 +227,7 @@ if ($haveServers->haveAny() !== true) {
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
                   getClustersAndStandloneHosts: "/api/Hosts/GetClustersAndStandloneHostsController/get",
+                  getInstances: "/api/Hosts/GetInstancesController/get",
                   delete: "/api/Hosts/DeleteHostController/delete",
                   getHostOverview: "/api/Hosts/GetHostOverviewController/get"
               },
