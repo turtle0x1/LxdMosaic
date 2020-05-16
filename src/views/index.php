@@ -95,6 +95,10 @@ if ($haveServers->haveAny() !== true) {
           var currentContainerDetails = null;
 
           var globalUrls = {
+              actionSeries: {
+                getOverview: '/api/ActionSeries/GetOverviewController/get',
+                getSeriesOverview: '/api/ActionSeries/GetSeriesOverviewController/get',
+              },
               dashboard: {
                 get: "/api/Dashboard/GetController/get"
               },
@@ -383,6 +387,10 @@ if ($haveServers->haveAny() !== true) {
               <i class="fas fa-rocket"></i> <span class="hideNavText"> Deployments </span></a>
           </li>
           <li class="nav-item">
+            <a class="nav-link viewActionSeries">
+              <i class="fas fa-route"></i> <span class="hideNavText"> Action Series </span></a>
+          </li>
+          <li class="nav-item">
               <a class="nav-link viewImages">
               <i class="fa fa-images"></i> <span class="hideNavText"> Images </span></a>
           </li>
@@ -456,6 +464,7 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/server.php";
                     require __DIR__ . "/boxes/backups.php";
                     require __DIR__ . "/boxes/settings.php";
+                    require __DIR__ . "/boxes/actionSeries.php";
                 ?>
             </div>
             <div class="col-md-2">
@@ -1120,6 +1129,12 @@ $(document).on("click", ".viewNetwork, .network-overview", function(){
     loadNetworksView();
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewNetwork")
+});
+
+$(document).on("click", ".viewActionSeries", function(){
+    loadActionSeriesView();
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    changeActiveNav(".viewActionSeries")
 });
 
 $(document).on("click", ".viewCloudConfigFiles, .cloudConfig-overview", function(){
