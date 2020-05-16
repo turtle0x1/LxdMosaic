@@ -10,6 +10,8 @@ class RouteApi
     private $project;
     private $userId;
 
+    private $routed = false;
+
     public function __construct(Container $container, RecordAction  $recordAction)
     {
         $this->container = $container;
@@ -26,8 +28,15 @@ class RouteApi
         return $this->userId;
     }
 
+    public function isRealRequest() :bool
+    {
+        return $this->routed;
+    }
+
     public function route($pathParts, $headers)
     {
+        $this->routed = true;
+
         $userId = $headers["userid"];
 
         $this->project = isset($headers["project"]) && !empty($headers["project"]) ? $headers["project"] : null;
