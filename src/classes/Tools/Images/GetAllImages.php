@@ -32,7 +32,8 @@ class GetAllImages
 
     private function getImages(array $host)
     {
-        if ($host["hostOnline"] != true) {
+        //TODO Hacky as anything but its late and I dont want to pull at threads
+        if (isset($host["hostOnline"]) && $host["hostOnline"] != true) {
             return [
                 "hostAlias"=>$host["alias"],
                 "hostId"=>$host["hostId"],
