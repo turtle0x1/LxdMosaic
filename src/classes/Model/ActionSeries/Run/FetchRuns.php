@@ -30,4 +30,23 @@ class FetchRuns
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function fetchRunDetails(int $runId)
+    {
+        $sql = "SELECT
+                    `ASR_ID` as `id`,
+                    `ASR_AS_ID` as `actionSeries`,
+                    `ASR_Date_Created` as `started`,
+                    `ASR_Date_Finished` as `finished`
+                FROM
+                    `Action_Series_Runs`
+                WHERE
+                    `ASR_ID` = :runId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":runId"=>$runId
+        ]);
+        return $do->fetch(\PDO::FETCH_ASSOC);
+    }
 }

@@ -58,12 +58,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 border">
+        <div class="col-md-12 border" id="exeutionPlanContainer">
             <h4>Execution Plan</h4>
             <div id="actionSeriesTree">
             </div>
         </div>
-        <div class="col-md-12 mt-2">
+        <div class="col-md-12 mt-2" id="executionRunsContainer">
             <div class="card bg-dark text-white">
                 <div class="card-header">
                     <h4>Execution Runs</h4>
@@ -83,6 +83,9 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-12" id="actionSeriesRunGraphs">
+
+        </div>
     </div>
 </div>
 <?php
@@ -91,13 +94,16 @@
 <script>
 
 var currentSeries = {
-    actionSeries: null
+    actionSeries: null,
+    name: null
 }
 
 function loadActionSeriesView(){
     changeActiveNav(".viewImages");
     setBreadcrumb(["Action Series"], ["active"], false)
-    $(".boxSlide").hide();
+    $(".boxSlide, #actionSeriesView").hide();
+    $("#exeutionPlanContainer, #executionRunsContainer").show();
+    $("#actionSeriesRunGraphs").hide().empty();
     $("#actionSeriesBox").show();
     ajaxRequest(globalUrls.actionSeries.getOverview, {}, (data)=>{
         data = makeToastr(data);
@@ -119,6 +125,28 @@ function loadActionSeriesView(){
     });
 }
 
+$(document).on("click", ".viewRun", function(){
+    let x = {runId: $(this).text()};
+    $("#actionSeriesName").append(`<span id='runHeadInfo'> Run Id: ${x.runId}</span>`);
+    $("#exeutionPlanContainer, #executionRunsContainer").hide();
+    $("#actionSeriesRunGraphs").empty().show();
+    addBreadcrumbs(["Action Series", currentSeries.name, `Run ID: ${x.runId}`], ["", "", "active"], false);
+    ajaxRequest(globalUrls.actionSeries.run.get, x, (data)=>{
+        data = makeToastr(data);
+        $.each(data.runResults, (hostId, host)=>{
+            $.each(host.instances, (instance, treeData)=>{
+                let selector = `instanceActionRunGraph-${instance}`;
+                $("#actionSeriesRunGraphs").append(`<div class="border-bottom">
+                    <h4>${instance}</h4>
+                    <div id='${selector}'></div>
+
+                </div>`);
+                makeActionSeriesGraph("#"+selector, treeData, false);
+            })
+        });
+    });
+});
+
 $(document).on("click", "#startActionSeries", function(){
     startActionSeries.actionSeries = currentSeries.actionSeries
     $("#modal-actionSeries-start").modal("toggle");
@@ -127,16 +155,19 @@ $(document).on("click", "#startActionSeries", function(){
 $("#sidebar-ul").on("click", ".viewSeries", function(){
     let actionSeries = $(this).attr("id");
     currentSeries.actionSeries = actionSeries;
+    $("#actionSeriesView, #exeutionPlanContainer, #executionRunsContainer").show();
+    $("#actionSeriesRunGraphs").hide();
     ajaxRequest(globalUrls.actionSeries.getSeriesOverview, {actionSeries: actionSeries}, (data)=>{
         data = makeToastr(data);
-        addBreadcrumbs(["Action Series", data.details.name], ["", "active"], false);
-        $("#actionSeriesName").text(data.details.name);
-        makeActionSeriesGraph(data.commandTree[0]);
+        currentSeries.name = data.details.name;
+        addBreadcrumbs(["Action Series", currentSeries.name], ["", "active"], false);
+        $("#actionSeriesName").text(currentSeries.name);
+        makeActionSeriesGraph("#actionSeriesTree", data.commandTree[0]);
         let trs = "";
         $.each(data.runs, (_, run)=>{
             let fin = run.finished == null ? "Still Running" : moment(run.finished).format("llll");
             trs += `<tr>
-                <td><a href="#">${run.id}</a></td>
+                <td><a href="#" id='viewRun' class='viewRun'>${run.id}</a></td>
                 <td>${moment(run.started).format("llll")}</td>
                 <td>${fin}</td>
             </tr>`
@@ -146,8 +177,8 @@ $("#sidebar-ul").on("click", ".viewSeries", function(){
 });
   // This is how the pro's do it right ?
   // Taken straight from https://stackoverflow.com/a/41603646/4008082
-  function makeActionSeriesGraph(treeData, notRunning = true) {
-      $("#actionSeriesTree").empty();
+  function makeActionSeriesGraph(selector, treeData, notRunning = true) {
+      $(selector).empty();
         // Set the dimensions and margins of the diagram
          var margin = {
              top: 20,
@@ -161,8 +192,8 @@ $("#sidebar-ul").on("click", ".viewSeries", function(){
          // append the svg object to the body of the page
          // appends a 'group' element to 'svg'
          // moves the 'group' element to the top left margin
-         var svg = d3.select("#actionSeriesTree").append("svg")
-           .attr("width", $("#actionSeriesTree").width())
+         var svg = d3.select(selector).append("svg")
+           .attr("width", $(selector).width())
            .attr("height", height + margin.top + margin.bottom)
            .append("g")
            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -352,12 +383,7 @@ $("#sidebar-ul").on("click", ".viewSeries", function(){
              });
 
            linkEnter.append('text')
-             .text(function(d,i) {
-                 if(notRunning){
-                     return '';
-                 }
-                 return d.data.parentReturnAction == 0 ? "On Success" : "On Failure";
-             })
+             .text('')
              .attr('dy', "-1em");
 
            // UPDATE

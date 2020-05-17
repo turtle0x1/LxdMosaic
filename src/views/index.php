@@ -96,9 +96,12 @@ if ($haveServers->haveAny() !== true) {
 
           var globalUrls = {
               actionSeries: {
+                run: {
+                    get: '/api/ActionSeries/Run/GetRunController/get'
+                },
                 getOverview: '/api/ActionSeries/GetOverviewController/get',
                 getSeriesOverview: '/api/ActionSeries/GetSeriesOverviewController/get',
-                startRun: '/api/ActionSeries/StartRunController/start'
+                startRun: '/api/ActionSeries/StartRunController/start',
               },
               dashboard: {
                 get: "/api/Dashboard/GetController/get"
