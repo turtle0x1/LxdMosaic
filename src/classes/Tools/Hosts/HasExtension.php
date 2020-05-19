@@ -7,6 +7,8 @@ use Opensaucesystems\Lxd\Client;
 
 class HasExtension
 {
+    private $hostCache = [];
+
     public function __construct(LxdClient $lxdClient)
     {
         $this->lxdClient = $lxdClient;
@@ -21,7 +23,9 @@ class HasExtension
 
     public function checkWithClient(Client $client, $extension)
     {
-        $extensions = $client->host->info()["api_extensions"];
-        return in_array($extension, $extensions);
+        $hostUrl = $client->getUrl();
+        $info = isset($this->hostCache[$hostUrl]) ? $this->hostCache[$hostUrl] : $client->host->info();
+        $this->hostCache[$hostUrl] = $info;
+        return in_array($extension, $info["api_extensions"]);
     }
 }

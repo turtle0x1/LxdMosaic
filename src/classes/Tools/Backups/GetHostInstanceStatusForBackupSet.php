@@ -122,7 +122,7 @@ class GetHostInstanceStatusForBackupSet
     {
         return [
             "name"=>$name,
-            "created"=>$container["info"]["created_at"]
+            "created"=>$container["created_at"]
         ];
     }
 }

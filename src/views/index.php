@@ -729,7 +729,7 @@ function addHostContainerList(hostId, hostAlias) {
 
                 let typeFa = "box";
 
-                if(details.info.hasOwnProperty("type") && details.info.type == "virtual-machine"){
+                if(details.hasOwnProperty("type") && details.type == "virtual-machine"){
                     typeFa = "vr-cardboard";
                 }
 

@@ -5,6 +5,7 @@ use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
+use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class GetHostsInstances
 {
@@ -58,9 +59,14 @@ class GetHostsInstances
             $client = $this->client->getANewClient($hostId);
         }
 
-        $instances = $client->instances->all();
+        $recur = $this->hasExtension->checkWithClient($client, LxdApiExtensions::CONTAINER_FULL);
+
+        $recur = $recur ? LxdRecursionLevels::INSTANCE_FULL_RECURSION : LxdRecursionLevels::INSTANCE_NO_RECURSION;
+
+        $instances = $client->instances->all($recur);
 
         $instances = $this->addInstancesStateAndInfo($client, $instances);
+
         ksort($instances, SORT_STRING | SORT_FLAG_CASE);
         return $instances;
     }
@@ -68,22 +74,30 @@ class GetHostsInstances
     private function addInstancesStateAndInfo($client, $instances)
     {
         $hostInfo = $client->host->info();
-        $details = array();
-        foreach ($instances as $instance) {
-            $state = $client->instances->state($instance);
-            $info = $client->instances->info($instance);
 
-            if ($info["location"] !== "") {
-                if ($info["location"] !== "none" && $info["location"] !== $hostInfo["environment"]["server_name"]) {
+        foreach ($instances as $index => $instance) {
+            if (is_string($instance)) {
+                $instance = $client->instances->info($instance);
+                $instance["state"] = $client->instances->state($instance["name"]);
+            } else {
+                // Keep the return between get all and using LXD recusion method
+                // the above is slow enough lets not force it to add +2 api
+                // calls to match this array
+                unset($instance["backups"]);
+                unset($instance["snapshots"]);
+            }
+
+            unset($instances[$index]);
+
+            if ($instance["location"] !== "") {
+                if ($instance["location"] !== "none" && $instance["location"] !== $hostInfo["environment"]["server_name"]) {
                     continue;
                 }
             }
 
-            $details[$instance] = [
-                "state"=>$state,
-                "info"=>$info
-            ];
+            $instances[$instance["name"]] = $instance;
         }
-        return $details;
+
+        return $instances;
     }
 }
