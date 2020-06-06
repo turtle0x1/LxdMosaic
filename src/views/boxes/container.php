@@ -18,7 +18,9 @@
             </u></h4>
             <div class="btn-toolbar float-right">
               <div class="btn-group mr-2">
-
+                  <button data-toggle="tooltip" data-placement="bottom" title="Create Image" class="btn btn-sm btn-primary" id="craeteImage">
+                      <i class="fas fa-image"></i>
+                  </button>
                   <button data-toggle="tooltip" data-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
                       <i class="fas fa-cog"></i>
                   </button>
@@ -1269,6 +1271,10 @@ $("#containerBox").on("click", ".editContainerSettings", function(){
     $("#modal-container-editSettings").modal("show");
 });
 
+$("#containerBox").on("click", "#craeteImage", function(){
+    $("#modal-container-createImage").modal("show");
+});
+
 $("#containerBox").on("click", ".deleteContainer", function(){
     deleteContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.alias, currentContainerDetails.container);
 });
@@ -1295,4 +1301,5 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
     require __DIR__ . "/../modals/containers/editSettings.php";
     require __DIR__ . "/../modals/containers/files/uploadFile.php";
     require __DIR__ . "/../modals/instances/vms/createVm.php";
+    require __DIR__ . "/../modals/containers/createImage.php";
 ?>

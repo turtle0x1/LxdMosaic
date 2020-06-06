@@ -141,6 +141,7 @@ if ($haveServers->haveAny() !== true) {
                   getCurrentSettings: "/api/Instances/GetCurrentInstanceSettingsController/get",
                   setSettings: "/api/Instances/SetSettingsController/set",
                   create: "/api/Instances/CreateController/create",
+                  exportImage: "/api/Instances/CreateImageController/create",
               },
               //NOTE The url can't be "Analytics" because some ad blockers
               //     will block it by default
