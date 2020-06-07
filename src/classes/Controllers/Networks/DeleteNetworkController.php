@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Networks;
 
 use dhope0000\LXDClient\Tools\Networks\DeleteNetwork;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteNetworkController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,9 +12,9 @@ class DeleteNetworkController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->deleteNetwork = $deleteNetwork;
     }
 
-    public function delete(int $hostId, $network)
+    public function delete(Host $host, $network)
     {
-        $this->deleteNetwork->delete($hostId, $network);
+        $this->deleteNetwork->delete($host, $network);
         return ["state"=>"success", "message"=>"Deleted network"];
     }
 }

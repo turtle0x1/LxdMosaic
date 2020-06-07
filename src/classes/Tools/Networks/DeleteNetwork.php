@@ -2,19 +2,12 @@
 
 namespace dhope0000\LXDClient\Tools\Networks;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteNetwork
 {
-    public function __construct(LxdClient $lxdClient)
+    public function delete(Host $host, string $network)
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function delete(int $hostId, string $network)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->networks->remove($network);
+        return $host->networks->remove($network);
     }
 }
