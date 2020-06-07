@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Tools\Profiles\DeleteProfile;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,11 +11,9 @@ class DeleteProfileController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->deleteProfile = $deleteProfile;
     }
 
-    public function delete(
-        string $profile,
-        int $hostId
-    ) {
-        $response = $this->deleteProfile->delete($hostId, $profile);
+    public function delete(Host $host, string $profile)
+    {
+        $response = $this->deleteProfile->delete($host, $profile);
         return ["state"=>"success", "message"=>"Deleted Profile", "lxdResponse"=>$response];
     }
 }

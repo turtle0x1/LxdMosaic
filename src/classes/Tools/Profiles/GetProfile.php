@@ -1,27 +1,19 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Profiles;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetProfile
 {
-    public function __construct(LxdClient $lxdClient, GetDetails $getDetails)
+    public function get(Host $host, string $profile)
     {
-        $this->lxdClient = $lxdClient;
-        $this->getDetails = $getDetails;
-    }
-
-    public function get(int $hostId, string $profile)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        $profile =  $client->profiles->info($profile);
+        $profile =  $host->profiles->info($profile);
 
         $profile["used_by"] = StringTools::usedByStringsToLinks(
-            $hostId,
+            $host->getHostId(),
             $profile["used_by"],
-            $this->getDetails->fetchAlias($hostId)
+            $host->getAlias()
         );
 
         return $profile;

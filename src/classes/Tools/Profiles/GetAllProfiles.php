@@ -15,6 +15,7 @@ class GetAllProfiles
     private function getProfiles($host)
     {
         $indent = $host["alias"];
+
         // So inconsistent its ridiculous need to make objects
         if ((isset($host["online"]) && $host["online"] != true) || (isset($host["hostOnline"]) && $host["hostOnline"] != true)) {
             return [

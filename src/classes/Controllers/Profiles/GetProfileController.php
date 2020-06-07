@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Tools\Profiles\GetProfile;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,8 +11,8 @@ class GetProfileController implements \dhope0000\LXDClient\Interfaces\RecordActi
         $this->getProfile = $getProfile;
     }
 
-    public function get(int $hostId, string $profile)
+    public function get(Host $host, string $profile)
     {
-        return $this->getProfile->get($hostId, $profile);
+        return $this->getProfile->get($host, $profile);
     }
 }

@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Tools\Profiles;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class Copy
 {
@@ -11,16 +12,17 @@ class Copy
     }
 
     public function copyToTargetHosts(
-        int $hostId,
+        Host $host,
         string $profile,
         array $targetHosts,
         string $newName
     ) {
-        $hostClient = $this->client->getANewClient($hostId);
-        $profileInfo = $hostClient->profiles->info($profile);
+        $profileInfo = $host->profiles->info($profile);
 
         $profileInfo["devices"] = $profileInfo["devices"] ?: null;
         $profileInfo["config"] = $profileInfo["config"] ?: null;
+
+        var_dump($profileInfo);
 
         $targetHosts = array_unique($targetHosts);
         $targetClientCache = [];
