@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Projects;
 
 use dhope0000\LXDClient\Tools\Projects\GetProjectInfo;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetProjectInfoController
 {
@@ -11,8 +12,8 @@ class GetProjectInfoController
         $this->getProjectInfo = $getProjectInfo;
     }
 
-    public function get(int $hostId, string $project)
+    public function get(Host $host, string $project)
     {
-        return $this->getProjectInfo->get($hostId, $project);
+        return $this->getProjectInfo->get($host, $project);
     }
 }

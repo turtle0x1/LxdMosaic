@@ -2,18 +2,12 @@
 
 namespace dhope0000\LXDClient\Tools\Projects;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteProject
 {
-    public function __construct(LxdClient $lxdClient)
+    public function remove(Host $host, string $project)
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function remove(int $hostId, string $project)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->projects->remove($project);
+        return $host->projects->remove($project);
     }
 }

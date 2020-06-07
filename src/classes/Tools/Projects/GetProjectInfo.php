@@ -2,27 +2,20 @@
 
 namespace dhope0000\LXDClient\Tools\Projects;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetProjectInfo
 {
-    public function __construct(LxdClient $lxdClient, GetDetails $getDetails)
+    public function get(Host $host, string $project)
     {
-        $this->lxdClient = $lxdClient;
-        $this->getDetails = $getDetails;
-    }
+        $project = $host->projects->info($project);
 
-    public function get(int $hostId, string $project)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        $project = $client->projects->info($project);
         $project["used_by"] = StringTools::usedByStringsToLinks(
-            $hostId,
+            $host->getHostId(),
             $project["used_by"],
-            $this->getDetails->fetchAlias($hostId),
-            $client
+            $host->getAlias(),
+            null
         );
         return $project;
     }
