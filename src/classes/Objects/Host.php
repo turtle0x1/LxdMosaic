@@ -42,6 +42,19 @@ class Host
         return $this->alias;
     }
 
+    public function callClientMethod($method, $param = null)
+    {
+        if ($this->client == null) {
+            $this->client = $this->lxdClient->getClientWithHost($this);
+        }
+
+        if ($param !== null) {
+            return $this->client->$method($param);
+        } else {
+            return $this->client->$method();
+        }
+    }
+
     public function __get($target)
     {
         if ($this->client == null) {
