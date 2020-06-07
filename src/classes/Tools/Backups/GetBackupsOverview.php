@@ -52,7 +52,13 @@ class GetBackupsOverview
                 $this->createYearArray($filesByMonthYear, $year, $monthLen);
             }
 
-            $sizeByMonthYear[$year][$month] += filesize($backup["localPath"]);
+            $filesize = 0;
+            // We should be doing something more agressive in this case!
+            if (file_exists($backup["localPath"])) {
+                $filesize = filesize($backup["localPath"]);
+            }
+
+            $sizeByMonthYear[$year][$month] += $filesize;
             $filesByMonthYear[$year][$month] ++;
         }
 
