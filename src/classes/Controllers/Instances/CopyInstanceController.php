@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Instances;
 
 use dhope0000\LXDClient\Tools\Instances\Copy;
+use dhope0000\LXDClient\Objects\Host;
 
 class CopyInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,13 +12,13 @@ class CopyInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAc
     }
 
     public function copy(
-        int $hostId,
+        Host $host,
         string $container,
         string $newContainer,
         int $newHostId,
         string $alias = null
     ) {
-        $this->copy->copy($hostId, $container, $newContainer, $newHostId);
+        $this->copy->copy($host, $container, $newContainer, $newHostId);
         return ["state"=>"success", "message"=>"Copying $container to $newContainer"];
     }
 }
