@@ -25,7 +25,7 @@ class GetHostOverview
             "header"=>$host,
             "containers"=>$sortedContainers,
             "containerStats"=>$containerStats,
-            "resources"=>$this->getResources->getHostExtended($host->getHostId())
+            "resources"=>$this->getResources->getHostExtended($host)
         ];
     }
 

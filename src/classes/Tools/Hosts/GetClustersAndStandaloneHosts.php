@@ -44,7 +44,7 @@ class GetClustersAndStandaloneHosts
                 continue;
             }
 
-            $info = $this->getResources->getHostExtended($host->getHostId());
+            $info = $this->getResources->getHostExtended($host);
             $standaloneHosts[$index]->setCustomProp("resources", $info);
         }
 
