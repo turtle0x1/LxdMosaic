@@ -1,27 +1,20 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteInstances
 {
-    public function __construct(LxdClient $lxdClient)
+    public function delete(Host $host, array $instances)
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function delete(int $hostId, array $instances)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-
         foreach ($instances as $instance) {
-            $state = $client->instances->state($instance);
+            $state = $host->instances->state($instance);
 
             if ($state["status_code"] == 103) {
-                $client->instances->setState($instance, "stop");
+                $host->instances->setState($instance, "stop");
             }
 
-            $client->instances->remove($instance, true);
+            $host->instances->remove($instance, true);
         }
 
         return true;

@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Hosts\Instances;
 
 use dhope0000\LXDClient\Tools\Instances\DeleteInstances;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteInstancesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -9,9 +10,9 @@ class DeleteInstancesController implements \dhope0000\LXDClient\Interfaces\Recor
     {
         $this->deleteInstances = $deleteInstances;
     }
-    public function delete(int $hostId, array $containers)
+    public function delete(Host $host, array $containers)
     {
-        $this->deleteInstances->delete($hostId, $containers);
+        $this->deleteInstances->delete($host, $containers);
         return ["state"=>"success", "message"=>"Delete Containers"];
     }
 }
