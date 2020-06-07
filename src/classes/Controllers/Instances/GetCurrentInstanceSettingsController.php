@@ -1,6 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Instances;
 
+use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\GetInstanceSettings;
 
 class GetCurrentInstanceSettingsController
@@ -10,8 +11,8 @@ class GetCurrentInstanceSettingsController
         $this->getInstanceSettings = $getInstanceSettings;
     }
 
-    public function get(int $hostId, string $container)
+    public function get(Host $host, string $container)
     {
-        return $this->getInstanceSettings->get($hostId, $container);
+        return $this->getInstanceSettings->get($host, $container);
     }
 }
