@@ -1,25 +1,19 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class CreateImage
 {
-    public function __construct(LxdClient $lxdClient)
-    {
-        $this->lxdClient = $lxdClient;
-    }
-
     public function create(
-        int $hostId,
+        Host $host,
         string $instance,
         string $alias,
         bool $public,
         string $os = null,
         string $description = null
     ) :bool {
-        $client = $this->lxdClient->getANewClient($hostId);
-        $x = $client->images->createFromContainer($instance, [
+        $x = $host->images->createFromContainer($instance, [
             "properties"=>[
                 "os" => $os
             ],
