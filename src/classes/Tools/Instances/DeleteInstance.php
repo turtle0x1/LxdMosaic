@@ -1,18 +1,12 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteInstance
 {
-    public function __construct(LxdClient $lxdClient)
+    public function delete(Host $host, string $instance)
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function delete(int $hostId, string $instance)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->instances->remove($instance);
+        return $host->instances->remove($instance);
     }
 }
