@@ -25,7 +25,7 @@ class ImportImageIfNotHave
         // linuxcontainers but the default method ) will be difficult
         // and need this work around if the host doesn't have the ubuntu
         // image
-        if ($imageDetails["alias"] == "default" || $alias == null) {
+        if ($imageDetails["alias"] == "default") {
             $detailsToUse = [
                 "fingerprint"=>$imageDetails["fingerprint"],
                 "protocol"=>$imageDetails["protocol"]
