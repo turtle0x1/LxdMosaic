@@ -4,12 +4,17 @@ namespace dhope0000\LXDClient\Objects;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 
-class Host
+class Host implements \JsonSerializable
 {
     private $id;
     private $urlAndPort;
     private $certPath;
     private $alias;
+
+    private $certFilePath;
+    private $keyFilePath ;
+    private $hostOnline;
+    private $lxdClient;
     private $client = null;
 
     public function __construct(LxdClient $lxdClient)
@@ -53,6 +58,15 @@ class Host
         } else {
             return $this->client->$method();
         }
+    }
+
+    final public function jsonSerialize()
+    {
+        return [
+            "hostId"=>$this->id,
+            "alias"=>$this->alias,
+            "urlAndPort"=>$this->urlAndPort,
+        ];
     }
 
     public function __get($target)
