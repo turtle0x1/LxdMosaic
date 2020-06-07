@@ -14,11 +14,12 @@ class GetAllProfiles
 
     private function getProfiles($host)
     {
-        $indent = is_null($host["alias"]) ? $host["urlAndPort"] : $host["alias"];
-
-        if (isset($host["online"]) && $host["online"] != true) {
+        $indent = $host["alias"];
+        // So inconsistent its ridiculous need to make objects
+        if ((isset($host["online"]) && $host["online"] != true) || (isset($host["hostOnline"]) && $host["hostOnline"] != true)) {
             return [
                 "online"=>false,
+                "hostOnline"=>0,
                 "hostId"=>$host["hostId"]
             ];
         }
@@ -42,7 +43,12 @@ class GetAllProfiles
 
         foreach ($clustersAndHosts["clusters"] as $clusterIndex => $cluster) {
             foreach ($cluster["members"] as $hostIndex => $host) {
-                $profiles = $this->getProfiles($host);
+                $profiles = [];
+
+                if ($host["hostOnline"] == 0) {
+                    $profiles = $this->getProfiles($host);
+                }
+
                 $clustersAndHosts["clusters"][$clusterIndex]["members"][$hostIndex] = $profiles;
             }
         }
