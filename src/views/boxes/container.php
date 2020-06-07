@@ -346,7 +346,7 @@ function restoreBackupContainerConfirm(backupId, hostAlias, container, callback 
             // bind to events
             var jc = this;
             this.$content.find('input[name=targetHost]').tokenInput(globalUrls.hosts.search.search, {
-                queryParam: "host",
+                queryParam: "hostSearch",
                 propertyToSearch: "host",
                 tokenValue: "hostId",
                 preventDuplicates: false,
@@ -609,7 +609,7 @@ function copyContainerConfirm(hostId, container) {
             // bind to events
             var jc = this;
             this.$content.find('input[name=newHost]').tokenInput(globalUrls.hosts.search.search, {
-                queryParam: "host",
+                queryParam: "hostSearch",
                 propertyToSearch: "host",
                 tokenValue: "hostId",
                 preventDuplicates: false,

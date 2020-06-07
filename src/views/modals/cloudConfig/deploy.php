@@ -82,7 +82,7 @@ $("#deployCloudConfigProfiles").tokenInput(globalUrls.profiles.search.getCommonP
 });
 
 $("#deployCloudConfigHosts").tokenInput(globalUrls.hosts.search.search, {
-    queryParam: "host",
+    queryParam: "hostSearch",
     propertyToSearch: "host",
     tokenValue: "hostId",
     preventDuplicates: false,

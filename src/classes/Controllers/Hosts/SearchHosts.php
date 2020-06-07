@@ -10,7 +10,7 @@ class SearchHosts
         $this->hostList = $hostList;
     }
 
-    public function search(string $host)
+    public function search(string $hostSearch)
     {
         $servers = $this->hostList->getHostListWithDetails();
         $output = [];
@@ -19,7 +19,7 @@ class SearchHosts
                 continue;
             }
 
-            if (stripos($server["Host_Alias"], $host) !== false) {
+            if (stripos($server["Host_Alias"], $hostSearch) !== false) {
                 $output[] = [
                     "host"=>$server["Host_Alias"],
                     "hostId"=>$server["Host_ID"]

@@ -39,7 +39,7 @@
 <script>
 
 $("#newVmHosts").tokenInput(globalUrls.hosts.search.search, {
-    queryParam: "host",
+    queryParam: "hostSearch",
     propertyToSearch: "host",
     tokenValue: "hostId",
     preventDuplicates: false,
