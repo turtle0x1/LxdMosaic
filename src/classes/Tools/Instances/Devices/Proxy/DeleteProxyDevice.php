@@ -2,23 +2,16 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\Devices\Proxy;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteProxyDevice
 {
-    public function __construct(LxdClient $lxdClient)
-    {
-        $this->lxdClient = $lxdClient;
-    }
-
     public function delete(
-        int $hostId,
+        Host $host,
         string $instance,
         string $device
     ) {
-        $client = $this->lxdClient->getANewClient($hostId);
-
-        $info = $client->instances->info($instance);
+        $info = $host->instances->info($instance);
 
         if (isset($info["devices"][$device]) && $info["devices"][$device]["type"] == "proxy") {
             unset($info["devices"][$device]);
@@ -27,7 +20,7 @@ class DeleteProxyDevice
                 unset($info["devices"]);
             }
 
-            $client->instances->replace($instance, $info);
+            $host->instances->replace($instance, $info);
         }
 
         return true;

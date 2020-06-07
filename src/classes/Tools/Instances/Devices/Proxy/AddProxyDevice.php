@@ -2,24 +2,17 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\Devices\Proxy;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class AddProxyDevice
 {
-    public function __construct(LxdClient $lxdClient)
-    {
-        $this->lxdClient = $lxdClient;
-    }
-
     public function add(
-        int $hostId,
+        Host $host,
         string $instance,
         string $proxyName,
         string $source,
         string $destination
     ) {
-        $client = $this->lxdClient->getANewClient($hostId);
-
         $devices = [
             $proxyName=>[
                 "listen"=>$source,
@@ -28,7 +21,7 @@ class AddProxyDevice
             ]
         ];
 
-        $devices = $client->instances->update($instance, [
+        $devices = $host->instances->update($instance, [
             "devices"=>$devices
         ]);
 
