@@ -23,7 +23,7 @@ class RouteApi
         return $this->project;
     }
 
-    public function getUserId() :int
+    public function getUserId()
     {
         return $this->userId;
     }

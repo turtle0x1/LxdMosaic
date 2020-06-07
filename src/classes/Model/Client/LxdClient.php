@@ -38,7 +38,10 @@ class LxdClient
 
             if ($project == null) {
                 $userId = $this->routeApi->getUserId();
-                $project = $this->fetchUserProject->fetchOrDefault($userId, $host->getHostId());
+                $project = "default";
+                if (!empty($userId)) {
+                    $project = $this->fetchUserProject->fetchOrDefault($userId, $host->getHostId());
+                }
             }
             $client->setProject($project);
         }
