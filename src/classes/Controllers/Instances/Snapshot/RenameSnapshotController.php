@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Instances\Snapshot;
 
 use dhope0000\LXDClient\Tools\Instances\Snapshot\RenameSnapshot;
+use dhope0000\LXDClient\Objects\Host;
 
 class RenameSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,13 +12,13 @@ class RenameSnapshotController implements \dhope0000\LXDClient\Interfaces\Record
     }
 
     public function renameSnapshot(
-        int $hostId,
+        Host $host,
         string $container,
         string $snapshotName,
         string $newSnapshotName,
         string $alias = null
     ) {
-        $this->renameSnapshot->rename($hostId, $container, $snapshotName, $newSnapshotName);
+        $this->renameSnapshot->rename($host, $container, $snapshotName, $newSnapshotName);
         return array("state"=>"success", "message"=>"Renamed $snapshotName to $alias/$container/$newSnapshotName");
     }
 }

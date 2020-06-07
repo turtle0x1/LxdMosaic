@@ -1,18 +1,12 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Instances\Snapshot;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteSnapshot
 {
-    public function __construct(LxdClient $lxdClient)
+    public function deleteSnapshot(Host $host, string $instance, string $snapshotName)
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function deleteSnapshot(int $hostId, string $instance, string $snapshotName)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->instances->snapshots->remove($instance, $snapshotName);
+        return $host->instances->snapshots->remove($instance, $snapshotName);
     }
 }

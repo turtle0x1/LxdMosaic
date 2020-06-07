@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Instances\Snapshot;
 
 use dhope0000\LXDClient\Tools\Instances\Snapshot\DeleteSnapshot;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,10 +11,10 @@ class DeleteSnapshotController implements \dhope0000\LXDClient\Interfaces\Record
         $this->deleteSnapshot = $deleteSnapshot;
     }
 
-    public function deleteSnapshot(int $hostId, string $container, string $snapshotName)
+    public function deleteSnapshot(Host $host, string $container, string $snapshotName)
     {
         $lxdResponse = $this->deleteSnapshot->deleteSnapshot(
-            $hostId,
+            $host,
             $container,
             $snapshotName
         );
