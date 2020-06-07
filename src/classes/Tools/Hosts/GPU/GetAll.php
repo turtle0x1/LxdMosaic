@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Tools\Hosts\GPU;
 
 use dhope0000\LXDClient\Tools\Hosts\GetResources;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetAll
 {
@@ -11,9 +12,9 @@ class GetAll
         $this->getResources = $getResources;
     }
 
-    public function getAll(int $hostId)
+    public function getAll(Host $host)
     {
-        $x = $this->getResources->getHostExtended($hostId);
+        $x = $this->getResources->getHostExtended($host->getHostId());
         if ($x["extensions"]["resGpu"]) {
             return $x["gpu"]["cards"];
         }
