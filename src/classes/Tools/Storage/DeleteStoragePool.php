@@ -2,20 +2,12 @@
 
 namespace dhope0000\LXDClient\Tools\Storage;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteStoragePool
 {
-    public function __construct(HostList $hostList, LxdClient $lxdClient)
+    public function delete(Host $host, string $poolName)
     {
-        $this->hostList = $hostList;
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function delete(int $hostId, string $poolName)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->storage->remove($poolName);
+        return $host->storage->remove($poolName);
     }
 }
