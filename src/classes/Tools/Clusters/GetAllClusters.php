@@ -55,9 +55,11 @@ class GetAllClusters
                 $memberHostObj = $this->getDetails->fetchHostByUrl($member["url"]);
 
                 $member["resources"] = $this->getResources->getHostExtended($memberHostObj->getHostId());
+
                 $member["hostId"] = $memberHostObj->getHostId();
                 $member["alias"] = $memberHostObj->getAlias();
                 $member["urlAndPort"] = $memberHostObj->getUrl();
+                $member["hostOnline"] = $memberHostObj->hostOnline();
 
                 $clusters[$clusterId]["members"][] = $member;
                 $hostsInACluster[] = $member["url"];
