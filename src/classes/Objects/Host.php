@@ -37,7 +37,7 @@ class Host
         return (bool) $this->hostOnline;
     }
 
-    public function getHostAlias() :string
+    public function getAlias() :string
     {
         return $this->alias;
     }
