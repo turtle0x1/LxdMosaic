@@ -7,6 +7,9 @@ Added
     Display some of the system details provided in LXD >= 4.1 (#206)
     Export instance as image
 
+Fixed
+    Cant load project inforatmion
+
 Changed
     Inject userId if requested by controller so the $userId variable in a
     controller will always be locked to the user using the app
