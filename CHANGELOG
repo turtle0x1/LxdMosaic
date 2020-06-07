@@ -9,6 +9,7 @@ Added
 
 Fixed
     Cant load project inforatmion
+    Cant upload file to instance files
 
 Changed
     Inject userId if requested by controller so the $userId variable in a
