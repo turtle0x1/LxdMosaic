@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\App;
 
 use \DI\Container;
 use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\RecordAction;
+use dhope0000\LXDClient\Model\Hosts\GetDetails;
 
 class RouteApi
 {
@@ -10,10 +11,11 @@ class RouteApi
     private $project;
     private $userId;
 
-    public function __construct(Container $container, RecordAction  $recordAction)
+    public function __construct(Container $container, RecordAction  $recordAction, GetDetails $getDetails)
     {
         $this->container = $container;
         $this->recordAction = $recordAction;
+        $this->getDetails = $getDetails;
     }
 
     public function getRequestedProject()
@@ -83,13 +85,22 @@ class RouteApi
             if ($name === "userId") {
                 $o[$name] = $userId;
                 continue;
-            } elseif (!$hasDefault && !isset($passedArguments[$name])) {
+            } elseif ($name == "host" && !isset($passedArguments["hostId"])) {
+                throw new \Exception("Missing paramater hostId", 1);
+            } elseif ($name !== "host" && !$hasDefault && !isset($passedArguments[$name])) {
                 throw new \Exception("Missing Paramater $name", 1);
             } elseif ($hasDefault && !isset($passedArguments[$name])) {
                 $o[$name] = $param->getDefaultValue();
                 continue;
             }
-            $o[$name] = $passedArguments[$name];
+
+
+
+            if ($name == "host") {
+                $o[$name] = $this->getDetails->fetchHost($passedArguments["hostId"]);
+            } else {
+                $o[$name] = $passedArguments[$name];
+            }
         }
         return $o;
     }
