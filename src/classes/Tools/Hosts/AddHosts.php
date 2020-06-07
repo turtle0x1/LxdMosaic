@@ -31,7 +31,7 @@ class AddHosts
 
             $hostName = $this->addSchemeAndDefaultPort($hostsDetail["name"]);
 
-            if (!empty($this->getDetails->getIdByUrlMatch($hostName))) {
+            if (!empty($this->getDetails->fetchHostByUrl($hostName))) {
                 continue;
             }
 

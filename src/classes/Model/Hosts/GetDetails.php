@@ -71,22 +71,27 @@ class GetDetails
         return $do->fetchObject("dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]);
     }
 
-    public function getIdByUrlMatch($hostUrl)
+    public function fetchHostByUrl($hostUrl)
     {
         $sql = "SELECT
-                    `Host_ID`
+                    `Host_ID` as `id`,
+                    `Host_Url_And_Port` as `urlAndPort`,
+                    `Host_Cert_Path` as `certPath`,
+                    `Host_Cert_Only_File` as `certFilePath`,
+                    `Host_Key_File` as `keyFilePath`,
+                    COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
+                    `Host_Online` as `hostOnline`
                 FROM
                     `Hosts`
                 WHERE
                     `Host_Url_And_Port` LIKE ?
                 ORDER BY
                     `Host_ID` DESC
+                LIMIT 1
                 ";
         $do = $this->database->prepare($sql);
-        $do->execute(
-            ["%$hostUrl%"]
-        );
-        return $do->fetchColumn();
+        $do->execute(["%$hostUrl%"]);
+        return $do->fetchObject("dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]);
     }
 
     public function getCertificate($hostId)
