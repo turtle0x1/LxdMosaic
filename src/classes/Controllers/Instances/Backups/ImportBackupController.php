@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
 use dhope0000\LXDClient\Tools\Instances\Backups\StoreBackupLocally;
+use dhope0000\LXDClient\Objects\Host;
 
 class ImportBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,9 +12,9 @@ class ImportBackupController implements \dhope0000\LXDClient\Interfaces\RecordAc
         $this->storeBackupLocally = $storeBackupLocally;
     }
 
-    public function import(int $hostId, string $container, string $backup, int $delete)
+    public function import(Host $host, string $container, string $backup, int $delete)
     {
-        $this->storeBackupLocally->store($hostId, $container, $backup, (bool) $delete);
+        $this->storeBackupLocally->store($host, $container, $backup, (bool) $delete);
 
         return ["state"=>"success", "message"=>"Imported backup"];
     }

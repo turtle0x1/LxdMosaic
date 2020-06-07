@@ -43,7 +43,7 @@ class BackupInstance
         $response = $host->instances->backups->create($instance, $backup, [], $wait);
 
         if ($importAndDelete) {
-            $this->storeBackupLocally->store($host->getHostId(), $instance, $backup, true);
+            $this->storeBackupLocally->store($host, $instance, $backup, true);
         }
 
         return $response;
