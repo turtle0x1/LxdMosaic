@@ -45,7 +45,7 @@ class GetAllProfiles
             foreach ($cluster["members"] as $hostIndex => $host) {
                 $profiles = [];
 
-                if ($host["hostOnline"] == 0) {
+                if ($host["hostOnline"] == 1) {
                     $profiles = $this->getProfiles($host);
                 }
 
