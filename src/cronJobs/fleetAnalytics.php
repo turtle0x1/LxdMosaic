@@ -21,7 +21,7 @@ $totalStorageAvailable = 0;
 
 foreach ($storagePools["clusters"] as $cluster) {
     foreach ($cluster["members"] as $host) {
-        foreach ($host["pools"] as $pool) {
+        foreach ($host->getCustomProp("pools") as $pool) {
             $totalStorageUsage += $pool["resources"]["space"]["used"];
             $totalStorageAvailable += $pool["resources"]["space"]["total"];
         }
@@ -29,7 +29,7 @@ foreach ($storagePools["clusters"] as $cluster) {
 }
 
 foreach ($storagePools["standalone"]["members"] as $host) {
-    foreach ($host["pools"] as $pool) {
+    foreach ($host->getCustomProp("pools") as $pool) {
         $totalStorageUsage += $pool["resources"]["space"]["used"];
         $totalStorageAvailable += $pool["resources"]["space"]["total"];
     }
