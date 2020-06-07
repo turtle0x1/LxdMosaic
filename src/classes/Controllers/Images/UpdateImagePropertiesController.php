@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Images;
 
 use dhope0000\LXDClient\Tools\Images\UpdateImageProperties;
+use dhope0000\LXDClient\Objects\Host;
 
 class UpdateImagePropertiesController
 {
@@ -13,9 +14,9 @@ class UpdateImagePropertiesController
     /**
      * This is the list of proprties we support updating for an image
      */
-    public function update(int $hostId, string $fingerprint, array $settings)
+    public function update(Host $host, string $fingerprint, array $settings)
     {
-        $this->updateImageProperties->update($hostId, $fingerprint, $settings);
+        $this->updateImageProperties->update($host, $fingerprint, $settings);
         return ["state"=>"success", "message"=>"Update image"];
     }
 }

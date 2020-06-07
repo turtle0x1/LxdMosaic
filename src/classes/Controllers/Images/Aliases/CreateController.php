@@ -3,6 +3,7 @@
 namespace dhope0000\LxdClient\Controllers\Images\Aliases;
 
 use dhope0000\LXDClient\Tools\Images\Aliases\CreateAlias;
+use dhope0000\LXDClient\Objects\Host;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,10 +12,10 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->createAlias = $createAlias;
     }
 
-    public function create(int $hostId, string $fingerprint, string $name, string $description = "")
+    public function create(Host $host, string $fingerprint, string $name, string $description = "")
     {
         $lxdResponse = $this->createAlias->create(
-            $hostId,
+            $host,
             $fingerprint,
             $name,
             $description

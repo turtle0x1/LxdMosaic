@@ -1,7 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Images;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetImageProperties
 {
@@ -10,20 +10,14 @@ class GetImageProperties
         "auto_update"=>""
     ];
 
-    public function __construct(LxdClient $lxdClient)
+    public function getAll(Host $host, string $fingerprint)
     {
-        $this->client = $lxdClient;
+        return $host->images->info($fingerprint);
     }
 
-    public function getAll(int $hostId, string $fingerprint)
+    public function getFiltertedList(Host $host, string  $fingerprint)
     {
-        $client = $this->client->getANewClient($hostId);
-        return $client->images->info($fingerprint);
-    }
-
-    public function getFiltertedList(int $hostId, string  $fingerprint)
-    {
-        $info = $this->getAll($hostId, $fingerprint);
+        $info = $this->getAll($host, $fingerprint);
         return array_intersect_key($info, $this->supportedProprties);
     }
 }

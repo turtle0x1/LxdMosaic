@@ -1,18 +1,12 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Images\Aliases;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class UpdateDescription
 {
-    public function __construct(LxdClient $lxdClient)
+    public function update(Host $host, string $fingerprint, string $name, string $description = "")
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function update(int $hostId, string $fingerprint, string $name, string $description = "")
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->images->aliases->replace($name, $fingerprint, $description);
+        return $host->images->aliases->replace($name, $fingerprint, $description);
     }
 }
