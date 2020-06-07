@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Tools\Profiles;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetAllProfiles
 {
@@ -12,50 +13,28 @@ class GetAllProfiles
         $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
     }
 
-    private function getProfiles($host)
+    private function getProfiles(Host $host)
     {
-        $indent = $host["alias"];
-
-        // So inconsistent its ridiculous need to make objects
-        if ((isset($host["online"]) && $host["online"] != true) || (isset($host["hostOnline"]) && $host["hostOnline"] != true)) {
-            return [
-                "online"=>false,
-                "hostOnline"=>0,
-                "hostId"=>$host["hostId"]
-            ];
+        if (!$host->hostOnline()) {
+            return [];
         }
 
-        $client = $this->client->getANewClient($host["hostId"], false);
-
-        $profiles = $client->profiles->all();
-
-        return [
-            "hostAlias"=>$indent,
-            "online"=>true,
-            "hostId"=>$host["hostId"],
-            "profiles"=>$this->getProfileDetails($client, $profiles)
-        ];
+        return $host->profiles->all();
     }
 
 
     public function getAllProfiles()
     {
-        $clustersAndHosts = $this->getClustersAndStandaloneHosts->get();
+        $clustersAndHosts = $this->getClustersAndStandaloneHosts->get(true);
 
         foreach ($clustersAndHosts["clusters"] as $clusterIndex => $cluster) {
-            foreach ($cluster["members"] as $hostIndex => $host) {
-                $profiles = [];
-
-                if ($host["hostOnline"] == 1) {
-                    $profiles = $this->getProfiles($host);
-                }
-
-                $clustersAndHosts["clusters"][$clusterIndex]["members"][$hostIndex] = $profiles;
+            foreach ($cluster["members"] as $hostIndex => &$host) {
+                $host->setCustomProp("profiles", $this->getProfiles($host));
             }
         }
 
-        foreach ($clustersAndHosts["standalone"]["members"] as $index => $host) {
-            $clustersAndHosts["standalone"]["members"][$index] =  $this->getProfiles($host);
+        foreach ($clustersAndHosts["standalone"]["members"] as $index => &$host) {
+            $host->setCustomProp("profiles", $this->getProfiles($host));
         }
 
         return $clustersAndHosts;

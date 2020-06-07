@@ -17,15 +17,17 @@ class GetClustersAndStandaloneHosts
         $this->hostList = $hostList;
         $this->getResources = $getResources;
     }
-
-    public function get()
+    //TODO $removeResources should default to true but quicker at time of wrting
+    public function get($removeResources = false)
     {
-        $clusters = $this->getAllClusters->get(false);
+        $clusters = $this->getAllClusters->get($removeResources);
 
         $hostsInClusterGroups = [];
 
         foreach ($clusters as $cluster) {
-            $hostsInClusterGroups = array_merge($hostsInClusterGroups, array_column($cluster["members"], "hostId"));
+            $hostsInClusterGroups = array_merge($hostsInClusterGroups, array_map(function ($member) {
+                return $member->getHostId();
+            }, $cluster["members"]));
         }
 
         if (empty($hostsInClusterGroups)) {
@@ -36,14 +38,14 @@ class GetClustersAndStandaloneHosts
 
 
         foreach ($standaloneHosts as $index => $host) {
-            $standaloneHosts[$index]["resources"] = [];
+            $standaloneHosts[$index]->setCustomProp("resources", []);
 
-            if ((int)$host["hostOnline"] === 0) {
+            if (!$host->hostOnline()) {
                 continue;
             }
 
-            $info = $this->getResources->getHostExtended($host["hostId"]);
-            $standaloneHosts[$index]["resources"] = $info;
+            $info = $this->getResources->getHostExtended($host->getHostId());
+            $standaloneHosts[$index]->setCustomProp("resources", $info);
         }
 
         $standaloneHosts = [

@@ -905,7 +905,7 @@ function loadDashboard(){
             let projects = "<b> Not Available </b>";
 
 
-            if(host.hostOnline == 1 && host.resources.extensions.supportsProjects){
+            if(host.resources.extensions.supportsProjects){
                 projects = "<select class='form-control changeHostProject'>";
                 $.each(host.resources.projects, function(o, project){
                     let selected = project == host.currentProject ? "selected" : "";

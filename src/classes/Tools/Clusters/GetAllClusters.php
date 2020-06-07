@@ -50,18 +50,14 @@ class GetAllClusters
             }
 
             $clusterMembers = $host->cluster->members->all(LxdRecursionLevels::INSTANCE_FULL_RECURSION);
-            //TODO This is still weird - we probably need a "ClusterHost" object
+
             foreach ($clusterMembers as $member) {
                 $memberHostObj = $this->getDetails->fetchHostByUrl($member["url"]);
 
-                $member["resources"] = $this->getResources->getHostExtended($memberHostObj->getHostId());
+                $memberHostObj->setCustomProp("resources", $this->getResources->getHostExtended($memberHostObj->getHostId()));
+                $memberHostObj->setCustomProp("status", $member["status"]);
 
-                $member["hostId"] = $memberHostObj->getHostId();
-                $member["alias"] = $memberHostObj->getAlias();
-                $member["urlAndPort"] = $memberHostObj->getUrl();
-                $member["hostOnline"] = $memberHostObj->hostOnline();
-
-                $clusters[$clusterId]["members"][] = $member;
+                $clusters[$clusterId]["members"][] = $memberHostObj;
                 $hostsInACluster[] = $member["url"];
             }
             $clusterId++;
@@ -78,15 +74,17 @@ class GetAllClusters
 
             $onlineMembers = 0;
 
-            foreach ($cluster["members"] as $memberIndex => $member) {
-                $totalMemory += $member["resources"]["memory"]["total"];
-                $usedMemory += $member["resources"]["memory"]["used"];
+            foreach ($cluster["members"] as $memberIndex => &$member) {
+                $resources = $member->getCustomProp("resources");
+
+                $totalMemory += $resources["memory"]["total"];
+                $usedMemory += $resources["memory"]["used"];
 
                 if ($removeResources) {
-                    unset($clusters[$index]["members"][$memberIndex]["resources"]);
+                    $member->removeCustomProp("resources");
                 }
 
-                if ($member["status"] == "Online") {
+                if ($member->getCustomProp("status") == "Online") {
                     $onlineMembers++;
                 }
             }

@@ -14,12 +14,33 @@ class Host implements \JsonSerializable
     private $certFilePath;
     private $keyFilePath ;
     private $hostOnline;
+
+    private $customProps = [];
+
     private $lxdClient;
     private $client = null;
 
     public function __construct(LxdClient $lxdClient)
     {
         $this->lxdClient = $lxdClient;
+    }
+
+    public function setCustomProp(string $name, $value)
+    {
+        if (in_array($name, ["hostId", "alias", "urlAndPort"])) {
+            throw new \Exception("Not to set $name is custom props", 1);
+        }
+        $this->customProps[$name] = $value;
+    }
+
+    public function getCustomProp(string $name)
+    {
+        return $this->customProps[$name];
+    }
+
+    public function removeCustomProp(string $name)
+    {
+        unset($this->customProps[$name]);
     }
 
     public function getHostId() :int
@@ -62,11 +83,17 @@ class Host implements \JsonSerializable
 
     final public function jsonSerialize()
     {
-        return [
+        return array_merge([
             "hostId"=>$this->id,
             "alias"=>$this->alias,
             "urlAndPort"=>$this->urlAndPort,
-        ];
+        ], $this->customProps);
+    }
+
+    //NOTE hmm
+    public function __set($prop, $value)
+    {
+        throw new \Exception("Not allowed to set public properties on this object, use the methods provided", 1);
     }
 
     public function __get($target)

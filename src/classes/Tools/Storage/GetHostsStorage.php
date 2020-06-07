@@ -2,17 +2,15 @@
 
 namespace dhope0000\LXDClient\Tools\Storage;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetHostsStorage
 {
     public function __construct(
-        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts,
-        LxdClient $lxdClient
+        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts
     ) {
         $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
-        $this->lxdClient = $lxdClient;
     }
 
     public function getAll()
@@ -20,33 +18,31 @@ class GetHostsStorage
         $clusters = $this->getClustersAndStandaloneHosts->get();
 
         foreach ($clusters["clusters"] as $clusterIndex => $cluster) {
-            foreach ($cluster["members"] as $hostIndex => $host) {
-                $clusters["clusters"][$clusterIndex]["members"][$hostIndex]["pools"] = $this->getHostPools($host);
+            foreach ($cluster["members"] as $hostIndex => &$host) {
+                $host->setCustomProp("pools", $this->getHostPools($host));
             }
         }
 
-        foreach ($clusters["standalone"]["members"] as $hostIndex => $host) {
-            $clusters["standalone"]["members"][$hostIndex]["pools"] = $this->getHostPools($host);
+        foreach ($clusters["standalone"]["members"] as $hostIndex => &$host) {
+            $host->setCustomProp("pools", $this->getHostPools($host));
         }
 
         return $clusters;
     }
 
-    private function getHostPools(array $host)
+    private function getHostPools(Host $host)
     {
-        $indent = is_null($host["alias"]) ? $host["urlAndPort"] : $host["alias"];
-
-        if (isset($host["hostOnline"]) && $host["hostOnline"] != true) {
+        if (!$host->hostOnline()) {
             return [];
         }
 
-        $client = $this->lxdClient->getANewClient($host["hostId"]);
-        $pools = $client->storage->all();
+        //TODO Recursion
+        $pools = $host->storage->all();
         $withResources = [];
         foreach ($pools as $pool) {
             $withResources[] = [
                 "name"=>$pool,
-                "resources"=>$client->storage->resources->info($pool)
+                "resources"=>$host->storage->resources->info($pool)
             ];
         }
 

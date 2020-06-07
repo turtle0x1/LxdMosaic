@@ -75,8 +75,11 @@ class HostList
 
         $qMarks = join(',', array_fill(0, count($hostIds), '?'));
         $sql = "SELECT
-                    `Host_ID` as `hostId`,
+                    `Host_ID` as `id`,
                     `Host_Url_And_Port` as `urlAndPort`,
+                    `Host_Cert_Path` as `certPath`,
+                    `Host_Cert_Only_File` as `certFilePath`,
+                    `Host_Key_File` as `keyFilePath`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
                     `Host_Online` as `hostOnline`
                 FROM
@@ -88,14 +91,17 @@ class HostList
                 ";
         $do = $this->database->prepare($sql);
         $do->execute($hostIds);
-        return $do->fetchAll(\PDO::FETCH_ASSOC);
+        return $do->fetchAll(\PDO::FETCH_CLASS, "dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]);
     }
 
     public function fetchAllHosts()
     {
         $sql = "SELECT
-                    `Host_ID` as `hostId`,
+                    `Host_ID` as `id`,
                     `Host_Url_And_Port` as `urlAndPort`,
+                    `Host_Cert_Path` as `certPath`,
+                    `Host_Cert_Only_File` as `certFilePath`,
+                    `Host_Key_File` as `keyFilePath`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
                     `Host_Online` as `hostOnline`
                 FROM
@@ -104,6 +110,6 @@ class HostList
                     `Host_ID` DESC
                 ";
         $do = $this->database->query($sql);
-        return $do->fetchAll(\PDO::FETCH_ASSOC);
+        return $do->fetchAll(\PDO::FETCH_CLASS, "dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]);
     }
 }

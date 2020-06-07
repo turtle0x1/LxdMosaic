@@ -49,7 +49,6 @@ class GetInstanceBackups
         foreach ($backups as $index => $backupName) {
             $info = $client->instances->backups->info($instance, $backupName);
 
-
             $info["storedLocally"] = $this->backupDownloadedLocally($localBackups, $backupName, $info["created_at"]);
             $backups[$index] = $info;
         }
