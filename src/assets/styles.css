@@ -341,8 +341,20 @@ a:hover {
     cursor: pointer;
 }
 
-body {
-    font-size: 0.875rem;
+body, table {
+    font-size: 0.9rem;
+}
+
+h1 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+a {
+    font-weight: 200;
 }
 
 .app-header .nav-item {
