@@ -828,13 +828,13 @@ function loadDashboard(){
             $.each(item.members, function(_, host){
                 let disabled = "";
 
-                if(host.status !== "Online"){
+                if(!host.hostOnline){
                     disabled = "disabled text-warning text-strikethrough";
                 }
 
                 let projects = "Not Available";
 
-                if(host.resources.extensions.supportsProjects){
+                if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
                     projects = "<select class='form-control changeHostProject'>";
                     $.each(host.resources.projects, function(o, project){
                         let selected = project == host.currentProject ? "selected" : "";
@@ -905,7 +905,7 @@ function loadDashboard(){
             let projects = "<b> Not Available </b>";
 
 
-            if(host.resources.extensions.supportsProjects){
+            if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
                 projects = "<select class='form-control changeHostProject'>";
                 $.each(host.resources.projects, function(o, project){
                     let selected = project == host.currentProject ? "selected" : "";
