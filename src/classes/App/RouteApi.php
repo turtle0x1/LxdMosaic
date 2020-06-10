@@ -89,13 +89,19 @@ class RouteApi
             $name = $param->getName();
             $hasDefault = $param->isDefaultValueAvailable();
 
+            $type = $param->getType();
+            if (!empty($type)) {
+                $type = $type->getName();
+            }
+
+
             if ($hasDefault && !isset($passedArguments[$name])) {
                 $o[$name] = $param->getDefaultValue();
             } elseif ($name === "userId") {
                 $o[$name] = $userId;
             } elseif ($name == "host") {
                 $o[$name] = $this->getDetails->fetchHost($passedArguments["hostId"]);
-            } elseif ($param->getType()->getName() == "dhope0000\LXDClient\Objects\HostsCollection") {
+            } elseif ($type == "dhope0000\LXDClient\Objects\HostsCollection") {
                 $o[$name] = $this->hostList->getHostCollection($passedArguments[$name]);
             } elseif (!isset($passedArguments[$name])) {
                 throw new \Exception("Missing Paramater $name", 1);
