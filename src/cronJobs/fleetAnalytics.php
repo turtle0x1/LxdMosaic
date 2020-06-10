@@ -69,7 +69,7 @@ $containersByHost = $getAllContainers->getAll();
 $activeContainers = 0;
 
 foreach ($containersByHost as $host) {
-    foreach ($host["containers"] as $container) {
+    foreach ($host->getCustomProp("containers") as $container) {
         if ($container["state"]["status_code"] == 103) {
             $activeContainers++;
         }
