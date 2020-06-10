@@ -1,5 +1,8 @@
 <?php
+
 namespace dhope0000\LXDClient\Tools\Images;
+
+use dhope0000\LXDClient\Objects\Host;
 
 class UpdateImageProperties
 {
@@ -23,6 +26,6 @@ class UpdateImageProperties
             }
             $details[$key] = $value;
         }
-        return $client->images->replace($fingerprint, $details);
+        return $host->images->replace($fingerprint, $details);
     }
 }
