@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Tools\Deployments\Profiles;
 
 use dhope0000\LXDClient\Tools\Profiles\GetAllProfiles;
+use dhope0000\LXDClient\Objects\Host;
 
 class HostHaveDeploymentProfiles
 {
@@ -11,12 +12,12 @@ class HostHaveDeploymentProfiles
         $this->getAllProfiles = $getAllProfiles;
     }
 
-    public function getProfileName(int $hostId, int $deploymentId, int $revId)
+    public function getProfileName(Host $host, int $deploymentId, int $revId) :string
     {
-        $allProfiles = $this->getAllProfiles->getHostProfilesWithDetails($hostId);
-        foreach ($allProfiles as $profile => $data) {
-            if ($this->profileContainsDeployment($data, $deploymentId, $revId)) {
-                return $profile;
+        $allProfiles = $host->profiles->all(2);
+        foreach ($allProfiles as $profile) {
+            if ($this->profileContainsDeployment($profile, $deploymentId, $revId)) {
+                return $profile["name"];
             }
         }
         return false;
@@ -25,7 +26,7 @@ class HostHaveDeploymentProfiles
     public function getAllProfilesInDeployment(int $deploymentId)
     {
         //TODO Broken
-        $allProfiles = $this->getAllProfiles->getAllProfiles();
+        $allProfiles = $this->getAllProfiles->getAllProfiles(true);
         $output = [];
         foreach ($allProfiles["standalone"]["members"] as $host) {
             foreach ($host->getCustomProp("profiles") as $profile) {

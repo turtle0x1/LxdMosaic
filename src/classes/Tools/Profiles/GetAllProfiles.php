@@ -39,21 +39,4 @@ class GetAllProfiles
 
         return $clustersAndHosts;
     }
-
-    public function getHostProfilesWithDetails(int $hostId)
-    {
-        $client = $this->client->getANewClient($hostId);
-        $profiles = $client->profiles->all();
-        return $this->getProfileDetails($client, $profiles);
-    }
-
-    public function getProfileDetails($client, $profiles)
-    {
-        $details = array();
-        foreach ($profiles as $profile) {
-            $state = $client->profiles->info($profile);
-            $details[$profile] = ["details"=>$state];
-        }
-        return $details;
-    }
 }

@@ -50,7 +50,7 @@ class Deploy
                 $hostId = (int) $hostId;
                 $host = $this->getDetails->fetchHost($hostId);
                 $profile = $this->hostHaveDeploymentProfiles->getProfileName(
-                    $hostId,
+                    $host,
                     $deploymentId,
                     $instance["revId"]
                 );

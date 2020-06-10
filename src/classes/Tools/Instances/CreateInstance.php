@@ -58,7 +58,7 @@ class CreateInstance
             $response = $host->instances->create($name, $options, true, [], $alias);
 
             if ($response["status_code"] == 400) {
-                throw new \Exception("Host: $host " . $response["err"], 1);
+                throw new \Exception("Host: {$host->getUrl()} " . $response["err"], 1);
             }
 
             $results[] = $response;
