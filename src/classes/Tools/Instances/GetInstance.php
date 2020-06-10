@@ -27,7 +27,7 @@ class GetInstance
 
         $hostId = $host->getHostId();
         $deploymentDetails = $this->fetchDeployments->byHostContainer($hostId, $instance);
-        $hostSupportsBackups = $this->hasExtension->hasWithHostId($hostId, LxdApiExtensions::CONTAINER_BACKUP);
+        $hostSupportsBackups = $this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP);
 
         return [
             "details"=>$details,

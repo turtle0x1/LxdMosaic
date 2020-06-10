@@ -39,7 +39,7 @@ class GetHostsProjects
             return [];
         }
 
-        if (!$this->hasExtension->hasWithHostId($host->getHostId(), "projects")) {
+        if (!$this->hasExtension->checkWithHost($host, "projects")) {
             return [];
         }
 

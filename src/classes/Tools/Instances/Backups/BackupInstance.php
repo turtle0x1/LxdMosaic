@@ -36,7 +36,7 @@ class BackupInstance
             $wait = true;
         }
 
-        if ($this->hasExtension->hasWithHostId($host->getHostId(), LxdApiExtensions::CONTAINER_BACKUP) !== true) {
+        if ($this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP) !== true) {
             throw new \Exception("Host doesn't support backups", 1);
         }
 

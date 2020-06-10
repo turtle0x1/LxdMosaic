@@ -17,8 +17,8 @@ class DeleteRemoteBackup
 
     public function delete(Host $host, string $instance, string $backup)
     {
-        if ($this->hasExtension->hasWithHostId(
-            $host->getHostId(),
+        if ($this->hasExtension->checkWithHost(
+            $host,
             LxdApiExtensions::CONTAINER_BACKUP
         ) !== true) {
             throw new \Exception("Host doesn't support backups", 1);

@@ -15,9 +15,9 @@ class GetResources
     {
         $details = $host->resources->info();
 
-        $supportsProjects = $this->hasExtension->hasWithHostId($host->getHostId(), "projects");
-        $resCpuSocket = $this->hasExtension->hasWithHostId($host->getHostId(), "resources_cpu_socket");
-        $resGpu = $this->hasExtension->hasWithHostId($host->getHostId(), "resources_gpu");
+        $supportsProjects = $this->hasExtension->checkWithHost($host, "projects");
+        $resCpuSocket = $this->hasExtension->checkWithHost($host, "resources_cpu_socket");
+        $resGpu = $this->hasExtension->checkWithHost($host, "resources_gpu");
 
         $details["extensions"] = [
             "supportsProjects"=>$supportsProjects,
