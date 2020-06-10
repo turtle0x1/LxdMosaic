@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Model\Hosts;
 
 use dhope0000\LXDClient\Model\Database\Database;
 use \DI\Container;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class HostList
 {
@@ -10,6 +11,29 @@ class HostList
     {
         $this->database = $database->dbObject;
         $this->container = $container;
+    }
+
+    public function getHostCollection(array $hostIds)
+    {
+        $qMarks = join(',', array_fill(0, count($hostIds), '?'));
+        $sql = "SELECT
+                    `Host_ID` as `id`,
+                    `Host_Url_And_Port` as `urlAndPort`,
+                    `Host_Cert_Path` as `certPath`,
+                    `Host_Cert_Only_File` as `certFilePath`,
+                    `Host_Key_File` as `keyFilePath`,
+                    COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
+                    `Host_Online` as `hostOnline`
+                FROM
+                    `Hosts`
+                WHERE
+                    `Host_ID` IN ($qMarks)
+                ORDER BY
+                    `Host_ID` DESC
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute($hostIds);
+        return new HostsCollection($do->fetchAll(\PDO::FETCH_CLASS, "dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]));
     }
 
     public function getHostList()
