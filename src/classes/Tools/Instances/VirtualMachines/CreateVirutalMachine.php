@@ -2,21 +2,19 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\VirtualMachines;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Constants\LxdInstanceTypes;
 use dhope0000\LXDClient\Tools\Instances\CreateInstance;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateVirutalMachine
 {
     public function __construct(
-        LxdClient $lxdClient,
         CreateInstance $createInstance
     ) {
-        $this->lxdClient = $lxdClient;
         $this->createInstance = $createInstance;
     }
 
-    public function create(string $name, string $username, array $hostIds)
+    public function create(string $name, string $username, HostsCollection $hosts)
     {
         $config = [];
         $config["user.vendor-data"] = $this->getVendorData($username);
@@ -25,10 +23,8 @@ class CreateVirutalMachine
 
         $description = "Created by LXDMosaic";
 
-        foreach ($hostIds as $hostId) {
-            $client = $this->lxdClient->getANewClient($hostId);
-
-            $client->profiles->create(
+        foreach ($hosts as $host) {
+            $host->profiles->create(
                 $profileName,
                 $description,
                 $config,
@@ -51,7 +47,7 @@ class CreateVirutalMachine
             LxdInstanceTypes::VM,
             $name,
             [$profileName, "default"],
-            $hostIds,
+            $hosts,
             $imageDetails
         );
 

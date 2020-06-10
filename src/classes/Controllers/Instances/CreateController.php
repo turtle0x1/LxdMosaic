@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances;
 
 use dhope0000\LXDClient\Tools\Instances\CreateInstance;
 use dhope0000\LXDClient\Constants\LxdInstanceTypes;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -15,7 +16,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     public function create(
         $name,
         $profileIds = [],
-        $hosts,
+        HostsCollection $hosts,
         array $imageDetails,
         string $instanceType = "",
         $server = "",
