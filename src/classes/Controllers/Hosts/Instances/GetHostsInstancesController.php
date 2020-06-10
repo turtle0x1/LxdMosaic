@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Hosts\Instances;
 
 use dhope0000\LXDClient\Tools\Instances\GetHostsInstances;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetHostsInstancesController
 {
@@ -9,8 +10,8 @@ class GetHostsInstancesController
     {
         $this->getHostsInstances = $getHostsInstances;
     }
-    public function get(int $hostId)
+    public function get(Host $host)
     {
-        return $this->getHostsInstances->getContainers($hostId);
+        return $this->getHostsInstances->getContainers($host);
     }
 }

@@ -18,7 +18,7 @@ class GetHostOverview
 
     public function get(Host $host)
     {
-        $containers = $this->getHostsInstances->getContainers($host->getHostId());
+        $containers = $this->getHostsInstances->getContainers($host);
         $sortedContainers = $this->sortContainersByState($containers);
         $containerStats = $this->calcContainerStats($containers);
         return [
