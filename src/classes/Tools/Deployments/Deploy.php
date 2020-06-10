@@ -55,8 +55,10 @@ class Deploy
                     $instance["revId"]
                 );
 
+                $hostCollection = new HostsCollection([$host]);
+
                 if (!$profile && !isset($revProfileNames[$instance["revId"]])) {
-                    $profile = $this->deployProfile($hostId, $deploymentId, $instance["revId"], $vendorData);
+                    $profile = $this->deployProfile($hostCollection, $deploymentId, $instance["revId"], $vendorData);
                     $revProfileNames[$instance["revId"]] = $profile;
                 }
 
@@ -73,7 +75,7 @@ class Deploy
                         LxdInstanceTypes::CONTAINER,
                         $containerName,
                         $profiles,
-                        new HostsCollection([$host]),
+                        $hostCollection,
                         $imageDetails[$instance["revId"]]
                     );
 
@@ -95,12 +97,12 @@ class Deploy
         ];
     }
 
-    private function deployProfile(int $hostId, int $deploymentId, int $revId, string $vendorData)
+    private function deployProfile(HostsCollection $hostCollection, int $deploymentId, int $revId, string $vendorData)
     {
         $profileName = StringTools::random(12);
         $this->deployToProfile->deployToHosts(
             $profileName,
-            [$hostId],
+            $hostCollection,
             null,
             $revId,
             [
