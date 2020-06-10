@@ -27,22 +27,22 @@ class HostHaveDeploymentProfiles
         //TODO Broken
         $allProfiles = $this->getAllProfiles->getAllProfiles();
         $output = [];
-        foreach ($allProfiles["standalone"]["members"] as $host => $data) {
-            foreach ($data["profiles"] as $profile) {
-                if ($profile["details"]["name"] == "default") {
+        foreach ($allProfiles["standalone"]["members"] as $host) {
+            foreach ($host->getCustomProp("profiles") as $profile) {
+                if ($profile["name"] == "default") {
                     continue;
                 }
                 if ($this->profileContainsDeployment($profile, $deploymentId)) {
-                    if (!isset($output[$host])) {
-                        $output[$host] = [
-                            "hostId"=>$data["hostId"],
+                    if (!isset($output[$host->getAlias()])) {
+                        $output[$host->getAlias()] = [
+                            "hostId"=>$host->getHostId(),
                             "profiles"=>[]
                         ];
                     }
-                    $output[$host]["profiles"][] = [
-                        "name"=>$profile["details"]["name"],
-                        "revId"=>$profile["details"]["config"]["environment.revId"],
-                        "usedBy"=>$profile["details"]["used_by"]
+                    $output[$host->getAlias()]["profiles"][] = [
+                        "name"=>$profile["name"],
+                        "revId"=>$profile["config"]["environment.revId"],
+                        "usedBy"=>$profile["used_by"]
                     ];
                 }
             }
@@ -52,13 +52,11 @@ class HostHaveDeploymentProfiles
 
     private function profileContainsDeployment($profiledata, int $deploymentId, int $revId = null)
     {
-        $data = $profiledata["details"];
-
-        if (!isset($data["config"])) {
+        if (!isset($profiledata["config"])) {
             return false;
         }
 
-        $config = $data["config"];
+        $config = $profiledata["config"];
 
         if (!isset($config["environment.deploymentId"]) && !isset($config["environment.revId"])) {
             return false;

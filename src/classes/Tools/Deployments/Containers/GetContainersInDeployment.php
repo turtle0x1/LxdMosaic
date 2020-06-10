@@ -38,6 +38,8 @@ class GetContainersInDeployment
                             continue;
                         }
 
+                        $containerName = preg_replace("/\?project=.*/", "", $containerName);
+
                         $info = $client->instances->info($containerName);
                         if (!isset($output[$host])) {
                             $output[$host] = [
