@@ -2,8 +2,7 @@
 
 namespace dhope0000\LXDClient\Tools\Networks;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateNetwork
 {
@@ -12,11 +11,10 @@ class CreateNetwork
         $this->lxdClient = $lxdClient;
     }
 
-    public function create(array $hostIds, string $name, string $description = "", array $config = [])
+    public function create(HostsCollection $hosts, string $name, string $description = "", array $config = [])
     {
-        foreach($hostIds as $hostId){
-            $client = $this->lxdClient->getANewClient($hostId);
-            $client->networks->create($name, $description, $config);
+        foreach ($hosts as $host) {
+            $host->networks->create($name, $description, $config);
         }
 
         return true;
