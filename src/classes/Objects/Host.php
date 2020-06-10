@@ -87,6 +87,7 @@ class Host implements \JsonSerializable
             "hostId"=>$this->id,
             "alias"=>$this->alias,
             "urlAndPort"=>$this->urlAndPort,
+            "hostOnline"=>$this->hostOnline
         ], $this->customProps);
     }
 
