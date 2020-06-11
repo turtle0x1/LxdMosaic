@@ -49,17 +49,6 @@ class LxdClient
         return $client;
     }
 
-    public function getANewClient($hostId, $checkCache = true, $setProject = true)
-    {
-        $host = $this->getDetails->fetchHost($hostId);
-
-        if ($host == false) {
-            throw new \Exception("Couldn't find info for this host", 1);
-        }
-
-        return $this->getClientWithHost($host, $checkCache, $setProject);
-    }
-
     private function createFullcertPath(string $certName)
     {
         return $_ENV["LXD_CERTS_DIR"] . $certName;
