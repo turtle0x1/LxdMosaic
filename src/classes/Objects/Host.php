@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Objects;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
+use Opensaucesystems\Lxd\Client;
 
 class Host implements \JsonSerializable
 {
@@ -89,6 +90,16 @@ class Host implements \JsonSerializable
             "urlAndPort"=>$this->urlAndPort,
             "hostOnline"=>$this->hostOnline
         ], $this->customProps);
+    }
+    /**
+     * You should probably not be using this.
+     */
+    public function getClient() :Client
+    {
+        if ($this->client == null) {
+            $this->client = $this->lxdClient->getClientWithHost($this);
+        }
+        return $this->client;
     }
 
     //NOTE hmm
