@@ -51,7 +51,7 @@
             let result = $.parseJSON(data);
             let html = "";
             $.each(result, function(i, item){
-                html += `<option value='${item}'>${item}</option>`;
+                html += `<option value='${item.Host_ID}'>${item.Host_Alias}</option>`;
             });
             $("#migrateModal-targetHost").empty().append(html);
         });
@@ -65,6 +65,10 @@
 
         ajaxRequest(globalUrls.instances.migrate, x, function(data){
             makeToastr(data);
+            if(data.hasOwnProperty("state") && data.state == "error"){
+                return false;
+            }
+            $("#modal-container-migrate").modal("hide");
         });
     });
 </script>

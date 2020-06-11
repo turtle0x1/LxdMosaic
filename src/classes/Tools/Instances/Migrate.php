@@ -1,25 +1,22 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class Migrate
 {
-    public function __construct(LxdClient $lxdClient)
-    {
-        $this->lxdClient = $lxdClient;
-    }
-
     public function migrate(
-        int $hostId,
+        Host $sourceHost,
         string $instance,
-        int $newHostId,
+        Host $destinationHost,
         string $newContainerName
     ) {
-        $hostClient = $this->lxdClient->getANewClient($hostId);
-        $destinationClient = $this->lxdClient->getANewClient($newHostId);
-
-        $hostClient->instances->migrate($destinationClient, $instance, $newContainerName, true);
+        $sourceHost->instances->migrate(
+            $destinationHost->getClient(),
+            $instance,
+            $newContainerName,
+            true
+        );
         return true;
     }
 }
