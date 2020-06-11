@@ -93,6 +93,10 @@ class RouteApi
             if (!empty($type)) {
                 $type = $type->getName();
             }
+            
+            if ($name == "host" && !isset($passedArguments["hostId"])) {
+                throw new \Exception("Missing paramater hostId", 1);
+            }
 
 
             if ($hasDefault && !isset($passedArguments[$name])) {
@@ -101,13 +105,12 @@ class RouteApi
                 $o[$name] = $userId;
             } elseif ($name == "host") {
                 $o[$name] = $this->getDetails->fetchHost($passedArguments["hostId"]);
+            } elseif ($type == "dhope0000\LXDClient\Objects\Host") {
+                $o[$name] = $this->getDetails->fetchHost($passedArguments[$name]);
             } elseif ($type == "dhope0000\LXDClient\Objects\HostsCollection") {
                 $o[$name] = $this->hostList->getHostCollection($passedArguments[$name]);
-            } elseif (!isset($passedArguments[$name])) {
+            } elseif (!$hasDefault && !isset($passedArguments[$name])) {
                 throw new \Exception("Missing Paramater $name", 1);
-            //TODO use type again here instead of name
-            } elseif ($name == "host" && !isset($passedArguments["hostId"])) {
-                throw new \Exception("Missing paramater hostId", 1);
             } else {
                 $o[$name] = $passedArguments[$name];
             }
