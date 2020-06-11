@@ -15,13 +15,13 @@ class Copy
         Host $host,
         string $instance,
         string $newInstance,
-        int $newHostId
+        Host $destination
     ) {
-        if ($host->getHostId() !== $newHostId) {
+        if ($host->getHostId() !== $destination->getHostId()) {
             return $this->migrate->migrate(
-                $hostId,
+                $host,
                 $instance,
-                $newHostId,
+                $destination,
                 $newInstance
             );
         }
