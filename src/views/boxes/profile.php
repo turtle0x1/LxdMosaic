@@ -124,7 +124,7 @@ var currentProfileDetails = {
 
 function makeHostHtml(hosthtml, host, selectedProfile = null, selectedHost = null){
     let disabled = "";
-    if(host.online == false){
+    if(host.hostOnline == false){
         disabled = "disabled text-warning text-strikethrough";
     }
 
