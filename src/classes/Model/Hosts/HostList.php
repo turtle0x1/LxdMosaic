@@ -36,22 +36,9 @@ class HostList
         return new HostsCollection($do->fetchAll(\PDO::FETCH_CLASS, "dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]));
     }
 
-    public function getHostList()
-    {
-        $sql = "SELECT
-                    `Host_Url_And_Port`
-                FROM
-                    `Hosts`
-                ORDER BY
-                    `Host_ID` DESC
-                ";
-        $do = $this->database->query($sql);
-        return $do->fetchAll(\PDO::FETCH_COLUMN, 0);
-    }
-
     public function haveAny()
     {
-        return (bool) count($this->getHostList());
+        return (bool) count($this->getHostListWithDetails());
     }
 
     public function getHostListWithDetails()
