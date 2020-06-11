@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Backups;
 
 use dhope0000\LXDClient\Tools\Backups\RestoreBackup;
+use dhope0000\LXDClient\Objects\Host;
 
 class RestoreBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,7 +14,7 @@ class RestoreBackupController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->restoreBackup = $restoreBackup;
     }
 
-    public function restore(int $backupId, int $targetHost)
+    public function restore(int $backupId, Host $targetHost)
     {
         $response = $this->restoreBackup->restore($backupId, $targetHost);
         return ["state"=>"success", "message"=>"Restored Backup", "lxdResponse"=>$response];
