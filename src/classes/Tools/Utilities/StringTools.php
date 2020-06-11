@@ -26,6 +26,29 @@ class StringTools
         return implode('', $pieces);
     }
 
+    /**
+     * https://stackoverflow.com/a/2790919/4008082
+     */
+    public function stringStartsWith(string $string, string $query)
+    {
+        return substr($string, 0, strlen($query)) === $query;
+    }
+
+    /**
+     * https://stackoverflow.com/a/9826656/4008082
+     */
+    public static function getStringBetween(string $string, string $start, string $end)
+    {
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) {
+            return '';
+        }
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
+    }
+
     public static function usedByStringsToLinks(
         int $hostId,
         array $usedBy,

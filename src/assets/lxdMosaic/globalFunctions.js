@@ -82,7 +82,11 @@ function ajaxRequest(url, data, callback){
          type: 'POST',
          data: data,
          url: url,
-         success: function(data){
+         success: function(data, _, jqXHR){
+             if(jqXHR.status == 205){
+                 $.alert("its likely a host has gone offline, refresh the page");
+                 return false;
+             }
              callback(data);
          },
          error: function(data){
