@@ -3,6 +3,7 @@
 require __DIR__ . "/../../vendor/autoload.php";
 
 $builder = new \DI\ContainerBuilder();
+$builder->useAnnotations(true);
 $container = $builder->build();
 
 $exceptionHandler = new dhope0000\LXDClient\App\ExceptionHandler();
@@ -11,6 +12,8 @@ $exceptionHandler->register();
 $env = new Dotenv\Dotenv(__DIR__ . "/../../");
 $env->load();
 $env->required(['DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME']);
+
+$container->injectOn($exceptionHandler);
 
 $router = $container->make("dhope0000\LXDClient\App\RouteController");
 

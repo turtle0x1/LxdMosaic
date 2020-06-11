@@ -7,7 +7,8 @@
         "vlucas/phpdotenv": "^2.5",
         "symfony/http-foundation": "^4.2",
         "symfony/filesystem": "^4.3",
-        "symfony/cache": "^4.3"
+        "symfony/cache": "^4.3",
+        "doctrine/annotations": "^1.10"
     },
     "autoload": {
         "psr-4": {

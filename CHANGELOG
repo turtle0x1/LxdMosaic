@@ -11,6 +11,7 @@ Fixed
     Cant load project inforatmion
     Cant upload file to instance files
     Cant load backups for instance (#211)
+    Sidebar lost when LXD host goes offline (#152)
 
 Changed
     Inject userId if requested by controller so the $userId variable in a
