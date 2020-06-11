@@ -25,28 +25,24 @@ class HostHaveDeploymentProfiles
 
     public function getAllProfilesInDeployment(int $deploymentId)
     {
-        //TODO Broken
         $allProfiles = $this->getAllProfiles->getAllProfiles(true);
         $output = [];
         foreach ($allProfiles["standalone"]["members"] as $host) {
+            $deployProfiles = [];
             foreach ($host->getCustomProp("profiles") as $profile) {
                 if ($profile["name"] == "default") {
                     continue;
                 }
                 if ($this->profileContainsDeployment($profile, $deploymentId)) {
-                    if (!isset($output[$host->getAlias()])) {
-                        $output[$host->getAlias()] = [
-                            "hostId"=>$host->getHostId(),
-                            "profiles"=>[]
-                        ];
-                    }
-                    $output[$host->getAlias()]["profiles"][] = [
+                    $deployProfiles[] = [
                         "name"=>$profile["name"],
                         "revId"=>$profile["config"]["environment.revId"],
                         "usedBy"=>$profile["used_by"]
                     ];
                 }
             }
+            $host->setCustomProp("profiles", $deployProfiles);
+            $output[] = $host;
         }
         return $output;
     }
