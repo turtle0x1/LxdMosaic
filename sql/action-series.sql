@@ -1,0 +1,37 @@
+CREATE TABLE `Action_Series` (
+    `AS_ID` INT PRIMARY KEY AUTO_INCREMENT,
+    `AS_Date_Created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `AS_User_ID` INT NOT NULL,
+    `AS_Name` VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE `Action_Series_Commands` (
+    `ASC_ID` INT PRIMARY KEY AUTO_INCREMENT,
+    `ASC_Date_Created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `ASC_User_ID` INT NOT NULL,
+    `ASC_AS_ID` INT NOT NULL,
+    `ASC_Name` VARCHAR(255) NOT NULL,
+    `ASC_Command` TEXT NOT NULL,
+    `ASC_ASC_Parent` INT, -- Trees
+    `ASC_ASC_Parent_Return_Action` INT
+);
+
+CREATE TABLE `Action_Series_Runs` (
+    `ASR_ID` INT PRIMARY KEY AUTO_INCREMENT,
+    `ASR_Date_Created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `ASR_User_ID` INT NOT NULL,
+    `ASR_AS_ID` INT NOT NULL,
+    `ASR_Date_Finished` DATETIME NULL
+);
+
+CREATE TABLE `Action_Series_Command_Results` (
+    `ASCR_ID` INT PRIMARY KEY AUTO_INCREMENT,
+    `ASCR_ASR_ID` INT NOT NULL,
+    `ASCR_ASC_ID` INT NOT NULL,
+    `ASCR_Date_Executed` DATETIME NOT NULL,
+    `ASCR_Host_ID` INT NOT NULL,
+    `ASCR_Instance` VARCHAR(255) NOT NULL,
+    `ASCR_Out_Log_Path` VARCHAR(255) NOT NULL, -- can be local or remote
+    `ASCR_Err_Log_Path` VARCHAR(255) NOT NULL, -- can be local or remote
+    `ASCR_Return` INT NOT NULL
+);
