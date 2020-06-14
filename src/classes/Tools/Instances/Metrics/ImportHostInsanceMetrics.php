@@ -29,35 +29,29 @@ class ImportHostInsanceMetrics
         }
         foreach ($instancesToScan as $instance) {
             $state = $instances[$instance]["state"];
-            $this->importCpuLoadAverage($host, $instance);
+            $this->addInstanceLoadAverage($host, $instance);
             $this->addInstanceMemoryUsage($host, $instance, $state);
             $this->addInstanceNetworkUsage($host, $instance, $state);
             $this->addInstanceStorageUsage($host, $instance, $state);
         }
     }
 
-    private function importCpuLoadAverage($host, $instance)
+    private function addInstanceLoadAverage($host, $instance)
     {
-        // Import CPU Load averages
-        try {
-            $path = "/etc/lxdMosaic/offlineLogs/";
-            $files = $host->instances->files->read($instance, $path);
-
-            if (empty($files)) {
-                return true;
-            }
-
-            foreach ($files as $file) {
-                $dateTime = (new \DateTime(str_replace(".json", "", $file)))->format("Y-m-d H:i:s");
-                $content = $host->instances->files->read($instance, "/etc/lxdMosaic/offlineLogs/" . $file);
-                $content = json_decode($content, true);
-                $matched = $this->matchTypeAndStore($dateTime, $host, $instance, $content);
-                $host->instances->files->remove($instance, "/etc/lxdMosaic/offlineLogs/" . $file);
-            }
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-            //TODO HMm what todo here
-            return false;
-        }
+        $output = $host->instances->execute($instance, "cat /proc/loadavg", $record = true, [], true);
+        $averages = trim($host->instances->logs->read($instance, $output["output"][0]));
+        $x = explode(" ", $averages);
+        $dateTime = (new \DateTimeImmutable())->format("Y-m-d H:i:s");
+        $matched = $this->matchTypeAndStore($dateTime, $host, $instance, [
+            "loadAvg"=>[
+                "1 minute"=>$x[0],
+                "5 minutes"=>$x[1],
+                "15 minutes"=>$x[2]
+            ]
+        ]);
+        $host->instances->logs->remove($instance, $output["output"][0]);
+        $host->instances->logs->remove($instance, $output["output"][1]);
+        return true;
     }
 
     private function addInstanceStorageUsage($host, $instance, $instanceState)
@@ -82,19 +76,18 @@ class ImportHostInsanceMetrics
         $metricKey = "networkUsage";
 
         $networkDetails = [];
-
+        $networkData = [];
         foreach ($instanceState["network"] as $name => $network) {
-            $networkData = [];
             foreach ($network["counters"] as $key => $value) {
                 $networkData["$name $key"] = $value;
             }
-            $this->matchTypeAndStore(
-                (new \DateTimeImmutable())->format("Y-m-d H:i:s"),
-                $host,
-                $instance,
-                [$metricKey=>$networkData]
-            );
         }
+        $this->matchTypeAndStore(
+            (new \DateTimeImmutable())->format("Y-m-d H:i:s"),
+            $host,
+            $instance,
+            [$metricKey=>$networkData]
+        );
     }
 
     private function addInstanceMemoryUsage($host, $instance, $instanceState)
