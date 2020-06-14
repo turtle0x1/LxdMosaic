@@ -5,17 +5,20 @@ namespace dhope0000\LXDClient\Tools\Dashboard;
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
 use dhope0000\LXDClient\Tools\Analytics\GetLatestData;
+use dhope0000\LXDClient\Model\Users\Dashboard\FetchUserDashboards;
 
 class GetDashboard
 {
     public function __construct(
         FetchUserProject $fetchUserProject,
         GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts,
-        GetLatestData $getLatestData
+        GetLatestData $getLatestData,
+        FetchUserDashboards $fetchUserDashboards
     ) {
         $this->fetchUserProject = $fetchUserProject;
         $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
         $this->getLatestData = $getLatestData;
+        $this->fetchUserDashboards = $fetchUserDashboards;
     }
 
     public function get($userId)
@@ -24,8 +27,10 @@ class GetDashboard
         $clustersAndHosts = $this->addCurrentProjects($userId, $clustersAndHosts);
         $stats = $this->getStatsFromClustersAndHosts($clustersAndHosts);
         $analyticsData = $this->getLatestData->get();
+        $dashboards = $this->fetchUserDashboards->fetchAll($userId);
 
         return [
+            "userDashboards"=>$dashboards,
             "clustersAndHosts"=>$clustersAndHosts,
             "stats"=>$stats,
             "analyticsData"=>$analyticsData
