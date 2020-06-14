@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Instances\Metrics;
 
 use dhope0000\LXDClient\Tools\Instances\Metrics\EnablePullGathering;
+use dhope0000\LXDClient\Objects\Host;
 
 class EnablePullGatheringController
 {
@@ -11,7 +12,7 @@ class EnablePullGatheringController
         $this->enablePullGathering = $enablePullGathering;
     }
 
-    public function enable(int $host, string $instance)
+    public function enable(Host $host, string $instance)
     {
         $this->enablePullGathering->enable($host, $instance);
         return ["state"=>"success", "message"=>"Enabled pulling metrics"];

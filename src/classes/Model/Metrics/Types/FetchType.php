@@ -26,4 +26,21 @@ class FetchType
         ]);
         return $do->fetchColumn();
     }
+
+
+    public function formatTypeAsBytes(int $typeId) :bool
+    {
+        $sql = "SELECT
+                    `IMT_Format_Bytes`
+                FROM
+                    `Instance_Metric_Types`
+                WHERE
+                    `IMT_ID` = :typeId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":typeId"=>$typeId
+        ]);
+        return (int) $do->fetchColumn() === 1;
+    }
 }

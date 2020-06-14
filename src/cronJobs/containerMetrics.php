@@ -10,39 +10,30 @@ $container = $builder->build();
 $env = new Dotenv\Dotenv(__DIR__ . "/../../");
 $env->load();
 
-$hostList = $container->make("dhope0000\LXDClient\Model\Hosts\HostList");
-
-
-$getP = $container->make("dhope0000\LXDClient\Tools\Profiles\GetAllProfiles");
 $import = $container->make("dhope0000\LXDClient\Tools\Instances\Metrics\ImportHostInsanceMetrics");
 
-$allProfiles = $getP->getAllProfiles();
+$o = $container->make("dhope0000\LXDClient\Tools\Instances\Metrics\GetHostContainerStatus");
 
-foreach($allProfiles as $host => $details){
-    $instancesToScan = [];
+$p = $o->get();
 
-    foreach($details["profiles"] as $profile){
-        $pDetails = $profile["details"];
-
-        if(!isset($pDetails["config"])){
-            continue;
-        }
-
-        $config = $pDetails["config"];
-
-        if(!isset($config["environment.lxdMosaicPullMetrics"])){
-            continue;
-        }
-
-        foreach($pDetails["used_by"] as $instance){
-            $instance = str_replace("/1.0/instances/", "", $instance);
-            $instance = str_replace("/1.0/containers/", "", $instance);
-            $instancesToScan[] = $instance;
+function importInstancesStats($member, $import)
+{
+    $instances = $member->getCustomProp("instances");
+    $o = [];
+    foreach ($instances as $instance) {
+        if ($instance["pullMetrics"]) {
+            $o[] = $instance["name"];
         }
     }
+    $import->import($member, $o);
+}
 
-    $instancesToScan = array_unique($instancesToScan);
-    // var_dump($details);
-    $import->import($details["hostId"], $instancesToScan);
+foreach ($p["clusters"] as $cluster) {
+    foreach ($cluster["members"] as $member) {
+        importInstancesStats($member, $import);
+    }
+}
 
+foreach ($p["standalone"]["members"] as $member) {
+    importInstancesStats($member, $import);
 }

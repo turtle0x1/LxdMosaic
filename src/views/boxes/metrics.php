@@ -40,10 +40,10 @@ function loadMetricsView()
     ajaxRequest(globalUrls.instances.metrics.getAllInstancesSettings, {}, (data)=>{
         data = $.parseJSON(data);
         let html = "";
-        $.each(data, (host, info)=>{
-            html += `<tr><td class="bg-primary text-center text-white" colspan="999">${host}</td></tr>`;
-            $.each(info.instances, (_, instance)=>{
-                let pm = instance.pullMetrics ? "<i class='fas fa-check'></i>" : `<button data-instance="${instance.name}" data-host="${info.hostId}" class='btn btn-warning enablePullGathering'>Enable</button>`;
+        $.each(data.standalone.members, (_, host)=>{
+            html += `<tr><td class="bg-primary text-center text-white" colspan="999">${host.alias}</td></tr>`;
+            $.each(host.instances, (_, instance)=>{
+                let pm = instance.pullMetrics ? "<i class='fas fa-check'></i>" : `<button data-instance="${instance.name}" data-host-id="${host.hostId}" class='btn btn-warning enablePullGathering'>Enable</button>`;
                 html += `<tr>
                         <td>${instance.name}</td>
                         <td>${pm}</td>

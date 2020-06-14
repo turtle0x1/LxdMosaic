@@ -233,8 +233,8 @@
             </select>
 
         </div>
-        <div class="card-body bg-dark">
-            <canvas id="metricGraph" style="width: 100%;"></canvas>
+        <div class="card-body bg-dark" id="metricGraphBody">
+
         </div>
     </div>
 
@@ -1129,12 +1129,16 @@ function loadFileSystemPath(path){
 
 $("#containerBox").on("click", "#goToFiles", function(){
     $("#containerFiles").show();
-    $("#containerConsole, #containerBackups, #containerDetails").hide();
+    $("#containerConsole, #containerBackups, #containerDetails, #containerMetrics").hide();
     loadFileSystemPath("/");
 });
 
 $("#containerBox").on("change", "#metricTypeSelect", function(){
     let type = $(this).val();
+    if(type == ""){
+        $("#metricGraphBody").empty();
+        return false;
+    }
     let x = {...{type: type}, ...currentContainerDetails}
     ajaxRequest(globalUrls.instances.metrics.getTypeFilters, x, (data)=>{
         data = $.parseJSON(data);
@@ -1148,10 +1152,17 @@ $("#containerBox").on("change", "#metricTypeSelect", function(){
 $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
     let filter = $(this).val();
     let type = $("#metricTypeSelect").val();
+    if(type == "" || filter == ""){
+        $("#metricGraphBody").empty();
+        return false;
+    }
     let x = {...{type: type, filter: filter}, ...currentContainerDetails}
     ajaxRequest(globalUrls.instances.metrics.getGraphData, x, (data)=>{
         let color = randomColor();
         data = $.parseJSON(data);
+        $("#metricGraphBody").empty().append('<canvas id="metricGraph" style="width: 100%;"></canvas>');
+        let scales = data.formatBytes ? scalesBytesCallbacks : [];
+        let tooltips = data.formatBytes ? toolTipsBytesCallbacks : [];
         new Chart($("#metricGraph"), {
             type: "line",
             data: {
@@ -1169,6 +1180,8 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
             options: {
               cutoutPercentage: 40,
               responsive: false,
+              scales: scales,
+              tooltips: tooltips
             }
         });
     });
@@ -1176,7 +1189,8 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
 
 $("#containerBox").on("click", "#goToMetrics", function(){
     $("#containerMetrics").show();
-    $("#containerConsole, #containerBackups, #containerDetails").hide();
+    $("#containerConsole, #containerBackups, #containerDetails, #containerFiles").hide();
+    $("#metricGraphBody, #metricTypeFilterSelect").empty();
     let x = {...{type: 1}, ...currentContainerDetails}
 
     ajaxRequest(globalUrls.instances.metrics.getAllTypes, currentContainerDetails, (data)=>{
@@ -1210,7 +1224,7 @@ $(document).on("click", ".goUpDirectory", function(){
 
 $("#containerBox").on("click", "#goToDetails", function(){
     $("#containerDetails").show();
-    $("#containerConsole, #containerBackups, #containerFiles").hide();
+    $("#containerConsole, #containerBackups, #containerFiles, #containerMetrics").hide();
 });
 
 $("#containerBox").on("click", "#goToBackups", function() {
@@ -1218,14 +1232,14 @@ $("#containerBox").on("click", "#goToBackups", function() {
         return false;
     }
     loadContainerBackups();
-    $("#containerDetails, #containerConsole, #containerFiles").hide();
+    $("#containerDetails, #containerConsole, #containerFiles, #containerMetrics").hide();
     $("#containerBackups").show();
 });
 
 $("#containerBox").on("click", "#goToConsole", function() {
     Terminal.applyAddon(attach);
 
-    $("#containerDetails, #containerBackups, #containerFiles").hide();
+    $("#containerDetails, #containerBackups, #containerFiles, #containerMetrics").hide();
     $("#containerConsole").show();
 
 

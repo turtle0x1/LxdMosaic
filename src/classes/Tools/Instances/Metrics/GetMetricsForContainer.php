@@ -3,12 +3,14 @@
 namespace dhope0000\LXDClient\Tools\Instances\Metrics;
 
 use dhope0000\LXDClient\Model\Metrics\FetchMetrics;
+use dhope0000\LXDClient\Model\Metrics\Types\FetchType;
 
 class GetMetricsForContainer
 {
-    public function __construct(FetchMetrics $fetchMetrics)
+    public function __construct(FetchMetrics $fetchMetrics, FetchType $fetchType)
     {
         $this->fetchMetrics = $fetchMetrics;
+        $this->fetchType = $fetchType;
     }
 
     public function getAllTypes($hostId, $container)
@@ -20,7 +22,7 @@ class GetMetricsForContainer
     {
         $allMetrics = $this->fetchMetrics->fetchByHostContainerType($hostId, $container, $type);
         $keys = [];
-        foreach($allMetrics as $metricsIndex => $metricEntry){
+        foreach ($allMetrics as $metricsIndex => $metricEntry) {
             $data = json_decode($metricEntry["data"], true);
             // We iterate through all the seen entries because the user
             // may have added a new key at some random point at time but this
@@ -29,25 +31,31 @@ class GetMetricsForContainer
             $keys = array_merge($keys, array_keys($data));
         }
         return array_unique($keys);
-
     }
     public function get($hostId, $container, $type, $filter)
     {
         $allMetrics = $this->fetchMetrics->fetchByHostContainerType($hostId, $container, $type);
 
-        foreach($allMetrics as $metricsIndex => $metricEntry){
+        $output = [];
+
+        foreach ($allMetrics as $metricsIndex => $metricEntry) {
             $data = json_decode($metricEntry["data"], true);
 
-            if($filter !== ""){
-                foreach($data as $dataKey => $dataValue){
-                    if($dataKey == $filter){
+            if ($filter !== "") {
+                $found = false;
+                foreach ($data as $dataKey => $dataValue) {
+                    if ($dataKey == $filter) {
+                        $found = true;
                         $data = $dataValue;
                         break;
                     }
                 }
+                if (!$found) {
+                    $data = null;
+                }
             }
 
-            if(empty($data)){
+            if (empty($data)) {
                 unset($allMetrics[$metricsIndex]);
                 continue;
             }
@@ -58,6 +66,7 @@ class GetMetricsForContainer
         $labels = array_column($allMetrics, "date");
         $data = array_column($allMetrics, "data");
         return [
+            "formatBytes"=>$this->fetchType->formatTypeAsBytes($type),
             "labels"=>$labels,
             "data"=>$data
         ];

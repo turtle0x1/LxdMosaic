@@ -5,6 +5,7 @@ namespace dhope0000\LXDClient\Tools\Instances\Metrics;
 use dhope0000\LXDClient\Tools\Instances\Metrics\DeployAgentFiles;
 use dhope0000\LXDClient\Tools\Instances\Metrics\DeployGenericPullProfile;
 use dhope0000\LXDClient\Tools\Profiles\AssignProfiles;
+use dhope0000\LXDClient\Objects\Host;
 
 class EnablePullGathering
 {
@@ -18,16 +19,15 @@ class EnablePullGathering
         $this->assignProfiles = $assignProfiles;
     }
 
-    public function enable(int $hostId, string $instance)
+    public function enable(Host $host, string $instance)
     {
-        $this->deployAgentFiles->deploy($hostId, $instance);
-        $this->deployGenericPullProfile->deploy($hostId);
+        $this->deployAgentFiles->deploy($host, $instance);
+        $this->deployGenericPullProfile->deploy($host);
         $this->assignProfiles->assign(
-            $hostId,
+            $host,
             $instance,
             ["lxdMosaicPullMetrics"]
         );
         return true;
     }
-
 }

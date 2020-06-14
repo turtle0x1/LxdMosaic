@@ -2,30 +2,23 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\Metrics;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeployGenericPullProfile
 {
-    public function __construct(LxdClient $lxdClient)
+    public function deploy(Host $host)
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function deploy(int $hostId)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-
         try {
-            $client->profiles->info("lxdMosaicPullMetrics");
+            $host->profiles->info("lxdMosaicPullMetrics");
             return true;
         } catch (\Throwable $e) {
-            return $this->deployProfile($client);
+            return $this->deployProfile($host);
         }
     }
 
-    private function deployProfile($client)
+    private function deployProfile($host)
     {
-        return $client->profiles->create("lxdMosaicPullMetrics", "Indicates LxdMosaic should pull metrics from these instances", [
+        return $host->profiles->create("lxdMosaicPullMetrics", "Indicates LxdMosaic should pull metrics from these instances", [
             "environment.lxdMosaicPullMetrics"=>"y"
         ]);
     }

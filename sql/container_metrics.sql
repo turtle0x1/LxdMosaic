@@ -3,7 +3,8 @@ CREATE TABLE `Instance_Metric_Types` (
     `IMT_Date_Created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     `IMT_Name` VARCHAR(255) NOT NULL,
     `IMT_Description` TEXT NOT NULL,
-    `IMT_Metrics_Template_Key` VARCHAR(255) NOT  NULL
+    `IMT_Metrics_Template_Key` VARCHAR(255) NOT  NULL,
+    `IMT_Format_Bytes` TINYINT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `Instance_Metric_Values` (
@@ -22,6 +23,18 @@ INSERT INTO `Instance_Metric_Types` (
     `IMT_Metrics_Template_Key`
 ) VALUES (
     "Load Averages",
-    "Load averages for containers",
+    "Load averages for instance",
     "loadAvg"
-);
+), (
+    "Memory Usage",
+    "Memory usage for instance",
+    "memoryUsage"
+), (
+    "Network Usage",
+    "Network usage for instance",
+    "networkUsage"
+), (
+    "Stroage Usage",
+    "Storage usage for instance",
+    "storageUsage"
+),

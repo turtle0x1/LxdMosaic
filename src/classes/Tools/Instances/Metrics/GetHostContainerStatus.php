@@ -2,63 +2,70 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\Metrics;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Profiles\GetAllProfiles;
 
 class GetHostContainerStatus
 {
-    public function __construct(LxdClient $lxdClient, GetAllProfiles $getAllProfiles)
+    public function __construct(GetAllProfiles $getAllProfiles)
     {
-        $this->lxdClient = $lxdClient;
         $this->getAllProfiles = $getAllProfiles;
     }
 
     public function get()
     {
-        $allProfiles = $this->getAllProfiles->getAllProfiles();
+        $allProfiles = $this->getAllProfiles->getAllProfiles(true);
 
-        $output = [];
+        foreach ($allProfiles["clusters"] as $cluster) {
+            foreach ($cluster["members"] as &$host) {
+                $this->addHostDetails($host);
+            }
+        }
 
-        foreach($allProfiles as $host => $details){
-            $instancesToScan = ["pullMetrics"=>[]];
+        foreach ($allProfiles["standalone"]["members"] as &$host) {
+            $this->addHostDetails($host);
+        }
 
-            foreach($details["profiles"] as $profile){
-                $pDetails = $profile["details"];
+        return $allProfiles;
+    }
+    private function addHostDetails(&$host)
+    {
+        $instances = [];
+        $instancesToScan = ["pullMetrics"=>[]];
+        foreach ($host->getCustomProp("profiles") as $profile) {
+            if (!isset($profile["config"])) {
+                continue;
+            }
 
-                if(!isset($pDetails["config"])){
-                    continue;
-                }
+            $config = $profile["config"];
 
-                $config = $pDetails["config"];
+            $pullMetrics = isset($config["environment.lxdMosaicPullMetrics"]);
 
-                $pullMetrics = isset($config["environment.lxdMosaicPullMetrics"]);
+            if (!$pullMetrics) {
+                continue;
+            }
 
-                if(!$pullMetrics){
-                    continue;
-                }
+            foreach ($profile["used_by"] as $instance) {
+                $instance = str_replace("/1.0/instances/", "", $instance);
+                $instance = str_replace("/1.0/containers/", "", $instance);
 
-
-
-                foreach($pDetails["used_by"] as $instance){
-                    $instance = str_replace("/1.0/instances/", "", $instance);
-                    $instance = str_replace("/1.0/containers/", "", $instance);
-
+                if (strpos($instance, "?project=default") !== false) {
+                    $instance = str_replace("?project=default", "", $instance);
                     $instancesToScan["pullMetrics"][] = $instance;
                 }
             }
-            $client = $this->lxdClient->getANewClient($details["hostId"]);
-            $allInstances = $client->instances->all();
-            unset($details["profiles"]);
-            $details["instances"] = [];
-            foreach($allInstances as $instance){
-                $details["instances"][] = [
-                    "name"=>$instance,
-                    "pullMetrics"=>in_array($instance, $instancesToScan["pullMetrics"])
-                ];
-            }
-            $output[$host] = $details;
-
         }
-        return $output;
+
+        $allInstances = $host->instances->all();
+        foreach ($allInstances as $instance) {
+            $instances[] = [
+                "name"=>$instance,
+                "pullMetrics"=>in_array($instance, $instancesToScan["pullMetrics"])
+            ];
+        }
+
+        $host->removeCustomProp("resources");
+        $host->removeCustomProp("profiles");
+        $host->setCustomProp("instances", $instances);
+        return $host;
     }
 }
