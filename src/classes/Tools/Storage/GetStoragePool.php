@@ -11,11 +11,10 @@ class GetStoragePool
     {
         $info = $host->storage->info($poolName);
         $info["resources"] = $host->storage->resources->info($poolName);
-        $info["used_by"] = StringTools::usedByStringsToLinks(
-            $host->getHostId(),
-            $info["used_by"],
-            $host->getAlias()
-        );
+        // $info["used_by"] = StringTools::usedByStringsToLinks(
+        //     $host,
+        //     $info["used_by"]
+        // );
         return $info;
     }
 }
