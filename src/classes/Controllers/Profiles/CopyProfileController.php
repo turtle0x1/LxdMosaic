@@ -2,6 +2,8 @@
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Tools\Profiles\Copy;
+use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CopyProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,12 +13,12 @@ class CopyProfileController implements \dhope0000\LXDClient\Interfaces\RecordAct
     }
 
     public function copyProfile(
-        int $hostId,
+        Host $host,
         string $profile,
-        array $targetHosts,
+        HostsCollection $targetHosts,
         string $newName
     ) {
-        $response = $this->copy->copyToTargetHosts($hostId, $profile, $targetHosts, $newName);
+        $response = $this->copy->copyToTargetHosts($host, $profile, $targetHosts, $newName);
         return ["state"=>"success", "message"=>"Copied Profile", "lxdResponse"=>$response];
     }
 }

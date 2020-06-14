@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
 use dhope0000\LXDClient\Tools\CloudConfig\DeployConfigToContainer;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,7 +12,7 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
     }
 
     public function deploy(
-        array $hosts,
+        HostsCollection $hosts,
         string $containerName,
         int $cloudConfigId,
         array $imageDetails,

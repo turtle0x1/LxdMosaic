@@ -2,33 +2,27 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts\Instances;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Devices\Proxy\GetAllInstanceProxies;
+use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class GetAllProxyDevices
 {
-    public function __construct(
-        LxdClient $lxdClient,
-        GetAllInstanceProxies $getAllInstanceProxies
-    ) {
-        $this->lxdClient = $lxdClient;
+    public function __construct(GetAllInstanceProxies $getAllInstanceProxies)
+    {
         $this->getAllInstanceProxies = $getAllInstanceProxies;
     }
 
-    public function get(int $hostId)
+    public function get(Host $host)
     {
-        $client = $this->lxdClient->getANewClient($hostId);
-
-        $instances = $client->instances->all();
-
+        // Recursion target?
+        $instances = $host->instances->all(LxdRecursionLevels::INSTANCE_FULL_RECURSION);
         $output = [];
         foreach ($instances as $instance) {
-            $info = $client->instances->info($instance);
-
-            $devices = $this->getAllInstanceProxies->get($info["devices"]);
+            $devices = $this->getAllInstanceProxies->get($instance["devices"]);
 
             if (!empty($devices)) {
-                $output[$instance] = $devices;
+                $output[$instance["name"]] = $devices;
             }
         }
         return $output;

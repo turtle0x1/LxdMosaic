@@ -1,21 +1,15 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Profiles;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class Rename
 {
-    public function __construct(LxdClient $lxdClient)
-    {
-        $this->client = $lxdClient;
-    }
-
     public function rename(
-        int $hostId,
+        Host $host,
         string $currentName,
         string $newProfileName
     ) {
-        $client = $this->client->getANewClient($hostId);
-        return $client->profiles->rename($currentName, $newProfileName);
+        return $host->profiles->rename($currentName, $newProfileName);
     }
 }

@@ -3,6 +3,7 @@
 namespace dhope0000\LxdClient\Controllers\Images\Aliases;
 
 use dhope0000\LXDClient\Tools\Images\Aliases\RenameAlias;
+use dhope0000\LXDClient\Objects\Host;
 
 class RenameController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,9 +12,9 @@ class RenameController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->renameAlias = $renameAlias;
     }
 
-    public function rename(int $hostId, string $name, string $newName)
+    public function rename(Host $host, string $name, string $newName)
     {
-        $lxdResponse = $this->renameAlias->rename($hostId, $name, $newName);
+        $lxdResponse = $this->renameAlias->rename($host, $name, $newName);
         return ["state"=>"success", "message"=>"Renamed alias", "lxdResponse"=>$lxdResponse];
     }
 }

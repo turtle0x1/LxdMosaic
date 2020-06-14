@@ -2,6 +2,7 @@
 
 namespace dhope0000\LXDClient\Controllers\Instances\Files;
 
+use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Files\DeletePath;
 
 class DeletePathController implements \dhope0000\LXDClient\Interfaces\RecordAction
@@ -14,11 +15,11 @@ class DeletePathController implements \dhope0000\LXDClient\Interfaces\RecordActi
     }
 
     public function delete(
-        int $hostId,
+        Host $host,
         string $container,
         string $path
     ) {
-        $response = $this->deletePath->delete($hostId, $container, $path);
+        $response = $this->deletePath->delete($host, $container, $path);
 
         return ["state"=>"success", "message"=>"Deleted item", "lxdResponse"=>$response];
     }

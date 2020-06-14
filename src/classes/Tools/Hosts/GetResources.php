@@ -1,64 +1,23 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Hosts;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
-use \Opensaucesystems\Lxd\Client;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetResources
 {
-    public function __construct(
-        LxdClient $lxdClient,
-        HostList $hostList,
-        HasExtension $hasExtension
-    ) {
-        $this->client = $lxdClient;
-        $this->hostList = $hostList;
+    public function __construct(HasExtension $hasExtension)
+    {
         $this->hasExtension = $hasExtension;
     }
 
-    public function getHostExtended(int $hostId)
+    public function getHostExtended(Host $host)
     {
-        return $this->getDetails($hostId);
-    }
+        $details = $host->resources->info();
 
-    public function getAllHostRecourses()
-    {
-        $output = array();
-        foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $hostId = $host["Host_ID"];
-            $details = [];
-
-            if ($host["Host_Online"] != true) {
-                $output[$host["Host_Url_And_Port"]] = [
-                    "online"=>false,
-                    "alias"=>$host["Host_Alias"],
-                    "hostId"=>$hostId
-                ];
-                continue;
-            }
-
-
-            $details = $this->getDetails($hostId);
-
-            $details["alias"] = $host["Host_Alias"];
-            $details["hostId"] = $hostId;
-
-
-            $output[$host["Host_Url_And_Port"]] = $details;
-        }
-        return $output;
-    }
-
-    private function getDetails(int $hostId)
-    {
-        $client = $this->client->getANewClient($hostId);
-        $details = $client->resources->info();
-
-        $supportsProjects = $this->hasExtension->checkWithClient($client, "projects");
-        $resCpuSocket = $this->hasExtension->checkWithClient($client, "resources_cpu_socket");
-        $resGpu = $this->hasExtension->checkWithClient($client, "resources_gpu");
+        $supportsProjects = $this->hasExtension->checkWithHost($host, "projects");
+        $resCpuSocket = $this->hasExtension->checkWithHost($host, "resources_cpu_socket");
+        $resGpu = $this->hasExtension->checkWithHost($host, "resources_gpu");
 
         $details["extensions"] = [
             "supportsProjects"=>$supportsProjects,
@@ -69,7 +28,7 @@ class GetResources
         $details["projects"] = [];
 
         if ($supportsProjects) {
-            $details["projects"] = $client->projects->all();
+            $details["projects"] = $host->projects->all();
         }
 
         return $details;

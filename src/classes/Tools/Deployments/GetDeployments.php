@@ -35,9 +35,10 @@ class GetDeployments
     {
         $totalMem = 0;
         $totalContainers = 0;
-        foreach ($containerDetails as $host => $details) {
-            $totalContainers += count($details["containers"]);
-            foreach ($details["containers"] as $container) {
+        foreach ($containerDetails as $host) {
+            $containers = $host->getCustomProp("containers");
+            $totalContainers += count($containers);
+            foreach ($containers as $container) {
                 $totalMem += $container["state"]["memory"]["usage"];
             }
         }

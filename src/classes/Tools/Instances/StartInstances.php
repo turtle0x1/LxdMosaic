@@ -1,27 +1,20 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class StartInstances
 {
-    public function __construct(LxdClient $lxdClient)
+    public function start(Host $host, array $instances)
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function start(int $hostId, array $instances)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-
         foreach ($instances as $instance) {
-            $state = $client->instances->state($instance);
+            $state = $host->instances->state($instance);
 
             if ($state["status_code"] == 103) {
                 continue;
             }
 
-            $client->instances->setState($instance, "start");
+            $host->instances->setState($instance, "start");
         }
 
         return true;

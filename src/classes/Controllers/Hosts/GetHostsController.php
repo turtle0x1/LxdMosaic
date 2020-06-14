@@ -11,6 +11,6 @@ class GetHostsController
     }
     public function getAllHosts()
     {
-        return $this->hostList->getHostList();
+        return $this->hostList->getHostListWithDetails();
     }
 }

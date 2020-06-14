@@ -102,9 +102,13 @@
     function makeImagesHtml(hosthtml, host, selectedProfile = null, selectedHost = null){
         let disabled = "";
 
+        if(host.hostOnline == false){
+            disabled = "disabled text-warning text-strikethrough";
+        }
+
         hosthtml += `<li class="nav-item nav-dropdown">
             <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
-                <i class="fas fa-server"></i> ${host.hostAlias}
+                <i class="fas fa-server"></i> ${host.alias}
             </a>
             <ul class="nav-dropdown-items">`;
 
@@ -118,7 +122,7 @@
             hosthtml += `<li class="nav-item view-image ${active}"
                 data-host-id="${host.hostId}"
                 data-fingerprint="${image.fingerprint}"
-                data-host-alias="${host.hostAlias}"
+                data-host-alias="${host.alias}"
                 >
               <a class="nav-link" href="#">
                 <i class="nav-icon fa fa-${icon}"></i>

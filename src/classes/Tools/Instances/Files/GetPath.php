@@ -2,35 +2,31 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\Files;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class GetPath
 {
-    private $lxdClient;
     private $cache;
 
-    public function __construct(LxdClient $lxdClient, ArrayAdapter $cache)
+    public function __construct(ArrayAdapter $cache)
     {
-        $this->lxdClient = $lxdClient;
         $this->cache = $cache;
     }
 
     public function get(
-        int $hostId,
+        Host $host,
         string $instance,
         string $path,
         string $download
     ) {
-        $client = $this->lxdClient->getANewClient($hostId);
+        $host->callClientMethod("addCache", $this->cache);
 
-        $client->addCache($this->cache, []);
+        $response = $host->instances->files->read($instance, $path);
 
-        $response = $client->instances->files->read($instance, $path);
+        $this->instanceUrlKey = str_replace("/", "", $host->instances->getEndpoint());
 
-        $this->instanceUrlKey = str_replace("/", "", $client->instances->getEndpoint());
-
-        $cacheKey = hash("sha1", "GET " . $client->getUrl() . "/1.0/$this->instanceUrlKey/$instance/files?path=$path");
+        $cacheKey = hash("sha1", "GET " . $host->callClientMethod("getUrl") . "/1.0/$this->instanceUrlKey/$instance/files?path=$path");
 
         if ($response == null) {
             $isDirectory = $this->isCachedResponsePathDirectory($cacheKey);
@@ -47,7 +43,7 @@ class GetPath
         }
 
         // We dont send the output of files here as its not required
-        $contents = is_string($response) ? null : $this->labelDirContents($client, $instance, $path, $response);
+        $contents = is_string($response) ? null : $this->labelDirContents($host, $instance, $path, $response);
 
         return [
             "isDirectory"=>$isDirectory,
@@ -55,13 +51,13 @@ class GetPath
         ];
     }
 
-    private function labelDirContents($client, $instance, $path, $contents)
+    private function labelDirContents($host, $instance, $path, $contents)
     {
         foreach ($contents as $index => $content) {
             $contentPath = $path == "/" ? "/$content" : "$path/$content";
 
-            $response = $client->instances->files->read($instance, $contentPath);
-            $cacheKey = hash("sha1", "GET " . $client->getUrl() . "/1.0/$this->instanceUrlKey/$instance/files?path=$contentPath");
+            $response = $host->instances->files->read($instance, $contentPath);
+            $cacheKey = hash("sha1", "GET " . $host->callClientMethod("getUrl") . "/1.0/$this->instanceUrlKey/$instance/files?path=$contentPath");
             $contents[$index] = [
                 "name"=>$content,
                 "isDirectory"=>$this->isCachedResponsePathDirectory($cacheKey)

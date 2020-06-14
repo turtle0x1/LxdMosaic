@@ -1,18 +1,12 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class RenameInstance
 {
-    public function __construct(LxdClient $lxdClient)
+    public function rename(Host $host, string $instance, string $newInstance)
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function rename(int $hostId, string $instance, string $newInstance)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->instances->rename($instance, $newInstance, true);
+        return $host->instances->rename($instance, $newInstance, true);
     }
 }

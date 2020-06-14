@@ -3,9 +3,9 @@
 namespace dhope0000\LXDClient\Tools\Clusters;
 
 use dhope0000\LXDClient\Model\Hosts\HostList;
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Tools\Hosts\GetResources;
+use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class GetAllClusters
 {
@@ -13,12 +13,10 @@ class GetAllClusters
 
     public function __construct(
         HostList $hostList,
-        LxdClient $lxdClient,
         GetDetails $getDetails,
         GetResources $getResources
     ) {
         $this->hostList = $hostList;
-        $this->lxdClient = $lxdClient;
         $this->getDetails = $getDetails;
         $this->getResources = $getResources;
     }
@@ -35,7 +33,7 @@ class GetAllClusters
 
         $clusters = [];
 
-        $hostClusterRelationship = [];
+        $hostsInACluster = [];
 
         $hosts = $this->hostList->getOnlineHostsWithDetails();
 
@@ -43,32 +41,24 @@ class GetAllClusters
             // I belive one host can only belong to one cluster so until that
             // isn't true then we can skip checking hosts we already know
             // are in a cluster some where
-            if (in_array($host["Host_Url_And_Port"], $hostClusterRelationship)) {
+            if (in_array($host->getUrl(), $hostsInACluster)) {
                 continue;
             }
 
-            $client = $this->lxdClient->getANewClient($host["Host_ID"], true, false);
-
-            if (!$client->cluster->info()["enabled"]) {
+            if (!$host->cluster->info()["enabled"]) {
                 continue;
             }
 
-            $clusterMembers = $client->cluster->members->all();
+            $clusterMembers = $host->cluster->members->all(LxdRecursionLevels::INSTANCE_FULL_RECURSION);
 
             foreach ($clusterMembers as $member) {
-                $info = $client->cluster->members->info($member);
+                $memberHostObj = $this->getDetails->fetchHostByUrl($member["url"]);
 
-                $hostId =  $this->getDetails->getIdByUrlMatch($info["url"]);
-                $memberClient = $this->lxdClient->getANewClient($hostId);
+                $memberHostObj->setCustomProp("resources", $this->getResources->getHostExtended($memberHostObj));
+                $memberHostObj->setCustomProp("status", $member["status"]);
 
-                $info["resources"] = $this->getResources->getHostExtended($hostId);
-                $info["hostId"] = $hostId;
-                $ipAndAlias = $this->getDetails->getIpAndAlias($hostId);
-                $info["alias"] = $ipAndAlias["alias"];
-                $info["urlAndPort"] = $ipAndAlias["urlAndPort"];
-
-                $clusters[$clusterId]["members"][] = $info;
-                $hostClusterRelationship[] = $info["url"];
+                $clusters[$clusterId]["members"][] = $memberHostObj;
+                $hostsInACluster[] = $member["url"];
             }
             $clusterId++;
         }
@@ -84,15 +74,17 @@ class GetAllClusters
 
             $onlineMembers = 0;
 
-            foreach ($cluster["members"] as $memberIndex => $member) {
-                $totalMemory += $member["resources"]["memory"]["total"];
-                $usedMemory += $member["resources"]["memory"]["used"];
+            foreach ($cluster["members"] as &$member) {
+                $resources = $member->getCustomProp("resources");
+
+                $totalMemory += $resources["memory"]["total"];
+                $usedMemory += $resources["memory"]["used"];
 
                 if ($removeResources) {
-                    unset($clusters[$index]["members"][$memberIndex]["resources"]);
+                    $member->removeCustomProp("resources");
                 }
 
-                if ($member["status"] == "Online") {
+                if ($member->getCustomProp("status") == "Online") {
                     $onlineMembers++;
                 }
             }

@@ -6,6 +6,7 @@ use dhope0000\LXDClient\Tools\CloudConfig\DeployToProfile;
 use dhope0000\LXDClient\Tools\Instances\CreateInstance;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
 use dhope0000\LXDClient\Constants\LxdInstanceTypes;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class DeployConfigToContainer
 {
@@ -18,7 +19,7 @@ class DeployConfigToContainer
     }
 
     public function deploy(
-        array $hostUrls,
+        HostsCollection $hosts,
         string $containerName,
         array $imageDetails,
         string $profileName = "",
@@ -37,7 +38,7 @@ class DeployConfigToContainer
 
         $this->deployToProfile->deployToHosts(
             $profileName,
-            $hostUrls,
+            $hosts,
             $cloudConfigId,
             $cloudConfigRevId
         );
@@ -46,7 +47,7 @@ class DeployConfigToContainer
             LxdInstanceTypes::CONTAINER,
             $containerName,
             $additionalProfiles,
-            $hostUrls,
+            $hosts,
             $imageDetails,
             "",
             [$profileName],

@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Tools\Profiles\Rename;
+use dhope0000\LXDClient\Objects\Host;
 
 class RenameProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,12 +12,12 @@ class RenameProfileController implements \dhope0000\LXDClient\Interfaces\RecordA
     }
 
     public function rename(
-        int $hostId,
+        Host $host,
         string $currentName,
         string $newProfileName
     ) {
         $this->rename->rename(
-            $hostId,
+            $host,
             $currentName,
             $newProfileName
         );

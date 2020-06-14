@@ -2,18 +2,12 @@
 
 namespace dhope0000\LXDClient\Tools\Projects;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class RenameProject
 {
-    public function __construct(LxdClient $lxdClient)
+    public function rename(Host $host, string $project, string $newName)
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function rename(int $hostId, string $project, string $newName)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->projects->rename($project, $newName);
+        return $host->projects->rename($project, $newName);
     }
 }

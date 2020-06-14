@@ -3,6 +3,8 @@ namespace dhope0000\LXDClient\App;
 
 use \DI\Container;
 use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\RecordAction;
+use dhope0000\LXDClient\Model\Hosts\GetDetails;
+use dhope0000\LXDClient\Model\Hosts\HostList;
 
 class RouteApi
 {
@@ -10,10 +12,16 @@ class RouteApi
     private $project;
     private $userId;
 
-    public function __construct(Container $container, RecordAction  $recordAction)
-    {
+    public function __construct(
+        Container $container,
+        RecordAction  $recordAction,
+        GetDetails $getDetails,
+        HostList $hostList
+    ) {
         $this->container = $container;
         $this->recordAction = $recordAction;
+        $this->getDetails = $getDetails;
+        $this->hostList = $hostList;
     }
 
     public function getRequestedProject()
@@ -21,7 +29,7 @@ class RouteApi
         return $this->project;
     }
 
-    public function getUserId() :int
+    public function getUserId()
     {
         return $this->userId;
     }
@@ -76,20 +84,36 @@ class RouteApi
         $reflectedMethod = new \ReflectionMethod($class, $method);
         $paramaters = $reflectedMethod->getParameters();
         $o = [];
+        $specialParams = ["userId", "host"];
         foreach ($paramaters as $param) {
             $name = $param->getName();
             $hasDefault = $param->isDefaultValueAvailable();
 
-            if ($name === "userId") {
+            $type = $param->getType();
+            if (!empty($type)) {
+                $type = $type->getName();
+            }
+            
+            if ($name == "host" && !isset($passedArguments["hostId"])) {
+                throw new \Exception("Missing paramater hostId", 1);
+            }
+
+
+            if ($hasDefault && !isset($passedArguments[$name])) {
+                $o[$name] = $param->getDefaultValue();
+            } elseif ($name === "userId") {
                 $o[$name] = $userId;
-                continue;
+            } elseif ($name == "host") {
+                $o[$name] = $this->getDetails->fetchHost($passedArguments["hostId"]);
+            } elseif ($type == "dhope0000\LXDClient\Objects\Host") {
+                $o[$name] = $this->getDetails->fetchHost($passedArguments[$name]);
+            } elseif ($type == "dhope0000\LXDClient\Objects\HostsCollection") {
+                $o[$name] = $this->hostList->getHostCollection($passedArguments[$name]);
             } elseif (!$hasDefault && !isset($passedArguments[$name])) {
                 throw new \Exception("Missing Paramater $name", 1);
-            } elseif ($hasDefault && !isset($passedArguments[$name])) {
-                $o[$name] = $param->getDefaultValue();
-                continue;
+            } else {
+                $o[$name] = $passedArguments[$name];
             }
-            $o[$name] = $passedArguments[$name];
         }
         return $o;
     }

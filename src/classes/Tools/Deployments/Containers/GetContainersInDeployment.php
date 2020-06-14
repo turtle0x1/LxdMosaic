@@ -2,34 +2,31 @@
 
 namespace dhope0000\LXDClient\Tools\Deployments\Containers;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 
 class GetContainersInDeployment
 {
-    public function __construct(LxdClient $lxdClient, GetConfig $getConfig)
+    public function __construct(GetConfig $getConfig)
     {
-        $this->client = $lxdClient;
         $this->getConfig = $getConfig;
     }
 
-    public function getFromProfile(array $profilesInDeployment)
+    public function getFromProfile(array $hostsWithProfiles)
     {
-        $output = [];
-        $revDetails = [];
-        foreach ($profilesInDeployment as $host => $data) {
-            $client = $this->client->getANewClient($data["hostId"]);
-            foreach ($data["profiles"] as $profile) {
+        $revCache = [];
+        foreach ($hostsWithProfiles as &$host) {
+            $host->setCustomProp("hostInfo", $host->host->info());
+            $containers = [];
+            foreach ($host->getCustomProp("profiles") as $profile) {
+                $revId = $profile["revId"];
                 foreach ($profile["usedBy"] as $item) {
                     if (strpos($item, "/1.0/containers") !== false || strpos($item, "/1.0/instances") !== false) {
-                        $revId = $profile["revId"];
-
-                        if (isset($revDetails[$revId])) {
-                            $revInfo = $revDetails[$revId];
-                        } else {
+                        if (!isset($revCache[$revId])) {
                             $revInfo = $this->getConfig->getCloudConfigByRevId($revId);
-                            $revDetails[$revId] = $revInfo;
+                            $revCache[$revId] = $revInfo;
                         }
+
+                        $revInfo = $revCache[$revId];
 
                         $containerName = str_replace("/1.0/containers/", "", $item);
                         $containerName = str_replace("/1.0/instances/", "", $item);
@@ -38,23 +35,18 @@ class GetContainersInDeployment
                             continue;
                         }
 
-                        $info = $client->instances->info($containerName);
-                        if (!isset($output[$host])) {
-                            $output[$host] = [
-                                "hostId"=>$data["hostId"],
-                                "containers"=>[],
-                                "hostInfo"=>$client->host->info()
-                            ];
-                        }
+                        $containerName = preg_replace("/\?project=.*/", "", $containerName);
+
+                        $info = $host->instances->info($containerName);
 
                         if ($info["location"] !== "none") {
-                            if ($output[$host]["hostInfo"]["environment"]["server_name"] !== $info["location"]) {
+                            if ($host->getCustomProp("hostInfo")["environment"]["server_name"] !== $info["location"]) {
                                 continue;
                             }
                         }
 
-                        $state = $client->instances->state($containerName);
-                        $output[$host]["containers"][] = [
+                        $state = $host->instances->state($containerName);
+                        $containers[] = [
                             "createdAt"=>$info["created_at"],
                             "statusCode"=>$info["status_code"],
                             "name"=>$info["name"],
@@ -67,7 +59,8 @@ class GetContainersInDeployment
                     }
                 }
             }
+            $host->setCustomProp("containers", $containers);
         }
-        return $output;
+        return $hostsWithProfiles;
     }
 }

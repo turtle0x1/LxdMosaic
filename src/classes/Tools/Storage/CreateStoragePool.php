@@ -2,22 +2,14 @@
 
 namespace dhope0000\LXDClient\Tools\Storage;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateStoragePool
 {
-    public function __construct(HostList $hostList, LxdClient $lxdClient)
+    public function create(HostsCollection $hosts, string $name, string $driver, array $config)
     {
-        $this->hostList = $hostList;
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function create(array $hosts, string $name, string $driver, array $config)
-    {
-        foreach($hosts as $hostId){
-            $client = $this->lxdClient->getANewClient($hostId);
-            $client->storage->create($name, $driver, $config);
+        foreach ($hosts as $host) {
+            $host->storage->create($name, $driver, $config);
         }
         return true;
     }

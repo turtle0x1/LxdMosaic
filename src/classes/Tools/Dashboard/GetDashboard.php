@@ -35,14 +35,14 @@ class GetDashboard
     private function addCurrentProjects($userId, $clustersAndHosts)
     {
         foreach ($clustersAndHosts["clusters"] as $index => $cluster) {
-            foreach ($cluster["members"] as $memIndex => $member) {
-                $project = $this->fetchUserProject->fetchOrDefault($userId, $member["hostId"]);
-                $clustersAndHosts["clusters"][$index]["members"][$memIndex]["currentProject"] = $project;
+            foreach ($cluster["members"] as &$member) {
+                $project = $this->fetchUserProject->fetchOrDefault($userId, $member->getHostId());
+                $member->setCustomProp("currentProject", $project);
             }
         }
-        foreach ($clustersAndHosts["standalone"]["members"] as $index => $member) {
-            $project = $this->fetchUserProject->fetchOrDefault($userId, $member["hostId"]);
-            $clustersAndHosts["standalone"]["members"][$index]["currentProject"] = $project;
+        foreach ($clustersAndHosts["standalone"]["members"] as $index => &$member) {
+            $project = $this->fetchUserProject->fetchOrDefault($userId, $member->getHostId());
+            $member->setCustomProp("currentProject", $project);
         }
         return $clustersAndHosts;
     }
@@ -60,11 +60,11 @@ class GetDashboard
         }
 
         foreach ($clustersAndHosts["standalone"]["members"] as $host) {
-            if ((int)$host["hostOnline"] === 0) {
+            if (!$host->hostOnline()) {
                 continue;
             }
-            $memory["total"] += $host["resources"]["memory"]["total"];
-            $memory["used"] += $host["resources"]["memory"]["used"];
+            $memory["total"] += $host->getCustomProp("resources")["memory"]["total"];
+            $memory["used"] += $host->getCustomProp("resources")["memory"]["used"];
         }
 
         return [

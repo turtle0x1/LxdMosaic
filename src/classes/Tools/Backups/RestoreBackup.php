@@ -3,28 +3,30 @@
 namespace dhope0000\LXDClient\Tools\Backups;
 
 use dhope0000\LXDClient\Model\Backups\FetchBackup;
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class RestoreBackup
 {
     private $fetchBackup;
-    private $lxdClient;
 
-    public function __construct(FetchBackup $fetchBackup, LxdClient $lxdClient)
+    public function __construct(FetchBackup $fetchBackup)
     {
         $this->fetchBackup = $fetchBackup;
-        $this->lxdClient = $lxdClient;
     }
 
-    public function restore(int $backupId, int $targetHost)
+    public function restore(int $backupId, Host $targetHost)
     {
         $backup = $this->fetchBackup->fetch($backupId);
 
-        $client = $this->lxdClient->getANewClient($targetHost);
-
-        return $client->instances->create("", [
+        $response = $targetHost->instances->create("", [
             "source"=>"backup",
             "file"=>file_get_contents($backup["localPath"])
         ], true);
+
+        if (isset($response["err"]) && $response["err"] !== "") {
+            throw new \Exception($response["err"], 1);
+        }
+
+        return $response;
     }
 }

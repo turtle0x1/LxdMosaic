@@ -1,18 +1,12 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Images\Aliases;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class RenameAlias
 {
-    public function __construct(LxdClient $lxdClient)
+    public function rename(Host $host, string $name, string $newName)
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function rename(int $hostId, string $name, string $newName)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->images->aliases->rename($name, $newName);
+        return $host->images->aliases->rename($name, $newName);
     }
 }

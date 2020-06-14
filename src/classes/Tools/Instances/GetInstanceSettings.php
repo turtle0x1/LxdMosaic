@@ -2,23 +2,19 @@
 
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Model\Instances\Settings\GetSettings;
 
 class GetInstanceSettings
 {
-    public function __construct(
-        LxdClient $lxdClient,
-        GetSettings $getSettings
-    ) {
-        $this->client = $lxdClient;
+    public function __construct(GetSettings $getSettings)
+    {
         $this->getSettings = $getSettings;
     }
 
-    public function get(int $hostId, string $instance)
+    public function get(Host $host, string $instance)
     {
-        $client = $this->client->getANewClient($hostId);
-        $info = $client->instances->info($instance);
+        $info = $host->instances->info($instance);
         $enabledConfigs = $this->getSettings->getAllEnabledNamesAndDefaults();
         $enabledConfigNames = array_column($enabledConfigs, "key");
         $output = [];

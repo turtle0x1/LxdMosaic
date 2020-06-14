@@ -3,6 +3,7 @@
 namespace dhope0000\LxdClient\Controllers\Images\Aliases;
 
 use dhope0000\LXDClient\Tools\Images\Aliases\DeleteAlias;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,9 +12,9 @@ class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->deleteAlias = $deleteAlias;
     }
 
-    public function delete(int $hostId, string $name)
+    public function delete(Host $host, string $name)
     {
-        $lxdResponse = $this->deleteAlias->delete($hostId, $name);
+        $lxdResponse = $this->deleteAlias->delete($host, $name);
         return ["state"=>"success", "message"=>"Deleted alias", "lxdResponse"=>$lxdResponse];
     }
 }

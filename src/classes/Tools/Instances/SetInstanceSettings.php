@@ -2,19 +2,13 @@
 
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class SetInstanceSettings
 {
-    public function __construct(LxdClient $lxdClient)
+    public function set(Host $host, string $instance, array $settings)
     {
-        $this->client = $lxdClient;
-    }
-
-    public function set(int $hostId, string $instance, array $settings)
-    {
-        $client = $this->client->getANewClient($hostId);
-        $client->instances->update($instance, ["config"=>$settings]);
+        $host->instances->update($instance, ["config"=>$settings]);
         return true;
     }
 }

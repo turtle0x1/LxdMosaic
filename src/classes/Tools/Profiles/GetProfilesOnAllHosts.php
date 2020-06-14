@@ -6,9 +6,8 @@ use dhope0000\LXDClient\Model\Hosts\HostList;
 
 class GetProfilesOnAllHosts
 {
-    public function __construct(LxdClient $lxdClient, HostList $hostList)
+    public function __construct(HostList $hostList)
     {
-        $this->client = $lxdClient;
         $this->hostList = $hostList;
     }
 
@@ -20,8 +19,7 @@ class GetProfilesOnAllHosts
         $seenProfiles = [];
 
         foreach ($hosts as $host) {
-            $client = $this->client->getANewClient($host["Host_ID"]);
-            $hostProfiles = $client->profiles->all();
+            $hostProfiles = $host->profiles->all();
             foreach ($hostProfiles as $profile) {
                 if (!isset($seenProfiles[$profile])) {
                     $seenProfiles[$profile] = 0;

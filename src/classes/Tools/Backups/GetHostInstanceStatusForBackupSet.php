@@ -22,27 +22,25 @@ class GetHostInstanceStatusForBackupSet
     {
         $hostsContainers = $this->getHostsInstances->getAll(true);
 
-        $backupHostIds = array_unique(array_column($backups, "hostId"));
-
         $backupsByHostId = $this->createBackupsByHostIdStruct($backups);
 
         $missingBackups = [];
 
-        foreach ($hostsContainers as $hostIdent => $host) {
-            if (empty($host["containers"])) {
+        foreach ($hostsContainers as $host) {
+            if (empty($host->getCustomProp("containers"))) {
                 continue;
             }
 
             $backupsToSearch = [];
 
-            if (isset($backupsByHostId[$host["hostId"]])) {
-                $backupsToSearch = $backupsByHostId[$host["hostId"]];
+            if (isset($backupsByHostId[$host->getHostId()])) {
+                $backupsToSearch = $backupsByHostId[$host->getHostId()];
             }
 
             $containers = [];
             $seenContainerNames = [];
 
-            foreach ($host["containers"] as $name => $container) {
+            foreach ($host->getCustomProp("containers") as $name => $container) {
                 $lastBackup = $this->findLastBackup($name, $backupsToSearch);
                 $container = $this->extractContainerInfo($name, $container);
                 $allBackups = $this->findAllBackups($name, $backupsToSearch);
@@ -67,11 +65,10 @@ class GetHostInstanceStatusForBackupSet
                 }
             }
 
-            $host["containers"] = $containers;
+            $host->setCustomProp("containers", $containers);
+            $host->removeCustomProp("hostInfo", $containers);
 
-            unset($host["hostInfo"]);
-
-            $missingBackups[$hostIdent] = $host;
+            $missingBackups[$host->getAlias()] = $host;
         }
         return $missingBackups;
     }

@@ -1,6 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Instances;
 
+use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\SetInstanceSettings;
 
 class SetSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
@@ -10,9 +11,9 @@ class SetSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAct
         $this->setInstanceSettings = $setInstanceSettings;
     }
 
-    public function set(int $hostId, string $container, array $settings)
+    public function set(Host $host, string $container, array $settings)
     {
-        $this->setInstanceSettings->set($hostId, $container, $settings);
+        $this->setInstanceSettings->set($host, $container, $settings);
         return ["state"=>"success", "message"=>"Updated container settings"];
     }
 }

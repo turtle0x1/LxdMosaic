@@ -1,18 +1,12 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Images\Aliases;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class CreateAlias
 {
-    public function __construct(LxdClient $lxdClient)
+    public function create(Host $host, string $fingerprint, string $name, string $description = "")
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function create(int $hostId, string $fingerprint, string $name, string $description = "")
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->images->aliases->create($fingerprint, $name, $description);
+        return $host->images->aliases->create($fingerprint, $name, $description);
     }
 }

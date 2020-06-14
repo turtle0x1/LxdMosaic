@@ -124,17 +124,17 @@ var currentProfileDetails = {
 
 function makeHostHtml(hosthtml, host, selectedProfile = null, selectedHost = null){
     let disabled = "";
-    if(host.online == false){
+    if(host.hostOnline == false){
         disabled = "disabled text-warning text-strikethrough";
     }
 
     hosthtml += `<li class="nav-item nav-dropdown">
         <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
-            <i class="fas fa-server"></i> ${host.hostAlias}
+            <i class="fas fa-server"></i> ${host.alias}
         </a>
         <ul class="nav-dropdown-items">`;
 
-    $.each(host.profiles, function(profileName, details){
+    $.each(host.profiles, function(_, profileName){
         let active = "";
         if(host.hostId == selectedHost && profileName == selectedProfile ){
             active = "text-info";
@@ -143,7 +143,7 @@ function makeHostHtml(hosthtml, host, selectedProfile = null, selectedHost = nul
         hosthtml += `<li class="nav-item view-profile ${active}"
             data-host-id="${host.hostId}"
             data-profile="${profileName}"
-            data-alias="${host.hostAlias}"
+            data-alias="${host.alias}"
             >
           <a class="nav-link" href="#">
             <i class="nav-icon fa fa-user"></i>

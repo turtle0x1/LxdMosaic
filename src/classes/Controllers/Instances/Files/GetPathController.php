@@ -2,6 +2,7 @@
 
 namespace dhope0000\LXDClient\Controllers\Instances\Files;
 
+use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Files\GetPath;
 
 class GetPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
@@ -14,11 +15,11 @@ class GetPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
     }
 
     public function get(
-        int $hostId,
+        Host $host,
         string $container,
         string $path,
         $download
     ) {
-        return $this->getPath->get($hostId, $container, $path, (int) $download);
+        return $this->getPath->get($host, $container, $path, (int) $download);
     }
 }

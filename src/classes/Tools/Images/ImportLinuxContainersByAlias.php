@@ -2,22 +2,15 @@
 
 namespace dhope0000\LXDClient\Tools\Images;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class ImportLinuxContainersByAlias
 {
-    public function __construct(
-        LxdClient $lxdClient
-    ) {
-        $this->client = $lxdClient;
-    }
-
-    public function import(array $hosts, array $aliases)
+    public function import(HostsCollection $hosts, array $aliases)
     {
-        foreach ($hosts as $hostId) {
-            $client = $this->client->getANewClient($hostId);
+        foreach ($hosts as $host) {
             foreach ($aliases as $alias) {
-                $output[] = $client->images->createFromRemote(
+                $output[] = $host->images->createFromRemote(
                     "https://images.linuxcontainers.org:8443",
                     [
                         "alias"=>$alias

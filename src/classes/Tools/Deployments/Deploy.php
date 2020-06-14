@@ -10,6 +10,8 @@ use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 use dhope0000\LXDClient\Tools\InstanceSettings\CreatePhoneHomeVendorString;
 use dhope0000\LXDClient\Tools\Deployments\Containers\StoreDeployedContainerNames;
 use dhope0000\LXDClient\Constants\LxdInstanceTypes;
+use dhope0000\LXDClient\Model\Hosts\GetDetails;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class Deploy
 {
@@ -19,7 +21,8 @@ class Deploy
         CreateInstance $createInstance,
         GetConfig $getConfig,
         CreatePhoneHomeVendorString $createPhoneHomeVendorString,
-        StoreDeployedContainerNames $storeDeployedContainerNames
+        StoreDeployedContainerNames $storeDeployedContainerNames,
+        GetDetails $getDetails
     ) {
         $this->deployToProfile = $deployToProfile;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
@@ -27,6 +30,7 @@ class Deploy
         $this->getConfig = $getConfig;
         $this->createPhoneHomeVendorString = $createPhoneHomeVendorString;
         $this->storeDeployedContainerNames = $storeDeployedContainerNames;
+        $this->getDetails = $getDetails;
     }
 
     public function deploy(int $deploymentId, array $instances)
@@ -44,14 +48,17 @@ class Deploy
         foreach ($instances as $instance) {
             foreach ($instance["hosts"] as $hostId) {
                 $hostId = (int) $hostId;
+                $host = $this->getDetails->fetchHost($hostId);
                 $profile = $this->hostHaveDeploymentProfiles->getProfileName(
-                    $hostId,
+                    $host,
                     $deploymentId,
                     $instance["revId"]
                 );
 
+                $hostCollection = new HostsCollection([$host]);
+
                 if (!$profile && !isset($revProfileNames[$instance["revId"]])) {
-                    $profile = $this->deployProfile($hostId, $deploymentId, $instance["revId"], $vendorData);
+                    $profile = $this->deployProfile($hostCollection, $deploymentId, $instance["revId"], $vendorData);
                     $revProfileNames[$instance["revId"]] = $profile;
                 }
 
@@ -68,7 +75,7 @@ class Deploy
                         LxdInstanceTypes::CONTAINER,
                         $containerName,
                         $profiles,
-                        [$hostId],
+                        $hostCollection,
                         $imageDetails[$instance["revId"]]
                     );
 
@@ -90,12 +97,12 @@ class Deploy
         ];
     }
 
-    private function deployProfile(int $hostId, int $deploymentId, int $revId, string $vendorData)
+    private function deployProfile(HostsCollection $hostCollection, int $deploymentId, int $revId, string $vendorData)
     {
         $profileName = StringTools::random(12);
         $this->deployToProfile->deployToHosts(
             $profileName,
-            [$hostId],
+            $hostCollection,
             null,
             $revId,
             [

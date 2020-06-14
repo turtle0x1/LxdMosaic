@@ -1,6 +1,7 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Hosts\Instances;
 
+use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\StopInstances;
 
 class StopInstancesController implements \dhope0000\LXDClient\Interfaces\RecordAction
@@ -9,10 +10,10 @@ class StopInstancesController implements \dhope0000\LXDClient\Interfaces\RecordA
     {
         $this->stopInstances = $stopInstances;
     }
-    
-    public function stop(int $hostId, array $containers)
+
+    public function stop(Host $host, array $containers)
     {
-        $this->stopInstances->stop($hostId, $containers);
+        $this->stopInstances->stop($host, $containers);
         return ["state"=>"success", "message"=>"Stopped Containers"];
     }
 }

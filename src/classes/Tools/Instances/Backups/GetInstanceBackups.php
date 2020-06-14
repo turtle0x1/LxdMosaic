@@ -2,38 +2,33 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\Backups;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\FetchInstanceBackups;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetInstanceBackups
 {
-    private $lxdClient;
     private $fetchInstanceBackups;
     private $hasExtension;
 
     public function __construct(
-        LxdClient $lxdClient,
         FetchInstanceBackups $fetchInstanceBackups,
         HasExtension $hasExtension
     ) {
-        $this->lxdClient = $lxdClient;
         $this->fetchInstanceBackups = $fetchInstanceBackups;
         $this->hasExtension = $hasExtension;
     }
 
-    public function get(int $hostId, string $instance)
+    public function get(Host $host, string $instance)
     {
-        $client = $this->lxdClient->getANewClient($hostId);
-
-        if ($this->hasExtension->checkWithClient($client, LxdApiExtensions::CONTAINER_BACKUP) !== true) {
+        if ($this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP) !== true) {
             throw new \Exception("Host doesn't support backups", 1);
         }
 
-        $localBackups = $this->fetchInstanceBackups->fetchAll($hostId, $instance);
+        $localBackups = $this->fetchInstanceBackups->fetchAll($host->getHostId(), $instance);
 
-        $remoteBackups = $this->getRemoteBackups($client, $instance, $localBackups);
+        $remoteBackups = $this->getRemoteBackups($host, $instance, $localBackups);
 
         return [
             "localBackups"=>$localBackups,
@@ -42,13 +37,12 @@ class GetInstanceBackups
     }
 
 
-    private function getRemoteBackups($client, string $instance, array $localBackups)
+    private function getRemoteBackups($host, string $instance, array $localBackups)
     {
-        $backups = $client->instances->backups->all($instance);
+        $backups = $host->instances->backups->all($instance);
 
         foreach ($backups as $index => $backupName) {
-            $info = $client->instances->backups->info($instance, $backupName);
-
+            $info = $host->instances->backups->info($instance, $backupName);
 
             $info["storedLocally"] = $this->backupDownloadedLocally($localBackups, $backupName, $info["created_at"]);
             $backups[$index] = $info;

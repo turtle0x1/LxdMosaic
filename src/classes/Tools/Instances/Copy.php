@@ -1,33 +1,32 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Migrate;
 
 class Copy
 {
-    public function __construct(LxdClient $lxdClient, Migrate $migrate)
+    public function __construct(Migrate $migrate)
     {
-        $this->lxdClient = $lxdClient;
         $this->migrate = $migrate;
     }
 
     public function copy(
-        int $hostId,
+        Host $host,
         string $instance,
         string $newInstance,
-        int $newHostId
+        Host $destination
     ) {
-        if ($hostId !== $newHostId) {
+        if ($host->getHostId() !== $destination->getHostId()) {
             return $this->migrate->migrate(
-                $hostId,
+                $host,
                 $instance,
-                $newHostId,
+                $destination,
                 $newInstance
             );
         }
-        $client = $this->lxdClient->getANewClient($hostId);
-        $r = $client->instances->copy($instance, $newInstance, [], true);
+
+        $r = $host->instances->copy($instance, $newInstance, [], true);
         // There is some error that is not being caught here so added this checking
         if (isset($r["err"]) && !empty($r["err"])) {
             throw new \Exception($r["err"], 1);

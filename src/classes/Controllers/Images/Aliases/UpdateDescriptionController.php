@@ -3,6 +3,7 @@
 namespace dhope0000\LxdClient\Controllers\Images\Aliases;
 
 use dhope0000\LXDClient\Tools\Images\Aliases\UpdateDescription;
+use dhope0000\LXDClient\Objects\Host;
 
 class UpdateDescriptionController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,9 +12,9 @@ class UpdateDescriptionController implements \dhope0000\LXDClient\Interfaces\Rec
         $this->updateDescription = $updateDescription;
     }
 
-    public function update(int $hostId, string $fingerprint, string $name, string $description = "")
+    public function update(Host $host, string $fingerprint, string $name, string $description = "")
     {
-        $lxdResponse = $this->updateDescription->update($hostId, $fingerprint, $name, $description);
+        $lxdResponse = $this->updateDescription->update($host, $fingerprint, $name, $description);
         return ["state"=>"success", "message"=>"Updated alias description", "lxdResponse"=>$lxdResponse];
     }
 }

@@ -72,7 +72,8 @@ var currentNetwork = {};
 
 function makeNetworkHostSidebarHtml(hosthtml, host){
     let disabled = "";
-    if(host.online == false){
+
+    if(host.hostOnline == false){
         disabled = "disabled text-warning text-strikethrough";
     }
 

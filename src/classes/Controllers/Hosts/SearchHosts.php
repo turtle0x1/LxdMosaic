@@ -10,19 +10,15 @@ class SearchHosts
         $this->hostList = $hostList;
     }
 
-    public function search(string $host)
+    public function search(string $hostSearch)
     {
-        $servers = $this->hostList->getHostListWithDetails();
+        $servers = $this->hostList->getOnlineHostsWithDetails();
         $output = [];
         foreach ($servers as $server) {
-            if ($server["Host_Online"] != true) {
-                continue;
-            }
-
-            if (stripos($server["Host_Alias"], $host) !== false) {
+            if (stripos($server->getAlias(), $hostSearch) !== false) {
                 $output[] = [
-                    "host"=>$server["Host_Alias"],
-                    "hostId"=>$server["Host_ID"]
+                    "host"=>$server->getAlias(),
+                    "hostId"=>$server->getHostId()
                 ];
             }
         }

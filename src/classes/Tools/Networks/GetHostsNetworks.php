@@ -2,17 +2,15 @@
 
 namespace dhope0000\LXDClient\Tools\Networks;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetHostsNetworks
 {
     public function __construct(
-        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts,
-        LxdClient $lxdClient
+        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts
     ) {
         $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
-        $this->lxdClient = $lxdClient;
     }
 
     public function getAll()
@@ -20,26 +18,24 @@ class GetHostsNetworks
         $clusters = $this->getClustersAndStandaloneHosts->get();
 
         foreach ($clusters["clusters"] as $clusterIndex => $cluster) {
-            foreach ($cluster["members"] as $hostIndex => $host) {
-                $clusters["clusters"][$clusterIndex]["members"][$hostIndex]["networks"] = $this->getHostNetwork($host);
+            foreach ($cluster["members"] as $hostIndex => &$host) {
+                $host->setCustomProp("networks", $this->getHostNetwork($host));
             }
         }
 
-        foreach ($clusters["standalone"]["members"] as $hostIndex => $host) {
-            $clusters["standalone"]["members"][$hostIndex]["networks"] = $this->getHostNetwork($host);
+        foreach ($clusters["standalone"]["members"] as $hostIndex => &$host) {
+            $host->setCustomProp("networks", $this->getHostNetwork($host));
         }
 
         return $clusters;
     }
 
-    private function getHostNetwork(array $host)
+    private function getHostNetwork(Host $host)
     {
-        $indent = is_null($host["alias"]) ? $host["urlAndPort"] : $host["alias"];
-
-        if (isset($host["hostOnline"]) && $host["hostOnline"] != true) {
+        if (!$host->hostOnline()) {
             return [];
         }
-        $client = $this->lxdClient->getANewClient($host["hostId"]);
-        return $client->networks->all();
+
+        return $host->networks->all(2);
     }
 }

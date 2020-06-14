@@ -2,23 +2,18 @@
 
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Tools\Hosts\Instances\HostsHaveInstance;
 use dhope0000\LXDClient\Tools\Hosts\Images\ImportImageIfNotHave;
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateInstance
 {
     public function __construct(
-        LxdClient $lxdClient,
         HostsHaveInstance $hostsHaveInstance,
-        ImportImageIfNotHave $importImageIfNotHave,
-        GetDetails $getDetails
+        ImportImageIfNotHave $importImageIfNotHave
     ) {
-        $this->client = $lxdClient;
         $this->hostsHaveInstance = $hostsHaveInstance;
         $this->importImageIfNotHave = $importImageIfNotHave;
-        $this->getDetails = $getDetails;
     }
     /**
      * TODO Combine the two profiles array
@@ -28,7 +23,7 @@ class CreateInstance
         string $type,
         string $name,
         array $profiles,
-        array $hosts,
+        HostsCollection $hosts,
         array $imageDetails,
         $server = "",
         array $profileNames = [],
@@ -53,18 +48,17 @@ class CreateInstance
         $results = [];
 
         foreach ($hosts as $host) {
-            $client = $this->client->getANewClient($host);
-            $this->importImageIfNotHave->importIfNot($client, $imageDetails);
+            $this->importImageIfNotHave->importIfNot($host, $imageDetails);
             $alias = "";
             // Thats expensive
-            if ($client->cluster->info()["enabled"]) {
-                $alias = $this->getDetails->fetchAlias($host);
+            if ($host->cluster->info()["enabled"]) {
+                $alias = $host->getAlias();
             }
 
-            $response = $client->instances->create($name, $options, true, [], $alias);
+            $response = $host->instances->create($name, $options, true, [], $alias);
 
             if ($response["status_code"] == 400) {
-                throw new \Exception("Host: $host " . $response["err"], 1);
+                throw new \Exception("Host: {$host->getUrl()} " . $response["err"], 1);
             }
 
             $results[] = $response;

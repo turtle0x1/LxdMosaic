@@ -4,46 +4,41 @@ namespace dhope0000\LXDClient\Model\Client;
 use GuzzleHttp\Client as GuzzleClient;
 use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 use \Opensaucesystems\Lxd\Client;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\App\RouteApi;
+use dhope0000\LXDClient\Objects\Host;
 
 class LxdClient
 {
     private $clientBag = [];
 
     public function __construct(
-        GetDetails $getDetails,
         FetchUserProject $fetchUserProject,
         RouteApi $routeApi
     ) {
-        $this->getDetails = $getDetails;
         $this->fetchUserProject = $fetchUserProject;
         $this->routeApi = $routeApi;
     }
 
-    public function getANewClient($hostId, $checkCache = true, $setProject = true)
+    public function getClientWithHost(Host $host, $checkCache = true, $setProject = true)
     {
-        $hostDetails = $this->getDetails->getAll($hostId);
-
-        if (empty($hostDetails)) {
-            throw new \Exception("Couldn't find info for this host", 1);
+        if ($checkCache && isset($this->clientBag[$host->getUrl()])) {
+            return $this->clientBag[$host->getUrl()];
         }
 
-        if ($checkCache && isset($this->clientBag[$hostDetails["Host_Url_And_Port"]])) {
-            return $this->clientBag[$hostDetails["Host_Url_And_Port"]];
-        }
-
-        $certPath = $this->createFullcertPath($hostDetails["Host_Cert_Path"]);
+        $certPath = $this->createFullcertPath($host->getCertPath());
         $config = $this->createConfigArray($certPath);
-        $client = $this->createNewClient($hostDetails["Host_Url_And_Port"], $config);
+        $client = $this->createNewClient($host->getUrl(), $config);
 
         if ($setProject) {
             $project = $this->routeApi->getRequestedProject();
 
             if ($project == null) {
                 $userId = $this->routeApi->getUserId();
-                $project = $this->fetchUserProject->fetchOrDefault($userId, $hostId);
+                $project = "default";
+                if (!empty($userId)) {
+                    $project = $this->fetchUserProject->fetchOrDefault($userId, $host->getHostId());
+                }
             }
             $client->setProject($project);
         }

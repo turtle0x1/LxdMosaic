@@ -6,7 +6,6 @@ use dhope0000\LXDClient\Model\Hosts\AddHost as AddHostModel;
 use dhope0000\LXDClient\Tools\Hosts\GenerateCert;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Tools\Node\Hosts;
-use dhope0000\LXDClient\Model\Client\LxdClient;
 
 class AddHosts
 {
@@ -14,14 +13,12 @@ class AddHosts
         AddHostModel $addHost,
         GenerateCert $generateCert,
         GetDetails $getDetails,
-        Hosts $hosts,
-        LxdClient $lxdClient
+        Hosts $hosts
     ) {
         $this->generateCert = $generateCert;
         $this->addHost = $addHost;
         $this->getDetails = $getDetails;
         $this->hosts = $hosts;
-        $this->lxdClient = $lxdClient;
     }
 
     public function add(array $hostsDetails)
@@ -31,7 +28,7 @@ class AddHosts
 
             $hostName = $this->addSchemeAndDefaultPort($hostsDetail["name"]);
 
-            if (!empty($this->getDetails->getIdByUrlMatch($hostName))) {
+            if (!empty($this->getDetails->fetchHostByUrl($hostName))) {
                 continue;
             }
 
@@ -57,13 +54,14 @@ class AddHosts
 
                 $hostId = $this->addHost->getId();
 
-                $client = $this->lxdClient->getANewClient($hostId);
+                $host = $this->getDetails->fetchHost($hostId);
 
-                if ($client->cluster->info()["enabled"]) {
-                    $members = $client->cluster->members->all();
+                if ($host->cluster->info()["enabled"]) {
+                    //TODO Recursion ?
+                    $members = $host->cluster->members->all();
                     $extraMembersToAdd = [];
                     foreach ($members as $member) {
-                        $inf = $client->cluster->members->info($member);
+                        $inf = $host->cluster->members->info($member);
                         if ($hostName == $inf["url"]) {
                             continue;
                         }

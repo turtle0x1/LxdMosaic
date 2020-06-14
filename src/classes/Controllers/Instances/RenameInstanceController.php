@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Instances;
 
 use dhope0000\LXDClient\Tools\Instances\RenameInstance;
+use dhope0000\LXDClient\Objects\Host;
 
 class RenameInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,12 +12,12 @@ class RenameInstanceController implements \dhope0000\LXDClient\Interfaces\Record
     }
 
     public function rename(
-        int $hostId,
+        Host $host,
         string $container,
         string $newContainer,
         string $alias = null
     ) {
-        $result = $this->renameInstance->rename($hostId, $container, $newContainer);
+        $result = $this->renameInstance->rename($host, $container, $newContainer);
         return [
             "state"=>"success",
             "message"=>"Renaming $alias/$container to $alias/$newContainer",

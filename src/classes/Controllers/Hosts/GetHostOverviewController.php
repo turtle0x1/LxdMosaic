@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Hosts;
 
 use dhope0000\LXDClient\Tools\Hosts\GetHostOverview;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetHostOverviewController
 {
@@ -10,8 +11,8 @@ class GetHostOverviewController
         $this->getHostOverview = $getHostOverview;
     }
 
-    public function get(int $hostId)
+    public function get(Host $host)
     {
-        return $this->getHostOverview->get($hostId);
+        return $this->getHostOverview->get($host);
     }
 }

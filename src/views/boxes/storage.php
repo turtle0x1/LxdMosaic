@@ -117,7 +117,7 @@ var currentPool = {};
 
 function makeStorageHostSidebarHtml(hosthtml, host, tableListHtml){
     let disabled = "";
-    if(host.online == false){
+    if(host.hostOnline == false){
         disabled = "disabled text-warning text-strikethrough";
     }
 

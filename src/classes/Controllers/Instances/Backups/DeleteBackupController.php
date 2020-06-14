@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
 use dhope0000\LXDClient\Tools\Instances\Backups\DeleteRemoteBackup;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +14,9 @@ class DeleteBackupController implements \dhope0000\LXDClient\Interfaces\RecordAc
         $this->deleteRemoteBackup = $deleteRemoteBackup;
     }
 
-    public function delete(int $hostId, string $container, string $backup)
+    public function delete(Host $host, string $container, string $backup)
     {
-        $lxdRespone = $this->deleteRemoteBackup->delete($hostId, $container, $backup);
+        $lxdRespone = $this->deleteRemoteBackup->delete($host, $container, $backup);
 
         return ["state"=>"success", "message"=>"Deleted backup", "lxdRespone"=>$lxdRespone];
     }

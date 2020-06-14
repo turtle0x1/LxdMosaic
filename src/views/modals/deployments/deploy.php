@@ -56,7 +56,7 @@ $("#modal-deployments-deploy").on("shown.bs.modal", function(){
             });
 
             x.find("input[name=hosts]").tokenInput(globalUrls.hosts.search.search, {
-                queryParam: "host",
+                queryParam: "hostSearch",
                 propertyToSearch: "host",
                 tokenLimit: 1,
                 tokenValue: "hostId",

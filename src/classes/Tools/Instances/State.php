@@ -1,18 +1,12 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class State
 {
-    public function __construct(LxdClient $lxdClient)
+    public function change(Host $host, string $instance, string $state)
     {
-        $this->lxdClient = $lxdClient;
-    }
-
-    public function change(int $hostId, string $instance, string $state)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->instances->{$state}($instance);
+        return $host->instances->{$state}($instance);
     }
 }
