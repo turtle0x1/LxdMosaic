@@ -14,6 +14,8 @@ class RouteView
     {
         if (empty($pathParts)) {
             require __DIR__ . "/../../views/index.php";
+        } elseif ($pathParts[0] == "login") {
+            require __DIR__ . "/../../views/login.php";
         } elseif ($pathParts[1] == "firstRun") {
             require __DIR__ . "/../../views/firstRun.php";
         } else {

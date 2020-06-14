@@ -1,20 +1,12 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Profiles;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteProfile
 {
-    public function __construct(LxdClient $lxdClient)
+    public function delete(Host $host, string $profile)
     {
-        $this->client = $lxdClient;
-    }
-
-    public function delete(
-        int $hostId,
-        string $profile
-    ) {
-        $client = $this->client->getANewClient($hostId);
-        return $client->profiles->remove($profile);
+        return $host->profiles->remove($profile);
     }
 }

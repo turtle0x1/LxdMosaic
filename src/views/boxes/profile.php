@@ -1,56 +1,44 @@
 <div id="profileBox" class="boxSlide">
-<div id="profileOverview" class="row">
-    <div class="col-md-9">
-          <div class="card">
-            <div class="card-header bg-info" role="tab" >
-              <h5>
-                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
-                  Profiles
-                </a>
-              </h5>
+<div id="profileOverview">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h4> Profiles </h4>
+                <div class="btn-group mr-2">
+                    <button data-toggle="tooltip" data-placement="bottom" title="Create Profile" class="btn btn-primary" id="createProfile">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
             </div>
-            <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" >
-              <div class="card-block bg-dark">
-                  Profiles are used to store processes used with a container.
-              </div>
-            </div>
-          </div>
+        </div>
     </div>
 </div>
-<div id="profileDetails" class="row">
-<div class="col-md-3">
-      <div class="card">
-        <div class="card-header bg-info" role="tab" id="profilesActionHeading">
-          <h5>
-            <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#profileActions" aria-expanded="true" aria-controls="profileActions">
-              Actions
-              <i class="fas fa-edit float-right"></i>
-            </a>
-          </h5>
-        </div>
-        <div id="profileActions" class="collapse show" role="tabpanel" aria-labelledby="profilesActionHeading">
-          <div class="card-block bg-dark table-responsive">
-              <div id="collapseOne" class="collapse in show" role="tabpanel" >
-                <div class="card-block">
-                    <button class="btn btn-block btn-primary" id="copyProfile">
-                        Copy
-                    </button>
-                    <button class="btn btn-block btn-warning" id="renameProfile">
-                        Rename
-                    </button>
-                    <button class="btn btn-block btn-danger" id="deleteProfile">
-                        Delete
-                    </button>
-                    <hr/>
-                </div>
+<div id="profileDetails">
+    <div class="row border-bottom">
+        <div class="col-md-12">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+            <h4 id="profileNameTitle"> <u>
+            </u></h4>
+            <div class="btn-toolbar float-right">
+              <div class="btn-group mr-2">
+                  <button data-toggle="tooltip" data-placement="bottom" title="Copy Profile" class="btn btn-primary" id="copyProfile">
+                      <i class="fas fa-copy"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Rename Profile" class="btn btn-warning" id="renameProfile">
+                      <i class="fa fa-edit"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Delete Profile" class="btn btn-danger" id="deleteProfile">
+                      <i class="fas fa-trash"></i>
+                  </button>
               </div>
-          </div>
+            </div>
+            </div>
         </div>
-      </div>
-</div>
-<div class="col-md-6">
-      <div class="card">
-        <div class="card-header bg-info" role="tab" id="profileDevicesHeading">
+    </div>
+    <div class="row mt-2">
+<div class="col-md-4">
+      <div class="card bg-dark">
+        <div class="card-header bg-dark" role="tab" id="profileDevicesHeading">
           <h5>
             <a id="devicesAriaToggle" class="text-white" data-toggle="collapse" data-parent="#profileDevicesHeading" href="#profileDevicesCard" aria-expanded="true" aria-controls="profileDevicesCard">
               Devices
@@ -74,35 +62,37 @@
         </div>
       </div>
       <br/>
-      <div class="card">
-        <div class="card-header bg-info" role="tab" id="configDeviceCardHeading">
-          <h5>
-            <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#configDeviceCard" aria-expanded="true" aria-controls="configDeviceCard">
-              Configuration
-              <i class="fas fa-cogs float-right"></i>
-            </a>
-          </h5>
-        </div>
+</div>
+<div class="col-md-5">
+    <div class="card bg-dark">
+      <div class="card-header bg-dark" role="tab" id="configDeviceCardHeading">
+        <h5>
+          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#configDeviceCard" aria-expanded="true" aria-controls="configDeviceCard">
+            Configuration
+            <i class="fas fa-cogs float-right"></i>
+          </a>
+        </h5>
+      </div>
 
-        <div id="configDeviceCard" class="collapse show" role="tabpanel" aria-labelledby="configDeviceCardHeading">
-          <div class="card-block bg-dark table-responsive">
-              <table class="table table-dark table-striped" id="profile-configData">
-                    <thead class="thead-inverse">
-                        <tr>
-                            <th> Key </th>
-                            <th> Value </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-              </table>
-          </div>
+      <div id="configDeviceCard" class="collapse show" role="tabpanel" aria-labelledby="configDeviceCardHeading">
+        <div class="card-block bg-dark table-responsive">
+            <table class="table table-dark table-striped" id="profile-configData">
+                  <thead class="thead-inverse">
+                      <tr>
+                          <th> Key </th>
+                          <th> Value </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+            </table>
         </div>
       </div>
+    </div>
 </div>
 <div class="col-md-3">
-      <div class="card">
-        <div class="card-header bg-info" role="tab" id="usedByCard">
+      <div class="card bg-dark">
+        <div class="card-header bg-dark" role="tab" id="usedByCard">
           <h5>
             <a data-toggle="collapse" class="text-white" data-parent="#accordion" href="#usedByCollapse" aria-expanded="true" aria-controls="usedByCollapse">
               Used By
@@ -116,7 +106,6 @@
               <table class="table table-bordered table-dark" id="profile-usedByData">
                     <thead class="thead-inverse">
                         <tr>
-                            <th> Counter </th>
                             <th> Name </th>
                         </tr>
                     </thead>
@@ -129,15 +118,47 @@
 </div>
 </div>
 </div>
+</div>
 
 <script>
-//TODO Refactor this away
-var profileData = null;
 
 var currentProfileDetails = {
     profile: null,
     host: null
 };
+
+function makeHostHtml(hosthtml, host, selectedProfile = null, selectedHost = null){
+    let disabled = "";
+    if(host.hostOnline == false){
+        disabled = "disabled text-warning text-strikethrough";
+    }
+
+    hosthtml += `<li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+            <i class="fas fa-server"></i> ${host.alias}
+        </a>
+        <ul class="nav-dropdown-items">`;
+
+    $.each(host.profiles, function(_, profileName){
+        let active = "";
+        if(host.hostId == selectedHost && profileName == selectedProfile ){
+            active = "text-info";
+        }
+
+        hosthtml += `<li class="nav-item view-profile ${active}"
+            data-host-id="${host.hostId}"
+            data-profile="${profileName}"
+            data-alias="${host.alias}"
+            >
+          <a class="nav-link" href="#">
+            <i class="nav-icon fa fa-user"></i>
+            ${profileName}
+          </a>
+        </li>`;
+    });
+    hosthtml += "</ul></li>";
+    return hosthtml;
+}
 
 
 function loadProfileView(selectedProfile = null, selectedHost = null, callback = null)
@@ -146,49 +167,30 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
     ajaxRequest(globalUrls.profiles.getAllProfiles, null, function(data){
         var data = $.parseJSON(data);
 
-        let a = selectedProfile == null ? "active" : "";
+        let a = selectedProfile == null ? "text-info" : "";
         let hosts = `
-        <li class="nav-item ${a} profile-overview">
-            <a class="nav-link" href="#">
+        <li class="nav-item profile-overview">
+            <a class="nav-link ${a}" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;
-        $.each(data, function(hostName, host){
-            let disabled = "";
-            if(host.online == false){
-                disabled = "disabled text-warning";
-                hostName += " (Offline)";
-            }
 
-            hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
-                    <i class="fas fa-server"></i> ${hostName}
-                </a>
-                <ul class="nav-dropdown-items">`;
 
-            $.each(host.profiles, function(profileName, details){
-                let active = "";
-                if(host.hostId == selectedHost && profileName == selectedProfile ){
-                    active = "active";
-                }
-
-                hosts += `<li class="nav-item view-profile ${active}"
-                    data-host-id="${host.hostId}"
-                    data-profile="${profileName}"
-                    data-alias="${hostName}">
-                  <a class="nav-link" href="#">
-                    <i class="nav-icon fa fa-user"></i>
-                    ${profileName}
-                  </a>
-                </li>`;
-            });
-            hosts += "</ul></li>";
+        $.each(data.clusters, (clusterIndex, cluster)=>{
+            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            $.each(cluster.members, (_, host)=>{
+                hosts = makeHostHtml(hosts, host, selectedProfile, selectedHost)
+            })
         });
-        $(".boxSlide, #profileDetails").hide();
-        $("#profileOverview, #profileBox").show();
+
+        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+
+        $.each(data.standalone.members, (_, host)=>{
+            hosts = makeHostHtml(hosts, host, selectedProfile, selectedHost)
+        });
+
         $("#sidebar-ul").empty().append(hosts);
 
-        profileData = data;
         if($.isFunction(callback)){
             callback();
         }
@@ -200,38 +202,54 @@ $("#sidebar-ul").on("click", ".view-profile", function(){
 })
 
 function viewProfile(profileId, hostAlias, hostId){
+
     currentProfileDetails.profile = profileId;
     currentProfileDetails.hostAlias = hostAlias;
     currentProfileDetails.hostId = hostId;
-    let details = profileData[hostAlias].profiles[profileId].details;
-    let deviceTableRows = createTableRowsHtml(details.devices);
 
-    addBreadcrumbs(["Profiles", hostAlias, profileId], ["viewProfiles", "", "active"], false);
+    ajaxRequest(globalUrls.profiles.getProfile, {hostId: hostId, profile: profileId}, (data)=>{
+        let details = $.parseJSON(data);
 
-    let usedBy = [{empty: "Couldn't get profiles uesd by (api version probably)"}];
+        let deviceTableRows = createTableRowsHtml(details.devices);
 
-    if(details.hasOwnProperty("used_by")){
-        usedBy = details.used_by;
-    }
+        $("#profileNameTitle").text(profileId);
 
-    let profileUsedByHtml = createTableRowsHtml(usedBy);
-    let configTr = createTableRowsHtml(details.config);
+        addBreadcrumbs(["Profiles", hostAlias, profileId], ["viewProfiles", "", "active"], false);
 
-    let collpaseDetailsFunc = $.isEmptyObject(details.devices) ? "hide" : "show";
-    let collpaseConfigFunc = $.isEmptyObject(details.config) ? "hide" : "show";
+        let usedBy = ["Couldn't get profiles uesd by (api version probably)"];
 
-    $("#profileDevicesCard").collapse(collpaseDetailsFunc);
-    $("#configDeviceCard").collapse(collpaseConfigFunc);
+        if(details.hasOwnProperty("used_by")){
+            usedBy = details.used_by;
+        }
 
-    $("#profileBox #deleteProfile").attr("disabled", usedBy.length > 0);
-    $("#profile-deviceData > tbody").empty().html(deviceTableRows);
-    $("#profile-usedByData > tbody").empty().html(profileUsedByHtml);
-    $("#profile-configData > tbody").empty().html(configTr);
-    $("#profileOverview").hide();
-    $(".boxSlide").hide();
-    $("#profileDetails, #profileBox").show();
+        let profileUsedByHtml = "";
+
+        $.each(usedBy, function(_, instance){
+            profileUsedByHtml += `<tr><td>${instance}</td></tr>`;
+        })
+
+        let configTr = createTableRowsHtml(details.config);
+
+        let collpaseDetailsFunc = $.isEmptyObject(details.devices) ? "hide" : "show";
+        let collpaseConfigFunc = $.isEmptyObject(details.config) ? "hide" : "show";
+
+        $("#profileDevicesCard").collapse(collpaseDetailsFunc);
+        $("#configDeviceCard").collapse(collpaseConfigFunc);
+
+        $("#profileBox #deleteProfile").attr("disabled", usedBy.length > 0);
+        $("#profile-deviceData > tbody").empty().html(deviceTableRows);
+        $("#profile-usedByData > tbody").empty().html(profileUsedByHtml);
+        $("#profile-configData > tbody").empty().html(configTr);
+        $("#profileOverview").hide();
+        $(".boxSlide").hide();
+        $("#profileDetails, #profileBox").show();
+    });
 }
 
+
+$("#profileBox").on("click", "#createProfile", function(){
+    $("#modal-profile-create").modal("show");
+});
 
 $("#profileBox").on("click", "#copyProfile", function(){
     copyProfileData.hostAlias = currentProfileDetails.hostAlias;
@@ -272,4 +290,5 @@ $("#profileBox").on("click", "#deleteProfile", function(){
 <?php
 require __DIR__ . "/../modals/profiles/rename.php";
 require __DIR__ . "/../modals/profiles/copy.php";
+require __DIR__ . "/../modals/profiles/create.php";
 ?>

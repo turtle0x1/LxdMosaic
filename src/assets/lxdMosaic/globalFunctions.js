@@ -72,14 +72,27 @@ function createTableRowsHtml(data, childPropertyToSearch)
 
 
 function ajaxRequest(url, data, callback){
+    if (typeof userDetails == "object") {
+        $.ajaxSetup({
+            headers: userDetails
+        })
+    }
+
     $.ajax({
          type: 'POST',
          data: data,
          url: url,
-         success: function(data){
+         success: function(data, _, jqXHR){
+             if(jqXHR.status == 205){
+                 $.alert("its likely a host has gone offline, refresh the page");
+                 return false;
+             }
              callback(data);
          },
          error: function(data){
+             if(data.status == 403){
+                 location.reload();
+             }
              callback(data);
          }
      });
@@ -192,7 +205,7 @@ var scalesBytesCallbacks = {
 var toolTipsBytesCallbacks = {
     callbacks: {
         label: function(value, data) {
-            return formatBytes(value.value);
+            return formatBytes(data.datasets[value.datasetIndex].data[value.index]);
         }
     }
 };

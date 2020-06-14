@@ -1,46 +1,38 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Profiles;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class Copy
 {
-    public function __construct(LxdClient $lxdClient)
-    {
-        $this->client = $lxdClient;
-    }
-
     public function copyToTargetHosts(
-        int $hostId,
+        Host $host,
         string $profile,
-        array $targetHosts,
+        HostsCollection $targetHosts,
         string $newName
     ) {
-        $hostClient = $this->client->getANewClient($hostId);
-        $profileInfo = $hostClient->profiles->info($profile);
+        $profileInfo = $host->profiles->info($profile);
 
         $profileInfo["devices"] = $profileInfo["devices"] ?: null;
         $profileInfo["config"] = $profileInfo["config"] ?: null;
 
-        $targetHosts = array_unique($targetHosts);
-        $targetClientCache = [];
         // We do this so the copy action is "atomic"
-        foreach ($targetHosts as $newHostId) {
-            $newHostClient = $this->client->getANewClient($newHostId);
-            $targetClientCache[] = $newHostClient;
+        foreach ($targetHosts as $targetHost) {
             try {
-                $x = $newHostClient->profiles->info($newName);
+                $x = $targetHost->profiles->info($newName);
                 if (!empty($x)) {
                     throw new \Exception("Already have a profile with this name on a target host", 1);
                 }
+                //TODO Hmm this is probably wrong
             } catch (\Opensaucesystems\Lxd\Exception\NotFoundException $e) {
                 // The above code throws an exception when a profile isn't found
                 // so we just slienty catch and ignore that exception
             }
         }
 
-        foreach ($targetClientCache as $client) {
-            $client->profiles->create(
+        foreach ($targetHosts as $targetHost) {
+            $targetHost->profiles->create(
                 $newName,
                 $profileInfo["description"],
                 $profileInfo["config"],

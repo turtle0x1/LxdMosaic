@@ -2,26 +2,18 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use Opensaucesystems\Lxd\Client;
+use dhope0000\LXDClient\Objects\Host;
 
 class HasExtension
 {
-    public function __construct(LxdClient $lxdClient)
-    {
-        $this->lxdClient = $lxdClient;
-    }
+    private $hostCache = [];
 
-    public function hasWithHostId(int $hostId, $extension)
+    public function checkWithHost(Host $host, $extension)
     {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $this->checkWithClient($client, $extension);
-    }
-
-
-    public function checkWithClient(Client $client, $extension)
-    {
-        $extensions = $client->host->info()["api_extensions"];
-        return in_array($extension, $extensions);
+        $hostUrl = $host->getUrl();
+        $info = isset($this->hostCache[$hostUrl]) ? $this->hostCache[$hostUrl] : $host->host->info();
+        $this->hostCache[$hostUrl] = $info;
+        return in_array($extension, $info["api_extensions"]);
     }
 }

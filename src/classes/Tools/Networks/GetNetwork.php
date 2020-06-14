@@ -2,19 +2,20 @@
 
 namespace dhope0000\LXDClient\Tools\Networks;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Utilities\StringTools;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetNetwork
 {
-    public function __construct(LxdClient $lxdClient)
+    public function get(Host $host, string $network)
     {
-        $this->lxdClient = $lxdClient;
-    }
+        $network = $host->networks->info($network);
 
-    public function get(int $hostId, string $network)
-    {
-        $client = $this->lxdClient->getANewClient($hostId);
-        return $client->networks->info($network);
+        $network["used_by"] = StringTools::usedByStringsToLinks(
+            $host,
+            $network["used_by"]
+        );
+
+        return $network;
     }
 }

@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Storage;
 
 use dhope0000\LXDClient\Tools\Storage\DeleteStoragePool;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteStoragePoolController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,9 +12,9 @@ class DeleteStoragePoolController implements \dhope0000\LXDClient\Interfaces\Rec
         $this->deleteStoragePool = $deleteStoragePool;
     }
 
-    public function delete(int $hostId, string $poolName)
+    public function delete(Host $host, string $poolName)
     {
-        $this->deleteStoragePool->delete($hostId, $poolName);
+        $this->deleteStoragePool->delete($host, $poolName);
         return ["state"=>"success", "message"=>"Deleted Pool"];
     }
 }

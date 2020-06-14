@@ -4,13 +4,13 @@
         <div class="col-md-8">
             <div class="card bg-dark">
                 <div class="card-header">
-                    <h4>Host Containers Local Backups</h4>
+                    <h4>Instance Backups</h4>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-dark" id="containerBackupTable">
                         <thead>
                             <tr>
-                                <th>Container</th>
+                                <th>Instance</th>
                                 <th>Created</th>
                                 <th>Last Backed Up</th>
                                 <th>View</th>
@@ -25,7 +25,7 @@
         <div class="col-md-4" id="graphCards">
               <div class="card bg-dark">
                   <div class="card-header">
-                      <h4> Local Backup Disk Usage </h4>
+                      <h4> Disk Usage </h4>
                   </div>
                   <div class="card-body">
                       <canvas style="width: 100%; max-height: 400px; width: 400px;" id="backupsSizeChart"></canvas>
@@ -33,7 +33,7 @@
               </div>
               <div class="card bg-dark">
                   <div class="card-header">
-                      <h4> Total Backup Files </h4>
+                      <h4> # Backup Files </h4>
                   </div>
                   <div class="card-body">
                       <canvas style="width: 100%; max-height: 400px; width: 400px;" id="backupFilesChart"></canvas>
@@ -163,7 +163,7 @@ function loadBackupsOverview() {
         currentBackups = data.allBackups;
 
         $.each(data.allBackups, (host, hostDetails)=>{
-            backupTrs += `<tr class="bg-info"><td class="text-center" colspan="999">${host}</tr></tr>`;
+            backupTrs += `<tr class="bg-success"><td class="text-center" colspan="999">${host}</tr></tr>`;
             $.each(hostDetails.containers, (containerIndex, container)=>{
 
                 let trClass = container.lastBackup.neverBackedUp || !container.containerExists ? "danger" : "success";

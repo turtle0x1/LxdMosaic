@@ -27,6 +27,10 @@ var editHostDetailsObj = {
     hostId: null
 }
 
+$("#modal-hosts-edit").on("hide.bs.modal", function(){
+    $("#modal-hosts-edit #alias").val("");
+});
+
 $("#modal-hosts-edit").on("shown.bs.modal", function(){
     if(!$.isNumeric(editHostDetailsObj.hostId)){
         makeToastr(JSON.stringify({state: "error", message: "Developer Fail - Please provide host id"}));
@@ -51,8 +55,7 @@ $("#modal-hosts-edit").on("click", "#edit", function(){
             return false;
         }
         aInput.val("");
-        createContainerTree();
-        loadServerOview();
+        loadDashboard();
         $("#modal-hosts-edit").modal("hide");
     });
 });

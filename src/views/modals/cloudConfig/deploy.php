@@ -11,7 +11,7 @@
       <div class="modal-body">
 
           <div class="form-group">
-              <label> Container Name </label>
+              <label> Instance Name </label>
               <input class="form-control" name="containerName" />
           </div>
           <div class="form-group">
@@ -19,12 +19,16 @@
               <input class="form-control" id="deployCloudConfigHosts" />
           </div>
           <div class="form-group">
-              <label> Image </label>
+              <label
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Currently an image needs to have been imported into atleast
+                  one server on the network to use it here! Images will be downloaded
+                  onto hosts that dont have the selected image.">
+                  Image
+                  <i class="fas fa-question-circle"></i>
+              </label>
               <input class="form-control" id="deployCloudConfigImage" />
-              <div class="alert alert-info">
-                  Currently an image needs to have been imported into atleast
-                  one server on the network to use it here!
-              </div>
           </div>
           <div class="form-group">
               <label> Profile Name (Optional) </label>
@@ -32,15 +36,27 @@
           </div>
 
           <div class="form-group">
-              <label> Additonal Profiles </label>
+              <label
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Only profiles on all hosts will appear!
+                      <br/>
+                      <br/>
+                      Remember the default profile usually contains storage information & network details!">
+                  Additional Profiles
+                  <i class="fas fa-question-circle"></i>
+              </label>
               <input class="form-control" id="deployCloudConfigProfiles"/>
-              <div class="alert alert-info">
-                  Only profiles on all hosts will appear
-                  <br/>
-                  Remember the default profile usually contains storage information &
-                  network details!
+          </div>
+          <div class="form-group">
+              <label> GPU's (Optional) </label>
+              <select class="form-control" id="deployContainerGpu" multiple>
+                  <option value="">Please select a host </option>
+              </select>
+              <div id="deployContainerGpuWarning" class="alert alert-danger">
+                  We currently only support adding gpu's when creating a contaienr
+                  on one host.
               </div>
-
           </div>
       </div>
       <div class="modal-footer">
@@ -60,15 +76,48 @@ $("#deployCloudConfigProfiles").tokenInput(globalUrls.profiles.search.getCommonP
     queryParam: "profile",
     propertyToSearch: "profile",
     theme: "facebook",
-    tokenValue: "Profile_ID"
+    tokenValue: "Profile_ID",
+    limit: 999,
+    preventDuplicates: false
 });
 
 $("#deployCloudConfigHosts").tokenInput(globalUrls.hosts.search.search, {
-    queryParam: "host",
+    queryParam: "hostSearch",
     propertyToSearch: "host",
     tokenValue: "hostId",
     preventDuplicates: false,
-    theme: "facebook"
+    theme: "facebook",
+    onAdd: function(token){
+        let h = $("#deployCloudConfigHosts").tokenInput("get")
+        if(h.length > 1){
+            $("#deployContainerGpuWarning").show();
+            $("#deployContainerGpu").hide();
+        }else{
+            let x = {hostId: h[0].hostId}
+            ajaxRequest(globalUrls.hosts.gpu.getAll, x, (data)=>{
+                data =  $.parseJSON(data);
+                //TODO if len == 0
+                let gpus = "";
+                $.each(data, function(i, item){
+                    gpus += `<option value="${item.pci_address}">${item.product}</option>`
+                });
+                $("#deployContainerGpu").empty().append(gpus);
+            });
+        }
+    },
+    onDelete: function(){
+        let h = $("#deployCloudConfigHosts").tokenInput("get")
+        if(h.length > 1){
+            $("#deployContainerGpuWarning").show();
+            $("#deployContainerGpu").hide();
+        }else{
+            if(h.length == 0){
+                $("#deployContainerGpu").empty().append("<option value=''>Please select a host</option>");
+            }
+            $("#deployContainerGpuWarning").hide();
+            $("#deployContainerGpu").show();
+        }
+    }
 });
 
 $("#deployCloudConfigImage").tokenInput(globalUrls.images.search.searchAllHosts, {
@@ -80,7 +129,15 @@ $("#deployCloudConfigImage").tokenInput(globalUrls.images.search.searchAllHosts,
 });
 
 
+$("#modal-cloudConfig-deploy").on("hide.bs.modal", function(){
+    $("#modal-cloudConfig-deploy input").val("");
+    $("#deployCloudConfigProfiles").tokenInput("clear");
+    $("#deployCloudConfigHosts").tokenInput("clear");
+    $("#deployCloudConfigImage").tokenInput("clear");
+});
+
 $("#modal-cloudConfig-deploy").on("shown.bs.modal", function(){
+    $("#deployContainerGpuWarning").hide();
     if(!$.isNumeric(deployCloudConfigObj.cloudConfigId)){
         makeToastr(JSON.stringify({state: "error", message: "Developer fail - set cloud config id to open this modal"}));
         return false;
@@ -98,16 +155,22 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
     let image = $("#deployCloudConfigImage").tokenInput("get");
 
     if(containerName == ""){
-        makeToastr(JSON.stringify({state: "error", message: "Please provide container name"}));
+        makeToastr(JSON.stringify({state: "error", message: "Please provide instance name"}));
         containerNameInput.focus()
         return false;
     } else if(hosts.length == 0){
         makeToastr(JSON.stringify({state: "error", message: "Please provide atleast one host"}));
         $("#deployCloudConfigHosts").focus();
         return false;
-    } else if(image.legnth == 0 || !image[0].hasOwnProperty("details")){
+    } else if(image.length == 0 || !image[0].hasOwnProperty("details")){
         makeToastr(JSON.stringify({state: "error", message: "Please select image"}));
         return false;
+    }
+
+    let gpus = [];
+
+    if(hosts.length == 1){
+        gpus = $("#deployContainerGpu").val();
     }
 
     let x = {
@@ -116,7 +179,8 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
         cloudConfigId: deployCloudConfigObj.cloudConfigId,
         profileName: profileName,
         additionalProfiles: profileIds,
-        imageDetails: image[0].details
+        imageDetails: image[0].details,
+        gpus: gpus
     };
 
     ajaxRequest(globalUrls.cloudConfig.deploy, x, (response)=>{

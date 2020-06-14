@@ -6,7 +6,13 @@ class GetHostCertificate
 {
     public static function get(string $hostWithPort)
     {
-        $g = stream_context_create(array("ssl" => array("capture_peer_cert" => true, "verify_peer"=>false)));
+        $g = stream_context_create(array("ssl" => array(
+            "capture_peer_cert" => true,
+            "verify_peer"=>false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        )
+        ));
         $r = stream_socket_client(
             "ssl://$hostWithPort",
             $errno,
@@ -15,6 +21,7 @@ class GetHostCertificate
             STREAM_CLIENT_CONNECT,
             $g
         );
+
         $cont = stream_context_get_params($r);
         $cert = $cont["options"]["ssl"]["peer_certificate"];
 

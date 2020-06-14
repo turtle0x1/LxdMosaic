@@ -29,6 +29,10 @@
         hostId: null
     }
 
+    $("#modal-profile-rename").on("hide.bs.modal",  function(){
+        $("#modal-profile-rename input").val("");
+    });
+
     $("#modal-profile-rename").on("shown.bs.modal", function(){
         if(renameProfileData.hostAlias == null){
             makeToastr(JSON.stringify({state: "error", message: "Developer fail - Please provide host alias"}));

@@ -17,7 +17,7 @@
             Snapshots take "pictures" of the current state of your container
         </div>
         <h5>
-            <b> Container </b> <span class="snapshotModal-containerName"></span> <br/>
+            <b> Instance </b> <span class="snapshotModal-containerName"></span> <br/>
             <b> Host: </b> <span id="snapshotModal-currentHost"></span>
         </h5>
         <div class="form-group">
@@ -33,6 +33,10 @@
   </div>
 </div>
 <script>
+    $("#modal-container-snapshot").on("hide.bs.modal", function(){
+        $("#snapshotModal-snapshotName").val("");
+    });
+
     $("#modal-container-snapshot").on("shown.bs.modal", function(){
 
         if(!$.isPlainObject(currentContainerDetails)){
@@ -54,7 +58,7 @@
             snapshotName: $("#snapshotModal-snapshotName").val()
         }, currentContainerDetails);
 
-        ajaxRequest(globalUrls.containers.snapShots.take, x, function(data){
+        ajaxRequest(globalUrls.instances.snapShots.take, x, function(data){
             let x = makeToastr(data);
             if(x.state == "error"){
                 return false;

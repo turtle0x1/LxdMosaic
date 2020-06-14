@@ -1,61 +1,83 @@
 <div id="containerBox" class="boxSlide">
+    <div class="row border-bottom mb-2">
     <div class="col-md-12 text-center">
-        <h4> <u>
-            <span id="container-currentState"></span>
-            <span id="container-containerNameDisplay"></span>
-            <span id="container-imageDescription"></span>
-        </u></h4>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+              <select class="form-control" style="max-width: 150px;" id="container-changeState">
+                  <option value="" selected="selected"> Change State </option>
+                  <option value="start"> Start </option>
+                  <option value="stop"> Stop </option>
+                  <option value="restart"> Restart </option>
+                  <option value="freeze"> Freeze </option>
+                  <option value="unfreeze"> Unfreeze </option>
+              </select>
+
+            <h4 class="pt-1"> <u>
+                <span id="container-currentState"></span>
+                <span id="container-containerNameDisplay"></span>
+                <span id="container-imageDescription"></span>
+            </u></h4>
+            <div class="btn-toolbar float-right">
+              <div class="btn-group mr-2">
+                  <button data-toggle="tooltip" data-placement="bottom" title="Create Image" class="btn btn-sm btn-primary" id="craeteImage">
+                      <i class="fas fa-image"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
+                      <i class="fas fa-cog"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Snapshot" class="btn btn-sm btn-success takeSnapshot">
+                      <i class="fas fa-camera"></i>
+                  </button>
+                  <hr/>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Copy Instance" class="btn btn-sm btn-info copyContainer">
+                      <i class="fas fa-copy"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Migrate Instance" class="btn btn-sm btn-primary migrateContainer">
+                      <i class="fas fa-people-carry"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Rename Instance" class="btn btn-sm btn-warning renameContainer">
+                      <i class="fas fa-edit"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Delete" class="btn btn-sm btn-danger deleteContainer">
+                      <i class="fas fa-trash"></i>
+                  </button>
+              </div>
+            </div>
+        </div>
     </div>
-    <div class="row" id="containerViewBtns">
-        <div class="col-md-2 text-center">
-            <div class="card bg-primary card-hover-primary text-center toggleCard" id="goToDetails">
-                <div class="card-body">
-                    <i class="fas fa-info pr-2"></i>Details
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2 text-center">
-            <div class="card card-hover-primary text-center toggleCard" id="goToConsole">
-                <div class="card-body">
-                    <i class="fas fa-terminal pr-2"></i>Console
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2 text-center">
-            <div class="card card-hover-primary text-center toggleCard" id="goToBackups">
-                <div class="card-body">
-                    <i class="fas fa-save pr-2"></i>Backups
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2 text-center">
-            <div class="card card-hover-primary text-center toggleCard" id="goToFiles">
-                <div class="card-body">
-                    <i class="fas fa-save pr-2"></i>Files
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2 text-center">
-            <div class="card card-hover-primary text-center toggleCard" id="goToMetrics">
-                <div class="card-body">
-                    <i class="fas fa-chart-bar pr-2"></i>Metrics
-                </div>
+    </div>
+    <div class="row border-bottom mb-2 pb-2" id="containerViewBtns">
+        <div class="col-md-12 text-center justify-content">
+            <button type="button" class="btn text-white btn-outline-primary active" id="goToDetails">
+                <i class="fas fa-info pr-2"></i>Details
+            </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToConsole">
+                <i class="fas fa-terminal pr-2"></i>Console
+            </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToBackups">
+                <i class="fas fa-save pr-2"></i>Backups
+            </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToFiles">
+                <i class="fas fa-save pr-2"></i>Files
+            </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToMetrics">
+                <i class="fas fa-chart-bar pr-2"></i>Metrics
+            </button>
+            <div class="btn-toolbar  mb-2 mb-md-0">
+
             </div>
         </div>
     </div>
 <div id="containerDetails">
 <div class="row">
-    <div class="col-md-6">
-        <div class="card text-white bg-deepblue">
+    <div class="col-md-5">
+        <div class="card text-white bg-dark">
           <div class="card-body">
-              <h5> <u> Container Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
+              <h5> <u> Instance Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
               Host: <span id="container-hostNameDisplay"></span>
               <br/>
               <a
                   href="https://github.com/lxc/pylxd/issues/242#issuecomment-323272318"
-                  target="_blank">
-                  CPU Time:
-              </a><span id="container-cpuTime"></span>
+                  target="_blank">CPU Time:</a> <span id="container-cpuTime"></span>
               <br/>
               Created: <span id="container-createdAt"></span>
               <br/>
@@ -64,125 +86,65 @@
               Deployment: <span id="container-deployment"></span>
           </div>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card text-white bg-primary">
+        <div class="card text-white bg-dark">
           <div class="card-body">
             <h5> <u> Network Information <i class="fas float-right fa-network-wired"></i> </u> </h5>
                 <div class="col-md-12" id="networkDetails">
                 </div>
 
           </div>
-        </div>
-    </div>
-
 </div>
-<br/>
-<div class="row">
-<!-- <h4> Container: <`span id="containerName"></span> </h4> -->
-<div class="col-md-3">
-    <div class="card card-accent-danger">
-      <div class="card-header bg-info" role="tab" id="container-actionsHeading">
-        <h5>
-          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#actionsCollapse" aria-expanded="true" aria-controls="container-actionsCollapse">
-            Actions
-            <i class="fas fa-edit float-right"></i>
-          </a>
-        </h5>
-      </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-dark">
+            <div class="card-body" id="memoryDataCard">
 
-      <div id="actionsCollapse" class="collapsed show" aria-expanded="true" role="tabpanel" aria-labelledby="container-actionsHeading">
-        <div class="card-block bg-dark">
-            <div class="form-group">
-                <label><u> Change State </u></label>
-                <select class="form-control" id="container-changeState">
-                    <option value="" selected="selected">  </option>
-                    <option value="startContainer"> Start </option>
-                    <option value="stopContainer"> Stop </option>
-                    <option value="restartContainer"> Restart </option>
-                    <option value="freezeContainer"> Freeze </option>
-                    <option value="unfreezeContainer"> Unfreeze </option>
-                </select>
             </div>
-            <hr/>
-            <button class="btn btn-block btn-primary editContainerSettings">
-                Settings
-            </button>
-            <button class="btn btn-block btn-success takeSnapshot">
-                Snapshot
-            </button>
-            <hr/>
-            <button class="btn btn-block btn-info copyContainer">
-                Copy
-            </button>
-            <button class="btn btn-block btn-primary migrateContainer">
-                Migrate
-            </button>
-            <button class="btn btn-block btn-warning renameContainer">
-                Rename
-            </button>
-            <button class="btn btn-block btn-danger deleteContainer">
-                Delete
-            </button>
         </div>
-      </div>
+        <div class="card bg-dark">
+            <div class="card-body" id="storageDataCard">
+
+            </div>
+        </div>
+
     </div>
-</div>
-<div class="col-md-3">
-    <div class="card border-primary">
-      <div class="card-header bg-info" role="tab">
-        <h5 class="text-white">
-            Profiles
-             <i class="fas fa-users float-right"></i>
-        </h5>
-      </div>
-      <div class="collapse show" role="tabpanel" >
-        <div class="card-block bg-dark table-responsive">
-            <table class="table table-dark table-bordered"id="profileData">
-                  <thead class="thead-inverse">
-                      <tr>
-                          <th> Name </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-            </table>
+    <div class="col-md-3">
+        <div class="card bg-dark">
+
+            <div class="card-body table-responsive">
+                <h5 class="text-white">
+                    <u> Profiles </u>
+                    <i class="fas fa-users float-right"></i>
+                </h5>
+                <table class="table table-dark table-bordered"id="profileData">
+                      <thead class="thead-inverse">
+                          <tr>
+                              <th> Name </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                </table>
+            </div>
         </div>
-      </div>
-    </div>
-    <br/>
-    <div class="card border-primary">
-      <div class="card-header bg-info" role="tab">
-        <h5 class="text-white">
-            Snapshots
-            <i class="fas fa-images float-right"></i>
-        </h5>
-      </div>
-      <div class="collapse show" role="tabpanel" >
-        <div class="card-block bg-dark table-responsive">
-            <table class="table table-dark table-bordered"id="snapshotData">
-                  <thead class="thead-inverse">
-                      <tr>
-                          <th> Name </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-            </table>
-        </div>
-      </div>
-    </div>
-</div>
-<div class="col-md-6">
-    <div class="card bg-dark">
-        <div class="card-header">
-            Memory Details
-        </div>
-        <div class="card-body">
-            <canvas id="memoryData" style="width: 100%;"></canvas>
+        <div class="card bg-dark">
+            <div class="card-body table-responsive">
+                <h5 class="text-white">
+                    <u>Snapshots</u>
+                    <i class="fas fa-images float-right"></i>
+                </h5>
+                <table class="table table-dark table-bordered"id="snapshotData">
+                      <thead class="thead-inverse">
+                          <tr>
+                              <th> Name </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                </table>
+          </div>
         </div>
     </div>
-</div>
 </div>
 </div>
 <div id="containerConsole">
@@ -196,8 +158,8 @@
     <div class="row" id="backupDetailsRow">
         <div class="col-md-6">
             <div class="card card-accent-success">
-                <div class="card-header bg-info">
-                    <h4> LXDMosaic Container Backups </h4>
+                <div class="card-header bg-dark">
+                    <h4> LXDMosaic Instance Backups </h4>
                 </div>
                 <div class="card-body bg-dark">
                     <table class="table table-bordered table-dark" id="localBackupTable">
@@ -216,9 +178,9 @@
         </div>
         <div class="col-md-6">
             <div class="card card-accent-success">
-                <div class="card-header bg-info">
+                <div class="card-header bg-dark">
                     <h4>
-                        LXD Container Backups
+                        LXD Instance Backups
                         <button class="btn btn-success float-right" id="createBackup">
                             Create
                         </button>
@@ -245,7 +207,7 @@
 </div>
 <div id="containerFiles"  class="col-md-12">
     <div class="alert alert-danger">
-        Do not use this over metered intnernet connections
+        Do not use this over a metered internet connection.
         To Correctly indentify the whether the something is a dir or a file
         we have to get the file and check the response, so the file is "downloaded".
         <br/>
@@ -296,10 +258,12 @@ function loadContainerViewAfter(data = null, milSeconds = 2000)
     }, 2000);
 }
 
-function loadContainerTreeAfter(milSeconds = 2000)
+function loadContainerTreeAfter(milSeconds = 2000, hostId = null, hostAlias = null)
 {
     setTimeout(function(){
-        createContainerTree();
+        let p = $.isNumeric(hostId) ? hostId : currentContainerDetails.hostId;
+        let a = hostAlias == null ? currentContainerDetails.alias : hostAlias;
+        addHostContainerList(p, a);
     }, milSeconds);
 }
 
@@ -328,7 +292,7 @@ function deleteFilesystemObjectConfirm(path)
                         ...currentContainerDetails
                     };
 
-                    ajaxRequest(globalUrls.containers.files.delete, x, function(data){
+                    ajaxRequest(globalUrls.instances.files.delete, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.rename.setText('Delete'); // let the user know
@@ -348,7 +312,7 @@ function deleteFilesystemObjectConfirm(path)
 function restoreBackupContainerConfirm(backupId, hostAlias, container, callback = null, wait = true)
 {
     $.confirm({
-        title: `Backup Container - ${hostAlias} / ${container} `,
+        title: `Backup Instance - ${hostAlias} / ${container} `,
         content: `
             <div class="form-group">
                 <label> Target Host </label>
@@ -401,7 +365,7 @@ function restoreBackupContainerConfirm(backupId, hostAlias, container, callback 
             // bind to events
             var jc = this;
             this.$content.find('input[name=targetHost]').tokenInput(globalUrls.hosts.search.search, {
-                queryParam: "host",
+                queryParam: "hostSearch",
                 propertyToSearch: "host",
                 tokenValue: "hostId",
                 preventDuplicates: false,
@@ -414,7 +378,7 @@ function restoreBackupContainerConfirm(backupId, hostAlias, container, callback 
 function backupContainerConfirm(hostId, hostAlias, container, callback = null, wait = true)
 {
     $.confirm({
-        title: `Backup Container - ${hostAlias} / ${container} `,
+        title: `Backup Instance - ${hostAlias} / ${container} `,
         content: `
             <div class="form-group">
                 <label> Backup Name </label>
@@ -455,7 +419,7 @@ function backupContainerConfirm(hostId, hostAlias, container, callback = null, w
                         importAndDelete: importAndDelete
                     }
 
-                    ajaxRequest(globalUrls.containers.backups.backup, x, function(data){
+                    ajaxRequest(globalUrls.instances.backups.backup, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.rename.setText('Backup'); // let the user know
@@ -478,8 +442,8 @@ function backupContainerConfirm(hostId, hostAlias, container, callback = null, w
 function deleteContainerConfirm(hostId, hostAlias, container)
 {
     $.confirm({
-        title: 'Delete Container ' + hostAlias + '/' + container,
-        content: 'Are you sure you want to delete this container ?!',
+        title: 'Delete Instance ' + hostAlias + '/' + container,
+        content: 'Are you sure you want to delete this instance ?!',
         buttons: {
             cancel: function () {},
             delete: {
@@ -489,10 +453,10 @@ function deleteContainerConfirm(hostId, hostAlias, container)
                         hostId: hostId,
                         container: container
                     }
-                    ajaxRequest(globalUrls.containers.delete, x, function(data){
+                    ajaxRequest(globalUrls.instances.delete, x, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
-                            loadContainerTreeAfter();
+                            loadContainerTreeAfter(1000, currentContainerDetails.hostId);
                         }
                         currentContainerDetails = null;
                         $("#overviewBox").show();
@@ -504,10 +468,10 @@ function deleteContainerConfirm(hostId, hostAlias, container)
     });
 }
 
-function renameContainerConfirm(hostId, container, reloadView)
+function renameContainerConfirm(hostId, container, reloadView, hostAlias)
 {
     $.confirm({
-        title: 'Rename Container!',
+        title: 'Rename Instance!',
         content: `
             <div class="form-group">
                 <label> New Name </label>
@@ -539,13 +503,13 @@ function renameContainerConfirm(hostId, container, reloadView)
                         container: container
                     }
 
-                    ajaxRequest(globalUrls.containers.rename, x, function(data){
+                    ajaxRequest(globalUrls.instances.rename, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             return false;
                         }
                         modal.close();
-                        createContainerTree();
+                        addHostContainerList(hostId, hostAlias);
                         if(reloadView){
                             currentContainerDetails.container = newName;
                             loadContainerView(currentContainerDetails);
@@ -562,7 +526,7 @@ function renameContainerConfirm(hostId, container, reloadView)
 function snapshotContainerConfirm(hostId, container)
 {
     $.confirm({
-        title: 'Snapshot Container - ' + container,
+        title: 'Snapshot Instance - ' + container,
         content: `
             <div class="form-group">
                 <label> Snapshot Name </label>
@@ -584,7 +548,7 @@ function snapshotContainerConfirm(hostId, container)
                         return false;
                     }
 
-                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Renaming..'); // let the user know
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Taking snapshot..'); // let the user know
                     modal.buttons.rename.disable();
                     modal.buttons.cancel.disable();
 
@@ -594,7 +558,7 @@ function snapshotContainerConfirm(hostId, container)
                         snapshotName: snapshotName
                     }
 
-                    ajaxRequest(globalUrls.containers.snapShots.take, x, function(data){
+                    ajaxRequest(globalUrls.instances.snapShots.take, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             return false;
@@ -645,7 +609,7 @@ function copyContainerConfirm(hostId, container) {
                         container: container
                     };
 
-                    ajaxRequest(globalUrls.containers.copy, x, function(data){
+                    ajaxRequest(globalUrls.instances.copy, x, function(data){
                         let x = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.copy.enable();
@@ -664,7 +628,7 @@ function copyContainerConfirm(hostId, container) {
             // bind to events
             var jc = this;
             this.$content.find('input[name=newHost]').tokenInput(globalUrls.hosts.search.search, {
-                queryParam: "host",
+                queryParam: "hostSearch",
                 propertyToSearch: "host",
                 tokenValue: "hostId",
                 preventDuplicates: false,
@@ -677,7 +641,7 @@ function copyContainerConfirm(hostId, container) {
 
 function loadContainerBackups()
 {
-    ajaxRequest(globalUrls.containers.backups.getContainerBackups, currentContainerDetails, (data)=>{
+    ajaxRequest(globalUrls.instances.backups.getContainerBackups, currentContainerDetails, (data)=>{
         x = makeToastr(data);
         $("#backupDetailsRow").show();
         $("#backupErrorRow").hide()
@@ -746,17 +710,15 @@ function loadContainerView(data)
         currentTerminalProcessId = null;
     }
 
-    ajaxRequest(globalUrls.containers.getDetails, data, function(result){
+    ajaxRequest(globalUrls.instances.getInstance, data, function(result){
         let x = $.parseJSON(result);
 
         if(x.state == "error"){
             makeToastr(result);
             return false;
         }
-
-        $("#sidebar-ul").find(".text-info").removeClass("text-info");
-
-        addBreadcrumbs([data.alias, data.container ], ["viewHost lookupId", "active"]);
+        changeActiveNav(".overview");
+        addBreadcrumbs(["Dashboard", data.alias, data.container ], ["overview", "viewHost lookupId", "active"], false);
 
         let disableActions = x.state.status_code !== 102;
 
@@ -767,9 +729,9 @@ function loadContainerView(data)
         $("#container-changeState").val("");
 
         if(x.backupsSupported){
-            $("#goToBackups").removeClass("bg-dark disabled");
+            $("#goToBackups").removeClass("bg-dark disabled").css("cursor", "pointer");
         }else{
-            $("#goToBackups").addClass("bg-dark disabled");
+            $("#goToBackups").addClass("bg-dark disabled").css("cursor", "not-allowed");
         }
 
         //NOTE Read more here https://github.com/lxc/pylxd/issues/242
@@ -787,7 +749,7 @@ function loadContainerView(data)
         $("#container-containerNameDisplay").text(data.container);
         $("#container-imageDescription").html(` - ${os} (${version})`);
         $("#container-cpuTime").text(containerCpuTime);
-        $("#container-createdAt").text(moment(x.details.create_at).format("MMM DD YYYY h:mm A"));
+        $("#container-createdAt").text(moment(x.details.created_at).format("MMM DD YYYY h:mm A"));
 
         if(x.details.hasOwnProperty("last_used_at")){
             let last_used_at = moment(x.details.last_used_at);
@@ -833,7 +795,7 @@ function loadContainerView(data)
             profileTrHtml = "<tr><td colspan='999' class='text-center'> No Profiles </td></tr>"
         }else{
             $.each(x.details.profiles, function(i, item){
-                profileTrHtml += `<tr><td><a href='#' class='toProfile'>${item}</a></td></tr>`;
+                profileTrHtml += `<tr><td><a href='#' data-profile=${item} class='toProfile'>${item}</a></td></tr>`;
             });
         }
 
@@ -864,25 +826,83 @@ function loadContainerView(data)
             memoryData.push(item);
         });
 
-        new Chart($("#memoryData"), {
-            type: "bar",
-            data: {
-                labels: memoryLabels,
-                datasets: [{
-                  label: 'Memory',
-                  data: memoryData,
-                  backgroundColor: memoryColors,
-                  borderColor: memoryColors,
-                  borderWidth: 1
-              }]
-            },
-            options: {
-              cutoutPercentage: 40,
-              responsive: false,
-              scales: scalesBytesCallbacks,
-              tooltips: toolTipsBytesCallbacks
-            }
-        });
+        if(x.state.status_code == 103){
+            $("#memoryDataCard").empty().append(`
+                <h5 class="text-white">
+                    <u> Memory Usage </u>
+                    <i class="fas fa-memory float-right"></i>
+                </h5>
+                <div style="width: 100%;">
+                <canvas id="memoryData"></canvas></div>`);
+
+            new Chart($("#memoryData"), {
+                type: "bar",
+                data: {
+                    labels: memoryLabels,
+                    datasets: [{
+                      label: 'Memory',
+                      data: memoryData,
+                      backgroundColor: memoryColors,
+                      borderColor: memoryColors,
+                      borderWidth: 1
+                  }]
+                },
+                options: {
+                  cutoutPercentage: 40,
+                  responsive: false,
+                  scales: scalesBytesCallbacks,
+                  tooltips: toolTipsBytesCallbacks
+                }
+            });
+
+            $("#storageDataCard").empty().append(`
+                <h5 class="text-white">
+                    <u> Disk Usage </u>
+                    <i class="fas fa-hdd float-right"></i>
+                </h5>
+                <div style="width: 100%;">
+                <canvas id="storageData"></canvas></div>`);
+
+
+            let storageKeys = Object.keys(x.state.disk);
+            let storageColors = [];
+            let storageLabels = storageKeys;
+            let storageData = storageKeys.map((key)=>{
+                storageColors.push(randomColor());
+                return x.state.disk[key].usage;
+            });
+
+            new Chart($("#storageData"), {
+                type: "bar",
+                data: {
+                    labels: storageLabels,
+                    datasets: [{
+                      label: 'Memory',
+                      data: storageData,
+                      backgroundColor: storageColors,
+                      borderColor: storageColors,
+                      borderWidth: 1
+                  }]
+                },
+                options: {
+                  responsive: false,
+                  scales: scalesBytesCallbacks,
+                  tooltips: toolTipsBytesCallbacks
+                }
+            });
+        }else{
+            $("#memoryDataCard").empty().append(`<h5 class="text-white">
+                <u> Memory Usage </u>
+                <i class="fas fa-memory float-right"></i>
+            </h5>
+            <div class="alert alert-info text-center">Instance Not Running</div>`);
+            $("#storageDataCard").empty().append(`<h5 class="text-white">
+                            <u> Disk Usage </u>
+                            <i class="fas fa-hdd float-right"></i>
+                        </h5><div class="alert alert-info text-center">Instance Not Running</div>`);
+        }
+
+
 
         $(".boxSlide").hide();
         $("#containerBox").show();
@@ -934,7 +954,7 @@ $("#containerBox").on("click", ".deleteBackup", function(){
                     modal.buttons.delete.disable();
                     modal.buttons.cancel.disable();
 
-                    ajaxRequest(globalUrls.containers.backups.deleteContainerBackup, x, (data)=>{
+                    ajaxRequest(globalUrls.instances.backups.deleteContainerBackup, x, (data)=>{
                         data = makeToastr(data);
                         if(x.state == "error"){
                             modal.buttons.delete.setText('Delete Backup'); // let the user know
@@ -985,7 +1005,7 @@ $("#containerBox").on("click", ".importBackup", function(){
                         'delete': deleteFromRemote
                     }
 
-                    ajaxRequest(globalUrls.containers.backups.importContainerBackup, x, (data)=>{
+                    ajaxRequest(globalUrls.instances.backups.importContainerBackup, x, (data)=>{
                         data = makeToastr(data);
                         if(data.state == "error"){
                             modal.buttons.rename.setText('Importing'); // let the user know
@@ -1004,16 +1024,16 @@ $("#containerBox").on("click", ".importBackup", function(){
 });
 
 $("#containerBox").on("click", ".renameContainer", function(){
-    renameContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);
+    renameContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container, true, currentContainerDetails.alias);
 });
 
-$("#containerBox").on("click", ".toggleCard", function(){
+$("#containerViewBtns").on("click", ".btn", function(){
     if($(this).attr("id") == "goToBackups" && $(this).hasClass("disabled")){
         return false;
     }
 
-    $("#containerViewBtns").find(".bg-primary").removeClass("bg-primary");
-    $(this).addClass("bg-primary");
+    $("#containerViewBtns").find(".active").removeClass("active");
+    $(this).addClass("active");
 });
 
 var currentPath = "/";
@@ -1028,7 +1048,7 @@ function loadFileSystemPath(path){
     currentRequest = $.ajax({
          type: 'POST',
          data: reqData,
-         url: globalUrls.containers.files.getPath,
+         url: globalUrls.instances.files.getPath,
          beforeSend : function()    {
             if(currentRequest != null) {
                 currentRequest.abort();
@@ -1074,10 +1094,34 @@ function loadFileSystemPath(path){
                  });
                  $("#filesystemTable").empty().append(h);
              }else {
-                 $("#downloadContainerFileForm").find("input[name=hostId]").val(currentContainerDetails.hostId);
-                 $("#downloadContainerFileForm").find("input[name=path]").val(path);
-                 $("#downloadContainerFileForm").find("input[name=container]").val(currentContainerDetails.container);
-                 $("#downloadContainerFileForm").trigger("submit");
+                 var formData = new FormData();
+
+                 let parts = path.split("/")
+                 let fileName = parts[parts.length - 1];
+
+                formData.append("hostId", currentContainerDetails.hostId);
+                formData.append("path", path);
+                formData.append("container", currentContainerDetails.container);
+                formData.append("download", 1);
+                // Stolen straight from stackoverflow
+                 fetch('/api/Instances/Files/GetPathController/get', {
+                     method: 'POST',
+                     headers: userDetails,
+                     body: formData
+                 })
+                  .then(resp => resp.blob())
+                  .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    // the filename you want
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                  })
+                  .catch(() => alert('oh no something went wrong!'));
              }
          }
      });
@@ -1193,7 +1237,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
         }
 
         $.confirm({
-            title: 'Container Shell!',
+            title: 'Instance Shell!',
             content: `
                 <div class="form-group">
                     <label> Shell </label>
@@ -1236,11 +1280,21 @@ $("#containerBox").on("click", "#goToConsole", function() {
 
                                     currentTerminalProcessId = data.processId;
 
-                                    consoleSocket = io.connect("/terminals", {
+                                    // Theoretically no need to inject credentials
+                                    // here as auth is only called when a socket
+                                    // is first connected (in this case when the
+                                    // operations socket is setup - which will
+                                    // always come before this) but to be safe ...
+                                    consoleSocket = io.connect(`/terminals`, {
                                         reconnection: false,
                                         query: $.extend({
+                                            ws_token: userDetails.apiToken,
+                                            user_id: userDetails.userId,
                                             pid: data.processId,
-                                            shell: shell
+                                            shell: shell,
+                                            userId: userDetails.userId,
+                                            host: currentContainerDetails.hostId,
+                                            container: currentContainerDetails.container
                                         }, currentContainerDetails)
                                     });
                                     consoleSocket.on('data', function(data) {
@@ -1277,13 +1331,6 @@ $("#containerBox").on("click", ".toDeployment", function(){
     changeActiveNav(".viewDeployments")
 })
 
-$("#containerBox").on("click", ".toProfile", function(){
-    let profile = $(this).text();
-    loadProfileView(profile, currentContainerDetails.hostId, function(){
-        viewProfile(profile, currentContainerDetails.alias, currentContainerDetails.hostId);
-    });
-});
-
 $("#containerBox").on("click", ".copyContainer", function(){
     copyContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);
 });
@@ -1300,12 +1347,16 @@ $("#containerBox").on("click", ".editContainerSettings", function(){
     $("#modal-container-editSettings").modal("show");
 });
 
+$("#containerBox").on("click", "#craeteImage", function(){
+    $("#modal-container-createImage").modal("show");
+});
+
 $("#containerBox").on("click", ".deleteContainer", function(){
     deleteContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.alias, currentContainerDetails.container);
 });
 
 $("#containerBox").on("change", "#container-changeState", function(){
-    let url = globalUrls.containers.state[$(this).val()];
+    let url = globalUrls.instances.state[$(this).val()];
     ajaxRequest(url, currentContainerDetails, function(data){
         let result = makeToastr(data);
         loadContainerTreeAfter();
@@ -1326,4 +1377,5 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
     require __DIR__ . "/../modals/containers/editSettings.php";
     require __DIR__ . "/../modals/containers/files/uploadFile.php";
     require __DIR__ . "/../modals/instances/vms/createVm.php";
+    require __DIR__ . "/../modals/containers/createImage.php";
 ?>

@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Tools\Backups;
 
 use dhope0000\LXDClient\Model\Backups\FetchBackups;
-use dhope0000\LXDClient\Tools\Backups\GetHostContainerStatusForBackupSet;
+use dhope0000\LXDClient\Tools\Backups\GetHostInstanceStatusForBackupSet;
 
 class GetBackupsOverview
 {
@@ -11,10 +11,10 @@ class GetBackupsOverview
 
     public function __construct(
         FetchBackups $fetchBackups,
-        GetHostContainerStatusForBackupSet $getHostContainerStatusForBackupSet
+        GetHostInstanceStatusForBackupSet $getHostInstanceStatusForBackupSet
     ) {
         $this->fetchBackups = $fetchBackups;
-        $this->getHostContainerStatusForBackupSet = $getHostContainerStatusForBackupSet;
+        $this->getHostInstanceStatusForBackupSet = $getHostInstanceStatusForBackupSet;
     }
 
     public function get()
@@ -22,7 +22,7 @@ class GetBackupsOverview
         $allBackups = $this->fetchBackups->fetchAll();
         $properties = $this->getProperties($allBackups);
 
-        $allBackups = $this->getHostContainerStatusForBackupSet->get($allBackups);
+        $allBackups = $this->getHostInstanceStatusForBackupSet->get($allBackups);
 
         return [
             "sizeByMonthYear"=>$properties["sizeByMonthYear"],
@@ -52,7 +52,13 @@ class GetBackupsOverview
                 $this->createYearArray($filesByMonthYear, $year, $monthLen);
             }
 
-            $sizeByMonthYear[$year][$month] += filesize($backup["localPath"]);
+            $filesize = 0;
+            // We should be doing something more agressive in this case!
+            if (file_exists($backup["localPath"])) {
+                $filesize = filesize($backup["localPath"]);
+            }
+
+            $sizeByMonthYear[$year][$month] += $filesize;
             $filesByMonthYear[$year][$month] ++;
         }
 

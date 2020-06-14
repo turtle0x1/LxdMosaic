@@ -1,9 +1,9 @@
     <!-- Modal -->
-<div class="modal fade" id="modal-container-create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="modal-container-create" tabindex="-1" role="dialog"  aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Create Container</h5>
+        <h5 class="modal-title">Create Container</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -70,7 +70,7 @@
             </div>
         </div>
         <label for="newContainerSettings">
-            Container Settings(Optional)
+            Settings(Optional)
             <button id="addNewContainerSetting" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
         </label>
         <table class="table table-borered" id="newContainerSettings">
@@ -84,7 +84,6 @@
             <tbody>
             </tbody>
         </table>
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -111,7 +110,7 @@
     });
 
     $("#newContainerHosts").tokenInput(globalUrls.hosts.search.search, {
-        queryParam: "host",
+        queryParam: "hostSearch",
         propertyToSearch: "host",
         tokenValue: "hostId",
         preventDuplicates: false,
@@ -128,7 +127,7 @@
                     //TODO if len == 0
                     let gpus = "";
                     $.each(data, function(i, item){
-                        gpus += `<option value="${item.id}">${item.product}</option>`
+                        gpus += `<option value="${item.pci_address}">${item.product}</option>`
                     });
                     $("#newContainerGpus").empty().append(gpus);
                 });
@@ -151,8 +150,16 @@
 
     var containerSettingRow = "";
 
+    $("#modal-container-create").on("hide.bs.modal", function(){
+        $("#newContainerName").val("");
+        $("#newContainerGpus, #newContainerSettings > tbody").empty()
+        $("#newContainerProfiles").tokenInput("clear");
+        $("#newContainerHosts").tokenInput("clear");
+        $("#newContainerImage").tokenInput("clear");
+    });
+
     $("#modal-container-create").on("shown.bs.modal", function(){
-        ajaxRequest(globalUrls.containers.settings.getAllAvailableSettings, {}, function(data){
+        ajaxRequest(globalUrls.instances.settings.getAllAvailableSettings, {}, function(data){
             data = $.parseJSON(data);
             let selectHtml = "<select name='key' class='form-control containerSetting'><option value=''>Please Select</option>";
             $.each(data, function(i, item){
@@ -168,7 +175,7 @@
         });
 
         $("#gpuWarning").hide();
-        ajaxRequest(globalUrls.containers.instanceTypes.getInstanceTypes, {}, function(data){
+        ajaxRequest(globalUrls.instances.instanceTypes.getInstanceTypes, {}, function(data){
             data = $.parseJSON(data);
             let h = "<option value=''>Please Select</option>";
             $.each(data, function(provider, templates){
@@ -247,12 +254,12 @@
             config: config
         };
 
-        ajaxRequest(globalUrls.containers.create, x, function(data){
+        ajaxRequest(globalUrls.instances.create, x, function(data){
             let x = makeToastr(data);
             if(x.state == "error"){
                 return false;
             }
-            $("#modal-container-create").modal("toggle");
+            $("#modal-container-create").modal("hide");
             loadContainerTreeAfter();
         });
     });

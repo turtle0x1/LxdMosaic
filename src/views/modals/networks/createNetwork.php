@@ -52,11 +52,17 @@
 </div>
 <script>
     $("#newNetworkHosts").tokenInput(globalUrls.hosts.search.search, {
-        queryParam: "host",
+        queryParam: "hostSearch",
         propertyToSearch: "host",
         tokenValue: "hostId",
         preventDuplicates: false,
         theme: "facebook"
+    });
+
+    $("#modal-networks-create").on("hide.bs.modal",  function(){
+        $("#modal-networks-create input").val("");
+        $("#newNetworkHosts").tokenInput("clear");
+        $("#networkConfigTable > tbody > tr").not(":last").remove();
     });
 
     $("#modal-networks-create").on("click", ".removeRow", function(){

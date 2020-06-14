@@ -2,33 +2,40 @@
 
 namespace dhope0000\LXDClient\Tools\Networks;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetHostsNetworks
 {
-    public function __construct(HostList $hostList, LxdClient $lxdClient)
-    {
-        $this->hostList = $hostList;
-        $this->lxdClient = $lxdClient;
+    public function __construct(
+        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts
+    ) {
+        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
     }
 
     public function getAll()
     {
-        $details = array();
-        foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
-            $details[$indent] = [
-                "hostId"=>$host["Host_ID"],
-                "online"=>(bool) $host["Host_Online"],
-                "networks"=>[]
-            ];
-            if ($host["Host_Online"] != true) {
-                continue;
+        $clusters = $this->getClustersAndStandaloneHosts->get();
+
+        foreach ($clusters["clusters"] as $clusterIndex => $cluster) {
+            foreach ($cluster["members"] as $hostIndex => &$host) {
+                $host->setCustomProp("networks", $this->getHostNetwork($host));
             }
-            $client = $this->lxdClient->getANewClient($host["Host_ID"]);
-            $details[$indent]["networks"] = $client->networks->all();
         }
-        return $details;
+
+        foreach ($clusters["standalone"]["members"] as $hostIndex => &$host) {
+            $host->setCustomProp("networks", $this->getHostNetwork($host));
+        }
+
+        return $clusters;
+    }
+
+    private function getHostNetwork(Host $host)
+    {
+        if (!$host->hostOnline()) {
+            return [];
+        }
+
+        return $host->networks->all(2);
     }
 }

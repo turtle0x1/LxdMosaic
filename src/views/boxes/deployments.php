@@ -1,48 +1,57 @@
 <div id="deploymentsBox" class="boxSlide">
-    <div id="deploymentsOverview" class="row">
-        <div class="col-md-9">
-              <div class="card">
-                <div class="card-header bg-info" role="tab" >
-                  <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
-                      Deployments
-                    </a>
-                  </h5>
+    <div id="deploymentsOverview">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row border-bottom mb-2">
+                    <div class="col-md-12 text-center">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                            <h4> Deployments </h4>
+                            <div class="btn-toolbar float-right">
+                              <div class="btn-group mr-2">
+                                  <button data-toggle="tooltip" data-placement="bottom" title="Create Deployment" class="btn btn-primary" id="createDeployment">
+                                      <i class="fas fa-plus"></i>
+                                  </button>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="cloudConfigDescription" class="collapse in show" role="tabpanel" >
-                  <div class="card-block bg-dark">
-                      Deployments are used to deploy multiple cloud configs to multiple
-                      containers.
-                  </div>
-                </div>
-              </div>
-              <div id="deploymentList">
-              </div>
+            </div>
         </div>
-        <div class="col-md-3">
-              <div class="card">
-                <div class="card-header bg-info" role="tab" >
-                  <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Actions
-                    </a>
-                  </h5>
-                </div>
-                <div id="collapseOne" class="collapse in show" role="tabpanel" >
-                  <div class="card-block bg-dark">
-                      <button class="btn btn-block btn-primary" id="createDeployment">
-                          Create
-                      </button>
-                  </div>
-                </div>
-              </div>
+        <div class="row">
+            <div class="col-md-12" id="deploymentList">
+            </div>
         </div>
     </div>
     <div id="depoymentDetails">
-        <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
-            <h4 class="text-white" id="deploymentName"> Deployment Name </h4>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row border-bottom mb-2">
+                    <div class="col-md-12 text-center">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                            <h4 id="deploymentName"></h4>
+                            <div class="btn-toolbar float-right">
+                              <div class="btn-group mr-2">
+                                  <button data-toggle="tooltip" data-placement="bottom" title="Deploy Instances" class="btn btn-primary" id="deploy">
+                                      <i class="fas fa-plus"></i>
+                                  </button>
+                                  <button data-toggle="tooltip" data-placement="bottom" title="Start Deployment" class="btn btn-success" id="startDeployment">
+                                      <i class="fas fa-play" style="color: white !important;"></i>
+                                  </button>
+                                  <button data-toggle="tooltip" data-placement="bottom" title="Stop Deployment" class="btn btn-warning" id="stopDeployment">
+                                      <i class="fas fa-stop"></i>
+                                  </button>
+                                  <button data-toggle="tooltip" data-placement="bottom" title="Delete Deployment" class="btn btn-danger" id="deleteDeployment">
+                                      <i class="fas fa-trash"></i>
+                                  </button>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
+        <!-- <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
             <div class="col-md-3">
                 <div id="deploy" class="card text-center actionCard bg-primary text-white">
                     <div class="card-body">Deploy Containers</div>
@@ -59,15 +68,15 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div id="deleteDeployment" class="card text-center actionCard bg-danger text-white">
+                <div id="" class="card text-center actionCard bg-danger text-white">
                     <div class="card-body">Delete Deployment</div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="row">
             <div class="col-md-3">
-                  <div class="card">
-                    <div class="card-header text-center bg-info" role="tab" id="deploymentCloudConfigHeading">
+                  <div class="card bg-dark">
+                    <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
                         Cloud Configs
@@ -90,9 +99,9 @@
                   </div>
             </div>
             <div class="col-md-9">
-                <div class="card">
-                    <div class="card-header bg-info text-center">
-                        <h5> <a> Containers In Deployment </a> </h5>
+                <div class="card bg-dark">
+                    <div class="card-header bg-dark">
+                        <h5> <a> Instances In Deployment </a> </h5>
                     </div>
                     <div class="card-body bg-dark">
                         <table class="table table-bordered table-dark" id="deploymentContainersList">
@@ -123,7 +132,7 @@ var currentDeployment = null;
 var emptyDeploymentBox = function(){
     return $(`
     <div class="brand-card" id="">
-      <div class="brand-card-header bg-info">
+      <div class="brand-card-header bg-dark">
         <h5 class='text-white name'></h5>
       </div>
       <div class="brand-card-body bg-dark">
@@ -155,8 +164,8 @@ function loadDeploymentsView(deploymentId = null)
         }
 
         let hosts = `
-        <li class="nav-item ${$.isNumeric(deploymentId) ? "" : "active"} deployments-overview">
-            <a class="nav-link" href="#">
+        <li class="nav-item deployments-overview">
+            <a class="nav-link ${$.isNumeric(deploymentId) ? "" : "text-info"}" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;

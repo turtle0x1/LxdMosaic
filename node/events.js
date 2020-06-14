@@ -10,20 +10,47 @@ const fs = require('fs'),
   rp = require('request-promise'),
   mysql = require('mysql'),
   Hosts = require('./Hosts');
+  WsTokens = require('./WsTokens');
 (HostOperations = require('./HostOperations')),
   (Terminals = require('./Terminals')),
   (bodyParser = require('body-parser')),
   (hosts = null),
   (hostOperations = null),
-  (terminals = null);
+  (terminals = null),
+  (wsTokens = null);
 
-const envImportResult = require('dotenv').config({
+var dotenv = require('dotenv')
+var dotenvExpand = require('dotenv-expand')
+
+var envImportResult = dotenv.config({
   path: __dirname + '/../.env',
 });
+
+dotenvExpand(envImportResult)
 
 if (envImportResult.error) {
   throw envImportResult.error;
 }
+
+
+if(!fs.existsSync(process.env.CERT_PATH)){
+    console.log("waiting 10 seconds to see if a certificate gets created");
+}
+
+var startDate = new Date();
+
+while (!fs.existsSync(process.env.CERT_PATH)) {
+    var seconds = (new Date().getTime() - startDate.getTime()) / 1000;
+    if(seconds > 10){
+        break;
+    }
+}
+
+if(!fs.existsSync(process.env.CERT_PATH)){
+    console.log("couldn't read certificate file");
+    process.exit(1);
+}
+
 
 // Https certificate and key file location for secure websockets + https server
 var privateKey = fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
@@ -79,7 +106,6 @@ app.get('/', function(req, res) {
 app.post('/terminals', function(req, res) {
   // Create a identifier for the console, this should allow multiple consolses
   // per user
-  console.log(req.body);
   uuid = terminals.getInternalUuid(req.body.host, req.body.container);
   res.json({ processId: uuid });
   res.send();
@@ -150,11 +176,33 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
   if (err) {
-    throw err;
+      if(process.env.hasOwnProperty("SNAP")){
+          console.log("delaying restart 10 seconds to because we are in a snap");
+          var startDate = new Date();
+          while (true) {
+              var seconds = (new Date().getTime() - startDate.getTime()) / 1000;
+              if(seconds > 10){
+                  break;
+              }
+          }
+      }
+      throw err;
   }
 });
 
+io.use(async (socket, next) => {
+  let token = socket.handshake.query.ws_token;
+  let userId = socket.handshake.query.user_id;
+  let isValid = await wsTokens.isValid(token, userId);
+
+  if (isValid) {
+    return next();
+  }
+  return next(new Error('authentication error'));
+});
+
 hosts = new Hosts(con, fs, rp);
+wsTokens = new WsTokens(con);
 hostOperations = new HostOperations(fs);
 terminals = new Terminals(rp);
 

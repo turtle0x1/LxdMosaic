@@ -2,22 +2,19 @@
 
 namespace dhope0000\LXDClient\Tools\CloudConfig;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class DeployToProfile
 {
-    public function __construct(
-        LxdClient $lxdClient,
-        GetConfig $getConfig
-    ) {
-        $this->client = $lxdClient;
+    public function __construct(GetConfig $getConfig)
+    {
         $this->getConfig = $getConfig;
     }
 
     public function deployToHosts(
         string $profileName,
-        array $hosts,
+        HostsCollection $hosts,
         int $cloudConfigId = null,
         int $cloudConfigRevId = null,
         array $extraConfigParams = null,
@@ -46,9 +43,8 @@ class DeployToProfile
         $config["user.user-data"] = $latestData["data"];
         $config["user.vendor-data"] = $vendorData;
 
-        foreach ($hosts as $hostId) {
-            $client = $this->client->getANewClient($hostId);
-            $serverProfiles = $client->profiles->all();
+        foreach ($hosts as $host) {
+            $serverProfiles = $host->profiles->all();
 
             $function = "create";
 
@@ -58,7 +54,7 @@ class DeployToProfile
 
             $description = "";
 
-            $deployResults[] = $client->profiles->$function(
+            $deployResults[] = $host->profiles->$function(
                 $profileName,
                 $description,
                 $config

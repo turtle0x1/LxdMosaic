@@ -1,0 +1,36 @@
+<?php
+
+namespace dhope0000\LXDClient\Controllers\Instances\Backups;
+
+use dhope0000\LXDClient\Tools\Instances\Backups\BackupInstance;
+use dhope0000\LXDClient\Objects\Host;
+
+class BackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
+{
+    private $backupInstance;
+
+    public function __construct(BackupInstance $backupInstance)
+    {
+        $this->backupInstance = $backupInstance;
+    }
+
+    public function backup(
+        Host $host,
+        string $container,
+        string $backup,
+        $wait = true,
+        int $importAndDelete
+    ) {
+        $lxdRespone = $this->backupInstance->create(
+            $host,
+            $container,
+            $backup,
+            $wait,
+            (bool) $importAndDelete
+        );
+
+        $status = $wait === "false" ? "Backing" : "Backed";
+
+        return ["state"=>"success", "message"=>"$status up container", "lxdRespone"=>$lxdRespone];
+    }
+}

@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Tools\Hosts\Images;
 
 use dhope0000\LXDClient\Tools\Hosts\Images\HostHasImage;
-use Opensaucesystems\Lxd\Client;
+use dhope0000\LXDClient\Objects\Host;
 
 class ImportImageIfNotHave
 {
@@ -12,38 +12,28 @@ class ImportImageIfNotHave
         $this->hostHasImage = $hostHasImage;
     }
 
-    public function importIfNot(Client $client, array $imageDetails)
+    public function importIfNot(Host $host, array $imageDetails)
     {
-        if ($this->hostHasImage->has($client, $imageDetails["fingerprint"])) {
+        if ($this->hostHasImage->has($host, $imageDetails["fingerprint"])) {
             return true;
         }
 
-        //By default we can just the alias (if the image is from linuxcontainers.org)
-        $detailsToUse = ["alias"=>$imageDetails["alias"]];
-
-        // Ubuntu images on the other hand (if imported ubuntu not from
-        // linuxcontainers but the default method ) will be difficult
-        // and need this work around if the host doesn't have the ubuntu
-        // image
-        if ($imageDetails["alias"] == "default" || $alias == null) {
-            $detailsToUse = [
-                "fingerprint"=>$imageDetails["fingerprint"],
-                "protocol"=>$imageDetails["protocol"]
-            ];
-
-            if (isset($imageDetails["provideMyHostsCert"]) &&  $imageDetails["provideMyHostsCert"] == true) {
-                $detailsToUse["certificate"] = $x = \dhope0000\LXDClient\Tools\Hosts\Certificates\GetHostCertificate::get(str_replace("https://", "", $imageDetails["server"]));
-            }
+        if (isset($imageDetails["provideMyHostsCert"]) &&  $imageDetails["provideMyHostsCert"] == true) {
+            $imageDetails["certificate"] = $x = \dhope0000\LXDClient\Tools\Hosts\Certificates\GetHostCertificate::get(str_replace("https://", "", $imageDetails["server"]));
         }
 
         //NOTE we are using wait here so for large images this is blocking
         //     (lengthing the request)
-        $this->lxdResponse = $client->images->createFromRemote(
+        $this->lxdResponse = $host->images->createFromRemote(
             $imageDetails["server"],
-            $detailsToUse,
+            $imageDetails,
             false,
             true
         );
+
+        if (!empty($this->lxdResponse["err"])) {
+            throw new \Exception($this->lxdResponse["err"], 1);
+        }
 
         return $imageDetails;
     }

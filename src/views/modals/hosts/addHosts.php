@@ -11,15 +11,21 @@
       <div class="modal-body">
             <b> <u> Servers To Add </u> </b>
             <div class="alert alert-info">
-                If a host is in a cluster LXDMosaic will find other cluster memebers
+                If a host is in a cluster LXDMosaic will find other cluster members
                 and try to import them with the same trust password!
             </div>
-            <button class="btn btn-sm pull-right btn-primary" id="addBox">
-                <i class="fa fa-plus"></i>
-            </button>
-            <br/>
-            <br/>
-            <div id="inputBoxes"></div>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                <button class="btn btn-sm pull-right btn-primary" id="addBox">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="showPasswordCheck">
+                  <label class="form-check-label" for="showPasswordCheck">
+                    Show Passwords
+                  </label>
+                </div>
+            </div>
+            <div class="mt-2" id="inputBoxes"></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31,17 +37,24 @@
 <script>
 
 let inputTemplate = `<div class="input-group mb-3 serverGroup">
-    <input placeholder="ip / hostname"  name="connectDetails" class="form-control"/>
-    <input placeholder="trust password" name="trustPassword"  type="password" class="form-control"/>
-    <input placeholder="alias" name="alias"  class="form-control"/>
+    <input placeholder="ip / hostname"  name="connectDetails" class="form-control" autocomplete="off"/>
+    <input placeholder="trust password" name="trustPassword"  type="password" class="form-control trustPasswordInput" autocomplete="off"/>
+    <input placeholder="alias" name="alias"  class="form-control" autocomplete="off"/>
     <div class="input-group-append">
     <button class="btn btn-danger removeRow" type="button"><i class="fa fa-trash"></i></button>
     </div>
     </button></div>`;
 
 $("#modal-hosts-add").on("shown.bs.modal", function(){
-    $('[data-toggle="tooltip"]').tooltip()
     $("#inputBoxes").empty().append(inputTemplate);
+});
+
+$("#modal-hosts-add").on("change", "#showPasswordCheck", function(){
+    if($(this).is(":checked")){
+        $("#modal-hosts-add").find(".trustPasswordInput").attr("type", "text");
+    }else{
+        $("#modal-hosts-add").find(".trustPasswordInput").attr("type", "password");
+    }
 });
 
 $("#modal-hosts-add").on("click", "#addBox", function(){

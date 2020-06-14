@@ -13,7 +13,7 @@
             <b> On Host: </b> <span id="editSettings-currentHost"></span>
         </h5>
         <div class="alert alert-warning">
-            This uses the update stragery so its currently <b> not possible to
+            This uses the update strategy so its currently <b> not possible to
             delete existing keys. </b>
         </div>
         <div id="editSettings-list"></div>
@@ -33,6 +33,11 @@
 
     var reamingSettingSelectOptions = "";
 
+    $("#modal-container-editSettings").on("hide.bs.modal", function(){
+        $("#editSettings-currentHost").text("");
+        $("#editSettings-list").empty();
+    });
+
     $("#modal-container-editSettings").on("shown.bs.modal", function(){
 
         reamingSettingSelectOptions = "";
@@ -47,7 +52,7 @@
             return false;
         }
 
-        ajaxRequest(globalUrls.containers.getCurrentSettings, currentContainerDetails, function(data){
+        ajaxRequest(globalUrls.instances.getCurrentSettings, currentContainerDetails, function(data){
             data = $.parseJSON(data);
             if(data.existingSettings.length > 0){
                 let existingSettingsHtml = "";
@@ -78,7 +83,7 @@
                 $.each(data.remainingSettings, function(i, item){
                     reamingSettingSelectOptions += `<option
                         data-default='${item.value}'
-                        data-description='${item.description}'
+                        data-description="${item.description}"
                         value='${item.key}'>
                             ${item.key}
                         </option>`;
@@ -133,7 +138,7 @@
         }
 
         data = $.extend(data, currentContainerDetails);
-        ajaxRequest(globalUrls.containers.setSettings, data, function(data){
+        ajaxRequest(globalUrls.instances.setSettings, data, function(data){
             data = makeToastr(data);
             if(data.state == "success"){
                 $("#modal-container-editSettings").modal("toggle");

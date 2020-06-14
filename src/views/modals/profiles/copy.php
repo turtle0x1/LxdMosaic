@@ -38,11 +38,16 @@ var copyProfileData = {
 };
 
 $("#profileCopyTargets").tokenInput(globalUrls.hosts.search.search, {
-    queryParam: "host",
+    queryParam: "hostSearch",
     propertyToSearch: "host",
     tokenValue: "hostId",
     preventDuplicates: false,
     theme: "facebook"
+});
+
+$("#modal-profile-copy").on("hide.bs.modal",  function(){
+    $("#modal-profile-copy input").val("");
+    $("#profileCopyTargets").tokenInput("clear");
 });
 
 $("#modal-profile-copy").on("shown.bs.modal", function(){

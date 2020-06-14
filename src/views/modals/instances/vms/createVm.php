@@ -39,11 +39,16 @@
 <script>
 
 $("#newVmHosts").tokenInput(globalUrls.hosts.search.search, {
-    queryParam: "host",
+    queryParam: "hostSearch",
     propertyToSearch: "host",
     tokenValue: "hostId",
     preventDuplicates: false,
     theme: "facebook"
+});
+
+$("#modal-vms-create").on("hide.bs.modal", function(){
+    $("#modal-vms-create input").val("");
+    $("#newVmHosts").tokenInput("clear");
 });
 
 $("#modal-vms-create").on("click", "#createVm", function(){

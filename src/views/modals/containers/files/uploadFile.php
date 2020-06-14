@@ -31,8 +31,9 @@ var uploadDropzone = null;
 $("#modal-container-files-upload").on("shown.bs.modal", function(){
     if(uploadDropzone ==  null){
         uploadDropzone = $("div#fileUpload").dropzone({
-            url: globalUrls.containers.files.uploadFiles,
+            url: globalUrls.instances.files.uploadFiles,
             method: "POST",
+            headers: userDetails,
             init: function() {
                 this.on("sending", function(file, xhr, formData){
                     $.each(currentContainerDetails, function(key, item){

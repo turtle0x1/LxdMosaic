@@ -1,7 +1,113 @@
 Unreleased
 
+Added
+    Version check showing if there is an update available (#191)
+    CRUD operations for image aliases (#170)
+    Update image "public" & "auto update" properties (#170)
+    Display some of the system details provided in LXD >= 4.1 (#206)
+    Export instance as image
+    Create profiles (#175)
+
+Fixed
+    Cant load project inforatmion
+    Cant upload file to instance files
+    Cant load backups for instance (#211)
+    Sidebar lost when LXD host goes offline (#152)
+
+Changed
+    Inject userId if requested by controller so the $userId variable in a
+    controller will always be locked to the user using the app
+
+    Use DB for validing if user is admin instead of session (#194)
+
+    Re-purpose the cluster page, access it by clicking a cluster on the dashboard
+    sidebar (#183)
+
+    Store the user project in the database for each host, it can be over written
+    anytime with a header (#194)
+
+    Use the LXD recursion param to drasticly improve fetchin instances time
+
+    Use objects because I need practise and its better
+
+    Add show password toggle when adding servers (#208)
+
+Fixed
+    Cant add more than one profile to deploy cloud config (#198)
+
+0.8.0 - 09/05/2020
+
+Added
+    Bulk action to stop containers (#184)
+    Bulk action to start containers (#185)
+    Add (optional) select GPU when deploying a cloud config (#199)
+
+Changed
+    Renamespaced & updated class names for lots of "Containers" to "Instances"
+    to be consistent with the way we use LXD API, this will break any scripts
+
+    When creating a usedBy link fetch image details and show user freindly name
+    instead of fingerprint (#186)
+
+    Use apiToken to authenticate user on API requests as part of the journey
+    to a "statless api" (so client apps can exist) the current caveat is that
+    the project will default to "default" for every request, until we move the
+    data into the database (#180)
+
+    Bump bootstrap version to 4.4.1 and made some changes to the way tooltips
+    are initialized to fix modals not hiding (#177)
+
+    Use ENV for sensitiveData/certs directory for snap
+
+    Use PCI address for GPU device when creating an instance (#197)
+
+Fixed
+    Terminal sessions not opening properly
+    Some instance settings can't be properly set (close #192)
+    Typos (#190)
+    Ensure that an instance is created where the user asked it to be (#196)
+
+0.7.0 - 12/04/2020
+
+Added
+    Access control - This will break any existing scripts that you may have,
+        it uses sessions for everything which isn't good API design (stateful)
+        so ill have to switch to using the tokens to authenticate the API
+
+        This includes the basic functionality to login, add users & reset passwords
+        it doesn't add any kind of per user restrictions!
+
+        Thanks to Shem Pasamba (@shemgp) for implementing the user token
+        functionality for the node server and that will be used for api requests
+        in the future.
+
+    Logo created by my buddy Josh
+    Total storage available to fleet analytics
+    View, create & delete proxy devices on a host (#165)
+    Instance network's bytes sent / recieved to server overview (#169)
+    Jump between instances, snapshots, images, & profiles from used by tables
+
+Changed
+    Indicate cluster groups & standalone hosts on dashboard (#150)
+    Load profile on click instead of passing around an array containing profile data
+    Indicate cluster groups & standalone hosts on profiles
+    Indicate cluster groups & standalone hosts on storage
+    Indicate cluster groups & standalone hosts on networks
+    Indicate cluster groups & standalone hosts on projects
+    Clear modals on hidden (#164)
+    Quite a lot of the UI was updated (to what I think is better)
+
+Fixed
+    Cant create a container with no devices (#158)
+    All clusters not showing on cluster overview (#151)
+    Cant store backup locally because of missing class property (#164)
+    Cant access files on new versions of LXD
+
+0.6.1 - 02/03/2020
+
 Fixed
     Cant add more than one GPU
+    CoreUI bug preventing collapse's from working
 
 0.6.0 - 01/02/2020
 

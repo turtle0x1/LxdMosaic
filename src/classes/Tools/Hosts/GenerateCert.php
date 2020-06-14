@@ -4,7 +4,6 @@ namespace dhope0000\LXDClient\Tools\Hosts;
 
 use GuzzleHttp\Client as GuzzleClient;
 use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
-use dhope0000\LXDClient\Constants\Constants;
 use dhope0000\LXDClient\Model\Client\LxdClient;
 
 class GenerateCert
@@ -47,16 +46,16 @@ class GenerateCert
         $host = parse_url($urlAndPort)["host"];
 
         return [
-            "key"=>Constants::CERTS_DIR . $host . ".key",
-            "cert"=>Constants::CERTS_DIR . $host . ".cert",
-            "combined"=>Constants::CERTS_DIR . $host . ".combined"
+            "key"=>$_ENV["LXD_CERTS_DIR"] . $host . ".key",
+            "cert"=>$_ENV["LXD_CERTS_DIR"] . $host . ".cert",
+            "combined"=>$_ENV["LXD_CERTS_DIR"] . $host . ".combined"
         ];
     }
 
     private function createShortPaths($pathsArray)
     {
         foreach ($pathsArray as $key => $path) {
-            $pathsArray[$key] = str_replace(Constants::CERTS_DIR, "", $path);
+            $pathsArray[$key] = str_replace($_ENV["LXD_CERTS_DIR"], "", $path);
         }
         return $pathsArray;
     }

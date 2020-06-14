@@ -30,32 +30,33 @@ class GetDeployment
 
         $profiles = $this->hostHaveDeploymentProfiles->getAllProfilesInDeployment($deploymentId);
 
-        $containers = $this->getContainersInDeployment->getFromProfile($profiles);
+        $hostWithContainers = $this->getContainersInDeployment->getFromProfile($profiles);
         $containerInfo = $this->getContainersInformation->getContainersInDeployment($deploymentId);
 
-        $containers = $this->addAdditionalInfoToContainers($containers, $containerInfo);
+        $hostWithContainers = $this->addAdditionalInfoToContainers($hostWithContainers, $containerInfo);
 
         $output["details"] = $this->fetchDeployments->fetch($deploymentId);
         $output["cloudConfigs"] = $this->fetchCloudConfigs->getAll($deploymentId);
         $output["profiles"] = $profiles;
-        $output["containers"] = $containers;
+        $output["containers"] = $hostWithContainers;
         return $output;
     }
 
-    private function addAdditionalInfoToContainers($containers, array $containerInfo)
+    private function addAdditionalInfoToContainers($hostWithContainers, array $containerInfo)
     {
-        foreach ($containers as $hostName => $hostDetails) {
+        foreach ($hostWithContainers as $host) {
+            $containers = $host->getCustomProp("containers");
             foreach ($containerInfo as $info) {
-                if ($hostDetails["hostId"] == $info["hostId"]) {
-                    foreach ($hostDetails["containers"] as $index => $container) {
+                if ($host->getHostId() == $info["hostId"]) {
+                    foreach ($containers as $index => &$container) {
                         if ($container["name"] == $info["name"]) {
-                            $containers[$hostName]["containers"][$index]["mosaicInfo"] =
-                            array_merge($container, $info);
+                            $container["mosaicInfo"] = array_merge($container, $info);
                         }
                     }
                 }
             }
+            $containers = $host->setCustomProp("containers", $containers);
         }
-        return $containers;
+        return $hostWithContainers;
     }
 }

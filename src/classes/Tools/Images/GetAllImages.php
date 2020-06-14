@@ -1,46 +1,47 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Images;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetAllImages
 {
-    public function __construct(LxdClient $lxdClient, HostList $hostList)
+    public function __construct(GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts)
     {
-        $this->client = $lxdClient;
-        $this->hostList = $hostList;
+        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
     }
 
     public function getAllHostImages()
     {
-        $output = array();
-        foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
+        $clustersAndHosts = $this->getClustersAndStandaloneHosts->get(true);
 
-            if ($host["Host_Online"] != true) {
-                $output[$indent] = [
-                    "hostId"=>$host["Host_ID"],
-                    "online"=>false,
-                    "images"=>[]
-                ];
-                continue;
+        foreach ($clustersAndHosts["clusters"] as $clusterIndex => $cluster) {
+            foreach ($cluster["members"] as $hostIndex => &$host) {
+                $host->setCustomProp("images", $this->getImages($host));
             }
-
-            $client = $this->client->getANewClient($host["Host_ID"]);
-            $ids = $client->images->all();
-            $details = [];
-
-            foreach ($ids as $fingerprint) {
-                $details[] = $client->images->info($fingerprint);
-            }
-
-            $output[$indent] = [
-                "online"=>true,
-                "images"=>$details,
-                "hostId"=>$host["Host_ID"]
-            ];
         }
-        return $output;
+
+        foreach ($clustersAndHosts["standalone"]["members"] as $index => &$host) {
+            $host->setCustomProp("images", $this->getImages($host));
+        }
+
+        return $clustersAndHosts;
+    }
+
+    private function getImages(Host $host)
+    {
+        if (!$host->hostOnline()) {
+            return [];
+        }
+
+        //TODO Recursion
+        $ids = $host->images->all();
+        $details = [];
+
+        foreach ($ids as $fingerprint) {
+            $details[] = $host->images->info($fingerprint);
+        }
+
+        return $details;
     }
 }

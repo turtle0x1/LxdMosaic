@@ -4,28 +4,81 @@ namespace dhope0000\LXDClient\App;
 use dhope0000\LXDClient\App\RouteApi;
 use dhope0000\LXDClient\App\RouteView;
 use dhope0000\LXDClient\App\RouteAssets;
+use dhope0000\LXDClient\Tools\User\UserSession;
+use dhope0000\LXDClient\Tools\User\LogUserIn;
+use dhope0000\LXDClient\Tools\User\ValidateToken;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
+use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
 
 class RouteController
 {
     public function __construct(
+        UserSession $userSession,
+        LogUserIn $logUserIn,
         RouteApi $routeApi,
         RouteView $routeView,
-        RouteAssets $routeAssets
+        RouteAssets $routeAssets,
+        ValidateToken $validateToken
     ) {
+        $this->validateToken = $validateToken;
+        $this->userSession = $userSession;
+        $this->logUserIn = $logUserIn;
         $this->routeApi = $routeApi;
         $this->routeView = $routeView;
         $this->routeAssets = $routeAssets;
+        $this->session = new Session(new NativeSessionStorage(), new NamespacedAttributeBag());
     }
 
     public function routeRequest($explodedPath)
     {
-        if (!isset($explodedPath[0]) || (
-            $explodedPath[0] == "index" ||
-                $explodedPath[0] == "views"
-        )) {
+        if (isset($explodedPath[0]) && $explodedPath[0] == "api") {
+            $headers = getallheaders();
+
+            // PHP-FPM strikes again
+            $headers = array_change_key_case($headers);
+
+            if (!isset($headers["userid"]) || !isset($headers["apitoken"])) {
+                http_response_code(403);
+                echo json_encode(["error"=>"Missing either user id or token"]);
+                exit;
+            }
+
+            if (!$this->validateToken->validate($headers["userid"], $headers["apitoken"])) {
+                http_response_code(403);
+                echo json_encode(["error"=>"Not valid token"]);
+                exit;
+            }
+
+            $this->routeApi->route($explodedPath, $headers);
+            exit;
+        }
+
+        $logoReq = implode("/", $explodedPath) === "assets/lxdMosaic/logo.png";
+
+        $this->session->start();
+        
+        $loginSet = isset($_POST["login"]);
+
+        if ($this->userSession->isLoggedIn() !== true && !$loginSet && !$logoReq) {
+            http_response_code(403);
+            require __DIR__ . "/../../views/login.php";
+            exit;
+        } elseif ($loginSet) {
+            if ($this->logUserIn->login($_POST["username"], $_POST["password"]) !== true) {
+                // Should never fire login throws exceptions
+                throw new \Exception("Couldn't login", 1);
+            }
+        } elseif (isset($explodedPath[0]) && $explodedPath[0] == "logout") {
+            $this->userSession->logout();
+            header("Location: /");
+            exit;
+        }
+
+        $routesForViewRoute = ["index", "login", "views"];
+
+        if (!isset($explodedPath[0]) || in_array($explodedPath[0], $routesForViewRoute)) {
             $this->routeView->route($explodedPath);
-        } elseif ($explodedPath[0] == "api") {
-            $this->routeApi->route($explodedPath, $_POST);
         } elseif ($explodedPath[0] == "assets") {
             $this->routeAssets->route($explodedPath);
         } elseif ($explodedPath[0] == "terminals?cols=80&rows=24") {

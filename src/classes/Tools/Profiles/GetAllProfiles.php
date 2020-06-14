@@ -1,56 +1,40 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Profiles;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetAllProfiles
 {
-    public function __construct(LxdClient $lxdClient, HostList $hostList)
+    public function __construct(GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts)
     {
-        $this->client = $lxdClient;
-        $this->hostList = $hostList;
+        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
     }
 
-    public function getAllProfiles()
+    private function getProfiles(Host $host, $profileRecursion)
     {
-        $details = array();
-        foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
+        if (!$host->hostOnline()) {
+            return [];
+        }
 
-            if ($host["Host_Online"] != true) {
-                $details[$indent] = [
-                    "online"=>false,
-                    "hostId"=>$host["Host_ID"]
-                ];
-                continue;
+        return $host->profiles->all($profileRecursion);
+    }
+
+
+    public function getAllProfiles(bool $profileRecursion = false)
+    {
+        $clustersAndHosts = $this->getClustersAndStandaloneHosts->get(true);
+
+        foreach ($clustersAndHosts["clusters"] as $clusterIndex => $cluster) {
+            foreach ($cluster["members"] as $hostIndex => &$host) {
+                $host->setCustomProp("profiles", $this->getProfiles($host, $profileRecursion));
             }
-            $client = $this->client->getANewClient($host["Host_ID"]);
-
-            $profiles = $client->profiles->all();
-            $details[$indent] = [
-                "online"=>true,
-                "hostId"=>$host["Host_ID"],
-                "profiles"=>$this->getProfileDetails($client, $profiles)
-            ];
         }
-        return $details;
-    }
 
-    public function getHostProfilesWithDetails(int $hostId)
-    {
-        $client = $this->client->getANewClient($hostId);
-        $profiles = $client->profiles->all();
-        return $this->getProfileDetails($client, $profiles);
-    }
-
-    public function getProfileDetails($client, $profiles)
-    {
-        $details = array();
-        foreach ($profiles as $profile) {
-            $state = $client->profiles->info($profile);
-            $details[$profile] = ["details"=>$state];
+        foreach ($clustersAndHosts["standalone"]["members"] as $index => &$host) {
+            $host->setCustomProp("profiles", $this->getProfiles($host, $profileRecursion));
         }
-        return $details;
+
+        return $clustersAndHosts;
     }
 }

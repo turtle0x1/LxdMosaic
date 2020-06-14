@@ -1,0 +1,19 @@
+<?php
+namespace dhope0000\LXDClient\Controllers\Instances;
+
+use dhope0000\LXDClient\Tools\Instances\Migrate;
+use dhope0000\LXDClient\Objects\Host;
+
+class MigrateInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
+{
+    public function __construct(Migrate $migrate)
+    {
+        $this->migrate = $migrate;
+    }
+
+    public function migrate(Host $hostId, $container, Host $destination)
+    {
+        $this->migrate->migrate($hostId, $container, $destination, $container);
+        return array("success"=>"Instance Has Been Migrated");
+    }
+}

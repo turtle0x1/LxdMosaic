@@ -2,27 +2,20 @@
 
 namespace dhope0000\LXDClient\Tools\Projects;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateProject
 {
-    public function __construct(LxdClient $lxdClient)
-    {
-        $this->lxdClient = $lxdClient;
-    }
-
     public function create(
-        array $hosts,
+        HostsCollection $hosts,
         string $name,
         string $description = "",
         array $config = []
     ) {
-        $output = [];
-        foreach ($hosts as $hostId) {
-            $client = $this->lxdClient->getANewClient($hostId);
+        foreach ($hosts as $host) {
             //TODO Check if project exsits
-            $client->projects->create($name, $description, $config);
+            $host->projects->create($name, $description, $config);
         }
-        return $output;
+        return true;
     }
 }

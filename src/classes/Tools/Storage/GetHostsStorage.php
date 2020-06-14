@@ -2,43 +2,50 @@
 
 namespace dhope0000\LXDClient\Tools\Storage;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetHostsStorage
 {
-    public function __construct(HostList $hostList, LxdClient $lxdClient)
-    {
-        $this->hostList = $hostList;
-        $this->lxdClient = $lxdClient;
+    public function __construct(
+        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts
+    ) {
+        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
     }
 
     public function getAll()
     {
-        $details = array();
-        foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
-            $details[$indent] = [
-                "online"=>(bool) $host["Host_Online"],
-                "pools"=>[]
-            ];
-            if ($host["Host_Online"] != true) {
-                continue;
-            }
-            $client = $this->lxdClient->getANewClient($host["Host_ID"]);
-            $pools = $client->storage->all();
-            $withResources = [];
-            foreach($pools as $pool){
-                $withResources[] = [
-                    "name"=>$pool,
-                    "resources"=>$client->storage->resources->info($pool)
-                ];
-            }
+        $clusters = $this->getClustersAndStandaloneHosts->get();
 
-
-            $details[$indent]["hostId"] = $host["Host_ID"];
-            $details[$indent]["pools"] = $withResources;
+        foreach ($clusters["clusters"] as $clusterIndex => $cluster) {
+            foreach ($cluster["members"] as $hostIndex => &$host) {
+                $host->setCustomProp("pools", $this->getHostPools($host));
+            }
         }
-        return $details;
+
+        foreach ($clusters["standalone"]["members"] as $hostIndex => &$host) {
+            $host->setCustomProp("pools", $this->getHostPools($host));
+        }
+
+        return $clusters;
+    }
+
+    private function getHostPools(Host $host)
+    {
+        if (!$host->hostOnline()) {
+            return [];
+        }
+
+        //TODO Recursion
+        $pools = $host->storage->all();
+        $withResources = [];
+        foreach ($pools as $pool) {
+            $withResources[] = [
+                "name"=>$pool,
+                "resources"=>$host->storage->resources->info($pool)
+            ];
+        }
+
+        return $withResources;
     }
 }

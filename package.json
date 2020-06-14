@@ -20,29 +20,34 @@
   },
   "homepage": "https://github.com/turtle0x1/LxdManager#readme",
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
+    "bufferutil": "^4.0.1",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
-    "dropzone": "^5.5.1",
-    "express": "^4.16.4",
+    "dotenv-expand": "^5.1.0",
+    "dropzone": "^5.7.0",
+    "express": "^4.17.1",
     "express-ws": "^4.0.0",
-    "mysql": "^2.16.0",
-    "request": "^2.88.0",
+    "mysql": "^2.18.1",
+    "perfect-scrollbar": "^1.5.0",
+    "popper.js": "^1.16.1",
+    "request": "^2.88.2",
     "request-promise": "^4.2.5",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.3.0",
+    "utf-8-validate": "^5.0.2",
     "uuid": "^3.4.0",
-    "ws": "^6.1.2"
+    "ws": "^6.2.1"
   },
   "devDependencies": {
-    "@coreui/coreui": "^2.1.12",
-    "ace-builds": "^1.4.6",
+    "@coreui/coreui": "^2.1.16",
+    "ace-builds": "^1.4.9",
     "chalk": "^2.4.2",
     "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-minify": "^3.1.0",
     "jquery-confirm": "^3.3.4",
-    "gulp-clean-css": "^4.2.0",
-    "xterm": "^3.13.2",
-    "toastr": "^2.1.4"
+    "toastr": "^2.1.4",
+    "xterm": "^3.14.5"
   }
 }

@@ -3,8 +3,19 @@ body {
     font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
 }
 
+.cluster-title:hover {
+    color: #167495 !important; /* Eugh */
+}
 
-.toggleCard {
+.text-underline {
+    text-decoration: underline;
+}
+
+.text-strikethrough {
+    text-decoration: line-through !important;
+}
+
+.toggleCard, .cluster-title {
     cursor: pointer;
 }
 
@@ -289,8 +300,12 @@ li.breadcrumb-item:nth-child(1) {
     color: white;
 }
 
+.sidebar .nav-link {
+    outline: 0;
+}
 .sidebar .nav-link:hover {
-    background-color: #167495;
+    color: #167495;
+    background-color: rgba(0,0,0,0);
 }
 
 .sidebar .nav-item.active {
@@ -317,15 +332,6 @@ a:hover {
     color: white;
 }
 
-.bg-deepblue {
-  background-color: #167495 !important;
-}
-
-.bg-deepblue  a {
-    color: #3a4149;
-    text-decoration: underline;
-}
-
 .breadcrumb {
     background-color: #3a4149;
     border-bottom: none;
@@ -335,8 +341,20 @@ a:hover {
     cursor: pointer;
 }
 
-body {
-    font-size: 0.875rem;
+body, table {
+    font-size: 0.9rem;
+}
+
+h1 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+a {
+    font-weight: 200;
 }
 
 .app-header .nav-item {

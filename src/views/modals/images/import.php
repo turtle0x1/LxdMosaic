@@ -30,11 +30,15 @@
     var imageAliasesToImport = [];
 
     $("#hostsToImportImagesTo").tokenInput(globalUrls.hosts.search.search, {
-        queryParam: "host",
+        queryParam: "hostSearch",
         propertyToSearch: "host",
         tokenValue: "hostId",
         theme: "facebook",
         preventDuplicates: false
+    });
+
+    $("#modal-hosts-addImages").on("hide.bs.modal", function(){
+        $("#hostsToImportImagesTo").tokenInput("clear");
     });
 
     $("#modal-hosts-addImages").on("shown.bs.modal", function(){

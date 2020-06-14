@@ -7,6 +7,20 @@ if ($haveServers->haveAny() === true) {
     header("Location: /");
     exit;
 }
+
+$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
+$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions");
+
+$userId = $userSession->getUserId();
+$isAdmin = (int) $validatePermissions->isAdmin($userId);
+$apiToken = $userSession->getToken();
+
+echo "<script>var userDetails = {
+    isAdmin: $isAdmin,
+    apiToken: '$apiToken',
+    userId: $userId
+} </script>";
+
 ?>
 <!DOCTYPE html>
 <head>
@@ -31,23 +45,39 @@ if ($haveServers->haveAny() === true) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha256-3blsJd4Hli/7wCQ+bmgXfOdK7p/ZUMtPXY08jmxSSgk=" crossorigin="anonymous"></script>
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+<style>
+body {
+    background-color: #a8a8a8;
+    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
+}
+</style>
+
 </head>
 <html>
 <body>
     <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
-            <h1 class='text-center'><u> LXD Mosaic </u></h1>
-
-            <h4 class=''> Add Your Hosts
-                <button class="btn btn-sm btn-primary" id="addServer">
-                    <i class="fa fa-plus"></i>
-                </button>
-            </h4>
+        <div class="col-sm-12 col-md-12 col-lg-6 offset-lg-3">
+            <h1 class='text-center mt-5'><u> LXD Mosaic </u></h1>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center m-2 mt-3">
+                <h4 class=''> Add Your Hosts
+                    <button class="btn btn-sm btn-primary" id="addServer">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </h4>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="showPasswordCheck" autocomplete="off">
+                  <label class="form-check-label" for="showPasswordCheck">
+                    Show Passwords
+                  </label>
+                </div>
+            </div>
             <div class="alert alert-info">
-                If a host is in a cluster LXDMosaic will find other cluster memebers
+                If a host is in a cluster LXDMosaic will find other cluster members
                 and try to import them with the same trust password!
             </div>
+
             <div id="serverGroups"></div>
             <div class="row">
                 <div class="col-md-12 text-center">
@@ -66,8 +96,8 @@ let inputTemplate = `<div class="input-group mb-3 serverGroup">
     <div class="input-group-addon">
         <label> Server </label>
     </div>
-    <input placeholder="ip / hostname" name="connectDetails" class="form-control"/>
-    <input placeholder="trust password" name="trustPassword" type="password" class="form-control"/>
+    <input placeholder="ip / hostname" name="connectDetails" class="form-control" autocomplete='off'/>
+    <input placeholder="trust password" name="trustPassword" type="password" class="form-control trustPasswordInput"/>
     <input placeholder="Alias (Optional)" name="alias" type="text" class="form-control"/>
     <div class="input-group-addon">
         <button class="btn btn-danger removeRow" type="button">
@@ -79,6 +109,14 @@ let inputTemplate = `<div class="input-group mb-3 serverGroup">
 
 $(function(){
     $("#serverGroups").empty().append(inputTemplate);
+});
+
+$(document).on("change", "#showPasswordCheck", function(){
+    if($(this).is(":checked")){
+        $(document).find(".trustPasswordInput").attr("type", "text");
+    }else{
+        $(document).find(".trustPasswordInput").attr("type", "password");
+    }
 });
 
 $(document).on("click", ".removeRow", function(){
@@ -122,6 +160,7 @@ $(document).on("click", "#addServers", function(){
 
     $.ajax({
          type: 'POST',
+         headers: userDetails,
          data: details,
          url: "/api/Hosts/AddHostsController/add",
          success: function(data){

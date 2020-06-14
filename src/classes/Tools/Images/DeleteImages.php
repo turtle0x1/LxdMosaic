@@ -1,22 +1,28 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Images;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Model\Hosts\GetDetails;
 
 class DeleteImages
 {
-    public function __construct(LxdClient $lxdClient)
+    public function __construct(GetDetails $getDetails)
     {
-        $this->lxdClient = $lxdClient;
+        $this->getDetails = $getDetails;
     }
 
     public function delete($imageData)
     {
         $output = [];
+        $hostCache = [];
         foreach ($imageData as $image) {
             $this->validateOrThrowImageDetails($image);
-            $client = $this->lxdClient->getANewClient($image["hostId"]);
-            $output[] = $client->images->remove($image["fingerprint"]);
+            
+            if (!isset($hostCache[$image["hostId"]])) {
+                $hostCache[$image["hostId"]] = $this->getDetails->fetchHost($image["hostId"]);
+            }
+
+            $host = $hostCache[$image["hostId"]];
+            $output[] = $host->images->remove($image["fingerprint"]);
         }
         return $output;
     }

@@ -2,46 +2,47 @@
 
 namespace dhope0000\LXDClient\Tools\Projects;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
+use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
 
 class GetHostsProjects
 {
     public function __construct(
-        HostList $hostList,
-        LxdClient $lxdClient,
+        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts,
         HasExtension $hasExtension
     ) {
-        $this->hostList = $hostList;
-        $this->lxdClient = $lxdClient;
+        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
         $this->hasExtension = $hasExtension;
     }
 
     public function getAll()
     {
-        $details = array();
-        foreach ($this->hostList->getHostListWithDetails() as $host) {
-            $indent = is_null($host["Host_Alias"]) ? $host["Host_Url_And_Port"] : $host["Host_Alias"];
-            $details[$indent] = [
-                "online"=>(bool) $host["Host_Online"],
-                "projects"=>[]
-            ];
-            if ($host["Host_Online"] != true) {
-                continue;
+        $clusters = $this->getClustersAndStandaloneHosts->get(true);
+
+        foreach ($clusters["clusters"] as $clusterIndex => $cluster) {
+            foreach ($cluster["members"] as $hostIndex => &$host) {
+                $host->setCustomProp("projects", $this->getHostProjects($host));
             }
-            $client = $this->lxdClient->getANewClient($host["Host_ID"]);
-
-            if(!$this->hasExtension->checkWithClient($client, "projects")){
-                continue;
-            }
-
-            $projects = $client->projects->all();
-
-
-            $details[$indent]["hostId"] = $host["Host_ID"];
-            $details[$indent]["projects"] = $projects;
         }
-        return $details;
+
+        foreach ($clusters["standalone"]["members"] as $hostIndex => &$host) {
+            $host->setCustomProp("projects", $this->getHostProjects($host));
+        }
+
+        return $clusters;
+    }
+
+
+    private function getHostProjects($host)
+    {
+        if (!$host->hostOnline()) {
+            return [];
+        }
+
+        if (!$this->hasExtension->checkWithHost($host, "projects")) {
+            return [];
+        }
+
+        return $host->projects->all();
     }
 }

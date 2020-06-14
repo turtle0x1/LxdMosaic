@@ -62,11 +62,16 @@
 </div>
 <script>
     $("#newProjectHosts").tokenInput(globalUrls.hosts.search.search, {
-        queryParam: "host",
+        queryParam: "hostSearch",
         propertyToSearch: "host",
         tokenValue: "hostId",
         preventDuplicates: false,
         theme: "facebook"
+    });
+
+    $("#modal-projects-create").on("hide.bs.modal",  function(){
+        $("#modal-projects-create input, #modal-projects-create textarea").val("");
+        $("#newProjectHosts").tokenInput("clear");
     });
 
     $("#modal-projects-create").on("click", "#createProject", function(){

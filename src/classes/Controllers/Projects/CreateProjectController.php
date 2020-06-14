@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Projects;
 
 use dhope0000\LXDClient\Tools\Projects\CreateProject;
+use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateProjectController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,7 +13,7 @@ class CreateProjectController implements \dhope0000\LXDClient\Interfaces\RecordA
     }
 
     public function create(
-        array $hosts,
+        HostsCollection $hosts,
         string $name,
         string $description = "",
         array $config = []

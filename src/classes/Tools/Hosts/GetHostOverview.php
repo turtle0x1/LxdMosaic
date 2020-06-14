@@ -2,33 +2,30 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts;
 
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
-use dhope0000\LXDClient\Tools\Containers\GetHostsContainers;
+use dhope0000\LXDClient\Tools\Instances\GetHostsInstances;
 use dhope0000\LXDClient\Tools\Hosts\GetResources;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetHostOverview
 {
     public function __construct(
-        GetDetails $getDetails,
-        GetHostsContainers $getHostsContainers,
+        GetHostsInstances $getHostsInstances,
         GetResources $getResources
     ) {
-        $this->getDetails = $getDetails;
-        $this->getHostsContainers = $getHostsContainers;
+        $this->getHostsInstances = $getHostsInstances;
         $this->getResources = $getResources;
     }
 
-    public function get(int $hostId)
+    public function get(Host $host)
     {
-        $header = $this->getDetails->getIpAndAlias($hostId);
-        $containers = $this->getHostsContainers->getContainers($hostId);
+        $containers = $this->getHostsInstances->getContainers($host);
         $sortedContainers = $this->sortContainersByState($containers);
         $containerStats = $this->calcContainerStats($containers);
         return [
-            "header"=>$header,
+            "header"=>$host,
             "containers"=>$sortedContainers,
             "containerStats"=>$containerStats,
-            "resources"=>$this->getResources->getHostExtended($hostId)
+            "resources"=>$this->getResources->getHostExtended($host)
         ];
     }
 
