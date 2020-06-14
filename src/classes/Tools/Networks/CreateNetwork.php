@@ -6,11 +6,6 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateNetwork
 {
-    public function __construct(LxdClient $lxdClient)
-    {
-        $this->lxdClient = $lxdClient;
-    }
-
     public function create(HostsCollection $hosts, string $name, string $description = "", array $config = [])
     {
         foreach ($hosts as $host) {

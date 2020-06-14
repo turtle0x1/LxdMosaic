@@ -1,15 +1,13 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Profiles;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
 use dhope0000\LXDClient\Objects\Host;
 
 class GetAllProfiles
 {
-    public function __construct(LxdClient $lxdClient, GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts)
+    public function __construct(GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts)
     {
-        $this->client = $lxdClient;
         $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
     }
 
