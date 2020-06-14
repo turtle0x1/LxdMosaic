@@ -16,6 +16,49 @@ CREATE TABLE `Instance_Metric_Values` (
     `IMV_Data` JSON
 );
 
+CREATE TABLE `User_Dashboards` (
+    `UD_ID` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `UD_Date_Created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    `UD_User_ID` INT NOT NULL,
+    `UD_Name` VARCHAR(255) NOT NULL,
+    `UD_Public` TINYINT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE `User_Dashboard_Graphs` (
+    `UDG_ID` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `UDG_Date_Created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    `UDG_UD_ID` INT NOT NULL,
+    `UDG_Name` VARCHAR(255) NOT NULL,
+    `UDG_Host_ID` INT NOT NULL,
+    `UDG_Instance` VARCHAR(255) NOT NULL,
+    `UDG_Project` VARCHAR(255) NOT NULL DEFAULT "default",
+    `UDG_Metric_ID` INT NOT NULL,
+    `UDG_Filter` VARCHAR(255) NOT NULL
+);
+
+ALTER TABLE `User_Dashboard_Graphs`
+    ADD FOREIGN KEY(`UDG_UD_ID`) REFERENCES `User_Dashboards`(`UD_ID`)
+    ON
+        DELETE CASCADE
+    ON
+        UPDATE RESTRICT;
+
+ALTER TABLE `User_Dashboard_Graphs`
+    ADD FOREIGN KEY(`UDG_Host_ID`) REFERENCES `Hosts`(`Host_ID`)
+    ON
+        DELETE CASCADE
+    ON
+        UPDATE RESTRICT;
+
+ALTER TABLE `User_Dashboard_Graphs`
+    ADD FOREIGN KEY(`UDG_Metric_ID`) REFERENCES `Instance_Metric_Types`(`IMT_ID`)
+    ON
+        DELETE CASCADE
+    ON
+        UPDATE RESTRICT;
+
+ALTER TABLE `Instance_Metric_Values` ADD INDEX( `IMV_Date`);
+ALTER TABLE `Instance_Metric_Values` ADD INDEX( `IMV_Containr_Name`);
 
 INSERT INTO `Instance_Metric_Types` (
     `IMT_Name`,

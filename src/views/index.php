@@ -97,10 +97,11 @@ if ($haveServers->haveAny() !== true) {
 
           var globalUrls = {
               dashboard: {
-                get: "/api/Dashboard/GetController/get"
+                  get: "/api/Dashboard/GetController/get"
               },
               instances: {
                   metrics: {
+                      getAllAvailableMetrics: "/api/Instances/Metrics/GetAllAvailableMetricsController/get",
                       getGraphData: "/api/Instances/Metrics/GetGraphDataController/get",
                       getAllTypes: "/api/Instances/Metrics/GetGraphDataController/getAllTypes",
                       getTypeFilters: "/api/Instances/Metrics/GetGraphDataController/getTypeFilters",
@@ -268,6 +269,15 @@ if ($haveServers->haveAny() !== true) {
                   getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
               },
               user: {
+                  dashboard: {
+                    graphs: {
+                       add: '/api/User/Dashboard/Graphs/AddGraphController/add',
+                       delete: '/api/User/Dashboard/Graphs/DeleteGraphController/delete',
+                    },
+                    create: '/api/User/Dashboard/CreateDashboardController/create',
+                    get: '/api/User/Dashboard/GetDashboardController/get',
+                    delete: '/api/User/Dashboard/DeleteDashboardController/delete'
+                  },
                   setHostProject: '/api/User/SetHostProjectController/set'
               },
               projects: {
@@ -488,6 +498,8 @@ if ($haveServers->haveAny() !== true) {
   </body>
 </html>
 <script type='text/javascript'>
+
+$("#userDashboard").hide();
 
 $("#sidebar-ul").on("click", ".nav-item", function(){
     if($(this).hasClass("nav-dropdown")){
@@ -812,8 +824,9 @@ $(document).on("click", ".viewServer", function(){
 });
 
 function loadDashboard(){
-    $(".boxSlide").hide();
-    $("#overviewBox").show();
+    $("#userDashboardGraphs").empty();
+    $(".boxSlide, #userDashboard").hide();
+    $("#overviewBox, #generalDashboard").show();
     setBreadcrumb("Dashboard", "active overview");
     changeActiveNav(".overview")
 
@@ -826,6 +839,20 @@ function loadDashboard(){
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>`;
+
+
+
+        let lis = `<li class="nav-item">
+          <a class="nav-link active viewDashboard" id="generalDashboardLink" href="#">General</a>
+        </li>`;
+
+        $.each(data.userDashboards, (_, dashboard)=>{
+            lis += `<li class="nav-item">
+              <a class="nav-link viewDashboard" id="${dashboard.id}" href="#">${dashboard.name}</a>
+            </li>`;
+        });
+
+        $("#userDashboardsList").empty().append(lis);
 
         let hostsTrs = "";
 
@@ -1082,6 +1109,7 @@ $(document).on("change", ".changeHostProject", function(){
 });
 
 $(document).on("click", ".overview, .container-overview", function(){
+
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     currentContainerDetails = null;
 
