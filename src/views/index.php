@@ -679,12 +679,9 @@ function createDashboardSidebar()
                 if(host.status !== "Online"){
                     disabled = "disabled text-warning text-strikethrough";
                 }
-
-                let name = host.alias == null ? host.urlAndPort : host.alias;
-
-                hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
+                hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link viewServer ${disabled}" href="#">
-                        <i class="fas fa-server"></i> ${name}
+                        <i class="fas fa-server"></i> ${host.alias}
                         <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
                     </a>
                     <ul class="nav-dropdown-items">
@@ -696,15 +693,13 @@ function createDashboardSidebar()
         $.each(data.standalone.members, function(_, host){
             let disabled = "";
 
-            let name = host.alias == null ? host.urlAndPort : host.alias;
-
             if(host.hostOnline == false){
                 disabled = "disabled text-warning text-strikethrough";
             }
 
-            hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
+            hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                 <a class="nav-link viewServer ${disabled}" href="#">
-                    <i class="fas fa-server"></i> ${name}
+                    <i class="fas fa-server"></i> ${host.alias}
                     <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
                 </a>
                 <ul class="nav-dropdown-items">
@@ -845,12 +840,11 @@ function loadDashboard(){
                     projects += "</select>";
                 }
 
-                let name = host.alias == null ? host.urlAndPort : host.alias;
-                hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
+                hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
 
-                hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
+                hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link viewServer ${disabled}" href="#">
-                        <i class="fas fa-server"></i> ${name}
+                        <i class="fas fa-server"></i> ${host.alias}
                         <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
                     </a>
                     <ul class="nav-dropdown-items">
@@ -896,8 +890,6 @@ function loadDashboard(){
         $.each(data.clustersAndHosts.standalone.members, function(_, host){
             let disabled = "";
 
-            let name = host.alias == null ? host.urlAndPort : host.alias;
-
             if(host.hostOnline == false){
                 disabled = "disabled text-warning text-strikethrough";
             }
@@ -915,11 +907,11 @@ function loadDashboard(){
                 });
                 projects += "</select>";
             }
-            hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${name}</a></td><td>${projects}</td></tr>`
+            hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
 
-            hosts += `<li data-hostId="${host.hostId}" data-alias="${name}" class="nav-item containerList nav-dropdown">
+            hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                 <a class="nav-link viewServer ${disabled}" href="#">
-                    <i class="fas fa-server"></i> ${name}
+                    <i class="fas fa-server"></i> ${host.alias}
                     <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
                 </a>
                 <ul class="nav-dropdown-items">
