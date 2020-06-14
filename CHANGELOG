@@ -6,6 +6,7 @@ Added
     Update image "public" & "auto update" properties (#170)
     Display some of the system details provided in LXD >= 4.1 (#206)
     Export instance as image
+    Create profiles (#175)
 
 Fixed
     Cant load project inforatmion

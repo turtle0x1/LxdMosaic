@@ -91,6 +91,7 @@ if ($haveServers->haveAny() !== true) {
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
 
       <script src="/assets/lxdMosaic/globalFunctions.js"></script>
+      <script src="/assets/lxdMosaic/globalDetails.js"></script>
       <script>
           var currentContainerDetails = null;
 
@@ -200,6 +201,7 @@ if ($haveServers->haveAny() !== true) {
                   delete: '/api/Profiles/DeleteProfileController/delete',
                   rename: '/api/Profiles/RenameProfileController/rename',
                   copy: '/api/Profiles/CopyProfileController/copyProfile',
+                  create: '/api/Profiles/CreateProfileController/create',
               },
               hosts: {
                   gpu: {

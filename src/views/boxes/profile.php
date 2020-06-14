@@ -4,6 +4,11 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <h4> Profiles </h4>
+                <div class="btn-group mr-2">
+                    <button data-toggle="tooltip" data-placement="bottom" title="Create Profile" class="btn btn-primary" id="createProfile">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -242,6 +247,10 @@ function viewProfile(profileId, hostAlias, hostId){
 }
 
 
+$("#profileBox").on("click", "#createProfile", function(){
+    $("#modal-profile-create").modal("show");
+});
+
 $("#profileBox").on("click", "#copyProfile", function(){
     copyProfileData.hostAlias = currentProfileDetails.hostAlias;
     copyProfileData.hostId = currentProfileDetails.hostId;
@@ -281,4 +290,5 @@ $("#profileBox").on("click", "#deleteProfile", function(){
 <?php
 require __DIR__ . "/../modals/profiles/rename.php";
 require __DIR__ . "/../modals/profiles/copy.php";
+require __DIR__ . "/../modals/profiles/create.php";
 ?>
