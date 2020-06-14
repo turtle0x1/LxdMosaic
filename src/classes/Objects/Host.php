@@ -71,14 +71,10 @@ class Host implements \JsonSerializable
 
     public function callClientMethod($method, $param = null)
     {
-        if ($this->client == null) {
-            $this->client = $this->lxdClient->getClientWithHost($this);
-        }
-
         if ($param !== null) {
-            return $this->client->$method($param);
+            return $this->getClient()->$method($param);
         } else {
-            return $this->client->$method();
+            return $this->getClient()->$method();
         }
     }
 
@@ -107,17 +103,13 @@ class Host implements \JsonSerializable
         $this->client->setProject($project);
     }
 
-    //NOTE hmm
     public function __set($prop, $value)
     {
-        throw new \Exception("Not allowed to set public properties on this object, use the methods provided", 1);
+        throw new \Exception("Not allowed to set public properties on this object, use get/set/removeCustomProp", 1);
     }
 
     public function __get($target)
     {
-        if ($this->client == null) {
-            $this->client = $this->lxdClient->getClientWithHost($this);
-        }
-        return $this->client->$target;
+        return $this->getClient()->$target;
     }
 }
