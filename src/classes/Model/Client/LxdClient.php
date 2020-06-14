@@ -4,7 +4,6 @@ namespace dhope0000\LXDClient\Model\Client;
 use GuzzleHttp\Client as GuzzleClient;
 use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 use \Opensaucesystems\Lxd\Client;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\App\RouteApi;
 use dhope0000\LXDClient\Objects\Host;
@@ -14,11 +13,9 @@ class LxdClient
     private $clientBag = [];
 
     public function __construct(
-        GetDetails $getDetails,
         FetchUserProject $fetchUserProject,
         RouteApi $routeApi
     ) {
-        $this->getDetails = $getDetails;
         $this->fetchUserProject = $fetchUserProject;
         $this->routeApi = $routeApi;
     }
