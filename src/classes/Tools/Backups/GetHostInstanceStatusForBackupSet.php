@@ -22,8 +22,6 @@ class GetHostInstanceStatusForBackupSet
     {
         $hostsContainers = $this->getHostsInstances->getAll(true);
 
-        $backupHostIds = array_unique(array_column($backups, "hostId"));
-
         $backupsByHostId = $this->createBackupsByHostIdStruct($backups);
 
         $missingBackups = [];

@@ -7,7 +7,8 @@ use dhope0000\LXDClient\Model\InstanceSettings\RecordActions\FetchRecordedAction
 
 class GetActions
 {
-    private $insertActionLog;
+    private $validatePermissions;
+    private $fetchRecordedActions;
 
     public function __construct(ValidatePermissions $validatePermissions, FetchRecordedActions $fetchRecordedActions)
     {

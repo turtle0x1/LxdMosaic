@@ -9,7 +9,6 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetInstanceBackups
 {
-    private $lxdClient;
     private $fetchInstanceBackups;
     private $hasExtension;
 

@@ -6,10 +6,6 @@ use dhope0000\LXDClient\Tools\Utilities\IsUpToDate;
 
 class GetSettingsOverview
 {
-    public function __construct()
-    {
-    }
-
     public function get() :array
     {
         return [

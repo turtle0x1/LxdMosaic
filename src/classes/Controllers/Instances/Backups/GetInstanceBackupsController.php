@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetInstanceBackupsController
 {
-    private $getContainerBackups;
+    private $getInstanceBackups;
 
     public function __construct(GetInstanceBackups $getInstanceBackups)
     {

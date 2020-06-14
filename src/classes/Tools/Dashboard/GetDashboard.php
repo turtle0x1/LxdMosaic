@@ -35,7 +35,7 @@ class GetDashboard
     private function addCurrentProjects($userId, $clustersAndHosts)
     {
         foreach ($clustersAndHosts["clusters"] as $index => $cluster) {
-            foreach ($cluster["members"] as $memIndex => &$member) {
+            foreach ($cluster["members"] as &$member) {
                 $project = $this->fetchUserProject->fetchOrDefault($userId, $member->getHostId());
                 $member->setCustomProp("currentProject", $project);
             }

@@ -74,7 +74,7 @@ class GetAllClusters
 
             $onlineMembers = 0;
 
-            foreach ($cluster["members"] as $memberIndex => &$member) {
+            foreach ($cluster["members"] as &$member) {
                 $resources = $member->getCustomProp("resources");
 
                 $totalMemory += $resources["memory"]["total"];

@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\InstanceSettings\GetSettingsOverview;
 
 class GetSettingsOverviewController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $saveSettings;
+    private $getSettingsOverview;
 
     public function __construct(GetSettingsOverview $getSettingsOverview)
     {
