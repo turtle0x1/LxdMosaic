@@ -12,11 +12,10 @@ class GetNetwork
         $network = $host->networks->info($network);
 
         $network["used_by"] = StringTools::usedByStringsToLinks(
-            $host->getHostId(),
-            $network["used_by"],
-            $host->getAlias()
+            $host,
+            $network["used_by"]
         );
-        
+
         return $network;
     }
 }

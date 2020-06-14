@@ -102,6 +102,11 @@ class Host implements \JsonSerializable
         return $this->client;
     }
 
+    public function setProject(string $project)
+    {
+        $this->client->setProject($project);
+    }
+
     //NOTE hmm
     public function __set($prop, $value)
     {

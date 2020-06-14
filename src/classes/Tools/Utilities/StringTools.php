@@ -2,6 +2,8 @@
 
 namespace dhope0000\LXDClient\Tools\Utilities;
 
+use dhope0000\LXDClient\Objects\Host;
+
 class StringTools
 {
     /**
@@ -49,12 +51,8 @@ class StringTools
         return substr($string, $ini, $len);
     }
 
-    public static function usedByStringsToLinks(
-        int $hostId,
-        array $usedBy,
-        string $hostAlias = "",
-        $client = null
-    ) {
+    public static function usedByStringsToLinks(Host $host, array $usedBy)
+    {
         foreach ($usedBy as $index => $item) {
             $parts = parse_url($item);
 
@@ -63,8 +61,6 @@ class StringTools
             if (isset($parts["query"])) {
                 parse_str($parts['query'], $query);
             }
-
-
 
             $explodedPath = explode("/", $parts["path"]);
 
@@ -78,8 +74,7 @@ class StringTools
 
             $icon = "";
             $class = "";
-            $data = " data-project='$project' data-host-id='$hostId' data-alias='$hostAlias' ";
-
+            $data = " data-project='$project' data-host-id='{$host->getHostId()}' data-alias='{$host->getAlias()}' ";
 
             if (strpos($item, '/snapshots/') !== false) {
                 $container = $explodedPath[count($explodedPath) - 2];
@@ -96,14 +91,12 @@ class StringTools
                 $data .= "data-profile='$lastItem'";
                 $icon = "users";
             } elseif (strpos($item, '/images/') !== false) {
-                if ($client !== null) {
-                    $imageDetails = $client->images->info($lastItem);
+                $imageDetails = $host->images->info($lastItem);
 
-                    $lastItem = $imageDetails["properties"]["os"] . " " . $imageDetails["properties"]["release"] . "({$imageDetails['type']})";
+                $lastItem = $imageDetails["properties"]["os"] . " " . $imageDetails["properties"]["release"] . "({$imageDetails['type']})";
 
-                    if (!empty($imageDetails["aliases"])) {
-                        $lastItem = implode(",", array_column($imageDetails["aliases"], "name")) . "({$imageDetails['type']})";
-                    }
+                if (!empty($imageDetails["aliases"])) {
+                    $lastItem = implode(",", array_column($imageDetails["aliases"], "name")) . "({$imageDetails['type']})";
                 }
 
                 $class = 'viewImages';

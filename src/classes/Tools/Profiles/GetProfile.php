@@ -11,9 +11,8 @@ class GetProfile
         $profile =  $host->profiles->info($profile);
 
         $profile["used_by"] = StringTools::usedByStringsToLinks(
-            $host->getHostId(),
-            $profile["used_by"],
-            $host->getAlias()
+            $host,
+            $profile["used_by"]
         );
 
         return $profile;

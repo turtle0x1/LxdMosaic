@@ -7,15 +7,13 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetProjectInfo
 {
-    public function get(Host $host, string $project)
+    public function get(Host $host, string $projectName)
     {
-        $project = $host->projects->info($project);
-
+        $project = $host->projects->info($projectName);
+        $host->setProject($projectName);
         $project["used_by"] = StringTools::usedByStringsToLinks(
-            $host->getHostId(),
-            $project["used_by"],
-            $host->getAlias(),
-            null
+            $host,
+            $project["used_by"]
         );
         return $project;
     }
