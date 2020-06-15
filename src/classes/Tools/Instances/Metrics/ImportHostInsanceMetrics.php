@@ -29,11 +29,48 @@ class ImportHostInsanceMetrics
         }
         foreach ($instancesToScan as $instance) {
             $state = $instances[$instance]["state"];
+
             $this->addInstanceLoadAverage($host, $instance);
             $this->addInstanceMemoryUsage($host, $instance, $state);
             $this->addInstanceNetworkUsage($host, $instance, $state);
             $this->addInstanceStorageUsage($host, $instance, $state);
+
+            if (isset($instances[$instance]["expanded_config"]["nvidia.runtime"]) && $instances[$instance]["expanded_config"]["nvidia.runtime"] == "true") {
+                $this->addInstanceNvidiaGpuUsage($host, $instance, $state);
+            }
         }
+    }
+
+    private function addInstanceNvidiaGpuUsage($host, $instance, $state)
+    {
+        $command = "nvidia-smi --query-gpu=name,gpu_uuid,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv";
+        $output = $host->instances->execute($instance, $command, $record = true, [], true);
+
+        $output = array_filter(explode("\n", $host->instances->logs->read($instance, $output["output"][0])));
+        // var_dump($output);
+        unset($output[0]);
+        $csv = array_map('str_getcsv', $output);
+        $gpuDetails = [];
+        foreach ($csv as $gpu) {
+            $gpu = array_map("trim", $gpu);
+
+
+            $gpuDetails["{$gpu[0]} temperature (Id: {$gpu[1]}"] = $gpu[2];
+            $gpuDetails["{$gpu[0]} utilization % (Id: {$gpu[1]}"] = explode(" ", $gpu[3])[0];
+            $gpuDetails["{$gpu[0]} memory utilization % (Id: {$gpu[1]}"] = explode(" ", $gpu[4])[0];
+            $gpuDetails["{$gpu[0]} memory total MiB (Id: {$gpu[1]}"] = explode(" ", $gpu[5])[0];
+            $gpuDetails["{$gpu[0]} memory free MiB (Id: {$gpu[1]}"] = explode(" ", $gpu[6])[0];
+            $gpuDetails["{$gpu[0]} memory used MiB (Id: {$gpu[1]}"] = explode(" ", $gpu[7])[0];
+        }
+
+
+        $metricKey = "nvidiaGpuDetails";
+        $this->matchTypeAndStore(
+            (new \DateTimeImmutable())->format("Y-m-d H:i:s"),
+            $host,
+            $instance,
+            [$metricKey=>$gpuDetails]
+        );
     }
 
     private function addInstanceLoadAverage($host, $instance)

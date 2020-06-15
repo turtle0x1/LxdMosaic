@@ -81,4 +81,8 @@ INSERT INTO `Instance_Metric_Types` (
     "Stroage Usage",
     "Storage usage for instance",
     "storageUsage"
-),
+), (
+    "Nvidia GPU's",
+    "Nvidia GPU",
+    "nvidiaGpuDetails"
+);
