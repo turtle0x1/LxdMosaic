@@ -30,7 +30,9 @@ class GetMetricsForContainer
             // var_dump(array_keys($data);
             $keys = array_merge($keys, array_keys($data));
         }
-        return array_unique($keys);
+        $keys = array_unique($keys);
+        asort($keys);
+        return array_values($keys);
     }
     public function get($hostId, $container, $type, $filter)
     {

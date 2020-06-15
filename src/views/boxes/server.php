@@ -161,16 +161,41 @@ $(document).on("click", ".disableMetrics", function(){
     btn.attr("disabled", true);
     let x = btn.data();
 
-    ajaxRequest(globalUrls.instances.metrics.disablePullGathering, x, (data)=>{
-        data = makeToastr(data);
-        if(data.state == "error"){
-            btn.attr("disabled", false);
-            return false;
+    $.confirm({
+        title: 'Disable Metric Gathering?!',
+        content: `<div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="clearMetricdata">
+          <label class="form-check-label" for="clearMetricdata">
+            Clear Metric Data ?
+          </label>
+        </div>`,
+        buttons: {
+            cancel: function () {},
+            yes: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin"></i>Deleting..'); // let the user know
+                    this.buttons.yes.disable();
+                    this.buttons.cancel.disable();
+                    var modal = this;
+                    x.clearData = modal.$content.find("#clearMetricdata").is(":checked") ? 1 : 0;
+                    ajaxRequest(globalUrls.instances.metrics.disablePullGathering, x, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            btn.attr("disabled", false);
+                            return false;
+                        }
+                        modal.close();
+                        td.empty().append(`<button data-host-id="${x.hostId}" data-instance="${x.instance}" class='btn btn-outline-primary btn-sm enableMetrics'>
+                            Enable
+                        </button>`);
+                    });
+                    return false;
+                }
+            }
         }
-        td.empty().append(`<button data-host-id="${x.hostId}" data-instance="${x.instance}" class='btn btn-outline-primary btn-sm enableMetrics'>
-            Enable
-        </button>`);
     });
+
 });
 
 $(document).on("click", ".enableMetrics", function(){

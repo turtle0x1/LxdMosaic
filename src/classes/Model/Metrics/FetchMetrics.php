@@ -17,7 +17,7 @@ class FetchMetrics
                 	COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `hostAlias`,
                     `IMV_Host_ID` as `hostId`,
                     `IMV_IMT_ID` as `metricId`,
-                    `IMV_Containr_Name` as `instance`,
+                    `IMV_Instance_Name` as `instance`,
                     `IMT_Name` as `metric`
                 FROM
                     `Instance_Metric_Values`
@@ -39,7 +39,7 @@ class FetchMetrics
                 WHERE
                     `IMV_Host_ID` = :hostId
                 AND
-                    `IMV_Containr_Name` = :container
+                    `IMV_Instance_Name` = :container
                 AND
                     `IMV_IMT_ID` = :typeId
                 ORDER BY
@@ -55,7 +55,7 @@ class FetchMetrics
         return array_reverse($do->fetchAll(\PDO::FETCH_ASSOC));
     }
 
-    public function fetchAllTypes(int $hostId, string $container)
+    public function fetchAllTypes(int $hostId, string $container, string $project = "default")
     {
         $sql = "SELECT DISTINCT
                     `IMV_IMT_ID` as `typeId`,
@@ -67,12 +67,15 @@ class FetchMetrics
                 WHERE
                     `IMV_Host_ID` = :hostId
                 AND
-                    `IMV_Containr_Name` = :container
+                    `IMV_Instance_Name` = :container
+                AND
+                    `IMV_Project_Name` = :project
                 ";
         $do = $this->database->prepare($sql);
         $do->execute([
             ":hostId"=>$hostId,
-            ":container"=>$container
+            ":container"=>$container,
+            ":project"=>$project
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

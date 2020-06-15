@@ -709,6 +709,7 @@ function loadContainerView(data)
         consoleSocket.emit("close", currentTerminalProcessId);
         currentTerminalProcessId = null;
     }
+    $("#goToMetrics").attr("disabled", true).addClass("disabled");
 
     ajaxRequest(globalUrls.instances.getInstance, data, function(result){
         let x = $.parseJSON(result);
@@ -721,6 +722,11 @@ function loadContainerView(data)
         addBreadcrumbs(["Dashboard", data.alias, data.container ], ["overview", "viewHost lookupId", "active"], false);
 
         let disableActions = x.state.status_code !== 102;
+
+
+        if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.haveMetrics){
+            $("#goToMetrics").attr("disabled", false).removeClass("disabled");
+        }
 
         $(".renameContainer").attr("disabled", disableActions);
         $(".deleteContainer").attr("disabled", disableActions);
