@@ -125,28 +125,12 @@ $(document).on("click", "#editDashboardGraphs", function(){
         $(this).removeClass("btn-outline-primary").addClass("btn-primary");
         $(".removeDashGraph").show()
     }
-
 });
 
-$(document).on("click", ".viewDashboard", function(){
-    $("#userDashboardsList").find(".active").removeClass("active");
-    $(this).addClass("active");
-    $("#editDashboardGraphs").removeClass("btn-primary").addClass("btn-outline-primary");
-
-    let dashId = $(this).attr("id");
-    if(dashId == "generalDashboardLink"){
-        $("#generalDashboard").show();
-        $("#userDashboard").hide();
-        $("#userDashboardGraphs").empty();
-        currentDashboard = null;
-        return false;
-    }
-    currentDashboard = dashId;
-    let x = {dashboardId: dashId};
-
-    $("#generalDashboard").hide();
-    $("#userDashboard").show();
+function loadUserDashboardGraphs()
+{
     $("#userDashboardGraphs").empty();
+        let x = {dashboardId: currentDashboard};
     ajaxRequest(globalUrls.user.dashboard.get, x, (data)=>{
         data = makeToastr(data);
 
@@ -195,8 +179,26 @@ $(document).on("click", ".viewDashboard", function(){
             });
             $("#userDashboardGraphs").append(x);
         })
-
     });
+}
+
+$(document).on("click", ".viewDashboard", function(){
+    $("#userDashboardsList").find(".active").removeClass("active");
+    $(this).addClass("active");
+    $("#editDashboardGraphs").removeClass("btn-primary").addClass("btn-outline-primary");
+
+    let dashId = $(this).attr("id");
+    if(dashId == "generalDashboardLink"){
+        $("#generalDashboard").show();
+        $("#userDashboard").hide();
+        $("#userDashboardGraphs").empty();
+        currentDashboard = null;
+        return false;
+    }
+    currentDashboard = dashId;
+    $("#generalDashboard").hide();
+    $("#userDashboard").show();
+    loadUserDashboardGraphs()
 });
 
 $(document).on("click", "#newDashboardBtn", function(){
@@ -304,7 +306,9 @@ $(document).on("click", "#addDashMetricGraph", function(){
             </div>
         `,
         buttons: {
+            cancel: {},
             create: {
+                btnClass: "btn-primary",
                 action: function(){
                     let nameInput = this.$content.find("input[name=name]");
                     let instanceInput = $("#addDashMetricInstanceSelect");
@@ -344,7 +348,11 @@ $(document).on("click", "#addDashMetricGraph", function(){
 
 
                     ajaxRequest(globalUrls.user.dashboard.graphs.add, x, (data)=>{
-                        console.log(data);
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            return false;
+                        }
+                        loadUserDashboardGraphs();
                     });
 
                 }
