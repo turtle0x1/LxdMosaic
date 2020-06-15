@@ -284,7 +284,7 @@ $(document).on("click", "#addDashMetricGraph", function(){
         title: "Add A Graph",
         content: `
             <div class="form-group">
-                <label>Graph</label>
+                <label>Name</label>
                 <input class="form-control" name="name" />
             </div>
             <div class="form-group">

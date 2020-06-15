@@ -64,6 +64,8 @@ class ImportHostInsanceMetrics
             $storageDetails["$disk usage"] = $details["usage"];
         }
 
+        ksort($storageDetails);
+
         $this->matchTypeAndStore(
             (new \DateTimeImmutable())->format("Y-m-d H:i:s"),
             $host,
@@ -82,6 +84,9 @@ class ImportHostInsanceMetrics
                 $networkData["$name $key"] = $value;
             }
         }
+
+        ksort($networkData);
+
         $this->matchTypeAndStore(
             (new \DateTimeImmutable())->format("Y-m-d H:i:s"),
             $host,

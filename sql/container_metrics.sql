@@ -11,7 +11,8 @@ CREATE TABLE `Instance_Metric_Values` (
     `IMV_ID` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `IMV_Date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     `IMV_Host_ID` INT(11) NOT NULL,
-    `IMV_Containr_Name` VARCHAR(255) NOT NULL,
+    `IMV_Project_Name` VARCHAR(255) NOT NULL DEFAULT "default",
+    `IMV_Instance_Name` VARCHAR(255) NOT NULL,
     `IMV_IMT_ID` INT(11) NOT NULL,
     `IMV_Data` JSON
 );
@@ -58,7 +59,7 @@ ALTER TABLE `User_Dashboard_Graphs`
         UPDATE RESTRICT;
 
 ALTER TABLE `Instance_Metric_Values` ADD INDEX( `IMV_Date`);
-ALTER TABLE `Instance_Metric_Values` ADD INDEX( `IMV_Containr_Name`);
+ALTER TABLE `Instance_Metric_Values` ADD INDEX( `IMV_Instance_Name`);
 
 INSERT INTO `Instance_Metric_Types` (
     `IMT_Name`,

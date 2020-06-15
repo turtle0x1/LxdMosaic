@@ -18,7 +18,7 @@ class InsertMetric
                 (
                     `IMV_Date`,
                     `IMV_Host_ID`,
-                    `IMV_Containr_Name`,
+                    `IMV_Instance_Name`,
                     `IMV_IMT_ID`,
                     `IMV_Data`
                 ) VALUES (

@@ -12,9 +12,9 @@ class DisablePullGatheringController
         $this->disablePullGathering = $disablePullGathering;
     }
 
-    public function disable(Host $host, string $instance)
+    public function disable(Host $host, string $instance, int $clearData = 0)
     {
-        $this->disablePullGathering->disable($host, $instance);
+        $this->disablePullGathering->disable($host, $instance, (bool) $clearData);
         return ["state"=>"success", "message"=>"Disabled pulling metrics"];
     }
 }
