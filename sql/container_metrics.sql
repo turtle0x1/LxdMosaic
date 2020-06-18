@@ -34,7 +34,8 @@ CREATE TABLE `User_Dashboard_Graphs` (
     `UDG_Instance` VARCHAR(255) NOT NULL,
     `UDG_Project` VARCHAR(255) NOT NULL DEFAULT "default",
     `UDG_Metric_ID` INT NOT NULL,
-    `UDG_Filter` VARCHAR(255) NOT NULL
+    `UDG_Filter` VARCHAR(255) NOT NULL,
+    `UDG_Range` VARCHAR(255) NOT NULL
 );
 
 ALTER TABLE `User_Dashboard_Graphs`

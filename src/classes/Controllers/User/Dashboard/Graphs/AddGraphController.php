@@ -20,7 +20,8 @@ class AddGraphController
         int $hostId,
         string $instance,
         int $metricId,
-        string $filter
+        string $filter,
+        string  $range
     ) {
         $this->addGraph->add(
             $userId,
@@ -29,7 +30,8 @@ class AddGraphController
             $hostId,
             $instance,
             $metricId,
-            $filter
+            $filter,
+            $range
         );
         return ["state"=>"success", "message"=>"Added Graph"];
     }
