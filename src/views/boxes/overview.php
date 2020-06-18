@@ -389,9 +389,11 @@ $(document).on("click", "#addDashMetricGraph", function(){
                 tempObjs = data;
                 let options = "<option value=''>Please select</option>";
                 $.each(data, (host, details)=>{
+                     options += `<optgroup label="${host}">`
                     $.each(details.instances, (instance, _)=>{
                         options += `<option data-host="${host}" value='${instance}'>${instance}</option>`;
                     });
+                    options += `</optgroup>`
                 });
                 content.find("#addDashMetricInstanceSelect").append(options);
             })

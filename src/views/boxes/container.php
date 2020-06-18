@@ -227,7 +227,7 @@
     <div class="card">
         <div class="card-header bg-primary">
             Metric Graph
-            <select class="form-control-sm float-right" id="metricRangePicker">
+            <select class="float-right" id="metricRangePicker" disabled>
                 <option value="">Please Select</option>
                 <option value="-15 minutes">Last 15 Minutes</option>
                 <option value="-30 minutes">Last 30 Minutes</option>
@@ -246,9 +246,9 @@
                 <option value="-1 months">Last 1 Month</option>
                 <option value="-2 months">Last 2 Months</option>
             </select>
-            <select class="form-control-sm float-right" id="metricTypeFilterSelect">
+            <select class="float-right" id="metricTypeFilterSelect" disabled>
             </select>
-            <select class="form-control-sm float-right" id="metricTypeSelect">
+            <select class="float-right" id="metricTypeSelect">
             </select>
 
 
@@ -1162,6 +1162,7 @@ $("#containerBox").on("click", "#goToFiles", function(){
 $("#containerBox").on("change", "#metricTypeSelect", function(){
     let type = $(this).val();
     if(type == ""){
+        $("#metricTypeFilterSelect, #metricRangePicker").attr("disabled", true);
         $("#metricGraphBody").empty();
         return false;
     }
@@ -1172,11 +1173,15 @@ $("#containerBox").on("change", "#metricTypeSelect", function(){
         $.each(data, (_, filter)=>{
             html += `<option value='${filter}'>${filter}</option>`
         });
-        $("#metricTypeFilterSelect").empty().append(html);
+        $("#metricTypeFilterSelect").attr("disabled", false).empty().append(html);
     });
 });
 
 $("#containerBox").on("change", "#metricRangePicker", function(){
+    if($(this).val() == ""){
+        $("#metricGraphBody").empty();
+        return false;
+    }
     $("#metricTypeFilterSelect").trigger("change");
 });
 
@@ -1186,9 +1191,12 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
     let range = $("#metricRangePicker").val();
 
     if(type == "" || filter == ""){
+        $("#metricRangePicker").attr("disabled", true);
         $("#metricGraphBody").empty();
         return false;
     }
+
+    $("#metricRangePicker").attr("disabled", false);
 
     if(range == ""){
         return false;
@@ -1228,7 +1236,9 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
 $("#containerBox").on("click", "#goToMetrics", function(){
     $("#containerMetrics").show();
     $("#containerConsole, #containerBackups, #containerDetails, #containerFiles").hide();
-    $("#metricGraphBody, #metricTypeFilterSelect").empty();
+    $("#metricGraphBody").empty();
+    $("#metricRangePicker").attr("disabled", true);
+    $("#metricTypeFilterSelect").attr("disabled", true).empty().append(`<option value=''>Please Select</option>`)
     $("#metricRangePicker").find("option[value='']").attr("selected", true);
     let x = {...{type: 1}, ...currentContainerDetails}
 
