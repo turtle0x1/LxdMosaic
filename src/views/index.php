@@ -215,8 +215,8 @@ if ($haveServers->haveAny() !== true) {
                   gpu: {
                     getAll: "/api/Hosts/GPU/GetAllController/getAll"
                   },
-                  alias: {
-                    update: "/api/Hosts/Alias/UpdateAliasController/update"
+                  settings: {
+                    update: "/api/Hosts/Settings/UpdateSettingsController/update"
                   },
                   search: {
                       search: "/api/Hosts/SearchHosts/search"

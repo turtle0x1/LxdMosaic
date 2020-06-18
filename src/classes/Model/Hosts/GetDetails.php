@@ -39,7 +39,8 @@ class GetDetails
                     `Host_Cert_Only_File` as `certFilePath`,
                     `Host_Key_File` as `keyFilePath`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
-                    `Host_Online` as `hostOnline`
+                    `Host_Online` as `hostOnline`,
+                    `Host_Support_Load_Averages` as `supportsLoadAvgs`
                 FROM
                     `Hosts`
                 WHERE
@@ -63,7 +64,8 @@ class GetDetails
                     `Host_Cert_Only_File` as `certFilePath`,
                     `Host_Key_File` as `keyFilePath`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
-                    `Host_Online` as `hostOnline`
+                    `Host_Online` as `hostOnline`,
+                    `Host_Support_Load_Averages` as `supportsLoadAvgs`
                 FROM
                     `Hosts`
                 WHERE
