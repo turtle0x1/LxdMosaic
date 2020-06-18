@@ -16,6 +16,8 @@ class Host implements \JsonSerializable
     private $keyFilePath ;
     private $hostOnline;
 
+    private $supportsLoadAvgs;
+
     private $customProps = [];
 
     private $lxdClient;
@@ -69,6 +71,11 @@ class Host implements \JsonSerializable
         return $this->alias;
     }
 
+    public function hostSupportLoadAvgs() :bool
+    {
+        return (bool) $this->supportsLoadAvgs;
+    }
+
     public function callClientMethod($method, $param = null)
     {
         if ($param !== null) {
@@ -84,7 +91,8 @@ class Host implements \JsonSerializable
             "hostId"=>$this->id,
             "alias"=>$this->alias,
             "urlAndPort"=>$this->urlAndPort,
-            "hostOnline"=>$this->hostOnline
+            "hostOnline"=>$this->hostOnline,
+            "supportsLoadAvgs"=>$this->supportsLoadAvgs
         ], $this->customProps);
     }
     /**

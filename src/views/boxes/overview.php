@@ -446,11 +446,6 @@ $(document).on("click", "#createVm", function(){
 $(document).on("click", "#createContainer", function(){
     $("#modal-container-create").modal("show");
 });
-
-$(document).on("click", ".editHost", function(){
-    editHostDetailsObj.hostId = $(this).parents(".brand-card").attr("id");
-    $("#modal-hosts-edit").modal("show");
-});
 </script>
 
 <?php

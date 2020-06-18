@@ -320,6 +320,8 @@ $(document).on("change", "#serverContainerActions", function(){
 });
 
 $(document).on("click", "#editHost", function(){
+    editHostDetailsObj.supportsLoadAvgs = parseInt(currentServer.supportsLoadAvgs) ? true : false;
+    editHostDetailsObj.hostAlias = currentServer.hostAlias
     editHostDetailsObj.hostId = currentServer.hostId
     $("#modal-hosts-edit").modal("show");
 });
@@ -342,7 +344,8 @@ function loadServerView(hostId)
         data = $.parseJSON(data);
 
         let ident = data.header.alias == null ? data.header.urlAndPort : data.header.alias;
-
+        currentServer.hostAlias = data.header.alias;
+        currentServer.supportsLoadAvgs = data.header.supportsLoadAvgs;
         addBreadcrumbs([ident], ["active"]);
 
         $("#serverHeading").text(ident);
