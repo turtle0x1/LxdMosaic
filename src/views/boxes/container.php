@@ -227,10 +227,30 @@
     <div class="card">
         <div class="card-header bg-primary">
             Metric Graph
+            <select class="form-control-sm float-right" id="metricRangePicker">
+                <option value="">Please Select</option>
+                <option value="-15 minutes">Last 15 Minutes</option>
+                <option value="-30 minutes">Last 30 Minutes</option>
+                <option value="-45 minutes">Last 45 Minutes</option>
+                <option value="-60 minutes">Last 60 Minutes</option>
+                <option value="-3 hours">Last 3 Hours</option>
+                <option value="-6 hours">Last 6 Hours</option>
+                <option value="-12 hours">Last 12 Hours</option>
+                <option value="-24 hours">Last 24 Hours</option>
+                <option value="-2 days">Last 2 Days</option>
+                <option value="-3 days">Last 3 Days</option>
+                <option value="-1 weeks">Last 1 Week</option>
+                <option value="-2 weeks">Last 2 Weeks</option>
+                <option value="-3 weeks">Last 3 Weeks</option>
+                <option value="-4 weeks">Last 4 Weeks</option>
+                <option value="-1 months">Last 1 Month</option>
+                <option value="-2 months">Last 2 Months</option>
+            </select>
             <select class="form-control-sm float-right" id="metricTypeFilterSelect">
             </select>
             <select class="form-control-sm float-right" id="metricTypeSelect">
             </select>
+
 
         </div>
         <div class="card-body bg-dark" id="metricGraphBody">
@@ -1155,14 +1175,26 @@ $("#containerBox").on("change", "#metricTypeSelect", function(){
         $("#metricTypeFilterSelect").empty().append(html);
     });
 });
+
+$("#containerBox").on("change", "#metricRangePicker", function(){
+    $("#metricTypeFilterSelect").trigger("change");
+});
+
 $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
     let filter = $(this).val();
     let type = $("#metricTypeSelect").val();
+    let range = $("#metricRangePicker").val();
+
     if(type == "" || filter == ""){
         $("#metricGraphBody").empty();
         return false;
     }
-    let x = {...{type: type, filter: filter}, ...currentContainerDetails}
+
+    if(range == ""){
+        return false;
+    }
+
+    let x = {...{type: type, filter: filter, range: range}, ...currentContainerDetails}
     ajaxRequest(globalUrls.instances.metrics.getGraphData, x, (data)=>{
         let color = randomColor();
         data = $.parseJSON(data);
@@ -1197,6 +1229,7 @@ $("#containerBox").on("click", "#goToMetrics", function(){
     $("#containerMetrics").show();
     $("#containerConsole, #containerBackups, #containerDetails, #containerFiles").hide();
     $("#metricGraphBody, #metricTypeFilterSelect").empty();
+    $("#metricRangePicker").find("option[value='']").attr("selected", true);
     let x = {...{type: 1}, ...currentContainerDetails}
 
     ajaxRequest(globalUrls.instances.metrics.getAllTypes, currentContainerDetails, (data)=>{
