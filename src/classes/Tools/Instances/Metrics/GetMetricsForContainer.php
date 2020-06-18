@@ -40,7 +40,6 @@ class GetMetricsForContainer
     public function get($hostId, $container, $type, $filter, $range = "P30I")
     {
         $startDate = (new \DateTime())->modify($range);
-        $endDate = new \DateTimeImmutable;
 
         $allMetrics = $this->fetchMetrics->fetchByHostContainerType(
             $hostId,
@@ -72,15 +71,17 @@ class GetMetricsForContainer
 
             $startMinute = 0;
             $startHour = 0;
-            $stopAtNow = $dateString === $endDate->format("d-m-Y");
+            $stopAtNow = $dateString === $period->getEndDate()->format("d-m-Y");
 
             // If this day is the start date
-            if ($startDate->format("d-m-Y") === $dateString) {
-                $startHour = $startDate->format("H");
-                $startMinute = $startDate->format("i");
+            if ($period->getStartDate()->format("d-m-Y") === $dateString) {
+                $startHour = $period->getStartDate()->format("H");
+                $startMinute = $period->getStartDate()->format("i");
             }
 
-            $prefix = $moreThanOneDay ?  $dateString . " " : "";
+            $prefixFormat = $value->format("Y") === (new \DateTime)->format("Y") ? "d M" : "d M Y";
+
+            $prefix = $moreThanOneDay ?  $value->format($prefixFormat) . " " : "";
 
             $dataByDate[$dateString] = DateTools::hoursRange($startHour, 24, $step, $prefix, $stopAtNow, $startMinute);
         }
@@ -108,7 +109,15 @@ class GetMetricsForContainer
 
             $date = new \DateTimeImmutable($metricEntry["date"]);
 
-            $format = $moreThanOneDay ?  "d-m-Y H:i" : "H:i";
+            $format = "H:i";
+
+            if ($moreThanOneDay) {
+                if ($date->format("Y") === (new \DateTime)->format("Y")) {
+                    $format = "d M H:i";
+                } else {
+                    $format = "d M Y H:i";
+                }
+            }
 
             if (array_key_exists($date->format($format), $dataByDate[$date->format("d-m-Y")])) {
                 $dataByDate[$date->format("d-m-Y")][$date->format($format)] = $data;
