@@ -39,7 +39,8 @@ class GetUserDashboard
                 $graph["hostId"],
                 $graph["instance"],
                 $graph["metricId"],
-                $graph["filter"]
+                $graph["filter"],
+                $graph["range"]
             );
 
             $outputGraphs[] = array_merge([
