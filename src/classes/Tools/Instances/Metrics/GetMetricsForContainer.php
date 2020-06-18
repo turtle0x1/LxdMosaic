@@ -56,7 +56,7 @@ class GetMetricsForContainer
 
         $dataByDate = [];
 
-        $numberOfDays = iterator_count($period);
+        $numberOfDays = (int) ($period->getStartDate())->diff($period->getEndDate())->format("%R%a");
         $moreThanOneDay = $numberOfDays > 1;
 
         $step = 1;
