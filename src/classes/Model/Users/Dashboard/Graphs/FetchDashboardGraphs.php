@@ -19,7 +19,8 @@ class FetchDashboardGraphs
                     `UDG_Host_ID` as `hostId`,
                     `UDG_Instance` as `instance`,
                     `UDG_Metric_ID` as `metricId`,
-                    `UDG_Filter` as `filter`
+                    `UDG_Filter` as `filter`,
+                    `UDG_Range` as `range`
                 FROM
                     `User_Dashboard_Graphs`
                 WHERE

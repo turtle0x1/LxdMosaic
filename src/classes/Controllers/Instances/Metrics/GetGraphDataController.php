@@ -21,8 +21,8 @@ class GetGraphDataController
         return $this->getMetricsForContainer->getTypeFilters($hostId, $container, $type);
     }
 
-    public function get(int $hostId, string $container, int $type, string $filter)
+    public function get(int $hostId, string $container, int $type, string $filter, string $range)
     {
-        return $this->getMetricsForContainer->get($hostId, $container, $type, $filter);
+        return $this->getMetricsForContainer->get($hostId, $container, $type, $filter, $range);
     }
 }

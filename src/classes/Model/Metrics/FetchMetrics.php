@@ -28,10 +28,10 @@ class FetchMetrics
         return $do->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_ASSOC);
     }
 
-    public function fetchByHostContainerType(int $hostId, string $container, int $typeId)
+    public function fetchByHostContainerType(int $hostId, string $container, int $typeId, \DateTimeInterface $after)
     {
         $sql = "SELECT
-                    DATE_FORMAT(`IMV_Date`, '%H:%i:%s') as `date`,
+                    `IMV_Date` as `date`,
                     `IMV_IMT_ID` as `typeId`,
                     `IMV_Data` as `data`
                 FROM
@@ -42,15 +42,17 @@ class FetchMetrics
                     `IMV_Instance_Name` = :container
                 AND
                     `IMV_IMT_ID` = :typeId
+                AND
+                    `IMV_Date` > :after
                 ORDER BY
                     `IMV_Date` DESC
-                LIMIT  15
                 ";
         $do = $this->database->prepare($sql);
         $do->execute([
             ":hostId"=>$hostId,
             ":container"=>$container,
-            ":typeId"=>$typeId
+            ":typeId"=>$typeId,
+            ":after"=>$after->format("Y-m-d H:i")
         ]);
         return array_reverse($do->fetchAll(\PDO::FETCH_ASSOC));
     }
