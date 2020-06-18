@@ -48,7 +48,7 @@ class GetHostContainerStatus
                 $instance = str_replace("/1.0/instances/", "", $instance);
                 $instance = str_replace("/1.0/containers/", "", $instance);
 
-                if (strpos($instance, "?project=default") !== false) {
+                if (strpos($instance, "?project=default") !== false || strpos($instance, '?project=') === false) {
                     $instance = str_replace("?project=default", "", $instance);
                     $instancesToScan["pullMetrics"][] = $instance;
                 }
