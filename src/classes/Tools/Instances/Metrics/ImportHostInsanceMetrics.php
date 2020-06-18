@@ -30,7 +30,10 @@ class ImportHostInsanceMetrics
         foreach ($instancesToScan as $instance) {
             $state = $instances[$instance]["state"];
 
-            $this->addInstanceLoadAverage($host, $instance);
+            if ($host->hostSupportLoadAvgs()) {
+                $this->addInstanceLoadAverage($host, $instance);
+            }
+
             $this->addInstanceMemoryUsage($host, $instance, $state);
             $this->addInstanceNetworkUsage($host, $instance, $state);
             $this->addInstanceStorageUsage($host, $instance, $state);
