@@ -17,7 +17,8 @@ class InsertDashboardGraph
         int $hostId,
         string $instance,
         int $metricId,
-        string $filter
+        string $filter,
+        string $range
     ) {
         $sql = "INSERT INTO `User_Dashboard_Graphs`
                 (
@@ -26,14 +27,16 @@ class InsertDashboardGraph
                     `UDG_Host_ID`,
                     `UDG_Instance`,
                     `UDG_Metric_ID`,
-                    `UDG_Filter`
+                    `UDG_Filter`,
+                    `UDG_Range`
                 ) VALUES (
                     :dashboardId,
                     :name,
                     :hostId,
                     :instance,
                     :metricId,
-                    :filter
+                    :filter,
+                    :range
                 )
                 ";
         $do = $this->database->prepare($sql);
@@ -44,6 +47,7 @@ class InsertDashboardGraph
             ":instance"=>$instance,
             ":metricId"=>$metricId,
             ":filter"=>$filter,
+            ":range"=>$range
         ]);
         return $do->rowCount() ? true : false;
     }

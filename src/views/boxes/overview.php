@@ -304,6 +304,22 @@ $(document).on("click", "#addDashMetricGraph", function(){
                     <option value=''>Select Metric</option>
                 </select>
             </div>
+            <div class="form-group">
+                <label>Range</label>
+                <select class="form-control float-right" id="addDashMetricRangeSelect" disabled>
+                    <option value="">Please Select</option>
+                    <option value="-15 minutes">Last 15 Minutes</option>
+                    <option value="-30 minutes">Last 30 Minutes</option>
+                    <option value="-45 minutes">Last 45 Minutes</option>
+                    <option value="-60 minutes">Last 60 Minutes</option>
+                    <option value="-3 hours">Last 3 Hours</option>
+                    <option value="-6 hours">Last 6 Hours</option>
+                    <option value="-12 hours">Last 12 Hours</option>
+                    <option value="-24 hours">Last 24 Hours</option>
+                    <option value="-2 days">Last 2 Days</option>
+                    <option value="-3 days">Last 3 Days</option>
+                </select>
+            </div>
         `,
         buttons: {
             cancel: {},
@@ -314,10 +330,12 @@ $(document).on("click", "#addDashMetricGraph", function(){
                     let instanceInput = $("#addDashMetricInstanceSelect");
                     let metricInput = $("#addDashMetricMetricSelect");
                     let filterInput = $("#addDashMetricFilterSelect");
+                    let rangeInput = $("#addDashMetricRangeSelect");
                     let name = nameInput.val().trim();
                     let instance = instanceInput.val().trim();
                     let metric = metricInput.val().trim();
                     let filter = filterInput.val().trim();
+                    let range = rangeInput.val().trim();
 
                     if(name == ""){
                         nameInput.focus();
@@ -335,6 +353,10 @@ $(document).on("click", "#addDashMetricGraph", function(){
                         filterInput.focus();
                         $.alert("Please select filter");
                         return false;
+                    }else if(range == ""){
+                        filterInput.focus();
+                        $.alert("Please select range");
+                        return false;
                     }
 
                     let x = {
@@ -344,6 +366,7 @@ $(document).on("click", "#addDashMetricGraph", function(){
                         instance: instance,
                         metricId: metric,
                         filter: filter,
+                        range: range
                     }
 
 
@@ -395,10 +418,12 @@ $(document).on("change", "#addDashMetricInstanceSelect", function(){
 $(document).on("change", "#addDashMetricMetricSelect", function(){
     let type = $(this).val();
     if(type == ""){
+        $("#addDashMetricRangeSelect").attr("disabled", true);
         $("#addDashMetricFilterSelect").empty().append(`<option value=''>Select Metric</option>`).attr("disabled", true);
         $("#metricGraphBody").empty();
         return false;
     }
+    $("#addDashMetricRangeSelect").attr("disabled", false);
     let x = {
         type: type,
         hostId: tempObjs[$("#addDashMetricInstanceSelect").find(":selected").data()["host"]].hostId,

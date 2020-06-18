@@ -18,7 +18,8 @@ class AddGraph
         int $hostId,
         string $instance,
         int $metricId,
-        string $filter
+        string $filter,
+        string $range
     ) {
         $this->insertDashboardGraph->insert(
             $dashboardId,
@@ -26,7 +27,8 @@ class AddGraph
             $hostId,
             $instance,
             $metricId,
-            $filter
+            $filter,
+            $range
         );
     }
 }
