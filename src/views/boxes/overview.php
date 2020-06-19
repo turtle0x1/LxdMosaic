@@ -13,7 +13,7 @@
     <div class="row mb-2" id="userDashboard">
         <div class="col-md-12">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
-                <div></div>
+                <div id="dashboardTitle"></div>
                 <div class="btn-toolbar float-right">
                     <button class="btn btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Add graph" id="addDashMetricGraph">
                         <i class="fas fa-plus"></i>
@@ -116,6 +116,7 @@
 <script>
 var tempObjs = {};
 var currentDashboard = null
+var dashboardRefreshInterval = null;
 
 $(document).on("click", "#editDashboardGraphs", function(){
     if($(this).hasClass("btn-primary")){
@@ -130,9 +131,16 @@ $(document).on("click", "#editDashboardGraphs", function(){
 function loadUserDashboardGraphs()
 {
     $("#userDashboardGraphs").empty();
-        let x = {dashboardId: currentDashboard};
+    let x = {dashboardId: currentDashboard};
+
+    if(dashboardRefreshInterval != null){
+        clearInterval(dashboardRefreshInterval);
+    }
+
     ajaxRequest(globalUrls.user.dashboard.get, x, (data)=>{
         data = makeToastr(data);
+        $("#dashboardTitle").text(" Last Refresh: " + moment().format("llll"));
+        dashboardRefreshInterval = setInterval(loadUserDashboardGraphs, 90000);
 
         $.each(data.graphsData, (i, graph)=>{
             let x = $(`<div class="card bg-dark" id="${graph.graphId}">
@@ -152,6 +160,7 @@ function loadUserDashboardGraphs()
             let scales = graph.formatBytes ? scalesBytesCallbacks : [];
             let tooltips = graph.formatBytes ? toolTipsBytesCallbacks : [];
             let color = randomColor();
+
             new Chart(x.find("#" +i), {
                 type: "line",
                 data: {
@@ -178,7 +187,7 @@ function loadUserDashboardGraphs()
                 }
             });
             $("#userDashboardGraphs").append(x);
-        })
+        });
     });
 }
 
@@ -189,6 +198,10 @@ $(document).on("click", ".viewDashboard", function(){
 
     let dashId = $(this).attr("id");
     if(dashId == "generalDashboardLink"){
+        if(dashboardRefreshInterval != null){
+            clearInterval(dashboardRefreshInterval);
+        }
+
         $("#generalDashboard").show();
         $("#userDashboard").hide();
         $("#userDashboardGraphs").empty();
