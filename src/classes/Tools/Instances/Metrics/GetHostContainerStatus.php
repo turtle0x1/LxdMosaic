@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Tools\Instances\Metrics;
 
 use dhope0000\LXDClient\Tools\Profiles\GetAllProfiles;
+use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class GetHostContainerStatus
 {
@@ -29,8 +30,16 @@ class GetHostContainerStatus
     }
     private function addHostDetails(&$host)
     {
-        $instances = [];
         $instancesToScan = ["pullMetrics"=>[]];
+        //TODO Should probably check that the host supports this extension
+        //     but how old is that host (Wish the LXD docs were clearer)?
+        $instances = $host->instances->all(LxdRecursionLevels::INSTANCE_HALF_RECURSION);
+
+        foreach ($instances as $index => $instance) {
+            $instances[$instance["name"]] = $instance;
+            unset($instances[$index]);
+        }
+
         foreach ($host->getCustomProp("profiles") as $profile) {
             if (!isset($profile["config"])) {
                 continue;
@@ -49,11 +58,17 @@ class GetHostContainerStatus
                 $instance = str_replace("/1.0/containers/", "", $instance);
 
                 if (strpos($instance, "?project=default") !== false || strpos($instance, '?project=') === false) {
+                    $hostLocation = $instances[$instance]["location"];
+                    if ($hostLocation !== "none" && $hostLocation !== "" && $hostLocation !== $host->getAlias()) {
+                        continue;
+                    }
                     $instance = str_replace("?project=default", "", $instance);
                     $instancesToScan["pullMetrics"][] = $instance;
                 }
             }
         }
+
+        $instances = [];
 
         $allInstances = $host->instances->all();
         foreach ($allInstances as $instance) {
