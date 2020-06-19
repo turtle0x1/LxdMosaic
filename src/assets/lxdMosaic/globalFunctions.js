@@ -214,6 +214,7 @@ var monthsNameArray = ["January", "February", "March", "April", "May", "June", "
 
 https://stackoverflow.com/questions/1484506/random-color-generator/32124533
 function randomColor(format = 'hex') {
+    return '#2ecc71'
     const rnd = Math.random().toString(16).slice(-6);
     if (format === 'hex') {
         return '#' + rnd;

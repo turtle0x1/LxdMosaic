@@ -28,7 +28,7 @@
                 </div>
         </div>
         <div class="row serverViewBox" id="serverInfoBox">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="card bg-dark">
                 <div class="card-header bg-dark">
                     <h4> Instances
@@ -50,6 +50,7 @@
                                 <td> Disk Usage </td>
                                 <td> Memory Usage </td>
                                 <td> <a href="#" data-toggle="tooltip" data-placement="bottom" title="Excluding local interface bytes sent & received"> Network Usage </a> </td>
+                                <td> Gather Metrics</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,7 +59,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="row">
                 <div class="col-md-6">
                     <div class="card bg-dark">
@@ -151,6 +152,68 @@ $(document).on("change", ".toggleStatusContainer", function(){
             return false;
         }
         $(this).find("input[name=containerCheckbox]").prop("checked", checked);
+    });
+});
+
+$(document).on("click", ".disableMetrics", function(){
+    let btn = $(this);
+    let td = btn.parents("td");
+    btn.attr("disabled", true);
+    let x = btn.data();
+
+    $.confirm({
+        title: 'Disable Metric Gathering?!',
+        content: `<div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="clearMetricdata">
+          <label class="form-check-label" for="clearMetricdata">
+            Clear Metric Data ?
+          </label>
+        </div>`,
+        buttons: {
+            cancel: function () {},
+            yes: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin"></i>Deleting..'); // let the user know
+                    this.buttons.yes.disable();
+                    this.buttons.cancel.disable();
+                    var modal = this;
+                    x.clearData = modal.$content.find("#clearMetricdata").is(":checked") ? 1 : 0;
+                    ajaxRequest(globalUrls.instances.metrics.disablePullGathering, x, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            btn.attr("disabled", false);
+                            return false;
+                        }
+                        modal.close();
+                        td.empty().append(`<button data-host-id="${x.hostId}" data-instance="${x.instance}" class='btn btn-outline-primary btn-sm enableMetrics'>
+                            Enable
+                        </button>`);
+                    });
+                    return false;
+                }
+            }
+        }
+    });
+
+});
+
+$(document).on("click", ".enableMetrics", function(){
+    let btn = $(this);
+    let td = btn.parents("td");
+    btn.attr("disabled", true);
+    let x = btn.data();
+
+    ajaxRequest(globalUrls.instances.metrics.enablePullGathering, x, (data)=>{
+        data = makeToastr(data);
+        if(data.state == "error"){
+            btn.attr("disabled", false);
+            return false;
+        }
+
+        td.empty().append(`<button data-host-id="${x.hostId}" data-instance="${x.instance}" class='btn btn-outline-warning btn-sm disableMetrics'>
+                    Disable
+                </button>`);
     });
 });
 
@@ -257,6 +320,8 @@ $(document).on("change", "#serverContainerActions", function(){
 });
 
 $(document).on("click", "#editHost", function(){
+    editHostDetailsObj.supportsLoadAvgs = parseInt(currentServer.supportsLoadAvgs) ? true : false;
+    editHostDetailsObj.hostAlias = currentServer.hostAlias
     editHostDetailsObj.hostId = currentServer.hostId
     $("#modal-hosts-edit").modal("show");
 });
@@ -279,7 +344,8 @@ function loadServerView(hostId)
         data = $.parseJSON(data);
 
         let ident = data.header.alias == null ? data.header.urlAndPort : data.header.alias;
-
+        currentServer.hostAlias = data.header.alias;
+        currentServer.supportsLoadAvgs = data.header.supportsLoadAvgs;
         addBreadcrumbs([ident], ["active"]);
 
         $("#serverHeading").text(ident);
@@ -298,7 +364,7 @@ function loadServerView(hostId)
                 <td>${$.isNumeric(item.cores) ? item.cores : item.cores.length} Cores</td>
             </tr>`
         });
-        
+
         hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white">GPU'S</td></tr>`
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
@@ -370,12 +436,23 @@ function loadServerView(hostId)
                         bytesRecieved += network.counters.bytes_received;
                     });
 
+                    let metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-primary btn-sm enableMetrics'>
+                        Enable
+                    </button>`;
+
+                    if(details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics")){
+                        metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-warning btn-sm disableMetrics'>
+                            Disable
+                        </button>`;
+                    }
+
                     containerHtml += `<tr data-name="${name}">
                         <td><input name="containerCheckbox" type="checkbox"/></td>
                         <td>${name}</td>
                         <td>${storageUsage}</td>
                         <td>${formatBytes(details.state.memory.usage)}</td>
                         <td>R: ${formatBytes(bytesRecieved)} <br/> S: ${formatBytes(bytesSent)}</td>
+                        <td>${metricsButton}</td>
                     </tr>`
                 });
             });
