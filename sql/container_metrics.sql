@@ -61,6 +61,20 @@ ALTER TABLE `User_Dashboard_Graphs`
     ON
         UPDATE RESTRICT;
 
+ALTER TABLE `Instance_Metric_Values`
+    ADD FOREIGN KEY (`IMV_Host_ID`) REFERENCES `Hosts`(`Host_ID`)
+    ON
+        DELETE RESTRICT
+    ON
+        UPDATE RESTRICT;
+
+ALTER TABLE `Instance_Metric_Values`
+    ADD FOREIGN KEY (`IMV_IMT_ID`) REFERENCES `Instance_Metric_Types`(`IMT_ID`)
+    ON
+        DELETE RESTRICT
+    ON
+        UPDATE RESTRICT; 
+
 ALTER TABLE `Instance_Metric_Values` ADD INDEX( `IMV_Date`);
 ALTER TABLE `Instance_Metric_Values` ADD INDEX( `IMV_Instance_Name`);
 
