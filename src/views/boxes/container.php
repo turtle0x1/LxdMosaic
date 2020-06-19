@@ -59,6 +59,9 @@
             <button type="button" class="btn text-white btn-outline-primary" id="goToFiles">
                 <i class="fas fa-save pr-2"></i>Files
             </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToMetrics">
+                <i class="fas fa-chart-bar pr-2"></i>Metrics
+            </button>
             <div class="btn-toolbar  mb-2 mb-md-0">
 
             </div>
@@ -219,6 +222,42 @@
     </div>
     <div class="card-columns" id="filesystemTable">
     </div>
+</div>
+<div id="containerMetrics"  class="col-md-12">
+    <div class="card bg-dark text-white">
+        <div class="card-header">
+            Metric Graph
+            <select class="float-right" id="metricRangePicker" disabled>
+                <option value="">Please Select</option>
+                <option value="-15 minutes">Last 15 Minutes</option>
+                <option value="-30 minutes">Last 30 Minutes</option>
+                <option value="-45 minutes">Last 45 Minutes</option>
+                <option value="-60 minutes">Last 60 Minutes</option>
+                <option value="-3 hours">Last 3 Hours</option>
+                <option value="-6 hours">Last 6 Hours</option>
+                <option value="-12 hours">Last 12 Hours</option>
+                <option value="-24 hours">Last 24 Hours</option>
+                <option value="-2 days">Last 2 Days</option>
+                <option value="-3 days">Last 3 Days</option>
+                <option value="-1 weeks">Last 1 Week</option>
+                <option value="-2 weeks">Last 2 Weeks</option>
+                <option value="-3 weeks">Last 3 Weeks</option>
+                <option value="-4 weeks">Last 4 Weeks</option>
+                <option value="-1 months">Last 1 Month</option>
+                <option value="-2 months">Last 2 Months</option>
+            </select>
+            <select class="float-right form-control-sm" id="metricTypeFilterSelect" disabled>
+            </select>
+            <select class="float-right" id="metricTypeSelect">
+            </select>
+
+
+        </div>
+        <div class="card-body bg-dark" id="metricGraphBody">
+
+        </div>
+    </div>
+
 </div>
 </div>
 <script src="/assets/dist/xterm.js"></script>
@@ -690,6 +729,7 @@ function loadContainerView(data)
         consoleSocket.emit("close", currentTerminalProcessId);
         currentTerminalProcessId = null;
     }
+    $("#goToMetrics").attr("disabled", true).addClass("disabled");
 
     ajaxRequest(globalUrls.instances.getInstance, data, function(result){
         let x = $.parseJSON(result);
@@ -702,6 +742,11 @@ function loadContainerView(data)
         addBreadcrumbs(["Dashboard", data.alias, data.container ], ["overview", "viewHost lookupId", "active"], false);
 
         let disableActions = x.state.status_code !== 102;
+
+
+        if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.haveMetrics){
+            $("#goToMetrics").attr("disabled", false).removeClass("disabled");
+        }
 
         $(".renameContainer").attr("disabled", disableActions);
         $(".deleteContainer").attr("disabled", disableActions);
@@ -1110,8 +1155,102 @@ function loadFileSystemPath(path){
 
 $("#containerBox").on("click", "#goToFiles", function(){
     $("#containerFiles").show();
-    $("#containerConsole, #containerBackups, #containerDetails").hide();
+    $("#containerConsole, #containerBackups, #containerDetails, #containerMetrics").hide();
     loadFileSystemPath("/");
+});
+
+$("#containerBox").on("change", "#metricTypeSelect", function(){
+    let type = $(this).val();
+    if(type == ""){
+        $("#metricTypeFilterSelect, #metricRangePicker").attr("disabled", true);
+        $("#metricGraphBody").empty();
+        return false;
+    }
+    let x = {...{type: type}, ...currentContainerDetails}
+    ajaxRequest(globalUrls.instances.metrics.getTypeFilters, x, (data)=>{
+        data = $.parseJSON(data);
+        let html = "<option value=''>Please select</option>";
+        $.each(data, (_, filter)=>{
+            html += `<option value='${filter}'>${filter}</option>`
+        });
+        $("#metricTypeFilterSelect").attr("disabled", false).empty().append(html);
+    });
+});
+
+$("#containerBox").on("change", "#metricRangePicker", function(){
+    if($(this).val() == ""){
+        $("#metricGraphBody").empty();
+        return false;
+    }
+    $("#metricTypeFilterSelect").trigger("change");
+});
+
+$("#containerBox").on("change", "#metricTypeFilterSelect", function(){
+    let filter = $(this).val();
+    let type = $("#metricTypeSelect").val();
+    let range = $("#metricRangePicker").val();
+
+    if(type == "" || filter == ""){
+        $("#metricRangePicker").attr("disabled", true);
+        $("#metricGraphBody").empty();
+        return false;
+    }
+
+    $("#metricRangePicker").attr("disabled", false);
+
+    if(range == ""){
+        return false;
+    }
+
+    let x = {...{type: type, filter: filter, range: range}, ...currentContainerDetails}
+    ajaxRequest(globalUrls.instances.metrics.getGraphData, x, (data)=>{
+        let color = randomColor();
+        data = $.parseJSON(data);
+        $("#metricGraphBody").empty().append('<canvas id="metricGraph" style="width: 100%;"></canvas>');
+        let scales = data.formatBytes ? scalesBytesCallbacks : [];
+        let tooltips = data.formatBytes ? toolTipsBytesCallbacks : [];
+        new Chart($("#metricGraph"), {
+            type: "line",
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: `Data`,
+                    fill: false,
+                    borderColor: color,
+                    pointHoverBackgroundColor: color,
+                    backgroundColor: color,
+                    pointHoverBorderColor: color,
+                    data: data.data
+                }]
+            },
+            options: {
+              cutoutPercentage: 40,
+              responsive: false,
+              scales: scales,
+              tooltips: tooltips
+            }
+        });
+    });
+});
+
+$("#containerBox").on("click", "#goToMetrics", function(){
+    $("#containerMetrics").show();
+    $("#containerConsole, #containerBackups, #containerDetails, #containerFiles").hide();
+    $("#metricGraphBody").empty();
+    $("#metricRangePicker").attr("disabled", true);
+    $("#metricTypeFilterSelect").attr("disabled", true).empty().append(`<option value=''>Please Select</option>`)
+    $("#metricRangePicker").find("option[value='']").attr("selected", true);
+    let x = {...{type: 1}, ...currentContainerDetails}
+
+    ajaxRequest(globalUrls.instances.metrics.getAllTypes, currentContainerDetails, (data)=>{
+        data = $.parseJSON(data);
+        let html = "<option value=''>Please select</option>";
+        $.each(data, (_, item)=>{
+            html += `<option value='${item.typeId}'>${item.type}</option>`
+        });
+        $("#metricTypeSelect").empty().append(html);
+    });
+
 });
 
 $(document).on("click", ".filesystemObject", function(){
@@ -1134,7 +1273,7 @@ $(document).on("click", ".goUpDirectory", function(){
 
 $("#containerBox").on("click", "#goToDetails", function(){
     $("#containerDetails").show();
-    $("#containerConsole, #containerBackups, #containerFiles").hide();
+    $("#containerConsole, #containerBackups, #containerFiles, #containerMetrics").hide();
 });
 
 $("#containerBox").on("click", "#goToBackups", function() {
@@ -1142,14 +1281,14 @@ $("#containerBox").on("click", "#goToBackups", function() {
         return false;
     }
     loadContainerBackups();
-    $("#containerDetails, #containerConsole, #containerFiles").hide();
+    $("#containerDetails, #containerConsole, #containerFiles, #containerMetrics").hide();
     $("#containerBackups").show();
 });
 
 $("#containerBox").on("click", "#goToConsole", function() {
     Terminal.applyAddon(attach);
 
-    $("#containerDetails, #containerBackups, #containerFiles").hide();
+    $("#containerDetails, #containerBackups, #containerFiles, #containerMetrics").hide();
     $("#containerConsole").show();
 
 

@@ -13,6 +13,12 @@
               <label> Alias </label>
               <input class="form-control" id="alias" />
           </div>
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="supportsLoadAvgs">
+              <label class="form-check-label" for="supportsLoadAvgs">
+                Host Support Load Averages
+              </label>
+            </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24,7 +30,9 @@
 <script>
 
 var editHostDetailsObj = {
-    hostId: null
+    hostId: null,
+    hostAlias: '',
+    supportsLoadAvgs: false
 }
 
 $("#modal-hosts-edit").on("hide.bs.modal", function(){
@@ -37,19 +45,22 @@ $("#modal-hosts-edit").on("shown.bs.modal", function(){
         $("#modal-hosts-edit").modal("toggle");
         return false;
     }
+    $("#supportsLoadAvgs").prop("checked", editHostDetailsObj.supportsLoadAvgs ? "checked" : "");
+    $("#alias").val(editHostDetailsObj.hostAlias);
 });
 
 $("#modal-hosts-edit").on("click", "#edit", function(){
     let aInput = $("#modal-hosts-edit #alias");
     let alias = aInput.val();
+
     if(alias == ""){
-        makeToastr(JSON.stringify({error: "Please provide the alias"}));
+        makeToastr(JSON.stringify({state:"error", message: "Please provide the alias"}));
         return false;
     }
 
-    let x = $.extend({alias: alias}, editHostDetailsObj);
+    let x = $.extend({alias: alias, supportsLoadAverages: $("#supportsLoadAvgs").is(":checked") ? 1 : 0}, editHostDetailsObj);
 
-    ajaxRequest(globalUrls.hosts.alias.update, x, function(data){
+    ajaxRequest(globalUrls.hosts.settings.update, x, function(data){
         data = makeToastr(data);
         if(data.state == "error"){
             return false;

@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LXDClient\Model\Hosts\Alias;
+namespace dhope0000\LXDClient\Model\Hosts\Settings\Alias;
 
 use dhope0000\LXDClient\Model\Database\Database;
 
@@ -11,7 +11,7 @@ class HaveAlias
         $this->database = $database->dbObject;
     }
 
-    public function have(string $alias)
+    public function have(int $hostId, string $alias)
     {
         $sql = "SELECT
                     1
@@ -19,10 +19,13 @@ class HaveAlias
                     `Hosts`
                 WHERE
                     `Host_Alias` = :alias
+                AND
+                    `Host_ID` != :hostId
                 ";
         $do = $this->database->prepare($sql);
         $do->execute([
             ":alias"=>$alias,
+            ":hostId"=>$hostId
         ]);
         return $do->fetch() ? true : false;
     }
