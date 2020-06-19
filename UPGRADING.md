@@ -5,6 +5,30 @@ You should only upgrade when a new version is tagged,
 Restarting the `pm2` and `apache2` process may interupt running process please
 be careful when upgrading!
 
+## 0.8.X -> 0.9.0
+
+```
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout v0.9.0
+
+mysql < sql/0.9.0.sql
+
+npm i
+
+composer install
+
+# Important
+crontab -l | { cat; echo "*/1 * * * * php /var/www/LxdMosaic/src/cronJobs/containerMetrics.php"; } | crontab -
+
+#Ubuntu
+systemctl restart apache2
+#Centos
+systemctl restart httpd
+```
+
 ## 0.7.X -> 0.8.0
 
 ```

@@ -7,6 +7,7 @@ Added
     Display some of the system details provided in LXD >= 4.1 (#206)
     Export instance as image
     Create profiles (#175)
+    Store instance metrics (#148)
     Allow user to create custom dashboards of instance metrics
 
 Fixed
