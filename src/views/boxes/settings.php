@@ -3,15 +3,22 @@
         <div class="row">
             <div class="col-md-8">
                   <div class="card bg-dark">
-                    <div class="card-header bg-dark" role="tab" >
+                  <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
                           Current Settings
                         </a>
-                        <button class="btn btn-success float-right" id="saveSettings">
-                            <i class="fas fa-save"></i>
-                        </button>
-                      </h5>
+                        </h5>
+                        <div class="btn-toolbar float-right">
+                            <div class="btn-group mr-2">
+                                <a target="_blank" class="btn btn-primary" href="https://lxdmosaic.readthedocs.io/en/latest/LXDMosaic_Settings/">
+                                    <i class="fas fa-book-open"></i>
+                                </a>
+                                <button class="btn btn-success" id="saveSettings">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
                       <div class="card-body bg-dark">
@@ -19,7 +26,6 @@
                             <thead>
                                 <tr>
                                     <th>Setting</th>
-                                    <th>Description</th>
                                     <th>Value</th>
                                 </tr>
                             </thead>
@@ -146,7 +152,6 @@ function loadSettingsView()
         $.each(data, function(_, item){
             trs += `<tr data-setting-id="${item.settingId}">
                     <td>${item.settingName}</td>
-                    <td>${item.settingDescription}</td>
                     <td><input class="form-control" name="settingValue" value="${item.currentValue}"/></td>
                 </tr>`
         });
