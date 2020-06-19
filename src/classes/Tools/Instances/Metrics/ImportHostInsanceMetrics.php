@@ -36,6 +36,9 @@ class ImportHostInsanceMetrics
         foreach ($instancesToScan as $instance) {
             $state = $instances[$instance]["state"];
 
+            if ($state["status_code"] !== 103) {
+                continue;
+            }
             // Can always gatther these two thanks to the LXD API
             $this->addInstanceNetworkUsage($host, $instance, $state);
             $this->addInstanceMemoryUsage($host, $instance, $state);
