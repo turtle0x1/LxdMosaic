@@ -16,7 +16,6 @@ class GetSettings
         $sql = "SELECT
                     `IS_ID` as `settingId`,
                     `IS_Name` as `settingName`,
-                    `IS_Description` as `settingDescription`,
                     `Instance_Settings_Values`.`ISV_Date` as `currentValueDateSet`,
                     `Instance_Settings_Values`.`ISV_Value` as `currentValue`
                 FROM

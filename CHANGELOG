@@ -8,6 +8,7 @@ Added
     Export instance as image
     Create profiles (#175)
     Allow user to create custom dashboards of instance metrics
+    Documenation for instance settings (#218)
 
 Fixed
     Cant load project inforatmion
@@ -35,6 +36,9 @@ Changed
 
 Fixed
     Cant add more than one profile to deploy cloud config (#198)
+
+Removed
+    Removed instance settings desription (#218)
 
 0.8.0 - 09/05/2020
 
