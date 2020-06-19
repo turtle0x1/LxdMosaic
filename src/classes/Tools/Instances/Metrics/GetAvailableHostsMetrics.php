@@ -27,6 +27,13 @@ class GetAvailableHostsMetrics
                 ];
             }
         }
+
+        foreach ($output as $hostAlias => &$details) {
+            ksort($details["instances"]);
+        }
+
+        ksort($output);
+
         return $output;
     }
 }
