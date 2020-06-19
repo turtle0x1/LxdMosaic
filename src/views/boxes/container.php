@@ -224,8 +224,8 @@
     </div>
 </div>
 <div id="containerMetrics"  class="col-md-12">
-    <div class="card">
-        <div class="card-header bg-primary">
+    <div class="card bg-dark text-white">
+        <div class="card-header">
             Metric Graph
             <select class="float-right" id="metricRangePicker" disabled>
                 <option value="">Please Select</option>
@@ -246,7 +246,7 @@
                 <option value="-1 months">Last 1 Month</option>
                 <option value="-2 months">Last 2 Months</option>
             </select>
-            <select class="float-right" id="metricTypeFilterSelect" disabled>
+            <select class="float-right form-control-sm" id="metricTypeFilterSelect" disabled>
             </select>
             <select class="float-right" id="metricTypeSelect">
             </select>
