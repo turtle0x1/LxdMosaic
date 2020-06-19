@@ -500,6 +500,11 @@ $("#sidebar-ul").on("click", ".nav-item", function(){
     if($(this).hasClass("nav-dropdown")){
         return;
     }
+
+    if(dashboardRefreshInterval != null){
+        clearInterval(dashboardRefreshInterval);
+    }
+
     $("#sidebar-ul").find(".text-info").removeClass("text-info");
     $(this).find(".nav-link").addClass("text-info");
 })
@@ -819,6 +824,10 @@ $(document).on("click", ".viewServer", function(){
 });
 
 function loadDashboard(){
+    if(dashboardRefreshInterval != null){
+        clearInterval(dashboardRefreshInterval);
+    }
+    
     $("#userDashboardGraphs").empty();
     $(".boxSlide, #userDashboard").hide();
     $("#overviewBox, #generalDashboard").show();
