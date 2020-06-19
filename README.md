@@ -14,7 +14,9 @@ I also like stars, I you find yourself that way inclinded :angel:
 
 Please refer to the documentation <a href="https://lxdmosaic.readthedocs.io/en/latest/"> here </a>
 
-**Default username & password is admin test123 - Change the password in settings ASAP** 
+**Default username & password is admin test123 - Change the password in settings ASAP**
+
+Lost your admin password ? See <a href="https://lxdmosaic.readthedocs.io/en/latest/resetPassword/"> the docs</a>
 
 ## Installation
 
