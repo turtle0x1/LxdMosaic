@@ -6,7 +6,7 @@ class Database
 {
     public function __construct()
     {
-        $this->dbObject = new \PDO("mysql:host=" . $_ENV["DB_HOST"] . ";
+        $this->dbObject = new \PDO("mysql:host=" . $_ENV["DB_HOST_STRING"] . ";
             dbname=" . $_ENV["DB_NAME"] ."", $_ENV["DB_USER"], $_ENV["DB_PASS"]);
         $this->dbObject->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
