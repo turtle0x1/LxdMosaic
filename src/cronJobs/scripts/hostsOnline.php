@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . "/../../vendor/autoload.php";
+require __DIR__ . "/../../../vendor/autoload.php";
 
 $builder = new \DI\ContainerBuilder();
 $container = $builder->build();
 
-$env = new Dotenv\Dotenv(__DIR__ . "/../../");
+$env = new Dotenv\Dotenv(__DIR__ . "/../../../");
 $env->load();
 
 $hostList = $container->make("dhope0000\LXDClient\Model\Hosts\HostList");
