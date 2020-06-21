@@ -18,7 +18,8 @@ class FetchBackupSchedules
                     `IBS_Instance` as `instance`,
                     `IBS_Project` as `project`,
                     `IBS_Schedule_String` as `scheduleString`,
-                    `IBS_BS_ID` as `strategyId`
+                    `IBS_BS_ID` as `strategyId`,
+                    `IBS_Retention` as `scheduleRetention`
                 FROM
                     `Instance_Backup_Schedule`
                 WHERE
@@ -37,7 +38,8 @@ class FetchBackupSchedules
                     `IBS_Instance` as `instance`,
                     `IBS_Project` as `project`,
                     `IBS_Schedule_String` as `scheduleString`,
-                    `IBS_BS_ID` as `strategyId`
+                    `IBS_BS_ID` as `strategyId`,
+                    `IBS_Retention` as `scheduleRetention`
                 FROM
                     `Instance_Backup_Schedule`
                 WHERE
