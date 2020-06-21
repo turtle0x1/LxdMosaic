@@ -22,7 +22,8 @@ class AddBackupSchedule
         string $instance,
         string $frequency,
         string $time,
-        int $strategyId
+        int $strategyId,
+        int $retention
     ) {
         $this->validateBakupSchedule($frequency, $time);
 
@@ -39,7 +40,8 @@ class AddBackupSchedule
             $instance,
             "default",
             $frequency . " " . $time,
-            $strategyId
+            $strategyId,
+            $retention
         );
     }
 
