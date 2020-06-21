@@ -3,14 +3,17 @@
 namespace dhope0000\LXDClient\Tools\Instances\Backups;
 
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\InsertBackupSchedule;
+use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\UpdateBackupSchedules;
 use dhope0000\LXDClient\Objects\Host;
 
 class AddBackupSchedule
 {
     public function __construct(
-        InsertBackupSchedule $insertBackupSchedule
+        InsertBackupSchedule $insertBackupSchedule,
+        UpdateBackupSchedules $updateBackupSchedules
     ) {
         $this->insertBackupSchedule = $insertBackupSchedule;
+        $this->updateBackupSchedules = $updateBackupSchedules;
     }
 
     public function add(
@@ -22,6 +25,14 @@ class AddBackupSchedule
         int $strategyId
     ) {
         $this->validateBakupSchedule($frequency, $time);
+
+        $this->updateBackupSchedules->disableActiveScheds(
+            $userId,
+            $host->getHostId(),
+            $instance,
+            "default"
+        );
+
         $this->insertBackupSchedule->insert(
             $userId,
             $host->getHostId(),
