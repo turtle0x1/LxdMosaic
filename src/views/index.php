@@ -401,6 +401,10 @@ if ($haveServers->haveAny() !== true) {
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link viewBackups">
+              <i class="fas fa-save"></i> <span class="hideNavText"> Backups </span> </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link viewCloudConfigFiles">
               <i class="fa fa-cogs"></i> <span class="hideNavText"> Cloud Config </span></a>
           </li>
@@ -429,10 +433,6 @@ if ($haveServers->haveAny() !== true) {
           <li class="nav-item">
             <a class="nav-link viewStorage">
               <i class="fas fa-hdd"></i> <span class="hideNavText"> Storage </span> </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewBackups">
-              <i class="fas fa-save"></i> <span class="hideNavText"> Backups </span> </a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewSettings">
