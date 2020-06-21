@@ -51,6 +51,9 @@
                             <button data-toggle="tooltip" data-placement="bottom" title="Schedule Backup" class="btn btn-outline-primary btn-sm" id="scheduleInstanceBackup">
                                 <i class="fas fa-clock"></i>
                             </button>
+                            <button data-toggle="tooltip" data-placement="bottom" title="Disable Backup Schedule" class="btn btn-outline-warning btn-sm" id="disableInstanceSchedule">
+                                <i class="fas fa-power-off"></i>
+                            </button>
                             <button data-toggle="tooltip" data-placement="bottom" title="Back To Graphs" class="btn btn-outline-primary btn-sm" id="backToBackupGraphs">
                                 <i class="fas fa-arrow-left"></i>
                             </button>
@@ -119,6 +122,33 @@ $(document).on("click", ".restoreBackup", function(){
     );
 });
 
+$(document).on("click", "#disableInstanceSchedule", function(){
+    $.confirm({
+        title: `Disable Instance Backup Schedule`,
+        content: ``,
+        buttons: {
+            cancel: {
+                btnClass: "btn btn-secondary",
+                text: "cancel"
+            },
+            ok: {
+                btnClass: "btn btn-danger",
+                text: "Schedule",
+                action: function(){
+
+                    let x = {
+                        hostId: currentContainerBackups.hostId,
+                        instance: currentContainerBackups.name
+                    }
+
+                    ajaxRequest(globalUrls.instances.backups.disabledSchedule, x, (data)=>{
+                        makeToastr(data)
+                    });
+                }
+            }
+        }
+    });
+});
 $(document).on("click", "#scheduleInstanceBackup", function(){
     $.confirm({
         title: `Schedule Instance Backup`,
@@ -179,7 +209,7 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                     }
 
                     ajaxRequest(globalUrls.instances.backups.schedule, x, (data)=>{
-                        console.log(data);
+                        makeToastr(data)
                     });
                 }
             }
