@@ -207,6 +207,10 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                 <select class="form-control" id="scheduleBackupStrategy">
                 </select>
             </div>
+            <div class="form-group">
+                <label>Number Of Backups To Keep</label>
+                <input value="7" class="form-control" id="scheduleRetention"/>
+            </div>
         `,
         buttons: {
             cancel: {
@@ -220,9 +224,11 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                     let frequencyInput = $("#scheduleBackupFrequency");
                     let timeInput = $("#scheduleBackupTime");
                     let strategyInput = $("#scheduleBackupStrategy");
+                    let retentionInput = $("#scheduleRetention");
                     let frequency = frequencyInput.val();
                     let time = timeInput.val();
                     let strategy = strategyInput.val();
+                    let retention = retentionInput.val();
 
                     if(frequency == ""){
                         $.alert("Select frequency")
@@ -236,6 +242,10 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                         $.alert("Select strategy")
                         strategyInput.focus()
                         return false;
+                    } else if(!$.isNumeric(retention)) {
+                        $.alert("Number of backups to keep must be a number");
+                        retentionInput.focus();
+                        return false;
                     }
 
                     let x = {
@@ -243,7 +253,8 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                         time: time,
                         strategy: strategy,
                         hostId: currentContainerBackups.hostId,
-                        instance: currentContainerBackups.name
+                        instance: currentContainerBackups.name,
+                        retention: retention
                     }
 
                     ajaxRequest(globalUrls.instances.backups.schedule, x, (data)=>{

@@ -17,7 +17,8 @@ class InsertBackupSchedule
         string $instance,
         string $project,
         string $schedule,
-        int $strategyId
+        int $strategyId,
+        int $retention
     ) {
         $sql = "INSERT INTO `Instance_Backup_Schedule`
                 (
@@ -26,14 +27,16 @@ class InsertBackupSchedule
                     `IBS_Instance`,
                     `IBS_Project`,
                     `IBS_Schedule_String`,
-                    `IBS_BS_ID`
+                    `IBS_BS_ID`,
+                    `IBS_Retention`
                 ) VALUES (
                     :userId,
                     :hostId,
                     :instance,
                     :project,
                     :schedule,
-                    :strategyId
+                    :strategyId,
+                    :retention
                 );";
         $do = $this->database->prepare($sql);
         $do->execute([
@@ -42,7 +45,8 @@ class InsertBackupSchedule
             ":instance"=>$instance,
             ":project"=>$project,
             ":schedule"=>$schedule,
-            ":strategyId"=>$strategyId
+            ":strategyId"=>$strategyId,
+            ":retention"=>$retention
         ]);
         return $do->rowCount() ? true : false;
     }
