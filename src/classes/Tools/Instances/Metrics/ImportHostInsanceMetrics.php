@@ -65,14 +65,17 @@ class ImportHostInsanceMetrics
         $command = "nvidia-smi --query-gpu=name,gpu_uuid,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv";
         $lxdResponse = $host->instances->execute($instance, $command, $record = true, [], true);
         $output = array_filter(explode("\n", $host->instances->logs->read($instance, $lxdResponse["output"][0])));
+        
+        $host->instances->logs->remove($instance, $lxdResponse["output"][0]);
+        $host->instances->logs->remove($instance, $lxdResponse["output"][1]);
+
         if (empty($output)) {
             // Throwing an exception would interupt exectution but im adding this
             // because this what happens if the nvidia.runtime is set but
             // the nvidia-smi fails
             return false;
         }
-        $host->instances->logs->remove($instance, $lxdResponse["output"][0]);
-        $host->instances->logs->remove($instance, $lxdResponse["output"][1]);
+
         unset($output[0]);
         $csv = array_map('str_getcsv', $output);
         $gpuDetails = [];
