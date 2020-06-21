@@ -36,20 +36,14 @@ class GetBackupsOverview
         $sizeByMonthYear = [];
         $filesByMonthYear = [];
 
-        $dateTime = new \DateTime;
-        $currentYear = $dateTime->format("Y");
-        $currentMonth = $dateTime->format("m");
-
         foreach ($backups as $backup) {
             $date = new \DateTime($backup["storedDateCreated"]);
-            $month = $date->format("m");
+            $month = $date->format("n");
             $year = $date->format("Y");
 
-            $monthLen = $year == $currentYear ? $currentMonth : 12;
-
             if (!isset($sizeByMonthYear[$year])) {
-                $this->createYearArray($sizeByMonthYear, $year, $monthLen);
-                $this->createYearArray($filesByMonthYear, $year, $monthLen);
+                $this->createYearArray($sizeByMonthYear, $year);
+                $this->createYearArray($filesByMonthYear, $year);
             }
 
             $filesize = 0;
@@ -68,11 +62,8 @@ class GetBackupsOverview
         ];
     }
 
-    private function createYearArray(&$array, $year, $monthLen)
+    private function createYearArray(&$array, $year)
     {
-        for ($i = 0; $i <= $monthLen; $i++) {
-            $k = $i < 10 ? "0$i" : $i;
-            $array[$year][$k] = 0;
-        }
+        $array[$year] = array_fill(1, 12, null);
     }
 }
