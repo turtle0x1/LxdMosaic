@@ -150,14 +150,14 @@
 <div id="containerConsole">
     <div id="terminal-container"></div>
 </div>
-<div id="containerBackups" class="card-group">
+<div id="containerBackups">
     <div class="row" id="backupErrorRow">
         <div class="col-md-12 alert alert-danger" id="backupErrorMessage">
         </div>
     </div>
     <div class="row" id="backupDetailsRow">
         <div class="col-md-6">
-            <div class="card card-accent-success">
+            <div class="card">
                 <div class="card-header bg-dark">
                     <h4> LXDMosaic Instance Backups </h4>
                 </div>
@@ -177,7 +177,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card card-accent-success">
+            <div class="card">
                 <div class="card-header bg-dark">
                     <h4>
                         LXD Instance Backups
