@@ -131,6 +131,9 @@ if ($haveServers->haveAny() !== true) {
                       createFrom: "/api/Instances/CopyInstanceController/copy",
                   },
                   backups: {
+                      delete: "/api/Instances/Backups/DeleteLocalBackupController/delete",
+                      disabledSchedule: "/api/Instances/Backups/DisableScheduledBackupsController/disable",
+                      schedule: "/api/Instances/Backups/ScheduleBackupController/schedule",
                       backup: "/api/Instances/Backups/BackupController/backup",
                       getContainerBackups: "/api/Instances/Backups/GetInstanceBackupsController/get",
                       deleteContainerBackup: "/api/Instances/Backups/DeleteBackupController/delete",
@@ -158,6 +161,9 @@ if ($haveServers->haveAny() !== true) {
                   getLatestData: "/api/AnalyticData/GetLatestDataController/get"
               },
               backups: {
+                  strategies: {
+                    getAll: "/api/Backups/Strategies/GetStrategiesController/get",
+                  },
                   getOverview: "/api/Backups/GetBackupsOverviewController/get",
                   restore: '/api/Backups/RestoreBackupController/restore'
               },
@@ -395,6 +401,10 @@ if ($haveServers->haveAny() !== true) {
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link viewBackups">
+              <i class="fas fa-save"></i> <span class="hideNavText"> Backups </span> </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link viewCloudConfigFiles">
               <i class="fa fa-cogs"></i> <span class="hideNavText"> Cloud Config </span></a>
           </li>
@@ -423,10 +433,6 @@ if ($haveServers->haveAny() !== true) {
           <li class="nav-item">
             <a class="nav-link viewStorage">
               <i class="fas fa-hdd"></i> <span class="hideNavText"> Storage </span> </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewBackups">
-              <i class="fas fa-save"></i> <span class="hideNavText"> Backups </span> </a>
           </li>
           <li class="nav-item">
             <a class="nav-link viewSettings">
@@ -827,7 +833,7 @@ function loadDashboard(){
     if(dashboardRefreshInterval != null){
         clearInterval(dashboardRefreshInterval);
     }
-    
+
     $("#userDashboardGraphs").empty();
     $(".boxSlide, #userDashboard").hide();
     $("#overviewBox, #generalDashboard").show();
