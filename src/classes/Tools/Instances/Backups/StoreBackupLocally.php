@@ -71,7 +71,7 @@ class StoreBackupLocally
     ) :array {
         $backupInfo = $host->instances->backups->info($instance, $backup);
 
-        $backupFileName = "backup." . $backupInfo['created_at'] .".tar.gz";
+        $backupFileName = "backup." . $backupInfo['created_at'] .".tar";
 
         $backupFilePath = "$backupDir/$backupFileName";
 
