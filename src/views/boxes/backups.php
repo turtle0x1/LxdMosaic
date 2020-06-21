@@ -13,6 +13,7 @@
                                 <th>Instance</th>
                                 <th>Schedule</th>
                                 <th>Last Backed Up</th>
+                                <th>Size On Disk</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,6 +68,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Date Created</th>
+                                <th>Size On Disk</th>
                                 <th>Restore</th>
                                 <th>Delete</th>
                             </tr>
@@ -128,7 +130,7 @@ $(document).on("click", ".deleteBackup", function(){
 
     ajaxRequest(globalUrls.instances.backups.delete, x, (data)=>{
         data = makeToastr(data);
-        
+
         if(data.state == "error"){
             return false;
         }
@@ -179,6 +181,11 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
     $.confirm({
         title: `Schedule Instance Backup`,
         content: `
+            <div class="alert alert-warning">
+                <b>Be careful backups runs in parallel!</b> If you schedule lots
+                at once LXD itself (and therefor LXDMosaic) may become
+                unresponsive while the backups run!
+            </div>
             <div class="form-group">
                 <label>Frequency</label>
                 <select class="form-control" id="scheduleBackupFrequency">
@@ -292,6 +299,7 @@ $(document).on("click", ".viewContainerBackups", function(){
             trs += `<tr data-backup-id="${backup.id}">
                 <td>${backup.name}</td>
                 <td>${moment(backup.backupDateCreated).fromNow()}</td>
+                <td>${formatBytes(backup.filesize)}</td>
                 <td>
                     <button class="btn btn-sm btn-outline-warning restoreBackup">
                         <i class="fas fa-trash-restore"></i>
@@ -370,6 +378,7 @@ function loadBackupsOverview() {
                     <td>${instanceName}</td>
                     <td>${container.scheduleString}</td>
                     <td>${date}</td>
+                    <td>${formatBytes(container.totalSize)}</td>
                 </tr>`
             });
         })
