@@ -150,14 +150,14 @@
 <div id="containerConsole">
     <div id="terminal-container"></div>
 </div>
-<div id="containerBackups" class="card-group">
+<div id="containerBackups">
     <div class="row" id="backupErrorRow">
         <div class="col-md-12 alert alert-danger" id="backupErrorMessage">
         </div>
     </div>
     <div class="row" id="backupDetailsRow">
         <div class="col-md-6">
-            <div class="card card-accent-success">
+            <div class="card">
                 <div class="card-header bg-dark">
                     <h4> LXDMosaic Instance Backups </h4>
                 </div>
@@ -167,7 +167,7 @@
                             <tr>
                                 <th> Backup </th>
                                 <th> Date </th>
-                                <th> Restore </th>
+                                <th> Size </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -177,7 +177,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card card-accent-success">
+            <div class="card">
                 <div class="card-header bg-dark">
                     <h4>
                         LXD Instance Backups
@@ -407,6 +407,10 @@ function backupContainerConfirm(hostId, hostAlias, container, callback = null, w
             <div class="form-check">
               <input type="checkbox" class="form-check-input" name="importAndDelete">
               <label class="form-check-label" for="importAndDelete">Import & Delete From Remote</label>
+            </div>
+            <div class="alert alert-warning">
+                This will block the browser while it runs, schedule a backup to
+                run in the background! (Or open a new tab)
             </div>
             `,
         buttons: {
@@ -679,7 +683,7 @@ function loadContainerBackups()
                 localBackups += `<tr data-backup-id="${item.id}">
                     <td>${item.backupName}</td>
                     <td>${moment(item.dateCreated).fromNow()}</td>
-                    <td><button class='btn btn-warning containerRestoreBackup'>Restore</button></td>
+                    <td>${formatBytes(item.filesize)}</td>
                 </tr>`
             });
         } else{

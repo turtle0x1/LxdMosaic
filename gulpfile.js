@@ -12,7 +12,8 @@ function css(){
         "src/assets/token/styles/token-input.css",
         "src/assets/token/styles/token-input-facebook.css",
         "node_modules/dropzone/dist/min/basic.min.css",
-        "node_modules/dropzone/dist/min/dropzone.min.css"
+        "node_modules/dropzone/dist/min/dropzone.min.css",
+        "node_modules/jquery-timepicker/jquery.timepicker.css"
 
 
     ])
@@ -30,7 +31,8 @@ function js(){
             "node_modules/jquery-confirm/dist/jquery-confirm.min.js",
             "node_modules/toastr/build/toastr.min.js",
             "src/assets/token/src/jquery.tokeninput.js",
-            "node_modules/dropzone/dist/min/dropzone.min.js"
+            "node_modules/dropzone/dist/min/dropzone.min.js",
+            "node_modules/jquery-timepicker/jquery.timepicker.js"
         ])
         .pipe(minify({
             noSource: true
