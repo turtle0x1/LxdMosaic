@@ -88,28 +88,36 @@
 
 var currentBackups = [];
 var currentContainerBackups = [];
+const monthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
 
-function makeLineData(data){
+function makeLineData(data, setLabel){
     let dataByYearMonth = [];
+    let labels = [];
+    let outData = [];
+
     $.each(data, (year, months)=>{
-        let data = [];
-        let color = randomColor();
-
-        $.each(months, function(index, month){
-            data.splice(parseInt(index - 1), 0, month);
-        });
-
-        dataByYearMonth.push({
-            label: `${year} Data`,
-            fill: false,
-            borderColor: color,
-            pointHoverBackgroundColor: color,
-            backgroundColor: color,
-            pointHoverBorderColor: color,
-            data: data
+        $.each(months, (month, value)=>{
+            labels.push(monthList[month - 1] + " " + year);
+            outData.push(value);
         });
     });
-    return dataByYearMonth;
+
+    let color = randomColor();
+
+    dataByYearMonth.push({
+        label: setLabel,
+        fill: false,
+        borderColor: color,
+        pointHoverBackgroundColor: color,
+        backgroundColor: color,
+        pointHoverBorderColor: color,
+        data: outData
+    });
+
+    return {
+        labels: labels,
+        data: dataByYearMonth
+    };
 }
 
 $(document).on("click", ".restoreBackup", function(){
@@ -341,15 +349,17 @@ function loadBackupsOverview() {
         $("#containerBackupTable > tbody").empty().append(backupTrs);
         $("#containerBackupTable > tbody").find('[data-toggle="tooltip"]').tooltip()
 
+        let sizeChartData = makeLineData(data.sizeByMonthYear, "Local File Size Usage");
+        let filesChartData = makeLineData(data.filesByMonthYear, "# Local Backup Files");
+
         new Chart($("#backupsSizeChart"), {
             type: "line",
             data: {
-                labels: monthsNameArray,
-                datasets: makeLineData(data.sizeByMonthYear)
+                labels: sizeChartData.labels,
+                datasets: sizeChartData.data
             },
             options: {
               cutoutPercentage: 40,
-              responsive: false,
               scales: scalesBytesCallbacks,
               tooltips: toolTipsBytesCallbacks
             }
@@ -358,8 +368,8 @@ function loadBackupsOverview() {
         new Chart($("#backupFilesChart"), {
             type: "line",
             data: {
-                labels: monthsNameArray,
-                datasets: makeLineData(data.filesByMonthYear)
+                labels: filesChartData.labels,
+                datasets: filesChartData.data
             },
             options: {
                 scales: {
