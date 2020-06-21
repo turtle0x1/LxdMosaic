@@ -20,3 +20,27 @@ CREATE TABLE `Instance_Backup_Schedule` (
 
 INSERT INTO `Backup_Strategies` (`BS_ID`, `BS_Name`) VALUES
 (1, "Backup & Import");
+
+ALTER TABLE `Instance_Backup_Schedule`
+    ADD FOREIGN KEY (`IBS_User_ID`)
+    REFERENCES `Users`(`User_ID`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE `Instance_Backup_Schedule`
+    ADD FOREIGN KEY (`IBS_Host_ID`)
+    REFERENCES `Hosts`(`Host_ID`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE `Instance_Backup_Schedule`
+    ADD FOREIGN KEY (`IBS_BS_ID`)
+    REFERENCES `Backup_Strategies`(`BS_ID`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ALTER TABLE `Instance_Backup_Schedule`
+    ADD FOREIGN KEY (`IBS_Disabled_By`)
+    REFERENCES `Users`(`User_ID`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT; 
