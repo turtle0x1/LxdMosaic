@@ -3,6 +3,10 @@ body {
     font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
 }
 
+.ui-timepicker-container{
+    z-index: 999999999 !important;
+}
+
 .cluster-title:hover {
     color: #167495 !important; /* Eugh */
 }

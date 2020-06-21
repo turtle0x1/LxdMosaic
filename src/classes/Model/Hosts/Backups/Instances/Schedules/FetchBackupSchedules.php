@@ -11,6 +11,23 @@ class FetchBackupSchedules
         $this->database = $database->dbObject;
     }
 
+    public function fetchSchedulesGroupedByHostId()
+    {
+        $sql = "SELECT
+                    `IBS_Host_ID` as `hostId`,
+                    `IBS_Instance` as `instance`,
+                    `IBS_Project` as `project`,
+                    `IBS_Schedule_String` as `scheduleString`,
+                    `IBS_BS_ID` as `strategyId`
+                FROM
+                    `Instance_Backup_Schedule`
+                ORDER BY
+                    `IBS_ID` ASC
+                ";
+        $do = $this->database->query($sql);
+        return $do->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_ASSOC);
+    }
+
     public function fetch(int $hostId)
     {
         $sql = "SELECT
