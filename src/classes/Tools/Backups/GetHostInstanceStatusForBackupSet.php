@@ -4,18 +4,22 @@ namespace dhope0000\LXDClient\Tools\Backups;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Instances\GetHostsInstances;
+use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\FetchBackupSchedules;
 
 class GetHostInstanceStatusForBackupSet
 {
     private $getHostsInstances;
     private $lxdClient;
+    private $fetchBackupSchedules;
 
     public function __construct(
         GetHostsInstances $getHostsInstances,
-        LxdClient $lxdClient
+        LxdClient $lxdClient,
+        FetchBackupSchedules $fetchBackupSchedules
     ) {
         $this->getHostsInstances = $getHostsInstances;
         $this->lxdClient = $lxdClient;
+        $this->fetchBackupSchedules = $fetchBackupSchedules;
     }
 
     public function get(array $backups)
@@ -23,6 +27,8 @@ class GetHostInstanceStatusForBackupSet
         $hostsContainers = $this->getHostsInstances->getAll(true);
 
         $backupsByHostId = $this->createBackupsByHostIdStruct($backups);
+
+        $groupedSchedule = $this->groupSchedules($this->fetchBackupSchedules->fetchSchedulesGroupedByHostId());
 
         $missingBackups = [];
 
@@ -45,9 +51,16 @@ class GetHostInstanceStatusForBackupSet
                 $container = $this->extractContainerInfo($name, $container);
                 $allBackups = $this->findAllBackups($name, $backupsToSearch);
 
+                $scheduleString = "";
+
+                if (isset($groupedSchedule[$host->getHostId()][$name])) {
+                    $scheduleString = $groupedSchedule[$host->getHostId()][$name]["scheduleString"];
+                }
+
                 $container["containerExists"] = true;
                 $container["lastBackup"] = $lastBackup;
                 $container["allBackups"] = $allBackups;
+                $container["scheduleString"] = $scheduleString;
 
                 $containers[] = $container;
                 $seenContainerNames[] = $name;
@@ -58,6 +71,7 @@ class GetHostInstanceStatusForBackupSet
                     $containers[] = [
                         "name"=>$backup["container"],
                         "containerExists"=>false,
+                        "scheduleString"=>"N/A",
                         "lastBackup"=>$this->findLastBackup($backup["container"], $backupsToSearch),
                         "allBackups"=>$this->findAllBackups($backup["container"], $backupsToSearch)
                     ];
@@ -113,6 +127,17 @@ class GetHostInstanceStatusForBackupSet
             }
         }
         return $x;
+    }
+
+    private function groupSchedules(array $schedules)
+    {
+        foreach ($schedules as $hostId => $instances) {
+            foreach ($instances as $index => $instance) {
+                $schedules[$hostId][$instance["instance"]] = $instance;
+                unset($schedules[$hostId][$index]);
+            }
+        }
+        return $schedules;
     }
 
     private function extractContainerInfo(string $name, array $container)
