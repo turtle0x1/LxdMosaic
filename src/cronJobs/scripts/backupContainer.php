@@ -3,6 +3,7 @@
 require __DIR__ . "/../../../vendor/autoload.php";
 
 use dhope0000\LXDClient\Constants\Constants;
+use dhope0000\LXDClient\Constants\BackupStrategies;
 
 $builder = new \DI\ContainerBuilder();
 $container = $builder->build();
@@ -33,7 +34,7 @@ $backupInstance = $container->make("dhope0000\LXDClient\Tools\Instances\Backups\
 
 $host = $getHost->fetchHost($hostId);
 
-$importAndDelete = $strategy == 2;
+$importAndDelete = $strategy == BackupStrategies::IMPORT_AND_DELETE;
 
 $backupInstance->create(
     $host,

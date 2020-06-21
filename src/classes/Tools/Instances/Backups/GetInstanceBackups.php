@@ -27,6 +27,7 @@ class GetInstanceBackups
         }
 
         $localBackups = $this->fetchInstanceBackups->fetchAll($host->getHostId(), $instance);
+        $this->addFileSizeToLocal($localBackups);
 
         $remoteBackups = $this->getRemoteBackups($host, $instance, $localBackups);
 
@@ -36,6 +37,16 @@ class GetInstanceBackups
         ];
     }
 
+    private function addFileSizeToLocal(array &$localBackups)
+    {
+        foreach ($localBackups as $index => $backup) {
+            $fileSize = 0;
+            if (file_exists($backup["localFilePath"])) {
+                $fileSize = filesize($backup["localFilePath"]);
+            }
+            $localBackups[$index]["filesize"] = $fileSize;
+        }
+    }
 
     private function getRemoteBackups($host, string $instance, array $localBackups)
     {
