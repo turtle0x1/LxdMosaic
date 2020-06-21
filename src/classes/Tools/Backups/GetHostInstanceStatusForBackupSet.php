@@ -120,10 +120,15 @@ class GetHostInstanceStatusForBackupSet
             return $x;
         }
 
+        $latestDate =  null;
+
         foreach ($hostBackups as $backup) {
             if ($backup["container"] == $container) {
-                $x = array_merge($x, $backup);
                 $x["neverBackedUp"] = false;
+                if ((new \DateTime($backup["backupDateCreated"])) > $latestDate) {
+                    $latestDate = (new \DateTime($backup["backupDateCreated"]));
+                    $x = array_merge($x, $backup);
+                }
             }
         }
         return $x;
