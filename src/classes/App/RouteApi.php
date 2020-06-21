@@ -67,9 +67,7 @@ class RouteApi
         $controller = $this->container->make($controllerStr);
 
         if ($controller instanceof \dhope0000\LXDClient\Interfaces\RecordAction) {
-            $x = $params;
-            $x["userId"] = $userId;
-            $this->recordAction->record($controllerStr . "\\" . $method, $x);
+            $this->recordAction->record($userId, $controllerStr . "\\" . $method, $params);
         }
 
         // TODO Pass provided arguments to controller
@@ -93,7 +91,7 @@ class RouteApi
             if (!empty($type)) {
                 $type = $type->getName();
             }
-            
+
             if ($name == "host" && !isset($passedArguments["hostId"])) {
                 throw new \Exception("Missing paramater hostId", 1);
             }
