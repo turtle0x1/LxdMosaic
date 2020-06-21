@@ -163,7 +163,7 @@ $(document).on("click", "#disableInstanceSchedule", function(){
             },
             ok: {
                 btnClass: "btn btn-danger",
-                text: "Schedule",
+                text: "Disable Schedule",
                 action: function(){
 
                     let x = {
@@ -263,7 +263,7 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                         if(data.state == "error"){
                             return false;
                         }
-                        currentTr.find("td:eq(1)").text(frequency + " " + time);
+                        currentTr.find("td:eq(1)").text(strategy + " " + frequency + " " + time);
                     });
                 }
             }
