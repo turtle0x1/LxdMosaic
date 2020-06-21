@@ -21,7 +21,7 @@ class GetAllHostsSchedules
             return [];
         }
 
-        return $this->fetchBackupSchedules->fetch($host->getHostId());
+        return $this->fetchBackupSchedules->fetchActive($host->getHostId());
     }
 
 

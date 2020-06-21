@@ -28,7 +28,7 @@ class GetHostInstanceStatusForBackupSet
 
         $backupsByHostId = $this->createBackupsByHostIdStruct($backups);
 
-        $groupedSchedule = $this->groupSchedules($this->fetchBackupSchedules->fetchSchedulesGroupedByHostId());
+        $groupedSchedule = $this->groupSchedules($this->fetchBackupSchedules->fetchActiveSchedsGroupedByHostId());
 
         $missingBackups = [];
 
