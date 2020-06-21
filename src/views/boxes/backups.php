@@ -89,6 +89,7 @@
 </div>
 <script>
 
+var currentTr = null;
 var currentBackups = [];
 var currentContainerBackups = [];
 const monthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -170,7 +171,11 @@ $(document).on("click", "#disableInstanceSchedule", function(){
                     }
 
                     ajaxRequest(globalUrls.instances.backups.disabledSchedule, x, (data)=>{
-                        makeToastr(data)
+                        makeToastr(data);
+                        if(data.state == "error"){
+                            return false;
+                        }
+                        currentTr.find("td:eq(1)").text("");
                     });
                 }
             }
@@ -242,7 +247,11 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                     }
 
                     ajaxRequest(globalUrls.instances.backups.schedule, x, (data)=>{
-                        makeToastr(data)
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            return false;
+                        }
+                        currentTr.find("td:eq(1)").text(frequency + " " + time);
                     });
                 }
             }
@@ -286,6 +295,7 @@ $(document).on("click", "#backToBackupGraphs", function(){
 $(document).on("click", ".viewContainerBackups", function(){
     $("#graphCards").hide();
     $("#containerBackupDetails").show();
+    currentTr = $(this).parents("tr");
     currentContainerBackups = currentBackups[$(this).data("hostAlias")].containers[$(this).data("containerIndex")];
     currentContainerBackups.hostId = $(this).data("hostId");
     currentContainerBackups.hostAlias = $(this).data("hostAlias");
