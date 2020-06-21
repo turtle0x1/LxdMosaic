@@ -9,6 +9,7 @@ Added
     Create profiles (#175)
     Allow user to create custom dashboards of instance metrics
     Documenation for instance settings (#218)
+    Backup scheduling (#189)
 
 Fixed
     Cant load project inforatmion
