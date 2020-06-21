@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Hosts\Settings;
 
 use dhope0000\LXDClient\Tools\Hosts\Settings\UpdateHostSettings;
+use Symfony\Component\Routing\Annotation\Route;
 
 class UpdateSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -9,7 +10,9 @@ class UpdateSettingsController implements \dhope0000\LXDClient\Interfaces\Record
     {
         $this->updateHostSettings = $updateHostSettings;
     }
-
+    /**
+     * @Route("", name="Update hosts settings")
+     */
     public function update(int $hostId, string $alias, int $supportsLoadAverages)
     {
         $this->updateHostSettings->update($hostId, $alias, $supportsLoadAverages);
