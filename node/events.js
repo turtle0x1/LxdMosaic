@@ -168,7 +168,7 @@ terminalsIo.on('connect', function(socket) {
 });
 
 var con = mysql.createConnection({
-  host: process.env.DB_HOST_STRING,
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
