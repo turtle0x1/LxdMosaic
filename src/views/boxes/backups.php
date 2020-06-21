@@ -308,6 +308,12 @@ function loadBackupsOverview() {
 
                 let instanceName = container.name
 
+                let ghostIcon = '<i class="fas fa-ghost" data-toggle="tooltip" data-placement="bottom" title="Instance Deleted" class="btn btn-outline-primary btn-sm"></i>'
+
+                if(container.containerExists){
+                    instanceName += ghostIcon;
+                }
+
                 if(hostDetails.supportsBackups){
                     instanceName = `<a
                         href="#"
@@ -316,7 +322,7 @@ function loadBackupsOverview() {
                         data-host-id="${hostDetails.hostId}"
                         data-container-index="${containerIndex}"
                         data-container="${container.name}">
-                        ${container.name}
+                        ${container.name} ${!container.containerExists ? ghostIcon : ""}
                     </a>`;
                 }
 
@@ -333,6 +339,7 @@ function loadBackupsOverview() {
             });
         })
         $("#containerBackupTable > tbody").empty().append(backupTrs);
+        $("#containerBackupTable > tbody").find('[data-toggle="tooltip"]').tooltip()
 
         new Chart($("#backupsSizeChart"), {
             type: "line",
