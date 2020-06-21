@@ -19,5 +19,4 @@ CREATE TABLE `Instance_Backup_Schedule` (
 );
 
 INSERT INTO `Backup_Strategies` (`BS_ID`, `BS_Name`) VALUES
-(1, "Backup"),
-(2, "Backup & Import");
+(1, "Backup & Import");
