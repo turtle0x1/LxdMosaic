@@ -22,7 +22,7 @@ class GetBackupsOverview
         $allBackups = $this->fetchBackups->fetchAll();
         $properties = $this->getProperties($allBackups);
 
-        $allBackups = $this->getHostInstanceStatusForBackupSet->get($allBackups);
+        $allBackups = $this->getHostInstanceStatusForBackupSet->get($properties["localBackups"]);
 
         return [
             "sizeByMonthYear"=>$properties["sizeByMonthYear"],
@@ -36,7 +36,7 @@ class GetBackupsOverview
         $sizeByMonthYear = [];
         $filesByMonthYear = [];
 
-        foreach ($backups as $backup) {
+        foreach ($backups as $index => $backup) {
             $date = new \DateTime($backup["storedDateCreated"]);
             $month = $date->format("n");
             $year = $date->format("Y");
@@ -52,13 +52,18 @@ class GetBackupsOverview
                 $filesize = filesize($backup["localPath"]);
             }
 
+            $backup["filesize"] = $filesize;
+
+            $backups[$index] = $backup;
+
             $sizeByMonthYear[$year][$month] += $filesize;
             $filesByMonthYear[$year][$month] ++;
         }
 
         return [
             "sizeByMonthYear"=>$sizeByMonthYear,
-            "filesByMonthYear"=>$filesByMonthYear
+            "filesByMonthYear"=>$filesByMonthYear,
+            "localBackups"=>$backups
         ];
     }
 

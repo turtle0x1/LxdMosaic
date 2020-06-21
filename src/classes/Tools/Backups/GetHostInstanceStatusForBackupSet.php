@@ -45,11 +45,11 @@ class GetHostInstanceStatusForBackupSet
 
             $containers = [];
             $seenContainerNames = [];
-
+            //TODO This all needs to be project aware and re-written
             foreach ($host->getCustomProp("containers") as $name => $container) {
                 $lastBackup = $this->findLastBackup($name, $backupsToSearch);
                 $container = $this->extractContainerInfo($name, $container);
-                $allBackups = $this->findAllBackups($name, $backupsToSearch);
+                $allBackups = $this->findAllBackupsandTotalSize($name, $backupsToSearch);
 
                 $scheduleString = "";
 
@@ -59,7 +59,8 @@ class GetHostInstanceStatusForBackupSet
 
                 $container["containerExists"] = true;
                 $container["lastBackup"] = $lastBackup;
-                $container["allBackups"] = $allBackups;
+                $container["totalSize"] = $allBackups["size"];
+                $container["allBackups"] = $allBackups["backups"];
                 $container["scheduleString"] = $scheduleString;
 
                 $containers[] = $container;
@@ -68,12 +69,15 @@ class GetHostInstanceStatusForBackupSet
 
             foreach ($backupsToSearch as $backup) {
                 if (!in_array($backup["container"], $seenContainerNames)) {
+                    $allBackups = $this->findAllBackupsandTotalSize($backup["container"], $backupsToSearch);
+
                     $containers[] = [
                         "name"=>$backup["container"],
                         "containerExists"=>false,
                         "scheduleString"=>"N/A",
                         "lastBackup"=>$this->findLastBackup($backup["container"], $backupsToSearch),
-                        "allBackups"=>$this->findAllBackups($backup["container"], $backupsToSearch)
+                        "allBackups"=>$allBackups["backups"],
+                        "totalSize"=>$allBackups["size"]
                     ];
                     $seenContainerNames[] = $backup["container"];
                 }
@@ -99,15 +103,20 @@ class GetHostInstanceStatusForBackupSet
         return $backupsByHostId;
     }
 
-    private function findAllBackups(string $container, array $hostBackups)
+    private function findAllBackupsandTotalSize(string $container, array $hostBackups)
     {
         $output = [];
+        $totalSize = 0;
         foreach ($hostBackups as $backup) {
             if ($backup["container"] == $container) {
+                $totalSize += $backup["filesize"];
                 $output[] = $backup;
             }
         }
-        return $output;
+        return [
+            "backups"=>$output,
+            "size"=>$totalSize
+        ];
     }
 
     private function findLastBackup(string $container, ?array $hostBackups)
