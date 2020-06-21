@@ -68,6 +68,7 @@
                                 <th>Name</th>
                                 <th>Date Created</th>
                                 <th>Restore</th>
+                                <th>Delete</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -119,6 +120,23 @@ function makeLineData(data, setLabel){
         data: dataByYearMonth
     };
 }
+
+$(document).on("click", ".deleteBackup", function(){
+    let tr = $(this).parents("tr");
+    let backupId = tr.data("backupId");
+    let x = {backupId: backupId};
+
+    ajaxRequest(globalUrls.instances.backups.delete, x, (data)=>{
+        data = makeToastr(data);
+        
+        if(data.state == "error"){
+            return false;
+        }
+
+        tr.remove();
+    });
+
+});
 
 $(document).on("click", ".restoreBackup", function(){
     let backupId = $(this).parents("tr").data("backupId");
@@ -274,7 +292,16 @@ $(document).on("click", ".viewContainerBackups", function(){
             trs += `<tr data-backup-id="${backup.id}">
                 <td>${backup.name}</td>
                 <td>${moment(backup.backupDateCreated).fromNow()}</td>
-                <td><button class="btn btn-sm btn-outline-warning restoreBackup">Restore</button></td>
+                <td>
+                    <button class="btn btn-sm btn-outline-warning restoreBackup">
+                        <i class="fas fa-trash-restore"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-danger deleteBackup">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
             </tr>`
         });
     }else{
