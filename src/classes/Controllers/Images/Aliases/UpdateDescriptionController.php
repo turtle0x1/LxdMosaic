@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LxdClient\Controllers\Images\Aliases;
+namespace dhope0000\LXDClient\Controllers\Images\Aliases;
 
 use dhope0000\LXDClient\Tools\Images\Aliases\UpdateDescription;
 use dhope0000\LXDClient\Objects\Host;
