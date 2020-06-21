@@ -16,10 +16,10 @@ class RecordAction
         $this->getSetting = $getSetting;
     }
 
-    public function record(string $controller, array $params) :void
+    public function record(int $userId, string $controller, array $params) :void
     {
         if ($this->getSetting->getSettingLatestValue(InstanceSettingsKeys::RECORD_ACTIONS)) {
-            $this->insertActionLog->insert($controller, json_encode($params));
+            $this->insertActionLog->insert($userId, $controller, json_encode($params));
         }
     }
 }
