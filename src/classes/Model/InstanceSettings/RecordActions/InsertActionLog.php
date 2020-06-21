@@ -11,18 +11,21 @@ class InsertActionLog
         $this->database = $database->dbObject;
     }
 
-    public function insert(string $controller, string $params)
+    public function insert(int $userId, string $controller, string $params)
     {
         $sql = "INSERT INTO `Recorded_Actions`
                 (
+                    `RA_User_ID`,
                     `RA_Controller`,
                     `RA_Params`
                 ) VALUES (
+                    :userId,
                     :controller,
                     :params
                 );";
         $do = $this->database->prepare($sql);
         $do->execute([
+            ":userId"=>$userId,
             ":controller"=>$controller,
             ":params"=>$params
         ]);
