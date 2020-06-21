@@ -131,6 +131,7 @@ if ($haveServers->haveAny() !== true) {
                       createFrom: "/api/Instances/CopyInstanceController/copy",
                   },
                   backups: {
+                      disabledSchedule: "/api/Instances/Backups/DisableScheduledBackupsController/disable",
                       schedule: "/api/Instances/Backups/ScheduleBackupController/schedule",
                       backup: "/api/Instances/Backups/BackupController/backup",
                       getContainerBackups: "/api/Instances/Backups/GetInstanceBackupsController/get",
