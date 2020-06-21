@@ -24,7 +24,7 @@ class FetchBackups
                 FROM
                 `Container_Backups`
                 ORDER BY
-                    `storedDateCreated` ASC
+                    `storedDateCreated` DESC
                 ";
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
