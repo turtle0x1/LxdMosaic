@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LxdClient\Controllers\Images\Search;
+namespace dhope0000\LXDClient\Controllers\Images\Search;
 
 use dhope0000\LXDClient\Tools\Images\GetAllImages;
 

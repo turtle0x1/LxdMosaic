@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LxdClient\Controllers\Images;
+namespace dhope0000\LXDClient\Controllers\Images;
 
 use dhope0000\LXDClient\Tools\Images\DeleteImages;
 
