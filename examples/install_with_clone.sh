@@ -55,7 +55,7 @@ cp .env.dist .env
 
 # Update env values
 ## DB Host
-sed -i -e 's/DB_HOST_STRING=.*/DB_HOST_STRING=localhost/g' .env
+sed -i -e 's/DB_HOST=.*/DB_HOST=localhost/g' .env
 ## DB User
 sed -i -e 's/DB_USER=.*/DB_USER=lxd/g' .env
 ## DB Pass

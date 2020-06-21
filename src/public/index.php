@@ -11,7 +11,7 @@ $exceptionHandler->register();
 
 $env = new Dotenv\Dotenv(__DIR__ . "/../../");
 $env->load();
-$env->required(['DB_HOST_STRING', 'DB_USER', 'DB_PASS', 'DB_NAME']);
+$env->required(['DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME']);
 
 $container->injectOn($exceptionHandler);
 
