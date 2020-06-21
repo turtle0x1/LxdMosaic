@@ -11,7 +11,7 @@ class FetchBackupSchedules
         $this->database = $database->dbObject;
     }
 
-    public function fetchSchedulesGroupedByHostId()
+    public function fetchActiveSchedsGroupedByHostId()
     {
         $sql = "SELECT
                     `IBS_Host_ID` as `hostId`,
@@ -21,6 +21,8 @@ class FetchBackupSchedules
                     `IBS_BS_ID` as `strategyId`
                 FROM
                     `Instance_Backup_Schedule`
+                WHERE
+                    `IBS_Disabled` = 0
                 ORDER BY
                     `IBS_ID` ASC
                 ";
@@ -28,7 +30,7 @@ class FetchBackupSchedules
         return $do->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_ASSOC);
     }
 
-    public function fetch(int $hostId)
+    public function fetchActive(int $hostId)
     {
         $sql = "SELECT
                     `IBS_Host_ID` as `hostId`,
@@ -40,6 +42,8 @@ class FetchBackupSchedules
                     `Instance_Backup_Schedule`
                 WHERE
                     `IBS_Host_ID` = :hostId
+                AND
+                    `IBS_Disabled` = 0
                 ORDER BY
                     `IBS_ID` ASC
                 ";

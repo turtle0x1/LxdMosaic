@@ -11,7 +11,10 @@ CREATE TABLE `Instance_Backup_Schedule` (
     `IBS_Instance` VARCHAR(255) NOT NULL,
     `IBS_Project` VARCHAR(255) NOT NULL,
     `IBS_Schedule_String` VARCHAR(255) NOT NULL,
-    `IBS_BS_ID` INT NOT NULL
+    `IBS_BS_ID` INT NOT NULL,
+    `IBS_Disabled` TINYINT NOT NULL DEFAULT 0,
+    `IBS_Disabled_Date` DATETIME NOT NULL,
+    `IBS_Disabled_By` INT NOT NULL    
 );
 
 INSERT INTO `Backup_Strategies` (`BS_ID`, `BS_Name`) VALUES
