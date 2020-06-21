@@ -52,9 +52,13 @@ class GetHostInstanceStatusForBackupSet
                 $allBackups = $this->findAllBackupsandTotalSize($name, $backupsToSearch);
 
                 $scheduleString = "";
+                $scheduleRetention = "";
+                $strategyName = "";
 
                 if (isset($groupedSchedule[$host->getHostId()][$name])) {
                     $scheduleString = $groupedSchedule[$host->getHostId()][$name]["scheduleString"];
+                    $scheduleRetention = $groupedSchedule[$host->getHostId()][$name]["scheduleRetention"];
+                    $strategyName = $groupedSchedule[$host->getHostId()][$name]["strategyName"];
                 }
 
                 $container["containerExists"] = true;
@@ -62,6 +66,8 @@ class GetHostInstanceStatusForBackupSet
                 $container["totalSize"] = $allBackups["size"];
                 $container["allBackups"] = $allBackups["backups"];
                 $container["scheduleString"] = $scheduleString;
+                $container["scheduleRetention"] = $scheduleRetention;
+                $container["strategyName"] = $strategyName;
 
                 $containers[] = $container;
                 $seenContainerNames[] = $name;
@@ -77,7 +83,9 @@ class GetHostInstanceStatusForBackupSet
                         "scheduleString"=>"N/A",
                         "lastBackup"=>$this->findLastBackup($backup["container"], $backupsToSearch),
                         "allBackups"=>$allBackups["backups"],
-                        "totalSize"=>$allBackups["size"]
+                        "totalSize"=>$allBackups["size"],
+                        "scheduleRetention"=>"",
+                        "strategyName"=>""
                     ];
                     $seenContainerNames[] = $backup["container"];
                 }

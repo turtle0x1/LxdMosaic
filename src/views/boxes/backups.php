@@ -13,6 +13,7 @@
                                 <th>Instance</th>
                                 <th>Schedule</th>
                                 <th>Last Backed Up</th>
+                                <th># Backups</th>
                                 <th>Size On Disk</th>
                             </tr>
                         </thead>
@@ -395,10 +396,13 @@ function loadBackupsOverview() {
                     date = moment(container.lastBackup.backupDateCreated).fromNow()
                 }
 
+                let upToString = container.strategyName == "" ? "" :  ` / ${container.scheduleRetention} scheduled to keep`;
+
                 backupTrs += `<tr class="alert alert-${trClass}">
                     <td>${instanceName}</td>
-                    <td>${container.scheduleString}</td>
+                    <td>${container.strategyName} ${container.scheduleString}</td>
                     <td>${date}</td>
+                    <td>${container.allBackups.length} ${upToString}</td>
                     <td>${formatBytes(container.totalSize)}</td>
                 </tr>`
             });
