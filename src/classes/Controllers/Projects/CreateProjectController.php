@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Projects;
 
 use dhope0000\LXDClient\Tools\Projects\CreateProject;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CreateProjectController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,7 +12,9 @@ class CreateProjectController implements \dhope0000\LXDClient\Interfaces\RecordA
     {
         $this->createProject = $createProject;
     }
-
+    /**
+     * @Route("", name="Create Project")
+     */
     public function create(
         HostsCollection $hosts,
         string $name,
