@@ -1,3 +1,0 @@
-ALTER TABLE `Recorded_Actions` ADD `RA_User_ID` INT NULL AFTER `RA_Date_Created`;
-
-ALTER TABLE `Recorded_Actions` ADD FOREIGN KEY (`RA_User_ID`) REFERENCES `Users`(`User_ID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
