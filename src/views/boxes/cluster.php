@@ -66,9 +66,9 @@ function loadClusterView(clusterId){
 
         $.each(cluster.members, function(o, z){
             membersHtml += `<tr>
-                <td><a href="#" class="viewHost" data-id="${z.hostId}">${z.server_name}</a></td>
-                <td>${z.status}</td>
-                <td><i class="fas fa-${z.database ? "check-circle" : "times"}"</td>
+                <td><a href="#" class="viewHost" data-id="${z.hostId}">${z.clusterInfo.server_name}</a></td>
+                <td>${z.clusterInfo.status}</td>
+                <td><i class="fas fa-${z.clusterInfo.database ? "check-circle" : "times"}"</td>
             </tr>`;
         });
 
