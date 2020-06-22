@@ -18,7 +18,7 @@
             </u></h4>
             <div class="btn-toolbar float-right">
               <div class="btn-group mr-2">
-                  <button data-toggle="tooltip" data-placement="bottom" title="Create Image" class="btn btn-sm btn-primary" id="craeteImage">
+                  <button data-toggle="tooltip" data-placement="bottom" title="Create Image" class="btn btn-sm btn-secondary" id="craeteImage">
                       <i class="fas fa-image"></i>
                   </button>
                   <button data-toggle="tooltip" data-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
