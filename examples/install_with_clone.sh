@@ -89,6 +89,7 @@ mysql < sql/0.3.0.sql
 mysql < sql/0.5.0.sql
 mysql < sql/0.6.0.sql
 mysql < sql/0.7.0.sql
+mysql < sql/0.9.0.sql
 
 PASSWD=""
 
