@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Images;
 
 use dhope0000\LXDClient\Tools\Images\ImportLinuxContainersByAlias;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ImportLinuxContainersByAliasController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,7 +11,9 @@ class ImportLinuxContainersByAliasController implements \dhope0000\LXDClient\Int
     {
         $this->importLinuxContainersByAlias = $importLinuxContainersByAlias;
     }
-
+    /**
+     * @Route("", name="Import LinunxContainer.Org Image")
+     */
     public function import(HostsCollection $hosts, array $aliases)
     {
         $operations = $this->importLinuxContainersByAlias->import($hosts, $aliases);

@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Deployments;
 
 use dhope0000\LXDClient\Tools\Deployments\ChangeDeploymentState;
 use dhope0000\LXDClient\Constants\StateConstants;
+use Symfony\Component\Routing\Annotation\Route;
 
 class StartDeploymentController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,7 +12,9 @@ class StartDeploymentController implements \dhope0000\LXDClient\Interfaces\Recor
     {
         $this->changeDeploymentState = $changeDeploymentState;
     }
-
+    /**
+     * @Route("", name="Start Deployment")
+     */
     public function start(int $deploymentId)
     {
         $this->changeDeploymentState->change($deploymentId, StateConstants::START);

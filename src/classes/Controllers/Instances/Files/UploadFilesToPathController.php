@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Files;
 
 use dhope0000\LXDClient\Objects\Host;
 use \dhope0000\LXDClient\Tools\Instances\Files\UploadFiles;
+use Symfony\Component\Routing\Annotation\Route;
 
 class UploadFilesToPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,7 +14,9 @@ class UploadFilesToPathController implements \dhope0000\LXDClient\Interfaces\Rec
     {
         $this->uploadFiles = $uploadFiles;
     }
-
+    /**
+     * @Route("", name="Upload File To Instance")
+     */
     public function upload(
         Host $host,
         string $container,

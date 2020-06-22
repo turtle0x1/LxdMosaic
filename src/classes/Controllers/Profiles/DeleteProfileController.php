@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Tools\Profiles\DeleteProfile;
 use dhope0000\LXDClient\Objects\Host;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,7 +11,9 @@ class DeleteProfileController implements \dhope0000\LXDClient\Interfaces\RecordA
     {
         $this->deleteProfile = $deleteProfile;
     }
-
+    /**
+     * @Route("", name="Delete Profile")
+     */
     public function delete(Host $host, string $profile)
     {
         $response = $this->deleteProfile->delete($host, $profile);

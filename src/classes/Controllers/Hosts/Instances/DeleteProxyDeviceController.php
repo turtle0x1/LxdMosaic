@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Devices\Proxy\DeleteProxyDevice;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteProxyDeviceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,7 +11,9 @@ class DeleteProxyDeviceController implements \dhope0000\LXDClient\Interfaces\Rec
     {
         $this->deleteProxyDevice = $deleteProxyDevice;
     }
-
+    /**
+     * @Route("", name="Delete proxy device")
+     */
     public function delete(Host $host, string $instance, string $device)
     {
         $this->deleteProxyDevice->delete($host, $instance, $device);
