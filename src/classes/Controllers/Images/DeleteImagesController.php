@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Images;
 
 use dhope0000\LXDClient\Tools\Images\DeleteImages;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteImagesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,7 +11,9 @@ class DeleteImagesController implements \dhope0000\LXDClient\Interfaces\RecordAc
     {
         $this->deleteImages = $deleteImages;
     }
-
+    /**
+     * @Route("", name="Delete Images From Hosts")
+     */
     public function delete($imageData)
     {
         $lxdResponse = $this->deleteImages->delete($imageData);
