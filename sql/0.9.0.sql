@@ -1,3 +1,4 @@
+USE `LXD_Manager`;
 -- user-id-record-actions.sql
 
 ALTER TABLE `Recorded_Actions` ADD `RA_User_ID` INT NULL AFTER `RA_Date_Created`;
