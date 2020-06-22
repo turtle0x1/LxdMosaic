@@ -1,5 +1,7 @@
 <?php
 
+$_ENV = getenv();
+
 require __DIR__ . "/../../../vendor/autoload.php";
 
 use dhope0000\LXDClient\Constants\Constants;
@@ -7,9 +9,6 @@ use dhope0000\LXDClient\Constants\BackupStrategies;
 
 $builder = new \DI\ContainerBuilder();
 $container = $builder->build();
-
-$env = new Dotenv\Dotenv(__DIR__ . "/../../../");
-$env->load();
 
 if (count($argv) !== 5) {
     throw new \Exception("script should be called backupContainer.php hostId instance project strategyId", 1);

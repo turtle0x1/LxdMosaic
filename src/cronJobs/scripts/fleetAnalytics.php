@@ -1,13 +1,12 @@
 #!/usr/bin/env php
 <?php
 
+$_ENV = getenv();
+
 require __DIR__ . "/../../../vendor/autoload.php";
 
 $builder = new \DI\ContainerBuilder();
 $container = $builder->build();
-
-$env = new Dotenv\Dotenv(__DIR__ . "/../../../");
-$env->load();
 
 $getAllContainers = $container->make("dhope0000\LXDClient\Tools\Instances\GetHostsInstances");
 $getStorageDetails = $container->make("dhope0000\LXDClient\Tools\Storage\GetHostsStorage");
