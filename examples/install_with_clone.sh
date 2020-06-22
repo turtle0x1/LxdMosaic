@@ -66,7 +66,7 @@ npm install || exit $?
 # Install Dependecies
 composer install || exit $?
 
-PASSWD=`openssl rand -base64 32`
+PASSWD=`openssl rand -base64 29 | tr -d "=+/" | cut -c1-25`
 
 cp .env.dist .env
 # Update env values
