@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\InstanceSettings;
 
 use dhope0000\LXDClient\Tools\InstanceSettings\SaveSettings;
+use Symfony\Component\Routing\Annotation\Route;
 
 class SaveAllSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,7 +13,9 @@ class SaveAllSettingsController implements \dhope0000\LXDClient\Interfaces\Recor
     {
         $this->saveSettings = $saveSettings;
     }
-
+    /**
+     * @Route("", name="Save LXDMosaic Settings")
+     */
     public function saveAll($userId, $settings)
     {
         $this->saveSettings->save($userId, $settings);
