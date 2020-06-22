@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Deployments;
 
 use dhope0000\LXDClient\Tools\Deployments\CreateDeployment;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,7 +11,9 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     {
         $this->createDeployment = $createDeployment;
     }
-
+    /**
+     * @Route("", name="Create Deployment")
+     */
     public function create(string $name, array $cloudConfigs)
     {
         $deploymentId = $this->createDeployment->create($name, $cloudConfigs);
