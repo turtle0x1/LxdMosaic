@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
 use dhope0000\LXDClient\Tools\Instances\Backups\BackupInstance;
 use dhope0000\LXDClient\Objects\Host;
+use Symfony\Component\Routing\Annotation\Route;
 
 class BackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,7 +14,9 @@ class BackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
     {
         $this->backupInstance = $backupInstance;
     }
-
+    /**
+     * @Route("", name="Backup Instance")
+     */
     public function backup(
         Host $host,
         string $container,

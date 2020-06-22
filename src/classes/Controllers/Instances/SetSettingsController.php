@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\SetInstanceSettings;
+use Symfony\Component\Routing\Annotation\Route;
 
 class SetSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,7 +11,9 @@ class SetSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAct
     {
         $this->setInstanceSettings = $setInstanceSettings;
     }
-
+    /**
+     * @Route("", name="Set Instance Settings")
+     */
     public function set(Host $host, string $container, array $settings)
     {
         $this->setInstanceSettings->set($host, $container, $settings);

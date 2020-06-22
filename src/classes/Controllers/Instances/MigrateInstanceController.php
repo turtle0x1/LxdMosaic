@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Instances;
 
 use dhope0000\LXDClient\Tools\Instances\Migrate;
 use dhope0000\LXDClient\Objects\Host;
+use Symfony\Component\Routing\Annotation\Route;
 
 class MigrateInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,7 +11,9 @@ class MigrateInstanceController implements \dhope0000\LXDClient\Interfaces\Recor
     {
         $this->migrate = $migrate;
     }
-
+    /**
+     * @Route("", name="Migrate Instance")
+     */
     public function migrate(Host $hostId, $container, Host $destination)
     {
         $this->migrate->migrate($hostId, $container, $destination, $container);

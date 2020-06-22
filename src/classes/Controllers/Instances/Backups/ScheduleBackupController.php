@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
 use dhope0000\LXDClient\Tools\Instances\Backups\AddBackupSchedule;
 use dhope0000\LXDClient\Objects\Host;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ScheduleBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,7 +14,9 @@ class ScheduleBackupController implements \dhope0000\LXDClient\Interfaces\Record
     {
         $this->addBackupSchedule = $addBackupSchedule;
     }
-
+    /**
+     * @Route("", name="Set Instance Backup Schedule")
+     */
     public function schedule(
         int $userId,
         Host $host,
