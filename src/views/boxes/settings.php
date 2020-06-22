@@ -196,7 +196,7 @@ function loadRecordedActions(ammount = 30){
             $.each(data, (_, item)=>{
                 trs += `<tr>
                     <td>${moment(item.date).fromNow()}</td>
-                    <td>${item.controller}</td>
+                    <td>${item.controllerName == "" ? item.controller : item.controllerName}</td>
                     <td class="text-break">${item.params}</td>
                 </tr>`;
             });

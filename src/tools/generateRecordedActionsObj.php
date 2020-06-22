@@ -1,6 +1,4 @@
 <?php
-
-
 require __DIR__ . "/vendor/autoload.php";
 
 use \Doctrine\Common\Annotations\AnnotationReader;
@@ -36,6 +34,22 @@ AnnotationRegistry::registerLoader('class_exists');
 $reader = new AnnotationReader();
 
 $routeNames = [];
+$classString = '<?php
+
+namespace dhope0000\LXDClient\Objects;
+
+class RouteToNameMapping
+{
+    public $routesToName = REPLACE_ME;
+
+    public function getControllerName(string $controller)
+    {
+        if (!isset($this->routesToName[$controller])) {
+            return "";
+        }
+        return $this->routesToName[$controller];
+    }
+}';
 
 foreach ($fqcns as $class) {
     $refClass = new ReflectionClass($class);
@@ -54,11 +68,12 @@ foreach ($fqcns as $class) {
         );
 
         if ($route !== null) {
-            $routeNames[$class] = $route->getName();
+            $routeNames[$class . "\\" . $method->getName()] = $route->getName();
         } else {
             echo "Missing " . $class . "::" . $method->getName() . PHP_EOL;
         }
     }
 }
-
-print_r($routeNames);
+$routesString = var_export($routeNames, true);
+$classString = str_replace("REPLACE_ME", $routesString, $classString);
+file_put_contents(__DIR__ . "/../classes/Objects/RouteToNameMapping.php", $classString);
