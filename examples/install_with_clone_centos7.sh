@@ -51,30 +51,34 @@ git clone https://github.com/turtle0x1/LxdMosaic.git
 mkdir -p /var/www/LxdMosaic/src/sensitiveData/certs
 mkdir -p /var/www/LxdMosaic/src/sensitiveData/backups
 chown -R apache:apache /var/www/LxdMosaic/src/sensitiveData/
-chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/backups
+chown -R apache:apache /var/www/LxdMosaic/src/sensitiveData/backups
 
 # Move in LxdManager
 cd /var/www/LxdMosaic || exit
 
-git checkout v0.8.0
+git checkout v0.9.0
 
 npm install
 
 # Install Dependecies
 composer install
 
-cp .env.dist .env
+PASSWD=`openssl rand -base64 29 | tr -d "=+/" | cut -c1-25`
 
+cp .env.dist .env
 # Update env values
 ## DB Host
-sed -i -e 's/DB_HOST=/DB_HOST=localhost/g' .env
+sed -i -e "s/DB_HOST=.*/DB_HOST=localhost/g" .env
 ## DB User
-sed -i -e 's/DB_USER=/DB_USER=lxd/g' .env
+sed -i -e "s/DB_USER=.*/DB_USER=lxd/g" .env
 ## DB Pass
-sed -i -e 's/DB_PASS=/DB_PASS=lxdManagerPasswordComplex321/g' .env
+sed -i -e "s/DB_PASS=.*/DB_PASS=$PASSWD/g" .env
 
 # Import data into mysql
-mysql < sql/users.sql
+mysql <<EOF
+CREATE USER 'lxd'@'localhost' IDENTIFIED BY '$PASSWD';
+GRANT ALL PRIVILEGES ON \`LXD_Manager\`. * TO 'lxd'@'localhost';
+EOF
 mysql < sql/seed.sql
 mysql < sql/0.1.0.sql
 mysql < sql/0.2.0.sql
@@ -82,7 +86,9 @@ mysql < sql/0.3.0.sql
 mysql < sql/0.5.0.sql
 mysql < sql/0.6.0.sql
 mysql < sql/0.7.0.sql
+mysql < sql/0.9.0.sql
 
+PASSWD=""
 
 # Install a self-signed certificate as CentOS doesn't ship with one
 mkdir -p /etc/ssl/private
@@ -98,14 +104,15 @@ pm2 startup
 
 pm2 save
 
+if [ ! -f /etc/crontab ]; then
+    touch /etc/crontab
+fi
 # Add cron job for gathering data
-crontab -l | { cat; echo "*/5 * * * * php /var/www/LxdMosaic/src/cronJobs/fleetAnalytics.php"; } | crontab -
-crontab -l | { cat; echo "*/1 * * * * php /var/www/LxdMosaic/src/cronJobs/hostsOnline.php"; } | crontab -
+echo "* * * * * apache cd /var/www/LxdMosaic/ && vendor/bin/crunz schedule:run" >> /etc/crontab
 
 systemctl restart httpd
 
+IP=`ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\1/p'`
 printf "${grn}\nInstallation successfull \n\n"
-printf  "${grn}Point your browser at ${blu}https://myip${end} ${red}and accept the self signed certificate${end} \n"
-printf  "${grn} \n or \n\nyou could add lxd.local to your hosts file (on your pc) E.G \n"
-printf  " \n myip lxd.local \n\n"
-printf  "ServerName for LxdManager can be changed in /etc/httpd/conf.d/lxd_manager_centos.conf, followed by an apache restart (systemctl restart httpd) \n${end}"
+printf  "You now need to point your browser at ${blu}https://$IP${end} ${grn}and accept the self signed certificate${end} \n\n"
+printf  "ServerName for LxdManager can be changed in /etc/apache2/sites-available/lxd_manager.conf, followed by an apache restart (systemctl restart apache2) \n\n${end}"
