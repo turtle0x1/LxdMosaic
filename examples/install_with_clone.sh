@@ -101,9 +101,11 @@ pm2 startup || exit $?
 
 pm2 save || exit $?
 
+if [ ! -f /etc/crontab ]; then
+    touch /etc/crontab
+fi
 # Add cron job for gathering data
-crontab -l 2>/dev/null | { cat; echo "*/5 * * * * php /var/www/LxdMosaic/src/cronJobs/fleetAnalytics.php"; } | crontab -
-crontab -l | { cat; echo "*/1 * * * * php /var/www/LxdMosaic/src/cronJobs/hostsOnline.php"; } | crontab -
+echo "* * * * * www-data cd /var/www/LxdMosaic/ && vendor/bin/crunz schedule:run" >> /etc/crontab
 
 # Enable site
 a2ensite lxd_manager
