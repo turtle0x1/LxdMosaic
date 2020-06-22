@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Hosts;
 
 use dhope0000\LXDClient\Model\Hosts\DeleteHost;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteHostController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -9,7 +10,9 @@ class DeleteHostController implements \dhope0000\LXDClient\Interfaces\RecordActi
     {
         $this->deleteHost = $deleteHost;
     }
-
+    /**
+     * @Route("", name="Delete Host")
+     */
     public function delete(int $hostId)
     {
         $this->deleteHost->delete($hostId);

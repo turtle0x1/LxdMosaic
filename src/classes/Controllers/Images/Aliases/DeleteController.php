@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Images\Aliases;
 
 use dhope0000\LXDClient\Tools\Images\Aliases\DeleteAlias;
 use dhope0000\LXDClient\Objects\Host;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,7 +12,9 @@ class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
     {
         $this->deleteAlias = $deleteAlias;
     }
-
+    /**
+     * @Route("", name="Delete Image Alias")
+     */
     public function delete(Host $host, string $name)
     {
         $lxdResponse = $this->deleteAlias->delete($host, $name);

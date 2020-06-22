@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
 use dhope0000\LXDClient\Model\CloudConfig\DeleteCloudConfig;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -9,7 +10,9 @@ class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
     {
         $this->deleteCloudConfig = $deleteCloudConfig;
     }
-
+    /**
+     * @Route("", name="Delete Cloud Config")
+     */
     public function delete(int $cloudConfigId)
     {
         $this->deleteCloudConfig->delete($cloudConfigId);

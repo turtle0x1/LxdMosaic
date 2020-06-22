@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\DeleteInstance;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,7 +11,9 @@ class DeleteInstanceController implements \dhope0000\LXDClient\Interfaces\Record
     {
         $this->deleteInstance =  $deleteInstance;
     }
-
+    /**
+     * @Route("", name="Delete Instance")
+     */
     public function delete(
         Host $host,
         string $container,

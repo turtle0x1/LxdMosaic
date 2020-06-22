@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
 use dhope0000\LXDClient\Tools\CloudConfig\DeployConfigToContainer;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,7 +11,9 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
     {
         $this->deployConfigToContainer = $deploy;
     }
-
+    /**
+     * @Route("", name="Deploy Cloud Config")
+     */
     public function deploy(
         HostsCollection $hosts,
         string $containerName,

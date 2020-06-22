@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Files;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Files\DeletePath;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeletePathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,7 +14,9 @@ class DeletePathController implements \dhope0000\LXDClient\Interfaces\RecordActi
     {
         $this->deletePath = $deletePath;
     }
-
+    /**
+     * @Route("", name="Delete Instance File")
+     */
     public function delete(
         Host $host,
         string $container,

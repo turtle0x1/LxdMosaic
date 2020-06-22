@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Profiles;
 use dhope0000\LXDClient\Tools\Profiles\Copy;
 use dhope0000\LXDClient\Tools\Profiles\CreateProfile;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CreateProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,6 +13,9 @@ class CreateProfileController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->createProfile = $createProfile;
     }
 
+    /**
+     * @Route("", name="Create Profile")
+     */
     public function create(
         HostsCollection $hosts,
         string $name,

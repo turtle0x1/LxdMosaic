@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Tools\Profiles\GetProfile;
 use dhope0000\LXDClient\Objects\Host;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GetProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,7 +11,9 @@ class GetProfileController implements \dhope0000\LXDClient\Interfaces\RecordActi
     {
         $this->getProfile = $getProfile;
     }
-
+    /**
+     * @Route("", methods={"POST"},  name="Get Profile")
+     */
     public function get(Host $host, string $profile)
     {
         return $this->getProfile->get($host, $profile);

@@ -3,17 +3,24 @@ $haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList"
 
 $userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
 $validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions");
+$getSetting = $this->container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting");
+use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
+
+$recordActionsEnabled = $getSetting->getSettingLatestValue(InstanceSettingsKeys::RECORD_ACTIONS);
 
 $userId = $userSession->getUserId();
 $isAdmin = (int) $validatePermissions->isAdmin($userId);
 $apiToken = $userSession->getToken();
 
 
-echo "<script>var userDetails = {
+echo "<script>
+var userDetails = {
     isAdmin: $isAdmin,
     apiToken: '$apiToken',
     userId: $userId
-} </script>";
+}
+var recordActionsEnabled = $recordActionsEnabled;
+</script>";
 
 if ($haveServers->haveAny() !== true) {
     header("Location: /views/firstRun");
@@ -604,6 +611,9 @@ var editor = ace.edit("editor");
   editor.getSession().setMode("ace/mode/yaml");
 
 $(function(){
+    if(recordActionsEnabled == 0){
+        $("#goToEvents").hide();
+    }
     Chart.defaults.global.defaultFontColor='white';
     $('[data-toggle="tooltip"]').tooltip({html: true})
     loadDashboard();

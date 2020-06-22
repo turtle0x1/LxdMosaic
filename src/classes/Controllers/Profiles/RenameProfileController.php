@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Tools\Profiles\Rename;
 use dhope0000\LXDClient\Objects\Host;
+use Symfony\Component\Routing\Annotation\Route;
 
 class RenameProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -10,7 +11,9 @@ class RenameProfileController implements \dhope0000\LXDClient\Interfaces\RecordA
     {
         $this->rename = $rename;
     }
-
+    /**
+     * @Route("", name="Rename Profile")
+     */
     public function rename(
         Host $host,
         string $currentName,
