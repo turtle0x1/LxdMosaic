@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+$_ENV = getenv();
+
 require __DIR__ . "/../../../vendor/autoload.php";
 
 $builder = new \DI\ContainerBuilder();
