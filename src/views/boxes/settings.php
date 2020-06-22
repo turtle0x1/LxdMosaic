@@ -82,6 +82,7 @@
                         <table class="table table-dark table-bordered" id="recordedActionsTable">
                             <thead>
                                 <tr>
+                                    <th>User</th>
                                     <th>Date</th>
                                     <th>Controller</th>
                                     <th>Params</th>
@@ -195,6 +196,7 @@ function loadRecordedActions(ammount = 30){
         if(data.length > 0 ){
             $.each(data, (_, item)=>{
                 trs += `<tr>
+                    <td>${item.userName}</td>
                     <td>${moment(item.date).fromNow()}</td>
                     <td>${item.controllerName == "" ? item.controller : item.controllerName}</td>
                     <td class="text-break">${item.params}</td>
