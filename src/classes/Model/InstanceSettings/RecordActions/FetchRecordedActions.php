@@ -27,4 +27,31 @@ class FetchRecordedActions
         $do->execute();
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function fetchForHostInstance(int $hostId, string $instance)
+    {
+        $sql = "SELECT
+                    *
+                FROM
+                    `Recorded_Actions`
+                WHERE
+                    (
+                        JSON_EXTRACT(`RA_Params`, '$.container') = :instance
+                        OR
+                        JSON_EXTRACT(`RA_Params`, '$.instance') = :instance
+                    )
+                AND
+                    (
+                        JSON_EXTRACT(`RA_Params`, '$.host.hostId') = :hostId
+                        OR
+                        JSON_EXTRACT(`RA_Params`, '$.hostId') = :hostId
+                    )
+                ORDER BY `Recorded_Actions`.`RA_Date_Created`  DESC";
+        $do = $this->db->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId,
+            ":instance"=>$instance
+        ]);
+        return $do->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

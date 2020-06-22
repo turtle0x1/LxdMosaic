@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Files;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Files\GetPath;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GetPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,7 +14,9 @@ class GetPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
     {
         $this->getPath = $getPath;
     }
-
+    /**
+     * @Route("", name="Get Instance Path Contents")
+     */
     public function get(
         Host $host,
         string $container,

@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances;
 
 use dhope0000\LXDClient\Tools\Instances\CreateImage;
 use dhope0000\LXDClient\Objects\Host;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CreateImageController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -11,7 +12,9 @@ class CreateImageController implements \dhope0000\LXDClient\Interfaces\RecordAct
     {
         $this->createImage = $createImage;
     }
-
+    /**
+     * @Route("", name="Create image from instance")
+     */
     public function create(
         Host $host,
         string $container,

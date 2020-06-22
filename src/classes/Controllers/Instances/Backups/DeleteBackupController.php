@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
 use dhope0000\LXDClient\Tools\Instances\Backups\DeleteRemoteBackup;
 use dhope0000\LXDClient\Objects\Host;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,7 +14,9 @@ class DeleteBackupController implements \dhope0000\LXDClient\Interfaces\RecordAc
     {
         $this->deleteRemoteBackup = $deleteRemoteBackup;
     }
-
+    /**
+     * @Route("", name="Delete Remote Instance Backup")
+     */
     public function delete(Host $host, string $container, string $backup)
     {
         $lxdRespone = $this->deleteRemoteBackup->delete($host, $container, $backup);
