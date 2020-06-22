@@ -77,9 +77,21 @@ sed -i -e "s/DB_USER=.*/DB_USER=lxd/g" .env
 ## DB Pass
 sed -i -e "s/DB_PASS=.*/DB_PASS=$PASSWD/g" .env
 
+os_name=$(cat /etc/os-release | awk -F '=' '/^NAME/{print $2}' | awk '{print $1}' | tr -d '"')
+
+MYSQL_PASSWD_STRING="IDENTIFIED BY '$PASSWD'"
+# Ubuntu uses "real" mysql and in version 20.04 the use mysql 8.0 which changes
+# the default password scheme used - which at time of writing the node client
+# is not compatible with and so this is required to ensure LXDMosaic installs
+# proprerly
+if [ "$os_name" == "Ubuntu" ]
+then
+    MYSQL_PASSWD_STRING="IDENTIFIED WITH mysql_native_password BY '$PASSWD'"
+fi
+
 # Import data into mysql
 mysql <<EOF
-CREATE USER 'lxd'@'localhost' IDENTIFIED BY '$PASSWD';
+CREATE USER 'lxd'@'localhost' $MYSQL_PASSWD_STRING;
 GRANT ALL PRIVILEGES ON \`LXD_Manager\`. * TO 'lxd'@'localhost';
 EOF
 mysql < sql/seed.sql
