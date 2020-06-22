@@ -81,25 +81,31 @@ ALTER TABLE `Instance_Metric_Values` ADD INDEX( `IMV_Instance_Name`);
 INSERT INTO `Instance_Metric_Types` (
     `IMT_Name`,
     `IMT_Description`,
-    `IMT_Metrics_Template_Key`
+    `IMT_Metrics_Template_Key`,
+    `IMT_Format_Bytes`
 ) VALUES (
     "Load Averages",
     "Load averages for instance",
-    "loadAvg"
+    "loadAvg",
+    0
 ), (
     "Memory Usage",
     "Memory usage for instance",
-    "memoryUsage"
+    "memoryUsage",
+    1
 ), (
     "Network Usage",
     "Network usage for instance",
-    "networkUsage"
+    "networkUsage",
+    0
 ), (
     "Stroage Usage",
     "Storage usage for instance",
-    "storageUsage"
+    "storageUsage",
+    1
 ), (
     "Nvidia GPU's",
     "Nvidia GPU",
-    "nvidiaGpuDetails"
+    "nvidiaGpuDetails",
+    0
 );
