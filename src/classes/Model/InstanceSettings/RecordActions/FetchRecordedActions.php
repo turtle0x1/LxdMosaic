@@ -16,9 +16,12 @@ class FetchRecordedActions
         $sql = "SELECT
                     `RA_Date_Created` as `date`,
                     `RA_Controller` as `controller`,
-                    `RA_Params` as `params`
+                    `RA_Params` as `params`,
+                    COALESCE(`Users`.`User_Name`, 'To Old To Know') as `userName`
                 FROM
                     `Recorded_Actions`
+                LEFT JOIN `Users` ON
+                    `Recorded_Actions`.`RA_User_ID` = `Users`.`User_ID`
                 ORDER BY `RA_ID` DESC
                 LIMIT :ammount
                 ";
@@ -31,9 +34,18 @@ class FetchRecordedActions
     public function fetchForHostInstance(int $hostId, string $instance)
     {
         $sql = "SELECT
-                    *
+                    `RA_Date_Created` as `date`,
+                    `RA_Controller` as `controller`,
+                    `RA_Params` as `params`,
+                    COALESCE(`Users`.`User_Name`, 'To Old To Know') as `userName`
                 FROM
                     `Recorded_Actions`
+                LEFT JOIN `Users` ON
+                    (
+                        `Recorded_Actions`.`RA_User_ID` = `Users`.`User_ID`
+                        OR
+                        JSON_UNQUOTE(JSON_EXTRACT(`RA_Params`, '$.userId')) = `Users`.`User_ID`
+                    )
                 WHERE
                     (
                         JSON_EXTRACT(`RA_Params`, '$.container') = :instance
@@ -47,7 +59,7 @@ class FetchRecordedActions
                         JSON_EXTRACT(`RA_Params`, '$.hostId') = :hostId
                     )
                 ORDER BY `Recorded_Actions`.`RA_Date_Created`  DESC";
-        $do = $this->db->prepare($sql);
+        $do = $this->database->prepare($sql);
         $do->execute([
             ":hostId"=>$hostId,
             ":instance"=>$instance

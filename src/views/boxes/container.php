@@ -62,6 +62,9 @@
             <button type="button" class="btn text-white btn-outline-primary" id="goToMetrics">
                 <i class="fas fa-chart-bar pr-2"></i>Metrics
             </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToEvents">
+                <i class="fas fa-book-open pr-2"></i>Events
+            </button>
             <div class="btn-toolbar  mb-2 mb-md-0">
 
             </div>
@@ -221,6 +224,21 @@
         You can right click between the files /  folders to upload new files
     </div>
     <div class="card-columns" id="filesystemTable">
+    </div>
+</div>
+<div id="containerEvents"  class="col-md-12">
+    <div class="card bg-dark text-white">
+        <div class="card-header">
+            <h4> Event Logs </h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-dark table-bordered" id="containerEventsTable">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div id="containerMetrics"  class="col-md-12">
@@ -1159,7 +1177,7 @@ function loadFileSystemPath(path){
 
 $("#containerBox").on("click", "#goToFiles", function(){
     $("#containerFiles").show();
-    $("#containerConsole, #containerBackups, #containerDetails, #containerMetrics").hide();
+    $("#containerConsole, #containerBackups, #containerDetails, #containerMetrics, #containerEvents").hide();
     loadFileSystemPath("/");
 });
 
@@ -1239,7 +1257,7 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
 
 $("#containerBox").on("click", "#goToMetrics", function(){
     $("#containerMetrics").show();
-    $("#containerConsole, #containerBackups, #containerDetails, #containerFiles").hide();
+    $("#containerConsole, #containerBackups, #containerDetails, #containerFiles, #containerEvents").hide();
     $("#metricGraphBody").empty();
     $("#metricRangePicker").attr("disabled", true);
     $("#metricTypeFilterSelect").attr("disabled", true).empty().append(`<option value=''>Please Select</option>`)
@@ -1277,7 +1295,7 @@ $(document).on("click", ".goUpDirectory", function(){
 
 $("#containerBox").on("click", "#goToDetails", function(){
     $("#containerDetails").show();
-    $("#containerConsole, #containerBackups, #containerFiles, #containerMetrics").hide();
+    $("#containerConsole, #containerBackups, #containerFiles, #containerMetrics, #containerEvents").hide();
 });
 
 $("#containerBox").on("click", "#goToBackups", function() {
@@ -1285,14 +1303,37 @@ $("#containerBox").on("click", "#goToBackups", function() {
         return false;
     }
     loadContainerBackups();
-    $("#containerDetails, #containerConsole, #containerFiles, #containerMetrics").hide();
+    $("#containerDetails, #containerConsole, #containerFiles, #containerMetrics, #containerEvents").hide();
     $("#containerBackups").show();
+});
+
+$("#containerBox").on("click", "#goToEvents", function() {
+    $("#containerEvents").show();
+    $("#containerConsole, #containerBackups, #containerFiles, #containerMetrics, #containerDetails").hide();
+    ajaxRequest('/api/Instances/RecordedActions/GetHostInstanceEventsController/get', currentContainerDetails, (data)=>{
+        data = makeToastr(data);
+        let trs = "";
+        if(data.length > 0){
+            $.each(data, (_, instanceEvent)=>{
+                trs += `<tr>
+                    <td>${instanceEvent.userName}</td>
+                    <td>${moment(instanceEvent.date).format("llll")}</td>
+                    <td>${instanceEvent.controllerName == "" ? instanceEvent.controller : instanceEvent.controllerName}</td>
+                    <td>${instanceEvent.params}</td>
+                </tr>`
+            });
+        }else{
+            trs = "<tr><td colspan='999' class='text-center'>No Logs</td></tr>"
+        }
+
+        $("#containerEventsTable > tbody").empty().append(trs);
+    });
 });
 
 $("#containerBox").on("click", "#goToConsole", function() {
     Terminal.applyAddon(attach);
 
-    $("#containerDetails, #containerBackups, #containerFiles, #containerMetrics").hide();
+    $("#containerDetails, #containerBackups, #containerFiles, #containerMetrics, #containerEvents").hide();
     $("#containerConsole").show();
 
 
