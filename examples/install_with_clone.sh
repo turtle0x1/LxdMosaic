@@ -14,14 +14,26 @@ if [[ ! $EUID -eq 0 ]]; then
     exit 1
 fi
 
+os_distribution=`lsb_release -c -s`
+
 apt-get install -y curl || exit $?
-curl -sL https://deb.nodesource.com/setup_10.x | bash -
-if [ $? -ne 0 ]; then exit 1; fi
+
+if [ "$os_distribution" != "bullseye" ]
+then
+    curl -sL https://deb.nodesource.com/setup_10.x | bash -
+    if [ $? -ne 0 ]; then exit 1; fi
+fi
+
 
 # Install Dependecies
 apt-get install -y apache2 php php-cli php-json php-mysql php-xml php-curl unzip zip git nodejs openssl || exit $?
 apt-get install -y mysql-server || apt-get install -y default-mysql-server || exit $?
 apt-get install -y --no-install-recommends cron || exit $?
+
+if [ "$os_distribution" == "bullseye" ]
+then
+    apt-get install -y npm || exit $?
+fi
 
 npm -g install pm2 || exit $?
 
