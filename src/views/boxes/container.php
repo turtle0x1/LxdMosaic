@@ -234,6 +234,12 @@
         <div class="card-body">
             <table class="table table-dark table-bordered" id="containerEventsTable">
                 <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Date</th>
+                        <th>Event</th>
+                        <th>Parameters</th>
+                    </tr>
                 </thead>
                 <tbody>
                 </tbody>
@@ -1229,7 +1235,7 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
         let color = randomColor();
         data = $.parseJSON(data);
         $("#metricGraphBody").empty().append('<canvas id="metricGraph" style="width: 100%;"></canvas>');
-        
+
         let scales = data.formatBytes ? scalesBytesCallbacks : {yAxes: [{}]}
         let tooltips = data.formatBytes ? toolTipsBytesCallbacks : [];
 
