@@ -3,8 +3,7 @@
 
 <a href="https://github.com/turtle0x1/LxdMosaic/issues/new?assignees=&labels=&template=feature_request.md&title=">I want <b>YOUR</b> ideas :thought_balloon:</a>
 
-I also like stars, I you find yourself that way inclinded :angel:
-
+I also like stars, If you find yourself that way inclinded :angel:
 
 <img src="https://i.imgur.com/vnhrSDW.png" width="428"> <img src="https://i.imgur.com/xHSjw3J.png" width="428">
 
@@ -42,7 +41,7 @@ In examples you will find an bash script called install_with_clone.sh this will
 handle the installation of dependencies and setup this program.
 
 It handles the cloning of the repository so you can just do;
-#### Ubuntu
+#### Ubuntu (18.04 & 20.04) / Debian (Buster & Bullseye)
 ```bash
 # Launch a ubuntu container
 lxc launch ubuntu: lxdMosaic
