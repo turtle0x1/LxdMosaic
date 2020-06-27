@@ -1,0 +1,21 @@
+## This is not for you its for testing
+
+config:
+  core.https_address: '[::]:8443'
+  core.trust_password: examplePassword
+  images.auto_update_interval: "0"
+storage_pools:
+- config: {}
+  description: ""
+  name: default
+  driver: dir
+profiles:
+- config: {}
+  description: ""
+  devices:
+    root:
+      path: /
+      pool: default
+      type: disk
+  name: default
+cluster: null
