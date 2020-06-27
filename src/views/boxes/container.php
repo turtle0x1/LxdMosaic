@@ -1229,8 +1229,12 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
         let color = randomColor();
         data = $.parseJSON(data);
         $("#metricGraphBody").empty().append('<canvas id="metricGraph" style="width: 100%;"></canvas>');
-        let scales = data.formatBytes ? scalesBytesCallbacks : [];
+        
+        let scales = data.formatBytes ? scalesBytesCallbacks : {yAxes: [{}]}
         let tooltips = data.formatBytes ? toolTipsBytesCallbacks : [];
+
+        scales.yAxes[0].gridLines = {drawBorder: false}
+
         new Chart($("#metricGraph"), {
             type: "line",
             data: {
@@ -1242,14 +1246,39 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
                     pointHoverBackgroundColor: color,
                     backgroundColor: color,
                     pointHoverBorderColor: color,
-                    data: data.data
+                    data: data.data,
+                    pointRadius: 0,
+                    formatBytes: data.formatBytes,
+					lineTension: 0,
+					borderWidth: 2
                 }]
             },
             options: {
-              cutoutPercentage: 40,
-              responsive: false,
-              scales: scales,
-              tooltips: tooltips
+                animation: {
+                    duration: 0
+                },
+                scales:scales,
+                tooltips: {
+                    intersect: false,
+                    mode: 'index',
+                    callbacks: {
+                        label: function(tooltipItem, myData) {
+                            let ds = myData.datasets[tooltipItem.datasetIndex];
+                            var label = ds.label || '';
+
+                            if (label) {
+                                label += ': ';
+                            }
+                            if(ds.hasOwnProperty("formatBytes") && ds.formatBytes){
+                                label += formatBytes(tooltipItem.value);
+                            }else{
+                                label += parseFloat(tooltipItem.value).toFixed(2);
+                            }
+
+                            return label;
+                        }
+                    }
+                }
             }
         });
     });

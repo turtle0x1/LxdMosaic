@@ -63,7 +63,7 @@ class GetMetricsForContainer
         if ($numberOfDays > 1 && $numberOfDays < 31) {
             $step = 15;
         } elseif ($numberOfDays > 31) {
-            $step = 30;
+            $step = 60;
         }
 
         foreach ($period as $key => $value) {
