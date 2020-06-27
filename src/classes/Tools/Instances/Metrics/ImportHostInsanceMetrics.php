@@ -48,14 +48,14 @@ class ImportHostInsanceMetrics
                 $this->addInstanceLoadAverage($host, $instance);
             }
 
-            // Storage Details
-            if (!empty($state["disk"])) {
-                $this->addInstanceStorageUsage($host, $instance, $state);
-            }
-
             // Nvidia GPU support
             if (isset($instances[$instance]["expanded_config"]["nvidia.runtime"])) {
                 $this->addInstanceNvidiaGpuUsage($host, $instance, $state);
+            }
+
+            // Storage Details
+            if (!empty($state["disk"])) {
+                $this->addInstanceStorageUsage($host, $instance, $state);
             }
         }
     }
@@ -65,7 +65,7 @@ class ImportHostInsanceMetrics
         $command = "nvidia-smi --query-gpu=name,gpu_uuid,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv";
         $lxdResponse = $host->instances->execute($instance, $command, $record = true, [], true);
         $output = array_filter(explode("\n", $host->instances->logs->read($instance, $lxdResponse["output"][0])));
-        
+
         $host->instances->logs->remove($instance, $lxdResponse["output"][0]);
         $host->instances->logs->remove($instance, $lxdResponse["output"][1]);
 
@@ -101,7 +101,12 @@ class ImportHostInsanceMetrics
     private function addInstanceLoadAverage($host, $instance)
     {
         $output = $host->instances->execute($instance, "cat /proc/loadavg", $record = true, [], true);
+
         $averages = trim($host->instances->logs->read($instance, $output["output"][0]));
+
+        $host->instances->logs->remove($instance, $output["output"][0]);
+        $host->instances->logs->remove($instance, $output["output"][1]);
+
         $x = explode(" ", $averages);
         $dateTime = (new \DateTimeImmutable())->format("Y-m-d H:i:s");
         $matched = $this->matchTypeAndStore($dateTime, $host, $instance, [
@@ -111,8 +116,6 @@ class ImportHostInsanceMetrics
                 "15 minutes"=>$x[2]
             ]
         ]);
-        $host->instances->logs->remove($instance, $output["output"][0]);
-        $host->instances->logs->remove($instance, $output["output"][1]);
         return true;
     }
 
