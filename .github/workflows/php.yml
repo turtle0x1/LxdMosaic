@@ -1,0 +1,52 @@
+name: Test LXDMosaic
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Cache vendor
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-vendor
+      with:
+        path: vendor
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+
+    - name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        path: node_modules/
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+
+    - name: setup lxdmosaic
+      run: sudo sh examples/test_setup.sh
+
+    - name: Setup LXD
+      run: sudo snap install lxd
+
+    - name: init lxd
+      run: cat examples/tests_lxd_init.yaml | sudo lxd init --preseed
+
+    - name: run tests
+      run: vendor/bin/phpunit --coverage-text --colors=never

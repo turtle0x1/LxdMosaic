@@ -16,5 +16,8 @@
         "psr-4": {
             "dhope0000\\LXDClient\\": "src/classes"
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
     }
 }
