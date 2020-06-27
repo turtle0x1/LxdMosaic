@@ -172,7 +172,7 @@ INSERT INTO `Instance_Metric_Types` (
     "networkUsage",
     0
 ), (
-    "Stroage Usage",
+    "Storage Usage",
     "Storage usage for instance",
     "storageUsage",
     1

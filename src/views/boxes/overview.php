@@ -157,7 +157,8 @@ function loadUserDashboardGraphs()
 
                 </div>
             </div>`);
-            let scales = graph.formatBytes ? scalesBytesCallbacks : [];
+            let scales = graph.formatBytes ? scalesBytesCallbacks : {yAxes: [{}]}
+            scales.yAxes[0].gridLines = {drawBorder: false}
             let tooltips = graph.formatBytes ? toolTipsBytesCallbacks : [];
             let color = randomColor();
 
@@ -172,18 +173,39 @@ function loadUserDashboardGraphs()
                         pointHoverBackgroundColor: color,
                         backgroundColor: color,
                         pointHoverBorderColor: color,
-                        data: graph.data
+                        data: graph.data,
+                        pointRadius: 0,
+                        formatBytes: graph.formatBytes,
+                        lineTension: 0,
+                        borderWidth: 2
                     }]
                 },
                 options: {
-                  legend: {
-                    display: false
-                  },
+                    animation: {
+                        duration: 0
+                    },
+                    scales:scales,
+                    tooltips: {
+                        intersect: false,
+                        mode: 'index',
+                        callbacks: {
+                            label: function(tooltipItem, myData) {
+                                let ds = myData.datasets[tooltipItem.datasetIndex];
+                                var label = ds.label || '';
 
-                  cutoutPercentage: 40,
-                  responsive: true,
-                  scales: scales,
-                  tooltips: tooltips
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if(ds.hasOwnProperty("formatBytes") && ds.formatBytes){
+                                    label += formatBytes(tooltipItem.value);
+                                }else{
+                                    label += parseFloat(tooltipItem.value).toFixed(2);
+                                }
+
+                                return label;
+                            }
+                        }
+                    }
                 }
             });
             $("#userDashboardGraphs").append(x);
