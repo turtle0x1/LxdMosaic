@@ -5,6 +5,32 @@ You should only upgrade when a new version is tagged,
 Restarting the `pm2` and `apache2` process may interupt running process please
 be careful when upgrading!
 
+## 0.8.X -> 0.9.0
+```
+# Remove all the cron jobs from the users crontab
+crontab -r
+
+# Add the new cron tab (this one cronjob covers all cron jobs)
+echo "* * * * * www-data cd /var/www/LxdMosaic/ && vendor/bin/crunz schedule:run" >> /etc/crontab
+
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout v0.9.0
+
+npm i
+
+composer install
+
+mysql < sql/0.9.0.sql
+
+#Ubuntu
+systemctl restart apache2
+#Centos
+systemctl restart httpd
+```
+
 ## 0.7.X -> 0.8.0
 
 ```
