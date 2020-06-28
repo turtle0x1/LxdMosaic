@@ -503,12 +503,14 @@ function deleteContainerConfirm(hostId, hostAlias, container)
                     }
                     ajaxRequest(globalUrls.instances.delete, x, function(data){
                         let r = makeToastr(data);
+
                         if(r.state == "success"){
-                            loadContainerTreeAfter(1000, currentContainerDetails.hostId);
+                            if(currentContainerDetails != null){
+                                loadServerView(hostId);
+                            }
+                            loadContainerTreeAfter(1000, hostId, hostAlias);
+                            currentContainerDetails = null;
                         }
-                        currentContainerDetails = null;
-                        $("#overviewBox").show();
-                        $("#containerBox").hide();
                     });
                 }
             }

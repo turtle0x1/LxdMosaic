@@ -260,7 +260,7 @@
                 return false;
             }
             $("#modal-container-create").modal("hide");
-            loadContainerTreeAfter();
+            createDashboardSidebar();
         });
     });
 </script>

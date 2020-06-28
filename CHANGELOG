@@ -1,3 +1,11 @@
+Unreleaed
+
+Fixed
+    Issue with loading container tree after deleting container
+
+Changed
+    Jump to instance server view after deleting instance instead of overview
+
 0.9.1 - 28/06/2020
 
 Fixed
