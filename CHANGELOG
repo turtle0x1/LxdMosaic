@@ -2,6 +2,9 @@ Unrelead
 
 Fixed
     Cant search for images (#122)
+    When downloading an image based on an alias, the servrer may return a
+        new image with a different fingerprint to the one sent with the request
+        so updated this to use the new fingerprint if there is one
 
 Changed
     Imges will now actually filter results of the search and not return everything

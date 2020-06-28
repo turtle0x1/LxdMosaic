@@ -12,29 +12,41 @@ class ImportImageIfNotHave
         $this->hostHasImage = $hostHasImage;
     }
 
-    public function importIfNot(Host $host, array $imageDetails)
+    /**
+     * Will return the new fingerprint of the image
+     */
+    public function importIfNot(Host $host, array $imageDetails) :string
     {
         if ($this->hostHasImage->has($host, $imageDetails["fingerprint"])) {
-            return true;
+            return $imageDetails["fingerprint"];
         }
 
-        if (isset($imageDetails["provideMyHostsCert"]) &&  $imageDetails["provideMyHostsCert"] == true) {
-            $imageDetails["certificate"] = $x = \dhope0000\LXDClient\Tools\Hosts\Certificates\GetHostCertificate::get(str_replace("https://", "", $imageDetails["server"]));
+        if (isset($imageDetails["provideMyHostsCert"])) {
+            $provideCerts = $imageDetails["provideMyHostsCert"];
+            if (is_string($provideCerts)) {
+                $provideCerts = $provideCerts  === "true" ? true : false;
+            }
+
+            if ($provideCerts) {
+                $imageDetails["certificate"] = $x = \dhope0000\LXDClient\Tools\Hosts\Certificates\GetHostCertificate::get(str_replace("https://", "", $imageDetails["server"]));
+            }
         }
+
+
 
         //NOTE we are using wait here so for large images this is blocking
         //     (lengthing the request)
-        $this->lxdResponse = $host->images->createFromRemote(
+        $response = $host->images->createFromRemote(
             $imageDetails["server"],
             $imageDetails,
             false,
             true
         );
 
-        if (!empty($this->lxdResponse["err"])) {
-            throw new \Exception($this->lxdResponse["err"], 1);
+        if (!empty($response["err"])) {
+            throw new \Exception($response["err"], 1);
         }
 
-        return $imageDetails;
+        return $response["metadata"]["fingerprint"];
     }
 }

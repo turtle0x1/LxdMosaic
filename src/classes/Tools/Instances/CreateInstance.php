@@ -48,7 +48,12 @@ class CreateInstance
         $results = [];
 
         foreach ($hosts as $host) {
-            $this->importImageIfNotHave->importIfNot($host, $imageDetails);
+            $newFingerPrint = $this->importImageIfNotHave->importIfNot($host, $imageDetails);
+
+            if ($newFingerPrint !== $options["fingerprint"]) {
+                $options["fingerprint"] = $newFingerPrint;
+            }
+
             $alias = "";
             // Thats expensive
             if ($host->cluster->info()["enabled"]) {
