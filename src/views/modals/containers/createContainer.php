@@ -102,7 +102,7 @@
     });
 
     $("#newContainerImage").tokenInput(globalUrls.images.search.searchAllHosts, {
-        queryParam: "image",
+        queryParam: "search",
         tokenLimit: 1,
         propertyToSearch: "description",
         theme: "facebook",
