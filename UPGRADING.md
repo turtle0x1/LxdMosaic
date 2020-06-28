@@ -2,8 +2,33 @@
 
 You should only upgrade when a new version is tagged,
 
-Restarting the `pm2` and `apache2` process may interupt running process please
-be careful when upgrading!
+Restarting the `pm2` and `apache2` / `httpd` process may interupt running
+process please be careful when upgrading!
+
+## Between minor releases I.E X.X.0 -> X.X.1
+
+```
+# There should never be any DB changes between minor versions & buts its more
+# likely there will be dependency changes, the general advise is as follows
+
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout vX.X.X
+
+composer install
+
+npm i
+
+pm2 restart all
+
+#Ubuntu/Debian
+systemctl restart apache2
+#Centos
+systemctl restart httpd
+
+```
 
 ## 0.8.X -> 0.9.0
 ```
