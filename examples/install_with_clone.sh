@@ -76,7 +76,7 @@ git checkout v0.9.1
 npm install || exit $?
 
 # Install Dependecies
-composer install || exit $?
+composer install --no-dev || exit $?
 
 PASSWD=`openssl rand -base64 29 | tr -d "=+/" | cut -c1-25`
 
