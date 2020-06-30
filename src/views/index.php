@@ -585,7 +585,16 @@ if(typeof io !== "undefined"){
                return;
            }
 
-           liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon}'></span>${description}`);
+           liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} mr-2'></span>${description}`);
+
+           if(msg.metadata.err !== ""){
+               $(liItem).data({
+                   toggle: "tooltip",
+                   placement: "bottom",
+                   title: msg.metadata.err
+               }).addClass("btn-link text-danger").tooltip();
+           }
+
        }else{
            hostOpList.prepend(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code));
        }
@@ -603,7 +612,7 @@ $(".sidebar-nav").on("click", ".nav-item", function(){
 
 function makeOperationHtmlItem(id, icon, description, statusCode)
 {
-    return `<div id='${id}'><span data-status='${statusCode}' class='${icon}'></span>${description}</div>`;
+    return `<div id='${id}'><span data-status='${statusCode}' class='${icon} mr-2'></span>${description}</div>`;
 }
 
 var editor = ace.edit("editor");
