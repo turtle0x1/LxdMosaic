@@ -552,7 +552,9 @@ if(typeof io !== "undefined"){
        ]
 
        if(loadServerOviewDescriptions.includes(msg.metadata.description)  && msg.metadata.status_code == 200 && $("#mainBreadcrumb").find(".active").text()){
-          loadContainerTreeAfter();
+          if($(`.nav-item[data-hostid='${msg.hostId}']`).hasClass("open")){
+              loadContainerTreeAfter(0, msg.hostId, msg.hostAlias);
+          }
        }
 
        if(hostList.length == 0){

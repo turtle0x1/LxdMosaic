@@ -18,7 +18,12 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label> Instance Type (Optional) </label>
+                    <label
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Used to impose resource limits akin to different cloud provider limits!">
+                         Instance Type (Optional)
+                        <i class="fas fa-question-circle"></i></label>
                     <select id="newContainerInstanceType" class="form-control"></select>
                 </div>
             </div>
@@ -202,13 +207,27 @@
     });
 
     $("#modal-container-create").on("click", "#create", function(){
+        let btn = $(this);
+
+        btn.html('<i class="fa fa-cog fa-spin"></i>Creating..');
+        $("#modal-container-create").find(".btn").attr("disabled", true);
+
         let profileIds = mapObjToSignleDimension($("#newContainerProfiles").tokenInput("get"), "profile");
         let hosts = mapObjToSignleDimension($("#newContainerHosts").tokenInput("get"), "hostId");
         let image = $("#newContainerImage").tokenInput("get");
         let instanceType = $("#newContainerInstanceType").val();
 
-        if(image.legnth == 0 || !image[0].hasOwnProperty("details")){
+        if(image.length == 0 || !image[0].hasOwnProperty("details")){
+            btn.html('Create Container');
+            $("#modal-container-create").find(".btn").attr("disabled", false);
             makeToastr(JSON.stringify({state: "error", message: "Please select image"}));
+            return false;
+        }
+
+        if(hosts.length == 0 || !image[0].hasOwnProperty("details")){
+            btn.html('Create Container');
+            $("#modal-container-create").find(".btn").attr("disabled", false);
+            makeToastr(JSON.stringify({state: "error", message: "Please select host/s"}));
             return false;
         }
 
@@ -240,6 +259,8 @@
         });
 
         if(invalid){
+            btn.html('Create Container');
+            $("#modal-container-create").find(".btn").attr("disabled", false);
             makeToastr(JSON.stringify({state: "error", message: message}));
             return false;
         }
@@ -256,11 +277,15 @@
 
         ajaxRequest(globalUrls.instances.create, x, function(data){
             let x = makeToastr(data);
+            btn.html('Create Container');
+            $("#modal-container-create").find(".btn").attr("disabled", false);
             if(x.state == "error"){
                 return false;
             }
             $("#modal-container-create").modal("hide");
-            createDashboardSidebar();
+            if(typeof io == "undefined"){
+                createDashboardSidebar();
+            }
         });
     });
 </script>

@@ -2,6 +2,7 @@ Unreleased
 
 Changed
     Used buttons instead of dropdown to change instance state
+    Slight improvement to create container UX
 
 0.9.3
 
