@@ -2,6 +2,8 @@ Unreleaed
 
 Fixed
     Issue with loading container tree after deleting container
+    Issue with adding a new cluster breaks because the first member alias not
+        properly set
 
 Changed
     Jump to instance server view after deleting instance instead of overview
