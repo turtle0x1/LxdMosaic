@@ -31,6 +31,9 @@ module.exports = class HostOperations {
             var buf = Buffer.from(data);
             let message = JSON.parse(data.toString());
             message.host = details.hostWithOutProtoOrPort;
+            if(message.hasOwnProperty("location") && message.location !== "" && message.location !== "none" && message.location !== details.alias){
+                return;
+            }
             clientOperationSocket.emit('operationUpdate', message);
           });
         }

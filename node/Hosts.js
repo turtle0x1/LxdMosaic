@@ -70,6 +70,7 @@ module.exports = class Hosts {
           let hostWithOutProtoOrPort = hostWithOutProto.replace(portRegex, '');
 
           let hostInfo = values[i];
+          let alias = results[i].Host_Alias == "" ? results[i].Host_Url_And_Port : results[i].Host_Alias;
 
           output[results[i].Host_ID] = {
             hostId: results[i].Host_ID,
@@ -78,6 +79,7 @@ module.exports = class Hosts {
             hostWithOutProto: hostWithOutProto,
             hostWithOutProtoOrPort: hostWithOutProtoOrPort,
             port: urlURL.port,
+            alias: alias,
             supportsVms: hostInfo.metadata.api_extensions.includes(
               'virtual-machines'
             ),
