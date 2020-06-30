@@ -54,6 +54,10 @@ class GetAllClusters
             foreach ($clusterMembers as $member) {
                 $memberHostObj = $this->getDetails->fetchHostByUrl($member["url"]);
 
+                if (empty($memberHostObj)) {
+                    continue;
+                }
+
                 $memberHostObj->setCustomProp("clusterInfo", $host->cluster->members->info($host->getAlias()));
                 $memberHostObj->setCustomProp("resources", $this->getResources->getHostExtended($memberHostObj));
                 $memberHostObj->setCustomProp("status", $member["status"]);
