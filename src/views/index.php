@@ -558,10 +558,10 @@ if(typeof io !== "undefined"){
        }
 
        if(hostList.length == 0){
-           $("#operationsList").append(`<div data-host='${host}'>
+           $("#operationsList").append(`<div data-host='${host}' class="mt-2">
                 <div class='text-center'>
                     <h5><u>
-                        ${host}
+                        ${msg.hostAlias}
                     </u></h5>
                 </div>
                 <div class='opList'></div></div>`
