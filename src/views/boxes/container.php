@@ -2,14 +2,26 @@
     <div class="row border-bottom mb-2">
     <div class="col-md-12 text-center">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
-              <select class="form-control" style="max-width: 150px;" id="container-changeState">
-                  <option value="" selected="selected"> Change State </option>
-                  <option value="start"> Start </option>
-                  <option value="stop"> Stop </option>
-                  <option value="restart"> Restart </option>
-                  <option value="freeze"> Freeze </option>
-                  <option value="unfreeze"> Unfreeze </option>
-              </select>
+              <div class="btn-toolbar float-right">
+                <div class="btn-group mr-2">
+                    <button data-toggle="tooltip" data-placement="bottom" title="Start Instance" class="btn btn-sm btn-success changeInstanceState" data-action="start">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button data-toggle="tooltip" data-placement="bottom" title="Stop Instance" class="btn btn-sm btn-danger changeInstanceState" data-action="stop">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                    <button data-toggle="tooltip" data-placement="bottom" title="Restart Instance" class="btn btn-sm btn-warning changeInstanceState" data-action="restart">
+                        <i class="fa fa-sync"></i>
+                    </button>
+                    <hr/>
+                    <button data-toggle="tooltip" data-placement="bottom" title="Freeze Instance" class="btn btn-sm btn-info changeInstanceState" data-action="freeze">
+                        <i class="fas fa-snowflake"></i>
+                    </button>
+                    <button data-toggle="tooltip" data-placement="bottom" title="Unfreeze Instance" class="btn btn-sm btn-primary changeInstanceState" data-action="unfreeze">
+                        <i class="fas fa-mug-hot"></i>
+                    </button>
+                </div>
+              </div>
 
             <h4 class="pt-1"> <u>
                 <span id="container-currentState"></span>
@@ -773,6 +785,31 @@ function loadContainerView(data)
 
         let disableActions = x.state.status_code !== 102;
 
+        let stateBtnsToEnable = [];
+        let stateBtnsToDisable = [];
+
+        if(x.state.status_code == 103){
+            stateBtnsToEnable = ["stop", "freeze", "restart"];
+            stateBtnsToDisable = ["start", "unfreeze"];
+        }else if(x.state.status_code == 102){
+            stateBtnsToEnable = ["start"];
+            stateBtnsToDisable = ["stop", "freeze", "restart", "unfreeze"];
+        }else if(x.state.status_code == 110){
+            stateBtnsToEnable = ["unfreeze"];
+            stateBtnsToDisable = ["start", "stop", "freeze", "restart"];
+        }else{
+            stateBtnsToEnable = ["start", "unfreeze"];
+            stateBtnsToDisable = ["stop", "freeze"];
+        }
+
+        $.each(stateBtnsToDisable, (_, i)=>{
+            $(`.changeInstanceState[data-action='${i}']`).addClass("bg-secondary disabled").attr("disabled", "disabled");
+        })
+        $.each(stateBtnsToEnable, (_, i)=>{
+            $(`.changeInstanceState[data-action='${i}']`).removeClass("bg-secondary disabled").attr("disabled", false);
+        })
+
+
 
         if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.haveMetrics){
             $("#goToMetrics").attr("disabled", false).removeClass("disabled");
@@ -782,7 +819,6 @@ function loadContainerView(data)
         $(".deleteContainer").attr("disabled", disableActions);
 
         $("#container-currentState").html(`<i class="` + statusCodeIconMap[x.state.status_code] +`"></i>`);
-        $("#container-changeState").val("");
 
         if(x.backupsSupported){
             $("#goToBackups").removeClass("bg-dark disabled").css("cursor", "pointer");
@@ -1500,8 +1536,9 @@ $("#containerBox").on("click", ".deleteContainer", function(){
     deleteContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.alias, currentContainerDetails.container);
 });
 
-$("#containerBox").on("change", "#container-changeState", function(){
-    let url = globalUrls.instances.state[$(this).val()];
+$("#containerBox").on("click", ".changeInstanceState", function(){
+    let url = globalUrls.instances.state[$(this).data("action")];
+    $(".changeInstanceState").tooltip("hide");
     ajaxRequest(url, currentContainerDetails, function(data){
         let result = makeToastr(data);
         loadContainerTreeAfter();
