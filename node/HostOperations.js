@@ -30,6 +30,8 @@ module.exports = class HostOperations {
           ) {
             var buf = Buffer.from(data);
             let message = JSON.parse(data.toString());
+            message.hostAlias = details.alias;
+            message.hostId = details.hostId;
             message.host = details.hostWithOutProtoOrPort;
             if(message.hasOwnProperty("location") && message.location !== "" && message.location !== "none" && message.location !== details.alias){
                 return;
