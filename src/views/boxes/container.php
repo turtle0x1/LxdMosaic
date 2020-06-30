@@ -771,7 +771,11 @@ function loadContainerView(data)
         consoleSocket.emit("close", currentTerminalProcessId);
         currentTerminalProcessId = null;
     }
-    $("#goToMetrics").attr("disabled", true).addClass("disabled");
+    $("#goToMetrics").attr("disabled", true).addClass("disabled").data({
+        toggle: "tooltip",
+        placement: "bottom",
+        title: 'Go To Server View & Enable Gather Metrics!'
+    });
 
     ajaxRequest(globalUrls.instances.getInstance, data, function(result){
         let x = $.parseJSON(result);
@@ -812,7 +816,10 @@ function loadContainerView(data)
 
 
         if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.haveMetrics){
-            $("#goToMetrics").attr("disabled", false).removeClass("disabled");
+            $("#goToMetrics").tooltip("disable");
+            $("#goToMetrics").attr("disabled", false).removeClass("disabled").data({});
+        }else{
+            $("#goToMetrics").tooltip("enable");
         }
 
         $(".renameContainer").attr("disabled", disableActions);
