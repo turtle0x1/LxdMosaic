@@ -46,7 +46,7 @@ final class GetProjectInfoTest extends TestCase
                     "used_by" => [
                         //NOTE formating has to be exact or PHPUnit is going to
                         //     complain
-                        0 => '<a href=\'#\' class=\'toProfile\'  data-project=\'testProject\' data-host-id=\'1\' data-alias=\'a\' data-profile=\'default\'>
+                        0 => '<a href=\'#\' class=\'toProfile\'  data-project=\'testProject\' data-host-id=\'1\' data-alias=\'https://localhost:8443\' data-profile=\'default\'>
                 <i class=\'fas fa-users\'></i>
                 default
             </a>',
