@@ -9,3 +9,4 @@ certs/**
 site/**
 test.php
 python/sysMetrics/offlineLogs/**
+coverage/
