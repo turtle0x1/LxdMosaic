@@ -20,7 +20,6 @@ final class AddHostTest extends TestCase
                 "trustPassword"=>"examplePassword"
             ]
         ]);
-        var_dump($result);
         $this->assertEquals(["state"=>"success", "messages"=>"Added Hosts"], $result);
     }
 }
