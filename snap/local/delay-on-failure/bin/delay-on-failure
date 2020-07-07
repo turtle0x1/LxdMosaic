@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if ! "$@"; then
+	sleep 10 # Don't exit right away, so we'll be respawned
+	exit 1
+fi
+exit 0

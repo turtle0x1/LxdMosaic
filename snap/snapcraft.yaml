@@ -1,0 +1,373 @@
+name: lxdmosaic
+version: git
+summary: Manage lxd
+description: |
+ yeah yeah
+grade: stable
+confinement: strict
+base: core18
+
+apps:
+  # Apache daemon
+  apache:
+    command: run-httpd -k start -DFOREGROUND
+    stop-command: httpd-wrapper -k stop
+    daemon: simple
+    restart-condition: always
+    plugs: [network, network-bind]
+
+  # MySQL daemon
+  mysql:
+    command: start_mysql
+    stop-command: support-files/mysql.server stop
+    daemon: simple
+    restart-condition: always
+    plugs: [network, network-bind]
+
+  # PHP FPM daemon
+  php-fpm:
+    command: start-php-fpm
+    daemon: simple
+    restart-condition: always
+    plugs: [network, network-bind, removable-media]
+
+  # MySQL client
+  mysql-client:
+    command: run-mysql
+    plugs: [network, network-bind]
+
+  mysqldump:
+    command: run-mysqldump
+    plugs: [network, network-bind]
+
+  enable-https:
+    command: enable-https
+    plugs: [network, network-bind]
+
+  disable-https:
+    command: disable-https
+    plugs: [network, network-bind]
+
+  lxdmosaic-node:
+    command: bin/node $SNAP/lxdmosaicNode/node/events.js
+    daemon: simple
+    plugs: [network, network-bind]
+
+  lxdmosaic-cron:
+    command: bin/php $SNAP/htdocs/src/cronJobs/scripts/fleetAnalytics.php
+    daemon: oneshot
+    plugs: [network, network-bind]
+    timer: 00:00-24:00/96
+
+hooks:
+  configure:
+    plugs: [network, network-bind]
+  pre-refresh:
+    plugs: [network, network-bind]
+
+parts:
+  apache:
+    plugin: apache
+    source: http://ftp.wayne.edu/apache/httpd/httpd-2.4.43.tar.bz2
+    source-checksum: sha256/a497652ab3fc81318cdc2a203090a999150d86461acff97c1065dc910fe10f43
+
+    override-pull: |
+      snapcraftctl pull
+      # For some reason, all directories in (and after) 2.4.32 are setgid.
+      # Reported as https://bz.apache.org/bugzilla/show_bug.cgi?id=62298
+      # Work around by unsetting setgid. FIXME: Remove when bug is fixed.
+      find . -perm -g+s -exec chmod g-s {} \;
+
+    # The built-in Apache modules to enable
+    modules:
+      - headers
+      - proxy
+      - proxy_fcgi
+      - setenvif
+      - env
+      - rewrite
+      - mime
+      - dir
+      - authz_core
+      - unixd
+      - alias
+      - ssl
+      - socache_shmcb
+      - slotmem_shm
+      - proxy_wstunnel
+      - proxy_http
+      - proxy_balancer
+
+    filesets:
+      exclude:
+        - -man
+        - -manual
+        - -htdocs
+        - -include
+        - -build
+        - -conf/httpd.conf
+        - -conf/magic
+        - -conf/original
+        - -conf/extra
+        - -bin/apachectl
+        - -bin/envvars*
+    stage:
+      - $exclude
+    prime:
+      - $exclude
+
+  apache-customizations:
+    plugin: dump
+    source: snap/local/apache/
+
+  lxdmosaic-node:
+    plugin: nodejs
+    nodejs-version: "14.5.0"
+    source: .
+    organize:
+      'LICENSE': 'madLadGoAway'
+    override-build: |
+      snapcraftctl build
+      echo "Moving from $(pwd) to $SNAPCRAFT_PART_INSTALL/api..."
+      mkdir -p $SNAPCRAFT_PART_INSTALL/lxdmosaicNode
+
+      mv .env.dist .env
+
+      sed -i "/CERT_PATH/c\CERT_PATH=\${SNAP_DATA}/certs/self-signed/cert.pem" .env
+      sed -i "/CERT_PRIVATE_KEY/c\CERT_PRIVATE_KEY=\${SNAP_DATA}/certs/self-signed/privkey.pem" .env
+
+      sed -i "/DB_HOST/c\DB_HOST=127.0.0.1" .env
+      sed -i "/DB_USER/c\DB_USER=lxd" .env
+      sed -i "/DB_PASS/c\DB_PASS=lxdManagerPasswordComplex321" .env
+      sed -i "/DB_NAME/c\DB_NAME=LXD_Manager" .env
+      sed -i "/LXD_CERTS_DIR/c\LXD_CERTS_DIR=\${SNAP_DATA}/" .env
+
+      cat .env
+      rm -rf LICENSE
+      mv .env $SNAPCRAFT_PART_INSTALL/lxdmosaicNode/.env
+      mv node/ $SNAPCRAFT_PART_INSTALL/lxdmosaicNode/
+      mv node_modules/ $SNAPCRAFT_PART_INSTALL/lxdmosaicNode/
+
+  lxdmosaic:
+    plugin: dump
+    source: .
+    after: [php]
+    organize:
+      '*': htdocs/
+    build-packages:
+      - curl
+      - php-cli
+      - php-zip
+      - rsync
+      - unzip
+    override-pull: |
+        snapcraftctl pull
+        #Download composer
+        curl -sS https://getcomposer.org/installer -o composer-setup.php
+        ## Install it
+        php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+        composer install --ignore-platform-reqs
+        # Dont know - dont care (conflicts with mysql license file ?)
+        mv LICENSE LXD_MOSAIC_LICENSE
+        rsync -arP * $SNAPCRAFT_STAGE/htdocs
+
+  php:
+    plugin: php
+    source: https://php.net/get/php-7.3.18.tar.bz2/from/this/mirror
+    source-checksum: sha256/749d21f65deb57153b575f846705f5db54732c6b672e80612b29dcf1a53be8a4
+    source-type: tar
+    install-via: prefix
+    after: [apache]
+    configflags:
+      - --enable-fpm
+      - --disable-cgi
+      - --disable-phpdbg
+      - --enable-ctype
+      - --enable-mbstring
+      - --enable-zip
+      - --with-pdo-mysql
+      - --with-zlib
+      - --with-gd
+      - --with-curl
+      - --with-openssl
+      - --with-bz2
+      - --enable-exif
+      - --enable-intl
+      - --enable-pcntl
+      - --with-jpeg-dir=/usr/lib
+      - --with-freetype-dir=/usr/lib
+      - --disable-rpath
+      - --enable-ftp
+
+      # Enable ldap
+      - --with-libdir=lib/$SNAPCRAFT_ARCH_TRIPLET
+      - --with-ldap
+
+      # Enable gmp
+      - --with-gmp
+    build-packages:
+      - apache2
+      - libxml2-dev
+      - libcurl4-openssl-dev
+      - libpng-dev
+      - libjpeg9-dev
+      - libbz2-dev
+      - libmcrypt-dev
+      - libldap2-dev
+      - libfreetype6-dev
+      - libgmp-dev
+      - libzip-dev
+    stage-packages:
+      - libasn1-8-heimdal
+      - libcurl4
+      - libfreetype6
+      - libgssapi3-heimdal
+      - libhcrypto4-heimdal
+      - libheimbase1-heimdal
+      - libheimntlm0-heimdal
+      - libhx509-5-heimdal
+      - libicu60
+      - libjpeg9
+      - libkrb5-26-heimdal
+      - libldap-2.4-2
+      - libnghttp2-14
+      - libpng16-16
+      - libpsl5
+      - libroken18-heimdal
+      - librtmp1
+      - libsasl2-2
+      - libwind0-heimdal
+      - libxml2
+      - libzip4
+    prime:
+     - -sbin/
+     - -etc/
+    organize:
+      # Put php-fpm in bin with everything else, not sbin.
+      sbin/php-fpm: bin/php-fpm
+
+  # Copy over our PHP configuration file.
+  php-customizations:
+    plugin: dump
+    source: snap/local/php/
+    organize:
+      config/*: config/php/
+    stage-packages: [mawk]
+
+  # Copy over our LxdMosaic configuration files
+  lxdmosaic-customizations:
+    plugin: dump
+    source: snap/local/lxdmosaic/
+    organize:
+      config/.env: htdocs/.env
+
+  # Download the boost headers for MySQL. Note that the version used may need to
+  # be updated if the version of MySQL changes.
+  boost:
+    plugin: dump
+    source: https://github.com/kyrofa/boost_tarball/raw/master/boost_1_59_0.tar.gz
+    source-checksum: sha1/5123209db194d66d69a9cfa5af8ff473d5941d97
+    # When building MySQL, the headers in the source directory 'boost/' are
+    # required. Previously, using the 'copy' plugin, the whole archive was put
+    # under 'boost/', making the headers reside in 'boost/boost/'. Due to a bug,
+    # we now only stage the 'boost/' directory without moving it.
+    #
+    # Bug: https://bugs.launchpad.net/snapcraft/+bug/1757093
+    stage:
+      - boost/
+    prime:
+      - -*
+
+  mysql:
+    plugin: cmake
+    source: https://github.com/mysql/mysql-server.git
+    source-tag: mysql-5.7.30
+    source-depth: 1
+    override-pull: |
+      snapcraftctl pull
+      git apply $SNAPCRAFT_STAGE/mysql-support-compile-time-disabling-of-setpriority.patch
+    after: [boost, patches]
+    configflags:
+      - -DWITH_BOOST=$SNAPCRAFT_STAGE
+      - -DWITH_INNODB_PAGE_CLEANER_PRIORITY=OFF
+      - -DCMAKE_INSTALL_PREFIX=/
+      - -DBUILD_CONFIG=mysql_release
+      - -DWITH_UNIT_TESTS=OFF
+      - -DWITH_EMBEDDED_SERVER=OFF
+      - -DWITH_ARCHIVE_STORAGE_ENGINE=OFF
+      - -DWITH_BLACKHOLE_STORAGE_ENGINE=OFF
+      - -DWITH_FEDERATED_STORAGE_ENGINE=OFF
+      - -DWITH_PARTITION_STORAGE_ENGINE=OFF
+      - -DINSTALL_MYSQLTESTDIR=
+    build-packages:
+      - wget
+      - g++
+      - cmake
+      - bison
+      - libncurses5-dev
+      - libaio-dev
+    stage-packages:
+      - libaio1
+    stage:
+      # Remove scripts that we'll be replacing with our own
+      - -support-files/mysql.server
+      - -COPYING
+    prime:
+      # Remove scripts that we'll be replacing with our own
+      - -support-files/mysql.server
+
+      # Remove unused binaries that waste space
+      - -bin/innochecksum
+      - -bin/lz4_decompress
+      - -bin/myisam*
+      - -bin/mysqladmin
+      - -bin/mysqlbinlog
+      - -bin/mysql_client_test
+      - -bin/mysql_config*
+      - -bin/mysqld_multi
+      - -bin/mysqlimport
+      - -bin/mysql_install_db
+      - -bin/mysql_plugin
+      - -bin/mysqlpump
+      - -bin/mysql_secure_installation
+      - -bin/mysqlshow
+      - -bin/mysqlslap
+      - -bin/mysql_ssl_rsa_setup
+      - -bin/mysqltest
+      - -bin/mysql_tzinfo_to_sql
+      - -bin/perror
+      - -bin/replace
+      - -bin/resolveip
+      - -bin/resolve_stack_dump
+      - -bin/zlib_decompress
+
+  # Copy over our MySQL scripts
+  mysql-customizations:
+    plugin: dump
+    source: snap/local/mysql/
+
+  patches:
+    source: snap/local/patches
+    plugin: dump
+    prime:
+      - -*
+
+  delay-on-failure:
+    plugin: dump
+    source: snap/local/delay-on-failure/
+
+  setup-https:
+    plugin: dump
+    source: snap/local/https/
+    stage-packages: [openssl]
+    stage: [-etc/ssl, -requirements.txt]
+
+  common:
+    plugin: dump
+    source: snap/local/common/
+
+  hooks:
+    plugin: dump
+    source: snap/local/hooks/
+    organize:
+      bin/: snap/hooks/
