@@ -19,7 +19,7 @@ var userDetails = {
     apiToken: '$apiToken',
     userId: $userId
 }
-var recordActionsEnabled = $recordActionsEnabled;
+var recordActionsEnabled = parseInt($recordActionsEnabled);
 </script>";
 
 if ($haveServers->haveAny() !== true) {

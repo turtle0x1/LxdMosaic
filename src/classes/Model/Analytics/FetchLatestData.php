@@ -13,6 +13,7 @@ class FetchLatestData
 
     public function lastHour()
     {
+        $mod = isset($_ENV["DB_SQLITE"]) ? "datetime('now', '-3600 seconds')" : "DATE_SUB(NOW(), INTERVAL 1 HOUR)";
         $sql = "SELECT
                     `FA_Date_Created` as `dateTime`,
                     `FA_Total_Memory_Usage` as `memoryUsage`,
@@ -21,7 +22,7 @@ class FetchLatestData
                 FROM
                     `Fleet_Analytics`
                 WHERE
-                    `FA_Date_Created` >= DATE_SUB(NOW(),INTERVAL 1 HOUR);
+                    `FA_Date_Created` >= $mod
                 ORDER BY
                     `FA_ID` ASC
                 ";

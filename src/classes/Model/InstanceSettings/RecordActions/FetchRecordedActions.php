@@ -44,7 +44,7 @@ class FetchRecordedActions
                     (
                         `Recorded_Actions`.`RA_User_ID` = `Users`.`User_ID`
                         OR
-                        JSON_UNQUOTE(JSON_EXTRACT(`RA_Params`, '$.userId')) = `Users`.`User_ID`
+                        JSON_EXTRACT(`RA_Params`, '$.userId') = `Users`.`User_ID`
                     )
                 WHERE
                     (

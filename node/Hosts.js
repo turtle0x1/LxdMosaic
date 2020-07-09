@@ -25,9 +25,15 @@ module.exports = class Hosts {
 
   loadHostsFromDb() {
     return new Promise((resolve, reject) => {
-      this.con.query('SELECT * FROM Hosts', function(err, results) {
-        resolve(results);
-      });
+        if(process.env.hasOwnProperty("DB_SQLITE")){
+            this.con.all('SELECT * FROM Hosts', function(err, results) {
+              resolve(results);
+            });
+        }else{
+            this.con.query('SELECT * FROM Hosts', function(err, results) {
+              resolve(results);
+            });
+        }
     });
   }
 

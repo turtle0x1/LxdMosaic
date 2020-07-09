@@ -9,11 +9,12 @@ const fs = require('fs'),
   cors = require('cors'),
   rp = require('request-promise'),
   mysql = require('mysql'),
-  Hosts = require('./Hosts');
-  WsTokens = require('./WsTokens');
-(HostOperations = require('./HostOperations')),
-  (Terminals = require('./Terminals')),
-  (bodyParser = require('body-parser')),
+  Hosts = require('./Hosts'),
+  WsTokens = require('./WsTokens'),
+  sqlite3 = require('sqlite3').verbose();
+(HostOperations = require('./HostOperations'));
+  (Terminals = require('./Terminals'));
+  (bodyParser = require('body-parser'));
   (hosts = null),
   (hostOperations = null),
   (terminals = null),
@@ -167,28 +168,36 @@ terminalsIo.on('connect', function(socket) {
     });
 });
 
-var con = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-});
 
-con.connect(function(err) {
-  if (err) {
-      if(process.env.hasOwnProperty("SNAP")){
-          console.log("delaying restart 10 seconds to because we are in a snap");
-          var startDate = new Date();
-          while (true) {
-              var seconds = (new Date().getTime() - startDate.getTime()) / 1000;
-              if(seconds > 10){
-                  break;
+
+if(!process.env.hasOwnProperty("DB_SQLITE")){
+    var con = mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
+    });
+
+    con.connect(function(err) {
+      if (err) {
+          if(process.env.hasOwnProperty("SNAP")){
+              console.log("delaying restart 10 seconds to because we are in a snap");
+              var startDate = new Date();
+              while (true) {
+                  var seconds = (new Date().getTime() - startDate.getTime()) / 1000;
+                  if(seconds > 10){
+                      break;
+                  }
               }
           }
+          throw err;
       }
-      throw err;
-  }
-});
+    });
+}else{
+    var con = new sqlite3.Database(process.env.DB_SQLITE);
+}
+
+
 
 io.use(async (socket, next) => {
   let token = socket.handshake.query.ws_token;
