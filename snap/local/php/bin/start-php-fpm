@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# shellcheck source=src/mysql/utilities/mysql-utilities
-. "$SNAP/utilities/mysql-utilities"
 # shellcheck source=src/php/utilities/php-utilities
 . "$SNAP/utilities/php-utilities"
 
@@ -10,25 +8,11 @@
 mkdir -p "${SNAP_DATA}/php"
 chmod 750 "${SNAP_DATA}/php"
 
-# We need to make sure mysql is running so we can run the migration process
-# shellcheck disable=SC2119
-wait_for_mysql
-
-# Wait until we have an nextcloud mysql password
-printf "Obtaining nextcloud mysql credentials... "
-nextcloud_password_path=$SNAP_DATA/mysql/nextcloud_password
-timeout=10
-while [ $timeout -gt 0 ] && [ ! -e "$nextcloud_password_path" ]; do
-	timeout=$((timeout-1))
-	sleep 1
-done
-if [ ! -e "$nextcloud_password_path" ]; then
-	printf "\nTimed out while attempting to obtain nextcloud mysql password. "
-	printf "This isn't unusual when starting up for the first time after "
-	printf "an install or an upgrade. Will try again.\n"
-	exit 1
+if [ ! -s "${SNAP_DATA}/lxdMosaic.db" ]; then
+    cp ${SNAP}/htdocs/sql/sqliteSeed.db "${SNAP_DATA}/lxdMosaic.db"
 fi
-printf "done\n"
+
+
 
 # Tends to be between 30-50MB
 average_php_memory_requirement=50
