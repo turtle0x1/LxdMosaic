@@ -114,7 +114,7 @@ parts:
       echo "Moving from $(pwd) to $SNAPCRAFT_PART_INSTALL/api..."
       mkdir -p $SNAPCRAFT_PART_INSTALL/lxdmosaicNode
 
-      mv .env.dist .env
+      cp .env.dist .env
 
       sed -i "/CERT_PATH/c\CERT_PATH=\${SNAP_DATA}/certs/self-signed/cert.pem" .env
       sed -i "/CERT_PRIVATE_KEY/c\CERT_PRIVATE_KEY=\${SNAP_DATA}/certs/self-signed/privkey.pem" .env
@@ -127,9 +127,9 @@ parts:
 
       cat .env
       rm -rf LICENSE
-      mv .env $SNAPCRAFT_PART_INSTALL/lxdmosaicNode/.env
-      mv node/ $SNAPCRAFT_PART_INSTALL/lxdmosaicNode/
-      mv node_modules/ $SNAPCRAFT_PART_INSTALL/lxdmosaicNode/
+      cp .env $SNAPCRAFT_PART_INSTALL/lxdmosaicNode/.env
+      cp -R node/ $SNAPCRAFT_PART_INSTALL/lxdmosaicNode/
+      cp -R node_modules/ $SNAPCRAFT_PART_INSTALL/lxdmosaicNode/
 
   lxdmosaic:
     plugin: dump
