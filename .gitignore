@@ -2,6 +2,7 @@ vendor/**
 src/sensitiveData/certs/**
 src/sensitiveData/backups/**
 .env
+!snap/local/lxdmosaic/config/.env
 build/**
 .php_cs.cache
 node_modules/**
@@ -12,3 +13,5 @@ python/sysMetrics/offlineLogs/**
 
 snap/plugins/__pycache__/
 *.snap
+
+coverage/*

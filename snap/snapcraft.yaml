@@ -37,10 +37,10 @@ apps:
     plugs: [network, network-bind]
 
   lxdmosaic-cron:
-    command: bin/php $SNAP/htdocs/src/cronJobs/scripts/fleetAnalytics.php
+    command: bin/bash $SNAP/htdocs/runCrunz.sh
     daemon: oneshot
     plugs: [network, network-bind]
-    timer: 00:00-24:00/96
+    timer: 00:00-24:00/1440
 
 hooks:
   configure:
@@ -143,6 +143,8 @@ parts:
       - php-zip
       - rsync
       - unzip
+    stage-packages:
+      - bash
     override-pull: |
         snapcraftctl pull
         #Download composer
