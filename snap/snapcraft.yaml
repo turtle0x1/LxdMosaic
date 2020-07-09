@@ -217,6 +217,8 @@ parts:
       - libfreetype6-dev
       - libgmp-dev
       - libzip-dev
+      - sqlite3
+      - libsqlite3-0
     stage-packages:
       - libasn1-8-heimdal
       - libcurl4
@@ -239,6 +241,8 @@ parts:
       - libwind0-heimdal
       - libxml2
       - libzip4
+      - sqlite3
+      - libsqlite3-0
     prime:
      - -sbin/
      - -etc/
