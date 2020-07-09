@@ -52,6 +52,23 @@ if(!fs.existsSync(process.env.CERT_PATH)){
     process.exit(1);
 }
 
+var usingSqllite = process.env.hasOwnProperty("DB_SQLITE") && process.env.DB_SQLITE !== "";
+
+if(usingSqllite && !fs.existsSync(process.env.DB_SQLITE)){
+    console.log("couldnt find db file file the response was {" + fs.existsSync(process.env.DB_SQLITE) + "} {" + process.env.DB_SQLITE + " }");
+    if(process.env.hasOwnProperty("SNAP")){
+        console.log("delaying restart 10 seconds to because we are in a snap");
+        var startDate = new Date();
+        while (true) {
+            var seconds = (new Date().getTime() - startDate.getTime()) / 1000;
+            if(seconds > 10){
+                break;
+            }
+        }
+    }
+    process.exit(1);
+}
+
 
 // Https certificate and key file location for secure websockets + https server
 var privateKey = fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
@@ -170,7 +187,7 @@ terminalsIo.on('connect', function(socket) {
 
 
 
-if(!process.env.hasOwnProperty("DB_SQLITE")){
+if(!usingSqllite){
     var con = mysql.createConnection({
       host: process.env.DB_HOST,
       user: process.env.DB_USER,

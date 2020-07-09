@@ -119,6 +119,7 @@ parts:
       sed -i "/CERT_PATH/c\CERT_PATH=\${SNAP_DATA}/certs/self-signed/cert.pem" .env
       sed -i "/CERT_PRIVATE_KEY/c\CERT_PRIVATE_KEY=\${SNAP_DATA}/certs/self-signed/privkey.pem" .env
 
+      sed -i "/DB_SQLITE/c\DB_SQLITE=\${SNAP_DATA}/lxdMosaic.db" .env
       sed -i "/DB_HOST/c\DB_HOST=127.0.0.1" .env
       sed -i "/DB_USER/c\DB_USER=lxd" .env
       sed -i "/DB_PASS/c\DB_PASS=lxdManagerPasswordComplex321" .env
