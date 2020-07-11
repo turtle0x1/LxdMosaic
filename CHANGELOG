@@ -1,5 +1,8 @@
 Unreleased
 
+Added
+    Support for setting addtional restriction keys on projects (#229)
+
 Fixed
     Changing cluster member alias breaks UI (#234) (Slight caveat that the
         node server wont return operations for a cluster member with an alias
