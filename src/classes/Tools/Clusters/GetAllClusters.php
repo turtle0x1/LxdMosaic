@@ -58,7 +58,7 @@ class GetAllClusters
                     continue;
                 }
 
-                $memberHostObj->setCustomProp("clusterInfo", $host->cluster->members->info($host->getAlias()));
+                $memberHostObj->setCustomProp("clusterInfo", $member);
                 $memberHostObj->setCustomProp("resources", $this->getResources->getHostExtended($memberHostObj));
                 $memberHostObj->setCustomProp("status", $member["status"]);
 
