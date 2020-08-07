@@ -26,7 +26,7 @@ fi
 
 
 # Install Dependecies
-apt-get install -y apache2 php php-cli php-json php-mysql php-xml php-curl unzip zip git nodejs openssl || exit $?
+apt-get install -y apache2 php php-cli php-json php-mysql php-xml php-curl unzip zip git nodejs gcc g++ make openssl || exit $?
 apt-get install -y mysql-server || apt-get install -y default-mysql-server || exit $?
 apt-get install -y --no-install-recommends cron || exit $?
 
