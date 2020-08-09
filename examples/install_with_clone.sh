@@ -35,6 +35,11 @@ then
     apt-get install -y npm || exit $?
 fi
 
+if [ "$(uname -m)" == "aarch64" ]
+then
+    apt-get install -y gcc g++ make || exit $?
+fi
+
 npm -g install pm2 || exit $?
 
 # Install composer
