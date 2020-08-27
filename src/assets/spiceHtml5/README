@@ -1,0 +1,44 @@
+Spice Javascript client
+
+Instructions and status as of August, 2016.
+
+Requirements:
+
+  1.  Modern Firefox or Chrome (IE will work, but badly)
+
+  2.  A WebSocket proxy
+
+      websockify:
+        https://github.com/kanaka/websockify
+      works great.
+
+      Note that a patch to remove this requirement has been submitted
+      to the Spice project but not yet been accepted.  Refer to this email:
+      https://lists.freedesktop.org/archives/spice-devel/2016-June/030552.html
+
+  3.  A spice server
+
+
+Optional:
+  1.  A web server
+
+      With firefox, you can just open file:///your-path-to-spice.html-here
+
+      With Chrome, you have to set a secret config flag to do that, or
+      serve the files from a web server.
+
+
+Steps:
+
+  1.  Start the spice server
+
+  2.  Start websockify; my command line looks like this:
+        ./websockify 5959 localhost:5900
+
+  3.  Fire up spice.html, set host + port + password, and click start
+
+
+Status:
+
+  The TODO file should be a fairly comprehensive list of tasks
+  required to make this client more fully functional.

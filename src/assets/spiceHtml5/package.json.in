@@ -1,0 +1,21 @@
+{
+  "name": "spice-html5",
+  "version": "VERSION",
+  "description": "Spice Javascript client",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.freedesktop.org/spice/spice-html5.git"
+  },
+  "keywords": [
+    "spice",
+    "html5",
+    "websockify"
+  ],
+  "homepage": "https://www.spice-space.org",
+  "author": "SPICE Project <spice-devel@lists.freedesktop.org> (https://www.spice-space.org)",
+  "license": "LGPL-3.0-or-later"
+}
