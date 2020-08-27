@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Objects;
 
 use dhope0000\LXDClient\Objects\Host;
 
-class HostsCollection implements \Iterator
+class HostsCollection implements \Iterator, \JsonSerializable
 {
     private $hosts = [];
     private $index = 0;
@@ -14,6 +14,11 @@ class HostsCollection implements \Iterator
         foreach ($hosts as $host) {
             $this->addHost($host);
         }
+    }
+
+    final public function jsonSerialize()
+    {
+        return $this->hosts;
     }
 
     public function addHost(Host $host)
