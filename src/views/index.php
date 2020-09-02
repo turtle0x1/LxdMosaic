@@ -107,6 +107,9 @@ if ($haveServers->haveAny() !== true) {
                   get: "/api/Dashboard/GetController/get"
               },
               instances: {
+                  profiles: {
+                    remove: "/api/Instances/Profiles/RemoveProfileController/remove"  
+                  },
                   metrics: {
                       getAllAvailableMetrics: "/api/Instances/Metrics/GetAllAvailableMetricsController/get",
                       getGraphData: "/api/Instances/Metrics/GetGraphDataController/get",

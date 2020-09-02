@@ -5,7 +5,7 @@ use dhope0000\LXDClient\Objects\Host;
 
 class RemoveProfiles
 {
-    public function remove(Host $host, string $instance, array $profilesToRemove)
+    public function remove(Host $host, string $instance, array $profilesToRemove, bool $wait = false)
     {
         $info = $host->instances->info($instance);
         $info["profiles"] = array_values(array_diff($info["profiles"], $profilesToRemove));
@@ -14,6 +14,6 @@ class RemoveProfiles
             unset($info["devices"]);
         }
 
-        $host->instances->replace($instance, $info);
+        return $host->instances->replace($instance, $info, $wait);
     }
 }

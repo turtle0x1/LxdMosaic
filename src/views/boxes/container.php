@@ -135,6 +135,7 @@
                       <thead class="thead-inverse">
                           <tr>
                               <th> Name </th>
+                              <th></th>
                           </tr>
                       </thead>
                       <tbody>
@@ -894,7 +895,10 @@ function loadContainerView(data)
             profileTrHtml = "<tr><td colspan='999' class='text-center'> No Profiles </td></tr>"
         }else{
             $.each(x.details.profiles, function(i, item){
-                profileTrHtml += `<tr><td><a href='#' data-profile=${item} class='toProfile'>${item}</a></td></tr>`;
+                profileTrHtml += `<tr data-profile="${item}">
+                    <td><a href='#' data-profile=${item} class='toProfile'>${item}</a></td>
+                    <td><button class='btn btn-sm btn-outline-danger removeProfile'><i class="fas fa-trash"></i></button></td>
+                </tr>`;
             });
         }
 
@@ -1008,6 +1012,19 @@ function loadContainerView(data)
         $('html, body').animate({scrollTop:0},500);
     });
 }
+
+$("#containerBox").on("click", ".removeProfile", function(){
+    console.log(currentContainerDetails);
+    let tr = $(this).parents("tr");
+    let profile = tr.data("profile");
+    ajaxRequest(globalUrls.instances.profiles.remove, {...{profile: profile}, ...currentContainerDetails}, (data)=>{
+        data = makeToastr(data);
+        if(data.state == "error"){
+            return false;
+        }
+        tr.remove();
+    });
+});
 
 $("#containerBox").on("click", "#createBackup", function(){
     backupContainerConfirm(
