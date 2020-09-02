@@ -192,6 +192,9 @@ if ($haveServers->haveAny() !== true) {
                 getOverview: "/api/InstanceSettings/GetSettingsOverviewController/get"
               },
               networks: {
+                  tools: {
+                      findIpAddress: "/api/Networks/Tools/FindIpAddressController/find"
+                  },
                   getAll: "/api/Networks/GetHostsNetworksController/get",
                   get: "/api/Networks/GetNetworkController/get",
                   deleteNetwork: "/api/Networks/DeleteNetworkController/delete",
@@ -447,6 +450,9 @@ if ($haveServers->haveAny() !== true) {
           </li>
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">
+          <li class="nav-item px-3 btn btn-outline-primary pull-right" id="openSearch">
+                <a> <i class="fas fa-search"></i> Search </a>
+           </li>
           <li class="nav-item px-3 btn btn-outline-primary pull-right" id="addNewServer">
                 <a> <i class="fas fa-plus"></i> Server </a>
            </li>
@@ -1119,6 +1125,46 @@ function setContDetsByTreeItem(node)
     }
     return currentContainerDetails;
 }
+
+$(document).on("click", "#openSearch", function(){
+    $.confirm({
+        title: `Search`,
+        content: `
+            <div class="form-group">
+                <label>IP Address IPV4/IPV6</label>
+                <input class="form-control" name="ip" />
+            </div>
+        `,
+        buttons: {
+            cancel: {
+                btnClass: "btn btn-secondary",
+                text: "cancel"
+            },
+            search: {
+                btnClass: "btn btn-success",
+                text: "Search",
+                action: function(){
+                    let x = {
+                        ip: this.$content.find("input[name=ip]").val()
+                    }
+
+                    ajaxRequest(globalUrls.networks.tools.findIpAddress, x, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            return false;
+                        }
+                        if(data.result == false){
+                            makeToastr({state: "error", message: "Couldn't find instance"})
+                            return false;
+                        }
+                        currentContainerDetails = data.result;
+                        loadContainerView(data.result);
+                    });
+                }
+            }
+        }
+    });
+});
 
 $(document).on("click", "#addNewServer", function(){
     $("#modal-hosts-add").modal("show");

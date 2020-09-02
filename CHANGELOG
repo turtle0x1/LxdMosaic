@@ -2,6 +2,7 @@ Unreleased
 
 Added
     Support for setting addtional restriction keys on projects (#229)
+    Search for instance by ip address (#233)
 
 Fixed
     Changing cluster member alias breaks UI (#234) (Slight caveat that the
