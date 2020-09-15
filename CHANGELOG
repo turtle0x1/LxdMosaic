@@ -14,6 +14,7 @@ Changed
     Used buttons instead of dropdown to change instance state
     Slight improvement to create container UX
     HostsCollection implmenets JsonSerializable so it can be logged properly
+    Use guzzle sink to prevent oom issue using backups in the browser (#242)
 
 0.9.3
 

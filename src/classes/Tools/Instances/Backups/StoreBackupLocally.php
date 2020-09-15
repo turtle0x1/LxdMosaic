@@ -14,6 +14,8 @@ use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
 use dhope0000\LXDClient\Objects\Host;
 
+use dhope0000\LXDClient\Tools\Instances\Backups\DownloadFile;
+
 class StoreBackupLocally
 {
     private $getSetting;
@@ -27,13 +29,15 @@ class StoreBackupLocally
         Filesystem $filesystem,
         InsertInstanceBackup $insertInstanceBackup,
         DeleteRemoteBackup $deleteRemoteBackup,
-        HasExtension $hasExtension
+        HasExtension $hasExtension,
+        DownloadFile $downloadFile
     ) {
         $this->hasExtension = $hasExtension;
         $this->getSetting = $getSetting;
         $this->filesystem = $filesystem;
         $this->insertInstanceBackup = $insertInstanceBackup;
         $this->deleteRemoteBackup = $deleteRemoteBackup;
+        $this->downloadFile = $downloadFile;
     }
 
     public function store(Host $host, string $instance, string $backup, bool $deleteRemote)
@@ -75,9 +79,7 @@ class StoreBackupLocally
 
         $backupFilePath = "$backupDir/$backupFileName";
 
-        $this->filesystem->touch($backupFilePath);
-
-        $this->filesystem->appendToFile($backupFilePath, $host->instances->backups->export($instance, $backup));
+        $this->downloadFile->download($host, $backupFilePath, $instance, $backup);
 
         return [
             "backupFile"=>$backupFilePath,
