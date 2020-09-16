@@ -42,6 +42,8 @@ class StoreBackupLocally
 
     public function store(Host $host, string $instance, string $backup, bool $deleteRemote)
     {
+        set_time_limit(0);
+        
         $hostId = $host->getHostId();
         if ($this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP) !== true) {
             throw new \Exception("Host doesn't support backups", 1);

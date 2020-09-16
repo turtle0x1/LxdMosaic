@@ -15,6 +15,7 @@ Changed
     Slight improvement to create container UX
     HostsCollection implmenets JsonSerializable so it can be logged properly
     Use guzzle sink to prevent oom issue using backups in the browser (#242)
+    Allow running php script "forever" when importing a backup (#245)
 
 0.9.3
 
