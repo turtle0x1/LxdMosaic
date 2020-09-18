@@ -1,6 +1,7 @@
 <?php
 
 use Crunz\Schedule;
+use dhope0000\LXDClient\Objects\Backups\BackupSchedule;
 
 $schedule = new Schedule();
 
@@ -25,13 +26,18 @@ function addSchedulesToSchedule(Schedule &$schedule, $host, $createBackupSchedul
         $argString = "{$item["hostId"]} {$item["instance"]} {$item["project"]} {$item["strategyId"]}";
         $name = "Backing up $argString";
 
-        $scheduleParts = explode(" ", $item["scheduleString"]);
-
-        $tSchedule = $createBackupSchedule->parseString($item["scheduleString"]);
+        // Support the original backup format that was "daily hour:minute"
+        if (preg_match('/daily [0-9]{2}:[0-9]{2}/m', $item["scheduleString"])) {
+            $tSchedule = new BackupSchedule("daily", [explode(" ", $item["scheduleString"])[1]]);
+        } else {
+            $tSchedule = $createBackupSchedule->parseString($item["scheduleString"]);
+        }
 
         if ($tSchedule->getRange() == "daily") {
-            $task = $schedule->run("$executeString $argString")->description($name);
-            $task->daily()->at($scheduleParts[1]);
+            foreach ($tSchedule->getTimes() as $time) {
+                $task = $schedule->run("$executeString $argString")->description($name . " daily@" . $time);
+                $task->daily()->at($time);
+            }
         } elseif ($tSchedule->getRange() == "weekly") {
             foreach ($tSchedule->getDaysOfWeek() as $dayOfWeek) {
                 foreach ($tSchedule->getTimes() as $time) {
