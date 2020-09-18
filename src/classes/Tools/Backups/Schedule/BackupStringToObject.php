@@ -43,13 +43,13 @@ class BackupStringToObject
             $parts[0],
             $time,
             $daysOfWeek,
-            $parts[3] ?? null
+            is_numeric($parts[3]) ? $parts[3] : 0
         );
     }
 
     public function validateString(string $string) :void
     {
-        if (substr_count($string, "~") !== 4) {
+        if (substr_count($string, "~") < 3) {
             throw new \Exception("Syntax Error: There must be 4 tidles in the string", 1);
         }
     }

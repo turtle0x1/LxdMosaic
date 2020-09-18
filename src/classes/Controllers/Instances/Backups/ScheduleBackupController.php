@@ -24,7 +24,8 @@ class ScheduleBackupController implements \dhope0000\LXDClient\Interfaces\Record
         string $frequency,
         string $time,
         int $strategy,
-        int $retention
+        int $retention,
+        array $daysOfWeek = []
     ) {
         $this->addBackupSchedule->add(
             $userId,
@@ -33,7 +34,8 @@ class ScheduleBackupController implements \dhope0000\LXDClient\Interfaces\Record
             $frequency,
             $time,
             $strategy,
-            $retention
+            $retention,
+            $daysOfWeek
         );
 
         return ["state"=>"success", "message"=>"Set schedule for instance"];
