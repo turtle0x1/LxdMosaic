@@ -1,10 +1,10 @@
 <?php
-require __DIR__ . "/vendor/autoload.php";
+require __DIR__ . "/../../vendor/autoload.php";
 
 use \Doctrine\Common\Annotations\AnnotationReader;
 use \Doctrine\Common\Annotations\AnnotationRegistry;
 
-$path = __DIR__ . "/src/classes/Controllers/";
+$path = __DIR__ . "/../../src/classes/Controllers/";
 $fqcns = array();
 
 $allFiles = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
