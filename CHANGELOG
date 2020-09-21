@@ -6,6 +6,7 @@ Added
     Remove profile from instance (#224)
     Support weekly & monthly backups (#251)
     Networks feature to project creation (#252)
+    Support for permanent API keys (#181)
 
 Fixed
     Changing cluster member alias breaks UI (#234) (Slight caveat that the
