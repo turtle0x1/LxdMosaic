@@ -1,7 +1,7 @@
 <div id="settingsBox" class="boxSlide">
     <div id="settingsOverview">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-4">
                   <div class="card bg-dark">
                   <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
                       <h5>
@@ -35,7 +35,39 @@
                       </div>
                     </div>
                   </div>
-              </div>
+            </div>
+            <div class="col-md-4">
+                  <div class="card bg-dark">
+                  <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
+                      <h5>
+                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+                            My Permanent API keys
+                        </a>
+                        </h5>
+                        <div class="btn-toolbar float-right">
+                            <div class="btn-group mr-2">
+                                <button class="btn btn-success" id="saveSettings">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="" class="collapse in show" role="tabpanel" >
+                      <div class="card-body bg-dark">
+                        <table class="table table-dark table-bordered" id="apiKeyTable">
+                            <thead>
+                                <tr>
+                                    <th>Date Created</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+            </div>
             <div class="col-md-4">
                   <div class="card bg-dark">
                     <div class="card-header bg-dark" role="tab" >
@@ -184,6 +216,21 @@ function loadSettingsView()
         }
 
         $("#newVersion").html(newVersion);
+
+        let trs = "";
+
+        if(data.permanentTokens.length == 0){
+            trs = "<tr><td colspan='999'>No Permanent API Keys!</td></tr>"
+        }else{
+            $.each(data.permanentTokens, (_, token)=>{
+                trs += `<tr>
+                    <td>${moment(token.created).format("llll")}</td>
+                    <td><button class="btn btn-danger btn-sm deleteToken" id="${token.id}" ><i class="fas fa-trash"></i></button></td>
+                </tr>`;
+            });
+        }
+
+        $("#apiKeyTable > tbody").empty().append(trs);
     });
 
 }
