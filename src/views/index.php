@@ -290,6 +290,9 @@ if ($haveServers->haveAny() !== true) {
                   getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
               },
               user: {
+                  tokens: {
+                      delete: '/api/User/Tokens/DeleteTokenController/delete',
+                  },
                   dashboard: {
                     graphs: {
                        add: '/api/User/Dashboard/Graphs/AddGraphController/add',

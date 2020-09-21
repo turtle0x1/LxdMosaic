@@ -281,6 +281,18 @@ function loadUsers(){
     });
 }
 
+$("#settingsOverview").on("click", ".deleteToken", function(){
+    let tr = $(this).parents("tr");
+    let x = {tokenId: $(this).attr("id")};
+    ajaxRequest(globalUrls.user.tokens.delete, x, (response)=>{
+        response = makeToastr(response);
+        if(response.state == "error"){
+            return false;
+        }
+        tr.remove();
+    });
+});
+
 $("#settingsOverview").on("click", "#loadMoreRecordedActions", function(){
     $.confirm({
     title: 'Prompt!',

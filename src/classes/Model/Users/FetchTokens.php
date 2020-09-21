@@ -48,4 +48,20 @@ class FetchTokens
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function fetchTokenUser(int $tokenId)
+    {
+        $sql = "SELECT
+                    `UAT_User_ID`
+                FROM
+                    `User_Api_Tokens`
+                WHERE
+                    `UAT_ID` = :tokenId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":tokenId"=>$tokenId
+        ]);
+        return $do->fetch(\PDO::FETCH_COLUMN);
+    }
 }
