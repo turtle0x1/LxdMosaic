@@ -45,6 +45,12 @@ function addSchedulesToSchedule(Schedule &$schedule, $host, $createBackupSchedul
                     $task->weeklyOn($dayOfWeek, $time);
                 }
             }
+        } elseif ($tSchedule->getRange() == "monthly") {
+            foreach ($tSchedule->getTimes() as $time) {
+                $tParts = explode(":", $time);
+                $task = $schedule->run("$executeString $argString")->description($name . " monthly@" . $time);
+                $task->cron("{$tParts[1]} {$tParts[0]} {$tSchedule->getDayOfMonth()} * *");
+            }
         } else {
             throw new \Exception("Unsupported backup schedule", 1);
         }

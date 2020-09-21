@@ -24,7 +24,8 @@ class AddBackupSchedule
         string $time,
         int $strategyId,
         int $retention,
-        array $daysOfWeek = []
+        array $daysOfWeek = [],
+        int $dayOfMonth = 0
     ) {
         $this->validateBakupSchedule($frequency, $time);
 
@@ -40,7 +41,7 @@ class AddBackupSchedule
             $host->getHostId(),
             $instance,
             "default",
-            $frequency . "~ " . $time . "~ [" . implode(",", $daysOfWeek) . "]~",
+            $frequency . "~ " . $time . "~ [" . implode(",", $daysOfWeek) . "]~ $dayOfMonth~",
             $strategyId,
             $retention
         );
@@ -48,7 +49,8 @@ class AddBackupSchedule
 
     private function validateBakupSchedule(string $frequency, string $time)
     {
-        if ($frequency !== "daily" && $frequency !== "weekly") {
+        $allowedSchedules = ["daily", "weekly", "monthly"];
+        if (!in_array($frequency, $allowedSchedules)) {
             throw new \Exception("Only supporting daily & weekly backups for the time being", 1);
         }
         // https://stackoverflow.com/a/3964994/4008082
