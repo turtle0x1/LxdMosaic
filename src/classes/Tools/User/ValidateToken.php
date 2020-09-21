@@ -13,7 +13,7 @@ class ValidateToken
 
     public function validate(int $userId, string $token)
     {
-        $latestToken = $this->fetchTokens->fetchLatestToken($userId);
+        $latestToken = $this->fetchTokens->fetchLatestNonPermanentToken($userId);
         return $latestToken === $token;
     }
 }

@@ -11,7 +11,7 @@ class FetchTokens
         $this->database = $database->dbObject;
     }
 
-    public function fetchLatestToken(int $userId)
+    public function fetchLatestNonPermanentToken(int $userId)
     {
         $sql = "SELECT
                     `UAT_Token`
@@ -19,6 +19,8 @@ class FetchTokens
                     `User_Api_Tokens`
                 WHERE
                     `UAT_User_ID` = :userId
+                AND
+                    `UAT_Permanent` = 0
                 ORDER BY
                     `UAT_ID` DESC
                 LIMIT 1;
