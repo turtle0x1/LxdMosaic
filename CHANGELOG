@@ -5,6 +5,7 @@ Added
     Search for instance by ip address (#233)
     Remove profile from instance (#224)
     Support weekly & monthly backups (#251)
+    Networks feature to project creation (#252)
 
 Fixed
     Changing cluster member alias breaks UI (#234) (Slight caveat that the

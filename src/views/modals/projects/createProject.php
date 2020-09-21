@@ -44,6 +44,16 @@
                       </thead>
                       <tbody>
                           <tr>
+                              <td> Networks </td>
+                              <td> Separate set of networks for the project (Requires > LXD 4.6) </td>
+                              <td>
+                                  <select id="networksValue" class="form-control">
+                                      <option value="true" selected>true</option>
+                                      <option value="false">false</option>
+                                  </select>
+                              </td>
+                          </tr>
+                          <tr>
                               <td> Images </td>
                               <td> Separate set of images and image aliases for the project </td>
                               <td>
@@ -307,6 +317,7 @@
             name: projectName,
             hosts: hosts,
             config: {
+                "features.networks": $("#modal-projects-create #networksValue").val(),
                 "features.images": $("#modal-projects-create #imagesValue").val(),
                 "features.profiles": $("#modal-projects-create #profilesValue").val(),
                 "features.storage.volumes": $("#modal-projects-create #storageValue").val()
