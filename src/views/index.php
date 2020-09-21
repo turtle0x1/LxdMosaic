@@ -108,7 +108,8 @@ if ($haveServers->haveAny() !== true) {
               },
               instances: {
                   profiles: {
-                    remove: "/api/Instances/Profiles/RemoveProfileController/remove"
+                    remove: "/api/Instances/Profiles/RemoveProfileController/remove",
+                    assign: "/api/Instances/Profiles/AssignProfilesController/assign",
                   },
                   metrics: {
                       getAllAvailableMetrics: "/api/Instances/Metrics/GetAllAvailableMetricsController/get",
