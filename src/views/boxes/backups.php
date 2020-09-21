@@ -183,6 +183,25 @@ $(document).on("click", "#disableInstanceSchedule", function(){
         }
     });
 });
+
+$(document).on("click", ".toggleDaySelected", function(){
+    $(this).toggleClass("badge-secondary");
+    $(this).toggleClass("badge-primary");
+});
+
+$(document).on("change", "#scheduleBackupFrequency", function(){
+    if($(this).val() == "weekly"){
+        $("#weeklyBackupScheduleDiv").removeClass("d-none")
+        $("#monthlyBackupScheduleDiv").addClass("d-none")
+    }else if($(this).val() == "monthly"){
+        $("#weeklyBackupScheduleDiv").addClass("d-none")
+        $("#monthlyBackupScheduleDiv").removeClass("d-none")
+    }else{
+        $("#weeklyBackupScheduleDiv").addClass("d-none")
+        $("#monthlyBackupScheduleDiv").addClass("d-none")
+    }
+});
+
 $(document).on("click", "#scheduleInstanceBackup", function(){
     $.confirm({
         title: `Schedule Instance Backup`,
@@ -197,10 +216,50 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                 <select class="form-control" id="scheduleBackupFrequency">
                     <option value=""></option>
                     <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
                 </select>
             </div>
+            <div id="weeklyBackupScheduleDiv" class="d-none">
+                <label>Select Days Of Week</label>
+                <div>
+                    <div data-day="0" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Sunday
+                    </div>
+                    <div data-day="1" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Monday
+                    </div>
+                    <div data-day="2" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Tuesday
+                    </div>
+                    <div data-day="3" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Wednesday
+                    </div>
+                    <div data-day="4" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Thursday
+                    </div>
+                    <div data-day="5" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Friday
+                    </div>
+                    <div data-day="6" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Saturday
+                    </div>
+                </div>
+            </div>
+            <div id="monthlyBackupScheduleDiv" class="d-none">
+                <div class="form-group">
+                    <label>Day Of Month (1-31)</label>
+                    <div class="text-info"><i class="fas fa-info-circle mr-2"></i>This uses cron expressions, consider Feb 27th & Months with 30 days!</div>
+                    <input class="form-control" id="bMonthlyDayOfMonth"/>
+                </div>
+            </div>
             <div class="form-group">
-                <label>24 Hour Time (00:00-23:59)</label>
+                <div>
+                    <label>At These Times (00:00-23:59)</label>
+                    <button class="btn btn-sm btn-primary float-right">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
                 <input class="form-control" id="scheduleBackupTime" />
             </div>
             <div class="form-group">
@@ -249,13 +308,33 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                         return false;
                     }
 
+                    let daysOfWeek = [];
+
+                    if(frequency == "weekly"){
+                        $("#weeklyBackupScheduleDiv").find(".badge-primary").map(function(){
+                            daysOfWeek.push($(this).data("day"));
+                        });
+                    }
+
+                    let dayOfMonth = 0;
+                    if(frequency == "monthly"){
+                        dayOfMonth = $("#bMonthlyDayOfMonth").val();
+                        if(!$.isNumeric(dayOfMonth) || dayOfMonth == 0){
+                            $.alert("Day of month must number 1 - 31");
+                            $("#bMonthlyDayOfMonth").focus();
+                            return false;
+                        }
+                    }
+
                     let x = {
                         frequency: frequency,
                         time: time,
                         strategy: strategy,
                         hostId: currentContainerBackups.hostId,
                         instance: currentContainerBackups.name,
-                        retention: retention
+                        retention: retention,
+                        daysOfWeek: daysOfWeek,
+                        dayOfMonth: dayOfMonth
                     }
 
                     ajaxRequest(globalUrls.instances.backups.schedule, x, (data)=>{
