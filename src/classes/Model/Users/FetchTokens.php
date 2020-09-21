@@ -29,4 +29,23 @@ class FetchTokens
         ]);
         return $do->fetchColumn();
     }
+
+    public function fetchPermanentKeys(int $userId)
+    {
+        $sql = "SELECT
+                    `UAT_ID` as `id`,
+                    `UAT_Created_At` as `created`
+                FROM
+                    `User_Api_Tokens`
+                WHERE
+                    `UAT_Permanent` = 1
+                AND
+                    `UAT_User_ID` = :userId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":userId"=>$userId
+        ]);
+        return $do->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
