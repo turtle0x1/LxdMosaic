@@ -46,7 +46,7 @@
                         </h5>
                         <div class="btn-toolbar float-right">
                             <div class="btn-group mr-2">
-                                <button class="btn btn-success" id="saveSettings">
+                                <button class="btn btn-success" id="createToken">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -280,6 +280,47 @@ function loadUsers(){
         $("#usersTable > tbody").empty().append(trs);
     });
 }
+
+$("#settingsOverview").on("click", "#createToken", function(){
+    $.confirm({
+        title: 'Create Permanent API Key!',
+        content: `
+        <div class="form-group">
+            <label>Token</label>
+            <input class="form-control" name="token"/>
+        </div>
+        `,
+        buttons: {
+            cancel: function () {
+                //close
+            },
+            formSubmit: {
+                text: 'Create',
+                btnClass: 'btn-blue',
+                action: function () {
+                    var token = this.$content.find('input[name=token]').val().trim();
+                    if(token == ""){
+                        $.alert('Please provide a token');
+                        return false;
+                    }
+                    let x = {token: token};
+                    ajaxRequest(globalUrls.user.tokens.create, x, (response)=>{
+                        response = makeToastr(response);
+                        if(response.state == "error"){
+                            return false;
+                        }
+                        tr.remove();
+                    });
+                }
+            }
+        },
+        onContentReady: function () {
+            // bind to events
+            var jc = this;
+            this.$content.find('input[name=token]').val(Math.random().toString(36).substring(2));
+        }
+    });
+});
 
 $("#settingsOverview").on("click", ".deleteToken", function(){
     let tr = $(this).parents("tr");

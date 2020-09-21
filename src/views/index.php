@@ -291,6 +291,7 @@ if ($haveServers->haveAny() !== true) {
               },
               user: {
                   tokens: {
+                      create: '/api/User/Tokens/CreateTokenController/create',
                       delete: '/api/User/Tokens/DeleteTokenController/delete',
                   },
                   dashboard: {
