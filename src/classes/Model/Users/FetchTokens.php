@@ -32,7 +32,7 @@ class FetchTokens
         return $do->fetchColumn();
     }
 
-    public function fetchPermanentKeys(int $userId)
+    public function fetchPermanentTokenHeaders(int $userId)
     {
         $sql = "SELECT
                     `UAT_ID` as `id`,

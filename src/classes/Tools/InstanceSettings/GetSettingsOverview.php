@@ -15,7 +15,7 @@ class GetSettingsOverview
     public function get(string $userId) :array
     {
         return [
-            "permanentTokens"=>$this->fetchTokens->fetchPermanentKeys($userId),
+            "permanentTokens"=>$this->fetchTokens->fetchPermanentTokenHeaders($userId),
             "versionDetails"=>IsUpToDate::isIt()
         ];
     }
