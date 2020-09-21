@@ -108,7 +108,8 @@ if ($haveServers->haveAny() !== true) {
               },
               instances: {
                   profiles: {
-                    remove: "/api/Instances/Profiles/RemoveProfileController/remove"  
+                    remove: "/api/Instances/Profiles/RemoveProfileController/remove",
+                    assign: "/api/Instances/Profiles/AssignProfilesController/assign",
                   },
                   metrics: {
                       getAllAvailableMetrics: "/api/Instances/Metrics/GetAllAvailableMetricsController/get",
@@ -221,7 +222,8 @@ if ($haveServers->haveAny() !== true) {
               },
               profiles: {
                   search:{
-                      getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles"
+                      getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles",
+                      searchHostProfiles: "/api/Profiles/Search/SearchProfiles/searchHostProfiles"
                   },
                   getProfile: '/api/Profiles/GetProfileController/get',
                   getAllProfiles: '/api/Profiles/GetAllProfilesController/getAllProfiles',

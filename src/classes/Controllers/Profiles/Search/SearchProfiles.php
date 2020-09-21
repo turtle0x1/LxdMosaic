@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Profiles\Search;
 
 use dhope0000\LXDClient\Tools\Profiles\GetProfilesOnAllHosts;
+use dhope0000\LXDClient\Objects\Host;
 
 class SearchProfiles
 {
@@ -13,5 +14,18 @@ class SearchProfiles
     public function getAllCommonProfiles()
     {
         return $this->getProfilesOnAllHosts->getProfilesOnAllHosts();
+    }
+
+    public function searchHostProfiles(Host $host, string $search)
+    {
+        $profiles = $host->profiles->all();
+        $output = [];
+        foreach ($profiles as $profile) {
+            if (stripos($profile, $search) === false) {
+                continue;
+            }
+            $output[] = ["name"=>$profile];
+        }
+        return $output;
     }
 }
