@@ -51,6 +51,24 @@ class FetchTokens
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function fetchPermanentTokens(int $userId)
+    {
+        $sql = "SELECT
+                    `UAT_Token`
+                FROM
+                    `User_Api_Tokens`
+                WHERE
+                    `UAT_Permanent` = 1
+                AND
+                    `UAT_User_ID` = :userId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":userId"=>$userId
+        ]);
+        return $do->fetchAll(\PDO::FETCH_COLUMN, 0);
+    }
+
     public function fetchTokenUser(int $tokenId)
     {
         $sql = "SELECT

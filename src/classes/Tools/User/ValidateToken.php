@@ -14,6 +14,16 @@ class ValidateToken
     public function validate(int $userId, string $token)
     {
         $latestToken = $this->fetchTokens->fetchLatestNonPermanentToken($userId);
-        return $latestToken === $token;
+
+        if ($latestToken === $token) {
+            return true;
+        }
+        $permanentTokens = $this->fetchTokens->fetchPermanentTokens($userId);
+        foreach ($permanentTokens as $permaToken) {
+            if ($token === $permaToken) {
+                return true;
+            }
+        }
+        return false;
     }
 }
