@@ -160,6 +160,9 @@
 
     </div>
 </div>
+<div id="usersOverview" class="boxSlide">
+    user overview man
+</div>
 </div>
 
 <script>
@@ -264,7 +267,7 @@ function loadUsers(){
             $.each(data, (_, user)=>{
                 let isAdmin = user.isAdmin == 1  ? "check-circle" : "times-circle";
                 trs += `<tr data-user-id="${user.id}">
-                    <td>${user.username}</td>
+                    <td><a href="#" id="${user.id}" class='viewUser'>${user.username}</a></td>
                     <td>${moment(user.created).fromNow()}</td>
                     <td><i class="fas fa-${isAdmin}"></i></td>
                     <td>
@@ -280,6 +283,49 @@ function loadUsers(){
         $("#usersTable > tbody").empty().append(trs);
     });
 }
+
+$("#settingsOverview").on("click", ".viewUser", function(){
+    let x = {targetUser: $(this).attr("id") }
+    let userName = $(this).text();
+
+    $("#settingsOverview").hide();
+    $("#usersOverview").show();
+    ajaxRequest(globalUrls.user.getUserOverview, x, (data)=>{
+        data = makeToastr(data);
+        let x = `<div class="mb-3">
+            <h4 class="text-underline">
+                <i class="fas fa-user mr-2"></i>Viewing User ${userName} latest recorded actions
+            </h4>
+        </div>`;
+
+        let categoryIcons = {
+            "instance": "fas fa-box",
+            "backups": "fas fa-save"
+        };
+
+        let methodIcons = {
+            "create": "fas fa-plus",
+            "delete": "fas fa-trash",
+            "schedule": "fas fa-clock",
+            "disable": "fas fa-power-off"
+        };
+
+        $.each(data, (category, methods)=>{
+            x += `<div class='mb-3 pb-2 border-bottom'>
+                <h1><i class="${categoryIcons[category]} mr-2"></i>${category}
+                </h1>
+                <div class="row">`
+            let c = Math.floor(12 / Object.keys(methods).length);
+            $.each(methods, (method, events)=>{
+                x += `<div class="col-md-${c} border-left text-center"><h4><i class="${methodIcons[method]} mr-2"></i> ${method} - ${events.length}</h4></div>`;
+            });
+            x += `</div></div>`
+        });
+
+        $("#usersOverview").empty().append(x);
+
+    });
+});
 
 $("#settingsOverview").on("click", "#createToken", function(){
     $.confirm({

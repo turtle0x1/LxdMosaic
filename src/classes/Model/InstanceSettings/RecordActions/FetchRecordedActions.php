@@ -31,6 +31,32 @@ class FetchRecordedActions
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function fetchUserActions(int $userId, string $controller, int $ammount)
+    {
+        $sql = "SELECT
+                    `RA_Date_Created` as `date`,
+                    `RA_Controller` as `controller`,
+                    `RA_Params` as `params`,
+                    COALESCE(`Users`.`User_Name`, 'To Old To Know') as `userName`
+                FROM
+                    `Recorded_Actions`
+                LEFT JOIN `Users` ON
+                    `Recorded_Actions`.`RA_User_ID` = `Users`.`User_ID`
+                WHERE
+                    `RA_Controller` = :controller
+                AND
+                    `RA_User_ID` = :userId
+                ORDER BY `RA_ID` DESC
+                LIMIT :ammount
+                ";
+        $do = $this->database->prepare($sql);
+        $do->bindValue(":controller", $controller, \PDO::PARAM_STR);
+        $do->bindValue(":userId", (int) $userId, \PDO::PARAM_INT);
+        $do->bindValue(":ammount", (int) $ammount, \PDO::PARAM_INT);
+        $do->execute();
+        return $do->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function fetchForHostInstance(int $hostId, string $instance)
     {
         $sql = "SELECT

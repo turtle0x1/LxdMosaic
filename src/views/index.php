@@ -303,6 +303,7 @@ if ($haveServers->haveAny() !== true) {
                     get: '/api/User/Dashboard/GetDashboardController/get',
                     delete: '/api/User/Dashboard/DeleteDashboardController/delete'
                   },
+                  getUserOverview:'/api/User/GetUserOverviewController/get',
                   setHostProject: '/api/User/SetHostProjectController/set'
               },
               projects: {
