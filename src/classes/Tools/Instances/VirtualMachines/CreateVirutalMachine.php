@@ -58,10 +58,6 @@ class CreateVirutalMachine
                groups: lxd
                shell: /bin/bash
                sudo: ALL=(ALL) NOPASSWD:ALL
-
-            runcmd:
-             - mount -t 9p config /mnt/
-             - cd /mnt && ./install.sh
-             - reboot';
+         ';
     }
 }
