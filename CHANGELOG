@@ -7,6 +7,7 @@ Added
     Support weekly & monthly backups (#251)
     Networks feature to project creation (#252)
     Support for permanent API keys (#181)
+    Support for "ubuntu daily" & "ubuntu" (ubuntu-release) image remotes
 
 Fixed
     Changing cluster member alias breaks UI (#234) (Slight caveat that the
@@ -19,6 +20,10 @@ Changed
     HostsCollection implmenets JsonSerializable so it can be logged properly
     Use guzzle sink to prevent oom issue using backups in the browser (#242)
     Allow running php script "forever" when importing a backup (#245)
+    Only search for image types applicable to instance being created
+    Use simplestreams to read images from remote sources
+    Improve import images UX
+    Improve virtual machine creation UI & UX
 
 0.9.3
 
