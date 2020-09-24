@@ -14,6 +14,8 @@ class CreateController
 
     public function create(string $name, string $username, HostsCollection $hostIds, array $imageDetails)
     {
-        return $this->createVirutalMachine->create($name, $username, $hostIds, $imageDetails);
+        $response = $this->createVirutalMachine->create($name, $username, $hostIds, $imageDetails);
+
+        return ["state"=>"success", "message"=>"Creating VM", "lxdResponse"=>$response];
     }
 }
