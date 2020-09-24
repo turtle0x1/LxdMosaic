@@ -11,25 +11,25 @@ class SearchController
         $this->getAllImages = $getAllImages;
     }
 
-    public function getAllAvailableImages(string $search)
+    public function getAllAvailableImages(string $search, string $type = "")
     {
         $allImages = $this->getAllImages->getAllHostImages();
         $output = [];
         $seenFingerPrints = [];
         $unknownCount = 0;
         foreach ($allImages["standalone"]["members"] as $host) {
-            $this->doWork($output, $seenFingerPrints, $host->getCustomProp("images"), $unknownCount, $search);
+            $this->doWork($output, $seenFingerPrints, $host->getCustomProp("images"), $unknownCount, $search, $type);
         }
 
         foreach ($allImages["clusters"] as $cluster) {
             foreach ($cluster["members"] as $host) {
-                $this->doWork($output, $seenFingerPrints, $host->getCustomProp("images"), $unknownCount, $search);
+                $this->doWork($output, $seenFingerPrints, $host->getCustomProp("images"), $unknownCount, $search, $type);
             }
         }
         return $output;
     }
 
-    private function doWork(&$output, &$seenFingerPrints, $images, & $unknownCount, $search)
+    private function doWork(&$output, &$seenFingerPrints, $images, & $unknownCount, $search, $type)
     {
         foreach ($images as $image) {
             if (in_array($image["fingerprint"], $seenFingerPrints)) {
@@ -54,6 +54,10 @@ class SearchController
                 ];
             } else {
                 $image["update_source"]["provideMyHostsCert"] = false;
+            }
+
+            if (!empty($type) && isset($image["type"]) && $image["type"] !== $type) {
+                continue;
             }
 
             $output[] = [
