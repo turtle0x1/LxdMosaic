@@ -14,9 +14,9 @@ class ImportLinuxContainersByAliasController implements \dhope0000\LXDClient\Int
     /**
      * @Route("", name="Import LinunxContainer.Org Image")
      */
-    public function import(HostsCollection $hosts, array $aliases)
+    public function import(HostsCollection $hosts, array $aliases, $urlKey)
     {
-        $operations = $this->importLinuxContainersByAlias->import($hosts, $aliases);
+        $operations = $this->importLinuxContainersByAlias->import($hosts, $aliases, $urlKey);
 
         return [
             "state"=>"success",

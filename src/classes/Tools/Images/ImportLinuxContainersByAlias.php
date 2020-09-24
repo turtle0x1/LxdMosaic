@@ -6,14 +6,21 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class ImportLinuxContainersByAlias
 {
-    public function import(HostsCollection $hosts, array $aliases)
+    public function import(HostsCollection $hosts, array $images, $urlKey)
     {
+        $urlMap = [
+            "linuxcontainers"=>'https://images.linuxcontainers.org',
+            "ubuntu-release"=>'https://cloud-images.ubuntu.com/releases',
+            "ubuntu-daily"=>'https://cloud-images.ubuntu.com/daily'
+        ];
+
         foreach ($hosts as $host) {
-            foreach ($aliases as $alias) {
+            foreach ($images as $image) {
                 $output[] = $host->images->createFromRemote(
-                    "https://images.linuxcontainers.org:8443",
+                    $urlMap[$urlKey],
                     [
-                        "alias"=>$alias
+                        "protocol"=>"simplestreams",
+                        "fingerprint"=>$image["fingerprint"],
                     ]
                 );
             }
