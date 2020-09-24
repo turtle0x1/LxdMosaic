@@ -18,6 +18,19 @@
           <input class="form-control" name="username" />
       </div>
       <div class="form-group">
+          <label>  </label>
+          <label
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Currently an image needs to have been imported into atleast
+              one server on the network to use it here! Images will be downloaded
+              onto hosts that dont have the selected image.">
+              Image
+              <i class="fas fa-question-circle"></i>
+          </label>
+          <input id="newVirtualMachineImage" type="text" class="form-control"/>
+      </div>
+      <div class="form-group">
           <b> Hosts </b>
           <input class="form-control" name="hosts"  id="newVmHosts"/>
       </div>
@@ -37,6 +50,17 @@
 </div>
 </div>
 <script>
+
+$("#newVirtualMachineImage").tokenInput(globalUrls.images.search.searchAllHosts, {
+    queryParam: "search",
+    tokenLimit: 1,
+    propertyToSearch: "description",
+    theme: "facebook",
+    tokenValue: "details",
+    setExtraSearchParams: ()=>{
+        return {type: "virtual-machine"};
+    }
+});
 
 $("#newVmHosts").tokenInput(globalUrls.hosts.search.search, {
     queryParam: "hostSearch",
@@ -60,6 +84,14 @@ $("#modal-vms-create").on("click", "#createVm", function(){
     let nameInput = $("#modal-vms-create input[name=name]");
     let name = nameInput.val();
 
+    let image = $("#newVirtualMachineImage").tokenInput("get");
+
+    if(image.length == 0 || !image[0].hasOwnProperty("details")){
+        // btn.html('Create Container');
+        // $("#modal-container-create").find(".btn").attr("disabled", false);
+        makeToastr(JSON.stringify({state: "error", message: "Please select image"}));
+        return false;
+    }
 
     if(name == ""){
         nameInput.focus();
@@ -78,6 +110,7 @@ $("#modal-vms-create").on("click", "#createVm", function(){
     let x = {
         hostIds: hosts,
         username: username,
+        imageDetails: image[0]["details"],
         name: name
     }
 
