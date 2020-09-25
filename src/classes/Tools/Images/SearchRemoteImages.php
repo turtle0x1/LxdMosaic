@@ -2,7 +2,7 @@
 
 namespace dhope0000\LXDClient\Tools\Images;
 
-class GetLinuxContainersOrgImages
+class SearchRemoteImages
 {
     public function get($urlKey = "linuxcontainers", $searchType = "container", $searchArch = "amd64")
     {

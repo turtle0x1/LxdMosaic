@@ -66,12 +66,13 @@ class RouteToNameMapping
   'dhope0000\\LXDClient\\Controllers\\Deployments\\DeployController\\deploy' => 'Deploy Deployment',
   'dhope0000\\LXDClient\\Controllers\\Deployments\\StartDeploymentController\\start' => 'Start Deployment',
   'dhope0000\\LXDClient\\Controllers\\Deployments\\CreateController\\create' => 'Create Deployment',
-  'dhope0000\\LXDClient\\Controllers\\Images\\ImportLinuxContainersByAliasController\\import' => 'Import LinunxContainer.Org Image',
+  'dhope0000\\LXDClient\\Controllers\\Images\\ImportRemoteImagesController\\import' => 'Import image from simplestream server',
   'dhope0000\\LXDClient\\Controllers\\Images\\DeleteImagesController\\delete' => 'Delete Images From Hosts',
   'dhope0000\\LXDClient\\Controllers\\Images\\Aliases\\RenameController\\rename' => 'Rename Image Alias',
   'dhope0000\\LXDClient\\Controllers\\Images\\Aliases\\UpdateDescriptionController\\update' => 'Update Image Alias Description',
   'dhope0000\\LXDClient\\Controllers\\Images\\Aliases\\DeleteController\\delete' => 'Delete Image Alias',
   'dhope0000\\LXDClient\\Controllers\\Images\\Aliases\\CreateController\\create' => 'Create Image Alias',
+  'dhope0000\\LXDClient\\Controllers\\Images\\ImportLinuxContainersByAliasController\\import' => 'Import LinunxContainer.Org Image',
 );
 
     public function getControllerName(string $controller)

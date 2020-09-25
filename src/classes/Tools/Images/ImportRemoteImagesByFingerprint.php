@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Tools\Images;
 
 use dhope0000\LXDClient\Objects\HostsCollection;
 
-class ImportLinuxContainersByAlias
+class ImportRemoteImagesByFingerprint
 {
     public function import(HostsCollection $hosts, array $images, $urlKey)
     {

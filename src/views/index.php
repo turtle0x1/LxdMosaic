@@ -272,10 +272,10 @@ if ($haveServers->haveAny() !== true) {
                       update: '/api/Images/UpdateImagePropertiesController/update',
                       get: '/api/Images/GetImagePropertiesController/getAll'
                   },
-                  getLinuxContainersOrgImages: "/api/Images/GetLinuxContainersOrgImagesController/get",
+                  getLinuxContainersOrgImages: "/api/Images/SearchRemoteImagesController/get",
                   delete: "/api/Images/DeleteImagesController/delete",
                   getAll: "/api/Images/GetImagesController/getAllHostImages",
-                  import: "/api/Images/ImportLinuxContainersByAliasController/import",
+                  import: "/api/Images/ImportRemoteImagesController/import",
               },
               cloudConfig: {
                   search: {
