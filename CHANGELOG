@@ -26,6 +26,7 @@ Changed
     Improve import images UX
     Improve virtual machine creation UI & UX
     Added optional extensions filter to search hosts api
+    Ensure host supports projects before appearing in create project dropdown (#259)
 
 0.9.3
 
