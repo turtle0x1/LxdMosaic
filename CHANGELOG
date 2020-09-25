@@ -13,6 +13,7 @@ Fixed
     Changing cluster member alias breaks UI (#234) (Slight caveat that the
         node server wont return operations for a cluster member with an alias
         that doesn't match the LXD server_name)
+    Dont show deleted backups
 
 Changed
     Used buttons instead of dropdown to change instance state

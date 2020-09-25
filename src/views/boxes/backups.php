@@ -138,6 +138,13 @@ $(document).on("click", ".deleteBackup", function(){
         }
 
         tr.remove();
+
+        $.each(currentContainerBackups.allBackups, (index, details)=>{
+            if(details.id == backupId){
+                // console.log(index);
+                currentContainerBackups.allBackups.splice(index, 1)
+            }
+        })
     });
 
 });
