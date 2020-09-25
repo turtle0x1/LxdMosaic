@@ -8,12 +8,7 @@
 <div class="col-md-12" id="imageSplash">
     <div class="card bg-dark">
       <div class="card-header" role="tab" id="container-imagesHeading">
-        <h5>
-          <a class="text-white">
-            <a href="https://images.linuxcontainers.org" target="_blank">Available To Import</a>
-            <button class="btn btn-primary float-right" id="importImagesBtn"> Import </button>
-          </a>
-        </h5>
+        <h5 class="text-white">Search Remote Servers For Images</h5>
       </div>
       <div id="imagesOverviewDetails" class="card-body bg-dark table-responsive">
             <div id="remoteImagesTableBox">
@@ -60,10 +55,16 @@
                     </button>
                 </div>
 
-                <div class="border-top pt-2 text-info">
-                    <i class="fas fa-info-circle mr-2"></i>Select some images then click import!
-                </div>
+
                 <div class="mt-1" id="remoteImagesTable">
+                    <div class="border-top pt-2 text-info" id="imagesInstructions">
+                        <i class="fas fa-info-circle mr-2"></i>Select some images then click import!
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-secondary float-right" id="importImagesBtn"> Import </button>
+                    </div>
+                    <div id="remoteImageList">
+                    </div>
                 </div>
             </div>
         </div>
@@ -292,9 +293,20 @@
     $(document).on("click", ".imageForImport", function(){
         $(this).toggleClass("badge-secondary");
         $(this).toggleClass("badge-primary");
+
+        if($(".imageForImport.badge-primary").length == 0){
+            $("#importImagesBtn").removeClass("btn-primary")
+            $("#importImagesBtn").addClass("btn-outline-secondary")
+        }else{
+            $("#importImagesBtn").addClass("btn-primary")
+            $("#importImagesBtn").removeClass("btn-outline-secondary")
+        }
     });
 
     function showRemoteImages(){
+        $("#importImagesBtn, #imagesInstructions").hide();
+        $("#remoteImagesTable").show();
+        $("#remoteImageList").show().empty().append('<h1 class="text-center"><i class="fa fa-cog fa-spin"></i></h1>')
         ajaxRequest(globalUrls.images.getLinuxContainersOrgImages, {
             urlKey: $("#searchImages-server").val(),
             searchType: $("#searchImages-type").val(),
@@ -320,15 +332,8 @@
             });
 
 
-            $("#remoteImagesTable").empty().append(html).find(".osGroup").find("div:eq(0)").removeClass("m-4").addClass("mr-4");
-            // dataTable = $("#remoteImagesTable").DataTable({
-            //     drawCallback: function( settings, json ) {
-            //         $('#remoteImagesTable td').css({
-            //             "background-color": "#454d55",
-            //             "color": "white"
-            //         });
-            //     },
-            // });
+            $("#remoteImageList").empty().append(html).find(".osGroup").find("div:eq(0)").removeClass("m-4").addClass("mr-4");
+            $("#importImagesBtn, #imagesInstructions").show();
         });
     }
 
@@ -361,9 +366,8 @@
 
             $("#sidebar-ul").empty().append(hosts);
 
-            $(".boxSlide, #imageDetailsView").hide();
+            $(".boxSlide, #imageDetailsView, #remoteImagesTable").hide();
             $("#imagesBox, #imageSplash").show();
-            showRemoteImages();
         });
     }
 
