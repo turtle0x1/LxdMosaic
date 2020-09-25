@@ -11,7 +11,7 @@ class GetLinuxContainersOrgImagesController
         $this->getImages = $getLinuxContainersOrgImages;
     }
 
-    public function get($urlKey = "linuxcontainers", $searchType = "container", $searchArch = "amd64")
+    public function get($urlKey, $searchType, $searchArch)
     {
         return $this->getImages->get($urlKey, $searchType, $searchArch);
     }
