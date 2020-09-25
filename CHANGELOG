@@ -25,6 +25,7 @@ Changed
     Use simplestreams to read images from remote sources
     Improve import images UX
     Improve virtual machine creation UI & UX
+    Added optional extensions filter to search hosts api
 
 0.9.3
 
