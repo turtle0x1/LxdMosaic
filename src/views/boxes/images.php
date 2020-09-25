@@ -1,19 +1,71 @@
+<style>
+.imageForImport {
+    cursor: pointer;
+}
+</style>
 <div id="imagesBox" class="boxSlide">
 <!-- <h4> Container: <`span id="containerName"></span> </h4> -->
 <div class="col-md-12" id="imageSplash">
     <div class="card bg-dark">
       <div class="card-header" role="tab" id="container-imagesHeading">
-        <h5>
-          <a class="text-white">
-            <a href="https://images.linuxcontainers.org" target="_blank">Available To Import</a>
-            <button class="btn btn-primary float-right" id="importImagesBtn"> Import </button>
-          </a>
-        </h5>
+        <h5 class="text-white">Search Remote Servers For Images</h5>
       </div>
       <div id="imagesOverviewDetails" class="card-body bg-dark table-responsive">
             <div id="remoteImagesTableBox">
-                <table class="table mt-2 table-dark table-bordered" id="remoteImagesTable">
-                </table>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                    <div class="input-group mb-2 mr-sm-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Server</div>
+                        </div>
+                        <select id="searchImages-server" class="form-control">
+                            <option value="" selected>Select...</option>
+                            <option value="linuxcontainers">linuxcontainers</option>
+                            <option value="ubuntu-release">ubuntu-release</option>
+                            <option value="ubuntu-daily">ubuntu-daily</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-2 mr-sm-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Type</div>
+                        </div>
+                        <select id="searchImages-type" class="form-control">
+                            <option value="" selected>Select...</option>
+                            <option value="container">Container</option>
+                            <option value="virtual-machine">Virtual Machine</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-2 mr-sm-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Arch</div>
+                        </div>
+                        <select id="searchImages-arch" class="form-control">
+                            <option value="" selected>Select...</option>
+                            <option value="amd64">amd64</option>
+                            <option value="i386">i386</option>
+                            <option value="armel">armel</option>
+                            <option value="armhf">armhf</option>
+                            <option value="arm64">arm64</option>
+                            <option value="ppc64el">ppc64el</option>
+                            <option value="powerpc">powerpc</option>
+                            <option value="s390x">s390x</option>
+                        </select>
+                    </div>
+                    <button id="filterImages" class="btn btn-primary mb-2">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+
+                <div class="mt-1" id="remoteImagesTable">
+                    <div class="border-top pt-2 text-info" id="imagesInstructions">
+                        <i class="fas fa-info-circle mr-2"></i>Select some images then click import!
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-secondary float-right" id="importImagesBtn"> Import </button>
+                    </div>
+                    <div id="remoteImageList">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -82,6 +134,10 @@
         hostId: null,
         fingerprint: null
     }
+
+    $(document).on("click", "#filterImages", function(){
+        showRemoteImages()
+    });
 
     $(document).on("click", ".viewImages", function(){
         $(".sidebar-fixed").addClass("sidebar-lg-show");
@@ -224,50 +280,60 @@
 
     $(document).on("click", "#importImagesBtn", function(e){
         e.preventDefault();
-        let imagesToImport = []
-        $.each($("input[name=imageToImport]:checked"), function(){
-            imagesToImport.push($(this).val());
+        let y = []
+        $.each($(".imageForImport.badge-primary"), function(){
+            y.push($(this).data());
         });
-        imageAliasesToImport = imagesToImport;
+        imagesToImport = y;
+        serverToImportFrom = $("#searchImages-server").val();
         $("#modal-hosts-addImages").modal("show");
         return false;
     });
 
+    $(document).on("click", ".imageForImport", function(){
+        $(this).toggleClass("badge-secondary");
+        $(this).toggleClass("badge-primary");
+
+        if($(".imageForImport.badge-primary").length == 0){
+            $("#importImagesBtn").removeClass("btn-primary")
+            $("#importImagesBtn").addClass("btn-outline-secondary")
+        }else{
+            $("#importImagesBtn").addClass("btn-primary")
+            $("#importImagesBtn").removeClass("btn-outline-secondary")
+        }
+    });
+
     function showRemoteImages(){
-        ajaxRequest(globalUrls.images.getLinuxContainersOrgImages, "POST", function(data){
+        $("#importImagesBtn, #imagesInstructions").hide();
+        $("#remoteImagesTable").show();
+        $("#remoteImageList").show().empty().append('<h1 class="text-center"><i class="fa fa-cog fa-spin"></i></h1>')
+        ajaxRequest(globalUrls.images.getLinuxContainersOrgImages, {
+            urlKey: $("#searchImages-server").val(),
+            searchType: $("#searchImages-type").val(),
+            searchArch: $("#searchImages-arch").val(),
+        }, function(data){
             let x = $.parseJSON(data);
             if(x.hasOwnProperty("error")){
                 return false;
             }
-            let html = `<thead><tr>
-                <th> Import </th>`
-            $.each(x.headers, function(i, head){
-                html += `<th>${head}</th>`;
-            });
-            html += "</tr></thead><tbody>";
-            $.each(x.data, function(i, item){
-                html += `<tr>
-                    <td> <input name='imageToImport' type='checkbox' value='${item[0]}/${item[1]}/${item[2]}'/></td>`;
-                $.each(item, function(o, p){
-                    html += `<td>${p}</td>`;
-                })
-                html += "</tr>";
-            });
-            html += "</tbody>";
-            if(dataTable !== null){
-                dataTable.clear();
-                dataTable.destroy();
-            }
 
-            $("#remoteImagesTable").empty().append(html)
-            dataTable = $("#remoteImagesTable").DataTable({
-                drawCallback: function( settings, json ) {
-                    $('#remoteImagesTable td').css({
-                        "background-color": "#454d55",
-                        "color": "white"
-                    });
-                },
+            let html = "";
+            $.each(x, (os, versions)=>{
+                html += `<div class="mt-3 osGroup"><h5 class="d-flex pb-3">${os}</h5>`;
+                $.each(versions, (version, fingerPrint)=>{
+                    html += `<div class="d-inline m-4">
+                        <span class="badge badge-secondary imageForImport" data-fingerprint="${fingerPrint}" data-alias="${version}" data-os="${os}">
+                        <i class="fas fa-image"></i>
+                        ${version}
+                        </span>
+                    </div>`
+                });
+                html += `</div>`;
             });
+
+
+            $("#remoteImageList").empty().append(html).find(".osGroup").find("div:eq(0)").removeClass("m-4").addClass("mr-4");
+            $("#importImagesBtn, #imagesInstructions").show();
         });
     }
 
@@ -300,9 +366,8 @@
 
             $("#sidebar-ul").empty().append(hosts);
 
-            $(".boxSlide, #imageDetailsView").hide();
+            $(".boxSlide, #imageDetailsView, #remoteImagesTable").hide();
             $("#imagesBox, #imageSplash").show();
-            showRemoteImages();
         });
     }
 

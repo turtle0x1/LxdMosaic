@@ -27,7 +27,8 @@
   </div>
 </div>
 <script>
-    var imageAliasesToImport = [];
+    var imagesToImport = [];
+    var serverToImportFrom = "";
 
     $("#hostsToImportImagesTo").tokenInput(globalUrls.hosts.search.search, {
         queryParam: "hostSearch",
@@ -43,8 +44,8 @@
 
     $("#modal-hosts-addImages").on("shown.bs.modal", function(){
         let imageHtml = "";
-        $.each(imageAliasesToImport, function(i, item){
-            imageHtml += '<li class="list-group-item">' + item + '</li>'
+        $.each(imagesToImport, function(i, item){
+            imageHtml += `<li class="list-group-item">${item.os} - ${item.alias}</li>`;
         });
         $("#imagesToUpload").empty().append(imageHtml);
     });
@@ -53,8 +54,9 @@
         let p = mapObjToSignleDimension($("#hostsToImportImagesTo").tokenInput("get"), "hostId");
 
         let x = {
-            aliases: imageAliasesToImport,
-            hosts: p
+            aliases: imagesToImport,
+            hosts: p,
+            urlKey: serverToImportFrom
         }
 
         ajaxRequest(globalUrls.images.import, x, function(data){
