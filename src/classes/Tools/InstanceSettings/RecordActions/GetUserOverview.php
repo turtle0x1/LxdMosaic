@@ -35,7 +35,7 @@ class GetUserOverview
             foreach ($actions as $action) {
                 $action["params"] = json_decode($action["params"], true);
                 $action = $convertor->convert($action);
-                
+
                 $cat = $action->getCategory();
                 if (!isset($events[$cat])) {
                     $events[$cat] = [];
@@ -51,6 +51,10 @@ class GetUserOverview
         }
 
         ksort($events);
+
+        foreach ($events as $category => &$methods) {
+            ksort($methods);
+        }
 
         return $events;
     }
