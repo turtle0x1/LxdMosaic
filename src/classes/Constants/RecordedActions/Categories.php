@@ -8,4 +8,5 @@ class Categories
     const PROJECTS = "projects";
     const PROFILES = "profiles";
     const NETWORKS = "networks";
+    const STORAGE = "storage";
 }

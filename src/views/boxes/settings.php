@@ -304,6 +304,7 @@ $("#settingsOverview").on("click", ".viewUser", function(){
             "projects": "fas fa-project-diagram",
             "profiles": "fas fa-users",
             "networks": "fas fa-network-wired",
+            "storage": "fas fa-hdd"
 
         };
 

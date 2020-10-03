@@ -20,6 +20,9 @@ class KnownControllerConversions
         // Networks
         "dhope0000\LXDClient\Controllers\Networks\CreateNetworkController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Networks\CreateNetwork",
         "dhope0000\LXDClient\Controllers\Networks\DeleteNetworkController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Networks\DeleteNetwork",
+        // Storage
+        "dhope0000\LXDClient\Controllers\Storage\CreatePoolController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Storage\CreateStorage",
+        "dhope0000\LXDClient\Controllers\Storage\DeleteStoragePoolController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Storage\DeleteStorage",
     ];
 
     public function getAllControllers()
