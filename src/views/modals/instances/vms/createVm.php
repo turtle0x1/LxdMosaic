@@ -35,7 +35,7 @@
       </div>
       <div class="">
           <div class="mb-2">
-              <i class="fas fa-info-circle text-info mr-2"></i>Your account password will be set to ubuntu.
+              <i class="fas fa-info-circle text-info mr-2"></i>Your account password will be set to <code>ubuntu</code>
           </div>
           <div class="mb-2">
               <i class="fas fa-info-circle text-info mr-2"></i>You should wait 30~ seconds after first boot before attempting to access the console
@@ -46,8 +46,8 @@
       </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" id="createVm">Create</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+    <button type="button" class="btn btn-primary" id="createVm">Create VM</button>
   </div>
 </div>
 </div>
