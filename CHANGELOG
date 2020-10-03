@@ -14,6 +14,7 @@ Fixed
         node server wont return operations for a cluster member with an alias
         that doesn't match the LXD server_name)
     Dont show deleted backups
+    Fix server overview doesnt load properly when system details missing (#262)
 
 Changed
     Used buttons instead of dropdown to change instance state
