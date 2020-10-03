@@ -290,11 +290,12 @@ $("#settingsOverview").on("click", ".viewUser", function(){
 
     $("#settingsOverview").hide();
     $("#usersOverview").show();
+    addBreadcrumbs(["Users", userName], ["", "active"]);
     ajaxRequest(globalUrls.user.getUserOverview, x, (data)=>{
         data = makeToastr(data);
-        let x = `<div class="mb-3">
+        let x = `<div class="mb-3 text-center">
             <h4 class="text-underline">
-                <i class="fas fa-user mr-2"></i>Viewing User ${userName} latest recorded actions
+                <i class="fas fa-user mr-2"></i>Viewing <code>${userName}</code> latest attempted actions
             </h4>
         </div>`;
 
@@ -315,20 +316,24 @@ $("#settingsOverview").on("click", ".viewUser", function(){
             "disable": "fas fa-power-off"
         };
 
-        $.each(data, (category, methods)=>{
-            x += `<div class='mb-3 pb-2 border-bottom'>
-                <h1><i class="${categoryIcons[category]} mr-2"></i>${category}
-                </h1>
-                <div class="row">`
-            let c = Math.floor(12 / Object.keys(methods).length);
-            let i = 0 ;
-            $.each(methods, (method, events)=>{
-                let bl = i == 0 ? "" : "border-left";
-                x += `<div class="col-md-${c} ${bl} text-center"><h4><i class="${methodIcons[method]} mr-2"></i> ${method} - ${events.length}</h4></div>`;
-                i++;
+        if(data.length == 0){
+            x += `<div class="text-center"><h5><i class="fas fa-info-circle text-info mr-2"></i>No Recorded Actions</h5></div>`;
+        }else{
+            $.each(data, (category, methods)=>{
+                x += `<div class='mb-3 pb-2 border-bottom'>
+                    <h1><i class="${categoryIcons[category]} mr-2"></i>${category}
+                    </h1>
+                    <div class="row">`
+                let c = Math.floor(12 / Object.keys(methods).length);
+                let i = 0 ;
+                $.each(methods, (method, events)=>{
+                    let bl = i == 0 ? "" : "border-left";
+                    x += `<div class="col-md-${c} ${bl} text-center"><h4><i class="${methodIcons[method]} mr-2"></i> ${method} - ${events.length}</h4></div>`;
+                    i++;
+                });
+                x += `</div></div>`
             });
-            x += `</div></div>`
-        });
+        }
 
         $("#usersOverview").empty().append(x);
 
