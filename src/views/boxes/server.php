@@ -376,34 +376,59 @@ function loadServerView(hostId)
         }
 
         if(data.resources.hasOwnProperty("system")){
+
+            let mbProduct = "Not Set";
+            let chasisType = "Not Set";
+            let firmwareDetails = "Not Set";
+            let uuid = "Not Set";
+            let type = "Not Set";
+
+            if(data.resources.system != null){
+                type = data.resources.system.type;
+                uuid = data.resources.system.uuid;
+
+                if(data.resources.system.motherboard != null){
+                    mbProduct = data.resources.system.motherboard.product;
+                }
+
+                if(data.resources.system.chassis != null){
+                    chasisType = data.resources.system.chassis.type
+                }
+
+                if(data.resources.system.firmware  != null){
+                    firmwareDetails = `${data.resources.system.firmware.vendor}
+                    -
+                    ${data.resources.system.firmware.version}
+                    (${data.resources.system.firmware.date})`;
+                }
+            }
+
+
             hostDetailsTrs += `
                 <tr>
                     <td colspan="999" class="bg-info text-center text-white">System Details</td>
                 </tr>
                 <tr>
                     <td>Motherboard</td>
-                    <td>${data.resources.system.motherboard.product}</td>
+                    <td>${mbProduct}</td>
                 </tr>
                 <tr>
                     <td>Type</td>
-                    <td>${data.resources.system.type}</td>
+                    <td>${type}</td>
                 </tr>
                 <tr>
                     <td>Chasis Type</td>
-                    <td>${data.resources.system.chassis.type}</td>
+                    <td>${chasisType}</td>
                 </tr>
                 <tr>
                     <td>System Firmware</td>
                     <td>
-                        ${data.resources.system.firmware.vendor}
-                        -
-                        ${data.resources.system.firmware.version}
-                        (${data.resources.system.firmware.date})
+                        ${firmwareDetails}
                     </td>
                 </tr>
                 <tr>
                     <td>UUID</td>
-                    <td>${data.resources.system.uuid}</td>
+                    <td>${uuid}</td>
                 </tr>
             `;
         }

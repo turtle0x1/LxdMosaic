@@ -1,7 +1,7 @@
 <div id="backupsBox" class="boxSlide">
 <div id="backupsOverview">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 border-right">
             <div class="card bg-dark">
                 <div class="card-header">
                     <h4>Instance Backups</h4>
@@ -64,6 +64,9 @@
 
                   </div>
                   <div class="card-body">
+                      <div class="d-none text-center font-weight-bold mb-2" id="ghostInstanceText">
+                          <i class="fas fa-ghost text-success mr-2"></i>This instance has been deleted, this backup is all that remains!
+                      </div>
                       <table class="table table-bordered table-dark" id="backupContainerTable">
                           <thead>
                             <tr>
@@ -138,6 +141,13 @@ $(document).on("click", ".deleteBackup", function(){
         }
 
         tr.remove();
+
+        $.each(currentContainerBackups.allBackups, (index, details)=>{
+            if(details.id == backupId){
+                // console.log(index);
+                currentContainerBackups.allBackups.splice(index, 1)
+            }
+        })
     });
 
 });
@@ -204,15 +214,10 @@ $(document).on("change", "#scheduleBackupFrequency", function(){
 
 $(document).on("click", "#scheduleInstanceBackup", function(){
     $.confirm({
-        title: `Schedule Instance Backup`,
+        title: `Schedule Backup`,
         content: `
-            <div class="alert alert-warning">
-                <b>Be careful backups runs in parallel!</b> If you schedule lots
-                at once LXD itself (and therefor LXDMosaic) may become
-                unresponsive while the backups run!
-            </div>
             <div class="form-group">
-                <label>Frequency</label>
+                <label><b>Frequency</b></label>
                 <select class="form-control" id="scheduleBackupFrequency">
                     <option value=""></option>
                     <option value="daily">Daily</option>
@@ -221,7 +226,7 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                 </select>
             </div>
             <div id="weeklyBackupScheduleDiv" class="d-none">
-                <label>Select Days Of Week</label>
+                <label><b>Select Days Of Week</b></label>
                 <div>
                     <div data-day="0" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
                         Sunday
@@ -248,28 +253,31 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
             </div>
             <div id="monthlyBackupScheduleDiv" class="d-none">
                 <div class="form-group">
-                    <label>Day Of Month (1-31)</label>
-                    <div class="text-info"><i class="fas fa-info-circle mr-2"></i>This uses cron expressions, consider Feb 27th & Months with 30 days!</div>
+                    <label><b>Day Of Month (1-31)</b></label>
+                    <br/>
+                    <small><i class="fas fa-info-circle mr-2 text-info"></i>Safer to use start of month!</small>
                     <input class="form-control" id="bMonthlyDayOfMonth"/>
                 </div>
             </div>
             <div class="form-group">
                 <div>
-                    <label>At These Times (00:00-23:59)</label>
-                    <button class="btn btn-sm btn-primary float-right">
-                        <i class="fas fa-plus"></i>
-                    </button>
+                    <label><b>At This Time (00:00-23:59)</b></label>
+                    <br/>
+                    <small><i class="fas fa-info-circle mr-2 text-info"></i>Input or pick from the dropdown!</small>
                 </div>
                 <input class="form-control" id="scheduleBackupTime" />
             </div>
             <div class="form-group">
-                <label>Strategy</label>
+                <label><b>Strategy</b></label>
                 <select class="form-control" id="scheduleBackupStrategy">
                 </select>
             </div>
             <div class="form-group">
-                <label>Number Of Backups To Keep</label>
+                <label><b>Number Of Backups To Keep</b></label>
                 <input value="7" class="form-control" id="scheduleRetention"/>
+            </div>
+            <div class="mt-2">
+                <i class="fas fa-info-circle mr-2 text-warning"></i>Multiple backups at the same time may stall LXD!
             </div>
         `,
         buttons: {
@@ -395,6 +403,12 @@ $(document).on("click", ".viewContainerBackups", function(){
 
     let trs = "";
 
+    if(currentContainerBackups.containerExists == false){
+        $("#ghostInstanceText").removeClass("d-none");
+    }else{
+        $("#ghostInstanceText").addClass("d-none");
+    }
+
     if(currentContainerBackups.allBackups.length > 0){
         $.each(currentContainerBackups.allBackups, (_, backup)=>{
             trs += `<tr data-backup-id="${backup.id}">
@@ -415,7 +429,7 @@ $(document).on("click", ".viewContainerBackups", function(){
         });
     }else{
         trs += `<tr>
-            <td class="alert alert-danger text-center" colspan="999">No Backups</td>
+            <td class="text-warning text-center" colspan="999"><i class="fas fa-info-circle mr-2"></i>No Backups - Consider Scheduling Backups Above</td>
         </tr>`
     }
 
@@ -441,10 +455,10 @@ function loadBackupsOverview() {
         currentBackups = data.allBackups;
 
         $.each(data.allBackups, (host, hostDetails)=>{
-            backupTrs += `<tr class="bg-success"><td class="text-center" colspan="999">${host}</tr></tr>`;
+            backupTrs += `<tr><td class="text-center text-success" colspan="999"><i class="fas fa-server mr-2"></i>${host}</tr></tr>`;
             $.each(hostDetails.containers, (containerIndex, container)=>{
 
-                let trClass = container.lastBackup.neverBackedUp || !container.containerExists ? "danger" : "success";
+                let trClass = container.lastBackup.neverBackedUp ? "danger" : "success";
 
                 let createdDate = container.containerExists ? moment(container.created).fromNow() : "Deleted";
                 let date = "Never";
@@ -456,6 +470,8 @@ function loadBackupsOverview() {
 
                 if(container.containerExists){
                     instanceName += ghostIcon;
+                }else{
+                    trClass = "success";
                 }
 
                 if(hostDetails.supportsBackups){
@@ -475,12 +491,12 @@ function loadBackupsOverview() {
                     date = moment(container.lastBackup.backupDateCreated).fromNow()
                 }
 
-                let upToString = container.strategyName == "" ? "" :  ` / ${container.scheduleRetention} scheduled to keep`;
+                let upToString = container.strategyName == "" ? "" :  ` / ${container.scheduleRetention}`;
 
-                backupTrs += `<tr class="alert alert-${trClass}">
+                backupTrs += `<tr>
                     <td>${instanceName}</td>
                     <td>${container.strategyName} ${container.scheduleString}</td>
-                    <td>${date}</td>
+                    <td class='text-${trClass}'>${date}</td>
                     <td>${container.allBackups.length} ${upToString}</td>
                     <td>${formatBytes(container.totalSize)}</td>
                 </tr>`

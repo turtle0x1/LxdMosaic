@@ -111,7 +111,10 @@
         tokenLimit: 1,
         propertyToSearch: "description",
         theme: "facebook",
-        tokenValue: "details"
+        tokenValue: "details",
+        setExtraSearchParams: ()=>{
+            return {type: "container"};
+        }
     });
 
     $("#newContainerHosts").tokenInput(globalUrls.hosts.search.search, {

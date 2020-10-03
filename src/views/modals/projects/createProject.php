@@ -27,6 +27,7 @@
               <div class="col-md-12">
                   <div class="form-group">
                       <b> Hosts </b>
+                      <small><i class="fas fa-info-circle mr-2 text-info"></i>Only finds hosts that support projects</small>
                       <input class="form-control" id="newProjectHosts"/>
                   </div>
               </div>
@@ -267,7 +268,10 @@
         propertyToSearch: "host",
         tokenValue: "hostId",
         preventDuplicates: false,
-        theme: "facebook"
+        theme: "facebook",
+        setExtraSearchParams: ()=>{
+            return {extensionRequirements: ["projects"]}
+        }
     });
 
     $("#restrictionsTable, #restrictionWarning").hide();

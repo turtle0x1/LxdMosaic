@@ -272,10 +272,10 @@ if ($haveServers->haveAny() !== true) {
                       update: '/api/Images/UpdateImagePropertiesController/update',
                       get: '/api/Images/GetImagePropertiesController/getAll'
                   },
-                  getLinuxContainersOrgImages: "/api/Images/GetLinuxContainersOrgImagesController/get",
+                  getLinuxContainersOrgImages: "/api/Images/SearchRemoteImagesController/get",
                   delete: "/api/Images/DeleteImagesController/delete",
                   getAll: "/api/Images/GetImagesController/getAllHostImages",
-                  import: "/api/Images/ImportLinuxContainersByAliasController/import",
+                  import: "/api/Images/ImportRemoteImagesController/import",
               },
               cloudConfig: {
                   search: {
@@ -915,7 +915,7 @@ function loadDashboard(){
                     disabled = "disabled text-warning text-strikethrough";
                 }
 
-                let projects = "Not Available";
+                let projects = "<div class='text-center text-info'><i class='fas fa-info-circle mr-2'></i>Not Supported</div>";
 
                 if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
                     projects = "<select class='form-control changeHostProject'>";
@@ -928,7 +928,11 @@ function loadDashboard(){
                     projects += "</select>";
                 }
 
-                hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+                if(host.hostOnline == true){
+                    hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+                }
+
+
 
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link viewServer ${disabled}" href="#">
@@ -982,7 +986,7 @@ function loadDashboard(){
                 disabled = "disabled text-warning text-strikethrough";
             }
 
-            let projects = "<b> Not Available </b>";
+            let projects = "<div class='text-center text-info'><i class='fas fa-info-circle mr-2'></i>Not Supported</div>";
 
 
             if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
@@ -995,7 +999,9 @@ function loadDashboard(){
                 });
                 projects += "</select>";
             }
-            hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+            if(host.hostOnline == true){
+                hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+            }
 
             hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                 <a class="nav-link viewServer ${disabled}" href="#">
