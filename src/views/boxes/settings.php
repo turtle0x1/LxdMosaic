@@ -302,7 +302,9 @@ $("#settingsOverview").on("click", ".viewUser", function(){
             "instance": "fas fa-box",
             "backups": "fas fa-save",
             "projects": "fas fa-project-diagram",
-            "profiles": "fas fa-users"
+            "profiles": "fas fa-users",
+            "networks": "fas fa-network-wired",
+
         };
 
         let methodIcons = {

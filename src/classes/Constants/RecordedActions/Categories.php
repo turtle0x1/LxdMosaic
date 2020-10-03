@@ -7,4 +7,5 @@ class Categories
     const BACKUPS = "backups";
     const PROJECTS = "projects";
     const PROFILES = "profiles";
+    const NETWORKS = "networks";
 }

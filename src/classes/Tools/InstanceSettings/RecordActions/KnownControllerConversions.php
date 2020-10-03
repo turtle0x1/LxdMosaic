@@ -17,6 +17,9 @@ class KnownControllerConversions
         // Profiles
         "dhope0000\LXDClient\Controllers\Profiles\CreateProfileController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Profiles\CreateProfile",
         "dhope0000\LXDClient\Controllers\Profiles\DeleteProfileController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Profiles\DeleteProfile",
+        // Networks
+        "dhope0000\LXDClient\Controllers\Networks\CreateNetworkController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Networks\CreateNetwork",
+        "dhope0000\LXDClient\Controllers\Networks\DeleteNetworkController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Networks\DeleteNetwork",
     ];
 
     public function getAllControllers()
