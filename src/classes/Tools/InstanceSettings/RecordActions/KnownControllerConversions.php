@@ -6,8 +6,8 @@ class KnownControllerConversions
 {
     private $knowHowToConvert = [
         // Instances
-        "dhope0000\LXDClient\Controllers\Instances\CreateController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\CreateInstance",
-        "dhope0000\LXDClient\Controllers\Instances\DeleteInstanceController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\DeleteInstance",
+        "dhope0000\LXDClient\Controllers\Instances\CreateController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Instances\CreateInstance",
+        "dhope0000\LXDClient\Controllers\Instances\DeleteInstanceController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Instances\DeleteInstance",
         // Backups
         "dhope0000\LXDClient\Controllers\Instances\Backups\ScheduleBackupController\schedule"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Backups\ScheduleBackup",
         "dhope0000\LXDClient\Controllers\Instances\Backups\DisableScheduledBackupsController\disable"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Backups\DisableBackupSchedule",

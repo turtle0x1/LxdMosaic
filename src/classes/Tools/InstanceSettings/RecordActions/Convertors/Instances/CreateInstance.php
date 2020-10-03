@@ -1,6 +1,6 @@
 <?php
 
-namespace dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors;
+namespace dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Instances;
 
 use dhope0000\LXDClient\Objects\RecordedAction;
 use dhope0000\LXDClient\Interfaces\RecordedActionConvertor;
