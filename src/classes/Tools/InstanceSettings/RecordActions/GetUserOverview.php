@@ -2,38 +2,40 @@
 
 namespace dhope0000\LXDClient\Tools\InstanceSettings\RecordActions;
 
-use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\GetActions;
+use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\KnownControllerConversions;
+use dhope0000\LXDClient\Model\InstanceSettings\RecordActions\FetchRecordedActions;
+use \DI\Container;
 
 class GetUserOverview
 {
     private $getActions;
 
-    private $controllersToGet = [
-        "dhope0000\LXDClient\Controllers\Instances\CreateController\create",
-        "dhope0000\LXDClient\Controllers\Projects\CreateProjectController\create",
-        "dhope0000\LXDClient\Controllers\Instances\DeleteInstanceController\delete",
-        "dhope0000\LXDClient\Controllers\Instances\Backups\ScheduleBackupController\schedule",
-        "dhope0000\LXDClient\Controllers\Instances\Backups\DisableScheduledBackupsController\disable",
-        "dhope0000\LXDClient\Controllers\Projects\DeleteProjectController\delete",
-
-        "dhope0000\LXDClient\Controllers\Profiles\CreateProfileController\create",
-        "dhope0000\LXDClient\Controllers\Profiles\DeleteProfileController\delete"
-    ];
-
     public function __construct(
-        GetActions $getActions
+        KnownControllerConversions $knownControllerConversions,
+        FetchRecordedActions $fetchRecordedActions,
+        Container $container
     ) {
-        $this->getActions = $getActions;
+        $this->knownControllerConversions = $knownControllerConversions;
+        $this->fetchRecordedActions = $fetchRecordedActions;
+        $this->container = $container;
     }
 
     public function get(int $userId, int $targetUser)
     {
+        $controllers = $this->knownControllerConversions->getAllControllers();
+
+        $groupedActions = $this->fetchRecordedActions
+            ->fetchUserActionsForControllers($targetUser, $controllers);
+
         $events = [];
 
-        foreach ($this->controllersToGet as  $controller) {
-            $actions = $this->getActions->getUserActions($userId, $targetUser, $controller);
-
+        foreach ($groupedActions as $controller => $actions) {
+            $convertor = $this->knownControllerConversions->getConvertorClass($controller);
+            $convertor = $this->container->make($convertor);
             foreach ($actions as $action) {
+                $action["params"] = json_decode($action["params"], true);
+                $action = $convertor->convert($action);
+                
                 $cat = $action->getCategory();
                 if (!isset($events[$cat])) {
                     $events[$cat] = [];
@@ -47,9 +49,9 @@ class GetUserOverview
                 $events[$cat][$method][] = $action;
             }
         }
-        foreach ($events as $category => &$methods) {
-            asort($methods);
-        }
+
+        ksort($events);
+
         return $events;
     }
 }
