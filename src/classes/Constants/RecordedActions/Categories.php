@@ -5,4 +5,5 @@ class Categories
 {
     const INSTANCE = "instance";
     const BACKUPS = "backups";
+    const PROJECTS = "projects";
 }

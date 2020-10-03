@@ -300,7 +300,8 @@ $("#settingsOverview").on("click", ".viewUser", function(){
 
         let categoryIcons = {
             "instance": "fas fa-box",
-            "backups": "fas fa-save"
+            "backups": "fas fa-save",
+            "projects": "fas fa-project-diagram"
         };
 
         let methodIcons = {
@@ -316,8 +317,11 @@ $("#settingsOverview").on("click", ".viewUser", function(){
                 </h1>
                 <div class="row">`
             let c = Math.floor(12 / Object.keys(methods).length);
+            let i = 0 ;
             $.each(methods, (method, events)=>{
-                x += `<div class="col-md-${c} border-left text-center"><h4><i class="${methodIcons[method]} mr-2"></i> ${method} - ${events.length}</h4></div>`;
+                let bl = i == 0 ? "" : "border-left";
+                x += `<div class="col-md-${c} ${bl} text-center"><h4><i class="${methodIcons[method]} mr-2"></i> ${method} - ${events.length}</h4></div>`;
+                i++;
             });
             x += `</div></div>`
         });

@@ -13,11 +13,15 @@ class GetActions
     private $fetchRecordedActions;
 
     private $knowHowToConvert = [
+        // Instances
         "dhope0000\LXDClient\Controllers\Instances\CreateController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\CreateInstance",
-        "dhope0000\LXDClient\Controllers\Projects\CreateProjectController\create",
         "dhope0000\LXDClient\Controllers\Instances\DeleteInstanceController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\DeleteInstance",
+        // Backups
         "dhope0000\LXDClient\Controllers\Instances\Backups\ScheduleBackupController\schedule"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Backups\ScheduleBackup",
         "dhope0000\LXDClient\Controllers\Instances\Backups\DisableScheduledBackupsController\disable"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Backups\DisableBackupSchedule",
+        // Projects
+        "dhope0000\LXDClient\Controllers\Projects\CreateProjectController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Projects\CreateProject",
+        "dhope0000\LXDClient\Controllers\Projects\DeleteProjectController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Projects\DeleteProject",
     ];
 
     public function __construct(
@@ -46,7 +50,7 @@ class GetActions
     public function getUserActions(int $userId, int $targetUser, string $controller, int $ammount = 30)
     {
         $this->validatePermissions->isAdminOrThrow($userId);
-
+        // var_dump($controller);
         $logs = $this->fetchRecordedActions->fetchUserActions($targetUser, $controller, $ammount);
         $actions = [];
         foreach ($logs as &$log) {
