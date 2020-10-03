@@ -34,7 +34,7 @@ class RouteApi
         return $this->userId;
     }
 
-    public function route($pathParts, $headers)
+    public function route($pathParts, $headers, $returnResult = false)
     {
         $userId = $headers["userid"];
 
@@ -55,7 +55,6 @@ class RouteApi
         unset($pathParts[$methodkey]);
 
         $controllerStr = "dhope0000\\LXDClient\\Controllers\\" . implode($pathParts, "\\");
-
         if (!class_exists($controllerStr)) {
             throw new \Exception("End point not found", 1);
         } elseif (method_exists($controllerStr, $method) !== true) {
@@ -73,6 +72,10 @@ class RouteApi
         // TODO Pass provided arguments to controller
         $data = call_user_func_array(array($controller, $method), $params);
 
+        if ($returnResult) {
+            return $data;
+        }
+        
         //TODO So lazy
         echo json_encode($data);
     }

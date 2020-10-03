@@ -1,5 +1,7 @@
 # # #!/usr/bin/env bash
 
+sudo dpkg --purge --force-all lxd lxc
+
 # # Install Dependecies
 apt-get install -y apache2 php php-cli php-json php-mysql php-xml php-curl unzip zip git nodejs openssl || exit $?
 apt-get install -y mysql-server || apt-get install -y default-mysql-server || exit $?
