@@ -19,7 +19,7 @@ var userDetails = {
     apiToken: '$apiToken',
     userId: $userId
 }
-var recordActionsEnabled = $recordActionsEnabled;
+var recordActionsEnabled = parseInt($recordActionsEnabled);
 </script>";
 
 if ($haveServers->haveAny() !== true) {
@@ -107,6 +107,10 @@ if ($haveServers->haveAny() !== true) {
                   get: "/api/Dashboard/GetController/get"
               },
               instances: {
+                  profiles: {
+                    remove: "/api/Instances/Profiles/RemoveProfileController/remove",
+                    assign: "/api/Instances/Profiles/AssignProfilesController/assign",
+                  },
                   metrics: {
                       getAllAvailableMetrics: "/api/Instances/Metrics/GetAllAvailableMetricsController/get",
                       getGraphData: "/api/Instances/Metrics/GetGraphDataController/get",
@@ -192,6 +196,9 @@ if ($haveServers->haveAny() !== true) {
                 getOverview: "/api/InstanceSettings/GetSettingsOverviewController/get"
               },
               networks: {
+                  tools: {
+                      findIpAddress: "/api/Networks/Tools/FindIpAddressController/find"
+                  },
                   getAll: "/api/Networks/GetHostsNetworksController/get",
                   get: "/api/Networks/GetNetworkController/get",
                   deleteNetwork: "/api/Networks/DeleteNetworkController/delete",
@@ -215,7 +222,8 @@ if ($haveServers->haveAny() !== true) {
               },
               profiles: {
                   search:{
-                      getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles"
+                      getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles",
+                      searchHostProfiles: "/api/Profiles/Search/SearchProfiles/searchHostProfiles"
                   },
                   getProfile: '/api/Profiles/GetProfileController/get',
                   getAllProfiles: '/api/Profiles/GetAllProfilesController/getAllProfiles',
@@ -264,10 +272,10 @@ if ($haveServers->haveAny() !== true) {
                       update: '/api/Images/UpdateImagePropertiesController/update',
                       get: '/api/Images/GetImagePropertiesController/getAll'
                   },
-                  getLinuxContainersOrgImages: "/api/Images/GetLinuxContainersOrgImagesController/get",
+                  getLinuxContainersOrgImages: "/api/Images/SearchRemoteImagesController/get",
                   delete: "/api/Images/DeleteImagesController/delete",
                   getAll: "/api/Images/GetImagesController/getAllHostImages",
-                  import: "/api/Images/ImportLinuxContainersByAliasController/import",
+                  import: "/api/Images/ImportRemoteImagesController/import",
               },
               cloudConfig: {
                   search: {
@@ -282,6 +290,10 @@ if ($haveServers->haveAny() !== true) {
                   getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
               },
               user: {
+                  tokens: {
+                      create: '/api/User/Tokens/CreateTokenController/create',
+                      delete: '/api/User/Tokens/DeleteTokenController/delete',
+                  },
                   dashboard: {
                     graphs: {
                        add: '/api/User/Dashboard/Graphs/AddGraphController/add',
@@ -291,6 +303,7 @@ if ($haveServers->haveAny() !== true) {
                     get: '/api/User/Dashboard/GetDashboardController/get',
                     delete: '/api/User/Dashboard/DeleteDashboardController/delete'
                   },
+                  getUserOverview:'/api/User/GetUserOverviewController/get',
                   setHostProject: '/api/User/SetHostProjectController/set'
               },
               projects: {
@@ -447,6 +460,9 @@ if ($haveServers->haveAny() !== true) {
           </li>
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">
+          <li class="nav-item px-3 btn btn-outline-primary pull-right" id="openSearch">
+                <a> <i class="fas fa-search"></i> Search </a>
+           </li>
           <li class="nav-item px-3 btn btn-outline-primary pull-right" id="addNewServer">
                 <a> <i class="fas fa-plus"></i> Server </a>
            </li>
@@ -552,14 +568,16 @@ if(typeof io !== "undefined"){
        ]
 
        if(loadServerOviewDescriptions.includes(msg.metadata.description)  && msg.metadata.status_code == 200 && $("#mainBreadcrumb").find(".active").text()){
-          loadContainerTreeAfter();
+          if($(`.nav-item[data-hostid='${msg.hostId}']`).hasClass("open")){
+              loadContainerTreeAfter(0, msg.hostId, msg.hostAlias);
+          }
        }
 
        if(hostList.length == 0){
-           $("#operationsList").append(`<div data-host='${host}'>
+           $("#operationsList").append(`<div data-host='${host}' class="mt-2">
                 <div class='text-center'>
                     <h5><u>
-                        ${host}
+                        ${msg.hostAlias}
                     </u></h5>
                 </div>
                 <div class='opList'></div></div>`
@@ -585,7 +603,16 @@ if(typeof io !== "undefined"){
                return;
            }
 
-           liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon}'></span>${description}`);
+           liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} mr-2'></span>${description}`);
+
+           if(msg.metadata.err !== ""){
+               $(liItem).data({
+                   toggle: "tooltip",
+                   placement: "bottom",
+                   title: msg.metadata.err
+               }).addClass("btn-link text-danger").tooltip();
+           }
+
        }else{
            hostOpList.prepend(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code));
        }
@@ -603,7 +630,7 @@ $(".sidebar-nav").on("click", ".nav-item", function(){
 
 function makeOperationHtmlItem(id, icon, description, statusCode)
 {
-    return `<div id='${id}'><span data-status='${statusCode}' class='${icon}'></span>${description}</div>`;
+    return `<div id='${id}'><span data-status='${statusCode}' class='${icon} mr-2'></span>${description}</div>`;
 }
 
 var editor = ace.edit("editor");
@@ -888,7 +915,7 @@ function loadDashboard(){
                     disabled = "disabled text-warning text-strikethrough";
                 }
 
-                let projects = "Not Available";
+                let projects = "<div class='text-center text-info'><i class='fas fa-info-circle mr-2'></i>Not Supported</div>";
 
                 if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
                     projects = "<select class='form-control changeHostProject'>";
@@ -901,7 +928,11 @@ function loadDashboard(){
                     projects += "</select>";
                 }
 
-                hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+                if(host.hostOnline == true){
+                    hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+                }
+
+
 
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link viewServer ${disabled}" href="#">
@@ -955,7 +986,7 @@ function loadDashboard(){
                 disabled = "disabled text-warning text-strikethrough";
             }
 
-            let projects = "<b> Not Available </b>";
+            let projects = "<div class='text-center text-info'><i class='fas fa-info-circle mr-2'></i>Not Supported</div>";
 
 
             if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
@@ -968,7 +999,9 @@ function loadDashboard(){
                 });
                 projects += "</select>";
             }
-            hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+            if(host.hostOnline == true){
+                hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+            }
 
             hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                 <a class="nav-link viewServer ${disabled}" href="#">
@@ -1108,6 +1141,46 @@ function setContDetsByTreeItem(node)
     }
     return currentContainerDetails;
 }
+
+$(document).on("click", "#openSearch", function(){
+    $.confirm({
+        title: `Search`,
+        content: `
+            <div class="form-group">
+                <label>IP Address IPV4/IPV6</label>
+                <input class="form-control" name="ip" />
+            </div>
+        `,
+        buttons: {
+            cancel: {
+                btnClass: "btn btn-secondary",
+                text: "cancel"
+            },
+            search: {
+                btnClass: "btn btn-success",
+                text: "Search",
+                action: function(){
+                    let x = {
+                        ip: this.$content.find("input[name=ip]").val()
+                    }
+
+                    ajaxRequest(globalUrls.networks.tools.findIpAddress, x, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            return false;
+                        }
+                        if(data.result == false){
+                            makeToastr({state: "error", message: "Couldn't find instance"})
+                            return false;
+                        }
+                        currentContainerDetails = data.result;
+                        loadContainerView(data.result);
+                    });
+                }
+            }
+        }
+    });
+});
 
 $(document).on("click", "#addNewServer", function(){
     $("#modal-hosts-add").modal("show");

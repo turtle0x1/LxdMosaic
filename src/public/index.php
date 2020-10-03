@@ -11,7 +11,10 @@ $exceptionHandler->register();
 
 $env = new Dotenv\Dotenv(__DIR__ . "/../../");
 $env->load();
-$env->required(['DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME']);
+if (!isset($_ENV["DB_SQLITE"]) && !empty($_ENV["DB_SQLITE"])) {
+    $env->required(['DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME']);
+}
+
 
 $container->injectOn($exceptionHandler);
 

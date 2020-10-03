@@ -2,14 +2,26 @@
     <div class="row border-bottom mb-2">
     <div class="col-md-12 text-center">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
-              <select class="form-control" style="max-width: 150px;" id="container-changeState">
-                  <option value="" selected="selected"> Change State </option>
-                  <option value="start"> Start </option>
-                  <option value="stop"> Stop </option>
-                  <option value="restart"> Restart </option>
-                  <option value="freeze"> Freeze </option>
-                  <option value="unfreeze"> Unfreeze </option>
-              </select>
+              <div class="btn-toolbar float-right">
+                <div class="btn-group mr-2">
+                    <button data-toggle="tooltip" data-placement="bottom" title="Start Instance" class="btn btn-sm btn-success changeInstanceState" data-action="start">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button data-toggle="tooltip" data-placement="bottom" title="Stop Instance" class="btn btn-sm btn-danger changeInstanceState" data-action="stop">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                    <button data-toggle="tooltip" data-placement="bottom" title="Restart Instance" class="btn btn-sm btn-warning changeInstanceState" data-action="restart">
+                        <i class="fa fa-sync"></i>
+                    </button>
+                    <hr/>
+                    <button data-toggle="tooltip" data-placement="bottom" title="Freeze Instance" class="btn btn-sm btn-info changeInstanceState" data-action="freeze">
+                        <i class="fas fa-snowflake"></i>
+                    </button>
+                    <button data-toggle="tooltip" data-placement="bottom" title="Unfreeze Instance" class="btn btn-sm btn-primary changeInstanceState" data-action="unfreeze">
+                        <i class="fas fa-mug-hot"></i>
+                    </button>
+                </div>
+              </div>
 
             <h4 class="pt-1"> <u>
                 <span id="container-currentState"></span>
@@ -18,6 +30,9 @@
             </u></h4>
             <div class="btn-toolbar float-right">
               <div class="btn-group mr-2">
+                  <button data-toggle="tooltip" data-placement="bottom" title="Assign Profiles" class="btn btn-sm btn-purple" id="assignProfilesBtn">
+                      <i class="fas fa-users"></i>
+                  </button>
                   <button data-toggle="tooltip" data-placement="bottom" title="Create Image" class="btn btn-sm btn-secondary" id="craeteImage">
                       <i class="fas fa-image"></i>
                   </button>
@@ -123,6 +138,7 @@
                       <thead class="thead-inverse">
                           <tr>
                               <th> Name </th>
+                              <th></th>
                           </tr>
                       </thead>
                       <tbody>
@@ -759,7 +775,11 @@ function loadContainerView(data)
         consoleSocket.emit("close", currentTerminalProcessId);
         currentTerminalProcessId = null;
     }
-    $("#goToMetrics").attr("disabled", true).addClass("disabled");
+    $("#goToMetrics").attr("disabled", true).addClass("disabled").data({
+        toggle: "tooltip",
+        placement: "bottom",
+        title: 'Go To Server View & Enable Gather Metrics!'
+    });
 
     ajaxRequest(globalUrls.instances.getInstance, data, function(result){
         let x = $.parseJSON(result);
@@ -773,16 +793,43 @@ function loadContainerView(data)
 
         let disableActions = x.state.status_code !== 102;
 
+        let stateBtnsToEnable = [];
+        let stateBtnsToDisable = [];
+
+        if(x.state.status_code == 103){
+            stateBtnsToEnable = ["stop", "freeze", "restart"];
+            stateBtnsToDisable = ["start", "unfreeze"];
+        }else if(x.state.status_code == 102){
+            stateBtnsToEnable = ["start"];
+            stateBtnsToDisable = ["stop", "freeze", "restart", "unfreeze"];
+        }else if(x.state.status_code == 110){
+            stateBtnsToEnable = ["unfreeze"];
+            stateBtnsToDisable = ["start", "stop", "freeze", "restart"];
+        }else{
+            stateBtnsToEnable = ["start", "unfreeze"];
+            stateBtnsToDisable = ["stop", "freeze"];
+        }
+
+        $.each(stateBtnsToDisable, (_, i)=>{
+            $(`.changeInstanceState[data-action='${i}']`).addClass("bg-secondary disabled").attr("disabled", "disabled");
+        })
+        $.each(stateBtnsToEnable, (_, i)=>{
+            $(`.changeInstanceState[data-action='${i}']`).removeClass("bg-secondary disabled").attr("disabled", false);
+        })
+
+
 
         if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.haveMetrics){
-            $("#goToMetrics").attr("disabled", false).removeClass("disabled");
+            $("#goToMetrics").tooltip("disable");
+            $("#goToMetrics").attr("disabled", false).removeClass("disabled").data({});
+        }else{
+            $("#goToMetrics").tooltip("enable");
         }
 
         $(".renameContainer").attr("disabled", disableActions);
         $(".deleteContainer").attr("disabled", disableActions);
 
         $("#container-currentState").html(`<i class="` + statusCodeIconMap[x.state.status_code] +`"></i>`);
-        $("#container-changeState").val("");
 
         if(x.backupsSupported){
             $("#goToBackups").removeClass("bg-dark disabled").css("cursor", "pointer");
@@ -851,7 +898,10 @@ function loadContainerView(data)
             profileTrHtml = "<tr><td colspan='999' class='text-center'> No Profiles </td></tr>"
         }else{
             $.each(x.details.profiles, function(i, item){
-                profileTrHtml += `<tr><td><a href='#' data-profile=${item} class='toProfile'>${item}</a></td></tr>`;
+                profileTrHtml += `<tr data-profile="${item}">
+                    <td><a href='#' data-profile=${item} class='toProfile'>${item}</a></td>
+                    <td><button class='btn btn-sm btn-outline-danger removeProfile'><i class="fas fa-trash"></i></button></td>
+                </tr>`;
             });
         }
 
@@ -965,6 +1015,19 @@ function loadContainerView(data)
         $('html, body').animate({scrollTop:0},500);
     });
 }
+
+$("#containerBox").on("click", ".removeProfile", function(){
+    console.log(currentContainerDetails);
+    let tr = $(this).parents("tr");
+    let profile = tr.data("profile");
+    ajaxRequest(globalUrls.instances.profiles.remove, {...{profile: profile}, ...currentContainerDetails}, (data)=>{
+        data = makeToastr(data);
+        if(data.state == "error"){
+            return false;
+        }
+        tr.remove();
+    });
+});
 
 $("#containerBox").on("click", "#createBackup", function(){
     backupContainerConfirm(
@@ -1492,6 +1555,10 @@ $("#containerBox").on("click", ".editContainerSettings", function(){
     $("#modal-container-editSettings").modal("show");
 });
 
+$("#containerBox").on("click", "#assignProfilesBtn", function(){
+    $("#modal-container-assignProfiles").modal("show");
+});
+
 $("#containerBox").on("click", "#craeteImage", function(){
     $("#modal-container-createImage").modal("show");
 });
@@ -1500,8 +1567,9 @@ $("#containerBox").on("click", ".deleteContainer", function(){
     deleteContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.alias, currentContainerDetails.container);
 });
 
-$("#containerBox").on("change", "#container-changeState", function(){
-    let url = globalUrls.instances.state[$(this).val()];
+$("#containerBox").on("click", ".changeInstanceState", function(){
+    let url = globalUrls.instances.state[$(this).data("action")];
+    $(".changeInstanceState").tooltip("hide");
     ajaxRequest(url, currentContainerDetails, function(data){
         let result = makeToastr(data);
         loadContainerTreeAfter();
@@ -1523,4 +1591,5 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
     require __DIR__ . "/../modals/containers/files/uploadFile.php";
     require __DIR__ . "/../modals/instances/vms/createVm.php";
     require __DIR__ . "/../modals/containers/createImage.php";
+    require __DIR__ . "/../modals/containers/assignProfiles.php";
 ?>

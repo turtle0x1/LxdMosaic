@@ -14,6 +14,21 @@ class GetDetails
         $this->container = $container;
     }
 
+    public function getIdByUrlMatch(string $hostUrl)
+    {
+        $sql = "SELECT
+                    `Host_ID`
+                FROM
+                    `Hosts`
+                WHERE
+                    `Host_Url_And_Port` = :hostUrl
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostUrl"=>$hostUrl
+        ]);
+        return $do->fetchColumn();
+    }
     public function fetchAlias(int $hostId)
     {
         $sql = "SELECT

@@ -56,8 +56,9 @@ class CreateInstance
 
             $alias = "";
             // Thats expensive
-            if ($host->cluster->info()["enabled"]) {
-                $alias = $host->getAlias();
+            $clusterDetails = $host->cluster->info();
+            if ($clusterDetails["enabled"]) {
+                $alias = $clusterDetails["server_name"];
             }
 
             $response = $host->instances->create($name, $options, true, [], $alias);

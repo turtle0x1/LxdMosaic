@@ -210,11 +210,24 @@ function viewProject(project, hostId, hostAlias){
 
 
 $("#projectsBox").on("click", "#deleteProject", function(){
-    ajaxRequest(globalUrls.projects.delete, currentProject, function(data){
-        data = makeToastr(data);
-        if(data.state == "success"){
-            loadProjectView();
+    $.confirm({
+        title: "Delete Project?!",
+        content: `<i class="fas fa-info-circle text-info mr-2"></i>Users currently using this project will be assigned back to <code>default</code> project`,
+        theme: 'dark',
+        buttons: {
+            cancel: {},
+            ok: {
+                btnClass: "btn btn-danger",
+                action: function(){
+                    ajaxRequest(globalUrls.projects.delete, currentProject, function(data){
+                        data = makeToastr(data);
+                        if(data.state == "success"){
+                            loadProjectView();
 
+                        }
+                    });
+                }
+            }
         }
     });
 });

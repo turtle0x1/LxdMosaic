@@ -35,6 +35,11 @@ then
     apt-get install -y npm || exit $?
 fi
 
+if [ "$(uname -m)" == "aarch64" ]
+then
+    apt-get install -y gcc g++ make || exit $?
+fi
+
 npm -g install pm2 || exit $?
 
 # Install composer
@@ -71,7 +76,7 @@ chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/backups
 # Move in LxdManager
 cd /var/www/LxdMosaic || exit
 
-git checkout v0.9.1
+git checkout v0.9.3
 
 npm install || exit $?
 

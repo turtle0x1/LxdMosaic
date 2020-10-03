@@ -16,8 +16,8 @@ class GetSettingsOverviewController implements \dhope0000\LXDClient\Interfaces\R
     /**
      * @Route("", name="Get LXDMosaic Settings Overview")
      */
-    public function get()
+    public function get(string $userId)
     {
-        return $this->getSettingsOverview->get();
+        return $this->getSettingsOverview->get($userId);
     }
 }

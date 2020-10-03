@@ -24,16 +24,33 @@ echo "<script>var userDetails = {
 ?>
 <!DOCTYPE html>
 <head>
+<link rel="apple-touch-icon" sizes="57x57" href="/assets/lxdMosaic/favicons/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/assets/lxdMosaic/favicons/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/assets/lxdMosaic/favicons/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/assets/lxdMosaic/favicons/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/assets/lxdMosaic/favicons/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/assets/lxdMosaic/favicons/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/assets/lxdMosaic/favicons/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/assets/lxdMosaic/favicons/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/lxdMosaic/favicons/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="/assets/lxdMosaic/favicons/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/lxdMosaic/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/assets/lxdMosaic/favicons/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/lxdMosaic/favicons/favicon-16x16.png">
+<link rel="manifest" href="/assets/lxdMosaic/favicons/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/assets/lxdMosaic/favicons/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
 <meta charset="utf-8">
 <title>LXD Mosaic</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
       crossorigin="anonymous"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
 
 <!-- jqueryConfirm assets -->
 <link rel="stylesheet" href="/assets/jqueryConfirm/dist/jquery-confirm.min.css">
@@ -44,7 +61,7 @@ echo "<script>var userDetails = {
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" integrity="sha256-ENFZrbVzylNbgnXx0n3I1g//2WeO47XxoPe0vkp3NC8=" crossorigin="anonymous" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha256-3blsJd4Hli/7wCQ+bmgXfOdK7p/ZUMtPXY08jmxSSgk=" crossorigin="anonymous"></script>
 
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 <style>
 body {
@@ -59,30 +76,29 @@ body {
     <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-6 offset-lg-3">
-            <h1 class='text-center mt-5'><u> LXD Mosaic </u></h1>
+            <h1 class='text-center mt-5'>LXD Mosaic</h1>
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center m-2 mt-3">
                 <h4 class=''> Add Your Hosts
-                    <button class="btn btn-sm btn-primary" id="addServer">
-                        <i class="fa fa-plus"></i>
-                    </button>
                 </h4>
-                <div class="form-check">
+            </div>
+            <small class="">
+                <i class="fa fa-info-circle text-info mr-2"></i>If one LXD host is in a cluster we attempt to add  other cluster members
+                using the same trust password!
+            </small>
+            <div class="mt-2 d-block">
+                <button class="btn btn-sm btn-primary mb-2 float-left" id="addServer">
+                    <i class="fas fa-plus mr-2"></i>Add Another Host
+                </button>
+                <div class="form-check float-right">
                   <input class="form-check-input" type="checkbox" value="" id="showPasswordCheck" autocomplete="off">
                   <label class="form-check-label" for="showPasswordCheck">
                     Show Passwords
                   </label>
                 </div>
             </div>
-            <div class="alert alert-info">
-                If a host is in a cluster LXDMosaic will find other cluster members
-                and try to import them with the same trust password!
-            </div>
-
-            <div id="serverGroups"></div>
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <button class="btn btn-primary" id="addServers"> Done </button>
-                </div>
+            <div id="serverGroups" class="d-block mt-2"></div>
+            <div class="d-block text-center">
+                <button class="btn btn-primary" id="addServers">Manage Hosts <i class="fas fa-arrow-right"></i></button>
             </div>
         </div>
 
@@ -93,23 +109,30 @@ body {
 <script>
 
 let inputTemplate = `<div class="input-group mb-3 serverGroup">
-    <div class="input-group-addon">
-        <label> Server </label>
+    <div class="input-group-prepend">
+        <span class="input-group-text serverLabel"></span>
     </div>
-    <input placeholder="ip / hostname" name="connectDetails" class="form-control" autocomplete='off'/>
-    <input placeholder="trust password" name="trustPassword" type="password" class="form-control trustPasswordInput"/>
+    <input placeholder="ip / hostname" name="connectDetails" class="form-control" autocomplete="new-password"/>
+    <input placeholder="trust password" name="trustPassword" type="password" class="form-control trustPasswordInput" autocomplete="new-password"/>
     <input placeholder="Alias (Optional)" name="alias" type="text" class="form-control"/>
-    <div class="input-group-addon">
-        <button class="btn btn-danger removeRow" type="button">
+    <div class="input-group-append">
+        <button class="btn btn-sm btn-outline-danger removeRow" type="button">
             <i class="fa fa-trash"></i>
         </button>
     </div>
 </div>`;
 
-
 $(function(){
-    $("#serverGroups").empty().append(inputTemplate);
+    $("#addServer").trigger("click");
 });
+
+function reLabelServers(){
+    let i = 1;
+    $("#serverGroups").find(".serverLabel").each(function(){
+        $(this).text("Host " + i);
+        i++;
+    });
+}
 
 $(document).on("change", "#showPasswordCheck", function(){
     if($(this).is(":checked")){
@@ -121,30 +144,43 @@ $(document).on("change", "#showPasswordCheck", function(){
 
 $(document).on("click", ".removeRow", function(){
     $(this).parents(".serverGroup").remove();
+    reLabelServers();
 });
 
 $(document).on("click", "#addServer", function(){
     $("#serverGroups").append(inputTemplate);
+    reLabelServers();
 });
 
 $(document).on("click", "#addServers", function(){
-    let serverGroups = $(".serverGroup");
+
+    if($(".serverGroup").length == 0){
+        $("#addServer").trigger("click");
+        toastr["error"]("Please provide atleast one host");
+        return false;
+    }
+
     let details = {
         hostsDetails: []
     };
-    serverGroups.map(function(){
+
+    let failed = false;
+
+    $(".serverGroup").each(function(){
 
         let connectDetailsInput = $(this).find("input[name=connectDetails]");
         let trustPasswordInput = $(this).find("input[name=trustPassword]");
         let connectDetailsInputVal = connectDetailsInput.val();
         let trustPasswordInputVal = trustPasswordInput.val();
         if(connectDetailsInputVal == ""){
+            failed = true;
             connectDetailsInput.focus();
             toastr["error"]("Please provide connection details");
             return false;
         } else if(trustPasswordInputVal == ""){
+            failed = true;
             trustPasswordInput.focus();
-            toastr["error"]("Please provide trust provide");
+            toastr["error"]("Please provide trust password");
             return false;
         }
 
@@ -157,6 +193,10 @@ $(document).on("click", "#addServers", function(){
             alias: alias
         });
     });
+
+    if(failed){
+        return false;
+    }
 
     $.ajax({
          type: 'POST',

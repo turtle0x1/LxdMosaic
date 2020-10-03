@@ -1,10 +1,10 @@
 <?php
-require __DIR__ . "/vendor/autoload.php";
+require __DIR__ . "/../../vendor/autoload.php";
 
 use \Doctrine\Common\Annotations\AnnotationReader;
 use \Doctrine\Common\Annotations\AnnotationRegistry;
 
-$path = __DIR__ . "/src/classes/Controllers/";
+$path = __DIR__ . "/../../src/classes/Controllers/";
 $fqcns = array();
 
 $allFiles = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
@@ -74,6 +74,12 @@ foreach ($fqcns as $class) {
         }
     }
 }
+
+// Old routes we just manually add because they wont be found by the script
+// anymore
+$routeNames['dhope0000\\LXDClient\\Controllers\\Images\\ImportLinuxContainersByAliasController\\import'] = 'Import LinunxContainer.Org Image';
+
+
 $routesString = var_export($routeNames, true);
 $classString = str_replace("REPLACE_ME", $routesString, $classString);
 file_put_contents(__DIR__ . "/../classes/Objects/RouteToNameMapping.php", $classString);

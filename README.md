@@ -5,9 +5,9 @@
 
 I also like stars, If you find yourself that way inclinded :angel:
 
-<img src="https://i.imgur.com/vnhrSDW.png" width="428"> <img src="https://i.imgur.com/xHSjw3J.png" width="428">
+<img src="https://i.imgur.com/vnhrSDW.png" width="50%"> <img src="https://i.imgur.com/xHSjw3J.png" width="49%">
 
-<img src="https://i.imgur.com/YRRWcsj.png" width="428"><img src="https://i.imgur.com/sj5pAYi.png" width="428">
+<img src="https://i.imgur.com/YRRWcsj.png" width="50%"><img src="https://i.imgur.com/sj5pAYi.png" width="49%">
 
 ## Documentation
 

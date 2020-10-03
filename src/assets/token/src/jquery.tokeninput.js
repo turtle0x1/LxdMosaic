@@ -47,6 +47,7 @@ var DEFAULT_SETTINGS = {
     tokenFormatter: function(item) { return "<li><p>" + item[this.propertyToSearch] + "</p></li>" },
 
 	// Callbacks
+    setExtraSearchParams: null,
     onResult: null,
     onAdd: null,
     onDelete: null,
@@ -765,7 +766,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 var url = computeURL();
                 // Extract exisiting get params
                 var ajax_params = {};
-                ajax_params.data = {};
+                ajax_params.data = $.isFunction(settings.setExtraSearchParams) ? settings.setExtraSearchParams() : {};
                 if(url.indexOf("?") > -1) {
                     var parts = url.split("?");
                     ajax_params.url = parts[0];

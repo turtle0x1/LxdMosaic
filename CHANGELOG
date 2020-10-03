@@ -1,7 +1,52 @@
-Unreleaed
+Unreleased
+
+Added
+    Support for setting addtional restriction keys on projects (#229)
+    Search for instance by ip address (#233)
+    Remove profile from instance (#224)
+    Support weekly & monthly backups (#251)
+    Networks feature to project creation (#252)
+    Support for permanent API keys (#181)
+    Some local user analytics (#219)
+    Support for "ubuntu daily" & "ubuntu" (ubuntu-release) image remotes
+
+Fixed
+    Changing cluster member alias breaks UI (#234) (Slight caveat that the
+        node server wont return operations for a cluster member with an alias
+        that doesn't match the LXD server_name)
+    Dont show deleted backups
+    Fix server overview doesnt load properly when system details missing (#262)
+    Deleting last project when on project blocks UI (#261)
+
+Changed
+    Used buttons instead of dropdown to change instance state
+    Slight improvement to create container UX
+    HostsCollection implmenets JsonSerializable so it can be logged properly
+    Use guzzle sink to prevent oom issue using backups in the browser (#242)
+    Allow running php script "forever" when importing a backup (#245)
+    Only search for image types applicable to instance being created
+    Use simplestreams to read images from remote sources
+    Improve import images UX
+    Improve virtual machine creation UI & UX
+    Added optional extensions filter to search hosts api
+    Ensure host supports projects before appearing in create project dropdown (#259)
+
+0.9.3
+
+Added
+    Give access to operation error if its not empty
+
+Changed
+    Check location before emiting operation to prevent duplicate notifications
+        in a cluster environment
+
+0.9.2 - 30/06/2020
 
 Fixed
     Issue with loading container tree after deleting container
+    Issue with adding a new cluster breaks because the first member alias not
+        properly set
+    Dont break when we come across a cluster member we aren't managing
 
 Changed
     Jump to instance server view after deleting instance instead of overview

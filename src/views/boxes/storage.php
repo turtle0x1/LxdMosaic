@@ -15,32 +15,42 @@
             </div>
         </div>
         <div class="row">
-        <div class="col-md-9">
-              <div class="card bg-dark">
-                <div class="card-header " role="tab" >
-                  <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
-                        All Pools
-                    </a>
-                  </h5>
-                </div>
-                <div class="collapse in show" role="tabpanel" >
-                  <div class="card-block bg-dark">
-                    <table class="table table-dark table-bordered" id="poolListTable">
-                        <thead>
-                            <tr>
-                                <th>Pool</th>
-                                <th>Used</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+            <div class="col-md-9">
+                  <div class="card bg-dark">
+                    <div class="card-header " role="tab" >
+                      <h5>
+                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
+                            All Pools
+                        </a>
+                      </h5>
+                    </div>
+                    <div class="collapse in show" role="tabpanel" >
+                      <div class="card-block bg-dark">
+                        <table class="table table-dark table-bordered" id="poolListTable">
+                            <thead>
+                                <tr>
+                                    <th>Pool</th>
+                                    <th>Used</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-dark text-white">
+                    <div class="card-header">
+                        Total Storage Usage
+                    </div>
+                    <div class="card-body">
+                        <div id="currentStorageUsageTotal"></div>
+                    </div>
                 </div>
-              </div>
-        </div>
+            </div>
         </div>
     </div>
     <div id="storageDetails">
@@ -117,6 +127,7 @@ var currentPool = {};
 
 function makeStorageHostSidebarHtml(hosthtml, host, tableListHtml){
     let disabled = "";
+    let offlineText = "";
     if(host.hostOnline == false){
         disabled = "disabled text-warning text-strikethrough";
     }
@@ -127,24 +138,31 @@ function makeStorageHostSidebarHtml(hosthtml, host, tableListHtml){
         </a>
         <ul class="nav-dropdown-items">`;
 
-     tableListHtml += `<tr><td class='bg-success text-white text-center' colspan='3'><h5>${host.alias}</h5></td></tr>`;
 
-    $.each(host.pools, function(i, pool){
-        hosthtml += `<li class="nav-item view-storagePool"
-            data-host-id="${host.hostId}"
-            data-pool-name="${pool.name}"
-            >
-          <a class="nav-link" href="#">
-            <i class="nav-icon fa fa-hdd"></i>
-            ${pool.name}
-          </a>
-        </li>`;
-        tableListHtml += `<tr>
-            <td>${pool.name}</td>
-            <td>${formatBytes(pool.resources.space.used)}</td>
-            <td>${formatBytes(pool.resources.space.total)}</td>
-        </tr>`;
-    });
+    if(host.hostOnline == true) {
+        tableListHtml += `<tr><td class='text-info text-center' colspan='3'><h5>${host.alias}${offlineText}</h5></td></tr>`;
+    }
+
+
+
+     $.each(host.pools, function(i, pool){
+         hosthtml += `<li class="nav-item view-storagePool"
+             data-host-id="${host.hostId}"
+             data-pool-name="${pool.name}"
+             >
+           <a class="nav-link" href="#">
+             <i class="nav-icon fa fa-hdd"></i>
+             ${pool.name}
+           </a>
+         </li>`;
+         tableListHtml += `<tr>
+             <td>${pool.name}</td>
+             <td>${formatBytes(pool.resources.space.used)}</td>
+             <td>${formatBytes(pool.resources.space.total)}</td>
+         </tr>`;
+     });
+
+
     hosthtml += "</ul></li>";
     return {
         hosthtml: hosthtml,
@@ -171,7 +189,47 @@ function loadStorageView()
 
         let tableList = "";
 
-        $.each(data.clusters, (clusterIndex, cluster)=>{
+        let memoryWidth = ((data.stats.storage.used / data.stats.storage.total) * 100)
+        let formatedStorageTitle = formatBytes(data.stats.storage.used);
+
+        $("#currentStorageUsageTotal").empty().append(`<canvas id="containerStatsChart" style="width: 100%;"></canvas>`);
+
+        new Chart($("#containerStatsChart"), {
+            type: 'pie',
+              data: {
+                labels: ['Used', 'Total'],
+                datasets: [{
+                  label: '# of containers',
+                  data: [data.stats.storage.used, data.stats.storage.total],
+                  backgroundColor: [
+                    'rgba(46, 204, 113, 1)',
+                    'rgba(189, 195, 199, 1)'
+                  ],
+                  borderColor: [
+                      'rgba(46, 204, 113, 1)',
+                      'rgba(189, 195, 199, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                cutoutPercentage: 40,
+                responsive: false,
+                // scales: scalesBytesCallbacks,
+                tooltips: toolTipsBytesCallbacks
+              }
+        });
+
+        // $("#currentStorageUsageTotal").empty().append(`<div class="mb-2">
+        //     <label>Memory</label>
+        //     <div class="progress">
+        //         <div data-toggle="tooltip" data-placement="bottom" title="${formatBytes(data.stats.storage.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.stats.storage.used}" aria-valuemin="0" aria-valuemax="${(data.stats.storage.total - data.stats.storage.used)}"></div>
+        //     </div>
+        // </div>`);
+        //
+        // $("#currentStorageUsageTotal").find('[data-toggle="tooltip"]').tooltip({html: true})
+
+        $.each(data.hostDetails.clusters, (clusterIndex, cluster)=>{
             hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
             $.each(cluster.members, (_, host)=>{
                 let html = makeStorageHostSidebarHtml(hosts, host, tableList)
@@ -182,7 +240,7 @@ function loadStorageView()
 
         hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
 
-        $.each(data.standalone.members, (_, host)=>{
+        $.each(data.hostDetails.standalone.members, (_, host)=>{
             let html = makeStorageHostSidebarHtml(hosts, host, tableList)
             hosts = html.hosthtml;
             tableList = html.tableListHtml;

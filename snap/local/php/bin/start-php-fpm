@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# shellcheck source=src/php/utilities/php-utilities
+. "$SNAP/utilities/php-utilities"
+
+. "$SNAP/utilities/configuration-utilities"
+
+mkdir -p "${SNAP_DATA}/php"
+chmod 750 "${SNAP_DATA}/php"
+
+if [ ! -s "${SNAP_DATA}/lxdMosaic.db" ]; then
+    cp ${SNAP}/htdocs/sql/sqliteSeed.db "${SNAP_DATA}/lxdMosaic.db"
+fi
+
+
+
+# Tends to be between 30-50MB
+average_php_memory_requirement=50
+total_memory=$(mawk '/MemTotal/ {printf "%d", $2/1024}' /proc/meminfo)
+PHP_FPM_MAX_CHILDREN=$((total_memory/average_php_memory_requirement))
+PHP_MEMORY_LIMIT="$(php_memory_limit)"
+export PHP_FPM_MAX_CHILDREN
+export PHP_MEMORY_LIMIT
+
+PHP_EXPOSE_PHP="Off"
+if debug_mode_enabled; then
+	PHP_EXPOSE_PHP="On"
+fi
+export PHP_EXPOSE_PHP
+
+php-fpm -R -F --fpm-config "${SNAP}/config/php/php-fpm.conf" -c "${SNAP}/config/php"

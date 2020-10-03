@@ -17,17 +17,47 @@ class GetHostsStorage
     {
         $clusters = $this->getClustersAndStandaloneHosts->get();
 
+        $stats = [
+            "storage"=>[
+                "total"=>0,
+                "used"=>0
+            ],
+            "inodes"=>[
+                "total"=>0,
+                "used"=>0
+            ],
+        ];
+
         foreach ($clusters["clusters"] as $clusterIndex => $cluster) {
             foreach ($cluster["members"] as $hostIndex => &$host) {
-                $host->setCustomProp("pools", $this->getHostPools($host));
+                $pools = $this->getHostPools($host);
+                $stats = $this->calculateStats($stats, $pools);
+                $host->setCustomProp("pools", $pools);
             }
         }
 
         foreach ($clusters["standalone"]["members"] as $hostIndex => &$host) {
-            $host->setCustomProp("pools", $this->getHostPools($host));
+            $pools = $this->getHostPools($host);
+            $stats = $this->calculateStats($stats, $pools);
+            $host->setCustomProp("pools", $pools);
         }
 
-        return $clusters;
+        return [
+            "hostDetails"=>$clusters,
+            "stats"=>$stats
+        ];
+    }
+
+    private function calculateStats($stats, $pools)
+    {
+        foreach ($pools as $pool) {
+            $stats["storage"]["total"] += $pool["resources"]["space"]["total"];
+            $stats["storage"]["used"] += $pool["resources"]["space"]["used"];
+
+            $stats["inodes"]["total"] += $pool["resources"]["inodes"]["total"];
+            $stats["inodes"]["used"] += $pool["resources"]["inodes"]["used"];
+        }
+        return $stats;
     }
 
     private function getHostPools(Host $host)

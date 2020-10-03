@@ -6,6 +6,7 @@ use dhope0000\LXDClient\Model\Hosts\AddHost as AddHostModel;
 use dhope0000\LXDClient\Tools\Hosts\GenerateCert;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Tools\Node\Hosts;
+use dhope0000\LXDClient\Model\Client\LxdClient;
 
 class AddHosts
 {
@@ -13,12 +14,14 @@ class AddHosts
         AddHostModel $addHost,
         GenerateCert $generateCert,
         GetDetails $getDetails,
-        Hosts $hosts
+        Hosts $hosts,
+        LxdClient $lxdClient
     ) {
         $this->generateCert = $generateCert;
         $this->addHost = $addHost;
         $this->getDetails = $getDetails;
         $this->hosts = $hosts;
+        $this->lxdClient = $lxdClient;
     }
 
     public function add(array $hostsDetails)
@@ -44,6 +47,17 @@ class AddHosts
                     $alias = $hostsDetail["alias"];
                 }
 
+                $config = $this->lxdClient->createConfigArray(realpath($_ENV["LXD_CERTS_DIR"] . "/" . $result["shortPaths"]["combined"]));
+
+                $client = $this->lxdClient->createNewClient($hostName, $config);
+
+                $clusterInfo = $client->cluster->info();
+                $inCluster = $clusterInfo["enabled"];
+
+                if ($inCluster) {
+                    $alias = $clusterInfo["server_name"];
+                }
+
                 $this->addHost->addHost(
                     $hostName,
                     $result["shortPaths"]["key"],
@@ -52,16 +66,12 @@ class AddHosts
                     $alias
                 );
 
-                $hostId = $this->addHost->getId();
-
-                $host = $this->getDetails->fetchHost($hostId);
-
-                if ($host->cluster->info()["enabled"]) {
+                if ($inCluster) {
                     //TODO Recursion ?
-                    $members = $host->cluster->members->all();
+                    $members = $client->cluster->members->all();
                     $extraMembersToAdd = [];
                     foreach ($members as $member) {
-                        $inf = $host->cluster->members->info($member);
+                        $inf = $client->cluster->members->info($member);
                         if ($hostName == $inf["url"]) {
                             continue;
                         }
