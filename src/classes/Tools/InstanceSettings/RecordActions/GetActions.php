@@ -22,6 +22,9 @@ class GetActions
         // Projects
         "dhope0000\LXDClient\Controllers\Projects\CreateProjectController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Projects\CreateProject",
         "dhope0000\LXDClient\Controllers\Projects\DeleteProjectController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Projects\DeleteProject",
+        // Profiles
+        "dhope0000\LXDClient\Controllers\Profiles\CreateProfileController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Profiles\CreateProfile",
+        "dhope0000\LXDClient\Controllers\Profiles\DeleteProfileController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Profiles\DeleteProfile",
     ];
 
     public function __construct(

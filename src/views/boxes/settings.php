@@ -301,7 +301,8 @@ $("#settingsOverview").on("click", ".viewUser", function(){
         let categoryIcons = {
             "instance": "fas fa-box",
             "backups": "fas fa-save",
-            "projects": "fas fa-project-diagram"
+            "projects": "fas fa-project-diagram",
+            "profiles": "fas fa-users"
         };
 
         let methodIcons = {

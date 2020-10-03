@@ -15,6 +15,9 @@ class GetUserOverview
         "dhope0000\LXDClient\Controllers\Instances\Backups\ScheduleBackupController\schedule",
         "dhope0000\LXDClient\Controllers\Instances\Backups\DisableScheduledBackupsController\disable",
         "dhope0000\LXDClient\Controllers\Projects\DeleteProjectController\delete",
+
+        "dhope0000\LXDClient\Controllers\Profiles\CreateProfileController\create",
+        "dhope0000\LXDClient\Controllers\Profiles\DeleteProfileController\delete"
     ];
 
     public function __construct(
