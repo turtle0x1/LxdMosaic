@@ -49,7 +49,12 @@ class StoreBackupLocally
             throw new \Exception("Host doesn't support backups", 1);
         }
 
-        $backupDir = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::BACKUP_DIRECTORY);
+        if (isset($_ENV["SNAP"])) {
+            $backupDir = $_ENV["SNAP_COMMON"];
+        } else {
+            $backupDir = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::BACKUP_DIRECTORY);
+        }
+
         $backupDir = $this->makeDirectory($backupDir, $hostId, $instance);
 
         $backupInfo = $this->downloadBackup($host, $backupDir, $instance, $backup);
