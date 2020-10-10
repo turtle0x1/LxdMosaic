@@ -166,7 +166,7 @@ function viewNetwork(hostId, network, alias)
             });
         }
 
-        if(data.used_by.length == 0){
+        if(data.used_by == null || data.used_by.length == 0){
             usedByHtml += `<tr><td>Not Used</td></tr>`
         }else{
             $.each(data.used_by, function(key, value){
