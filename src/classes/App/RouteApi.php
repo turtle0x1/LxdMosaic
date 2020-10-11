@@ -5,23 +5,30 @@ use \DI\Container;
 use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\RecordAction;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class RouteApi
 {
     private $recordAction;
     private $project;
     private $userId;
+    private $fetchAllowedProjects;
 
     public function __construct(
         Container $container,
         RecordAction  $recordAction,
         GetDetails $getDetails,
-        HostList $hostList
+        HostList $hostList,
+        FetchAllowedProjects $fetchAllowedProjects,
+        FetchUserDetails $fetchUserDetails
     ) {
         $this->container = $container;
         $this->recordAction = $recordAction;
         $this->getDetails = $getDetails;
         $this->hostList = $hostList;
+        $this->fetchAllowedProjects = $fetchAllowedProjects;
+        $this->fetchUserDetails = $fetchUserDetails;
     }
 
     public function getRequestedProject()
@@ -75,7 +82,7 @@ class RouteApi
         if ($returnResult) {
             return $data;
         }
-        
+
         //TODO So lazy
         echo json_encode($data);
     }
@@ -86,6 +93,13 @@ class RouteApi
         $paramaters = $reflectedMethod->getParameters();
         $o = [];
         $specialParams = ["userId", "host"];
+
+        $allowedProjects = $this->fetchAllowedProjects->fetchAll($userId);
+
+        $allowedHostIds = array_keys($allowedProjects);
+
+        $userIsAdmin = $this->fetchUserDetails->isAdmin($userId);
+
         foreach ($paramaters as $param) {
             $name = $param->getName();
             $hasDefault = $param->isDefaultValueAvailable();
@@ -105,10 +119,21 @@ class RouteApi
             } elseif ($name === "userId") {
                 $o[$name] = $userId;
             } elseif ($name == "host") {
+                if (!$userIsAdmin && !in_array($passedArguments["hostId"], $allowedHostIds)) {
+                    throw new \Exception("Not allowed to access host", 1);
+                }
                 $o[$name] = $this->getDetails->fetchHost($passedArguments["hostId"]);
             } elseif ($type == "dhope0000\LXDClient\Objects\Host") {
+                if (!$userIsAdmin && !in_array($passedArguments[$name], $allowedHostIds)) {
+                    throw new \Exception("Not allowed to access host", 1);
+                }
                 $o[$name] = $this->getDetails->fetchHost($passedArguments[$name]);
             } elseif ($type == "dhope0000\LXDClient\Objects\HostsCollection") {
+                foreach ($passedArguments[$name] as $hostAttempt) {
+                    if (!$userIsAdmin && !in_array($hostAttempt, $allowedHostIds)) {
+                        throw new \Exception("Not allowed to access host", 1);
+                    }
+                }
                 $o[$name] = $this->hostList->getHostCollection($passedArguments[$name]);
             } elseif (!$hasDefault && !isset($passedArguments[$name])) {
                 throw new \Exception("Missing Paramater $name", 1);
