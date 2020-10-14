@@ -5,49 +5,87 @@ namespace dhope0000\LXDClient\Tools;
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Clusters\GetAllClusters;
+use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 
 class Universe
 {
     private $entityConversion = [
-        "instances"=>"/1.0/instances",
-        "images"=>"/1.0/images",
-        "profiles"=>"/1.0/profiles",
+        "instances"=>"/1.0/instances/",
+        "images"=>"/1.0/images/",
+        "profiles"=>"/1.0/profiles/",
+        "networks"=>"/1.0/networks/",
+        "projects"=>"", // Special case because projecs are "global"
+        "volumes"=>"/1.0/storage-pools/"
     ];
 
-    public function __construct(FetchAllowedProjects $fetchAllowedProjects, HostList $hostList)
-    {
+    public function __construct(
+        FetchAllowedProjects $fetchAllowedProjects,
+        HostList $hostList,
+        GetAllClusters  $getAllClusters,
+        FetchUserProject $fetchUserProject
+    ) {
         $this->fetchAllowedProjects = $fetchAllowedProjects;
         $this->hostList = $hostList;
+        $this->getAllClusters = $getAllClusters;
+        $this->fetchUserProject = $fetchUserProject;
     }
 
-    public function getEntitiesUserHasAccesTo(int $userId, string $entity)
+    public function getEntitiesUserHasAccesTo(int $userId, string $entity = null)
     {
         $projectsWithAccess = $this->fetchAllowedProjects->fetchAll($userId);
         $hosts = $this->hostList->getHostCollection(array_keys($projectsWithAccess));
 
-        $searchingFor = $this->entityConversion[$entity];
+        //TODO What happens when the user logs in and hasn't selected a project yet
+        $userCurrentProjects = $this->fetchUserProject->fetchCurrentProjects($userId);
 
-        foreach ($hosts as $host) {
-            $hostProjects = $host->projects->all(2);
-            $allowedProjects = $projectsWithAccess[$host->getHostId()];
+        if (!empty($entity)) {
+            $searchingFor = $this->entityConversion[$entity];
 
-            $entities = [];
+            foreach ($hosts as $host) {
+                $entities = [];
 
-            foreach ($hostProjects as $project) {
-                if (in_array($project["name"], $allowedProjects)) {
-                    if (!isset($entities[$project["name"]])) {
-                        $entities[$project["name"]] = [];
-                    }
+                $allowedProjects = $projectsWithAccess[$host->getHostId()];
 
-                    foreach ($project["used_by"] as $usedBy) {
-                        if (strpos($usedBy, $searchingFor) !== false) {
-                            $entities[$project["name"]][] = $usedBy;
+                if ($entity == "projects") {
+                    $entities = $allowedProjects;
+                } else {
+                    $currentProject = $userCurrentProjects[$host->getHostId()];
+                    $entities = [];
+                    $project = $host->projects->info($currentProject);
+
+                    if (in_array($project["name"], $allowedProjects)) {
+                        foreach ($project["used_by"] as $usedBy) {
+                            if (strpos($usedBy, $searchingFor) !== false) {
+                                $usedBy = str_replace("?project=$currentProject", "", $usedBy);
+                                $entities[] = str_replace($searchingFor, "", $usedBy);
+                            }
                         }
                     }
                 }
+                $host->setCustomProp($entity, $entities);
             }
-            $host->setCustomProp($entity, $entities);
         }
-        return $hosts;
+
+        $clusters = $this->getAllClusters->convertHostsToClusters($hosts);
+
+        $hostsInClusterGroups = [];
+
+        foreach ($clusters as $cluster) {
+            $hostsInClusterGroups = array_merge($hostsInClusterGroups, array_map(function ($member) {
+                return $member->getHostId();
+            }, $cluster["members"]));
+        }
+
+        foreach ($hosts as $i => $host) {
+            if (in_array($host->getHostId(), $hostsInClusterGroups)) {
+                unset($hosts[$i]);
+            }
+        }
+
+        return [
+            "clusters"=>$clusters,
+            "standalone"=>["members"=>$hosts]
+        ];
     }
 }
