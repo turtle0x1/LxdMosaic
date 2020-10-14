@@ -27,16 +27,11 @@ class GetAllClusters
         return $this->calculateClusterStats($clusters, $removeResources);
     }
 
-    private function createClusterGroupsWithInfo()
+    public function convertHostsToClusters($hosts)
     {
         $clusterId = 0;
-
         $clusters = [];
-
         $hostsInACluster = [];
-
-        $hosts = $this->hostList->getOnlineHostsWithDetails();
-
         foreach ($hosts as $host) {
             // I belive one host can only belong to one cluster so until that
             // isn't true then we can skip checking hosts we already know
@@ -69,6 +64,12 @@ class GetAllClusters
         }
 
         return $clusters;
+    }
+
+    private function createClusterGroupsWithInfo()
+    {
+        $hosts = $this->hostList->getOnlineHostsWithDetails();
+        return $this->convertHostsToClusters($hosts);
     }
 
     private function calculateClusterStats(array $clusters, bool $removeResources)
