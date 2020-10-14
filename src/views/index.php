@@ -103,6 +103,9 @@ if ($haveServers->haveAny() !== true) {
           var currentContainerDetails = null;
 
           var globalUrls = {
+              universe: {
+                getEntities: '/api/Universe/GetEntitiesFromUniverseController/get'
+              },
               dashboard: {
                   get: "/api/Dashboard/GetController/get"
               },
@@ -731,23 +734,28 @@ var unknownServerDetails = {
 
 function createDashboardSidebar()
 {
-    ajaxRequest(globalUrls.hosts.getClustersAndStandloneHosts, {}, (data)=>{
-        data = $.parseJSON(data);
+    ajaxRequest(globalUrls.universe.getEntities, {}, (data)=>{
+        data = makeToastr(data);
+
         let hosts = `
             <li class="nav-item container-overview">
                 <a class="nav-link" href="#">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>`;
+            
         $.each(data.clusters, function(i, item){
             hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
+
+            hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
 
             $.each(item.members, function(_, host){
                 let disabled = "";
 
-                if(host.status !== "Online"){
+                if(!host.hostOnline){
                     disabled = "disabled text-warning text-strikethrough";
                 }
+
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link viewServer ${disabled}" href="#">
                         <i class="fas fa-server"></i> ${host.alias}
@@ -758,7 +766,9 @@ function createDashboardSidebar()
                 </li>`;
             });
         });
+
         hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+
         $.each(data.standalone.members, function(_, host){
             let disabled = "";
 
@@ -919,7 +929,7 @@ function loadDashboard(){
 
                 if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
                     projects = "<select class='form-control changeHostProject'>";
-                    $.each(host.resources.projects, function(o, project){
+                    $.each(host.projects, function(o, project){
                         let selected = project == host.currentProject ? "selected" : "";
                             projects += `<option data-alias="${alias}" data-host='${data.hostId}'
                                 value='${project}' ${selected}>
@@ -991,7 +1001,7 @@ function loadDashboard(){
 
             if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
                 projects = "<select class='form-control changeHostProject'>";
-                $.each(host.resources.projects, function(o, project){
+                $.each(host.projects, function(o, project){
                     let selected = project == host.currentProject ? "selected" : "";
                         projects += `<option data-alias="${alias}" data-host='${host.hostId}'
                             value='${project}' ${selected}>
