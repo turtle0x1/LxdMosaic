@@ -19,8 +19,10 @@ class GetAllProfiles
 
         return $host->profiles->all($profileRecursion);
     }
-
-
+    /**
+     * TODO This "agnostic" access (without a user id) needs to exist for
+     *      deployments (should be updated) & metrics (metrics run wihtout user)
+     */
     public function getAllProfiles(bool $profileRecursion = false)
     {
         $clustersAndHosts = $this->getClustersAndStandaloneHosts->get(true);
