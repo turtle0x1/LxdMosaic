@@ -11,7 +11,7 @@ class GetEntitiesFromUniverseController
         $this->universe = $universe;
     }
 
-    public function get(int $userId, string $entity)
+    public function get(int $userId, string $entity = null)
     {
         return $this->universe->getEntitiesUserHasAccesTo($userId, $entity);
     }
