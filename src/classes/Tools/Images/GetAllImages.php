@@ -1,19 +1,19 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Images;
 
-use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Universe;
 
 class GetAllImages
 {
-    public function __construct(GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts)
+    public function __construct(Universe $universe)
     {
-        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
+        $this->universe = $universe;
     }
 
-    public function getAllHostImages()
+    public function getAllHostImages(int $userId)
     {
-        $clustersAndHosts = $this->getClustersAndStandaloneHosts->get(true);
+        $clustersAndHosts = $this->universe->getEntitiesUserHasAccesTo($userId, "images");
 
         foreach ($clustersAndHosts["clusters"] as $clusterIndex => $cluster) {
             foreach ($cluster["members"] as $hostIndex => &$host) {
@@ -21,7 +21,7 @@ class GetAllImages
             }
         }
 
-        foreach ($clustersAndHosts["standalone"]["members"] as $index => &$host) {
+        foreach ($clustersAndHosts["standalone"]["members"] as $host) {
             $host->setCustomProp("images", $this->getImages($host));
         }
 
@@ -35,7 +35,7 @@ class GetAllImages
         }
 
         //TODO Recursion
-        $ids = $host->images->all();
+        $ids = $host->getCustomProp("images");
         $details = [];
 
         foreach ($ids as $fingerprint) {
