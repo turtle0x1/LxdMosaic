@@ -33,6 +33,10 @@ class GetAllClusters
         $clusters = [];
         $hostsInACluster = [];
         foreach ($hosts as $host) {
+            if ($host->hostOnline() === false) {
+                continue;
+            }
+
             // I belive one host can only belong to one cluster so until that
             // isn't true then we can skip checking hosts we already know
             // are in a cluster some where

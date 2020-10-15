@@ -62,6 +62,9 @@ class GetDashboard
 
     private function getResources($member)
     {
+        if ($member->hostOnline() == false) {
+            return [];
+        }
         $r = $this->getResources->getHostExtended($member);
         unset($r["projects"]);
         return $r;
