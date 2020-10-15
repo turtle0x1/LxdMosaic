@@ -472,6 +472,9 @@ if ($haveServers->haveAny() !== true) {
           <li class="nav-item px-3 btn btn-outline-success pull-right" id="createVm">
                 <a> <i class="fas fa-plus"></i> VM </a>
            </li>
+           <li class="nav-item px-3 btn btn-outline-primary pull-right">
+                 <a href="/logout" class="text-primary"><i class="fas fa-sign-out-alt"></i> Logout </a>
+            </li>
       </ul>
     </header>
     <div class="app-body">
