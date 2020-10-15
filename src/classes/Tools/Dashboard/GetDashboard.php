@@ -3,7 +3,6 @@
 namespace dhope0000\LXDClient\Tools\Dashboard;
 
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
-use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
 use dhope0000\LXDClient\Tools\Analytics\GetLatestData;
 use dhope0000\LXDClient\Model\Users\Dashboard\FetchUserDashboards;
 use dhope0000\LXDClient\Tools\Universe;
@@ -13,14 +12,12 @@ class GetDashboard
 {
     public function __construct(
         FetchUserProject $fetchUserProject,
-        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts,
         GetLatestData $getLatestData,
         FetchUserDashboards $fetchUserDashboards,
         Universe $universe,
         GetResources $getResources
     ) {
         $this->fetchUserProject = $fetchUserProject;
-        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
         $this->getLatestData = $getLatestData;
         $this->fetchUserDashboards = $fetchUserDashboards;
         $this->universe = $universe;

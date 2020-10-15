@@ -256,7 +256,6 @@ if ($haveServers->haveAny() !== true) {
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
-                  getClustersAndStandloneHosts: "/api/Hosts/GetClustersAndStandloneHostsController/get",
                   delete: "/api/Hosts/DeleteHostController/delete",
                   getHostOverview: "/api/Hosts/GetHostOverviewController/get"
               },
