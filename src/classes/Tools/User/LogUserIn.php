@@ -36,14 +36,16 @@ class LogUserIn
 
         $allowedProjects = $this->fetchAllowedProjects->fetchAll($userId);
 
-        if (empty($allowedProjects)) {
+        $isAdmin = $this->fetchUserDetails->isAdmin($userId);
+
+        if (empty($allowedProjects) && !$isAdmin) {
             throw new \Exception("No servers / projects assigned, contact your admin!", 1);
         }
 
         $token = StringTools::random(256);
 
         $this->session->set("userId", $userId);
-        $this->session->set("isAdmin", $this->fetchUserDetails->isAdmin($userId));
+        $this->session->set("isAdmin", $isAdmin);
         $this->session->set("wsToken", $token);
         $this->insertToken->insert($userId, $token);
 
