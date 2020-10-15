@@ -4,6 +4,7 @@
             <div class="col-md-12">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                     <h1 id="serverHeading"></h1>
+                    <?php if ($isAdmin === 1) : ?>
                     <div class="btn-toolbar float-right">
                       <div class="btn-group mr-2">
                         <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Host" id="editHost">
@@ -14,6 +15,7 @@
                         </button>
                       </div>
                     </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

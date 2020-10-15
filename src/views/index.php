@@ -403,7 +403,6 @@ if ($haveServers->haveAny() !== true) {
           <input value="" name="path"/>
           <input value="" name="container"/>
           <input value="1" type="number" name="download"/>
-
       </form>
     <header class="app-header navbar navbar-dark bg-dark">
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
@@ -465,10 +464,12 @@ if ($haveServers->haveAny() !== true) {
       <ul class="nav navbar-nav ml-auto d-md-down-none">
           <li class="nav-item px-3 btn btn-outline-primary pull-right" id="openSearch">
                 <a> <i class="fas fa-search"></i> Search </a>
-           </li>
+          </li>
+          <?php if ($isAdmin === 1) : ?>
           <li class="nav-item px-3 btn btn-outline-primary pull-right" id="addNewServer">
                 <a> <i class="fas fa-plus"></i> Server </a>
            </li>
+          <?php endif; ?>
           <li class="nav-item px-3 btn btn-outline-success pull-right" id="createContainer">
                 <a> <i class="fas fa-plus"></i> Container </a>
            </li>
@@ -743,7 +744,7 @@ function createDashboardSidebar()
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>`;
-            
+
         $.each(data.clusters, function(i, item){
             hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
 

@@ -13,9 +13,9 @@ class UpdateSettingsController implements \dhope0000\LXDClient\Interfaces\Record
     /**
      * @Route("", name="Update hosts settings")
      */
-    public function update(int $hostId, string $alias, int $supportsLoadAverages)
+    public function update(int $userId, int $hostId, string $alias, int $supportsLoadAverages)
     {
-        $this->updateHostSettings->update($hostId, $alias, $supportsLoadAverages);
+        $this->updateHostSettings->update($userId, $hostId, $alias, $supportsLoadAverages);
         return ["state"=>"success", "messages"=>"Updated Settings"];
     }
 }
