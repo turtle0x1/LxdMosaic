@@ -55,6 +55,7 @@ class Universe
 
             foreach ($hosts as $host) {
                 if ($host->hostOnline() == false) {
+                    $host->setCustomProp($entity, []);
                     continue;
                 }
 
