@@ -7,6 +7,7 @@ use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Tools\Clusters\GetAllClusters;
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class Universe
 {
@@ -23,18 +24,28 @@ class Universe
         FetchAllowedProjects $fetchAllowedProjects,
         HostList $hostList,
         GetAllClusters  $getAllClusters,
-        FetchUserProject $fetchUserProject
+        FetchUserProject $fetchUserProject,
+        FetchUserDetails $fetchUserDetails
     ) {
         $this->fetchAllowedProjects = $fetchAllowedProjects;
         $this->hostList = $hostList;
         $this->getAllClusters = $getAllClusters;
         $this->fetchUserProject = $fetchUserProject;
+        $this->fetchUserDetails = $fetchUserDetails;
     }
 
     public function getEntitiesUserHasAccesTo(int $userId, string $entity = null)
     {
+        $isAdmin = $this->fetchUserDetails->isAdmin($userId) === "1";
+
         $projectsWithAccess = $this->fetchAllowedProjects->fetchAll($userId);
-        $hosts = $this->hostList->getHostCollection(array_keys($projectsWithAccess));
+
+        if ($isAdmin === true) {
+            $hosts = $this->hostList->fetchAllHosts();
+        } else {
+            $hosts = $this->hostList->getHostCollection(array_keys($projectsWithAccess));
+        }
+
 
         //TODO What happens when the user logs in and hasn't selected a project yet
         $userCurrentProjects = $this->fetchUserProject->fetchCurrentProjects($userId);
@@ -43,18 +54,30 @@ class Universe
             $searchingFor = $this->entityConversion[$entity];
 
             foreach ($hosts as $host) {
+                if ($host->hostOnline() == false) {
+                    continue;
+                }
+
                 $entities = [];
 
-                $allowedProjects = $projectsWithAccess[$host->getHostId()];
+                $allowedProjects = [];
+
+                if (isset($projectsWithAccess[$host->getHostId()])) {
+                    $allowedProjects = $projectsWithAccess[$host->getHostId()];
+                }
 
                 if ($entity == "projects") {
-                    $entities = $allowedProjects;
+                    if ($isAdmin === true) {
+                        $entities = $host->projects->all();
+                    } else {
+                        $entities = $allowedProjects;
+                    }
                 } else {
                     $currentProject = $userCurrentProjects[$host->getHostId()];
                     $entities = [];
                     $project = $host->projects->info($currentProject);
 
-                    if (in_array($project["name"], $allowedProjects)) {
+                    if ((in_array($project["name"], $allowedProjects)) || $isAdmin === true) {
                         foreach ($project["used_by"] as $usedBy) {
                             if (strpos($usedBy, $searchingFor) !== false) {
                                 $usedBy = str_replace("?project=$currentProject", "", $usedBy);
@@ -67,7 +90,9 @@ class Universe
             }
         }
 
+
         $clusters = $this->getAllClusters->convertHostsToClusters($hosts);
+
 
         $hostsInClusterGroups = [];
 
