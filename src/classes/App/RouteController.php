@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
 
 class RouteController
 {
+    public $loginError = null;
+
     public function __construct(
         UserSession $userSession,
         LogUserIn $logUserIn,
@@ -65,9 +67,15 @@ class RouteController
             require __DIR__ . "/../../views/login.php";
             exit;
         } elseif ($loginSet) {
-            if ($this->logUserIn->login($_POST["username"], $_POST["password"]) !== true) {
-                // Should never fire login throws exceptions
-                throw new \Exception("Couldn't login", 1);
+            //TODO fairly certian this creates a vunreabilty but this whole
+            //     thing is a mess
+            try {
+                $this->logUserIn->login($_POST["username"], $_POST["password"]);
+            } catch (\Throwable $e) {
+                $this->loginError = $e->getMessage();
+                http_response_code(403);
+                require __DIR__ . "/../../views/login.php";
+                return false;
             }
         } elseif (isset($explodedPath[0]) && $explodedPath[0] == "logout") {
             $this->userSession->logout();

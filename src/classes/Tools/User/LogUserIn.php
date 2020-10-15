@@ -6,17 +6,20 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Model\Users\InsertToken;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
 use Symfony\Component\HttpFoundation\Session\Session;
+use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 
 class LogUserIn
 {
     public function __construct(
         FetchUserDetails $fetchUserDetails,
         InsertToken $insertToken,
-        Session $session
+        Session $session,
+        FetchAllowedProjects $fetchAllowedProjects
     ) {
         $this->fetchUserDetails = $fetchUserDetails;
         $this->insertToken = $insertToken;
         $this->session = $session;
+        $this->fetchAllowedProjects = $fetchAllowedProjects;
     }
 
     public function login(string $username, string $password)
@@ -30,6 +33,12 @@ class LogUserIn
         }
 
         $userId = $this->fetchUserDetails->fetchId($username);
+
+        $allowedProjects = $this->fetchAllowedProjects->fetchAll($userId);
+
+        if (empty($allowedProjects)) {
+            throw new \Exception("No servers / projects assigned, contact your admin!", 1);
+        }
 
         $token = StringTools::random(256);
 
