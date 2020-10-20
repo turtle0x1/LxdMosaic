@@ -1,4 +1,4 @@
-Unreleased
+0.10.0 - 20/10/2020
 
 Added
     Support for setting addtional restriction keys on projects (#229)
