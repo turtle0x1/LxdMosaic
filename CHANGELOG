@@ -18,6 +18,7 @@ Fixed
     Fix server overview doesnt load properly when system details missing (#262)
     Deleting last project when on project blocks UI (#261)
     used_by on networks now returning null & preventing UI from loading
+    Reading files in instances not in the default project
 
 Changed
     Used buttons instead of dropdown to change instance state

@@ -111,6 +111,11 @@ class Host implements \JsonSerializable
         $this->client->setProject($project);
     }
 
+    public function getProject()
+    {
+        return $this->client->getProject();
+    }
+
     public function __set($prop, $value)
     {
         throw new \Exception("Not allowed to set public properties on this object, use get/set/removeCustomProp", 1);
