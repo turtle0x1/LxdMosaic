@@ -8,6 +8,7 @@ use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Tools\Clusters\GetAllClusters;
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
+use dhope0000\LXDClient\Tools\User\GetUserProject;
 
 class Universe
 {
@@ -25,13 +26,15 @@ class Universe
         HostList $hostList,
         GetAllClusters  $getAllClusters,
         FetchUserProject $fetchUserProject,
-        FetchUserDetails $fetchUserDetails
+        FetchUserDetails $fetchUserDetails,
+        GetUserProject $getUserProject
     ) {
         $this->fetchAllowedProjects = $fetchAllowedProjects;
         $this->hostList = $hostList;
         $this->getAllClusters = $getAllClusters;
         $this->fetchUserProject = $fetchUserProject;
         $this->fetchUserDetails = $fetchUserDetails;
+        $this->getUserProject = $getUserProject;
     }
 
     public function getEntitiesUserHasAccesTo(int $userId, string $entity = null)
@@ -46,8 +49,6 @@ class Universe
             $hosts = $this->hostList->getHostCollection(array_keys($projectsWithAccess));
         }
 
-
-        //TODO What happens when the user logs in and hasn't selected a project yet
         $userCurrentProjects = $this->fetchUserProject->fetchCurrentProjects($userId);
 
         if (!empty($entity)) {
@@ -74,7 +75,12 @@ class Universe
                         $entities = $allowedProjects;
                     }
                 } else {
-                    $currentProject = $userCurrentProjects[$host->getHostId()];
+                    if (!isset($userCurrentProjects[$host->getHostId()])) {
+                        $currentProject = $this->getUserProject->getForHost($userId, $host);
+                    } else {
+                        $currentProject = $userCurrentProjects[$host->getHostId()];
+                    }
+
                     $entities = [];
                     $project = $host->projects->info($currentProject);
 

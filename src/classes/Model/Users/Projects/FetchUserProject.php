@@ -11,7 +11,7 @@ class FetchUserProject
         $this->database = $database->dbObject;
     }
 
-    public function fetchOrDefault(int $userId, int $hostId)
+    public function fetch(int $userId, int $hostId)
     {
         $sql = "SELECT
                     `UHP_Project`
@@ -27,8 +27,7 @@ class FetchUserProject
             ":userId"=>$userId,
             ":hostId"=>$hostId
         ]);
-        $result = $do->fetchColumn();
-        return empty($result) ? "default" : $result;
+        return $do->fetchColumn();
     }
 
     public function fetchCurrentProjects(int $userId)

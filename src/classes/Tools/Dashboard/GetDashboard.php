@@ -7,6 +7,7 @@ use dhope0000\LXDClient\Tools\Analytics\GetLatestData;
 use dhope0000\LXDClient\Model\Users\Dashboard\FetchUserDashboards;
 use dhope0000\LXDClient\Tools\Universe;
 use dhope0000\LXDClient\Tools\Hosts\GetResources;
+use dhope0000\LXDClient\Tools\User\GetUserProject;
 
 class GetDashboard
 {
@@ -15,13 +16,15 @@ class GetDashboard
         GetLatestData $getLatestData,
         FetchUserDashboards $fetchUserDashboards,
         Universe $universe,
-        GetResources $getResources
+        GetResources $getResources,
+        GetUserProject $getUserProject
     ) {
         $this->fetchUserProject = $fetchUserProject;
         $this->getLatestData = $getLatestData;
         $this->fetchUserDashboards = $fetchUserDashboards;
         $this->universe = $universe;
         $this->getResources = $getResources;
+        $this->getUserProject = $getUserProject;
     }
 
     public function get($userId)
@@ -44,13 +47,13 @@ class GetDashboard
     {
         foreach ($clustersAndHosts["clusters"] as $index => $cluster) {
             foreach ($cluster["members"] as $member) {
-                $project = $this->fetchUserProject->fetchOrDefault($userId, $member->getHostId());
+                $project = $this->getUserProject->getForHost($userId, $member);
                 $member->setCustomProp("currentProject", $project);
                 $member->setCustomProp("resources", $this->getResources($member));
             }
         }
         foreach ($clustersAndHosts["standalone"]["members"] as $index => $member) {
-            $project = $this->fetchUserProject->fetchOrDefault($userId, $member->getHostId());
+            $project = $this->getUserProject->getForHost($userId, $member);
             $member->setCustomProp("currentProject", $project);
             $member->setCustomProp("resources", $this->getResources($member));
         }
