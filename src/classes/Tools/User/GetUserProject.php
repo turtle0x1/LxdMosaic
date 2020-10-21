@@ -27,6 +27,10 @@ class GetUserProject
 
         $allowedProjects = $this->fetchAllowedProjects->fetchForHost($userId, $host->getHostId());
 
+        if(empty($allowedProjects)){
+            throw new \Exception("Trying to access host with no allowed projects", 1);
+        }
+
         if (in_array("default", $allowedProjects)) {
             $project = "default";
         } else {
