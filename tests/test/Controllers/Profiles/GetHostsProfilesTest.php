@@ -31,7 +31,6 @@ final class GetHostsProfilesTest extends TestCase
             'urlAndPort',
             'hostOnline',
             'supportsLoadAvgs',
-            'resources', //TODO This shouldn't be returned here
             'profiles'
         ], $hostKeys);
 
