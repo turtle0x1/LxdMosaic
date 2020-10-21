@@ -25,7 +25,7 @@ module.exports = class Hosts {
 
   loadHostsFromDb() {
     return new Promise((resolve, reject) => {
-        if(process.env.hasOwnProperty("DB_SQLITE")){
+        if(process.env.hasOwnProperty("DB_SQLITE") && process.env.DB_SQLITE !== ""){
             this.con.all('SELECT * FROM Hosts', function(err, results) {
               resolve(results);
             });

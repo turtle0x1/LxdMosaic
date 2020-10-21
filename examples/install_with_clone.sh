@@ -76,7 +76,7 @@ chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/backups
 # Move in LxdManager
 cd /var/www/LxdMosaic || exit
 
-git checkout v0.10.0
+git checkout v0.10.1
 
 npm install || exit $?
 
