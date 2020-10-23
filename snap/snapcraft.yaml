@@ -7,6 +7,9 @@ grade: stable
 confinement: strict
 base: core18
 
+architectures:
+  - build-on: amd64
+
 apps:
   # Apache daemon
   apache:
