@@ -23,5 +23,11 @@ return
                         'charset' => 'utf8',
                         'collation' => 'utf8_unicode_ci',
                     ],
+                'snap' =>
+                    [
+                        'adapter' => 'sqlite',
+                        'name' => $_ENV["SNAP_DATA"] . "/lxdMosaic",
+                        'suffix' => '.db'
+                    ],
             ],
     ];
