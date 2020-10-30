@@ -40,10 +40,10 @@ class StoreBackupLocally
         $this->downloadFile = $downloadFile;
     }
 
-    public function store(Host $host, string $instance, string $backup, bool $deleteRemote)
+    public function store(Host $host, string $project, string $instance, string $backup, bool $deleteRemote)
     {
         set_time_limit(0);
-        
+
         $hostId = $host->getHostId();
         if ($this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP) !== true) {
             throw new \Exception("Host doesn't support backups", 1);
@@ -57,11 +57,12 @@ class StoreBackupLocally
 
         $backupDir = $this->makeDirectory($backupDir, $hostId, $instance);
 
-        $backupInfo = $this->downloadBackup($host, $backupDir, $instance, $backup);
+        $backupInfo = $this->downloadBackup($host, $project, $instance, $backupDir, $backup);
 
         $this->insertInstanceBackup->insert(
             (new \DateTime($backupInfo["created"])),
             $hostId,
+            $project,
             $instance,
             $backup,
             $backupInfo["backupFile"]
@@ -76,8 +77,9 @@ class StoreBackupLocally
 
     private function downloadBackup(
         Host $host,
-        string $backupDir,
+        string $project,
         string $instance,
+        string $backupDir,
         string $backup
     ) :array {
         $backupInfo = $host->instances->backups->info($instance, $backup);
@@ -86,7 +88,7 @@ class StoreBackupLocally
 
         $backupFilePath = "$backupDir/$backupFileName";
 
-        $this->downloadFile->download($host, $backupFilePath, $instance, $backup);
+        $this->downloadFile->download($host, $project, $instance, $backupFilePath, $backup);
 
         return [
             "backupFile"=>$backupFilePath,
