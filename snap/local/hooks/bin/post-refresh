@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+$SNAP/htdocs/vendor/bin/phinx migrate -e snap -c $SNAP/htdocs/phinx.php
