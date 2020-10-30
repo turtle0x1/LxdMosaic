@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72c0b574ccbddcde73f845d5c501f316",
+    "content-hash": "05067d004d2e656ff1200a8d990a1bf2",
     "packages": [
         {
             "name": "cakephp/core",
@@ -296,16 +296,16 @@
         },
         {
             "name": "dhope0000/lxd",
-            "version": "v0.16.4",
+            "version": "v0.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/turtle0x1/php-lxd.git",
-                "reference": "a809b76d0f1dad26134402d446869e30c7966515"
+                "reference": "10f9e9a21aee71d6bc68caa496c81967a6b59312"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/a809b76d0f1dad26134402d446869e30c7966515",
-                "reference": "a809b76d0f1dad26134402d446869e30c7966515",
+                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/10f9e9a21aee71d6bc68caa496c81967a6b59312",
+                "reference": "10f9e9a21aee71d6bc68caa496c81967a6b59312",
                 "shasum": ""
             },
             "require": {
@@ -362,7 +362,7 @@
                 "lxd",
                 "wrapper"
             ],
-            "time": "2020-06-10T20:39:00+00:00"
+            "time": "2020-10-30T01:30:01+00:00"
         },
         {
             "name": "doctrine/annotations",
