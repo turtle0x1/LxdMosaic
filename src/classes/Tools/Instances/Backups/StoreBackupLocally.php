@@ -55,7 +55,7 @@ class StoreBackupLocally
             $backupDir = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::BACKUP_DIRECTORY);
         }
 
-        $backupDir = $this->makeDirectory($backupDir, $hostId, $instance);
+        $backupDir = $this->makeDirectory($backupDir, $hostId, $project, $instance);
 
         $backupInfo = $this->downloadBackup($host, $project, $instance, $backupDir, $backup);
 
@@ -96,11 +96,11 @@ class StoreBackupLocally
         ];
     }
 
-    private function makeDirectory(string $backupDir, int $hostId, string $instance) :string
+    private function makeDirectory(string $backupDir, int $hostId, string $project, string $instance) :string
     {
         try {
             $this->filesystem = new Filesystem();
-            $path = "$backupDir/$hostId/$instance";
+            $path = "$backupDir/$hostId/$project/$instance";
 
             if ($this->filesystem->exists($path)) {
                 return $path;
