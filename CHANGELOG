@@ -1,7 +1,11 @@
 Unreleased
 
+Added
+    Cron job to disable backup schedules for offline hosts & deleted instances
+
 Changed
     Support backups & backup schedules in different projects
+    Disable backup schedules when deleting instance
 
 Fixed
     Switching projects in snap broken
