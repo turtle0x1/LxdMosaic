@@ -38,6 +38,7 @@ $importAndDelete = $strategy == BackupStrategies::IMPORT_AND_DELETE;
 $backupInstance->create(
     $host,
     $instance,
+    $project,
     (new \DateTime())->format("Y-m-d H:i:s"),
     true,
     $importAndDelete

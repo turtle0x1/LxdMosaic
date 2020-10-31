@@ -1,5 +1,8 @@
 Unreleased
 
+Changed
+    Support backups & backup schedules in different projects
+
 Fixed
     Switching projects in snap broken
 

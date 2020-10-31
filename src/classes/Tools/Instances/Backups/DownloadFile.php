@@ -14,7 +14,7 @@ class DownloadFile
         $this->lxdClient = $lxdClient;
     }
 
-    public function download(Host $host, string $backupFilePath, $instance, $backup)
+    public function download(Host $host, string $project, $instance, string $backupFilePath, $backup)
     {
         $certPath = $_ENV["LXD_CERTS_DIR"] .  $host->getCertPath();
 
@@ -27,7 +27,7 @@ class DownloadFile
         $client = new Client($config);
 
         try {
-            $client->get("{$host->getUrl()}/1.0/instances/$instance/backups/$backup/export");
+            $client->get("{$host->getUrl()}/1.0/instances/$instance/backups/$backup/export?project={$project}");
         } catch (\Throwable $e) {
             // Remove any file because it will be filled with the LXD response /
             // junk

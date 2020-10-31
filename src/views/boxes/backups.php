@@ -128,7 +128,7 @@ function makeLineData(data, setLabel){
     };
 }
 
-$(document).on("click", ".deleteBackup", function(){
+$("#containerBackupDetails").on("click", ".deleteBackup", function(){
     let tr = $(this).parents("tr");
     let backupId = tr.data("backupId");
     let x = {backupId: backupId};

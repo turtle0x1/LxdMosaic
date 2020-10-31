@@ -17,7 +17,7 @@ class ImportBackupController implements \dhope0000\LXDClient\Interfaces\RecordAc
      */
     public function import(Host $host, string $container, string $backup, int $delete)
     {
-        $this->storeBackupLocally->store($host, $container, $backup, (bool) $delete);
+        $this->storeBackupLocally->store($host, $host->callClientMethod("getProject"), $container, $backup, (bool) $delete);
 
         return ["state"=>"success", "message"=>"Imported backup"];
     }

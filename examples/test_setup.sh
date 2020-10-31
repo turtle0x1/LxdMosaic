@@ -41,3 +41,5 @@ sudo mysql -u root -proot < sql/0.5.0.sql
 sudo mysql -u root -proot < sql/0.6.0.sql
 sudo mysql -u root -proot < sql/0.7.0.sql
 sudo mysql -u root -proot < sql/0.9.0.sql
+
+vendor/bin/phinx migrate -e mysql
