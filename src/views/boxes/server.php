@@ -30,7 +30,7 @@
         <div class="row serverViewBox" id="serverInfoBox">
         <div class="col-md-7">
             <div class="card bg-dark">
-                <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                     <h4><i class="fas fa-box mr-2"></i>Instances</h4>
                     <div class="btn-toolbar float-right">
                       <div class="btn-group mr-2">
