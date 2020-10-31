@@ -11,13 +11,13 @@ class DeleteInstancesController implements \dhope0000\LXDClient\Interfaces\Recor
     {
         $this->deleteInstances = $deleteInstances;
     }
-    
+
     /**
      * @Route("", name="Delete Instances")
      */
-    public function delete(Host $host, array $containers)
+    public function delete(int $userId, Host $host, array $containers)
     {
-        $this->deleteInstances->delete($host, $containers);
+        $this->deleteInstances->delete($userId, $host, $containers);
         return ["state"=>"success", "message"=>"Delete Containers"];
     }
 }
