@@ -147,6 +147,7 @@
                                     <th>User</th>
                                     <th>Added</th>
                                     <th>Admin</th>
+                                    <th>Projects</th>
                                     <th>Reset Password</th>
                                 </tr>
                             </thead>
@@ -270,6 +271,11 @@ function loadUsers(){
                     <td><a href="#" id="${user.id}" class='viewUser'>${user.username}</a></td>
                     <td>${moment(user.created).fromNow()}</td>
                     <td><i class="fas fa-${isAdmin}"></i></td>
+                    <td>
+                        <button class="btn btn-primary setUserProject">
+                            <i class="fas fa-wrench"></i>
+                        </button>
+                    </td>
                     <td>
                         <button class="btn btn-primary resetPassword">
                             <i class="fas fa-wrench"></i>
@@ -479,6 +485,11 @@ $("#settingsOverview").on("click", "#addUser", function(){
     });
 });
 
+$("#settingsOverview").on("click", ".setUserProject", function(){
+    setUserSettings.targetUser = $(this).parents("tr").data("userId");
+    $("#modal-settings-setUserProject").modal("show");
+});
+
 $("#settingsOverview").on("click", ".resetPassword", function(){
     let targetUser = $(this).parents("tr").data("userId");
     $.confirm({
@@ -531,3 +542,7 @@ $("#settingsOverview").on("click", "#saveSettings", function(){
     });
 });
 </script>
+
+<?php
+    require __DIR__ . "/../modals/users/projectAccess.php";
+?>
