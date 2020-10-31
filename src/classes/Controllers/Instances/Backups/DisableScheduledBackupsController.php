@@ -26,7 +26,7 @@ class DisableScheduledBackupsController implements \dhope0000\LXDClient\Interfac
             $userId,
             $host->getHostId(),
             $instance,
-            "default"
+            $host->getProject()
         );
 
         return ["state"=>"success", "message"=>"Disabled schedule for instance"];

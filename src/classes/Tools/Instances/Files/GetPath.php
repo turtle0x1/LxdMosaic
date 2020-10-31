@@ -25,8 +25,12 @@ class GetPath
         $response = $host->instances->files->read($instance, $path);
 
         $this->instanceUrlKey = str_replace("/", "", $host->instances->getEndpoint());
+        $params = http_build_query([
+            "project"=>$host->getProject(),
+            "path"=>$path
+        ]);
 
-        $cacheKey = hash("sha1", "GET " . $host->callClientMethod("getUrl") . "/1.0/$this->instanceUrlKey/$instance/files?path=$path");
+        $cacheKey = hash("sha1", "GET " . $host->callClientMethod("getUrl") . "/1.0/$this->instanceUrlKey/$instance/files?$params");
 
         if ($response == null) {
             $isDirectory = $this->isCachedResponsePathDirectory($cacheKey);
@@ -57,7 +61,11 @@ class GetPath
             $contentPath = $path == "/" ? "/$content" : "$path/$content";
 
             $response = $host->instances->files->read($instance, $contentPath);
-            $cacheKey = hash("sha1", "GET " . $host->callClientMethod("getUrl") . "/1.0/$this->instanceUrlKey/$instance/files?path=$contentPath");
+            $params = http_build_query([
+                "project"=>$host->getProject(),
+                "path"=>$contentPath
+            ]);
+            $cacheKey = hash("sha1", "GET " . $host->callClientMethod("getUrl") . "/1.0/$this->instanceUrlKey/$instance/files?$params");
             $contents[$index] = [
                 "name"=>$content,
                 "isDirectory"=>$this->isCachedResponsePathDirectory($cacheKey)

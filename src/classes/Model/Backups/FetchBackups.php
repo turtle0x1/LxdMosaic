@@ -20,7 +20,8 @@ class FetchBackups
                     `CB_Host_ID` as `hostId`,
                     `CB_Container` as `container`,
                     `CB_Backup` as `name`,
-                    `CB_Local_Path` as `localPath`
+                    `CB_Local_Path` as `localPath`,
+                    `CB_Project` as `project`
                 FROM
                 `Container_Backups`
                 ORDER BY

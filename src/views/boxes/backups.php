@@ -128,7 +128,7 @@ function makeLineData(data, setLabel){
     };
 }
 
-$(document).on("click", ".deleteBackup", function(){
+$("#containerBackupDetails").on("click", ".deleteBackup", function(){
     let tr = $(this).parents("tr");
     let backupId = tr.data("backupId");
     let x = {backupId: backupId};
@@ -453,55 +453,62 @@ function loadBackupsOverview() {
         let backupTrs = "";
 
         currentBackups = data.allBackups;
+        if(data.allBackups.length == 0){
+            backupTrs = `<tr>
+                <td colspan="999" class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No instances / backups!</td>
+            </tr>`;
+        }else{
+            $.each(data.allBackups, (host, hostDetails)=>{
+                backupTrs += `<tr><td class="text-center text-success" colspan="999"><i class="fas fa-server mr-2"></i>${host}</tr></tr>`;
+                $.each(hostDetails.containers, (containerIndex, container)=>{
 
-        $.each(data.allBackups, (host, hostDetails)=>{
-            backupTrs += `<tr><td class="text-center text-success" colspan="999"><i class="fas fa-server mr-2"></i>${host}</tr></tr>`;
-            $.each(hostDetails.containers, (containerIndex, container)=>{
+                    let trClass = container.lastBackup.neverBackedUp ? "danger" : "success";
 
-                let trClass = container.lastBackup.neverBackedUp ? "danger" : "success";
+                    let createdDate = container.containerExists ? moment(container.created).fromNow() : "Deleted";
+                    let date = "Never";
+                    let viewButton = "Host Doesn't support backups";
 
-                let createdDate = container.containerExists ? moment(container.created).fromNow() : "Deleted";
-                let date = "Never";
-                let viewButton = "Host Doesn't support backups";
+                    let instanceName = container.name
 
-                let instanceName = container.name
+                    let ghostIcon = '<i class="fas fa-ghost" data-toggle="tooltip" data-placement="bottom" title="Instance Deleted" class="btn btn-outline-primary btn-sm"></i>'
 
-                let ghostIcon = '<i class="fas fa-ghost" data-toggle="tooltip" data-placement="bottom" title="Instance Deleted" class="btn btn-outline-primary btn-sm"></i>'
+                    if(container.containerExists){
+                        instanceName += ghostIcon;
+                    }else{
+                        trClass = "success";
+                    }
 
-                if(container.containerExists){
-                    instanceName += ghostIcon;
-                }else{
-                    trClass = "success";
-                }
-
-                if(hostDetails.supportsBackups){
-                    instanceName = `<a
-                        href="#"
-                        class="viewContainerBackups"
-                        data-host-alias="${host}"
-                        data-host-id="${hostDetails.hostId}"
-                        data-container-index="${containerIndex}"
-                        data-container="${container.name}">
-                        ${container.name} ${!container.containerExists ? ghostIcon : ""}
-                    </a>`;
-                }
+                    if(hostDetails.supportsBackups){
+                        instanceName = `<a
+                            href="#"
+                            class="viewContainerBackups"
+                            data-host-alias="${host}"
+                            data-host-id="${hostDetails.hostId}"
+                            data-container-index="${containerIndex}"
+                            data-container="${container.name}">
+                            ${container.name} ${!container.containerExists ? ghostIcon : ""}
+                        </a>`;
+                    }
 
 
-                if(container.lastBackup.hasOwnProperty("backupDateCreated")){
-                    date = moment(container.lastBackup.backupDateCreated).fromNow()
-                }
+                    if(container.lastBackup.hasOwnProperty("backupDateCreated")){
+                        date = moment(container.lastBackup.backupDateCreated).fromNow()
+                    }
 
-                let upToString = container.strategyName == "" ? "" :  ` / ${container.scheduleRetention}`;
+                    let upToString = container.strategyName == "" ? "" :  ` / ${container.scheduleRetention}`;
 
-                backupTrs += `<tr>
-                    <td>${instanceName}</td>
-                    <td>${container.strategyName} ${container.scheduleString}</td>
-                    <td class='text-${trClass}'>${date}</td>
-                    <td>${container.allBackups.length} ${upToString}</td>
-                    <td>${formatBytes(container.totalSize)}</td>
-                </tr>`
-            });
-        })
+                    backupTrs += `<tr>
+                        <td>${instanceName}</td>
+                        <td>${container.strategyName} ${container.scheduleString}</td>
+                        <td class='text-${trClass}'>${date}</td>
+                        <td>${container.allBackups.length} ${upToString}</td>
+                        <td>${formatBytes(container.totalSize)}</td>
+                    </tr>`
+                });
+            })
+        }
+
+
         $("#containerBackupTable > tbody").empty().append(backupTrs);
         $("#containerBackupTable > tbody").find('[data-toggle="tooltip"]').tooltip()
 

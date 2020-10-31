@@ -108,7 +108,18 @@ class Host implements \JsonSerializable
 
     public function setProject(string $project)
     {
+        if ($this->client == null) {
+            $this->client = $this->lxdClient->getClientWithHost($this);
+        }
         $this->client->setProject($project);
+    }
+
+    public function getProject()
+    {
+        if ($this->client == null) {
+            $this->client = $this->lxdClient->getClientWithHost($this);
+        }
+        return $this->client->getProject();
     }
 
     public function __set($prop, $value)

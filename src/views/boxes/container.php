@@ -859,7 +859,7 @@ function loadContainerView(data)
             if(last_used_at.format("YYYY") == "1970"){
                 $("#container-upTime").text("Not Started Yet");
             }else if(!disableActions){
-                $("#container-upTime").text("Not Running");
+                $("#container-upTime").text("Offline");
             }else{
                 let now = moment(new Date());
 
@@ -909,17 +909,26 @@ function loadContainerView(data)
 
         let networkData = "";
 
-        $.each(x.state.network,  function(i, item){
-            if(i == "lo"){
-                return;
-            }
-            networkData += `<div class='padding-bottom: 2em;'><b>${i}:</b><br/>`;
-            let lastKey = item.addresses.length - 1;
-            $.each(item.addresses, function(i, item){
-                networkData += `<span style='padding-left:3em'>${item.address}<br/></span>`;
+        if(x.state.network !== null){
+            $.each(x.state.network,  function(i, item){
+                if(i == "lo"){
+                    return;
+                }
+                networkData += `<div class='padding-bottom: 2em;'><b>${i}:</b><br/>`;
+                let lastKey = item.addresses.length - 1;
+                $.each(item.addresses, function(i, item){
+                    networkData += `<span style='padding-left:3em'>${item.address}<br/></span>`;
+                });
+                networkData += "</div>";
             });
-            networkData += "</div>";
-        });
+
+            if(networkData == ""){
+                networkData = '<div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Only local interface present!</div>';
+            }
+        }else{
+            networkData = '<div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Instance Offline</div>';
+        }
+
         $("#networkDetails").empty().append(networkData);
 
         let memoryLabels = [],
@@ -1001,11 +1010,13 @@ function loadContainerView(data)
                 <u> Memory Usage </u>
                 <i class="fas fa-memory float-right"></i>
             </h5>
-            <div class="alert alert-info text-center">Instance Not Running</div>`);
+            <div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Instance Offline</div>`);
+
             $("#storageDataCard").empty().append(`<h5 class="text-white">
-                            <u> Disk Usage </u>
-                            <i class="fas fa-hdd float-right"></i>
-                        </h5><div class="alert alert-info text-center">Instance Not Running</div>`);
+                <u> Disk Usage </u>
+                <i class="fas fa-hdd float-right"></i>
+            </h5>
+            <div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Instance Offline</div>`);
         }
 
 

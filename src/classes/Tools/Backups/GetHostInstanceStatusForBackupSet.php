@@ -31,12 +31,11 @@ class GetHostInstanceStatusForBackupSet
         $groupedSchedule = $this->groupSchedules($this->fetchBackupSchedules->fetchActiveSchedsGroupedByHostId());
 
         $missingBackups = [];
+        // Cache the hosts current active project because its cheaper than
+        // recalculating it later
+        $hostsProject = [];
 
         foreach ($hostsContainers as $host) {
-            if (empty($host->getCustomProp("containers"))) {
-                continue;
-            }
-
             $backupsToSearch = [];
 
             if (isset($backupsByHostId[$host->getHostId()])) {
@@ -45,9 +44,12 @@ class GetHostInstanceStatusForBackupSet
 
             $containers = [];
             $seenContainerNames = [];
-            //TODO This all needs to be project aware and re-written
+
+            $currentProject = $host->callCLientMethod("getProject");
+            $hostsProject[$host->getHostId()] = $currentProject;
+
             foreach ($host->getCustomProp("containers") as $name => $container) {
-                $lastBackup = $this->findLastBackup($name, $backupsToSearch);
+                $lastBackup = $this->findLastBackup($currentProject, $name, $backupsToSearch);
                 $container = $this->extractContainerInfo($name, $container);
                 $allBackups = $this->findAllBackupsandTotalSize($name, $backupsToSearch);
 
@@ -70,18 +72,33 @@ class GetHostInstanceStatusForBackupSet
                 $container["strategyName"] = $strategyName;
 
                 $containers[] = $container;
-                $seenContainerNames[] = $name;
+
+                if (!isset($seenContainerNames[$currentProject])) {
+                    $seenContainerNames[$currentProject] = [];
+                }
+
+                $seenContainerNames[$currentProject][] = $name;
             }
 
+
+
             foreach ($backupsToSearch as $backup) {
-                if (!in_array($backup["container"], $seenContainerNames)) {
+                if (!isset($seenContainerNames[$backup["project"]]) && $backup["project"] !== $hostsProject[$backup["hostId"]]) {
+                    continue;
+                }
+
+                if (!isset($seenContainerNames[$backup["project"]])) {
+                    $seenContainerNames[$backup["project"]] = [];
+                }
+
+                if (!in_array($backup["container"], $seenContainerNames[$backup["project"]])) {
                     $allBackups = $this->findAllBackupsandTotalSize($backup["container"], $backupsToSearch);
 
                     $containers[] = [
                         "name"=>$backup["container"],
                         "containerExists"=>false,
                         "scheduleString"=>"N/A",
-                        "lastBackup"=>$this->findLastBackup($backup["container"], $backupsToSearch),
+                        "lastBackup"=>$this->findLastBackup($backup["project"], $backup["container"], $backupsToSearch),
                         "allBackups"=>$allBackups["backups"],
                         "totalSize"=>$allBackups["size"],
                         "scheduleRetention"=>"",
@@ -127,7 +144,7 @@ class GetHostInstanceStatusForBackupSet
         ];
     }
 
-    private function findLastBackup(string $container, ?array $hostBackups)
+    private function findLastBackup(string $project, string $container, ?array $hostBackups)
     {
         $x = [
             "neverBackedUp"=>true
@@ -140,7 +157,7 @@ class GetHostInstanceStatusForBackupSet
         $latestDate =  null;
 
         foreach ($hostBackups as $backup) {
-            if ($backup["container"] == $container) {
+            if ($project == $backup["project"] && $backup["container"] == $container) {
                 $x["neverBackedUp"] = false;
                 if ((new \DateTime($backup["backupDateCreated"])) > $latestDate) {
                     $latestDate = (new \DateTime($backup["backupDateCreated"]));

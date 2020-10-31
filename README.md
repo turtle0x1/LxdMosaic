@@ -32,6 +32,17 @@ lxc config set core.trust_password some-secret-string #remember this you will be
 
 The preferred installation method is using a ubuntu container.
 
+### SNAP
+
+SNAP is now available for those interested, **if you're a company / power user - don't use snap**,
+your support needs aren't best serviced.
+
+"Home users" SNAP is perfectly fine & encouraged.
+
+`sudo snap install lxdmosaic`
+
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/lxdmosaic)
+
 ### Install script
 **Warning this installs apache, mysql-server, php, git and other
 dependencies its best to run in a container or an empty VM to avoid cluttering

@@ -33,14 +33,14 @@ class AddBackupSchedule
             $userId,
             $host->getHostId(),
             $instance,
-            "default"
+            $host->callClientMethod("getProject")
         );
 
         $this->insertBackupSchedule->insert(
             $userId,
             $host->getHostId(),
             $instance,
-            "default",
+            $host->callClientMethod("getProject"),
             $frequency . "~ " . $time . "~ [" . implode(",", $daysOfWeek) . "]~ $dayOfMonth~",
             $strategyId,
             $retention

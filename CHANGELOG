@@ -1,6 +1,29 @@
 Unreleased
 
 Added
+    Cron job to disable backup schedules for offline hosts & deleted instances
+
+Changed
+    Support backups & backup schedules in different projects
+    Disable backup schedules when deleting instance
+    Use buttons for bulk instance actions instead of dropdown
+
+Fixed
+    Switching projects in snap broken
+
+0.10.2 - 30/10/2020
+
+Fixed
+    Cant access instance files (#273)
+
+0.10.1 - 21/10/2020
+
+Fixed
+    Fix an issue with node trying to use wrong sql methods (#269)
+
+0.10.0 - 20/10/2020
+
+Added
     Support for setting addtional restriction keys on projects (#229)
     Search for instance by ip address (#233)
     Remove profile from instance (#224)
@@ -18,6 +41,7 @@ Fixed
     Fix server overview doesnt load properly when system details missing (#262)
     Deleting last project when on project blocks UI (#261)
     used_by on networks now returning null & preventing UI from loading
+    Reading files in instances not in the default project
 
 Changed
     Used buttons instead of dropdown to change instance state

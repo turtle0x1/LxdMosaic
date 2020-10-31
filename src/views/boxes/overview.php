@@ -69,8 +69,8 @@
                               <h4> Memory Usage </h4>
                           </div>
                           <div class="card-body" >
-                              <div class="alert alert-warning text-center notEnoughData">
-                                  Not enough data check again in 10 minutes
+                              <div class="text-center notEnoughData">
+                                  <i class="fas fa-info-circle text-warning mr-2"></i>Check again in 10 minutes!
                               </div>
                               <div id="dashboardMemoryHistoryBox">
                               </div>
@@ -86,8 +86,8 @@
                               <h4> Running Instances </h4>
                           </div>
                           <div class="card-body" >
-                              <div class="alert alert-warning text-center notEnoughData">
-                                  Not enough data check again in 10 minutes
+                              <div class="text-center notEnoughData">
+                                  <i class="fas fa-info-circle text-warning mr-2"></i>Check again in 10 minutes!
                               </div>
                               <div id="dashboardRunningInstancesBox">
                               </div>
@@ -100,8 +100,8 @@
                               <h4>Storage Usage</h4>
                           </div>
                           <div class="card-body" >
-                              <div class="alert alert-warning text-center notEnoughData">
-                                  Not enough data check again in 10 minutes
+                              <div class="text-center notEnoughData">
+                                  <i class="fas fa-info-circle text-warning mr-2"></i>Check again in 10 minutes!
                               </div>
                               <div id="dashboardStorageHistoryBox">
                               </div>
