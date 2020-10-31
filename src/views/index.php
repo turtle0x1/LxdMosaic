@@ -191,7 +191,8 @@ if ($haveServers->haveAny() !== true) {
                 },
                 users: {
                     allowedProjects: {
-                        getAllowed: '/api/User/AllowedProjects/GetUserAllowedProjectsController/get' 
+                        revokeAccess: '/api/User/AllowedProjects/RevokeAccessController/revoke',
+                        getAllowed: '/api/User/AllowedProjects/GetUserAllowedProjectsController/get'
                     },
                     resetPassword: '/api/InstanceSettings/Users/ResetPasswordController/reset',
                     add: '/api/InstanceSettings/Users/AddUserController/add',

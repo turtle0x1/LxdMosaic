@@ -34,6 +34,19 @@
     var setUserSettings = {
         targetUser: null
     }
+
+    $("#modal-settings-setUserProject").on("click", ".revokeProjectAccsss", function(){
+        let x = {...$(this).data(), ...setUserSettings};
+        let tr = $(this).parents("tr");
+        ajaxRequest(globalUrls.settings.users.allowedProjects.revokeAccess, x, (data)=>{
+            data = makeToastr(data);
+            if(data.state == "error"){
+                return false;
+            }
+            tr.remove();
+        })
+    });
+
     $("#modal-settings-setUserProject").on("show.bs.modal",  function(){
         ajaxRequest(globalUrls.settings.users.allowedProjects.getAllowed, setUserSettings, (data)=>{
             data = makeToastr(data);
@@ -55,7 +68,7 @@
                     $.each(host.projects, (_, project)=>{
                         trs += `<tr>
                             <td>${project}</td>
-                            <td><button class="btn btn-danger revokeProjectAccsss"><i class="fas fa-trash"></i></button></td>
+                            <td><button data-host-id="${host.hostId}" data-project="${project}" class="btn btn-danger revokeProjectAccsss"><i class="fas fa-trash"></i></button></td>
                         </tr>`
                     });
                 });
