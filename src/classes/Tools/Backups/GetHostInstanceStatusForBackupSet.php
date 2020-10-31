@@ -31,12 +31,11 @@ class GetHostInstanceStatusForBackupSet
         $groupedSchedule = $this->groupSchedules($this->fetchBackupSchedules->fetchActiveSchedsGroupedByHostId());
 
         $missingBackups = [];
+        // Cache the hosts current active project because its cheaper than
+        // recalculating it later
+        $hostsProject = [];
 
         foreach ($hostsContainers as $host) {
-            if (empty($host->getCustomProp("containers"))) {
-                continue;
-            }
-
             $backupsToSearch = [];
 
             if (isset($backupsByHostId[$host->getHostId()])) {
@@ -45,9 +44,11 @@ class GetHostInstanceStatusForBackupSet
 
             $containers = [];
             $seenContainerNames = [];
-            //TODO This all needs to be project aware and re-written
+
+            $currentProject = $host->callCLientMethod("getProject");
+            $hostsProject[$host->getHostId()] = $currentProject;
+
             foreach ($host->getCustomProp("containers") as $name => $container) {
-                $currentProject = $host->callCLientMethod("getProject");
                 $lastBackup = $this->findLastBackup($currentProject, $name, $backupsToSearch);
                 $container = $this->extractContainerInfo($name, $container);
                 $allBackups = $this->findAllBackupsandTotalSize($name, $backupsToSearch);
@@ -79,9 +80,15 @@ class GetHostInstanceStatusForBackupSet
                 $seenContainerNames[$currentProject][] = $name;
             }
 
+
+
             foreach ($backupsToSearch as $backup) {
-                if (!isset($seenContainerNames[$backup["project"]])) {
+                if (!isset($seenContainerNames[$backup["project"]]) && $backup["project"] !== $hostsProject[$backup["hostId"]]) {
                     continue;
+                }
+
+                if (!isset($seenContainerNames[$backup["project"]])) {
+                    $seenContainerNames[$backup["project"]] = [];
                 }
 
                 if (!in_array($backup["container"], $seenContainerNames[$backup["project"]])) {
