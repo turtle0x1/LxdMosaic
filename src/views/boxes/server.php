@@ -31,7 +31,7 @@
         <div class="col-md-7">
             <div class="card bg-dark">
                 <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                    <h4>Instances</h4>
+                    <h4><i class="fas fa-box mr-2"></i>Instances</h4>
                     <div class="btn-toolbar float-right">
                       <div class="btn-group mr-2">
                         <button class="btn btn-success serverContainerActions" data-action="start" data-toggle="tooltip" data-placement="bottom" title="Start Instances" disabled>
@@ -66,44 +66,27 @@
         </div>
         <div class="col-md-5">
             <div class="row">
-                <div class="col-md-6">
-                    <div class="card bg-dark">
-                        <div class="card-header">
-                            Instance Stats
-                        </div>
-                        <div class="card-body">
-                            <div id="serverInstancesOnlineBox">
-                            </div>
-                            <div class="alert alert-info" id="noContainersWarning">
-                                There are no instances on the host
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-md-6">
-                    <div class="card bg-dark">
-                        <div class="card-header">
-                            Memory Stats
-                        </div>
-                        <div class="card-body">
-                            <div id="serverMemoryUsageBox">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-md-12">
                     <div class="card bg-dark">
                         <div class="card-header">
-                            <h4>Host Details & Devices</h4>
+                            <h4><i class="fas fa-server mr-2"></i>Usage & Hardware</h4>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered table-dark" id="hostDetailsTable">
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <div class="mb-3">
+                                <h4><i class="fas fa-memory mr-2"></i>Server Memory Usage</h4>
+                                <div id="serverMemoryUsageBox"></div>
+                            </div>
+                            <div class="mb-3">
+                                <h4><i class="fas fa-boxes mr-2"></i>Project Instances Online</h4>
+                                <div id="serverInstancesOnlineBox"></div>
+                            </div>
+                            <div>
+                                <h4><i class="fas fa-server mr-2"></i>Server Hardware</h4>
+                                <table class="table table-bordered table-dark" id="hostDetailsTable">
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -382,7 +365,7 @@ function loadServerView(hostId)
 
         let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
 
-        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white">CPU'S</td></tr>`
+        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white"><i class="fas fa-microchip mr-2"></i>CPU'S</td></tr>`
 
         $.each(data.resources.cpu.sockets, (_, item)=>{
             hostDetailsTrs += `<tr>
@@ -391,7 +374,7 @@ function loadServerView(hostId)
             </tr>`
         });
 
-        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white">GPU'S</td></tr>`
+        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white"><i class="fas fa-bolt mr-2"></i>GPU'S</td></tr>`
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
             $.each(data.resources.gpu.cards, function(i, gpu){
@@ -432,7 +415,7 @@ function loadServerView(hostId)
 
             hostDetailsTrs += `
                 <tr>
-                    <td colspan="999" class="bg-info text-center text-white">System Details</td>
+                    <td colspan="999" class="bg-info text-center text-white"><i class="fas fa-info-circle mr-2"></i>System Details</td>
                 </tr>
                 <tr>
                     <td>Motherboard</td>
@@ -508,67 +491,52 @@ function loadServerView(hostId)
                 });
             });
 
-            $("#serverInstancesOnlineBox").empty().append(`<canvas id="containerStatsChart" style="width: 100%;"></canvas>`);
-
-            new Chart($("#containerStatsChart"), {
-                type: 'pie',
-                  data: {
-                    labels: ['Online', 'Offline'],
-                    datasets: [{
-                      label: '# of containers',
-                      data: [data.containerStats.online, data.containerStats.offline],
-                      backgroundColor: [
-                        'rgba(46, 204, 113, 1)',
-                        'rgba(189, 195, 199, 1)'
-                      ],
-                      borderColor: [
-                          'rgba(46, 204, 113, 1)',
-                          'rgba(189, 195, 199, 1)'
-                      ],
-                      borderWidth: 1
-                    }]
-                  },
-                  options: {
-                   	cutoutPercentage: 40,
-                    responsive: false,
-                  }
-            });
-            $("#noContainersWarning").hide();
-            $("#serverInstancesOnlineBox").show();
+            let instanceStatsWidth = ((data.containerStats.online / (data.containerStats.online + data.containerStats.offline)) * 100)
+            $("#serverInstancesOnlineBox").empty().append(`<div class="mb-2">
+                <div class="progress">
+                    <div data-toggle="tooltip" data-placement="bottom" title="${data.containerStats.online}" class="progress-bar bg-success" style="width: ${instanceStatsWidth}%" role="progressbar" aria-valuenow="${data.containerStats.online}" aria-valuemin="0" aria-valuemax="${(data.containerStats.online + data.containerStats.offline)}"></div>
+                </div>
+            </div>`);
         }else{
-            $("#serverInstancesOnlineBox").hide();
-            $("#noContainersWarning").show();
-            containerHtml = `<tr><td class="alert alert-info text-center" colspan="999">No Instances</td></tr>`
+            $("#serverInstancesOnlineBox").empty().append(`<div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No instances!</div>`);
+            containerHtml = `<tr><td class="text-center" colspan="999"><i class="fas fa-info-circle text-info mr-2"></i>No instances!</td></tr>`
         }
 
         $("#containerTable > tbody").empty().append(containerHtml);
 
-        $("#serverMemoryUsageBox").empty().append(`<canvas id="memoryStatsChart" style="width: 100%;"></canvas>`);
+        let memoryWidth = ((data.resources.memory.used / data.resources.memory.total) * 100)
+        $("#serverMemoryUsageBox").empty().append(`<div class="mb-2">
+            <div class="progress">
+                <div data-toggle="tooltip" data-placement="bottom" title="${formatBytes(data.resources.memory.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.resources.memory.used}" aria-valuemin="0" aria-valuemax="${(data.resources.memory.total - data.resources.memory.used)}"></div>
+            </div>
+        </div>`);
 
-        new Chart($("#memoryStatsChart"), {
-            type: 'pie',
-              data: {
-                labels: ['Used', 'Free'],
-                datasets: [{
-                  label: '# of containers',
-                  data: [data.resources.memory.used, (data.resources.memory.total - data.resources.memory.used)],
-                  backgroundColor: [
-                    'rgba(46, 204, 113, 1)',
-                    'rgba(189, 195, 199, 1)'
-                  ],
-                  borderColor: [
-                      'rgba(46, 204, 113, 1)',
-                      'rgba(189, 195, 199, 1)'
-                  ],
-                  borderWidth: 1
-                }]
-              },
-              options: {
-               	cutoutPercentage: 40,
-                responsive: false,
-                tooltips: toolTipsBytesCallbacks
-              }
-        });
+        // $("#serverMemoryUsageBox").empty().append(`<canvas id="memoryStatsChart" style="width: 100%;"></canvas>`);
+        //
+        // new Chart(, {
+        //     type: 'pie',
+        //       data: {
+        //         labels: ['Used', 'Free'],
+        //         datasets: [{
+        //           label: '# of containers',
+        //           data: [, ( - data.resources.memory.used)],
+        //           backgroundColor: [
+        //             'rgba(46, 204, 113, 1)',
+        //             'rgba(189, 195, 199, 1)'
+        //           ],
+        //           borderColor: [
+        //               'rgba(46, 204, 113, 1)',
+        //               'rgba(189, 195, 199, 1)'
+        //           ],
+        //           borderWidth: 1
+        //         }]
+        //       },
+        //       options: {
+        //        	cutoutPercentage: 40,
+        //         responsive: false,
+        //         tooltips: toolTipsBytesCallbacks
+        //       }
+        // });
     });
 }
 
