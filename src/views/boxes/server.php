@@ -30,18 +30,23 @@
         <div class="row serverViewBox" id="serverInfoBox">
         <div class="col-md-7">
             <div class="card bg-dark">
-                <div class="card-header bg-dark">
-                    <h4> Instances
-                        <select id="serverContainerActions" class="form-control-sm float-right">
-                            <option value="" selected></option>
-                            <option value="start">Start</option>
-                            <option value="stop">Stop</option>
-                            <option value="delete">Delete</option>
-                        </select>
-                    </h4>
-
+                <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h4>Instances</h4>
+                    <div class="btn-toolbar float-right">
+                      <div class="btn-group mr-2">
+                        <button class="btn btn-success serverContainerActions" data-action="start" data-toggle="tooltip" data-placement="bottom" title="Start Instances" disabled>
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="btn btn-warning serverContainerActions" data-action="stop" data-toggle="tooltip" data-placement="bottom" title="Stop Instances" disabled>
+                            <i class="fas fa-stop"></i>
+                        </button>
+                        <button class="btn btn-danger serverContainerActions" data-action="delete" data-toggle="tooltip" data-placement="bottom" title="Delete Instances" disabled>
+                            <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
                 </div>
-                <div class="card-body table-responsive bg-dark">
+                <div class="card-body table-responsive">
                     <table id="containerTable" class="table table-dark table-bordered">
                         <thead>
                             <tr>
@@ -146,6 +151,12 @@ var currentServer = {
 $(document).on("change", ".toggleStatusContainer", function(){
     let checked = $(this).is(":checked");
     let tr = $(this).parents("tr");
+
+    if(checked){
+        $(".serverContainerActions").attr("disabled", false);
+    }else {
+        $(".serverContainerActions").attr("disabled", true);
+    }
 
     $("#containerTable").find(`tr:gt(${tr.index() + 1})`).each(function(){
         if($(this).hasClass("statusRow")){
@@ -279,15 +290,29 @@ $(document).on("click", "#serverDetailsBtn, #serverProxyDevicesBtn", function(){
     }
 });
 
+$(document).on("change", "input[name=containerCheckbox]", function(){
+    if($("input[name=containerCheckbox]:checked").length > 0){
+        $(".serverContainerActions").attr("disabled", false);
+    }else{
+        $(".serverContainerActions").attr("disabled", true);
+    }
+});
 $(document).on("change", "#toggleAllContainers", function(){
     let checked = $(this).is(":checked");
+
+    if(checked){
+        $(".serverContainerActions").attr("disabled", false);
+    }else {
+        $(".serverContainerActions").attr("disabled", true);
+    }
+
     $("#containerTable").find("input[name=containerCheckbox]").each(function(){
         $(this).prop("checked", checked);
     });
 });
 
-$(document).on("change", "#serverContainerActions", function(){
-    let action = $(this).val();
+$(document).on("click", ".serverContainerActions", function(){
+    let action = $(this).data("action");
     if(action== ""){
         return false;
     }
@@ -350,7 +375,8 @@ function loadServerView(hostId)
 
         $("#serverHeading").text(ident);
 
-        $("#serverContainerActions").find("option[value='']").prop("selected", true);
+        $(".serverContainerActions").attr("disabled", true)
+        $("#toggleAllContainers").prop("checked", false);
 
         let containerHtml, hostDetailsTrs = "";
 
