@@ -52,6 +52,7 @@ class Universe
             $hosts = $this->hostList->getHostCollection(array_keys($projectsWithAccess));
         }
 
+
         $userCurrentProjects = $this->fetchUserProject->fetchCurrentProjects($userId);
 
         if (!empty($entity)) {
@@ -91,9 +92,19 @@ class Universe
                     }
 
                     $entities = [];
-                    $project = $host->projects->info($currentProject);
+
+                    if (!$supportsProjects) {
+                        $project = ["name"=>"default", "oldHost"=>true, "used_by"=>[]];
+                    } else {
+                        $project = $host->projects->info($currentProject);
+                    }
+
 
                     if ((in_array($project["name"], $allowedProjects)) || $isAdmin === true) {
+                        if (isset($project["oldHost"])) {
+                            $project["used_by"] = $this->buildOldUsedBy($host);
+                            unset($project["oldHost"]);
+                        }
                         foreach ($project["used_by"] as $usedBy) {
                             if (strpos($usedBy, $searchingFor) !== false) {
                                 $usedBy = str_replace("?project=$currentProject", "", $usedBy);
@@ -102,6 +113,7 @@ class Universe
                         }
                     }
                 }
+
                 $host->setCustomProp($entity, $entities);
             }
         }
@@ -128,5 +140,22 @@ class Universe
             "clusters"=>$clusters,
             "standalone"=>["members"=>$hosts]
         ];
+    }
+
+    private function buildOldUsedBy($host)
+    {
+        $instances = $this->prefixString($host->instances->all(), "/1.0/instances/");
+        $images = $this->prefixString($host->images->all(), "/1.0/images/");
+        $profiles = $this->prefixString($host->profiles->all(), "/1.0/profiles/");
+        $networks = $this->prefixString($host->networks->all(), "/1.0/networks/");
+        return array_merge($instances, $images, $profiles, $networks);
+    }
+
+    private function prefixString($objs, $string)
+    {
+        foreach ($objs as $i => $obj) {
+            $objs[$i] = "$string$obj";
+        }
+        return $objs;
     }
 }
