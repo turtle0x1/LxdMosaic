@@ -191,6 +191,7 @@ if ($haveServers->haveAny() !== true) {
                 },
                 users: {
                     allowedProjects: {
+                        grantAcess: '/api/User/AllowedProjects/GrantAccessController/grant',
                         revokeAccess: '/api/User/AllowedProjects/RevokeAccessController/revoke',
                         getAllowed: '/api/User/AllowedProjects/GetUserAllowedProjectsController/get'
                     },
