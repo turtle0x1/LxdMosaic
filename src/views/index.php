@@ -313,6 +313,9 @@ if ($haveServers->haveAny() !== true) {
                   setHostProject: '/api/User/SetHostProjectController/set'
               },
               projects: {
+                  search:{
+                    getCommonToHosts: '/api/Projects/Search/GetCommonToHostsProjectsController/get',
+                  },
                   create: '/api/Projects/CreateProjectController/create',
                   getAllFromHosts: '/api/Projects/GetHostsProjectsController/get',
                   info: '/api/Projects/GetProjectInfoController/get',
