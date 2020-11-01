@@ -46,6 +46,10 @@ class Universe
 
         $projectsWithAccess = $this->fetchAllowedProjects->fetchAll($userId);
 
+        if (empty($projectsWithAccess) && !$isAdmin) {
+            throw new \Exception("User has no access & is attempting to browse", 1);
+        }
+
         if ($isAdmin === true) {
             $hosts = $this->hostList->fetchAllHosts();
         } else {
