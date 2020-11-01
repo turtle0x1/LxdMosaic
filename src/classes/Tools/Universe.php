@@ -9,6 +9,7 @@ use dhope0000\LXDClient\Tools\Clusters\GetAllClusters;
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Tools\User\GetUserProject;
+use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 
 class Universe
 {
@@ -27,7 +28,8 @@ class Universe
         GetAllClusters  $getAllClusters,
         FetchUserProject $fetchUserProject,
         FetchUserDetails $fetchUserDetails,
-        GetUserProject $getUserProject
+        GetUserProject $getUserProject,
+        HasExtension $hasExtension
     ) {
         $this->fetchAllowedProjects = $fetchAllowedProjects;
         $this->hostList = $hostList;
@@ -35,6 +37,7 @@ class Universe
         $this->fetchUserProject = $fetchUserProject;
         $this->fetchUserDetails = $fetchUserDetails;
         $this->getUserProject = $getUserProject;
+        $this->hasExtension = $hasExtension;
     }
 
     public function getEntitiesUserHasAccesTo(int $userId, string $entity = null)
@@ -60,6 +63,8 @@ class Universe
                     continue;
                 }
 
+                $supportsProjects = $this->hasExtension->checkWithHost($host, "projects");
+
                 $entities = [];
 
                 $allowedProjects = [];
@@ -70,7 +75,11 @@ class Universe
 
                 if ($entity == "projects") {
                     if ($isAdmin === true) {
-                        $entities = $host->projects->all();
+                        if (!$supportsProjects) {
+                            $projects = ["default"];
+                        } else {
+                            $entities = $host->projects->all();
+                        }
                     } else {
                         $entities = $allowedProjects;
                     }

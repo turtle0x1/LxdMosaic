@@ -4,16 +4,16 @@ namespace dhope0000\LXDClient\Tools\Projects\Search;
 
 use dhope0000\LXDClient\Objects\HostsCollection;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
-
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class GetCommonToHostsProjects
 {
     private $validatePermissions;
 
-    public function __construct(ValidatePermissions $validatePermissions)
+    public function __construct(ValidatePermissions $validatePermissions, HasExtension $hasExtension)
     {
         $this->validatePermissions = $validatePermissions;
+        $this->hasExtension = $hasExtension;
     }
 
     public function get(int $userId, HostsCollection $hosts)
@@ -23,7 +23,15 @@ class GetCommonToHostsProjects
         $totalHosts = 0;
         foreach ($hosts as $host) {
             $totalHosts++;
-            $projects = $host->projects->all();
+
+            $supportsProjects = $this->hasExtension->checkWithHost($host, "projects");
+
+            if ($supportsProjects) {
+                $projects = $host->projects->all();
+            } else {
+                $projects = ["default"];
+            }
+
             foreach ($projects as $project) {
                 if (!isset($projectsCount[$project])) {
                     $projectsCount[$project] = 0;
