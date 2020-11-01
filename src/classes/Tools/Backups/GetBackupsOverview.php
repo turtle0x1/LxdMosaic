@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Tools\Backups;
 
 use dhope0000\LXDClient\Model\Backups\FetchBackups;
 use dhope0000\LXDClient\Tools\Backups\GetHostInstanceStatusForBackupSet;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetBackupsOverview
 {
@@ -11,18 +12,25 @@ class GetBackupsOverview
 
     public function __construct(
         FetchBackups $fetchBackups,
-        GetHostInstanceStatusForBackupSet $getHostInstanceStatusForBackupSet
+        GetHostInstanceStatusForBackupSet $getHostInstanceStatusForBackupSet,
+        FetchUserDetails $fetchUserDetails
     ) {
         $this->fetchBackups = $fetchBackups;
         $this->getHostInstanceStatusForBackupSet = $getHostInstanceStatusForBackupSet;
+        $this->fetchUserDetails = $fetchUserDetails;
     }
 
-    public function get()
+    public function get($userId)
     {
-        $allBackups = $this->fetchBackups->fetchAll();
+        if ($this->fetchUserDetails->isAdmin($userId)) {
+            $allBackups = $this->fetchBackups->fetchAll();
+        } else {
+            $allBackups = $this->fetchBackups->fetchBackupsUserCanAccess($userId);
+        }
+
         $properties = $this->getProperties($allBackups);
 
-        $allBackups = $this->getHostInstanceStatusForBackupSet->get($properties["localBackups"]);
+        $allBackups = $this->getHostInstanceStatusForBackupSet->get($userId, $properties["localBackups"]);
 
         return [
             "sizeByMonthYear"=>$properties["sizeByMonthYear"],
