@@ -30,4 +30,21 @@ class DeleteUserAccess
         ]);
         return $do->rowCount() ?  true : false;
     }
+
+    public function deletAllForProject(int $hostId, string $project)
+    {
+        $sql = "DELETE FROM `User_Allowed_Projects`
+                WHERE
+                    `UAP_Host_ID` = :hostId
+                AND
+                    `UAP_Project` = :project
+
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId,
+            ":project"=>$project
+        ]);
+        return $do->rowCount() ?  true : false;
+    }
 }

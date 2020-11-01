@@ -30,4 +30,21 @@ class DeleteUserProject
         ]);
         return $do->rowCount() ? true : false;
     }
+
+    public function removeAllUsersFromProject(int $hostId, string $project)
+    {
+        $sql = "DELETE FROM
+                    `User_Host_Projects`
+                WHERE
+                    `UHP_Host_ID` = :hostId
+                AND
+                    `UHP_Project` = :project
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId,
+            ":project"=>$project
+        ]);
+        return $do->rowCount() ? true : false;
+    }
 }
