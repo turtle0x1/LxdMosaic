@@ -10,8 +10,8 @@ class GetImagesController
         $this->getAllImages = $getAllImages;
     }
 
-    public function getAllHostImages()
+    public function getAllHostImages(int $userId)
     {
-        return $this->getAllImages->getAllHostImages();
+        return $this->getAllImages->getAllHostImages($userId);
     }
 }

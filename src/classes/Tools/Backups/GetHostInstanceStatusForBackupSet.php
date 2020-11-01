@@ -5,6 +5,9 @@ namespace dhope0000\LXDClient\Tools\Backups;
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Tools\Instances\GetHostsInstances;
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\FetchBackupSchedules;
+use dhope0000\LXDClient\Tools\Universe;
+use dhope0000\LXDClient\Tools\Hosts\HasExtension;
+use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
 class GetHostInstanceStatusForBackupSet
 {
@@ -15,105 +18,123 @@ class GetHostInstanceStatusForBackupSet
     public function __construct(
         GetHostsInstances $getHostsInstances,
         LxdClient $lxdClient,
-        FetchBackupSchedules $fetchBackupSchedules
+        FetchBackupSchedules $fetchBackupSchedules,
+        HasExtension $hasExtension,
+        Universe $universe
     ) {
         $this->getHostsInstances = $getHostsInstances;
         $this->lxdClient = $lxdClient;
         $this->fetchBackupSchedules = $fetchBackupSchedules;
+        $this->universe = $universe;
+        $this->hasExtension = $hasExtension;
     }
 
-    public function get(array $backups)
+    public function get(int $userId, array $backups)
     {
-        $hostsContainers = $this->getHostsInstances->getAll(true);
+        $clustersAndStandalone = $this->universe->getEntitiesUserHasAccesTo($userId, "instances");
 
         $backupsByHostId = $this->createBackupsByHostIdStruct($backups);
 
         $groupedSchedule = $this->groupSchedules($this->fetchBackupSchedules->fetchActiveSchedsGroupedByHostId());
 
         $missingBackups = [];
-        // Cache the hosts current active project because its cheaper than
-        // recalculating it later
-        $hostsProject = [];
 
-        foreach ($hostsContainers as $host) {
-            $backupsToSearch = [];
-
-            if (isset($backupsByHostId[$host->getHostId()])) {
-                $backupsToSearch = $backupsByHostId[$host->getHostId()];
-            }
-
-            $containers = [];
-            $seenContainerNames = [];
-
-            $currentProject = $host->callCLientMethod("getProject");
-            $hostsProject[$host->getHostId()] = $currentProject;
-
-            foreach ($host->getCustomProp("containers") as $name => $container) {
-                $lastBackup = $this->findLastBackup($currentProject, $name, $backupsToSearch);
-                $container = $this->extractContainerInfo($name, $container);
-                $allBackups = $this->findAllBackupsandTotalSize($name, $backupsToSearch);
-
-                $scheduleString = "";
-                $scheduleRetention = "";
-                $strategyName = "";
-
-                if (isset($groupedSchedule[$host->getHostId()][$name])) {
-                    $scheduleString = $groupedSchedule[$host->getHostId()][$name]["scheduleString"];
-                    $scheduleRetention = $groupedSchedule[$host->getHostId()][$name]["scheduleRetention"];
-                    $strategyName = $groupedSchedule[$host->getHostId()][$name]["strategyName"];
-                }
-
-                $container["containerExists"] = true;
-                $container["lastBackup"] = $lastBackup;
-                $container["totalSize"] = $allBackups["size"];
-                $container["allBackups"] = $allBackups["backups"];
-                $container["scheduleString"] = $scheduleString;
-                $container["scheduleRetention"] = $scheduleRetention;
-                $container["strategyName"] = $strategyName;
-
-                $containers[] = $container;
-
-                if (!isset($seenContainerNames[$currentProject])) {
-                    $seenContainerNames[$currentProject] = [];
-                }
-
-                $seenContainerNames[$currentProject][] = $name;
-            }
-
-
-
-            foreach ($backupsToSearch as $backup) {
-                if (!isset($seenContainerNames[$backup["project"]]) && $backup["project"] !== $hostsProject[$backup["hostId"]]) {
-                    continue;
-                }
-
-                if (!isset($seenContainerNames[$backup["project"]])) {
-                    $seenContainerNames[$backup["project"]] = [];
-                }
-
-                if (!in_array($backup["container"], $seenContainerNames[$backup["project"]])) {
-                    $allBackups = $this->findAllBackupsandTotalSize($backup["container"], $backupsToSearch);
-
-                    $containers[] = [
-                        "name"=>$backup["container"],
-                        "containerExists"=>false,
-                        "scheduleString"=>"N/A",
-                        "lastBackup"=>$this->findLastBackup($backup["project"], $backup["container"], $backupsToSearch),
-                        "allBackups"=>$allBackups["backups"],
-                        "totalSize"=>$allBackups["size"],
-                        "scheduleRetention"=>"",
-                        "strategyName"=>""
-                    ];
-                    $seenContainerNames[] = $backup["container"];
+        foreach ($clustersAndStandalone["clusters"] as $cluster) {
+            foreach ($cluster["members"] as $host) {
+                if ($host->hostOnline()) {
+                    $missingBackups[$host->getAlias()] = $this->addDetailsToHost($host, $backupsByHostId, $groupedSchedule);
                 }
             }
-
-            $host->setCustomProp("containers", $containers);
-            $host->removeCustomProp("hostInfo", $containers);
-
-            $missingBackups[$host->getAlias()] = $host;
         }
+
+        foreach ($clustersAndStandalone["standalone"]["members"] as $host) {
+            if ($host->hostOnline()) {
+                $missingBackups[$host->getAlias()] = $this->addDetailsToHost($host, $backupsByHostId, $groupedSchedule);
+            }
+        }
+
         return $missingBackups;
+    }
+
+    private function addDetailsToHost($host, $backupsByHostId, $groupedSchedule)
+    {
+        $backupsToSearch = [];
+
+        if (isset($backupsByHostId[$host->getHostId()])) {
+            $backupsToSearch = $backupsByHostId[$host->getHostId()];
+        }
+
+        $containers = [];
+        $seenContainerNames = [];
+
+        $currentProject = $host->callCLientMethod("getProject");
+
+        foreach ($host->getCustomProp("instances") as $name) {
+            $lastBackup = $this->findLastBackup($currentProject, $name, $backupsToSearch);
+            $container = ["name"=>$name];
+            $allBackups = $this->findAllBackupsandTotalSize($name, $backupsToSearch);
+
+            $scheduleString = "";
+            $scheduleRetention = "";
+            $strategyName = "";
+
+            if (isset($groupedSchedule[$host->getHostId()][$name])) {
+                $scheduleString = $groupedSchedule[$host->getHostId()][$name]["scheduleString"];
+                $scheduleRetention = $groupedSchedule[$host->getHostId()][$name]["scheduleRetention"];
+                $strategyName = $groupedSchedule[$host->getHostId()][$name]["strategyName"];
+            }
+
+            $container["containerExists"] = true;
+            $container["lastBackup"] = $lastBackup;
+            $container["totalSize"] = $allBackups["size"];
+            $container["allBackups"] = $allBackups["backups"];
+            $container["scheduleString"] = $scheduleString;
+            $container["scheduleRetention"] = $scheduleRetention;
+            $container["strategyName"] = $strategyName;
+
+            $containers[] = $container;
+
+            if (!isset($seenContainerNames[$currentProject])) {
+                $seenContainerNames[$currentProject] = [];
+            }
+
+            $seenContainerNames[$currentProject][] = $name;
+        }
+
+        foreach ($backupsToSearch as $backup) {
+            if (!isset($seenContainerNames[$backup["project"]]) && $backup["project"] !== $currentProject) {
+                continue;
+            }
+
+            if (!isset($seenContainerNames[$backup["project"]])) {
+                $seenContainerNames[$backup["project"]] = [];
+            }
+
+            if (!in_array($backup["container"], $seenContainerNames[$backup["project"]])) {
+                $allBackups = $this->findAllBackupsandTotalSize($backup["container"], $backupsToSearch);
+
+                $containers[] = [
+                    "name"=>$backup["container"],
+                    "containerExists"=>false,
+                    "scheduleString"=>"N/A",
+                    "lastBackup"=>$this->findLastBackup($backup["project"], $backup["container"], $backupsToSearch),
+                    "allBackups"=>$allBackups["backups"],
+                    "totalSize"=>$allBackups["size"],
+                    "scheduleRetention"=>"",
+                    "strategyName"=>""
+                ];
+                $seenContainerNames[] = $backup["container"];
+            }
+        }
+
+
+        $supportsBackups = $this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP);
+        $host->setCustomProp("supportsBackups", $supportsBackups);
+        $host->setCustomProp("containers", $containers);
+        $host->removeCustomProp("hostInfo");
+        $host->removeCustomProp("instances");
+
+        return $host;
     }
 
     private function createBackupsByHostIdStruct(array $backups)
@@ -177,13 +198,5 @@ class GetHostInstanceStatusForBackupSet
             }
         }
         return $schedules;
-    }
-
-    private function extractContainerInfo(string $name, array $container)
-    {
-        return [
-            "name"=>$name,
-            "created"=>$container["created_at"]
-        ];
     }
 }

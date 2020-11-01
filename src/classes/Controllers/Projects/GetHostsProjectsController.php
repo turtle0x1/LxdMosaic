@@ -12,7 +12,8 @@ class GetHostsProjectsController
         $this->getHostsProjects = $getHostsProjects;
     }
 
-    public function get(){
-        return $this->getHostsProjects->getAll();
+    public function get(int $userId)
+    {
+        return $this->getHostsProjects->getAll($userId);
     }
 }

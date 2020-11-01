@@ -14,7 +14,7 @@ final class AddHostTest extends TestCase
 
     public function test_addHosts() :void
     {
-        $result = $this->addHosts->add([
+        $result = $this->addHosts->add(1, [
             [
                 "name"=>"localhost",
                 "trustPassword"=>"examplePassword"

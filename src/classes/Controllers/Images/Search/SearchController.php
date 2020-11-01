@@ -11,9 +11,9 @@ class SearchController
         $this->getAllImages = $getAllImages;
     }
 
-    public function getAllAvailableImages(string $search, string $type = "")
+    public function getAllAvailableImages(int $userId, string $search, string $type = "")
     {
-        $allImages = $this->getAllImages->getAllHostImages();
+        $allImages = $this->getAllImages->getAllHostImages($userId);
         $output = [];
         $seenFingerPrints = [];
         $unknownCount = 0;

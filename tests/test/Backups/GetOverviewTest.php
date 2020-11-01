@@ -14,7 +14,7 @@ final class GetOverviewTest extends TestCase
 
     public function test_getOverviewResponseKeys() :void
     {
-        $result = array_keys($this->getBackupsOverview->get());
+        $result = array_keys($this->getBackupsOverview->get(1));
         $this->assertEquals([
             "sizeByMonthYear",
             "filesByMonthYear",

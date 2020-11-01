@@ -460,6 +460,11 @@ function loadBackupsOverview() {
         }else{
             $.each(data.allBackups, (host, hostDetails)=>{
                 backupTrs += `<tr><td class="text-center text-success" colspan="999"><i class="fas fa-server mr-2"></i>${host}</tr></tr>`;
+                if(!hostDetails.supportsBackups){
+                    backupTrs += `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-warning mr-2"></i>Doesn't support backups!</td></tr>`
+                    return true;
+                }
+
                 $.each(hostDetails.containers, (containerIndex, container)=>{
 
                     let trClass = container.lastBackup.neverBackedUp ? "danger" : "success";
@@ -478,18 +483,15 @@ function loadBackupsOverview() {
                         trClass = "success";
                     }
 
-                    if(hostDetails.supportsBackups){
-                        instanceName = `<a
-                            href="#"
-                            class="viewContainerBackups"
-                            data-host-alias="${host}"
-                            data-host-id="${hostDetails.hostId}"
-                            data-container-index="${containerIndex}"
-                            data-container="${container.name}">
-                            ${container.name} ${!container.containerExists ? ghostIcon : ""}
-                        </a>`;
-                    }
-
+                    instanceName = `<a
+                        href="#"
+                        class="viewContainerBackups"
+                        data-host-alias="${host}"
+                        data-host-id="${hostDetails.hostId}"
+                        data-container-index="${containerIndex}"
+                        data-container="${container.name}">
+                        ${container.name} ${!container.containerExists ? ghostIcon : ""}
+                    </a>`;
 
                     if(container.lastBackup.hasOwnProperty("backupDateCreated")){
                         date = moment(container.lastBackup.backupDateCreated).fromNow()

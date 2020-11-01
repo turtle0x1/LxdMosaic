@@ -28,7 +28,7 @@ class HostsCollection implements \Iterator, \JsonSerializable
 
     public function getAllHosts()
     {
-        return $this->hosts();
+        return $this->hosts;
     }
 
     public function current()

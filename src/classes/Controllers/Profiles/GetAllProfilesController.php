@@ -1,17 +1,17 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
-use dhope0000\LXDClient\Tools\Profiles\GetAllProfiles;
+use dhope0000\LXDClient\Tools\Universe;
 
 class GetAllProfilesController
 {
-    public function __construct(GetAllProfiles $getAllProfiles)
+    public function __construct(Universe $universe)
     {
-        $this->getAllProfiles = $getAllProfiles;
+        $this->universe = $universe;
     }
 
-    public function getAllProfiles()
+    public function getAllProfiles(int $userId)
     {
-        return $this->getAllProfiles->getAllProfiles();
+        return $this->universe->getEntitiesUserHasAccesTo($userId, "profiles");
     }
 }

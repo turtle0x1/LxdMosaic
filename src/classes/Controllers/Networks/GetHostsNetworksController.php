@@ -11,7 +11,8 @@ class GetHostsNetworksController
         $this->getHostsNetworks = $getHostsNetworks;
     }
 
-    public function get(){
-        return $this->getHostsNetworks->getAll();
+    public function get(int $userId)
+    {
+        return $this->getHostsNetworks->getAll($userId);
     }
 }

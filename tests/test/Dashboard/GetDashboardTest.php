@@ -34,8 +34,9 @@ final class GetDashboardTest extends TestCase
             "urlAndPort",
             "hostOnline",
             "supportsLoadAvgs",
-            "resources",
-            "currentProject"
+            "projects",
+            "currentProject",
+            "resources"
         ];
 
         $this->assertEquals($expectedKeys, $hostKeys);

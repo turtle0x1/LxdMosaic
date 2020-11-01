@@ -103,6 +103,9 @@ if ($haveServers->haveAny() !== true) {
           var currentContainerDetails = null;
 
           var globalUrls = {
+              universe: {
+                getEntities: '/api/Universe/GetEntitiesFromUniverseController/get'
+              },
               dashboard: {
                   get: "/api/Dashboard/GetController/get"
               },
@@ -187,6 +190,11 @@ if ($haveServers->haveAny() !== true) {
                     getLastResults: "/api/InstanceSettings/RecordedActions/GetLastController/get"
                 },
                 users: {
+                    allowedProjects: {
+                        grantAcess: '/api/User/AllowedProjects/GrantAccessController/grant',
+                        revokeAccess: '/api/User/AllowedProjects/RevokeAccessController/revoke',
+                        getAllowed: '/api/User/AllowedProjects/GetUserAllowedProjectsController/get'
+                    },
                     resetPassword: '/api/InstanceSettings/Users/ResetPasswordController/reset',
                     add: '/api/InstanceSettings/Users/AddUserController/add',
                     getAll: '/api/InstanceSettings/Users/GetUsersController/getAll',
@@ -253,7 +261,6 @@ if ($haveServers->haveAny() !== true) {
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
-                  getClustersAndStandloneHosts: "/api/Hosts/GetClustersAndStandloneHostsController/get",
                   delete: "/api/Hosts/DeleteHostController/delete",
                   getHostOverview: "/api/Hosts/GetHostOverviewController/get"
               },
@@ -307,6 +314,9 @@ if ($haveServers->haveAny() !== true) {
                   setHostProject: '/api/User/SetHostProjectController/set'
               },
               projects: {
+                  search:{
+                    getCommonToHosts: '/api/Projects/Search/GetCommonToHostsProjectsController/get',
+                  },
                   create: '/api/Projects/CreateProjectController/create',
                   getAllFromHosts: '/api/Projects/GetHostsProjectsController/get',
                   info: '/api/Projects/GetProjectInfoController/get',
@@ -400,7 +410,6 @@ if ($haveServers->haveAny() !== true) {
           <input value="" name="path"/>
           <input value="" name="container"/>
           <input value="1" type="number" name="download"/>
-
       </form>
     <header class="app-header navbar navbar-dark bg-dark">
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
@@ -462,10 +471,12 @@ if ($haveServers->haveAny() !== true) {
       <ul class="nav navbar-nav ml-auto d-md-down-none">
           <li class="nav-item px-3 btn btn-outline-primary pull-right" id="openSearch">
                 <a> <i class="fas fa-search"></i> Search </a>
-           </li>
+          </li>
+          <?php if ($isAdmin === 1) : ?>
           <li class="nav-item px-3 btn btn-outline-primary pull-right" id="addNewServer">
                 <a> <i class="fas fa-plus"></i> Server </a>
            </li>
+          <?php endif; ?>
           <li class="nav-item px-3 btn btn-outline-success pull-right" id="createContainer">
                 <a> <i class="fas fa-plus"></i> Container </a>
            </li>
@@ -734,23 +745,28 @@ var unknownServerDetails = {
 
 function createDashboardSidebar()
 {
-    ajaxRequest(globalUrls.hosts.getClustersAndStandloneHosts, {}, (data)=>{
-        data = $.parseJSON(data);
+    ajaxRequest(globalUrls.universe.getEntities, {}, (data)=>{
+        data = makeToastr(data);
+
         let hosts = `
             <li class="nav-item container-overview">
                 <a class="nav-link" href="#">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>`;
+
         $.each(data.clusters, function(i, item){
             hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
+
+            hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
 
             $.each(item.members, function(_, host){
                 let disabled = "";
 
-                if(host.status !== "Online"){
+                if(!host.hostOnline){
                     disabled = "disabled text-warning text-strikethrough";
                 }
+
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link viewServer ${disabled}" href="#">
                         <i class="fas fa-server"></i> ${host.alias}
@@ -761,7 +777,9 @@ function createDashboardSidebar()
                 </li>`;
             });
         });
+
         hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+
         $.each(data.standalone.members, function(_, host){
             let disabled = "";
 
@@ -922,7 +940,7 @@ function loadDashboard(){
 
                 if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
                     projects = "<select class='form-control changeHostProject'>";
-                    $.each(host.resources.projects, function(o, project){
+                    $.each(host.projects, function(o, project){
                         let selected = project == host.currentProject ? "selected" : "";
                             projects += `<option data-alias="${alias}" data-host='${data.hostId}'
                                 value='${project}' ${selected}>
@@ -994,7 +1012,7 @@ function loadDashboard(){
 
             if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
                 projects = "<select class='form-control changeHostProject'>";
-                $.each(host.resources.projects, function(o, project){
+                $.each(host.projects, function(o, project){
                     let selected = project == host.currentProject ? "selected" : "";
                         projects += `<option data-alias="${alias}" data-host='${host.hostId}'
                             value='${project}' ${selected}>

@@ -31,7 +31,6 @@ final class GetHostsProjectsTest extends TestCase
             'urlAndPort',
             'hostOnline',
             'supportsLoadAvgs',
-            'resources', //TODO This shouldn't be returned here
             'projects'
         ], $hostKeys);
 

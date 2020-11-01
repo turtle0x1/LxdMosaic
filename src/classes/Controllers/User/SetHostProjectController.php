@@ -2,18 +2,18 @@
 
 namespace dhope0000\LXDClient\Controllers\User;
 
-use dhope0000\LXDClient\Model\Users\Projects\InsertUserProject;
+use dhope0000\LXDClient\Tools\User\SetUserProject;
 
 class SetHostProjectController
 {
-    public function __construct(InsertUserProject $insertUserProject)
+    public function __construct(SetUserProject $setUserProject)
     {
-        $this->insertUserProject = $insertUserProject;
+        $this->setUserProject = $setUserProject;
     }
 
     public function set(int $userId, int $hostId, string $project)
     {
-        $this->insertUserProject->insert($userId, $hostId, $project);
+        $this->setUserProject->set($userId, $hostId, $project);
         return ["state"=>"success", "message"=>"Changed project to $project"];
     }
 }

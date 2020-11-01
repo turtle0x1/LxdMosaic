@@ -2,6 +2,7 @@ Unreleased
 
 Added
     Cron job to disable backup schedules for offline hosts & deleted instances
+    Limit not-admin users to servers/projects
 
 Changed
     Support backups & backup schedules in different projects

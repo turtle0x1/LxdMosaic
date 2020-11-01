@@ -3,27 +3,33 @@
 namespace dhope0000\LXDClient\Tools\Dashboard;
 
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
-use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
 use dhope0000\LXDClient\Tools\Analytics\GetLatestData;
 use dhope0000\LXDClient\Model\Users\Dashboard\FetchUserDashboards;
+use dhope0000\LXDClient\Tools\Universe;
+use dhope0000\LXDClient\Tools\Hosts\GetResources;
+use dhope0000\LXDClient\Tools\User\GetUserProject;
 
 class GetDashboard
 {
     public function __construct(
         FetchUserProject $fetchUserProject,
-        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts,
         GetLatestData $getLatestData,
-        FetchUserDashboards $fetchUserDashboards
+        FetchUserDashboards $fetchUserDashboards,
+        Universe $universe,
+        GetResources $getResources,
+        GetUserProject $getUserProject
     ) {
         $this->fetchUserProject = $fetchUserProject;
-        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
         $this->getLatestData = $getLatestData;
         $this->fetchUserDashboards = $fetchUserDashboards;
+        $this->universe = $universe;
+        $this->getResources = $getResources;
+        $this->getUserProject = $getUserProject;
     }
 
     public function get($userId)
     {
-        $clustersAndHosts = $this->getClustersAndStandaloneHosts->get();
+        $clustersAndHosts = $this->universe->getEntitiesUserHasAccesTo($userId, "projects");
         $clustersAndHosts = $this->addCurrentProjects($userId, $clustersAndHosts);
         $stats = $this->getStatsFromClustersAndHosts($clustersAndHosts);
         $analyticsData = $this->getLatestData->get();
@@ -40,16 +46,28 @@ class GetDashboard
     private function addCurrentProjects($userId, $clustersAndHosts)
     {
         foreach ($clustersAndHosts["clusters"] as $index => $cluster) {
-            foreach ($cluster["members"] as &$member) {
-                $project = $this->fetchUserProject->fetchOrDefault($userId, $member->getHostId());
+            foreach ($cluster["members"] as $member) {
+                $project = $this->getUserProject->getForHost($userId, $member);
                 $member->setCustomProp("currentProject", $project);
+                $member->setCustomProp("resources", $this->getResources($member));
             }
         }
-        foreach ($clustersAndHosts["standalone"]["members"] as $index => &$member) {
-            $project = $this->fetchUserProject->fetchOrDefault($userId, $member->getHostId());
+        foreach ($clustersAndHosts["standalone"]["members"] as $index => $member) {
+            $project = $this->getUserProject->getForHost($userId, $member);
             $member->setCustomProp("currentProject", $project);
+            $member->setCustomProp("resources", $this->getResources($member));
         }
         return $clustersAndHosts;
+    }
+
+    private function getResources($member)
+    {
+        if ($member->hostOnline() == false) {
+            return [];
+        }
+        $r = $this->getResources->getHostExtended($member);
+        unset($r["projects"]);
+        return $r;
     }
 
     private function getStatsFromClustersAndHosts(array $clustersAndHosts)
