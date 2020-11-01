@@ -7,6 +7,7 @@ use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
+use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 
 class RouteApi
 {
@@ -21,7 +22,8 @@ class RouteApi
         GetDetails $getDetails,
         HostList $hostList,
         FetchAllowedProjects $fetchAllowedProjects,
-        FetchUserDetails $fetchUserDetails
+        FetchUserDetails $fetchUserDetails,
+        FetchUserProject $fetchUserProject
     ) {
         $this->container = $container;
         $this->recordAction = $recordAction;
@@ -29,6 +31,7 @@ class RouteApi
         $this->hostList = $hostList;
         $this->fetchAllowedProjects = $fetchAllowedProjects;
         $this->fetchUserDetails = $fetchUserDetails;
+        $this->fetchUserProject = $fetchUserProject;
     }
 
     public function getRequestedProject()
@@ -92,13 +95,12 @@ class RouteApi
         $reflectedMethod = new \ReflectionMethod($class, $method);
         $paramaters = $reflectedMethod->getParameters();
         $o = [];
-        $specialParams = ["userId", "host"];
 
         $allowedProjects = $this->fetchAllowedProjects->fetchAll($userId);
 
-        $allowedHostIds = array_keys($allowedProjects);
-
         $userIsAdmin = $this->fetchUserDetails->isAdmin($userId);
+
+        $currentProjects = $this->fetchUserProject->fetchCurrentProjects($userId);
 
         foreach ($paramaters as $param) {
             $name = $param->getName();
@@ -113,27 +115,39 @@ class RouteApi
                 throw new \Exception("Missing paramater hostId", 1);
             }
 
+            $project = $this->getRequestedProject();
 
             if ($hasDefault && !isset($passedArguments[$name])) {
                 $o[$name] = $param->getDefaultValue();
             } elseif ($name === "userId") {
                 $o[$name] = $userId;
             } elseif ($name == "host") {
-                if (!$userIsAdmin && !in_array($passedArguments["hostId"], $allowedHostIds)) {
-                    throw new \Exception("Not allowed to access host", 1);
+                if (!$userIsAdmin) {
+                    if (is_null($project)) {
+                        $project = $currentProjects[$passedArguments["hostId"]];
+                    }
+                    $this->canAccessProject($allowedProjects, $passedArguments["hostId"], $project);
                 }
+
                 $o[$name] = $this->getDetails->fetchHost($passedArguments["hostId"]);
             } elseif ($type == "dhope0000\LXDClient\Objects\Host") {
-                if (!$userIsAdmin && !in_array($passedArguments[$name], $allowedHostIds)) {
-                    throw new \Exception("Not allowed to access host", 1);
+                if (!$userIsAdmin) {
+                    if (is_null($project)) {
+                        $project = $currentProjects[$passedArguments[$name]];
+                    }
+                    $this->canAccessProject($allowedProjects, $passedArguments[$name], $project);
                 }
+
+
                 $o[$name] = $this->getDetails->fetchHost($passedArguments[$name]);
             } elseif ($type == "dhope0000\LXDClient\Objects\HostsCollection") {
-                foreach ($passedArguments[$name] as $hostAttempt) {
-                    if (!$userIsAdmin && !in_array($hostAttempt, $allowedHostIds)) {
-                        throw new \Exception("Not allowed to access host", 1);
+                if (!$userIsAdmin) {
+                    foreach ($passedArguments[$name] as $hostAttempt) {
+                        $project = $currentProjects[$passedArguments[$hostAttempt]];
+                        $this->canAccessProject($allowedProjects, $hostAttempt, $project);
                     }
                 }
+
                 $o[$name] = $this->hostList->getHostCollection($passedArguments[$name]);
             } elseif (!$hasDefault && !isset($passedArguments[$name])) {
                 throw new \Exception("Missing Paramater $name", 1);
@@ -142,5 +156,16 @@ class RouteApi
             }
         }
         return $o;
+    }
+
+    private function canAccessProject($allowedProjects, $hostId, $project)
+    {
+        if (!isset($allowedProjects[$hostId])) {
+            throw new \Exception("No access to project", 1);
+        }
+
+        if (!in_array($project, $allowedProjects[$hostId])) {
+            throw new \Exception("Not allowed to access project", 1);
+        }
     }
 }
