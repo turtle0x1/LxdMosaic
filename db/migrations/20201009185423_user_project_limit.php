@@ -20,11 +20,14 @@ final class UserProjectLimit extends AbstractMigration
     {
         // create the table
         $table = $this->table('User_Allowed_Projects', ['id' => "UAP_ID", 'primary_key' => ["UAP_ID"]]);
-        $table->addColumn('UAP_Date_Created', 'datetime')
+        $table->addColumn('UAP_Date_Created', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
               ->addColumn('UAP_Granted_By', 'integer')
               ->addColumn('UAP_User_ID', 'integer')
               ->addColumn('UAP_Host_ID', 'integer')
               ->addColumn('UAP_Project', 'string')
+              ->addForeignKey('UAP_Granted_By', 'Users', 'User_ID', ['delete'=> 'RESTRICT', 'update'=> 'RESTRICT'])
+              ->addForeignKey('UAP_User_ID', 'Users', 'User_ID', ['delete'=> 'RESTRICT', 'update'=> 'RESTRICT'])
+              ->addForeignKey('UAP_Host_ID', 'Hosts', 'Host_ID', ['delete'=> 'CASCADE', 'update'=> 'RESTRICT'])
               ->create();
     }
 }
