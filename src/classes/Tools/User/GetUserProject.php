@@ -32,7 +32,7 @@ class GetUserProject
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);
 
         if ($isAdmin) {
-            $this->setUserProject->set($userId, $host->getHostId(), $project);
+            $this->setUserProject->set($userId, $host->getHostId(), "default");
             return "default";
         }
 
