@@ -29,9 +29,9 @@ class Ldap
 
     public function bindLdapOrThrow($con, $adminUser, $adminPass)
     {
-        $ldapbind = ldap_bind($con, $adminUser, $adminPass);
+        $ldapbind = @ldap_bind($con, $adminUser, $adminPass);
         if (!$ldapbind) {
-            throw new \Exception("Couldn't connect with admin account", 1);
+            throw new \Exception("Couldn't login with acount $adminUser", 1);
         }
         return $con;
     }
