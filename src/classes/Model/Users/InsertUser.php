@@ -11,21 +11,24 @@ class InsertUser
         $this->database = $database->dbObject;
     }
 
-    public function insert(string $username, string $passwordHash)
+    public function insert(string $username, string $passwordHash, $ldapId = null)
     {
         $sql = "INSERT INTO `Users`
                 (
                     `User_Name`,
-                    `User_Password`
+                    `User_Password`,
+                    `User_Ldap_ID`
                 ) VALUES (
                     :username,
-                    :password
+                    :password,
+                    :ldapId
                 );
                 ";
         $do = $this->database->prepare($sql);
         $do->execute([
             ":username"=>$username,
-            ":password"=>$passwordHash
+            ":password"=>$passwordHash,
+            ":ldapId"=>$ldapId
         ]);
         return $do->rowCount() ? true : false;
     }

@@ -27,4 +27,16 @@ class FetchUsers
         $do->execute();
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
+    public function fetchLdapIds()
+    {
+        $sql = "SELECT
+                    `User_Ldap_ID`
+                FROM
+                    `Users`
+                WHERE
+                    `User_Ldap_ID` IS NOT NULL
+                ";
+        $do = $this->database->query($sql);
+        return $do->fetchAll(\PDO::FETCH_COLUMN);
+    }
 }
