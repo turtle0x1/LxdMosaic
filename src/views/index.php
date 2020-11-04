@@ -186,6 +186,9 @@ if ($haveServers->haveAny() !== true) {
                 getCluster: "/api/Clusters/GetClusterController/get"
               },
               settings: {
+                ldap: {
+                    save: "/api/InstanceSettings/Ldap/SaveLdapSettingsController/save",
+                },
                 recordedActions: {
                     getLastResults: "/api/InstanceSettings/RecordedActions/GetLastController/get"
                 },
