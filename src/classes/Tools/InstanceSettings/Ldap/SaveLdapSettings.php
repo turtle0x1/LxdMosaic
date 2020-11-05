@@ -30,10 +30,11 @@ class SaveLdapSettings
             InstanceSettingsKeys::LDAP_BASE_DN
         ];
 
-        foreach ($settings as $setting) {
+        foreach ($settings as $i => $setting) {
             if (!in_array($setting["id"], $expectedSettingIds)) {
                 throw new \Exception("not expeting setting id {$setting["id"]}", 1);
             }
+            unset($settings[$i]);
             $settings[$setting["id"]] = $setting["value"];
         }
 
