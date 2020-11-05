@@ -126,30 +126,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- TODO use constants here for setting id -->
-                    <tr data-setting-id="4">
-                        <th>Server</th>
-                        <td><input name="settingValue" placeholder="ldaps://1.1.1.1:636" class="form-control"/></td>
-                    </tr>
-                    <!-- TODO use constants here for setting id -->
-                    <tr data-setting-id="5">
-                        <th>Lookup User DN <i class="fas fa-info-circle text-info" data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="The LDAP user that performs lookups E.G <code>cn=administrator,cn=Users,dc=example,dc=com</code>"></i></th>
-                        <td><input name="settingValue" placeholder="cn=administrator,cn=Users,dc=example,dc=com" class="form-control"/></td>
-                    </tr>
-                    <!-- TODO use constants here for setting id -->
-                    <tr data-setting-id="6">
-                        <th>Lookup User Password</th>
-                        <td><input name="settingValue" type="password" class="form-control"/></td>
-                    </tr>
-                    <!-- TODO use constants here for setting id -->
-                    <tr data-setting-id="7">
-                        <th>Base DN <i class="fas fa-info-circle text-info" data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="DN To Search Users for E.G <code>ou=user_folder,dc=example,dc=com</code>"></i></th>
-                        <td><input name="settingValue" placeholder="ou=user_folder,dc=example,dc=com" class="form-control"/></td>
-                    </tr>
                 </tbody>
             </table>
           </div>
@@ -359,13 +335,39 @@ function loadInstanceSettings(){
     ajaxRequest(globalUrls.settings.getAll, {}, (data)=>{
         data = makeToastr(data);
         let trs = "";
+        let ldapKeys = [4, 5, 6, 7];
+        let ldapTrs = "";
+        let ldapExtraText = {
+            5: `<i class="fas fa-info-circle text-info ml-2" data-toggle="tooltip"
+                data-placement="bottom"
+                title="The LDAP user that performs lookups E.G <code>cn=administrator,cn=Users,dc=example,dc=com</code>">
+                </i>`,
+            7: `<i class="fas fa-info-circle text-info ml-2" data-toggle="tooltip"
+                data-placement="bottom"
+                title="DN To Search Users for E.G <code>ou=user_folder,dc=example,dc=com</code>">
+                </i>`,
+        }
+
         $.each(data, function(_, item){
-            trs += `<tr data-setting-id="${item.settingId}">
-                    <td>${item.settingName}</td>
-                    <td><input class="form-control" name="settingValue" value="${item.currentValue}"/></td>
-                </tr>`
+
+            if(ldapKeys.includes(parseInt(item.settingId))){
+                let extraText = ldapExtraText.hasOwnProperty(item.settingId) ? ldapExtraText[item.settingId] : "";
+                let tr = `<tr data-setting-id="${item.settingId}">
+                        <td>${item.settingName}${extraText}</td>
+                        <td><input class="form-control" name="settingValue" value="${item.currentValue}"/></td>
+                    </tr>`;
+                ldapTrs += tr;
+            }else{
+                let tr = `<tr data-setting-id="${item.settingId}">
+                        <td>${item.settingName}</td>
+                        <td><input class="form-control" name="settingValue" value="${item.currentValue}"/></td>
+                    </tr>`;
+                trs += tr;
+            }
         });
+        $("#ldapSettingListTable > tbody").empty().append(ldapTrs);
         $("#settingListTable > tbody").empty().append(trs);
+        $("#ldapSettingListTable").find('[data-toggle="tooltip"]').tooltip({html: true})
     });
 }
 
