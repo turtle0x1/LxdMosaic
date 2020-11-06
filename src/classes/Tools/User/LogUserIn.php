@@ -35,6 +35,11 @@ class LogUserIn
 
         if (!empty($ldapId)) {
             $server = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_SERVER);
+
+            if (empty($server)) {
+                throw new \Exception("Contact your admin, login can't be resolved until then!", 1);
+            }
+
             $baseDn = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_BASE_DN);
             try {
                 $ldapconn = $this->ldap->getAdminBoundConnection($server);
