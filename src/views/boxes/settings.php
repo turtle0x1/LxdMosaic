@@ -1,42 +1,7 @@
 <div id="settingsBox" class="boxSlide">
-    <div id="settingsOverview">
+    <div id="settingsOverview" class="settingsBox">
         <div class="row">
-            <div class="col-md-4">
-                  <div class="card bg-dark">
-                  <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
-                      <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
-                          Current Settings
-                        </a>
-                        </h5>
-                        <div class="btn-toolbar float-right">
-                            <div class="btn-group mr-2">
-                                <a target="_blank" class="btn btn-primary" href="https://lxdmosaic.readthedocs.io/en/latest/LXDMosaic_Settings/">
-                                    <i class="fas fa-book-open"></i>
-                                </a>
-                                <button class="btn btn-success" id="saveSettings">
-                                    <i class="fas fa-save"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
-                      <div class="card-body bg-dark">
-                        <table class="table table-dark table-bordered" id="settingListTable">
-                            <thead>
-                                <tr>
-                                    <th>Setting</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                   <div class="card bg-dark">
                   <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
                       <h5>
@@ -96,73 +61,144 @@
                   </div>
               </div>
          </div>
-         <div class="row">
-             <div class="col-md-6">
-                  <div class="card bg-dark" id="recordedActionsCard">
-                    <div class="card-header bg-dark" role="tab" >
-                      <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#lastRecordedActions" aria-expanded="true" aria-controls="lastRecordedActions">
-                          Last <span id="actionCount"></span> Recorded Actions
-                        </a>
-                        <button class="btn btn-primary float-right" id="loadMoreRecordedActions">
-                            <i class="fas fa-search-plus"></i>
-                        </button>
-                      </h5>
-                    </div>
-                    <div id="lastRecordedActions" class="collapse in show" role="tabpanel">
-                      <div class="card-body table-responsive bg-dark">
-                        <table class="table table-dark table-bordered" id="recordedActionsTable">
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Date</th>
-                                    <th>Controller</th>
-                                    <th>Params</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
+</div>
+<div id="userDetails" class="settingsBox">
+</div>
+<div id="instanceSettingsBox" class="settingsBox row">
+    <div class="col-md-6">
+      <div class="card bg-dark">
+      <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
+          <h5>
+            <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+              General Settings
+            </a>
+            </h5>
+            <div class="btn-toolbar float-right">
+                <div class="btn-group mr-2">
+                    <a target="_blank" class="btn btn-primary" href="https://lxdmosaic.readthedocs.io/en/latest/LXDMosaic_Settings/">
+                        <i class="fas fa-book-open"></i>
+                    </a>
+                    <button class="btn btn-success" id="saveSettings">
+                        <i class="fas fa-save"></i>
+                    </button>
+                </div>
             </div>
-             <div class="col-md-6">
-                  <div class="card bg-dark" id="usersCard">
-                    <div class="card-header" role="tab" >
-                      <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
-                          Users
-                        </a>
-                        <button class="btn btn-primary float-right" id="addUser">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                      </h5>
-                    </div>
-                    <div id="users" class="collapse in show" role="tabpanel">
-                      <div class="card-body">
-                        <table class="table table-dark table-bordered" id="usersTable">
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Added</th>
-                                    <th>Admin</th>
-                                    <th>Projects</th>
-                                    <th>Reset Password</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
+        </div>
+        <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
+          <div class="card-body bg-dark">
+            <table class="table table-dark table-bordered" id="settingListTable">
+                <thead>
+                    <tr>
+                        <th>Setting</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card bg-dark">
+      <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
+          <h5>
+            <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+              LDAP Settings
+            </a>
+            </h5>
+            <div class="btn-toolbar float-right">
+                <div class="btn-group mr-2">
+                    <button class="btn btn-success" id="saveLdapSettings">
+                        <i class="fas fa-save"></i>
+                    </button>
+                </div>
             </div>
-
+        </div>
+        <div id="" class="collapse in show" role="tabpanel" >
+          <div class="card-body bg-dark">
+            <div class="text-center mb-2">
+                <small class="font-italic"><i class="fas fa-info-circle text-info mr-2"></i>Users sync'd on the hour every hour!</small>
+            </div>
+            <div class="text-center mb-2">
+                <small class="font-italic"><i class="fas fa-info-circle text-warning mr-2"></i>Setting LDAP Server to empty value will disable LDAP syncing &amp; login!</small>
+            </div>
+            <table class="table table-dark table-bordered" id="ldapSettingListTable">
+                <thead>
+                    <tr>
+                        <th>Setting</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
-<div id="usersOverview" class="boxSlide">
-    user overview man
+<div id="recordedActionsBox" class="settingsBox">
+    <div class="card bg-dark" id="recordedActionsCard">
+      <div class="card-header bg-dark" role="tab" >
+        <h5>
+          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#lastRecordedActions" aria-expanded="true" aria-controls="lastRecordedActions">
+            Last <span id="actionCount"></span> Recorded Actions
+          </a>
+          <button class="btn btn-primary float-right" id="loadMoreRecordedActions">
+              <i class="fas fa-search-plus"></i>
+          </button>
+        </h5>
+      </div>
+      <div id="lastRecordedActions" class="collapse in show" role="tabpanel">
+        <div class="card-body table-responsive bg-dark">
+          <table class="table table-dark table-bordered" id="recordedActionsTable">
+              <thead>
+                  <tr>
+                      <th>User</th>
+                      <th>Date</th>
+                      <th>Controller</th>
+                      <th>Params</th>
+                  </tr>
+              </thead>
+              <tbody>
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+</div>
+<div id="usersList" class="settingsBox">
+    <div class="card bg-dark" id="usersCard">
+      <div class="card-header" role="tab" >
+        <h5>
+          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
+            Users
+          </a>
+          <button class="btn btn-primary float-right" id="addUser">
+              <i class="fas fa-plus"></i>
+          </button>
+        </h5>
+      </div>
+      <div id="users" class="collapse in show" role="tabpanel">
+        <div class="card-body">
+          <table class="table table-dark table-bordered" id="usersTable">
+              <thead>
+                  <tr>
+                      <th>User</th>
+                      <th>Added</th>
+                      <th>Admin</th>
+                      <th>Projects</th>
+                      <th>Reset Password</th>
+                  </tr>
+              </thead>
+              <tbody>
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 </div>
 </div>
 
@@ -171,29 +207,40 @@
 function loadSettingsView()
 {
     $(".boxSlide").hide();
+    $(".settingsBox").hide();
     $("#settingsOverview, #settingsBox").show();
-    $(".sidebar-lg-show").removeClass("sidebar-lg-show");
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+
+    let hosts = `
+    <li class="nav-item my-settings">
+        <a class="nav-link text-info" href="#">
+            <i class="fas fa-user mr-2"></i>My Settings
+        </a>
+    </li>`
 
     if(!userDetails.isAdmin){
-        $("#saveSettings, #addUser, #recordedActionsCard, #usersCard").remove();
+        $("#saveSettings, #saveLdapSettings, #addUser, #recordedActionsCard, #usersCard").remove();
     }else{
-        loadRecordedActions();
-        loadUsers();
+        hosts += `<li class="nav-item instance-settings">
+            <a class="nav-link" href="#">
+                <i class="fas fa-server mr-2"></i>Instance Settings
+            </a>
+        </li>
+        <li class="nav-item users-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-users mr-2"></i>Users
+            </a>
+        </li>
+        <li class="nav-item recorded-actions-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-history mr-2"></i>Recorded Actions
+            </a>
+        </li>`
     }
 
-    setBreadcrumb("Settings", "viewSettings active");
+    $("#sidebar-ul").empty().append(hosts);
 
-    ajaxRequest(globalUrls.settings.getAll, {}, (data)=>{
-        data = makeToastr(data);
-        let trs = "";
-        $.each(data, function(_, item){
-            trs += `<tr data-setting-id="${item.settingId}">
-                    <td>${item.settingName}</td>
-                    <td><input class="form-control" name="settingValue" value="${item.currentValue}"/></td>
-                </tr>`
-        });
-        $("#settingListTable > tbody").empty().append(trs);
-    });
+    addBreadcrumbs(["Settings", "My Settings"], ["viewSettings", "active"], false);
 
     ajaxRequest(globalUrls.settings.getOverview, {}, (data)=>{
         data = makeToastr(data);
@@ -290,12 +337,79 @@ function loadUsers(){
     });
 }
 
-$("#settingsOverview").on("click", ".viewUser", function(){
+function loadInstanceSettings(){
+    ajaxRequest(globalUrls.settings.getAll, {}, (data)=>{
+        data = makeToastr(data);
+        let trs = "";
+        let ldapKeys = [4, 5, 6, 7];
+        let ldapTrs = "";
+        let ldapExtraText = {
+            5: `<i class="fas fa-info-circle text-info ml-2" data-toggle="tooltip"
+                data-placement="bottom"
+                title="The LDAP user that performs lookups E.G <code>cn=administrator,cn=Users,dc=example,dc=com</code>">
+                </i>`,
+            7: `<i class="fas fa-info-circle text-info ml-2" data-toggle="tooltip"
+                data-placement="bottom"
+                title="DN To Search Users for E.G <code>ou=user_folder,dc=example,dc=com</code>">
+                </i>`,
+        }
+
+        $.each(data, function(_, item){
+
+            if(ldapKeys.includes(parseInt(item.settingId))){
+                let extraText = ldapExtraText.hasOwnProperty(item.settingId) ? ldapExtraText[item.settingId] : "";
+                let tr = `<tr data-setting-id="${item.settingId}">
+                        <td>${item.settingName}${extraText}</td>
+                        <td><input class="form-control" name="settingValue" value="${item.currentValue}"/></td>
+                    </tr>`;
+                ldapTrs += tr;
+            }else{
+                let tr = `<tr data-setting-id="${item.settingId}">
+                        <td>${item.settingName}</td>
+                        <td><input class="form-control" name="settingValue" value="${item.currentValue}"/></td>
+                    </tr>`;
+                trs += tr;
+            }
+        });
+        $("#ldapSettingListTable > tbody").empty().append(ldapTrs);
+        $("#settingListTable > tbody").empty().append(trs);
+        $("#ldapSettingListTable").find('[data-toggle="tooltip"]').tooltip({html: true})
+    });
+}
+
+$("#sidebar-ul").on("click", ".my-settings", function(e){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    loadSettingsView();
+});
+
+$("#sidebar-ul").on("click", ".instance-settings", function(){
+    loadInstanceSettings();
+    $(".settingsBox").hide();
+    $("#instanceSettingsBox").show();
+    addBreadcrumbs(["Instance Management"], ["active"], true);
+});
+
+$("#sidebar-ul").on("click", ".users-overview", function(){
+    loadUsers();
+    $(".settingsBox").hide();
+    $("#usersList").show();
+    addBreadcrumbs(["User Management"], ["active"], true);
+});
+
+$("#sidebar-ul").on("click", ".recorded-actions-overview", function(){
+    loadRecordedActions();
+    $(".settingsBox").hide();
+    $("#recordedActionsBox").show();
+    addBreadcrumbs(["Recorded Actions"], ["active"], true);
+});
+
+$("#usersList").on("click", ".viewUser", function(){
     let x = {targetUser: $(this).attr("id") }
     let userName = $(this).text();
 
     $("#settingsOverview").hide();
-    $("#usersOverview").show();
+    $("#userDetails").show();
     addBreadcrumbs(["Users", userName], ["", "active"]);
     ajaxRequest(globalUrls.user.getUserOverview, x, (data)=>{
         data = makeToastr(data);
@@ -341,7 +455,7 @@ $("#settingsOverview").on("click", ".viewUser", function(){
             });
         }
 
-        $("#usersOverview").empty().append(x);
+        $("#userDetails").empty().append(x);
 
     });
 });
@@ -399,7 +513,7 @@ $("#settingsOverview").on("click", ".deleteToken", function(){
     });
 });
 
-$("#settingsOverview").on("click", "#loadMoreRecordedActions", function(){
+$("#recordedActionsBox").on("click", "#loadMoreRecordedActions", function(){
     $.confirm({
     title: 'Prompt!',
     content: `
@@ -441,7 +555,7 @@ $("#settingsOverview").on("click", "#loadMoreRecordedActions", function(){
 });
 });
 
-$("#settingsOverview").on("click", "#addUser", function(){
+$("#usersList").on("click", "#addUser", function(){
     $.confirm({
         title: 'Create user!',
         content: `<form action="" class="formName">
@@ -485,12 +599,12 @@ $("#settingsOverview").on("click", "#addUser", function(){
     });
 });
 
-$("#settingsOverview").on("click", ".setUserProject", function(){
+$("#usersList").on("click", ".setUserProject", function(){
     setUserSettings.targetUser = $(this).parents("tr").data("userId");
     $("#modal-settings-setUserProject").modal("show");
 });
 
-$("#settingsOverview").on("click", ".resetPassword", function(){
+$("#usersList").on("click", ".resetPassword", function(){
     let targetUser = $(this).parents("tr").data("userId");
     $.confirm({
         title: 'Reset password!',
@@ -538,6 +652,20 @@ $("#settingsOverview").on("click", "#saveSettings", function(){
         });
     });
     ajaxRequest(globalUrls.settings.saveAll, {settings: settings}, (data)=>{
+        makeToastr(data)
+    });
+});
+$("#instanceSettingsBox").on("click", "#saveLdapSettings", function(){
+    let settings = [];
+    $("#ldapSettingListTable > tbody > tr").each(function(){
+        let tr = $(this);
+
+        settings.push({
+            id: tr.data("settingId"),
+            value: tr.find("input[name=settingValue]").val()
+        });
+    });
+    ajaxRequest(globalUrls.settings.ldap.save, {settings: settings}, (data)=>{
         makeToastr(data)
     });
 });

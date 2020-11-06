@@ -27,6 +27,22 @@ class FetchUserDetails
         return $do->fetchColumn();
     }
 
+    public function fetchLdapId(string $username)
+    {
+        $sql = "SELECT
+                    `User_Ldap_ID`
+                FROM
+                    `Users`
+                WHERE
+                    `User_Name` = :username
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":username"=>$username
+        ]);
+        return $do->fetchColumn();
+    }
+
     public function fetchId(string $username)
     {
         $sql = "SELECT
