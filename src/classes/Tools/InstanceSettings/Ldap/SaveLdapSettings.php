@@ -38,6 +38,11 @@ class SaveLdapSettings
             $settings[$setting["id"]] = $setting["value"];
         }
 
+        if (empty($settings[InstanceSettingsKeys::LDAP_SERVER])) {
+            $this->insertSetting->insert(InstanceSettingsKeys::LDAP_SERVER, "");
+            return true;
+        }
+
         // Validate the provided settings no point storing junk
         $con = $this->ldap->getConnectionOrThrow($settings[InstanceSettingsKeys::LDAP_SERVER]);
 

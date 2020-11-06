@@ -118,6 +118,12 @@
         </div>
         <div id="" class="collapse in show" role="tabpanel" >
           <div class="card-body bg-dark">
+            <div class="text-center mb-2">
+                <small class="font-italic"><i class="fas fa-info-circle text-info mr-2"></i>Users sync'd on the hour every hour!</small>
+            </div>
+            <div class="text-center mb-2">
+                <small class="font-italic"><i class="fas fa-info-circle text-warning mr-2"></i>Setting LDAP Server to empty value will disable LDAP syncing &amp; login!</small>
+            </div>
             <table class="table table-dark table-bordered" id="ldapSettingListTable">
                 <thead>
                     <tr>
