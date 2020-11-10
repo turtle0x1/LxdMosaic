@@ -35,9 +35,10 @@ then
     apt-get install -y npm || exit $?
 fi
 
-if [ "$(uname -m)" == "aarch64" ]
+if [ "$(uname -m)" == "aarch64" ] || [ "$(uname -m)" == "armv7l" ]
 then
-    apt-get install -y gcc g++ make || exit $?
+    apt-get install -y gcc g++ make python2.7 || exit $?
+    update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
 fi
 
 npm -g install pm2 || exit $?
