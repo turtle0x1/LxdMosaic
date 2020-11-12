@@ -17,7 +17,7 @@ class DeleteInstances
             $state = $host->instances->state($instance);
 
             if ($state["status_code"] == 103) {
-                $host->instances->setState($instance, "stop");
+                $host->instances->setState($instance, "stop", 30, true, false, true);
             }
 
             $this->updateBackupSchedules->disableActiveScheds(

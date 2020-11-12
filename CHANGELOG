@@ -11,6 +11,7 @@ Changed
 
 Fixed
     Switching projects in snap broken
+    An issue with bulk deleting running instances
 
 0.10.2 - 30/10/2020
 
