@@ -443,7 +443,7 @@
             content: `
             <form action="" class="formName">
                 <div class="form-group">
-                    <label>New name</label>
+                    <label>Description</label>
                     <textarea type="text" name="description" class="form-control">${currentDescription}</textarea>
                 </div>
             </form>`,

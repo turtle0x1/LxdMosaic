@@ -21,9 +21,8 @@
                     <label
                         data-toggle="tooltip"
                         data-placement="bottom"
-                        title="Used to impose resource limits akin to different cloud provider limits!">
-                         Instance Type (Optional)
-                        <i class="fas fa-question-circle"></i></label>
+                        title="Used to impose resource limits akin to different cloud provider limits!">Instance Type (Optional)
+                        <i class="fas fa-question-circle text-info"></i></label>
                     <select id="newContainerInstanceType" class="form-control"></select>
                 </div>
             </div>
@@ -37,9 +36,8 @@
                         title="Only profiles on all hosts will appear!
                             <br/>
                             <br/>
-                            Remember the default profile usually contains storage information & network details!">
-                        Profiles
-                        <i class="fas fa-question-circle"></i>
+                            Remember the default profile usually contains storage information & network details!">Profiles
+                        <i class="fas fa-question-circle text-info"></i>
                     </label>
                     <input id="newContainerProfiles" type="text" class="form-control"/>
                 </div>
@@ -53,14 +51,12 @@
         </div>
         <div class="form-group">
             <label>  </label>
-            <label
-                data-toggle="tooltip"
+            <label data-toggle="tooltip"
                 data-placement="top"
                 title="Currently an image needs to have been imported into atleast
                 one server on the network to use it here! Images will be downloaded
-                onto hosts that dont have the selected image.">
-                Image
-                <i class="fas fa-question-circle"></i>
+                onto hosts that dont have the selected image.">Image
+                <i class="fas fa-question-circle text-info"></i>
             </label>
             <input id="newContainerImage" type="text" class="form-control"/>
         </div>
