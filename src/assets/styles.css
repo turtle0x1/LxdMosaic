@@ -8,6 +8,17 @@ body {
     color: white;
 }
 
+.btn-outline-purple {
+    background-color: transparent;
+    border-color: #563d7c;
+    color: #563d7c;
+}
+
+.btn-outline-purple:hover {
+    background-color: #563d7c;
+    color: white;
+}
+
 .btn-purple:hover {
     color: white;
 }

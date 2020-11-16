@@ -472,22 +472,22 @@ if ($haveServers->haveAny() !== true) {
           </li>
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">
-          <li class="nav-item px-3 btn btn-outline-primary pull-right" id="openSearch">
-                <a> <i class="fas fa-search"></i> Search </a>
+          <li class="nav-item px-3 btn btn-outline-purple pull-right" id="openSearch">
+                <a> <i class="fas fa-search"></i></a>
           </li>
           <?php if ($isAdmin === 1) : ?>
           <li class="nav-item px-3 btn btn-outline-primary pull-right" id="addNewServer">
-                <a> <i class="fas fa-plus"></i> Server </a>
+                <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-server"></i> </a>
            </li>
           <?php endif; ?>
           <li class="nav-item px-3 btn btn-outline-success pull-right" id="createContainer">
-                <a> <i class="fas fa-plus"></i> Container </a>
+                <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-box"></i> </a>
            </li>
           <li class="nav-item px-3 btn btn-outline-success pull-right" id="createVm">
-                <a> <i class="fas fa-plus"></i> VM </a>
+                <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-vr-cardboard"></i></a>
            </li>
-           <a href="/logout" class="nav-item px-3 btn btn-outline-secondary pull-right">
-                 <i class="fas fa-sign-out-alt"></i> Logout
+           <a href="/logout" class="nav-item px-3 btn btn-outline-secondary pull-right" style="height: 35px;">
+                <i style="line-height: 1.25rem" class="fas fa-sign-out-alt"></i>
             </a>
       </ul>
     </header>

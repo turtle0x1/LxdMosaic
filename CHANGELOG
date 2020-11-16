@@ -10,6 +10,7 @@ Changed
     Disable backup schedules when deleting instance
     Use buttons for bulk instance actions instead of dropdown
     Dont show carat when host is offline
+    Replace nav button text with icons
 
 Fixed
     Switching projects in snap broken
