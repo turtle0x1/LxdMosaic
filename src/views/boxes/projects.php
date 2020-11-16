@@ -35,7 +35,7 @@
         </div>
     </div>
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
           <div class="card bg-dark">
             <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
               <h5>
@@ -62,8 +62,34 @@
               </div>
             </div>
           </div>
+          <div class="card bg-dark">
+            <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
+              <h5>
+                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
+                  Restrictions
+                  <i class="float-right fas fa-lock"></i>
+                </a>
+              </h5>
+            </div>
+            <div id="projectConfig" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
+              <div class="card-block bg-dark table-responsive">
+                  <div id="collapseOne" class="collapse in show" role="tabpanel" >
+                      <table class="table table-dark table-bordered" id="restrictionsListTable">
+                          <thead>
+                              <tr>
+                                  <th> Key </th>
+                                  <th> Value </th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      </table>
+                   </div>
+              </div>
+            </div>
+          </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-8">
         <div class="card bg-dark">
           <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
             <h5>
@@ -201,9 +227,21 @@ function viewProject(project, hostId, hostAlias){
         $("#projectUsedByTable > tbody").empty().append(projectUsedBy);
 
         let projectConfig = "";
+        let restrictionsConfig = "";
+
         $.each(data.config, function(i, item){
-            projectConfig += `<tr><td>${i.replace("features.", "")}</td><td>${item}</td></tr>`;
+            if(i.startsWith("features")){
+                projectConfig += `<tr><td>${i.replace("features.", "")}</td><td>${item}</td></tr>`;
+            }else{
+                restrictionsConfig += `<tr><td>${i.replace("restricted.", "")}</td><td>${item}</td></tr>`;
+            }
         });
+
+        if(restrictionsConfig == ""){
+            restrictionsConfig = `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No Restrictions</td></tr>`
+        }
+
+        $("#restrictionsListTable > tbody").empty().append(restrictionsConfig);
         $("#projectConfigTable > tbody").empty().append(projectConfig);
     });
 }
