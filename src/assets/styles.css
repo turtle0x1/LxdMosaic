@@ -1,6 +1,6 @@
 body {
     background-color: #a8a8a8;
-    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
+    font-size: .9rem !important;
 }
 
 .btn-purple {
@@ -366,10 +366,6 @@ a:hover {
 
 .nav-link:hover {
     cursor: pointer;
-}
-
-body, table {
-    font-size: 0.9rem;
 }
 
 h1 {

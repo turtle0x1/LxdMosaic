@@ -11,6 +11,7 @@ Changed
     Use buttons for bulk instance actions instead of dropdown
     Dont show carat when host is offline
     Replace nav button text with icons
+    Go back to default font
 
 Fixed
     Switching projects in snap broken
