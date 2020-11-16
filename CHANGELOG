@@ -9,6 +9,7 @@ Changed
     Support backups & backup schedules in different projects
     Disable backup schedules when deleting instance
     Use buttons for bulk instance actions instead of dropdown
+    Dont show carat when host is offline
 
 Fixed
     Switching projects in snap broken

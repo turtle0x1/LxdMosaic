@@ -765,15 +765,17 @@ function createDashboardSidebar()
 
             $.each(item.members, function(_, host){
                 let disabled = "";
+                let expandBtn = '<button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>';
 
                 if(!host.hostOnline){
                     disabled = "disabled text-warning text-strikethrough";
+                    expandBtn = '';
                 }
 
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link viewServer ${disabled}" href="#">
                         <i class="fas fa-server"></i> ${host.alias}
-                        <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                        ${expandBtn}
                     </a>
                     <ul class="nav-dropdown-items">
                     </ul>
@@ -785,15 +787,17 @@ function createDashboardSidebar()
 
         $.each(data.standalone.members, function(_, host){
             let disabled = "";
+            let expandBtn = '<button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>';
 
             if(host.hostOnline == false){
                 disabled = "disabled text-warning text-strikethrough";
+                expandBtn = '';
             }
 
             hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                 <a class="nav-link viewServer ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${host.alias}
-                    <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                    ${expandBtn}
                 </a>
                 <ul class="nav-dropdown-items">
                 </ul>
@@ -934,9 +938,10 @@ function loadDashboard(){
 
             $.each(item.members, function(_, host){
                 let disabled = "";
-
+                let expandBtn = '<button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>';
                 if(!host.hostOnline){
                     disabled = "disabled text-warning text-strikethrough";
+                    expandBtn = '';
                 }
 
                 let projects = "<div class='text-center text-info'><i class='fas fa-info-circle mr-2'></i>Not Supported</div>";
@@ -952,6 +957,8 @@ function loadDashboard(){
                     projects += "</select>";
                 }
 
+
+
                 if(host.hostOnline == true){
                     hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
                 }
@@ -961,7 +968,7 @@ function loadDashboard(){
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link viewServer ${disabled}" href="#">
                         <i class="fas fa-server"></i> ${host.alias}
-                        <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                        ${expandBtn}
                     </a>
                     <ul class="nav-dropdown-items">
                     </ul>
@@ -1005,9 +1012,11 @@ function loadDashboard(){
 
         $.each(data.clustersAndHosts.standalone.members, function(_, host){
             let disabled = "";
+            let expandBtn = '<button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>';
 
             if(host.hostOnline == false){
                 disabled = "disabled text-warning text-strikethrough";
+                expandBtn = '';
             }
 
             let projects = "<div class='text-center text-info'><i class='fas fa-info-circle mr-2'></i>Not Supported</div>";
@@ -1030,7 +1039,7 @@ function loadDashboard(){
             hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                 <a class="nav-link viewServer ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${host.alias}
-                    <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                    ${expandBtn}
                 </a>
                 <ul class="nav-dropdown-items">
                 </ul>

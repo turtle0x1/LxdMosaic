@@ -32,6 +32,9 @@ body {
     cursor: pointer;
 }
 
+.sidebar .nav-dropdown-toggle.disabled::before {
+    display: none !important;
+}
 
 .disabled {
     cursor: not-allowed;
