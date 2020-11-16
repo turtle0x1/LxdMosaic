@@ -169,6 +169,36 @@
       </div>
     </div>
 </div>
+<div id="instanceHostsBox" class="settingsBox">
+    <div class="card bg-dark" id="recordedActionsCard">
+      <div class="card-header bg-dark" role="tab" >
+        <h5>
+          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#allHostsList" aria-expanded="true" aria-controls="allHostsList">
+            Hosts
+          </a>
+          <button class="btn btn-primary float-right" id="loadMoreRecordedActions">
+              <i class="fas fa-search-plus"></i>
+          </button>
+        </h5>
+      </div>
+      <div id="allHostsList" class="collapse in show" role="tabpanel">
+        <div class="card-body table-responsive bg-dark">
+          <table class="table table-dark table-bordered" id="hostListTable">
+              <thead>
+                  <tr>
+                      <th>Alias</th>
+                      <th>IP</th>
+                      <th>Online</th>
+                      <th>Delete</th>
+                  </tr>
+              </thead>
+              <tbody>
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+</div>
 <div id="usersList" class="settingsBox">
     <div class="card bg-dark" id="usersCard">
       <div class="card-header" role="tab" >
@@ -221,14 +251,20 @@ function loadSettingsView()
     if(!userDetails.isAdmin){
         $("#saveSettings, #saveLdapSettings, #addUser, #recordedActionsCard, #usersCard").remove();
     }else{
-        hosts += `<li class="nav-item instance-settings">
+        hosts += `
+        <li class="nav-item instance-hosts">
             <a class="nav-link" href="#">
-                <i class="fas fa-server mr-2"></i>Instance Settings
+                <i class="fas fa-server mr-2"></i>Hosts
+            </a>
+        </li>
+        <li class="nav-item instance-settings">
+            <a class="nav-link" href="#">
+                <i class="fas fa-sliders-h mr-2"></i>LXDMosaic Settings
             </a>
         </li>
         <li class="nav-item users-overview">
             <a class="nav-link" href="#">
-                <i class="fas fa-users mr-2"></i>Users
+                <i class="fas fa-users-cog mr-2"></i>Users
             </a>
         </li>
         <li class="nav-item recorded-actions-overview">
@@ -337,6 +373,30 @@ function loadUsers(){
     });
 }
 
+function loadInstancesHostsView(){
+    ajaxRequest(globalUrls.hosts.getAllHosts, {}, (data)=>{
+        data = $.parseJSON(data);
+        let trs = "";
+        if(data.length > 0 ){
+            $.each(data, (_, host)=>{
+                let o = "<i class='fas fa-check text-success'></i>";
+                if(host.Host_Online == 0){
+                    o = "<i class='fas fa-times text-danger'></i>";
+                }
+                trs += `<tr id="${host.Host_ID}">
+                    <td>${host.Host_Alias}</td>
+                    <td>${host.Host_Url_And_Port}</td>
+                    <td>${o}</td>
+                    <td><button class='btn btn-danger deleteHost'><i class="fas fa-trash"></i></button></td>
+                </tr>`
+            });
+        }else{
+            trs += `<tr><td colspan="999" class="text-info">No Hosts</td></tr>`
+        }
+        $("#hostListTable > tbody").empty().append(trs);
+    });
+}
+
 function loadInstanceSettings(){
     ajaxRequest(globalUrls.settings.getAll, {}, (data)=>{
         data = makeToastr(data);
@@ -376,6 +436,46 @@ function loadInstanceSettings(){
         $("#ldapSettingListTable").find('[data-toggle="tooltip"]').tooltip({html: true})
     });
 }
+
+$("#sidebar-ul").on("click", ".instance-hosts", function(e){
+    $(".settingsBox").hide();
+    $("#instanceHostsBox").show();
+    addBreadcrumbs(["Hosts Management"], ["active"], true);
+    loadInstancesHostsView();
+});
+
+$("#hostListTable").on("click", ".deleteHost", function(){
+    let tr = $(this).parents("tr");
+    let hostId = tr.attr("id");
+    $.confirm({
+        title: 'Delete Host',
+        content: 'Are you sure you want to remove this host!',
+        buttons: {
+            cancel: function () {},
+            yes: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin"></i>Deleting..'); // let the user know
+                    this.buttons.yes.disable();
+                    this.buttons.cancel.disable();
+                    var modal = this;
+                    ajaxRequest(globalUrls.hosts.delete, {hostId: hostId}, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            this.buttons.yes.enable();
+                            this.buttons.yes.setText('Yes'); // let the user know
+                            this.buttons.cancel.enable();
+                            return false;
+                        }
+                        tr.remove();
+                        modal.close();
+                    });
+                    return false;
+                }
+            }
+        }
+    });
+});
 
 $("#sidebar-ul").on("click", ".my-settings", function(e){
     e.preventDefault();
