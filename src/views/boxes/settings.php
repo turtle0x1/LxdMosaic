@@ -176,9 +176,6 @@
           <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#allHostsList" aria-expanded="true" aria-controls="allHostsList">
             Hosts
           </a>
-          <button class="btn btn-primary float-right" id="loadMoreRecordedActions">
-              <i class="fas fa-search-plus"></i>
-          </button>
         </h5>
       </div>
       <div id="allHostsList" class="collapse in show" role="tabpanel">
