@@ -9,6 +9,9 @@ class GetHostsController
     {
         $this->hostList = $hostList;
     }
+    /**
+     * @TODO Secure
+    */
     public function getAllHosts()
     {
         return $this->hostList->getHostListWithDetails();
