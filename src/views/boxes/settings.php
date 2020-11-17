@@ -62,8 +62,6 @@
               </div>
          </div>
 </div>
-<div id="userDetails" class="settingsBox">
-</div>
 <div id="instanceSettingsBox" class="settingsBox row">
     <div class="col-md-6">
       <div class="card bg-dark">
@@ -197,34 +195,41 @@
     </div>
 </div>
 <div id="usersList" class="settingsBox">
-    <div class="card bg-dark" id="usersCard">
-      <div class="card-header" role="tab" >
-        <h5>
-          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
-            Users
-          </a>
-          <button class="btn btn-primary float-right" id="addUser">
-              <i class="fas fa-plus"></i>
-          </button>
-        </h5>
-      </div>
-      <div id="users" class="collapse in show" role="tabpanel">
-        <div class="card-body">
-          <table class="table table-dark table-bordered" id="usersTable">
-              <thead>
-                  <tr>
-                      <th>User</th>
-                      <th>Added</th>
-                      <th>Admin</th>
-                      <th>Projects</th>
-                      <th>Reset Password</th>
-                  </tr>
-              </thead>
-              <tbody>
-              </tbody>
-          </table>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card bg-dark" id="usersCard">
+              <div class="card-header" role="tab" >
+                <h5>
+                  <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
+                    Users
+                  </a>
+                  <button class="btn btn-success float-right" id="addUser">
+                      <i class="fas fa-plus"></i>
+                  </button>
+                </h5>
+              </div>
+              <div id="users" class="collapse in show" role="tabpanel">
+                <div class="card-body">
+                  <table class="table table-dark table-bordered" id="usersTable">
+                      <thead>
+                          <tr>
+                              <th>User</th>
+                              <th>Added</th>
+                              <th>Admin</th>
+                              <th>Settings</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
         </div>
-      </div>
+        <div class="col-md-7">
+            <div id="userDetails" class="settingsBox">
+            </div>
+        </div>
     </div>
 </div>
 </div>
@@ -346,20 +351,26 @@ function loadUsers(){
         let trs = "";
         if(data.length > 0 ){
             $.each(data, (_, user)=>{
-                let isAdmin = user.isAdmin == 1  ? "check-circle" : "times-circle";
+                let isAdmin = "times-circle";
+                let isAdminTClass = "text-success";
+
+                if(user.isAdmin == 1){
+                    isAdmin = "check-circle"
+                    isAdminTClass = "text-warning";
+                }
+
                 trs += `<tr data-user-id="${user.id}">
                     <td><a href="#" id="${user.id}" class='viewUser'>${user.username}</a></td>
                     <td>${moment(user.created).fromNow()}</td>
-                    <td><i class="fas fa-${isAdmin}"></i></td>
+                    <td><i class="fas fa-${isAdmin} ${isAdminTClass}"></i></td>
                     <td>
-                        <button class="btn btn-primary setUserProject">
-                            <i class="fas fa-wrench"></i>
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-wrench"></i>
                         </button>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary resetPassword">
-                            <i class="fas fa-wrench"></i>
-                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item setUserProject" href="#">Set Projects Access</a>
+                          <a class="dropdown-item resetPassword" href="#">Reset Password</a>
+                        </div>
                     </td>
                 </tr>`;
             });
