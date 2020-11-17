@@ -304,7 +304,7 @@ function loadSettingsView()
         let trs = "";
 
         if(data.permanentTokens.length == 0){
-            trs = "<tr><td colspan='999'>No Permanent API Keys!</td></tr>"
+            trs = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-success mr-2'></i>No Permanent API Keys!</td></tr>"
         }else{
             $.each(data.permanentTokens, (_, token)=>{
                 trs += `<tr>
@@ -484,7 +484,7 @@ $("#sidebar-ul").on("click", ".instance-settings", function(){
     loadInstanceSettings();
     $(".settingsBox").hide();
     $("#instanceSettingsBox").show();
-    addBreadcrumbs(["Instance Management"], ["active"], true);
+    addBreadcrumbs(["LXDMosaic Settings"], ["active"], true);
 });
 
 $("#sidebar-ul").on("click", ".users-overview", function(){
