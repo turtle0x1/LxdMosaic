@@ -163,6 +163,24 @@
                 </table>
           </div>
         </div>
+        <div class="card bg-dark">
+            <div class="card-body table-responsive">
+                <h5 class="text-white">
+                    <u>Limits</u>
+                    <i class="fas fa-user-secret float-right"></i>
+                </h5>
+                <table class="table table-dark table-bordered" id="limitsTable">
+                      <thead class="thead-inverse">
+                          <tr>
+                              <th> Key </th>
+                              <th> Value </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                </table>
+          </div>
+        </div>
     </div>
 </div>
 </div>
@@ -853,6 +871,24 @@ function loadContainerView(data)
         $("#container-imageDescription").html(` - ${os} (${version})`);
         $("#container-cpuTime").text(containerCpuTime);
         $("#container-createdAt").text(moment(x.details.created_at).format("MMM DD YYYY h:mm A"));
+
+        let limitsTrs = "";
+
+        $.each(x.details.config, (key, value)=>{
+            if(key.startsWith("limit")){
+                limitsTrs += `<tr>
+                    <td>${key}</td>
+                    <td>${value}</td>
+                </tr>`
+            }
+        });
+
+        if(limitsTrs == ""){
+            limitsTrs = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-success mr-2'></i>No Limits</td></tr>";
+        }
+
+
+        $("#limitsTable > tbody").empty().append(limitsTrs);
 
         if(x.details.hasOwnProperty("last_used_at")){
             let last_used_at = moment(x.details.last_used_at);
