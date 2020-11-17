@@ -5,6 +5,7 @@ Added
     Limit not-admin users to servers/projects
     View to view & delete hosts in settings
     Show instance limits on instance view (#288)
+    Get & set comments in the user.comment key for an instance (#283)
 
 Changed
     Support backups & backup schedules in different projects

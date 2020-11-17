@@ -102,6 +102,8 @@
               Up Time: <span id="container-upTime"></span>
               <br/>
               Deployment: <span id="container-deployment"></span>
+              <br/>
+              Comment <button class="btn btn-sm btn-outline-primary ml-1 mr-1" id="editInstanceComment"><i class="fas fa-edit"></i></button>: <span id="container-comment"></span>
           </div>
         </div>
         <div class="card text-white bg-dark">
@@ -552,6 +554,38 @@ function deleteContainerConfirm(hostId, hostAlias, container)
     });
 }
 
+function editInstanceComment(hostId, hostAlias, container)
+{
+    $.confirm({
+        title: 'Set ' + hostAlias + '/' + container + ' Comment',
+        content: `<div class="form-group">
+            <label>Comment</label>
+            <textarea class="form-control" name="comment"></textarea>
+        </div>
+        `,
+        buttons: {
+            cancel: function () {},
+            set: {
+                btnClass: 'btn-success',
+                action: function () {
+                    let x = {
+                        hostId: hostId,
+                        container: container,
+                        comment: this.$content.find('textarea[name=comment]').val()
+                    };
+                    ajaxRequest(globalUrls.instances.comment.set, x, function(data){
+                        let r = makeToastr(data);
+
+                        if(r.state == "success"){
+                            loadContainerView(currentContainerDetails);
+                        }
+                    });
+                }
+            }
+        }
+    });
+}
+
 function renameContainerConfirm(hostId, container, reloadView, hostAlias)
 {
     $.confirm({
@@ -916,6 +950,14 @@ function loadContainerView(data)
 
         $("#container-deployment").html(deployment);
 
+        let userComment = "";
+
+        if(x.details.config.hasOwnProperty("user.comment") !== false){
+            userComment = nl2br(x.details.config["user.comment"]);
+        }
+
+        $("#container-comment").html(userComment);
+
         let snapshotTrHtml = "";
 
         if(x.snapshots.length == 0){
@@ -1187,6 +1229,10 @@ $("#containerBox").on("click", ".importBackup", function(){
             },
         }
     });
+});
+
+$("#containerBox").on("click", "#editInstanceComment", function(){
+    editInstanceComment(currentContainerDetails.hostId, currentContainerDetails.alias, currentContainerDetails.container);
 });
 
 $("#containerBox").on("click", ".renameContainer", function(){

@@ -110,6 +110,9 @@ if ($haveServers->haveAny() !== true) {
                   get: "/api/Dashboard/GetController/get"
               },
               instances: {
+                  comment: {
+                      set: "/api/Instances/Comments/SetInstanceCommentController/set",
+                  },
                   profiles: {
                     remove: "/api/Instances/Profiles/RemoveProfileController/remove",
                     assign: "/api/Instances/Profiles/AssignProfilesController/assign",
