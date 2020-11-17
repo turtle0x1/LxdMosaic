@@ -19,6 +19,7 @@ Changed
 Fixed
     Switching projects in snap broken
     An issue with bulk deleting running instances
+    Reseting user password by pressing enter leads to undefined behaviour (#282)
 
 0.10.2 - 30/10/2020
 

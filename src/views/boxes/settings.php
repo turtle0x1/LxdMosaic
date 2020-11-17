@@ -716,11 +716,12 @@ $("#usersList").on("click", ".setUserProject", function(){
     $("#modal-settings-setUserProject").modal("show");
 });
 
-$("#usersList").on("click", ".resetPassword", function(){
+$("#usersList").on("click", ".resetPassword", function(e){
     let targetUser = $(this).parents("tr").data("userId");
     $.confirm({
+        backgroundDismiss: true,
         title: 'Reset password!',
-        content: `<form action="" class="formName">
+        content: `<form>
             <div class="form-group">
                 <label>Password</label>
                 <input type="password" class="form-control" name="password" required />
@@ -733,6 +734,7 @@ $("#usersList").on("click", ".resetPassword", function(){
             reset: {
                 text: 'reset',
                 btnClass: 'btn-blue',
+                keys: ['enter'],
                 action: function () {
                     let password = this.$content.find('input[name=password]').val().trim();
                     if(password == ""){
@@ -748,10 +750,16 @@ $("#usersList").on("click", ".resetPassword", function(){
                         loadUsers();
                     });
                 }
-            },
-            cancel: function () {
-                //close
-            },
+            }
+        },
+        onContentReady: function () {
+            // bind to events
+            var jc = this;
+            this.$content.find('form').on('submit', function (e) {
+                // if the user submits the form by pressing enter in the field.
+                e.preventDefault();
+                jc.$$reset.trigger('click'); // reference the button and click it
+            });
         }
     });
 });
