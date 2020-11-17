@@ -675,10 +675,14 @@ $("#usersList").on("click", "#addUser", function(){
                 <label>Password</label>
                 <input type="password" class="form-control" name="password" required />
             </div>
+            <i class="fas fa-info-circle text-warning mr-2"></i>Users wont be able to login until you grant access to projects!
         </form>`,
         buttons: {
-            formSubmit: {
-                text: 'Submit',
+            cancel: {
+                action: function(){}
+            },
+            create: {
+                text: 'create',
                 btnClass: 'btn-blue',
                 action: function () {
                     let username = this.$content.find('input[name=username]').val().trim();
@@ -723,8 +727,11 @@ $("#usersList").on("click", ".resetPassword", function(){
             </div>
         </form>`,
         buttons: {
-            formSubmit: {
-                text: 'Submit',
+            cancel: {
+                action: function(){}
+            },
+            reset: {
+                text: 'reset',
                 btnClass: 'btn-blue',
                 action: function () {
                     let password = this.$content.find('input[name=password]').val().trim();
