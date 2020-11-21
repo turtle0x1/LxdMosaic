@@ -14,6 +14,10 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12 card-decks" id="projectCards">
+        </div>
+    </div>
 </div>
 <div id="projectDetails">
     <div class="row">
@@ -159,10 +163,66 @@ function makeProjectHostSidebarHtml(hosthtml, host){
     return hosthtml;
 }
 
+function makeProjectCard(projectName, limits){
+
+    let thead = "";
+    let tbody = "";
+
+    let formatBytesKeys = ["limits.memory", "limits.disk"];
+
+    $.each(limits, (limit, value)=>{
+        let lThead = limit.replace("limits.", "");
+        thead += `<th>${lThead}</th>`;
+        let lTxt = value.limit == null ? "Unlimited" : value.limit;
+        let vText = formatBytesKeys.includes(limit) ? formatBytes(value.value) : value.value;
+        tbody += `<td>${vText} / ${lTxt}</td>`;
+    });
+
+    return `<div class="card bg-dark text-white">
+        <div class="card-header">
+            <h4>${projectName}</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-dark table-bordered">
+                <thead>
+                    <tr>
+                    ${thead}
+                    </tr>
+                </thead>
+                <tbody>
+                ${tbody}
+                </tbody>
+            </table>
+        </div>
+    </div>`;
+}
+
 function loadProjectView()
 {
     $(".boxSlide, #projectDetails").hide();
     $("#projectsOverview, #projectsBox").show();
+
+    ajaxRequest(globalUrls.projects.getOverview, {}, function(data){
+        data = $.parseJSON(data);
+        let cards = "";
+
+        $.each(data.clusters, (clusterIndex, cluster)=>{
+            $.each(cluster.members, (_, host)=>{
+                $.each(host.projects, (projectName, project)=>{
+                    cards += makeProjectCard(projectName, project);
+                });
+            })
+        });
+
+        $.each(data.standalone.members, (_, host)=>{
+            $.each(host.projects, (projectName, project)=>{
+                cards += makeProjectCard(projectName, project);
+            });
+        });
+        $("#projectCards").empty().append(cards);
+    })
+
+
     ajaxRequest(globalUrls.projects.getAllFromHosts, {}, function(data){
 
         data = $.parseJSON(data);
