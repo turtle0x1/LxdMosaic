@@ -24,6 +24,7 @@ function css(){
 
 function js(){
     return src([
+            "node_modules/jquery/dist/jquery.min.js",
             "node_modules/@coreui/coreui/dist/js/coreui.min.js",
             "node_modules/ace-builds/src-min/ace.js",
             "node_modules/ace-builds/src-min/theme-monokai.js",

@@ -56,10 +56,7 @@ if ($haveServers->haveAny() !== true) {
       <meta name="msapplication-TileImage" content="/assets/lxdMosaic/favicons/ms-icon-144x144.png">
       <meta name="theme-color" content="#ffffff">
 
-      <script
-          src="https://code.jquery.com/jquery-3.3.1.min.js"
-          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-          crossorigin="anonymous"></script>
+      <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script>
 
@@ -67,8 +64,6 @@ if ($haveServers->haveAny() !== true) {
       <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
       <!-- <link rel="stylesheet" href="/assets/xterm/xterm.css" /> -->
-
-      <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
 
       <!-- Main styles for this application-->
       <link href="/assets/dist/external.dist.css" rel="stylesheet">
