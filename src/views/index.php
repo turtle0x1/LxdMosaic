@@ -75,9 +75,6 @@ if ($haveServers->haveAny() !== true) {
 
       <script src="/socket.io/socket.io.js"></script>
 
-      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
-
-
       <script src="/assets/lxdMosaic/globalFunctions.js"></script>
       <script src="/assets/lxdMosaic/globalDetails.js"></script>
       <script>

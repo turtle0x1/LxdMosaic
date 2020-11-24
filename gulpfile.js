@@ -15,7 +15,8 @@ function css(){
         "node_modules/dropzone/dist/min/basic.min.css",
         "node_modules/dropzone/dist/min/dropzone.min.css",
         "node_modules/jquery-timepicker/jquery.timepicker.css",
-        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css"
+        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css",
+        "node_modules/chart.js/dist/Chart.min.css"
     ])
     .pipe(cleanCSS({}))
     .pipe(concat("external.dist.css"))
@@ -38,7 +39,8 @@ function js(){
             "node_modules/dropzone/dist/min/dropzone.min.js",
             "node_modules/jquery-timepicker/jquery.timepicker.js",
             "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js",
-            "node_modules/jquery-contextmenu/dist/jquery.ui.position.min.js"
+            "node_modules/jquery-contextmenu/dist/jquery.ui.position.min.js",
+            "node_modules/chart.js/dist/Chart.min.js"
         ])
         .pipe(minify({
             noSource: true
