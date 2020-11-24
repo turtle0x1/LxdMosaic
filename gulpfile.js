@@ -14,9 +14,8 @@ function css(){
         "src/assets/token/styles/token-input-facebook.css",
         "node_modules/dropzone/dist/min/basic.min.css",
         "node_modules/dropzone/dist/min/dropzone.min.css",
-        "node_modules/jquery-timepicker/jquery.timepicker.css"
-
-
+        "node_modules/jquery-timepicker/jquery.timepicker.css",
+        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css"
     ])
     .pipe(cleanCSS({}))
     .pipe(concat("external.dist.css"))
@@ -37,7 +36,9 @@ function js(){
             "node_modules/toastr/build/toastr.min.js",
             "src/assets/token/src/jquery.tokeninput.js",
             "node_modules/dropzone/dist/min/dropzone.min.js",
-            "node_modules/jquery-timepicker/jquery.timepicker.js"
+            "node_modules/jquery-timepicker/jquery.timepicker.js",
+            "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js",
+            "node_modules/jquery-contextmenu/dist/jquery.ui.position.min.js"
         ])
         .pipe(minify({
             noSource: true
@@ -58,7 +59,20 @@ function xterm(){
         .pipe(dest('src/assets/dist'))
 }
 
+function fonts(){
+    return src([
+            "node_modules/jquery-contextmenu/dist/font/context-menu-icons.ttf",
+            "node_modules/jquery-contextmenu/dist/font/context-menu-icons.woff",
+            "node_modules/jquery-contextmenu/dist/font/context-menu-icons.woff2"
+        ])
+        .pipe(minify({
+            noSource: true
+        }))
+        .pipe(dest('src/assets/dist/font'))
+}
+
 exports.js = js;
 exports.extrnalCss = css;
 exports.xterm = xterm;
-exports.default = parallel(js, css, xterm);
+exports.xterm = fonts;
+exports.default = parallel(js, css, xterm, fonts);
