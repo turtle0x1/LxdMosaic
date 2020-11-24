@@ -16,6 +16,7 @@ Changed
     Replace nav button text with icons
     Go back to default font
     Split project restrictions into their own table on frontend
+    Remove all usage of cdns (so the it should work offline) (#293)
 
 Fixed
     Switching projects in snap broken

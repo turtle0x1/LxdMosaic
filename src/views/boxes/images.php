@@ -128,8 +128,6 @@
 </div>
 <script>
 
-    var dataTable = null;
-
     var currentImageDetails = {
         hostId: null,
         fingerprint: null

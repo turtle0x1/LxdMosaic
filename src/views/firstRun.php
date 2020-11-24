@@ -43,31 +43,26 @@ echo "<script>var userDetails = {
 <meta name="theme-color" content="#ffffff">
 <meta charset="utf-8">
 <title>LXD Mosaic</title>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<script
-      src="https://code.jquery.com/jquery-3.3.1.min.js"
-      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-      crossorigin="anonymous"></script>
-
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
-
-<!-- jqueryConfirm assets -->
-<link rel="stylesheet" href="/assets/jqueryConfirm/dist/jquery-confirm.min.css">
-<script src="/assets/jqueryConfirm/dist/jquery-confirm.min.js"></script>
-
-
-<!-- Toastr  -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" integrity="sha256-ENFZrbVzylNbgnXx0n3I1g//2WeO47XxoPe0vkp3NC8=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha256-3blsJd4Hli/7wCQ+bmgXfOdK7p/ZUMtPXY08jmxSSgk=" crossorigin="anonymous"></script>
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-
+<link rel="stylesheet" href="/assets/dist/login.dist.css">
+<script src="/assets/dist/login.dist.js"></script>
 <style>
 body {
     background-color: #a8a8a8;
     font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
 }
+
+.arrow {
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
 </style>
 
 </head>
@@ -87,7 +82,7 @@ body {
             </small>
             <div class="mt-2 d-block">
                 <button class="btn btn-sm btn-primary mb-2 float-left" id="addServer">
-                    <i class="fas fa-plus mr-2"></i>Add Another Host
+                    <b style="font-size: 1.2rem;" class="mr-2">+</b>Add Another Host
                 </button>
                 <div class="form-check float-right">
                   <input class="form-check-input" type="checkbox" value="" id="showPasswordCheck" autocomplete="off">
@@ -98,7 +93,7 @@ body {
             </div>
             <div id="serverGroups" class="d-block mt-2"></div>
             <div class="d-block text-center">
-                <button class="btn btn-primary" id="addServers">Manage Hosts <i class="fas fa-arrow-right"></i></button>
+                <button class="btn btn-primary" id="addServers">Manage Hosts <i class="arrow right"></i></button>
             </div>
         </div>
 
@@ -117,7 +112,7 @@ let inputTemplate = `<div class="input-group mb-3 serverGroup">
     <input placeholder="Alias (Optional)" name="alias" type="text" class="form-control"/>
     <div class="input-group-append">
         <button class="btn btn-sm btn-outline-danger removeRow" type="button">
-            <i class="fa fa-trash"></i>
+            <b>X</b>
         </button>
     </div>
 </div>`;

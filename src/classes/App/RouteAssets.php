@@ -6,7 +6,10 @@ class RouteAssets
     private $extensionMapping = [
         "css"=>"text/css",
         "js"=>"text/javascript",
-        "png"=>"image/png"
+        "png"=>"image/png",
+        "ttf"=>"font/ttf",
+        "woff"=>"font/woff",
+        "woff2"=>"font/woff2"
     ];
 
     public function route($path)
@@ -17,6 +20,10 @@ class RouteAssets
     public function outputFile($path)
     {
         $path = __DIR__ . "/../../" . implode($path, "/");
+        if (strpos($path, "?") !== false) {
+            $path = substr($path, 0, strpos($path, "?"));
+        }
+
         //get the last-modified-date of this very file
         $lastModified=filemtime($path);
         //get a unique hash of this file (etag)
