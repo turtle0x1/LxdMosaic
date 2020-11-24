@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/turtle0x1/LxdManager#readme",
   "dependencies": {
+    "@popperjs/core": "^2.5.4",
     "body-parser": "^1.19.0",
+    "bootstrap": "^4.5.3",
     "bufferutil": "^4.0.1",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
