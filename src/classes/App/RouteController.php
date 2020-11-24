@@ -56,13 +56,19 @@ class RouteController
             exit;
         }
 
-        $logoReq = implode("/", $explodedPath) === "assets/lxdMosaic/logo.png";
+
+
+        $canSkipAuth = in_array(implode("/", $explodedPath), [
+            "assets/lxdMosaic/logo.png",
+            "assets/dist/login.dist.css",
+            "assets/dist/login.dist.js"
+        ]);
 
         $this->session->start();
-        
+
         $loginSet = isset($_POST["login"]);
 
-        if ($this->userSession->isLoggedIn() !== true && !$loginSet && !$logoReq) {
+        if ($this->userSession->isLoggedIn() !== true && !$loginSet && !$canSkipAuth) {
             http_response_code(403);
             require __DIR__ . "/../../views/login.php";
             exit;
