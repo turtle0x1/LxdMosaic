@@ -86,9 +86,36 @@ function fontAwesomeCss(){
         .pipe(dest('src/assets/dist/'))
 }
 
+function preAuthCss(){
+    return src([
+        "node_modules/bootstrap/dist/css/bootstrap.min.css",
+        "node_modules/toastr/build/toastr.min.css"
+    ])
+    .pipe(cleanCSS({}))
+    .pipe(concat("login.dist.css"))
+    .pipe(dest('src/assets/dist'));
+}
+
+function preAuthJs(){
+    return src([
+            "node_modules/jquery/dist/jquery.min.js",
+            "node_modules/@popperjs/core/dist/umd/popper.min.js",
+            "node_modules/bootstrap/dist/js/bootstrap.min.js",
+            "node_modules/@coreui/coreui/dist/js/coreui.min.js",
+            "node_modules/toastr/build/toastr.min.js"
+        ])
+        .pipe(minify({
+            noSource: true
+        }))
+        .pipe(concat('login.dist.js'))
+        .pipe(dest('src/assets/dist'))
+}
+
 exports.js = js;
 exports.extrnalCss = css;
 exports.xterm = xterm;
 exports.xterm = fonts;
 exports.fontAwesomeCss = fontAwesomeCss;
-exports.default = parallel(js, css, xterm, fonts, fontAwesomeCss)
+exports.preAuthCss = preAuthCss;
+exports.preAuthJs = preAuthJs;
+exports.default = parallel(js, css, xterm, fonts, fontAwesomeCss, preAuthCss, preAuthJs)
