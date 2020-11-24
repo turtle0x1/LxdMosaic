@@ -6,7 +6,10 @@ class RouteAssets
     private $extensionMapping = [
         "css"=>"text/css",
         "js"=>"text/javascript",
-        "png"=>"image/png"
+        "png"=>"image/png",
+        "ttf"=>"font/ttf",
+        "woff"=>"font/woff",
+        "woff2"=>"font/woff2"
     ];
 
     public function route($path)
