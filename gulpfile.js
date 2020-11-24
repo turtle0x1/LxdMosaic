@@ -2,6 +2,7 @@ const { src, dest, parallel } = require('gulp');
 const concat = require('gulp-concat');
 const minify = require('gulp-minify');
 const cleanCSS = require('gulp-clean-css');
+const replace = require("gulp-replace");
 
 function css(){
     return src([
@@ -73,8 +74,21 @@ function fonts(){
         .pipe(dest('src/assets/dist/font'))
 }
 
+function fontAwesomeCss(){
+    return src([
+            "src/assets/fontawesome/css/all.min.css",
+        ])
+        .pipe(replace("../webfonts/", "/assets/fontawesome/webfonts/"))
+        .pipe(minify({
+            noSource: true
+        }))
+        .pipe(concat("external.fontawesome.css"))
+        .pipe(dest('src/assets/dist/'))
+}
+
 exports.js = js;
 exports.extrnalCss = css;
 exports.xterm = xterm;
 exports.xterm = fonts;
-exports.default = parallel(js, css, xterm, fonts);
+exports.fontAwesomeCss = fontAwesomeCss;
+exports.default = parallel(js, css, xterm, fonts, fontAwesomeCss)
