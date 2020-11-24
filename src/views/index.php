@@ -72,9 +72,6 @@ if ($haveServers->haveAny() !== true) {
       <title>LXD Mosaic</title>
 
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-      <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-      <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
 
       <script src="/socket.io/socket.io.js"></script>
 
