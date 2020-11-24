@@ -58,8 +58,6 @@ if ($haveServers->haveAny() !== true) {
 
       <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
 
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script>
-
       <!-- <link rel="stylesheet" href="/assets/xterm/xterm.css" /> -->
 
       <!-- Main styles for this application-->
