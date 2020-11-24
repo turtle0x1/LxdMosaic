@@ -116,7 +116,10 @@ var methods = {
     },
     get: function() {
     	return this.data("tokenInputObject").getTokens();
-   	}
+   	},
+    getCache: function(){
+        return this.data("tokenInputObject").getCache();
+    }
 }
 
 // Expose the .tokenInput function to jQuery as a plugin
@@ -389,10 +392,15 @@ $.TokenList = function (input, url_or_data, settings) {
                 delete_token($(this));
             }
         });
+        cache = new $.TokenList.Cache();
     }
 
     this.add = function(item) {
         add_token(item);
+    }
+
+    this.getCache = function() {
+        return cache.getAll();
     }
 
     this.remove = function(item) {
@@ -857,5 +865,9 @@ $.TokenList.Cache = function (options) {
     this.get = function (query) {
         return data[query];
     };
+
+    this.getAll = function(){
+        return data;
+    }
 };
 }(jQuery));
