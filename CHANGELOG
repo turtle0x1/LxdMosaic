@@ -8,6 +8,7 @@ Added
     Get & set comments in the user.comment key for an instance (#283)
     Show project consumption on project overview
     Filter by name & instance type in sidebar on hosts with more than 5 instances
+    Show OS icon in sidebar (#296)
 
 Changed
     Support backups & backup schedules in different projects

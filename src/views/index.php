@@ -854,6 +854,24 @@ function addHostContainerList(hostId, hostAlias) {
                     type = "vm";
                 }
 
+                let osIconMap = {
+                    centos: 'centos',
+                    opensuse: 'suse',
+                    fedora: 'fedora',
+                    ubuntu: 'ubuntu'
+                };
+
+                let osIcon = "linux";
+
+                let instanceImage = details.config["image.os"].toLowerCase();
+                console.log(instanceImage);
+
+                if(osIconMap.hasOwnProperty(instanceImage)){
+                    osIcon = osIconMap[instanceImage];
+                }
+
+                console.log();
+
                 containers += `<li class="nav-item view-container"
                     data-host-id="${hostId}"
                     data-container="${containerName}"
@@ -862,6 +880,7 @@ function addHostContainerList(hostId, hostAlias) {
                   <a class="nav-link ${active}" href="#">
                     <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
                     <i class="nav-icon fas fa-${typeFa}"></i>
+                    <i class="nav-icon fab fa-${osIcon}"></i>
                     ${containerName}
                   </a>
                 </li>`;
