@@ -48,29 +48,6 @@ function nl2br (str, is_xhtml) {
     return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
 }
 
-function createTableRowsHtml(data, childPropertyToSearch)
-{
-    let html = "";
-    $.each(data, function(x, y){
-        if($.isPlainObject(y)){
-            html += `<tr><td class='text-center' colspan='2'>${x}</td></tr>`;
-            if(typeof childPropertyToSearch == "string"){
-                $.each(y[childPropertyToSearch], function(i, p){
-                    html += `<tr><td>${i}</td><td>${nl2br(y)}</td></tr>`;
-                });
-            }else{
-                $.each(y, function(i, p){
-                    html += `<tr><td>${i}</td><td>${nl2br(p)}</td></tr>`;
-                });
-            }
-        }else{
-            html += `<tr><td>${x}</td><td>${nl2br(y)}</td></tr>`;
-        }
-    });
-    return html;
-}
-
-
 function ajaxRequest(url, data, callback){
     if (typeof userDetails == "object") {
         $.ajaxSetup({

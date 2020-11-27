@@ -201,6 +201,34 @@ $("#sidebar-ul").on("click", ".view-profile", function(){
     viewProfile($(this).data("profile"), $(this).data("alias"), $(this).data("hostId"));
 })
 
+function createTableRowsHtml(data, childPropertyToSearch)
+{
+    let html = "";
+    if(data.length == 0){
+        html = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-info mr-2'></i>No Settings!</td></tr>"
+    }else{
+        $.each(data, function(x, y){
+            if($.isPlainObject(y)){
+                html += `<tr><td class='text-center' colspan='2'>${x}</td></tr>`;
+                if(typeof childPropertyToSearch == "string"){
+                    $.each(y[childPropertyToSearch], function(i, p){
+                        html += `<tr><td>${i}</td><td>${nl2br(y)}</td></tr>`;
+                    });
+                }else{
+                    $.each(y, function(i, p){
+                        html += `<tr><td>${i}</td><td>${nl2br(p)}</td></tr>`;
+                    });
+                }
+            }else{
+                html += `<tr><td>${x}</td><td>${nl2br(y)}</td></tr>`;
+            }
+        });
+    }
+    return html;
+
+}
+
+
 function viewProfile(profileId, hostAlias, hostId){
 
     currentProfileDetails.profile = profileId;
@@ -224,17 +252,19 @@ function viewProfile(profileId, hostAlias, hostId){
 
         let profileUsedByHtml = "";
 
-        $.each(usedBy, function(_, instance){
-            profileUsedByHtml += `<tr><td>${instance}</td></tr>`;
-        })
+        if(usedBy.length == 0){
+            profileUsedByHtml = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-info mr-2'></i>Not Used!</td></tr>"
+        }else{
+            $.each(usedBy, function(_, instance){
+                profileUsedByHtml += `<tr><td>${instance}</td></tr>`;
+            })
+        }
+
 
         let configTr = createTableRowsHtml(details.config);
 
         let collpaseDetailsFunc = $.isEmptyObject(details.devices) ? "hide" : "show";
         let collpaseConfigFunc = $.isEmptyObject(details.config) ? "hide" : "show";
-
-        $("#profileDevicesCard").collapse(collpaseDetailsFunc);
-        $("#configDeviceCard").collapse(collpaseConfigFunc);
 
         $("#profileBox #deleteProfile").attr("disabled", usedBy.length > 0);
         $("#profile-deviceData > tbody").empty().html(deviceTableRows);
