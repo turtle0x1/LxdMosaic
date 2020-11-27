@@ -205,7 +205,7 @@ function createTableRowsHtml(data, childPropertyToSearch)
 {
     let html = "";
     if(data.length == 0){
-        html = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-info mr-2'></i>No Settings!</td></tr>"
+        html = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-info mr-2'></i>No Settings!</td></tr>"
     }else{
         $.each(data, function(x, y){
             if($.isPlainObject(y)){
@@ -253,7 +253,7 @@ function viewProfile(profileId, hostAlias, hostId){
         let profileUsedByHtml = "";
 
         if(usedBy.length == 0){
-            profileUsedByHtml = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-info mr-2'></i>Not Used!</td></tr>"
+            profileUsedByHtml = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-info mr-2'></i>Not Used!</td></tr>"
         }else{
             $.each(usedBy, function(_, instance){
                 profileUsedByHtml += `<tr><td>${instance}</td></tr>`;
