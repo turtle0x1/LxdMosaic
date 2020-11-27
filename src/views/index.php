@@ -808,7 +808,7 @@ $(document).on("click", '.search-panel .dropdown-menu', function(e) {
 
    let ul = target.parents("ul");
    ul.parents("li").find(".hostInstancesUl").css("min-height", "200px");
-   let inputSearch = ul.find(".filterHostsInstances").val();
+   let inputSearch = ul.find(".filterHostsInstances").val().toLowerCase();
    ul.find(".view-container").filter(function(){
        $(this).toggle($(this).data("type").toLowerCase().indexOf(search) > -1 && $(this).text().toLowerCase().indexOf(inputSearch) > -1)
    });
@@ -864,13 +864,10 @@ function addHostContainerList(hostId, hostAlias) {
                 let osIcon = "linux";
 
                 let instanceImage = details.config["image.os"].toLowerCase();
-                console.log(instanceImage);
 
                 if(osIconMap.hasOwnProperty(instanceImage)){
                     osIcon = osIconMap[instanceImage];
                 }
-
-                console.log();
 
                 containers += `<li class="nav-item view-container"
                     data-host-id="${hostId}"
@@ -895,7 +892,7 @@ function addHostContainerList(hostId, hostAlias) {
 
 $(document).on("keyup", ".filterHostsInstances", function(e){
     let ul = $(this).parents("ul");
-    let search = $(this).val()
+    let search = $(this).val().toLowerCase();
     let typeFilter = $(this).parents("ul").find(".search_concept").data("filter");
     ul.parents("li").find(".hostInstancesUl").css("min-height", "200px");
     ul.find(".view-container").filter(function(){
