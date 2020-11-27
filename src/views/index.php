@@ -759,7 +759,7 @@ function createDashboardSidebar()
                         <i class="fas fa-server"></i> ${host.alias}
                         ${expandBtn}
                     </a>
-                    <ul class="nav-dropdown-items">
+                    <ul class="nav-dropdown-items hostInstancesUl">
                     </ul>
                 </li>`;
             });
@@ -781,7 +781,7 @@ function createDashboardSidebar()
                     <i class="fas fa-server"></i> ${host.alias}
                     ${expandBtn}
                 </a>
-                <ul class="nav-dropdown-items">
+                <ul class="nav-dropdown-items hostInstancesUl">
                 </ul>
             </li>`;
         });
@@ -789,11 +789,55 @@ function createDashboardSidebar()
     });
 }
 
+$(document).on("click", '.search-panel .dropdown-menu', function(e) {
+   e.preventDefault();
+   var target = $(e.target)
+   let targetData = target.data();
+   if(!targetData.hasOwnProperty("search")){
+       targetData = target.parent().data();
+   }
+
+   let search = "";
+   if (targetData.search == "containers"){
+       search = "container";
+   } else if (targetData.search == "vms"){
+       search = "vm";
+   }
+
+   $(this).parents("ul").find('.search_concept').html(`<i class="fas fa-${targetData.icon}"></i>`).data("filter", search)
+
+   let ul = target.parents("ul");
+   ul.parents("li").find(".hostInstancesUl").css("min-height", "200px");
+   let inputSearch = ul.find(".filterHostsInstances").val();
+   ul.find(".view-container").filter(function(){
+       $(this).toggle($(this).data("type").toLowerCase().indexOf(search) > -1 && $(this).text().toLowerCase().indexOf(inputSearch) > -1)
+   });
+});
+
 function addHostContainerList(hostId, hostAlias) {
     ajaxRequest(globalUrls.hosts.instances.getHostContainers, {hostId: hostId}, (data)=>{
         data = makeToastr(data);
         let containers = "";
         if(Object.keys(data).length > 0){
+
+            if(Object.keys(data).length > 5){
+                containers += `<li class="">
+                    <div class="input-group ml-1">
+                        <div class="input-group-btn search-panel">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="search_concept" data-filter=""><i class="fas fa-filter"></i></span> <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                              <li class='dropdown-item' data-search="all" data-icon="filter"><a href="#"><i class="fas fa-filter mr-2"></i>All</a></li>
+                              <li class='dropdown-item' data-search="containers" data-icon="box"><a href="#"><i class="fas fa-box mr-2"></i>Containers</a></li>
+                              <li class='dropdown-item' data-search="vms" data-icon="vr-cardboard"><a href="#"><i class="fas fa-vr-cardboard mr-2"></i>Virtual Machines</a></li>
+                            </ul>
+                        </div>
+                        <input type="text" class="form-control filterHostsInstances" placeholder="Search instances...">
+                    </div>
+                </li>`
+            }
+
             $.each(data, function(containerName, details){
                 let active = "";
                 if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
@@ -803,15 +847,18 @@ function addHostContainerList(hostId, hostAlias) {
                 }
 
                 let typeFa = "box";
+                let type = "container";
 
                 if(details.hasOwnProperty("type") && details.type == "virtual-machine"){
                     typeFa = "vr-cardboard";
+                    type = "vm";
                 }
 
                 containers += `<li class="nav-item view-container"
                     data-host-id="${hostId}"
                     data-container="${containerName}"
-                    data-alias="${hostAlias}">
+                    data-alias="${hostAlias}"
+                    data-type="${type}">
                   <a class="nav-link ${active}" href="#">
                     <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
                     <i class="nav-icon fas fa-${typeFa}"></i>
@@ -826,6 +873,16 @@ function addHostContainerList(hostId, hostAlias) {
         $("#sidebar-ul").find("li[data-hostid=" + hostId + "] ul").empty().append(containers);
     });
 }
+
+$(document).on("keyup", ".filterHostsInstances", function(e){
+    let ul = $(this).parents("ul");
+    let search = $(this).val()
+    let typeFilter = $(this).parents("ul").find(".search_concept").data("filter");
+    ul.parents("li").find(".hostInstancesUl").css("min-height", "200px");
+    ul.find(".view-container").filter(function(){
+        $(this).toggle($(this).text().toLowerCase().indexOf(search) > -1 && $(this).data("type").toLowerCase().indexOf(typeFilter) > -1)
+    });
+});
 
 $(document).on("click", ".cluster-title", function(e){
     let x = $(this).data();
@@ -843,6 +900,7 @@ $(document).on("click", ".showServerInstances", function(e){
     if(parentLi.hasClass("open")){
         parentLi.find("ul").empty();
         parentLi.removeClass("open");
+        parentLi.find(".hostInstancesUl").css("min-height", "0px");
         $(this).html('<i class="fas fa-caret-left"></i>')
         return false;
     }else{
@@ -952,7 +1010,7 @@ function loadDashboard(){
                         <i class="fas fa-server"></i> ${host.alias}
                         ${expandBtn}
                     </a>
-                    <ul class="nav-dropdown-items">
+                    <ul class="nav-dropdown-items hostInstancesUl">
                     </ul>
                 </li>`;
             });
@@ -1023,7 +1081,7 @@ function loadDashboard(){
                     <i class="fas fa-server"></i> ${host.alias}
                     ${expandBtn}
                 </a>
-                <ul class="nav-dropdown-items">
+                <ul class="nav-dropdown-items hostInstancesUl">
                 </ul>
             </li>`;
         });
