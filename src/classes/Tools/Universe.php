@@ -63,8 +63,9 @@ class Universe
             $searchingFor = $this->entityConversion[$entity];
 
             foreach ($hosts as $host) {
+                $host->setCustomProp($entity, []);
+
                 if ($host->hostOnline() == false) {
-                    $host->setCustomProp($entity, []);
                     continue;
                 }
 
@@ -88,52 +89,51 @@ class Universe
                     } else {
                         $entities = $allowedProjects;
                     }
+                    $host->setCustomProp($entity, $entities);
+                    continue;
+                }
+
+                if (!isset($userCurrentProjects[$host->getHostId()])) {
+                    $currentProject = $this->getUserProject->getForHost($userId, $host);
                 } else {
-                    if (!isset($userCurrentProjects[$host->getHostId()])) {
-                        $currentProject = $this->getUserProject->getForHost($userId, $host);
-                    } else {
-                        $currentProject = $userCurrentProjects[$host->getHostId()];
-                    }
+                    $currentProject = $userCurrentProjects[$host->getHostId()];
+                }
 
-                    $entities = [];
+                $entities = [];
 
-                    if (!$supportsProjects) {
-                        $project = ["name"=>"default", "oldHost"=>true, "used_by"=>[], "config"=>["features.profiles"=>"false"]];
-                    } else {
-                        $project = $host->projects->info($currentProject);
-                    }
+                if (!$supportsProjects) {
+                    $project = ["name"=>"default", "oldHost"=>true, "used_by"=>[], "config"=>["features.profiles"=>"false"]];
+                } else {
+                    $project = $host->projects->info($currentProject);
+                }
 
 
-                    if ((in_array($project["name"], $allowedProjects)) || $isAdmin === true) {
-                        if (isset($project["oldHost"])) {
-                            $project["used_by"] = $this->buildOldUsedBy($host);
-                            unset($project["oldHost"]);
-                        }
+                if (!in_array($project["name"], $allowedProjects) && $isAdmin !== true) {
+                    echo "skipped";
+                    continue;
+                }
 
-                        if ($entity == "profiles" && $project["config"]["features.profiles"] == "false") {
-                            $oldProject = $host->getProject();
-                            $host->setProject("default");
-                            $profiles = $host->profiles->all();
-                            $host->setProject($oldProject);
-                            $entities = array_merge($entities, $profiles);
-                            $host->setCustomProp($entity, $entities);
-                            continue;
-                        } elseif ($entity == "images" && $project["config"]["features.images"] == "false") {
-                            $oldProject = $host->getProject();
-                            $host->setProject("default");
-                            $images = $host->images->all();
-                            $host->setProject($oldProject);
-                            $entities = array_merge($entities, $images);
-                            $host->setCustomProp($entity, $entities);
-                            continue;
-                        }
+                if (isset($project["oldHost"])) {
+                    $project["used_by"] = $this->buildOldUsedBy($host);
+                    unset($project["oldHost"]);
+                }
 
-                        foreach ($project["used_by"] as $usedBy) {
-                            if (strpos($usedBy, $searchingFor) !== false) {
-                                $usedBy = str_replace("?project=$currentProject", "", $usedBy);
-                                $entities[] = str_replace($searchingFor, "", $usedBy);
-                            }
-                        }
+                $getDefaultIfNotSupported = ["profiles", "images", "networks"];
+
+                if (in_array($entity, $getDefaultIfNotSupported) && $project["config"]["features.$entity"] == "false") {
+                    $oldProject = $host->getProject();
+                    $host->setProject("default");
+                    $x = $host->$entity->all();
+                    $host->setProject($oldProject);
+                    $entities = array_merge($entities, $x);
+                    $host->setCustomProp($entity, $entities);
+                    continue;
+                }
+
+                foreach ($project["used_by"] as $usedBy) {
+                    if (strpos($usedBy, $searchingFor) !== false) {
+                        $usedBy = str_replace("?project=$currentProject", "", $usedBy);
+                        $entities[] = str_replace($searchingFor, "", $usedBy);
                     }
                 }
 
