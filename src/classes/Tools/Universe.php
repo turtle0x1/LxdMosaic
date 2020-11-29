@@ -98,7 +98,7 @@ class Universe
                     $entities = [];
 
                     if (!$supportsProjects) {
-                        $project = ["name"=>"default", "oldHost"=>true, "used_by"=>[]];
+                        $project = ["name"=>"default", "oldHost"=>true, "used_by"=>[], "config"=>["features.profiles"=>false]];
                     } else {
                         $project = $host->projects->info($currentProject);
                     }
@@ -109,6 +109,17 @@ class Universe
                             $project["used_by"] = $this->buildOldUsedBy($host);
                             unset($project["oldHost"]);
                         }
+
+                        if ($entity == "profiles" && $project["config"]["features.profiles"] == "false") {
+                            $oldProject = $host->getProject();
+                            $host->setProject("default");
+                            $profiles = $host->profiles->all();
+                            $host->setProject($oldProject);
+                            $entities = array_merge($entities, $profiles);
+                            $host->setCustomProp($entity, $entities);
+                            continue;
+                        }
+
                         foreach ($project["used_by"] as $usedBy) {
                             if (strpos($usedBy, $searchingFor) !== false) {
                                 $usedBy = str_replace("?project=$currentProject", "", $usedBy);
