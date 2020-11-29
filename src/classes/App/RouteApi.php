@@ -153,7 +153,7 @@ class RouteApi
             } elseif ($type == "dhope0000\LXDClient\Objects\HostsCollection") {
                 if (!$userIsAdmin) {
                     foreach ($passedArguments[$name] as $hostAttempt) {
-                        $project = $currentProjects[$passedArguments[$hostAttempt]];
+                        $project = $currentProjects[$hostAttempt];
                         $this->canAccessProject($allowedProjects, $hostAttempt, $project);
                     }
                 }
