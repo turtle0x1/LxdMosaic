@@ -98,7 +98,7 @@ class Universe
                     $entities = [];
 
                     if (!$supportsProjects) {
-                        $project = ["name"=>"default", "oldHost"=>true, "used_by"=>[], "config"=>["features.profiles"=>false]];
+                        $project = ["name"=>"default", "oldHost"=>true, "used_by"=>[], "config"=>["features.profiles"=>"false"]];
                     } else {
                         $project = $host->projects->info($currentProject);
                     }
@@ -116,6 +116,14 @@ class Universe
                             $profiles = $host->profiles->all();
                             $host->setProject($oldProject);
                             $entities = array_merge($entities, $profiles);
+                            $host->setCustomProp($entity, $entities);
+                            continue;
+                        } elseif ($entity == "images" && $project["config"]["features.images"] == "false") {
+                            $oldProject = $host->getProject();
+                            $host->setProject("default");
+                            $images = $host->images->all();
+                            $host->setProject($oldProject);
+                            $entities = array_merge($entities, $images);
                             $host->setCustomProp($entity, $entities);
                             continue;
                         }
