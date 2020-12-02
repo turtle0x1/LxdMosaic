@@ -74,4 +74,22 @@ class FetchUserDetails
         ]);
         return $do->fetchColumn();
     }
+
+    public function isFromLdap(int $userId)
+    {
+        $sql = "SELECT
+                    1
+                FROM
+                    `Users`
+                WHERE
+                    `User_ID` = :userId
+                AND
+                    `User_Ldap_ID` IS NOT NULL
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":userId"=>$userId
+        ]);
+        return $do->fetch() ? true : false;
+    }
 }
