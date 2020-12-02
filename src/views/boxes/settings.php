@@ -359,6 +359,12 @@ function loadUsers(){
                     isAdminTClass = "text-warning";
                 }
 
+                let resetPasswordBtn = '<a class="dropdown-item resetPassword" href="#">Reset Password</a>';
+
+                if(parseInt(user.fromLdap) == 1){
+                    resetPasswordBtn = '';
+                }
+
                 trs += `<tr data-user-id="${user.id}">
                     <td><a href="#" id="${user.id}" class='viewUser'>${user.username}</a></td>
                     <td>${moment(user.created).fromNow()}</td>
@@ -369,7 +375,7 @@ function loadUsers(){
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <a class="dropdown-item setUserProject" href="#">Set Projects Access</a>
-                          <a class="dropdown-item resetPassword" href="#">Reset Password</a>
+                          ${resetPasswordBtn}
                         </div>
                     </td>
                 </tr>`;
