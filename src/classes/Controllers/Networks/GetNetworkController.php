@@ -12,8 +12,8 @@ class GetNetworkController
         $this->getNetwork = $getNetwork;
     }
 
-    public function get(Host $host, $network)
+    public function get(int $userId, Host $host, $network)
     {
-        return $this->getNetwork->get($host, $network);
+        return $this->getNetwork->get($userId, $host, $network);
     }
 }

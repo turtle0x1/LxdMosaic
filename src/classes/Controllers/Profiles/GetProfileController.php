@@ -14,8 +14,8 @@ class GetProfileController implements \dhope0000\LXDClient\Interfaces\RecordActi
     /**
      * @Route("", methods={"POST"},  name="Get Profile")
      */
-    public function get(Host $host, string $profile)
+    public function get(int $userId, Host $host, string $profile)
     {
-        return $this->getProfile->get($host, $profile);
+        return $this->getProfile->get($userId, $host, $profile);
     }
 }
