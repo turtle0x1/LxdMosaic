@@ -109,7 +109,6 @@ class Universe
 
 
                 if (!in_array($project["name"], $allowedProjects) && $isAdmin !== true) {
-                    echo "skipped";
                     continue;
                 }
 
