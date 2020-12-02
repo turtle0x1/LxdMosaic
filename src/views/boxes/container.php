@@ -325,7 +325,7 @@
 
 var term = new Terminal();
 var consoleSocket;
-var currentTerminalProcessId;
+var currentTerminalProcessId = null;
 
 function loadContainerViewAfter(data = null, milSeconds = 2000)
 {
@@ -1530,7 +1530,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
     $("#containerConsole").show();
 
 
-    if(!$.isNumeric(currentTerminalProcessId)){
+    if(currentTerminalProcessId === null){
         const terminalContainer = document.getElementById('terminal-container');
         // Clean terminal
         while (terminalContainer.children.length) {
