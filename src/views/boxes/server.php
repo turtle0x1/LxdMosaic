@@ -139,8 +139,11 @@ $(document).on("change", ".toggleStatusContainer", function(){
 
     if(checked){
         $(".serverContainerActions").attr("disabled", false);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("enable")
     }else {
         $(".serverContainerActions").attr("disabled", true);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("hide")
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
     }
 
     $("#containerTable").find(`tr:gt(${tr.index() + 1})`).each(function(){
@@ -278,17 +281,24 @@ $(document).on("click", "#serverDetailsBtn, #serverProxyDevicesBtn", function(){
 $(document).on("change", "input[name=containerCheckbox]", function(){
     if($("input[name=containerCheckbox]:checked").length > 0){
         $(".serverContainerActions").attr("disabled", false);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("enable")
     }else{
         $(".serverContainerActions").attr("disabled", true);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("hide")
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
     }
 });
-$(document).on("change", "#toggleAllContainers", function(){
+
+$(document).on("click", "#toggleAllContainers", function(){
     let checked = $(this).is(":checked");
 
     if(checked){
         $(".serverContainerActions").attr("disabled", false);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("enable")
     }else {
         $(".serverContainerActions").attr("disabled", true);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("hide")
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
     }
 
     $("#containerTable").find("input[name=containerCheckbox]").each(function(){
@@ -301,6 +311,12 @@ $(document).on("click", ".serverContainerActions", function(){
     if(action== ""){
         return false;
     }
+
+    let btn = $(this);
+
+    let origHtml = btn.html();
+
+    btn.html("<i class='fas fa-cog fa-spin'></i>");
 
     let checkboxes = $("#containerTable").find("input[name=containerCheckbox]");
 
@@ -321,11 +337,13 @@ $(document).on("click", ".serverContainerActions", function(){
 
     let url = globalUrls.hosts.instances[action]
 
-
     ajaxRequest(url, details, (data)=>{
+        btn.html(origHtml);
         data = makeToastr(data);
         loadServerView(details.hostId);
         $("#serverContainerActions").find("option[value='']").prop("selected", true);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("hide")
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
     });
 });
 
@@ -343,6 +361,8 @@ function loadServerView(hostId)
 
     $("#serverDetailsBtn, #serverProxyDevicesBtn").removeClass("active");
     $("#serverDetailsBtn").addClass("active");
+
+    $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
 
     $("#sidebar-ul").find(".active").removeClass("active");
     $("#sidebar-ul").find(".text-info").removeClass("text-info");
