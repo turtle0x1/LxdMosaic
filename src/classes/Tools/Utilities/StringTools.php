@@ -102,6 +102,8 @@ class StringTools
 
                 $class = 'viewImages';
                 $icon = "images";
+            } elseif (strpos($item, '/volumes/') !== false) {
+                $icon = "database";
             }
 
             $item = "<a href='#' class='$class' $data>
