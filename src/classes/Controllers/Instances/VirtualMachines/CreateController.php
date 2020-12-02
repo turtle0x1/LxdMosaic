@@ -12,9 +12,9 @@ class CreateController
         $this->createVirutalMachine = $createVirutalMachine;
     }
 
-    public function create(string $name, string $username, HostsCollection $hostIds, array $imageDetails)
+    public function create(string $name, string $username, HostsCollection $hostIds, array $imageDetails, bool $start)
     {
-        $response = $this->createVirutalMachine->create($name, $username, $hostIds, $imageDetails);
+        $response = $this->createVirutalMachine->create($name, $username, $hostIds, $imageDetails, $start);
 
         return ["state"=>"success", "message"=>"Creating VM", "lxdResponse"=>$response];
     }

@@ -24,7 +24,8 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         string $instanceType = "",
         $server = "",
         array $gpus = [],
-        array $config = []
+        array $config = [],
+        bool $start = false
     ) {
         $lxdResponses = $this->createInstance->create(
             LxdInstanceTypes::CONTAINER,
@@ -36,7 +37,8 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
             [],
             $instanceType,
             $gpus,
-            $config
+            $config,
+            $start
         );
         return ["success"=>"Created Container", "lxdResponses"=>$lxdResponses];
     }

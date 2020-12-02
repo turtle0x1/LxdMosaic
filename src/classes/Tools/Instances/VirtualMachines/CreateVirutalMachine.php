@@ -14,7 +14,7 @@ class CreateVirutalMachine
         $this->createInstance = $createInstance;
     }
 
-    public function create(string $name, string $username, HostsCollection $hosts, array $imageDetails)
+    public function create(string $name, string $username, HostsCollection $hosts, array $imageDetails, bool $start)
     {
         $config = [];
         $config["user.vendor-data"] = $this->getVendorData($username);
@@ -42,7 +42,13 @@ class CreateVirutalMachine
             $name,
             [$profileName, "default"],
             $hosts,
-            $imageDetails
+            $imageDetails,
+            "",
+            [],
+            "",
+            null,
+            [],
+            $start
         );
 
         return true;

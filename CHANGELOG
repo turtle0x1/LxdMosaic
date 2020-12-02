@@ -9,6 +9,7 @@ Added
     Show project consumption on project overview
     Filter by name & instance type in sidebar on hosts with more than 5 instances
     Show OS icon in sidebar (#296)
+    Button to start an instance on creation (#294)
 
 Changed
     Support backups & backup schedules in different projects

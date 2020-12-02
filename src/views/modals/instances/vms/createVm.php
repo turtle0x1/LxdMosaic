@@ -47,7 +47,8 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-    <button type="button" class="btn btn-primary" id="createVm">Create VM</button>
+    <button type="button" class="btn btn-primary createVirtualMachine" data-start="0">Create</button>
+    <button type="button" class="btn btn-success createVirtualMachine" data-start="1">Create & Start</button>
   </div>
 </div>
 </div>
@@ -79,7 +80,7 @@ $("#modal-vms-create").on("hide.bs.modal", function(){
     $("#newVirtualMachineImage").tokenInput("clear");
 });
 
-$("#modal-vms-create").on("click", "#createVm", function(){
+$("#modal-vms-create").on("click", ".createVirtualMachine", function(){
     let hosts = mapObjToSignleDimension($("#newVmHosts").tokenInput("get"), "hostId");
 
     let usernameInput = $("#modal-vms-create input[name=username]");
@@ -91,6 +92,7 @@ $("#modal-vms-create").on("click", "#createVm", function(){
     let image = $("#newVirtualMachineImage").tokenInput("get");
 
     let btn = $(this);
+
 
     if(image.length == 0 || !image[0].hasOwnProperty("details")){
         // btn.html('Create Container');
@@ -114,21 +116,29 @@ $("#modal-vms-create").on("click", "#createVm", function(){
     }
 
     btn.html('<i class="fa fa-cog fa-spin"></i>Creating..');
+    $("#modal-vms-create").find(".btn").attr("disabled", true);
 
     let x = {
         hostIds: hosts,
         username: username,
         imageDetails: image[0]["details"],
-        name: name
+        name: name,
+        start: parseInt(btn.data("start"))
+    }
+
+    let defaultBtnText = "Create";
+
+    if(x.start == 1){
+        defaultBtnText = "Create & Start";
     }
 
     ajaxRequest(globalUrls.instances.virtualMachines.create, x, (data)=>{
-
         data = makeToastr(data);
+        $("#modal-vms-create").find(".btn").attr("disabled", false);
         if(data.state == "success"){
             $("#modal-vms-create").modal("hide");
         }
-        btn.html('Create');
+        btn.html(defaultBtnText);
     });
 });
 

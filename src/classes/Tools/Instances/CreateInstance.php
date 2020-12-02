@@ -29,7 +29,8 @@ class CreateInstance
         array $profileNames = [],
         string $instanceType = "",
         array $gpus = null,
-        array $config = []
+        array $config = [],
+        bool $start = false
     ) {
         $this->hostsHaveInstance->ifHostInListHasContainerNameThrow($hosts, $name);
 
@@ -65,6 +66,10 @@ class CreateInstance
 
             if ($response["status_code"] == 400) {
                 throw new \Exception("Host: {$host->getUrl()} " . $response["err"], 1);
+            }
+
+            if ($start) {
+                $host->instances->start($name);
             }
 
             $results[] = $response;

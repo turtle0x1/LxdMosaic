@@ -88,7 +88,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="create">Create Container</button>
+        <button type="button" class="btn btn-primary createContainer" data-start="0">Create</button>
+        <button type="button" class="btn btn-success createContainer" data-start="1">Create & Start</button>
       </div>
     </div>
   </div>
@@ -205,7 +206,7 @@
         $(this).parents("tr").find("input[name=value]").val($(this).find(":selected").data("value"));
     });
 
-    $("#modal-container-create").on("click", "#create", function(){
+    $("#modal-container-create").on("click", ".createContainer", function(){
         let btn = $(this);
 
         btn.html('<i class="fa fa-cog fa-spin"></i>Creating..');
@@ -216,15 +217,22 @@
         let image = $("#newContainerImage").tokenInput("get");
         let instanceType = $("#newContainerInstanceType").val();
 
+
+        let defaultBtnText = "Create";
+
+        if(btn.data("start") == 1){
+            defaultBtnText = "Create & Start";
+        }
+
         if(image.length == 0 || !image[0].hasOwnProperty("details")){
-            btn.html('Create Container');
+            btn.html(defaultBtnText);
             $("#modal-container-create").find(".btn").attr("disabled", false);
             makeToastr(JSON.stringify({state: "error", message: "Please select image"}));
             return false;
         }
 
         if(hosts.length == 0 || !image[0].hasOwnProperty("details")){
-            btn.html('Create Container');
+            btn.html(defaultBtnText);
             $("#modal-container-create").find(".btn").attr("disabled", false);
             makeToastr(JSON.stringify({state: "error", message: "Please select host/s"}));
             return false;
@@ -258,7 +266,7 @@
         });
 
         if(invalid){
-            btn.html('Create Container');
+            btn.html(defaultBtnText);
             $("#modal-container-create").find(".btn").attr("disabled", false);
             makeToastr(JSON.stringify({state: "error", message: message}));
             return false;
@@ -271,12 +279,13 @@
             imageDetails: image[0]["details"],
             instanceType: instanceType,
             gpus: gpus,
-            config: config
+            config: config,
+            start: parseInt(btn.data("start"))
         };
 
         ajaxRequest(globalUrls.instances.create, x, function(data){
             let x = makeToastr(data);
-            btn.html('Create Container');
+            btn.html(defaultBtnText);
             $("#modal-container-create").find(".btn").attr("disabled", false);
             if(x.state == "error"){
                 return false;
