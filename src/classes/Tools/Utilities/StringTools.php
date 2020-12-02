@@ -91,6 +91,7 @@ class StringTools
                 $data .= "data-profile='$lastItem'";
                 $icon = "users";
             } elseif (strpos($item, '/images/') !== false) {
+                $host->setProject($project);
                 $imageDetails = $host->images->info($lastItem);
 
                 $lastItem = $imageDetails["properties"]["os"] . " " . $imageDetails["properties"]["release"] . "({$imageDetails['type']})";
