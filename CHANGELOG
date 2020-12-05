@@ -28,6 +28,7 @@ Fixed
     An issue with bulk deleting running instances
     Reseting user password by pressing enter leads to undefined behaviour (#282)
     Console session doubling input (#301)
+    Remove card-columns from images which prevents a jumpy UI
 
 0.10.2 - 30/10/2020
 

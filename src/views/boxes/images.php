@@ -87,40 +87,46 @@
             </div>
         </div>
     </div>
-    <div class="card-columns">
-        <div class="card bg-dark text-white">
-            <div class="card-header">
-                <h4>Properties</h4>
-            </div>
-            <div class="card-body">
-                <table class="table table-dark table-bordered" id="imagePropertiesTable">
-                    <tbody>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h4>Properties</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-dark table-bordered" id="imagePropertiesTable">
+                        <tbody>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <div class="card bg-dark text-white">
-            <div class="card-header">
-                <h4>Aliases
-                    <button class="btn btn-sm btn-outline-primary float-right" id="createAlias">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </h4>
-            </div>
-            <div class="card-body" id="imageAliasesCardBody">
+        <div class="col-md-4">
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h4>Aliases
+                        <button class="btn btn-sm btn-outline-primary float-right" id="createAlias">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </h4>
+                </div>
+                <div class="card-body" id="imageAliasesCardBody">
+                </div>
             </div>
         </div>
-        <div class="card bg-dark text-white">
-            <div class="card-header">
-                <h4>Extended Details</h4>
-            </div>
-            <div class="card-body">
-                <table class="table table-responsive table-dark table-bordered" id="imageExtendedDetailsTable">
-                    <tbody>
+        <div class="col-md-4">
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h4>Extended Details</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-responsive table-dark table-bordered" id="imageExtendedDetailsTable">
+                        <tbody>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
