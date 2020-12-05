@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Tools\User\Password;
 
 use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
+use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 class CheckPasswordPolicy
 {
@@ -13,7 +14,7 @@ class CheckPasswordPolicy
 
     public function conforms($pwd) :void
     {
-        if ((bool) $this->getSetting->getSettingLatestValue(8) === false) {
+        if ((bool) $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::STRONG_PASSWORD_POLICY) === false) {
             return;
         }
 
