@@ -41,8 +41,9 @@ class RouteController
             "assets/lxdMosaic/logo.png",
             "assets/dist/login.dist.css",
             "assets/dist/login.dist.js",
-            "/assets/dist/external.fontawesome.css",
-            "assets/fontawesome/webfonts/fa-solid-900.ttf"
+            "assets/dist/external.fontawesome.css",
+            "assets/fontawesome/webfonts/fa-solid-900.ttf",
+            "api/InstanceSettings/FirstRunController/run"
         ]);
 
         $adminPassBlank = $this->fetchUserDetails->adminPasswordBlank();
@@ -53,30 +54,30 @@ class RouteController
         }
 
         if (isset($explodedPath[0]) && $explodedPath[0] == "api") {
-            $headers = getallheaders();
+            $headers = ["userid"=>1];
 
-            // PHP-FPM strikes again
-            $headers = array_change_key_case($headers);
+            if (!$canSkipAuth) {
+                $headers = getallheaders();
 
-            if (!isset($headers["userid"]) || !isset($headers["apitoken"])) {
-                http_response_code(403);
-                echo json_encode(["error"=>"Missing either user id or token"]);
-                exit;
-            }
+                // PHP-FPM strikes again
+                $headers = array_change_key_case($headers);
 
-            if (!$this->validateToken->validate($headers["userid"], $headers["apitoken"])) {
-                http_response_code(403);
-                echo json_encode(["error"=>"Not valid token"]);
-                exit;
+                if (!isset($headers["userid"]) || !isset($headers["apitoken"])) {
+                    http_response_code(403);
+                    echo json_encode(["error"=>"Missing either user id or token"]);
+                    exit;
+                }
+
+                if (!$this->validateToken->validate($headers["userid"], $headers["apitoken"])) {
+                    http_response_code(403);
+                    echo json_encode(["error"=>"Not valid token"]);
+                    exit;
+                }
             }
 
             $this->routeApi->route($explodedPath, $headers);
             exit;
         }
-
-
-
-
 
         $this->session->start();
 
