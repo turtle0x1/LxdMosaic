@@ -11,6 +11,23 @@ class FetchUserDetails
         $this->database = $database->dbObject;
     }
 
+    public function adminPasswordBlank()
+    {
+        $sql = "SELECT
+                    1
+                FROM
+                    `Users`
+                WHERE
+                    `User_Admin` = 1
+                AND
+                    `User_ID` = 1
+                AND
+                    `User_Password` = ''
+                ";
+        $do = $this->database->query($sql);
+        return $do->fetchColumn() ? true : false;
+    }
+
     public function fetchHash(string $username)
     {
         $sql = "SELECT

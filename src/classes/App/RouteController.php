@@ -10,6 +10,7 @@ use dhope0000\LXDClient\Tools\User\ValidateToken;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class RouteController
 {
@@ -21,7 +22,8 @@ class RouteController
         RouteApi $routeApi,
         RouteView $routeView,
         RouteAssets $routeAssets,
-        ValidateToken $validateToken
+        ValidateToken $validateToken,
+        FetchUserDetails $fetchUserDetails
     ) {
         $this->validateToken = $validateToken;
         $this->userSession = $userSession;
@@ -30,39 +32,52 @@ class RouteController
         $this->routeView = $routeView;
         $this->routeAssets = $routeAssets;
         $this->session = new Session(new NativeSessionStorage(), new NamespacedAttributeBag());
+        $this->fetchUserDetails = $fetchUserDetails;
     }
 
     public function routeRequest($explodedPath)
     {
+        $canSkipAuth = in_array(implode("/", $explodedPath), [
+            "assets/lxdMosaic/logo.png",
+            "assets/dist/login.dist.css",
+            "assets/dist/login.dist.js",
+            "assets/dist/external.fontawesome.css",
+            "assets/fontawesome/webfonts/fa-solid-900.ttf",
+            "api/InstanceSettings/FirstRunController/run"
+        ]);
+
+        $adminPassBlank = $this->fetchUserDetails->adminPasswordBlank();
+
+        if ($adminPassBlank == true && !$canSkipAuth) {
+            $this->routeView->route(["views", "firstRun"]);
+            exit;
+        }
+
         if (isset($explodedPath[0]) && $explodedPath[0] == "api") {
-            $headers = getallheaders();
+            $headers = ["userid"=>1];
 
-            // PHP-FPM strikes again
-            $headers = array_change_key_case($headers);
+            if (!$canSkipAuth) {
+                $headers = getallheaders();
 
-            if (!isset($headers["userid"]) || !isset($headers["apitoken"])) {
-                http_response_code(403);
-                echo json_encode(["error"=>"Missing either user id or token"]);
-                exit;
-            }
+                // PHP-FPM strikes again
+                $headers = array_change_key_case($headers);
 
-            if (!$this->validateToken->validate($headers["userid"], $headers["apitoken"])) {
-                http_response_code(403);
-                echo json_encode(["error"=>"Not valid token"]);
-                exit;
+                if (!isset($headers["userid"]) || !isset($headers["apitoken"])) {
+                    http_response_code(403);
+                    echo json_encode(["error"=>"Missing either user id or token"]);
+                    exit;
+                }
+
+                if (!$this->validateToken->validate($headers["userid"], $headers["apitoken"])) {
+                    http_response_code(403);
+                    echo json_encode(["error"=>"Not valid token"]);
+                    exit;
+                }
             }
 
             $this->routeApi->route($explodedPath, $headers);
             exit;
         }
-
-
-
-        $canSkipAuth = in_array(implode("/", $explodedPath), [
-            "assets/lxdMosaic/logo.png",
-            "assets/dist/login.dist.css",
-            "assets/dist/login.dist.js"
-        ]);
 
         $this->session->start();
 
