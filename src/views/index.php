@@ -822,7 +822,7 @@ function addHostContainerList(hostId, hostAlias) {
 
             if(Object.keys(data).length > 5){
                 containers += `<li class="">
-                    <div class="input-group ml-1">
+                    <div class="input-group pl-3 pr-3">
                         <div class="input-group-btn search-panel">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                 <span class="search_concept" data-filter=""><i class="fas fa-filter"></i></span> <span class="caret"></span>
