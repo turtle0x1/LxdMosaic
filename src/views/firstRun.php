@@ -8,19 +8,6 @@ if ($haveServers->haveAny() === true) {
     exit;
 }
 
-$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
-$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions");
-
-$userId = $userSession->getUserId();
-$isAdmin = (int) $validatePermissions->isAdmin($userId);
-$apiToken = $userSession->getToken();
-
-echo "<script>var userDetails = {
-    isAdmin: $isAdmin,
-    apiToken: '$apiToken',
-    userId: $userId
-} </script>";
-
 ?>
 <!DOCTYPE html>
 <head>
@@ -62,7 +49,7 @@ body {
         </a>
 
       <ul class="nav navbar-nav ml-auto">
-      <button class="btn btn-success nav-item" id="addServers">Launch LXD Mosaic <i class="fas fa-rocket"></i></button>
+      <button class="btn btn-success nav-item" id="launchLxdMosaic">Launch LXD Mosaic <i class="fas fa-rocket"></i></button>
     </ul>
     </nav>
     <div class="container-fluid pt-5">
@@ -112,7 +99,7 @@ body {
                         </div>
                     </div>
                     <div id="userGroups" class="d-block mt-2">
-                        <div class="input-group mb-3 serverGroup">
+                        <div class="input-group mb-3 userGroup" id="adminUserGroup">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user-secret"></i></span>
                             </div>
@@ -142,7 +129,7 @@ let hostTemplate = `<div class="input-group mb-3 serverGroup">
         </button>
     </div>
 </div>`;
-let userTemplate = `<div class="input-group mb-3 serverGroup">
+let userTemplate = `<div class="input-group mb-3 userGroup">
     <div class="input-group-prepend">
         <span class="input-group-text"><i class="fas fa-user"></i></span>
     </div>
@@ -185,6 +172,7 @@ $(document).on("change", "#showUserPasswordCheck", function(){
 
 $(document).on("click", ".removeRow", function(){
     $(this).parents(".serverGroup").remove();
+    $(this).parents(".userGroup").remove();
     reLabelServers();
 });
 
@@ -197,7 +185,61 @@ $(document).on("click", "#addUser", function(){
     reLabelServers();
 });
 
-$(document).on("click", "#addServers", function(){
+$(document).on("click", "#launchLxdMosaic", function(){
+
+    let adminUserGroup = $("#adminUserGroup");
+
+    if (adminUserGroup.length === 0){
+        toastr["error"]("Nice try hax0r!");
+        return false;
+    }
+
+    let adminPasswordInput = adminUserGroup.find("input[name=password]");
+
+    if(adminPasswordInput.length === 0){
+        toastr["error"]("Nice try hax0r!");
+        return false;
+    }
+
+    let adminPassword = adminPasswordInput.val();
+
+    if(adminPassword === ""){
+        adminPasswordInput.focus();
+        toastr["error"]("Please provide an admin password!");
+        return false;
+    }
+
+    let additionalUsers = [];
+    let failed = false;
+
+    $(".userGroup:gt(0)").each(function(){
+        let userInputs = $(this);
+        let userNameInput = userInputs.find("input[name=username]");
+        let userPasswordInput = userInputs.find("input[name=password]");
+        let username = userNameInput.val();
+        let password = userPasswordInput.val();
+
+        if (username == ""){
+            failed = true;
+            userNameInput.focus();
+            toastr["error"](`Please provide a username!`);
+            return false;
+        }else if(password == false){
+            failed = true;
+            userPasswordInput.focus();
+            toastr["error"](`Please provide ${username} a password!`);
+            return false;
+        }
+
+        additionalUsers.push({
+            username: username,
+            password: password
+        });
+    });
+
+    if(failed){
+        return false;
+    }
 
     if($(".serverGroup").length == 0){
         $("#addServer").trigger("click");
@@ -206,10 +248,12 @@ $(document).on("click", "#addServers", function(){
     }
 
     let details = {
-        hostsDetails: []
+        hosts: [],
+        adminPassword: adminPassword,
+        users: additionalUsers
     };
 
-    let failed = false;
+    failed = false;
 
     $(".serverGroup").each(function(){
 
@@ -232,7 +276,7 @@ $(document).on("click", "#addServers", function(){
         let alias = $(this).find("input[name=alias]").val();
         alias = alias == "" ? null : alias;
 
-        details.hostsDetails.push({
+        details.hosts.push({
             name: connectDetailsInputVal,
             trustPassword: trustPasswordInputVal,
             alias: alias
@@ -245,9 +289,8 @@ $(document).on("click", "#addServers", function(){
 
     $.ajax({
          type: 'POST',
-         headers: userDetails,
          data: details,
-         url: "/api/Hosts/AddHostsController/add",
+         url: "/api/InstanceSettings/FirstRunController/run",
          success: function(data){
              let result = $.parseJSON(data);
              if(result.state !== "success"){
