@@ -29,6 +29,21 @@ The final backup tree will look something like;
 
     $hostId/$project/$instance/backup.tar.gz
 
+## Strong Password Policy
+
+Value: 1 or 0
+
+Default: 1 (enabled)
+
+Depending on if you are a home user or a corperate user you may wish to have
+a strong password policy.
+
+With strong password policy enabled a password must be;
+
+ - 8 chars long
+ - Include 1 number
+ - Include 1 letter
+
 ## LDAP
 
 ### Ldap Server
