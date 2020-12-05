@@ -17,7 +17,7 @@ final class AddUserTest extends TestCase
      */
     public function test_create_new_user() :void
     {
-        $this->assertEquals(true, $this->addUser->add(1, "testUser", "test123"));
+        $this->assertEquals(true, $this->addUser->add(1, "testUser", "Test1234"));
     }
 
     public function test_duplicate_username_throws() :void
