@@ -45,65 +45,91 @@ echo "<script>var userDetails = {
 <title>LXD Mosaic</title>
 <link rel="stylesheet" href="/assets/dist/login.dist.css">
 <script src="/assets/dist/login.dist.js"></script>
+<link rel="stylesheet" href="/assets/dist/external.fontawesome.css">
 <style>
 body {
     background-color: #a8a8a8;
-    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
 }
-
-.arrow {
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
-}
-
-.right {
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
-}
-
 </style>
 
 </head>
 <html>
 <body>
-    <div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-6 offset-lg-3">
-            <h1 class='text-center mt-5'>LXD Mosaic</h1>
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center m-2 mt-3">
-                <h4 class=''> Add Your Hosts
-                </h4>
-            </div>
-            <small class="">
-                <i class="fa fa-info-circle text-info mr-2"></i>If one LXD host is in a cluster we attempt to add  other cluster members
-                using the same trust password!
-            </small>
-            <div class="mt-2 d-block">
-                <button class="btn btn-sm btn-primary mb-2 float-left" id="addServer">
-                    <b style="font-size: 1.2rem;" class="mr-2">+</b>Add Another Host
-                </button>
-                <div class="form-check float-right">
-                  <input class="form-check-input" type="checkbox" value="" id="showPasswordCheck" autocomplete="off">
-                  <label class="form-check-label" for="showPasswordCheck">
-                    Show Passwords
-                  </label>
+    <nav class="navbar navbar-expand navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="#">
+               <img src="/assets/lxdMosaic/logo.png" style="width: 25px; height: 25px; margin-left: 1px; margin-right: 5px;" alt="">
+          LXD Mosaic
+        </a>
+
+      <ul class="nav navbar-nav ml-auto">
+      <button class="btn btn-success nav-item" id="addServers">Launch LXD Mosaic <i class="fas fa-rocket"></i></button>
+    </ul>
+    </nav>
+    <div class="container-fluid pt-5">
+    <div class="row pt-3">
+        <div class="col-sm-12 col-lg-6 offset-lg-1 mb-3 mb-lg-0">
+            <div class="card bg-dark text-white">
+                <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                    <h4 class=''><i class="fas fa-server mr-2"></i>Hosts</h4>
+                </div>
+                <div class="card-body">
+                    <small class="font-italic"><i class="fa fa-info-circle text-info mr-2"></i>Add one host in a cluster and the rest will be discovered (attempted using the same trust password!)</small>
+                    <div class="mt-2 mb-5 d-block">
+                        <button class="btn btn-sm btn-primary float-left" id="addServer">
+                            <i class="fas fa-plus mr-2"></i>Host
+                        </button>
+                        <div class="form-check float-right">
+                          <input class="form-check-input" type="checkbox" value="" id="showPasswordCheck" autocomplete="off">
+                          <label class="form-check-label" for="showPasswordCheck">
+                            Show Passwords
+                          </label>
+                        </div>
+                    </div>
+                    <div id="serverGroups" class="d-block mt-2"></div>
+                    <div class="d-block text-center">
+
+                    </div>
                 </div>
             </div>
-            <div id="serverGroups" class="d-block mt-2"></div>
-            <div class="d-block text-center">
-                <button class="btn btn-primary" id="addServers">Manage Hosts <i class="arrow right"></i></button>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+            <div class="card bg-dark text-white">
+                <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                    <h4 class=''><i class="fas fa-users mr-2"></i>Users</h4>
+                </div>
+                <div class="card-body">
+                    <small class="d-block font-italic mb-2"><i class="fa fa-info-circle text-warning mr-2"></i>You will have to assign users other than <code>admin</code> to projects before they can login!</small>
+                    <small class="d-block font-italic"><i class="fa fa-info-circle text-info mr-2"></i>LDAP can also be configured later!</small>
+                    <div class="mt-2 mb-5 d-block">
+                        <button class="btn btn-sm btn-primary  float-left" id="addUser">
+                            <i class="fas fa-plus mr-2"></i>User
+                        </button>
+                        <div class="form-check float-right">
+                          <input class="form-check-input" type="checkbox" value="" id="showUserPasswordCheck" autocomplete="off">
+                          <label class="form-check-label" for="showUserPasswordCheck">
+                            Show Passwords
+                          </label>
+                        </div>
+                    </div>
+                    <div id="userGroups" class="d-block mt-2">
+                        <div class="input-group mb-3 serverGroup">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user-secret"></i></span>
+                            </div>
+                            <input placeholder="username" name="username" class="form-control" value="admin" autocomplete="new-password" disabled/>
+                            <input placeholder="password" name="password" type="password" class="form-control" autocomplete="new-password"/>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
     </div>
 </body>
 </html>
 <script>
 
-let inputTemplate = `<div class="input-group mb-3 serverGroup">
+let hostTemplate = `<div class="input-group mb-3 serverGroup">
     <div class="input-group-prepend">
         <span class="input-group-text serverLabel"></span>
     </div>
@@ -111,8 +137,20 @@ let inputTemplate = `<div class="input-group mb-3 serverGroup">
     <input placeholder="trust password" name="trustPassword" type="password" class="form-control trustPasswordInput" autocomplete="new-password"/>
     <input placeholder="Alias (Optional)" name="alias" type="text" class="form-control"/>
     <div class="input-group-append">
-        <button class="btn btn-sm btn-outline-danger removeRow" type="button">
-            <b>X</b>
+        <button class="btn btn-sm btn-outline-secondary removeRow" type="button">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
+</div>`;
+let userTemplate = `<div class="input-group mb-3 serverGroup">
+    <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fas fa-user"></i></span>
+    </div>
+    <input placeholder="username" name="username" class="form-control" autocomplete="new-password"/>
+    <input placeholder="password" name="password" type="password" class="form-control trustPasswordInput" autocomplete="new-password"/>
+    <div class="input-group-append">
+        <button class="btn btn-sm btn-outline-secondary removeRow" type="button">
+            <i class="fas fa-trash"></i>
         </button>
     </div>
 </div>`;
@@ -131,9 +169,17 @@ function reLabelServers(){
 
 $(document).on("change", "#showPasswordCheck", function(){
     if($(this).is(":checked")){
-        $(document).find(".trustPasswordInput").attr("type", "text");
+        $("#serverGroups").find(".trustPasswordInput").attr("type", "text");
     }else{
-        $(document).find(".trustPasswordInput").attr("type", "password");
+        $("#serverGroups").find(".trustPasswordInput").attr("type", "password");
+    }
+});
+
+$(document).on("change", "#showUserPasswordCheck", function(){
+    if($(this).is(":checked")){
+        $("#userGroups").find(".trustPasswordInput").attr("type", "text");
+    }else{
+        $("#userGroups").find(".trustPasswordInput").attr("type", "password");
     }
 });
 
@@ -143,7 +189,11 @@ $(document).on("click", ".removeRow", function(){
 });
 
 $(document).on("click", "#addServer", function(){
-    $("#serverGroups").append(inputTemplate);
+    $("#serverGroups").append(hostTemplate);
+    reLabelServers();
+});
+$(document).on("click", "#addUser", function(){
+    $("#userGroups").append(userTemplate);
     reLabelServers();
 });
 
@@ -170,7 +220,7 @@ $(document).on("click", "#addServers", function(){
         if(connectDetailsInputVal == ""){
             failed = true;
             connectDetailsInput.focus();
-            toastr["error"]("Please provide connection details");
+            toastr["error"]("Please provide host details");
             return false;
         } else if(trustPasswordInputVal == ""){
             failed = true;
