@@ -32,4 +32,9 @@ class InsertUser
         ]);
         return $do->rowCount() ? true : false;
     }
+
+    public function getId()
+    {
+        return $this->database->lastInsertId();
+    }
 }
