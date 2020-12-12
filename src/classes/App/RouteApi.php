@@ -132,6 +132,10 @@ class RouteApi
             } elseif ($name === "userId") {
                 $o[$name] = $userId;
             } elseif ($name == "host") {
+                if (!isset($currentProjects[$passedArguments["hostId"]])) {
+                    throw new \Exception("No acess to project", 1);
+                }
+
                 if (!$userIsAdmin) {
                     if (is_null($project)) {
                         $project = $currentProjects[$passedArguments["hostId"]];
@@ -141,6 +145,9 @@ class RouteApi
 
                 $o[$name] = $this->getDetails->fetchHost($passedArguments["hostId"]);
             } elseif ($type == "dhope0000\LXDClient\Objects\Host") {
+                if (!isset($currentProjects[$passedArguments["hostId"]])) {
+                    throw new \Exception("No acess to project", 1);
+                }
                 if (!$userIsAdmin) {
                     if (is_null($project)) {
                         $project = $currentProjects[$passedArguments[$name]];
@@ -153,8 +160,11 @@ class RouteApi
             } elseif ($type == "dhope0000\LXDClient\Objects\HostsCollection") {
                 if (!$userIsAdmin) {
                     foreach ($passedArguments[$name] as $hostAttempt) {
-                        $project = $currentProjects[$hostAttempt];
+                        if (!isset($currentProjects[$hostAttempt])) {
+                            throw new \Exception("No acess to project", 1);
+                        }
                         $this->canAccessProject($allowedProjects, $hostAttempt, $project);
+                        $project = $currentProjects[$hostAttempt];
                     }
                 }
 
