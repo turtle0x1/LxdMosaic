@@ -15,15 +15,13 @@ final class GetHostOverviewControllerTest extends TestCase
     public function test_noAccesToGetHostOverview() :void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hostId"=>1];
+        $_POST = ["hostId"=>2];
 
         $result = $this->routeApi->route(
             array_filter(explode('/', '/Hosts/GetHostOverviewController/get')),
             ["userid"=>2],
             true
         );
-
-        $this->assertEquals($expected, $result);
     }
 
     public function test_hasAccessToHost() :void

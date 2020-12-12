@@ -11,23 +11,41 @@ final class SearchHostsControllerTest extends TestCase
         $container = $builder->build();
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
         $users = $container->make("dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects");
-        var_dump($users->fetchAll(2));
+
+        $this->database = $container->get("dhope0000\LXDClient\Model\Database\Database");
+        $this->database->dbObject->beginTransaction();
+        $addHost = $container->make("dhope0000\LXDClient\Model\Hosts\AddHost");
+        $addHost->addHost("localhostTwo", "fake", "fake", "fake", "localHostTwo");
     }
 
-    /**
-     * I think this is useless its filtered out by orderParams isnt it
-     */
-    public function test_noAccessToSearchAnyHosts() :void
+    public function tearDown() :void
     {
-        $this->expectException(\Exception::class);
+        $this->database->dbObject->rollBack();
+    }
+
+    public function test_accessToSearchLimitedHosts() :void
+    {
         $_POST = ["hostSearch"=>"localhost"];
 
         $result = $this->routeApi->route(
             array_filter(explode('/', '/Hosts/SearchHosts/search')),
-            ["userid"=>4],
+            ["userid"=>2],
             true
         );
 
-        var_dump($result);
+        $this->assertTrue(count($result) === 1);
+    }
+
+    public function test_accessToSearchAllHosts() :void
+    {
+        $_POST = ["hostSearch"=>"localhost"];
+
+        $result = $this->routeApi->route(
+            array_filter(explode('/', '/Hosts/SearchHosts/search')),
+            ["userid"=>1],
+            true
+        );
+
+        $this->assertTrue(count($result) === 2);
     }
 }

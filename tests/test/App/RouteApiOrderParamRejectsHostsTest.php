@@ -21,6 +21,18 @@ final class RouteApiOrderParamRejectsHostsTest extends TestCase
         $this->database->dbObject->rollBack();
     }
 
+    public function test_noAcessToAnyHosts() :void
+    {
+        $this->expectException(\Exception::class);
+        $this->routeApi->orderParams(
+            ["hostId"=>2],
+            "dhope0000\LXDClient\Controllers\Profiles\CopyProfileController",
+            "copyProfile",
+            3,
+            ["apitoken"=>"wow"]
+        );
+    }
+
     public function test_orderParamRejectsOnOneHost() :void
     {
         $this->expectException(\Exception::class);
@@ -29,7 +41,7 @@ final class RouteApiOrderParamRejectsHostsTest extends TestCase
             "dhope0000\LXDClient\Controllers\Profiles\CopyProfileController",
             "copyProfile",
             2,
-            ["userId"=>2]
+            []
         );
     }
 
@@ -41,7 +53,7 @@ final class RouteApiOrderParamRejectsHostsTest extends TestCase
             "dhope0000\LXDClient\Controllers\Instances\MigrateInstanceController",
             "migrate",
             2,
-            ["userId"=>2]
+            ["userId"=>3]
         );
     }
 
