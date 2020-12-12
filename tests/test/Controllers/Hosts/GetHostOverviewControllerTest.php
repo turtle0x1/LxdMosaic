@@ -25,4 +25,29 @@ final class GetHostOverviewControllerTest extends TestCase
 
         $this->assertEquals($expected, $result);
     }
+
+    public function test_hasAccessToHost() :void
+    {
+        $_POST = ["hostId"=>1];
+
+        $result = $this->routeApi->route(
+            array_filter(explode('/', '/Hosts/GetHostOverviewController/get')),
+            ["userid"=>1],
+            true
+        );
+
+        $this->assertEquals([
+            'header',
+            'containers',
+            'containerStats',
+            'resources',
+        ], array_keys($result));
+
+        $this->assertEquals([
+            'online',
+            'offline'
+        ], array_keys($result["containerStats"]));
+
+        $this->assertInstanceOf('dhope0000\LXDClient\Objects\Host', $result["header"]);
+    }
 }
