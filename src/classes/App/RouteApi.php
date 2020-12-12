@@ -106,8 +106,7 @@ class RouteApi
         if (empty($allowedProjects) && !$userIsAdmin) {
             $this->invalidateToken->invalidate($userId, $headers["apitoken"]);
             http_response_code(403);
-            echo json_encode(["error"=>"No access to any projects"]);
-            exit;
+            throw new \Exception("No Access To Any Projects", 1);
         }
 
         $currentProjects = $this->fetchUserProject->fetchCurrentProjects($userId);
