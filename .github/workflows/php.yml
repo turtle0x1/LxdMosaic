@@ -55,4 +55,4 @@ jobs:
       with:
         name: test-coverage
         path: coverage/
-        retention: 1 day
+        retention-days: 1
