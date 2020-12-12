@@ -51,8 +51,6 @@ class RouteApi
     {
         $userId = $headers["userid"];
 
-        var_dump($headers);
-
         $this->project = isset($headers["project"]) && !empty($headers["project"]) ? $headers["project"] : null;
         $this->userId = $userId;
 
@@ -128,19 +126,13 @@ class RouteApi
 
             $project = $this->getRequestedProject();
 
-            echo "Requested Header Project $project \n";
-
             if ($hasDefault && !isset($passedArguments[$name])) {
                 $o[$name] = $param->getDefaultValue();
             } elseif ($name === "userId") {
                 $o[$name] = $userId;
             } elseif ($name == "host") {
-                if (!isset($currentProjects[$passedArguments["hostId"]])) {
-                    throw new \Exception("No acess to project", 1);
-                }
-
                 if (!$userIsAdmin) {
-                    if (is_null($project)) {
+                    if (is_null($project) && isset($currentProjects[$passedArguments["hostId"]])) {
                         $project = $currentProjects[$passedArguments["hostId"]];
                     }
                     $this->canAccessProject($allowedProjects, $passedArguments["hostId"], $project);
@@ -148,11 +140,8 @@ class RouteApi
 
                 $o[$name] = $this->getDetails->fetchHost($passedArguments["hostId"]);
             } elseif ($type == "dhope0000\LXDClient\Objects\Host") {
-                if (!isset($currentProjects[$passedArguments["hostId"]])) {
-                    throw new \Exception("No acess to project", 1);
-                }
                 if (!$userIsAdmin) {
-                    if (is_null($project)) {
+                    if (is_null($project) && isset($currentProjects[$passedArguments[$name]])) {
                         $project = $currentProjects[$passedArguments[$name]];
                     }
                     $this->canAccessProject($allowedProjects, $passedArguments[$name], $project);
@@ -163,11 +152,10 @@ class RouteApi
             } elseif ($type == "dhope0000\LXDClient\Objects\HostsCollection") {
                 if (!$userIsAdmin) {
                     foreach ($passedArguments[$name] as $hostAttempt) {
-                        if (!isset($currentProjects[$hostAttempt])) {
-                            throw new \Exception("No acess to project", 1);
+                        if (is_null($project) && isset($currentProjects[$hostAttempt])) {
+                            $project = $currentProjects[$hostAttempt];
                         }
                         $this->canAccessProject($allowedProjects, $hostAttempt, $project);
-                        $project = $currentProjects[$hostAttempt];
                     }
                 }
 
@@ -183,6 +171,10 @@ class RouteApi
 
     private function canAccessProject($allowedProjects, $hostId, $project)
     {
+        if (!is_string($project) || strlen($project) == 0) {
+            throw new \Exception("Cant work out which project to use", 1);
+        }
+
         if (!isset($allowedProjects[$hostId])) {
             throw new \Exception("No access to project", 1);
         }
