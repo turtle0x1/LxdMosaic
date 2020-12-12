@@ -10,7 +10,6 @@ final class SearchHostsControllerTest extends TestCase
         $builder->useAnnotations(true);
         $container = $builder->build();
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
-        $users = $container->make("dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects");
 
         $this->database = $container->get("dhope0000\LXDClient\Model\Database\Database");
         $this->database->dbObject->beginTransaction();
