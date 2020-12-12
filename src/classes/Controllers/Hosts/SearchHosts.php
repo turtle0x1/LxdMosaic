@@ -3,20 +3,40 @@ namespace dhope0000\LXDClient\Controllers\Hosts;
 
 use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
+use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 
 class SearchHosts
 {
-    public function __construct(HostList $hostList, HasExtension $hasExtension)
-    {
+    public function __construct(
+        HostList $hostList,
+        HasExtension $hasExtension,
+        FetchUserDetails $fetchUserDetails,
+        FetchAllowedProjects $fetchAllowedProjects
+    ) {
         $this->hostList = $hostList;
         $this->hasExtension = $hasExtension;
+        $this->fetchUserDetails = $fetchUserDetails;
+        $this->fetchAllowedProjects = $fetchAllowedProjects;
     }
 
-    public function search(string $hostSearch, array $extensionRequirements = [])
+    public function search(int $userId, string $hostSearch, array $extensionRequirements = [])
     {
-        $servers = $this->hostList->getOnlineHostsWithDetails();
+        $isAdmin = $this->fetchUserDetails->isAdmin($userId) === "1";
+
+        $projectsWithAccess = $this->fetchAllowedProjects->fetchAll($userId);
+
+        if ($isAdmin === true) {
+            $hosts = $this->hostList->fetchAllHosts();
+        } else {
+            $hosts = $this->hostList->getHostCollection(array_keys($projectsWithAccess));
+        }
+
         $output = [];
-        foreach ($servers as $server) {
+        foreach ($hosts as $server) {
+            if ($server->hostOnline() == false) {
+                continue;
+            }
             if (stripos($server->getAlias(), $hostSearch) !== false) {
                 $doesntHaveExt = false;
                 if (!empty($extensionRequirements)) {
