@@ -51,6 +51,8 @@ class RouteApi
     {
         $userId = $headers["userid"];
 
+        var_dump($headers);
+
         $this->project = isset($headers["project"]) && !empty($headers["project"]) ? $headers["project"] : null;
         $this->userId = $userId;
 
@@ -101,7 +103,7 @@ class RouteApi
 
         $allowedProjects = $this->fetchAllowedProjects->fetchAll($userId);
 
-        $userIsAdmin = $this->fetchUserDetails->isAdmin($userId);
+        $userIsAdmin = $this->fetchUserDetails->isAdmin($userId) === '1';
 
         if (empty($allowedProjects) && !$userIsAdmin) {
             $this->invalidateToken->invalidate($userId, $headers["apitoken"]);
@@ -125,6 +127,8 @@ class RouteApi
             }
 
             $project = $this->getRequestedProject();
+
+            echo "Requested Header Project $project \n";
 
             if ($hasDefault && !isset($passedArguments[$name])) {
                 $o[$name] = $param->getDefaultValue();
