@@ -24,48 +24,40 @@ final class RouteApiOrderParamRejectsHostsTest extends TestCase
     public function test_noAcessToAnyHosts() :void
     {
         $this->expectException(\Exception::class);
-        $this->routeApi->orderParams(
-            ["hostId"=>2],
-            "dhope0000\LXDClient\Controllers\Profiles\CopyProfileController",
-            "copyProfile",
-            3,
-            ["apitoken"=>"wow"]
+        $_POST = ["hostId"=>2];
+        $this->routeApi->route(
+            array_filter(explode("/", "/Profiles/CopyProfileController/copyProfile")),
+            ["userid"=>3, "apitoken"=>"wow"]
         );
     }
 
     public function test_orderParamRejectsOnOneHost() :void
     {
         $this->expectException(\Exception::class);
-        $this->routeApi->orderParams(
-            ["hostId"=>2],
-            "dhope0000\LXDClient\Controllers\Profiles\CopyProfileController",
-            "copyProfile",
-            2,
-            []
+        $_POST = ["hostId"=>2];
+        $this->routeApi->route(
+            array_filter(explode("/", "/Profiles/CopyProfileController/copyProfile")),
+            ["userid"=>2, "project"=>"default"]
         );
     }
 
     public function test_orderParamRejectsOnOneHostObject() :void
     {
         $this->expectException(\Exception::class);
-        $this->routeApi->orderParams(
-            ["hostId"=>2],
-            "dhope0000\LXDClient\Controllers\Instances\MigrateInstanceController",
-            "migrate",
-            2,
-            ["userId"=>3]
+        $_POST = ["hostId"=>2];
+        $this->routeApi->route(
+            array_filter(explode("/", "/Instances/MigrateInstanceController/migrate")),
+            ["userid"=>2, "project"=>"default"]
         );
     }
 
     public function test_orderParamRejectsManyHosts() :void
     {
         $this->expectException(\Exception::class);
-        $this->routeApi->orderParams(
-            ["hosts"=>[2]],
-            "dhope0000\LXDClient\Controllers\CloudConfig\DeployController",
-            "deploy",
-            2,
-            ["userId"=>2]
+        $_POST = ["hosts"=>[2]];
+        $this->routeApi->route(
+            array_filter(explode("/", "/CloudConfig/DeployController/deploy")),
+            ["userid"=>2, "project"=>"default"]
         );
     }
 }
