@@ -54,10 +54,12 @@ final class SetHostProjectControllerTest extends TestCase
     {
         $_POST = ["hostId"=>1, "project"=>"testProject"];
 
-        $this->routeApi->route(
+        $result = $this->routeApi->route(
             array_filter(explode('/', '/User/SetHostProjectController/set')),
             ["userid"=>2],
             true
         );
+
+        $this->assertEquals(["state"=>"success", "message"=>"Changed project to testProject"], $result);
     }
 }
