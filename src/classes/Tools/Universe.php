@@ -154,9 +154,15 @@ class Universe
 
         foreach ($hosts as $i => $host) {
             if (in_array($host->getHostId(), $hostsInClusterGroups)) {
-                unset($hosts[$i]);
+                if (gettype($hosts) == "array") {
+                    unset($hosts[$i]);
+                } else {
+                    $hosts->removeHostId($host->getHostId());
+                }
             }
         }
+
+        $hosts = gettype($hosts) == "array" ? $hosts : $hosts->getAllHosts();
 
         return [
             "clusters"=>$clusters,
