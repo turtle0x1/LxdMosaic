@@ -26,6 +26,16 @@ class HostsCollection implements \Iterator, \JsonSerializable
         $this->hosts[] = $host;
     }
 
+    public function removeHostId(int $hostId)
+    {
+        foreach ($this as $index => $host) {
+            if ($host->getHostId() == $hostId) {
+                unset($this->hosts[$index]);
+                break;
+            }
+        }
+    }
+
     public function getAllHosts()
     {
         return $this->hosts;
