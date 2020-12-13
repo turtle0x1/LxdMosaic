@@ -29,9 +29,9 @@ class GetAllClusters
 
     public function convertHostsToClusters($hosts)
     {
-        $hostsById = [];
+        $hostByUrl = [];
         foreach ($hosts as $host) {
-            $hostsById[$host->getHostId()] = $host;
+            $hostByUrl[$host->getUrl()] = $host;
         }
 
         $clusterId = 0;
@@ -56,15 +56,11 @@ class GetAllClusters
             $clusterMembers = $host->cluster->members->all(LxdRecursionLevels::INSTANCE_FULL_RECURSION);
 
             foreach ($clusterMembers as $member) {
-                $memberHostObj = $this->getDetails->fetchHostByUrl($member["url"]);
-
-                if (empty($memberHostObj)) {
+                if (!isset($hostByUrl[$member["url"]])) {
                     continue;
                 }
 
-                if (isset($hostsById[$memberHostObj->getHostId()])) {
-                    $memberHostObj = $hostsById[$memberHostObj->getHostId()];
-                }
+                $memberHostObj = $hostByUrl[$member["url"]];
 
                 $memberHostObj->setCustomProp("clusterInfo", $member);
                 $memberHostObj->setCustomProp("resources", $this->getResources->getHostExtended($memberHostObj));
