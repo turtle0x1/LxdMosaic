@@ -163,7 +163,6 @@ if ($haveServers->haveAny() !== true) {
                   restore: '/api/Backups/RestoreBackupController/restore'
               },
               clusters: {
-                getAll: "/api/Clusters/GetAllController/get",
                 getCluster: "/api/Clusters/GetClusterController/get"
               },
               settings: {
