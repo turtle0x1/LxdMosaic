@@ -1,35 +1,60 @@
 <?php
 namespace dhope0000\LXDClient\Tools\Profiles;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Universe;
 
 class GetProfilesOnAllHosts
 {
-    public function __construct(HostList $hostList)
+    private $universe;
+
+    public function __construct(Universe $universe)
     {
-        $this->hostList = $hostList;
+        $this->universe = $universe;
     }
 
-    public function getProfilesOnAllHosts()
+    public function getProfilesOnAllHosts(int $userId, string $search)
     {
-        $profiles = array();
-        $hosts = $this->hostList->getOnlineHostsWithDetails();
-        $numberOfHosts = count($hosts);
-        $seenProfiles = [];
+        $clustersAndHosts = $this->universe->getEntitiesUserHasAccesTo($userId, "profiles");
 
-        foreach ($hosts as $host) {
-            $hostProfiles = $host->profiles->all();
-            foreach ($hostProfiles as $profile) {
-                if (!isset($seenProfiles[$profile])) {
-                    $seenProfiles[$profile] = 0;
+        $totalHosts = 0;
+        $profiles = [];
+
+        foreach ($clustersAndHosts["clusters"] as $clusterIndex => $cluster) {
+            foreach ($cluster["members"] as $hostIndex => &$host) {
+                if ($host->hostOnline() == false) {
+                    continue;
                 }
-                $seenProfiles[$profile]++;
-                if ($seenProfiles[$profile] == $numberOfHosts) {
-                    $profiles[] = ["profile"=>$profile, "host"=>$host];
+                $totalHosts++;
+                foreach ($host->getCustomProp("profiles") as $profile) {
+                    if (!isset($profiles[$profile])) {
+                        $profiles[$profile] = 0;
+                    }
+                    $profiles[$profile]++;
                 }
             }
         }
-        return $profiles;
+
+        foreach ($clustersAndHosts["standalone"]["members"] as $host) {
+            if ($host->hostOnline() == false) {
+                continue;
+            }
+            $totalHosts++;
+            foreach ($host->getCustomProp("profiles") as $profile) {
+                if (!isset($profiles[$profile])) {
+                    $profiles[$profile] = 0;
+                }
+                $profiles[$profile]++;
+            }
+        }
+
+        $output = [];
+
+        foreach ($profiles as $profile => $count) {
+            if ($count == $totalHosts && stripos($profile, $search) !== false) {
+                $output[] = ["profile"=>$profile];
+            }
+        }
+
+        return $output;
     }
 }
