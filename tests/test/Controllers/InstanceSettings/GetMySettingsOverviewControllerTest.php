@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
-final class GetSettingsOverviewControllerTest extends TestCase
+final class GetMySettingsOverviewControllerTest extends TestCase
 {
     public function setUp() :void
     {
@@ -16,11 +16,11 @@ final class GetSettingsOverviewControllerTest extends TestCase
     public function test_userCanGetTheirSettings() :void
     {
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/GetSettingsOverviewController/get')),
+            array_filter(explode('/', '/InstanceSettings/GetMySettingsOverviewController/get')),
             ["userid"=>2],
             true
         );
 
-        $this->assertEquals(["permanentTokens", "versionDetails"], array_keys($result));
+        $this->assertEquals(["permanentTokens"], array_keys($result));
     }
 }

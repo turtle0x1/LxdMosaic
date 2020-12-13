@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\InstanceSettings;
 
 use dhope0000\LXDClient\Model\InstanceSettings\GetSettings;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
+use dhope0000\LXDClient\Tools\Utilities\IsUpToDate;
 
 class GetAllSettingsController
 {
@@ -17,6 +18,9 @@ class GetAllSettingsController
     {
         $this->validatePermissions->isAdminOrThrow($userId);
 
-        return $this->getSettings->getAllSettingsWithLatestValues();
+        return [
+            "settings"=>$this->getSettings->getAllSettingsWithLatestValues(),
+            "versionDetails"=>IsUpToDate::isIt()
+        ];
     }
 }
