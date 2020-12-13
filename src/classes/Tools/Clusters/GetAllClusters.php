@@ -29,6 +29,11 @@ class GetAllClusters
 
     public function convertHostsToClusters($hosts)
     {
+        $hostsById = [];
+        foreach ($hosts as $host) {
+            $hostsById[$host->getHostId()] = $host;
+        }
+
         $clusterId = 0;
         $clusters = [];
         $hostsInACluster = [];
@@ -55,6 +60,10 @@ class GetAllClusters
 
                 if (empty($memberHostObj)) {
                     continue;
+                }
+
+                if (isset($hostsById[$memberHostObj->getHostId()])) {
+                    $memberHostObj = $hostsById[$memberHostObj->getHostId()];
                 }
 
                 $memberHostObj->setCustomProp("clusterInfo", $member);
