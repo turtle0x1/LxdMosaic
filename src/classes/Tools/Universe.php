@@ -82,7 +82,7 @@ class Universe
                 if ($entity == "projects") {
                     if ($isAdmin === true) {
                         if (!$supportsProjects) {
-                            $projects = ["default"];
+                            $entities = ["default"];
                         } else {
                             $entities = $host->projects->all();
                         }
