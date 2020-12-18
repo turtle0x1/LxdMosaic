@@ -27,8 +27,16 @@ body {
     z-index: 999999999 !important;
 }
 
+.c-sidebar-nav-title {
+    cursor: default;
+}
+
 .cluster-title:hover {
     color: #167495 !important; /* Eugh */
+}
+
+.cluster-title-not-admin:hover {
+	color: #4dbd74 !important;
 }
 
 .text-underline {
