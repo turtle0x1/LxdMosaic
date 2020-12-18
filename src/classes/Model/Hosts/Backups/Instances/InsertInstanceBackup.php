@@ -44,6 +44,6 @@ class InsertInstanceBackup
             ":backup"=>$backup,
             ":localPath"=>$localPath
         ]);
-        return $do->rowCount() ? true : false;
+        return $this->database->lastInsertId();
     }
 }
