@@ -49,7 +49,7 @@ jobs:
       run: cat examples/tests_lxd_init.yaml | sudo lxd init --preseed
 
     - name: run tests
-      run: vendor/bin/phpunit --coverage-html=./coverage
+      run: /usr/bin/php7.4 vendor/bin/phpunit --coverage-html=./coverage
 
     - uses: actions/upload-artifact@v2
       with:
