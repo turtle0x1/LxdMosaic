@@ -19,7 +19,7 @@ sudo chmod -R 777 src/sensitiveData/backups
 npm install || exit $?
 
 # Install Dependecies
-composer install || exit $?
+/usr/bin/php7.4 /usr/bin/composer install || exit $?
 
 cp .env.dist .env
 
