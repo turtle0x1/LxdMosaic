@@ -45,7 +45,7 @@ final class UniverseTest extends TestCase
     public function test_user_two_cant_see_new_entity()
     {
         $r = $this->universe->getEntitiesUserHasAccesTo(2, "profiles");
-        $result = $r["standalone"]["members"]->getAllHosts()[0]->getCustomProp("profiles");
+        $result = $r["standalone"]["members"][0]->getCustomProp("profiles");
         $this->assertEquals(["default"], $result);
     }
 }
