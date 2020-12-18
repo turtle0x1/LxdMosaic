@@ -20,8 +20,8 @@ final class StoreBackupProject extends AbstractMigration
     {
         // create the table
         $table = $this->table('Container_Backups');
-        $table->addColumn('CB_Project', 'string')
-            ->save();
+        $table->addColumn('CB_Project', 'string', ["default"=>''])
+            ->update();
         if ($this->isMigratingUp()) {
             // Some testing shows backups can only be default because the
             // software was bugged

@@ -21,7 +21,7 @@ final class LdapSupport extends AbstractMigration
         // create the table
         $table = $this->table('Users');
         $table->addColumn('User_Ldap_ID', 'string', ['null'=>true])
-            ->save();
+            ->update();
 
 
         $rows = [
