@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Tools\Backups;
 
 use dhope0000\LXDClient\Model\Backups\FetchBackup;
 use dhope0000\LXDClient\Objects\Host;
-use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
+use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class RestoreBackup
 {
@@ -12,21 +12,17 @@ class RestoreBackup
 
     public function __construct(
         FetchBackup $fetchBackup,
-        FetchAllowedProjects $fetchAllowedProjects
+        ValidatePermissions $validatePermissions
     ) {
         $this->fetchBackup = $fetchBackup;
-        $this->fetchAllowedProjects = $fetchAllowedProjects;
+        $this->validatePermissions = $validatePermissions;
     }
 
     public function restore(int $userId, int $backupId, Host $targetHost)
     {
         $backup = $this->fetchBackup->fetch($backupId);
 
-        $allowedProjects = $this->fetchAllowedProjects->fetchForHost($userId, $backup["hostId"]);
-
-        if (!in_array($backup["project"], $allowedProjects)) {
-            throw new \Exception("Not allowed to restore this backup", 1);
-        }
+        $this->validatePermissions->canAccessHostProjectOrThrow($userId, $backup["hostId"], $backup["project"]);
 
         $response = $targetHost->instances->create("", [
             "source"=>"backup",
