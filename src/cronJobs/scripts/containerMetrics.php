@@ -29,10 +29,16 @@ function importInstancesStats($member, $import)
 
 foreach ($p["clusters"] as $cluster) {
     foreach ($cluster["members"] as $member) {
+        if (!$member->hostOnline()) {
+            continue;
+        }
         importInstancesStats($member, $import);
     }
 }
 
 foreach ($p["standalone"]["members"] as $member) {
+    if (!$member->hostOnline()) {
+        continue;
+    }
     importInstancesStats($member, $import);
 }
