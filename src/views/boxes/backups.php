@@ -465,6 +465,11 @@ function loadBackupsOverview() {
                     return true;
                 }
 
+                if(hostDetails.containers.length == 0){
+                    backupTrs += `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-warning mr-2"></i>No Instances In Project!</td></tr>`
+                    return true;
+                }
+
                 $.each(hostDetails.containers, (containerIndex, container)=>{
 
                     let trClass = container.lastBackup.neverBackedUp ? "danger" : "success";
