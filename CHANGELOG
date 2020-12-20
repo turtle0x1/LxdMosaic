@@ -22,6 +22,7 @@ Changed
     Split project restrictions into their own table on frontend
     Remove all usage of cdns (so the it should work offline) (#293)
     Allow setting admin password on first run (#299)
+    Show operation download progress if available (#316)
 
 Fixed
     Switching projects in snap broken
