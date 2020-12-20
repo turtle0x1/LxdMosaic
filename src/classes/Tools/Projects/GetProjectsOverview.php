@@ -16,9 +16,15 @@ class GetProjectsOverview
     {
         $clustersAndStandalone = $this->universe->getEntitiesUserHasAccesTo($userId, "projects");
 
-        foreach ($clustersAndStandalone["clusters"] as $cluster) {
-            foreach ($cluster["members"] as $member) {
-                $this->calculateUsage($member);
+        foreach ($clustersAndStandalone["clusters"] as $cluserIndex => $cluster) {
+            $doneCluster = false;
+            foreach ($cluster["members"] as $index => $member) {
+                if (!$doneCluster) {
+                    $this->calculateUsage($member);
+                    $doneCluster = true;
+                } else {
+                    unset($clustersAndStandalone["clusters"][$cluserIndex]["members"][$index]);
+                }
             }
         }
 

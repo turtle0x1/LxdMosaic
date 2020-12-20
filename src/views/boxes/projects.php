@@ -163,24 +163,37 @@ function makeProjectHostSidebarHtml(hosthtml, host){
     return hosthtml;
 }
 
-function makeProjectCard(projectName, limits){
+function makeProjectCard(hostName, projects){
 
-    let thead = "";
+    if(Object.keys(projects).length == 0){
+        return "";
+    }
+
+    let thead = "<th>project</th>";
     let tbody = "";
 
     let formatBytesKeys = ["limits.memory", "limits.disk"];
 
-    $.each(limits, (limit, value)=>{
+
+    $.each(projects[Object.keys(projects)[0]], (limit, value)=>{
         let lThead = limit.replace("limits.", "");
         thead += `<th>${lThead}</th>`;
-        let lTxt = value.limit == null ? "Unlimited" : value.limit;
-        let vText = formatBytesKeys.includes(limit) ? formatBytes(value.value) : value.value;
-        tbody += `<td>${vText} / ${lTxt}</td>`;
     });
+
+    $.each(projects, (projectName, projectValues)=>{
+        tbody += `<tr><td>${projectName}</td>`;
+        $.each(projectValues, (limit, value)=>{
+
+            let lTxt = value.limit == null ? '<i class="fas fa-infinity"></i>' : value.limit;
+            let vText = formatBytesKeys.includes(limit) ? formatBytes(value.value) : value.value;
+            tbody += `<td>${vText} / ${lTxt}</td>`;
+        });
+        tbody += "</tr>";
+    })
 
     return `<div class="card bg-dark text-white">
         <div class="card-header">
-            <h4>${projectName}</h4>
+            <h4><i class='fas fa-server mr-2'></i>${hostName}</h4>
         </div>
         <div class="card-body">
             <table class="table table-dark table-bordered">
@@ -208,16 +221,12 @@ function loadProjectView()
 
         $.each(data.clusters, (clusterIndex, cluster)=>{
             $.each(cluster.members, (_, host)=>{
-                $.each(host.projects, (projectName, project)=>{
-                    cards += makeProjectCard(projectName, project);
-                });
+                cards += makeProjectCard(`Cluster ${clusterIndex}`, host.projects);
             })
         });
 
         $.each(data.standalone.members, (_, host)=>{
-            $.each(host.projects, (projectName, project)=>{
-                cards += makeProjectCard(projectName, project);
-            });
+            cards += makeProjectCard(host.alias, host.projects);
         });
         $("#projectCards").empty().append(cards);
     })
