@@ -163,7 +163,6 @@ if ($haveServers->haveAny() !== true) {
                   restore: '/api/Backups/RestoreBackupController/restore'
               },
               clusters: {
-                getAll: "/api/Clusters/GetAllController/get",
                 getCluster: "/api/Clusters/GetClusterController/get"
               },
               settings: {
@@ -185,7 +184,7 @@ if ($haveServers->haveAny() !== true) {
                 },
                 getAll: "/api/InstanceSettings/GetAllSettingsController/getAll",
                 saveAll: "/api/InstanceSettings/SaveAllSettingsController/saveAll",
-                getOverview: "/api/InstanceSettings/GetSettingsOverviewController/get"
+                getMyOverview: "/api/InstanceSettings/GetMySettingsOverviewController/get"
               },
               networks: {
                   tools: {
@@ -901,6 +900,9 @@ $(document).on("keyup", ".filterHostsInstances", function(e){
 });
 
 $(document).on("click", ".cluster-title", function(e){
+    if(userDetails.isAdmin){
+        return false;
+    }
     let x = $(this).data();
     $("#sidebar-ul").find(".text-info").removeClass("text-info");
     $("#sidebar-ul").find(".active").removeClass("active");
@@ -988,7 +990,10 @@ function loadDashboard(){
         let hostsTrs = "";
 
         $.each(data.clustersAndHosts.clusters, function(i, item){
-            hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
+
+            let cTitleClass = userDetails.isAdmin ? "cluster-title" : "cluster-title-not-admin";
+
+            hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title ${cTitleClass} text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
 
             hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
 

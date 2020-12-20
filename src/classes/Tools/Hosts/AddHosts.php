@@ -90,7 +90,7 @@ class AddHosts
                             "alias"=>$member
                         ];
                     }
-                    $this->add($extraMembersToAdd);
+                    $this->add($userId, $extraMembersToAdd);
                 }
             } catch (\Http\Client\Exception\NetworkException $e) {
                 throw new \Exception("Can't connect to ". $hostsDetail['name'] . ", is lxd running and the port open?", 1);

@@ -78,8 +78,13 @@ class GetDashboard
         ];
 
         foreach ($clustersAndHosts["clusters"] as $cluster) {
-            $memory["total"] += $cluster["stats"]["totalMemory"];
-            $memory["used"] += $cluster["stats"]["usedMemory"];
+            foreach ($cluster["members"] as $host) {
+                if (!$host->hostOnline()) {
+                    continue;
+                }
+                $memory["total"] += $host->getCustomProp("resources")["memory"]["total"];
+                $memory["used"] += $host->getCustomProp("resources")["memory"]["used"];
+            }
         }
 
         foreach ($clustersAndHosts["standalone"]["members"] as $host) {

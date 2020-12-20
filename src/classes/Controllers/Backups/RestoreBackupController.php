@@ -17,9 +17,9 @@ class RestoreBackupController implements \dhope0000\LXDClient\Interfaces\RecordA
     /**
      * @Route("", name="Restore Local Backup To Host")
      */
-    public function restore(int $backupId, Host $targetHost)
+    public function restore(int $userId, int $backupId, Host $targetHost)
     {
-        $response = $this->restoreBackup->restore($backupId, $targetHost);
+        $response = $this->restoreBackup->restore($userId, $backupId, $targetHost);
         return ["state"=>"success", "message"=>"Restored Backup", "lxdResponse"=>$response];
     }
 }

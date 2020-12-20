@@ -33,70 +33,68 @@
                     </div>
                   </div>
             </div>
-            <div class="col-md-4">
-                  <div class="card bg-dark">
-                    <div class="card-header bg-dark" role="tab" >
-                      <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
-                          LXDMosaic Details
-                        </a>
-                      </h5>
-                    </div>
-                    <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
-                      <div class="card-body bg-dark">
-                        <table class="table table-dark table-bordered" id="">
-                            <tbody>
-                                <tr>
-                                    <th>Current Version</th>
-                                    <td id="currentVersion"></td>
-                                </tr>
-                                <tr>
-                                    <th>New Version</th>
-                                    <td id="newVersion"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-              </div>
          </div>
 </div>
 <div id="instanceSettingsBox" class="settingsBox row">
     <div class="col-md-6">
-      <div class="card bg-dark">
-      <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
-          <h5>
-            <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
-              General Settings
-            </a>
+        <div class="card bg-dark">
+          <div class="card-header bg-dark" role="tab" >
+            <h5>
+              <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+                LXDMosaic Details
+              </a>
             </h5>
-            <div class="btn-toolbar float-right">
-                <div class="btn-group mr-2">
-                    <a target="_blank" class="btn btn-primary" href="https://lxdmosaic.readthedocs.io/en/latest/LXDMosaic_Settings/">
-                        <i class="fas fa-book-open"></i>
-                    </a>
-                    <button class="btn btn-success" id="saveSettings">
-                        <i class="fas fa-save"></i>
-                    </button>
-                </div>
+          </div>
+          <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
+            <div class="card-body bg-dark">
+              <table class="table table-dark table-bordered" id="">
+                  <tbody>
+                      <tr>
+                          <th>Current Version</th>
+                          <td id="currentVersion"></td>
+                      </tr>
+                      <tr>
+                          <th>New Version</th>
+                          <td id="newVersion"></td>
+                      </tr>
+                  </tbody>
+              </table>
             </div>
-        </div>
-        <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
-          <div class="card-body bg-dark">
-            <table class="table table-dark table-bordered" id="settingListTable">
-                <thead>
-                    <tr>
-                        <th>Setting</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
           </div>
         </div>
-      </div>
+          <div class="card bg-dark">
+          <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
+              <h5>
+                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+                  General Settings
+                </a>
+                </h5>
+                <div class="btn-toolbar float-right">
+                    <div class="btn-group mr-2">
+                        <a target="_blank" class="btn btn-primary" href="https://lxdmosaic.readthedocs.io/en/latest/LXDMosaic_Settings/">
+                            <i class="fas fa-book-open"></i>
+                        </a>
+                        <button class="btn btn-success" id="saveSettings">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
+              <div class="card-body bg-dark">
+                <table class="table table-dark table-bordered" id="settingListTable">
+                    <thead>
+                        <tr>
+                            <th>Setting</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
     </div>
     <div class="col-md-6">
       <div class="card bg-dark">
@@ -280,31 +278,11 @@ function loadSettingsView()
 
     addBreadcrumbs(["Settings", "My Settings"], ["viewSettings", "active"], false);
 
-    ajaxRequest(globalUrls.settings.getOverview, {}, (data)=>{
+    ajaxRequest(globalUrls.settings.getMyOverview, {}, (data)=>{
         data = makeToastr(data);
         if(data.hasOwnProperty("state") && data.state == "error"){
             return false;
         }
-
-        if(data.versionDetails.cantSeeGithub){
-            $("#currentVersion").text("Cant see github");
-            $("#newVersion").text("Cant see github");
-            return false;
-        }
-
-        $("#currentVersion").text(data.versionDetails.currentVersion);
-
-        let newVersion = "";
-
-        if(data.versionDetails.newVersionUrl !== false){
-            newVersion = `<a target="_blank" href="${data.versionDetails.newVersionUrl}">${data.versionDetails.newVersion}</a>`;
-        } else if(data.versionDetails.master == true){
-            newVersion = "N/A - You are on the master branch";
-        } else if(data.versionDetails.snap == true){
-            newVersion = "N/A - Snap will keep you up to date";
-        }
-
-        $("#newVersion").html(newVersion);
 
         let trs = "";
 
@@ -428,7 +406,7 @@ function loadInstanceSettings(){
                 </i>`,
         }
 
-        $.each(data, function(_, item){
+        $.each(data.settings, function(_, item){
 
             if(ldapKeys.includes(parseInt(item.settingId))){
                 let extraText = ldapExtraText.hasOwnProperty(item.settingId) ? ldapExtraText[item.settingId] : "";
@@ -445,6 +423,27 @@ function loadInstanceSettings(){
                 trs += tr;
             }
         });
+
+        if(data.versionDetails.cantSeeGithub){
+            $("#currentVersion").text("Cant see github");
+            $("#newVersion").text("Cant see github");
+            return false;
+        }
+
+        $("#currentVersion").text(data.versionDetails.currentVersion);
+
+        let newVersion = "";
+
+        if(data.versionDetails.newVersionUrl !== false){
+            newVersion = `<a target="_blank" href="${data.versionDetails.newVersionUrl}">${data.versionDetails.newVersion}</a>`;
+        } else if(data.versionDetails.master == true){
+            newVersion = "N/A - You are on the master branch";
+        } else if(data.versionDetails.snap == true){
+            newVersion = "N/A - Snap will keep you up to date";
+        }
+
+        $("#newVersion").html(newVersion);
+
         $("#ldapSettingListTable > tbody").empty().append(ldapTrs);
         $("#settingListTable > tbody").empty().append(trs);
         $("#ldapSettingListTable").find('[data-toggle="tooltip"]').tooltip({html: true})

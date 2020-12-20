@@ -11,9 +11,9 @@ class SearchProfiles
         $this->getProfilesOnAllHosts = $getProfilesOnAllHosts;
     }
 
-    public function getAllCommonProfiles()
+    public function getAllCommonProfiles(int $userId, string $profile)
     {
-        return $this->getProfilesOnAllHosts->getProfilesOnAllHosts();
+        return $this->getProfilesOnAllHosts->getProfilesOnAllHosts($userId, $profile);
     }
 
     public function searchHostProfiles(Host $host, string $search)

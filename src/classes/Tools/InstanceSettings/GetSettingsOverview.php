@@ -2,7 +2,6 @@
 
 namespace dhope0000\LXDClient\Tools\InstanceSettings;
 
-use dhope0000\LXDClient\Tools\Utilities\IsUpToDate;
 use dhope0000\LXDClient\Model\Users\FetchTokens;
 
 class GetSettingsOverview
@@ -15,8 +14,7 @@ class GetSettingsOverview
     public function get(string $userId) :array
     {
         return [
-            "permanentTokens"=>$this->fetchTokens->fetchPermanentTokenHeaders($userId),
-            "versionDetails"=>IsUpToDate::isIt()
+            "permanentTokens"=>$this->fetchTokens->fetchPermanentTokenHeaders($userId)
         ];
     }
 }
