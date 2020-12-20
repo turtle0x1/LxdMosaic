@@ -123,7 +123,7 @@ class GetHostInstanceStatusForBackupSet
                     "scheduleRetention"=>"",
                     "strategyName"=>""
                 ];
-                $seenContainerNames[] = $backup["container"];
+                $seenContainerNames[$backup["project"]][] = $backup["container"];
             }
         }
 
