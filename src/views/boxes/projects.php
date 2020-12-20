@@ -221,7 +221,7 @@ function loadProjectView()
 {
     $(".boxSlide, #projectDetails").hide();
     $("#projectsOverview, #projectsBox").show();
-
+    $("#projectCards").empty().append(`<h4 class='text-center'><i class="fas fa-cog fa-spin"></i></h4>`)
     ajaxRequest(globalUrls.projects.getOverview, {}, function(data){
         data = $.parseJSON(data);
         let cards = "";
