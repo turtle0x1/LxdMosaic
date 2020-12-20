@@ -119,7 +119,7 @@ class Universe
 
                 $getDefaultIfNotSupported = ["profiles", "images", "networks"];
 
-                if (in_array($entity, $getDefaultIfNotSupported) && $project["config"]["features.$entity"] == "false") {
+                if (in_array($entity, $getDefaultIfNotSupported) && (!isset($project["config"]["features.$entity"]) || $project["config"]["features.$entity"] == "false")) {
                     $oldProject = $host->getProject();
                     $host->setProject("default");
                     $x = $host->$entity->all();
