@@ -173,6 +173,7 @@ function makeProjectCard(hostName, projects){
     let tbody = "";
 
     let formatBytesKeys = ["limits.memory", "limits.disk"];
+    let formatNanoSecondsKeys = ["limits.cpu"];
 
 
     $.each(projects[Object.keys(projects)[0]], (limit, value)=>{
@@ -185,7 +186,13 @@ function makeProjectCard(hostName, projects){
         $.each(projectValues, (limit, value)=>{
 
             let lTxt = value.limit == null ? '<i class="fas fa-infinity"></i>' : value.limit;
-            let vText = formatBytesKeys.includes(limit) ? formatBytes(value.value) : value.value;
+            let vText = value.value;
+            if(formatBytesKeys.includes(limit)){
+                vText = formatBytes(vText)
+            }else if (formatNanoSecondsKeys.includes(limit)){
+                vText = nanoSecondsToHourMinutes(vText);
+            }
+
             tbody += `<td>${vText} / ${lTxt}</td>`;
         });
         tbody += "</tr>";
