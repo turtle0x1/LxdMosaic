@@ -17,9 +17,9 @@ class DeleteLocalBackupController implements \dhope0000\LXDClient\Interfaces\Rec
     /**
      * @Route("", name="Delete Local Instance Backup")
      */
-    public function delete(int $backupId)
+    public function delete(int $userId, int $backupId)
     {
-        $lxdRespone = $this->deleteLocalBackup->delete($backupId);
+        $lxdRespone = $this->deleteLocalBackup->delete($userId, $backupId);
 
         return ["state"=>"success", "message"=>"Deleted backup", "lxdRespone"=>$lxdRespone];
     }
