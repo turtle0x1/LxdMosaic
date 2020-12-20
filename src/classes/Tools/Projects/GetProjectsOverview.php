@@ -18,47 +18,55 @@ class GetProjectsOverview
 
         foreach ($clustersAndStandalone["clusters"] as $cluster) {
             foreach ($cluster["members"] as $member) {
-                $this->addSchedulesToSchedule($member);
+                $this->calculateUsage($member);
             }
         }
 
         foreach ($clustersAndStandalone["standalone"]["members"] as $member) {
-            if (!$member->hostOnline()) {
-                continue;
-            }
-
-            $hostProjects = [];
-
-            foreach ($member->getCustomProp("projects") as $project) {
-                $projectDetails = $member->projects->info($project, 2);
-                $limits = $this->getLimitValues($projectDetails["config"]);
-                $member->setProject($project);
-                $instances = $member->instances->all(2);
-
-                foreach ($instances as $instance) {
-                    if ($instance["type"] == "virtual-machine") {
-                        $limits["limits.virtual-machine"]["value"]++;
-                    } else {
-                        $limits["limits.containers"]["value"]++;
-                    }
-
-                    $limits["limits.memory"]["value"] += $instance["state"]["memory"]["usage"];
-                    $limits["limits.processes"]["value"] += $instance["state"]["processes"];
-                    $limits["limits.cpu"]["value"] += $instance["state"]["cpu"]["usage"];
-
-                    //TODO https://github.com/lxc/lxd/issues/8173
-                    if ($instance["state"]["disk"] != null) {
-                        $limits["limits.disk"]["value"] += $instance["state"]["disk"]["root"]["usage"];
-                    }
-                }
-                $limits["limits.networks"]["value"] = count($member->networks->all());
-                $images = $member->images->all(2);
-                $limits["limits.disk"]["value"] += array_sum(array_column($images, "size"));
-                $hostProjects[$project] = $limits;
-            }
-            $member->setCustomProp("projects", $hostProjects);
+            $this->calculateUsage($member);
         }
         return $clustersAndStandalone;
+    }
+
+    private function calculateUsage(&$member)
+    {
+        if (!$member->hostOnline()) {
+            return;
+        }
+
+        $hostProjects = [];
+
+        foreach ($member->getCustomProp("projects") as $project) {
+            $projectDetails = $member->projects->info($project, 2);
+
+            $limits = $this->getLimitValues($projectDetails["config"]);
+
+            $member->setProject($project);
+
+            $instances = $member->instances->all(2);
+
+            foreach ($instances as $instance) {
+                if ($instance["type"] == "virtual-machine") {
+                    $limits["limits.virtual-machine"]["value"]++;
+                } else {
+                    $limits["limits.containers"]["value"]++;
+                }
+
+                $limits["limits.memory"]["value"] += $instance["state"]["memory"]["usage"];
+                $limits["limits.processes"]["value"] += $instance["state"]["processes"];
+                $limits["limits.cpu"]["value"] += $instance["state"]["cpu"]["usage"];
+
+                //TODO https://github.com/lxc/lxd/issues/8173
+                if ($instance["state"]["disk"] != null) {
+                    $limits["limits.disk"]["value"] += $instance["state"]["disk"]["root"]["usage"];
+                }
+            }
+            $limits["limits.networks"]["value"] = count($member->networks->all());
+            $images = $member->images->all(2);
+            $limits["limits.disk"]["value"] += array_sum(array_column($images, "size"));
+            $hostProjects[$project] = $limits;
+        }
+        $member->setCustomProp("projects", $hostProjects);
     }
 
     private function getLimitValues($config)
