@@ -905,7 +905,7 @@ $(document).on("keyup", ".filterHostsInstances", function(e){
 });
 
 $(document).on("click", ".cluster-title", function(e){
-    if(userDetails.isAdmin){
+    if(!userDetails.isAdmin){
         return false;
     }
     let x = $(this).data();
