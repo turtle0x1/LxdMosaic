@@ -12,6 +12,7 @@ if [ ! -s "${SNAP_DATA}/lxdMosaic.db" ]; then
     cp ${SNAP}/htdocs/sql/sqliteSeed.db "${SNAP_DATA}/lxdMosaic.db"
 fi
 
+$SNAP/htdocs/vendor/bin/phinx migrate -e snap -c $SNAP/htdocs/phinx.php
 
 
 # Tends to be between 30-50MB
