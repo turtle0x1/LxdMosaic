@@ -1026,7 +1026,7 @@ function loadContainerView(data)
                     <i class="fas fa-memory float-right"></i>
                 </h5>
                 <div style="width: 100%;">
-                <canvas id="memoryData"></canvas></div>`);
+                <canvas id="memoryData" height="200"></canvas></div>`);
 
             new Chart($("#memoryData"), {
                 type: "bar",
@@ -1054,7 +1054,7 @@ function loadContainerView(data)
                     <i class="fas fa-hdd float-right"></i>
                 </h5>
                 <div style="width: 100%;">
-                <canvas id="storageData"></canvas></div>`);
+                <canvas id="storageData" height="200"></canvas></div>`);
 
 
             let storageKeys = Object.keys(x.state.disk);
@@ -1070,7 +1070,7 @@ function loadContainerView(data)
                 data: {
                     labels: storageLabels,
                     datasets: [{
-                      label: 'Memory',
+                      label: 'Space Used',
                       data: storageData,
                       backgroundColor: storageColors,
                       borderColor: storageColors,
