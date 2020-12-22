@@ -46,4 +46,25 @@ class FetchAllowedProjects
         ]);
         return $do->fetchAll(\PDO::FETCH_COLUMN, 0);
     }
+
+    public function fetchUsersCanAcessProject(int $hostId, string $project)
+    {
+        $sql = "SELECT
+                    `Users`.`User_Name`
+                FROM
+                    `User_Allowed_Projects`
+                LEFT JOIN `Users` ON
+                    `Users`.`User_ID` = `User_Allowed_Projects`.`UAP_User_ID`
+                WHERE
+                    `UAP_Host_ID` = :hostId
+                AND
+                    `UAP_Project` = :project
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId,
+            ":project"=>$project
+        ]);
+        return $do->fetchAll(\PDO::FETCH_COLUMN, 0);
+    }
 }

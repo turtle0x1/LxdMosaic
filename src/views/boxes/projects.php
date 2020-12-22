@@ -93,13 +93,40 @@
             </div>
           </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-4">
+        <div class="card bg-dark">
+          <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
+            <h5>
+              <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
+                Users
+                <i class="float-right fas fa-users"></i>
+              </a>
+            </h5>
+          </div>
+          <div id="projectUsedBy" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
+            <div class="card-block bg-dark table-responsive">
+                <div id="collapseOne" class="collapse in show" role="tabpanel" >
+                    <table class="table table-dark table-bordered" id="projectUsersTable">
+                        <thead>
+                            <tr>
+                                <th> User </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-4">
         <div class="card bg-dark">
           <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
             <h5>
               <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
                 Used By
-                <i class="float-right fas fa-users"></i>
+                <i class="fas fa-layer-group float-right"></i>
               </a>
             </h5>
           </div>
@@ -290,7 +317,7 @@ function viewProject(project, hostId, hostAlias){
         let projectUsedBy = "";
         let emptyProject = data.used_by.length < 2;
         if(data.used_by.length == 0){
-            projectUsedBy += "<tr><td class='text-center'><b style='color: red;'>Not Used</b></td></tr>"
+            projectUsedBy += "<tr><td class='text-center'><i class='fas fa-info-circle text-info mr-2'></i>Not used</td></tr>"
         }else{
             $.each(data.used_by, function(i, item){
                 projectUsedBy += `<tr><td>${item}</td></tr>`;
@@ -317,6 +344,12 @@ function viewProject(project, hostId, hostAlias){
             restrictionsConfig = `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No Restrictions</td></tr>`
         }
 
+        let usersList = "";
+        $.each(data.users, (_, user)=>{
+            usersList += `<tr><td>${user}</td></tr>`
+        });
+
+        $("#projectUsersTable > tbody").empty().append(usersList);
         $("#restrictionsListTable > tbody").empty().append(restrictionsConfig);
         $("#projectConfigTable > tbody").empty().append(projectConfig);
     });
