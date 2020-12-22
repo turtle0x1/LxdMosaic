@@ -66,6 +66,21 @@
         </div>
         <div class="row">
             <div class="col-md-3">
+                <div class="card bg-dark">
+                  <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
+                    <h5>
+                      <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
+                      Usage
+                      </a>
+                    </h5>
+                  </div>
+                  <div id="deploymentCloudConfig" class="collapse show" role="tabpanel" aria-labelledby="deploymentCloudConfigHeading">
+                    <div class="card-block bg-dark table-responsive">
+                        <h5 id="storagePoolUsage"></h5>
+                        <h5 id="storagePoolTotal"></h5>
+                    </div>
+                  </div>
+                </div>
                   <div class="card bg-dark">
                     <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
@@ -83,21 +98,23 @@
                   </div>
             </div>
             <div class="col-md-3">
-                  <div class="card bg-dark">
-                    <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
-                      <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
-                        Usage
-                        </a>
-                      </h5>
-                    </div>
-                    <div id="deploymentCloudConfig" class="collapse show" role="tabpanel" aria-labelledby="deploymentCloudConfigHeading">
-                      <div class="card-block bg-dark table-responsive">
-                          <h5 id="storagePoolUsage"></h5>
-                          <h5 id="storagePoolTotal"></h5>
-                      </div>
-                    </div>
+                <div class="card bg-dark">
+                  <div class="card-header" role="tab">
+                    <h5>Volumes <i class="fas fa-database float-right"></i></h5>
                   </div>
+                  <div class="card-body">
+                      <table class="table table-bordered table-dark" id="storageVolumeTable">
+                          <thead>
+                              <tr>
+                                  <th>Volume</th>
+                                  <th>Project</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      </table>
+                  </div>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="card bg-dark">
@@ -286,6 +303,20 @@ function viewStoragePool(hostId, poolName)
         $("#storagePoolUsage").text(`Total Used: ${formatBytes(data.resources.space.used)}`)
         $("#storagePoolTotal").text(`Total Free: ${formatBytes(data.resources.space.total)}`)
 
+        let volumesHtml = "";
+
+        if(data.volumes.length == 0){
+            volumesHtml += `<tr><td class="text-center" colspan="2"><i class="fas fa-info-circle text-info mr-2"></i>No Volumes</td></tr>`
+        }else{
+            $.each(data.volumes, function(key, value){
+                volumesHtml += `<tr>
+                    <td>${value.name}</td>
+                    <td>${value.project}</td>
+                </tr>`
+            });
+        }
+
+        $("#storageVolumeTable > tbody").empty().append(volumesHtml);
         $("#storagePoolConfigDetails").empty().append(configHtml);
         $("#storagePoolUsedBy > tbody").empty().append(usedByHtml);
     });
