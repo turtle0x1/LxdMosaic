@@ -96,7 +96,7 @@
           <h5>
             <a data-toggle="collapse" class="text-white" data-parent="#accordion" href="#usedByCollapse" aria-expanded="true" aria-controls="usedByCollapse">
               Used By
-              <i class="fas fa-users float-right"></i>
+              <i class="fas fa-layer-group float-right"></i>
             </a>
           </h5>
         </div>

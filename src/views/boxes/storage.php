@@ -101,8 +101,8 @@
             </div>
             <div class="col-md-6">
                 <div class="card bg-dark">
-                    <div class="card-header bg-dark">
-                        <h5> <a> Used By </a> </h5>
+                    <div class="card-header">
+                        <h5>Used By <i class="fas fa-layer-group float-right"></i> </h5>
                     </div>
                     <div class="card-body table-responsive  bg-dark">
                         <table class="table table-bordered table-dark" id="storagePoolUsedBy">
