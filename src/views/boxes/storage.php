@@ -136,6 +136,55 @@
             </div>
         </div>
     </div>
+    <div id="volumeDetails">
+        <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
+            <div class="col-md-12">
+                <h4>
+                    <i class="fas fa-database text-white mr-2"></i>
+                    <span class="text-white" id="storageVolumeName"></span>
+                </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card bg-dark">
+                  <div class="card-header">
+                    <h5>
+                        <i class="fas fa-cog mr-2"></i>Config
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                      <table class="table table-borderd table-dark" id="volumeConfigTable">
+                          <thead>
+                              <th>Key</th>
+                              <th>Value</th>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      </table>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card bg-dark">
+                  <div class="card-header">
+                    <h5>
+                        <i class="fas fa-layer-group float-right"></i>Used By
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                      <table class="table table-borderd table-dark" id="volumeUsedByTable">
+                          <thead>
+                              <th>Entity</th>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      </table>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -191,7 +240,7 @@ function makeStorageHostSidebarHtml(hosthtml, host, tableListHtml){
 
 function loadStorageView()
 {
-    $(".boxSlide, #storageDetails").hide();
+    $(".boxSlide, #storageDetails, #volumeDetails").hide();
     $("#storageOverview, #storageBox").show();
     $("#deploymentList").empty();
     setBreadcrumb("Storage", "viewStorage active");
@@ -280,8 +329,8 @@ $("#storageOverview").on("click", "#createPool", function(){
 
 function viewStoragePool(hostId, hostAlias, poolName)
 {
-    currentPool = {hostId: hostId, poolName: poolName};
-    $("#storageOverview").hide();
+    currentPool = {hostId: hostId, poolName: poolName, hostAlias: hostAlias};
+    $("#storageOverview, #volumeDetails").hide();
     $("#storageDetails").show();
 
     addBreadcrumbs(["Storage", hostAlias, poolName], ["viewStorage", "", "active"], false);
@@ -314,7 +363,7 @@ function viewStoragePool(hostId, hostAlias, poolName)
         }else{
             $.each(data.volumes, function(key, value){
                 volumesHtml += `<tr>
-                    <td>${value.name}</td>
+                    <td><a class='viewVolume' href="#" data-project="${value.project}" data-path="${value.path}" data-name="${value.name}">${value.name}</a></td>
                     <td>${value.project}</td>
                 </tr>`
             });
@@ -323,6 +372,52 @@ function viewStoragePool(hostId, hostAlias, poolName)
         $("#storageVolumeTable > tbody").empty().append(volumesHtml);
         $("#storagePoolConfigDetails").empty().append(configHtml);
         $("#storagePoolUsedBy > tbody").empty().append(usedByHtml);
+    });
+}
+
+$("#storageDetails").on("click", ".viewVolume", function(){
+    let d = $(this).data();
+    $("#storageOverview, #storageDetails").hide();
+    $("#volumeDetails").show();
+
+    viewStorageVolume(currentPool.hostId, currentPool.hostAlias, currentPool.poolName, d.name, d.path, d.project);
+});
+
+function viewStorageVolume(hostId, hostAlias, poolName, volumeName, path, project) {
+    let x = {hostId: hostId, pool: poolName, path: path, project: project};
+    addBreadcrumbs(["Storage", hostAlias, poolName, "volumes", volumeName ], ["viewStorage", "", "", "", "active"], false);
+    $("#storageVolumeName").text(volumeName)
+    ajaxRequest(globalUrls.storage.volumes.get, x, (data)=>{
+        data = makeToastr(data);
+        let volumeConfigTrs = "";
+        let configKeys = Object.keys(data.config);
+        if(configKeys.length == 0){
+            volumeConfigTrs = `<tr>
+                <td colspan="2" class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No Config</td>
+            </tr>`;
+
+        }else{
+            $.each(configKeys, (_, key)=>{
+                volumeConfigTrs += `<tr>
+                    <td>${key}</td>
+                    <td>${data.config[key]}</td>
+                </tr>`
+            });
+        }
+
+        let volumeUsedByTrs = "";
+
+        if(data.used_by.length == 0){
+            volumeUsedByTrs += `<tr><td class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Not Used</td></tr>`
+        }else{
+            $.each(data.used_by, function(key, value){
+                volumeUsedByTrs += `<tr><td>${value}</td></tr>`
+            });
+        }
+
+
+        $("#volumeUsedByTable > tbody").empty().append(volumeUsedByTrs)
+        $("#volumeConfigTable > tbody").empty().append(volumeConfigTrs)
     });
 }
 
