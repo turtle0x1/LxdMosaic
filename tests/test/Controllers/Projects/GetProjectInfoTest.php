@@ -14,7 +14,7 @@ final class GetProjectInfoTest extends TestCase
     /**
      * @dataProvider dataGetProject
      */
-    public function test_createProject($data, $expected) :void
+    public function test_get_project_info($data, $expected) :void
     {
         $_POST = $data;
 
@@ -51,6 +51,9 @@ final class GetProjectInfoTest extends TestCase
                 default
             </a>',
                     ],
+                    "users"=>[
+                        "testUser"
+                    ]
                 ]
             ]
         ];
