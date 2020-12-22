@@ -165,6 +165,7 @@ function makeStorageHostSidebarHtml(hosthtml, host, tableListHtml){
      $.each(host.pools, function(i, pool){
          hosthtml += `<li class="nav-item view-storagePool"
              data-host-id="${host.hostId}"
+             data-host-alias="${host.alias}"
              data-pool-name="${pool.name}"
              >
            <a class="nav-link" href="#">
@@ -269,7 +270,7 @@ function loadStorageView()
 }
 
 $("#sidebar-ul").on("click", ".view-storagePool", function(){
-    viewStoragePool($(this).data("hostId"), $(this).data("poolName"))
+    viewStoragePool($(this).data("hostId"), $(this).data("hostAlias"), $(this).data("poolName"))
 });
 
 
@@ -277,11 +278,14 @@ $("#storageOverview").on("click", "#createPool", function(){
     $("#modal-storage-createPool").modal("toggle");
 });
 
-function viewStoragePool(hostId, poolName)
+function viewStoragePool(hostId, hostAlias, poolName)
 {
     currentPool = {hostId: hostId, poolName: poolName};
     $("#storageOverview").hide();
     $("#storageDetails").show();
+
+    addBreadcrumbs(["Storage", hostAlias, poolName], ["viewStorage", "", "active"], false);
+
     ajaxRequest(globalUrls.storage.getPool, currentPool, function(data){
         data = $.parseJSON(data);
         let configHtml = "",
