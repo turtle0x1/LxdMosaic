@@ -196,6 +196,9 @@ if ($haveServers->haveAny() !== true) {
                   createNetwork: "/api/Networks/CreateNetworkController/create"
               },
               storage: {
+                  volumes: {
+                      get: "/api/Storage/Volumes/GetStorageVolumeController/get"
+                  },
                   getAll: "/api/Storage/GetHostsStorageController/get",
                   getPool: "/api/Storage/GetHostsStoragePoolController/get",
                   deletePool: "/api/Storage/DeleteStoragePoolController/delete",
