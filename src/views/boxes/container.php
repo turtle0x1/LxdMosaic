@@ -30,6 +30,9 @@
             </u></h4>
             <div class="btn-toolbar float-right">
               <div class="btn-group mr-2">
+                  <button data-toggle="tooltip" data-placement="bottom" title="Attach Volume" class="btn btn-sm btn-success" id="attachVolumesBtn">
+                      <i class="fas fa-hdd"></i>
+                  </button>
                   <button data-toggle="tooltip" data-placement="bottom" title="Assign Profiles" class="btn btn-sm btn-purple" id="assignProfilesBtn">
                       <i class="fas fa-users"></i>
                   </button>
@@ -1652,6 +1655,10 @@ $("#containerBox").on("click", "#assignProfilesBtn", function(){
     $("#modal-container-assignProfiles").modal("show");
 });
 
+$("#containerBox").on("click", "#attachVolumesBtn", function(){
+    $("#modal-container-attachVolumes").modal("show");
+});
+
 $("#containerBox").on("click", "#craeteImage", function(){
     $("#modal-container-createImage").modal("show");
 });
@@ -1685,4 +1692,5 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
     require __DIR__ . "/../modals/instances/vms/createVm.php";
     require __DIR__ . "/../modals/containers/createImage.php";
     require __DIR__ . "/../modals/containers/assignProfiles.php";
+    require __DIR__ . "/../modals/instances/attachVolumes.php";
 ?>

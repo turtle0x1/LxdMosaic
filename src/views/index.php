@@ -88,6 +88,9 @@ if ($haveServers->haveAny() !== true) {
                   get: "/api/Dashboard/GetController/get"
               },
               instances: {
+                  volumes: {
+                    assign: "/api/Instances/Volumes/AttachVolumesController/attach"  
+                  },
                   comment: {
                       set: "/api/Instances/Comments/SetInstanceCommentController/set",
                   },
@@ -197,7 +200,8 @@ if ($haveServers->haveAny() !== true) {
               },
               storage: {
                   volumes: {
-                      get: "/api/Storage/Volumes/GetStorageVolumeController/get"
+                      get: "/api/Storage/Volumes/GetStorageVolumeController/get",
+                      getOnHost: "/api/Storage/Volumes/GetHostStorageVolumesController/get",
                   },
                   getAll: "/api/Storage/GetHostsStorageController/get",
                   getPool: "/api/Storage/GetHostsStoragePoolController/get",
