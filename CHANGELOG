@@ -13,6 +13,7 @@ Added
     LDAP user syncing & login (#171, #272, #300)
     Show users who can access a project on project view
     View storage volumes
+    Attach volumes to instances
 
 Changed
     Support backups & backup schedules in different projects

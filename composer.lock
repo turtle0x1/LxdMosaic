@@ -296,16 +296,16 @@
         },
         {
             "name": "dhope0000/lxd",
-            "version": "v0.18.1",
+            "version": "v0.18.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/turtle0x1/php-lxd.git",
-                "reference": "a496430cd21a5ac649e634bdcb17a8027370a5e4"
+                "reference": "49f5fb57f4adcddffdc301fcf64c2d79172d4d2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/a496430cd21a5ac649e634bdcb17a8027370a5e4",
-                "reference": "a496430cd21a5ac649e634bdcb17a8027370a5e4",
+                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/49f5fb57f4adcddffdc301fcf64c2d79172d4d2e",
+                "reference": "49f5fb57f4adcddffdc301fcf64c2d79172d4d2e",
                 "shasum": ""
             },
             "require": {
@@ -362,7 +362,7 @@
                 "lxd",
                 "wrapper"
             ],
-            "time": "2020-12-22T18:41:18+00:00"
+            "time": "2020-12-23T00:04:07+00:00"
         },
         {
             "name": "doctrine/annotations",
