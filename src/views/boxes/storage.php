@@ -146,7 +146,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="card bg-dark">
                   <div class="card-header">
                     <h5>
@@ -154,7 +154,7 @@
                     </h5>
                   </div>
                   <div class="card-body">
-                      <table class="table table-borderd table-dark" id="volumeConfigTable">
+                      <table class="table table-borderd table-dark table-responsive" id="volumeConfigTable">
                           <thead>
                               <th>Key</th>
                               <th>Value</th>
@@ -165,7 +165,7 @@
                   </div>
                 </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-6">
                 <div class="card bg-dark">
                   <div class="card-header">
                     <h5>
