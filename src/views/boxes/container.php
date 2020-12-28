@@ -1,3 +1,165 @@
+<!-- ES2015/ES6 modules polyfill -->
+<script type="module">
+    window._spice_has_module_support = true;
+</script>
+<script>
+    window.addEventListener("load", function() {
+        if (window._spice_has_module_support) return;
+        var loader = document.createElement("script");
+        loader.src = "/assets/spiceHtml5/src/thirdparty/browser-es-module-loader/dist/browser-es-module-loader.js";
+        document.head.appendChild(loader);
+    });
+</script>
+
+<style>
+.spice-screen
+{
+    min-height: 600px;
+    height: 100%;
+    margin: 10px;
+    padding: 0;
+}
+</style>
+
+<script type="module" crossorigin="anonymous">
+    import * as SpiceHtml5 from './assets/spiceHtml5/src/main.js';
+
+    var host = null, port = null;
+    var sc;
+
+    function spice_set_cookie(name, value, days) {
+        var date, expires;
+        date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toGMTString();
+        document.cookie = name + "=" + value + expires + "; path=/";
+    };
+
+    function spice_query_var(name, defvalue) {
+        var match = RegExp('[?&]' + name + '=([^&]*)')
+                          .exec(window.location.search);
+        return match ?
+            decodeURIComponent(match[1].replace(/\+/g, ' '))
+            : defvalue;
+    }
+
+    function spice_error(e)
+    {
+        disconnect();
+        if (e !== undefined && e.message === "Permission denied.") {
+          var pass = prompt("Password");
+          connect(pass);
+        }
+    }
+
+    function connectToTerminal(uri, hostId, project, instance, password = undefined)
+    {
+        var host, port, scheme = "ws://";
+
+        // By default, use the host and port of server that served this file
+        host = spice_query_var('host', window.location.hostname);
+
+        // Note that using the web server port only makes sense
+        //  if your web server has a reverse proxy to relay the WebSocket
+        //  traffic to the correct destination port.
+        var default_port = window.location.port;
+        if (!default_port) {
+            if (window.location.protocol == 'http:') {
+                default_port = 80;
+            }
+            else if (window.location.protocol == 'https:') {
+                default_port = 443;
+            }
+        }
+        port = spice_query_var('port', default_port);
+        if (window.location.protocol == 'https:') {
+            scheme = "wss://";
+        }
+
+        // If a token variable is passed in, set the parameter in a cookie.
+        // This is used by nova-spiceproxy.
+        var token = spice_query_var('token', null);
+        if (token) {
+            spice_set_cookie('token', token, 1)
+        }
+
+        if (password === undefined) {
+            password = spice_query_var('password', '');
+        }
+        var path = spice_query_var('path', '/terminal');
+
+        if ((!host) || (!port)) {
+            console.log("must specify host and port in URL");
+            return;
+        }
+
+        if (sc) {
+            sc.stop();
+        }
+
+        uri = scheme + host + ":" + port;
+
+        if (path) {
+          uri += path[0] == '/' ? path : ('/' + path);
+        }
+
+        uri = `${uri}/${hostId}/${project}/${instance}?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}`
+
+        try
+        {
+            sc = new SpiceHtml5.SpiceMainConn({uri: uri, screen_id: "spice-screen", password: password, onerror: spice_error, onagent: agent_connected });
+        }
+        catch (e)
+        {
+            alert(e.toString());
+            disconnect();
+        }
+
+    }
+
+    function disconnect()
+    {
+        console.log(">> disconnect");
+        if (sc) {
+            sc.stop();
+        }
+        if (window.File && window.FileReader && window.FileList && window.Blob)
+        {
+            var spice_xfer_area = document.getElementById('spice-xfer-area');
+            if (spice_xfer_area != null) {
+              document.getElementById('spice-area').removeChild(spice_xfer_area);
+            }
+            document.getElementById('spice-area').removeEventListener('dragover', SpiceHtml5.handle_file_dragover, false);
+            document.getElementById('spice-area').removeEventListener('drop', SpiceHtml5.handle_file_drop, false);
+        }
+        console.log("<< disconnect");
+    }
+
+    function agent_connected(sc)
+    {
+        window.addEventListener('resize', SpiceHtml5.handle_resize);
+        window.spice_connection = this;
+
+        SpiceHtml5.resize_helper(this);
+
+        if (window.File && window.FileReader && window.FileList && window.Blob)
+        {
+            var spice_xfer_area = document.createElement("div");
+            spice_xfer_area.setAttribute('id', 'spice-xfer-area');
+            document.getElementById('spice-area').appendChild(spice_xfer_area);
+            document.getElementById('spice-area').addEventListener('dragover', SpiceHtml5.handle_file_dragover, false);
+            document.getElementById('spice-area').addEventListener('drop', SpiceHtml5.handle_file_drop, false);
+        }
+        else
+        {
+            console.log("File API is not supported");
+        }
+    }
+
+    window.disconnectFromTerminal = disconnect
+    window.connectToTerminal = connectToTerminal
+</script>
+
 <div id="containerBox" class="boxSlide">
     <div class="row border-bottom mb-2">
     <div class="col-md-12 text-center">
@@ -71,6 +233,9 @@
             <button type="button" class="btn text-white btn-outline-primary" id="goToConsole">
                 <i class="fas fa-terminal pr-2"></i>Console
             </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToTerminal">
+                <i class="fas fa-tv pr-2"></i>Terminal
+            </button>
             <button type="button" class="btn text-white btn-outline-primary" id="goToBackups">
                 <i class="fas fa-save pr-2"></i>Backups
             </button>
@@ -88,13 +253,15 @@
             </div>
         </div>
     </div>
-<div id="containerDetails">
+<div id="containerDetails" class="instanceViewBox">
 <div class="row">
     <div class="col-md-5">
         <div class="card text-white bg-dark">
           <div class="card-body">
               <h5> <u> Instance Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
               Host: <span id="container-hostNameDisplay"></span>
+              <br/>
+              Project: <span id="instanceProject"></span>
               <br/>
               <a
                   href="https://github.com/lxc/pylxd/issues/242#issuecomment-323272318"
@@ -189,10 +356,20 @@
     </div>
 </div>
 </div>
-<div id="containerConsole">
+<div id="containerConsole" class="instanceViewBox">
     <div id="terminal-container"></div>
 </div>
-<div id="containerBackups">
+<div id="containerTerminal" class="instanceViewBox">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div id="spice-area">
+                <div id="spice-screen" class="spice-screen">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="containerBackups" class="instanceViewBox">
     <div class="row" id="backupErrorRow">
         <div class="col-md-12 alert alert-danger" id="backupErrorMessage">
         </div>
@@ -247,7 +424,7 @@
         </div>
     </div>
 </div>
-<div id="containerFiles"  class="col-md-12">
+<div id="containerFiles"  class="col-md-12 instanceViewBox">
     <div class="alert alert-danger">
         Do not use this over a metered internet connection.
         To Correctly indentify the whether the something is a dir or a file
@@ -265,7 +442,7 @@
     <div class="card-columns" id="filesystemTable">
     </div>
 </div>
-<div id="containerEvents"  class="col-md-12">
+<div id="containerEvents"  class="col-md-12 instanceViewBox">
     <div class="card bg-dark text-white">
         <div class="card-header">
             <h4> Event Logs </h4>
@@ -286,7 +463,7 @@
         </div>
     </div>
 </div>
-<div id="containerMetrics"  class="col-md-12">
+<div id="containerMetrics"  class="col-md-12 instanceViewBox">
     <div class="card bg-dark text-white">
         <div class="card-header">
             Metric Graph
@@ -823,13 +1000,16 @@ function loadContainerBackups()
 
 function loadContainerView(data)
 {
-    $("#containerConsole").hide();
+    $(".instanceViewBox").hide();
     $("#containerDetails").show();
     $("#goToDetails").trigger("click");
     if(consoleSocket !== undefined && currentTerminalProcessId !== null){
         consoleSocket.emit("close", currentTerminalProcessId);
         currentTerminalProcessId = null;
     }
+
+    window.disconnectFromTerminal();
+
     $("#goToMetrics").attr("disabled", true).addClass("disabled").data({
         toggle: "tooltip",
         placement: "bottom",
@@ -873,6 +1053,12 @@ function loadContainerView(data)
         })
 
 
+        if(x.details.type == "container"){
+            $("#goToTerminal").hide();
+        }else{
+            $("#goToTerminal").show();
+        }
+
 
         if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.haveMetrics){
             $("#goToMetrics").tooltip("disable");
@@ -905,6 +1091,7 @@ function loadContainerView(data)
 
         $("#container-hostNameDisplay").text(currentContainerDetails.alias);
         $("#container-containerNameDisplay").text(data.container);
+        $("#instanceProject").text(x.project);
         $("#container-imageDescription").html(` - ${os} (${version})`);
         $("#container-cpuTime").text(containerCpuTime);
         $("#container-createdAt").text(moment(x.details.created_at).format("MMM DD YYYY h:mm A"));
@@ -1343,8 +1530,8 @@ function loadFileSystemPath(path){
 }
 
 $("#containerBox").on("click", "#goToFiles", function(){
+    $(".instanceViewBox").hide();
     $("#containerFiles").show();
-    $("#containerConsole, #containerBackups, #containerDetails, #containerMetrics, #containerEvents").hide();
     loadFileSystemPath("/");
 });
 
@@ -1452,8 +1639,9 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
 });
 
 $("#containerBox").on("click", "#goToMetrics", function(){
+    $(".instanceViewBox").hide();
     $("#containerMetrics").show();
-    $("#containerConsole, #containerBackups, #containerDetails, #containerFiles, #containerEvents").hide();
+
     $("#metricGraphBody").empty();
     $("#metricRangePicker").attr("disabled", true);
     $("#metricTypeFilterSelect").attr("disabled", true).empty().append(`<option value=''>Please Select</option>`)
@@ -1490,8 +1678,8 @@ $(document).on("click", ".goUpDirectory", function(){
 });
 
 $("#containerBox").on("click", "#goToDetails", function(){
+    $(".instanceViewBox").hide();
     $("#containerDetails").show();
-    $("#containerConsole, #containerBackups, #containerFiles, #containerMetrics, #containerEvents").hide();
 });
 
 $("#containerBox").on("click", "#goToBackups", function() {
@@ -1499,13 +1687,13 @@ $("#containerBox").on("click", "#goToBackups", function() {
         return false;
     }
     loadContainerBackups();
-    $("#containerDetails, #containerConsole, #containerFiles, #containerMetrics, #containerEvents").hide();
+    $(".instanceViewBox").hide();
     $("#containerBackups").show();
 });
 
 $("#containerBox").on("click", "#goToEvents", function() {
+    $(".instanceViewBox").hide();
     $("#containerEvents").show();
-    $("#containerConsole, #containerBackups, #containerFiles, #containerMetrics, #containerDetails").hide();
     ajaxRequest('/api/Instances/RecordedActions/GetHostInstanceEventsController/get', currentContainerDetails, (data)=>{
         data = makeToastr(data);
         let trs = "";
@@ -1526,10 +1714,21 @@ $("#containerBox").on("click", "#goToEvents", function() {
     });
 });
 
+$("#containerBox").on("click", "#goToTerminal", function() {
+    $(".instanceViewBox").hide();
+    $("#containerTerminal").show();
+
+    $("#spice-screen").append(`<h4 id="spiceLoadingIndicator"> <i class="fas fa-cog fa-spin"></i> </h4>`)
+    let project = $("#instanceProject").text();
+
+    window.disconnectFromTerminal();
+    window.connectToTerminal(undefined, currentContainerDetails.hostId, project, currentContainerDetails.container);
+});
+
 $("#containerBox").on("click", "#goToConsole", function() {
     Terminal.applyAddon(attach);
 
-    $("#containerDetails, #containerBackups, #containerFiles, #containerMetrics, #containerEvents").hide();
+    $(".instanceViewBox").hide();
     $("#containerConsole").show();
 
 
