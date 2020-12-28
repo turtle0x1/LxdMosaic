@@ -86,7 +86,7 @@
         if (password === undefined) {
             password = spice_query_var('password', '');
         }
-        var path = spice_query_var('path', '/terminal');
+        var path = spice_query_var('path', '/node/terminal');
 
         if ((!host) || (!port)) {
             console.log("must specify host and port in URL");
@@ -1004,7 +1004,7 @@ function loadContainerView(data)
     $("#containerDetails").show();
     $("#goToDetails").trigger("click");
     if(consoleSocket !== undefined && currentTerminalProcessId !== null){
-        consoleSocket.emit("close", currentTerminalProcessId);
+        consoleSocket.close();
         currentTerminalProcessId = null;
     }
 
@@ -1780,7 +1780,6 @@ $("#containerBox").on("click", "#goToConsole", function() {
                                     container: currentContainerDetails.container
                                 }),
                                 success: function(data) {
-
                                     currentTerminalProcessId = data.processId;
 
                                     // Theoretically no need to inject credentials
@@ -1788,31 +1787,17 @@ $("#containerBox").on("click", "#goToConsole", function() {
                                     // is first connected (in this case when the
                                     // operations socket is setup - which will
                                     // always come before this) but to be safe ...
-                                    consoleSocket = io.connect(`/terminals`, {
-                                        reconnection: false,
-                                        query: $.extend({
-                                            ws_token: userDetails.apiToken,
-                                            user_id: userDetails.userId,
-                                            pid: data.processId,
-                                            shell: shell,
-                                            userId: userDetails.userId,
-                                            host: currentContainerDetails.hostId,
-                                            container: currentContainerDetails.container
-                                        }, currentContainerDetails)
-                                    });
-                                    consoleSocket.on('data', function(data) {
-                                        term.write(data);
-                                    });
+                                    consoleSocket = new WebSocket(`wss://${getQueryVar("host", window.location.hostname)}:${getQueryVar("port", 443)}/node/console?${$.param($.extend({
+                                        ws_token: userDetails.apiToken,
+                                        user_id: userDetails.userId,
+                                        pid: data.processId,
+                                        shell: shell,
+                                        userId: userDetails.userId,
+                                        host: currentContainerDetails.hostId,
+                                        container: currentContainerDetails.container
+                                    }, currentContainerDetails))}`);
 
-                                    // Browser -> Backend
-                                    term.on('data', function(data) {
-                                        consoleSocket.emit('data', data);
-                                    });
-
-                                    consoleSocket.onopen = function() {
-                                        term.attach(consoleSocket);
-                                        term._initialized = true;
-                                    };
+                                    term.attach(consoleSocket);
                                 },
                                 error: function(){
                                     makeNodeMissingPopup();

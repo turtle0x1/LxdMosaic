@@ -4,9 +4,31 @@ module.exports = class HostOperations {
   constructor(fs, webSocket) {
     this.fs = fs;
     this.operationSockets = {};
+    this.sockets = [];
   }
 
-  setupWebsockets(hostDetails, clientOperationSocket) {
+  sendToOpsClients(type, msg)
+  {
+      //Silly but sometimes msg is a string :shrug:
+      if(typeof msg == "string"){
+          msg = JSON.parse(msg);
+      }
+      msg.mosaicType = type;
+      msg = JSON.stringify(msg);
+      this.sockets.forEach(socket=>{
+          if(socket.readyState == 1){
+
+              socket.send(msg);
+          }
+      })
+  }
+
+  addClientSocket(socket)
+  {
+      this.sockets.push(socket)
+  }
+
+  setupWebsockets(hostDetails) {
     return new Promise((resolve, reject) => {
       let keys = Object.keys(hostDetails);
       for (let i = 0; i < keys.length; i++) {
@@ -24,19 +46,19 @@ module.exports = class HostOperations {
             wsoptions
           );
 
-          this.operationSockets[details.hostId].on('message', function(
-            data,
-            flags
-          ) {
+          this.operationSockets[details.hostId].on('message', (data) => {
             var buf = Buffer.from(data);
             let message = JSON.parse(data.toString());
+
             message.hostAlias = details.alias;
             message.hostId = details.hostId;
             message.host = details.hostWithOutProtoOrPort;
+
             if(message.hasOwnProperty("location") && message.location !== "" && message.location !== "none" && message.location !== details.alias){
                 return;
             }
-            clientOperationSocket.emit('operationUpdate', message);
+
+            this.sendToOpsClients("operationUpdate", message)
           });
         }
       }

@@ -1,3 +1,13 @@
+// Stolen from spice html
+function getQueryVar(name, defvalue) {
+    var match = RegExp('[?&]' + name + '=([^&]*)')
+                      .exec(window.location.search);
+    return match ?
+        decodeURIComponent(match[1].replace(/\+/g, ' '))
+        : defvalue;
+}
+
+
 function makeToastr(x) {
     if(!$.isPlainObject(x)){
         x = $.parseJSON(x);
