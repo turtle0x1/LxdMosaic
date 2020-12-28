@@ -1122,9 +1122,9 @@ function loadDashboard(){
         $("#dashboardMemoryHistoryBox, #dashboardRunningInstancesBox, #dashboardStorageHistoryBox, #dashboardStorageUsageBox").show().parents(".card-body").find(".notEnoughData").hide();
 
 
-        $("#dashboardStorageHistoryBox").empty().append(`<canvas id="recentStorageCanvas" style="height: 300px"></canvas>`);
-        $("#dashboardRunningInstancesBox").empty().append(`<canvas id="activeContainers" style="height: 300px"></canvas>`);
-        $("#dashboardMemoryHistoryBox").empty().append(`<canvas id="memoryUsage" style="height: 300px"></canvas>`);
+        $("#dashboardStorageHistoryBox").empty().append(`<canvas id="recentStorageCanvas" height="200"></canvas>`);
+        $("#dashboardRunningInstancesBox").empty().append(`<canvas id="activeContainers" height="200"></canvas>`);
+        $("#dashboardMemoryHistoryBox").empty().append(`<canvas id="memoryUsage" height="200"></canvas>`);
 
         var mCtx = $('#memoryUsage');
         var acCtx = $('#activeContainers');
