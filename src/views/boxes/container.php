@@ -1765,6 +1765,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
                         }
 
                         term = new Terminal({});
+                        let project = $("#instanceProject").text();
 
                         term.open(terminalContainer);
 
@@ -1794,7 +1795,8 @@ $("#containerBox").on("click", "#goToConsole", function() {
                                         shell: shell,
                                         userId: userDetails.userId,
                                         host: currentContainerDetails.hostId,
-                                        container: currentContainerDetails.container
+                                        container: currentContainerDetails.container,
+                                        project: project
                                     }, currentContainerDetails))}`);
 
                                     term.attach(consoleSocket);

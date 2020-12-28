@@ -28,6 +28,7 @@ Changed
     Allow setting admin password on first run (#299)
     Show operation download progress if available (#316)
     Removed socket.io dependency as it was conflicting with expressws
+    Support opening console's in other projects
 
 Fixed
     Switching projects in snap broken

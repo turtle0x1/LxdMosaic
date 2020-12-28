@@ -61,6 +61,7 @@ module.exports = class Terminals {
     socket,
     hosts,
     host,
+    project,
     container,
     internalUuid = null,
     shell = null
@@ -84,7 +85,7 @@ module.exports = class Terminals {
 
       let hostDetails = hosts[host];
 
-      this.openLxdOperation(hostDetails, container, shell)
+      this.openLxdOperation(hostDetails, project, container, shell)
         .then(openResult => {
           let url = `wss://${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}`;
 
@@ -129,8 +130,8 @@ module.exports = class Terminals {
     });
   }
 
-  openLxdOperation(hostDetails, container, shell) {
-    let execOptions = this.createExecOptions(hostDetails, container);
+  openLxdOperation(hostDetails, project, container, shell) {
+    let execOptions = this.createExecOptions(hostDetails, project, container);
 
     execOptions.body = this.getExecBody(shell);
 
@@ -156,11 +157,11 @@ module.exports = class Terminals {
     };
   }
 
-  createExecOptions(hostDetails, container) {
+  createExecOptions(hostDetails, project, container) {
     let url = hostDetails.supportsVms ? 'instances' : 'containers';
     return {
       method: 'POST',
-      uri: `https://${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}/1.0/${url}/${container}/exec`,
+      uri: `https://${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}/1.0/${url}/${container}/exec?project=${project}`,
       cert: hostDetails.cert,
       key: hostDetails.key,
       rejectUnauthorized: false,

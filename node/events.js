@@ -195,10 +195,11 @@ app.ws('/node/console', (socket, req) => {
      let host = req.query.hostId,
          container = req.query.container,
          uuid = req.query.pid,
-         shell = req.query.shell;
+         shell = req.query.shell,
+         project = req.query.project;
 
   terminals
-    .createTerminalIfReq(socket, hosts.getHosts(), host, container, uuid, shell)
+    .createTerminalIfReq(socket, hosts.getHosts(), host, project, container, uuid, shell)
     .then(() => {
       //NOTE When user inputs from browser
       socket.on("message", (msg) => {
