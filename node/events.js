@@ -98,13 +98,11 @@ var httpsServer = https.createServer(
 
 expressWs(app, httpsServer)
 
-var io = require('socket.io')(httpsServer, { origins: '*:*'});
-
-var operationSocket = io.of('/operations');
+var io = require('socket.io')(httpsServer);
 
 function createWebSockets() {
   hosts.loadHosts().then(hostDetails => {
-    hostOperations.setupWebsockets(hostDetails, operationSocket);
+    hostOperations.setupWebsockets(hostDetails);
   });
 }
 
@@ -116,7 +114,7 @@ app.get('/hosts/reload/', function(req, res) {
 });
 
 app.post('/hosts/message/', function(req, res) {
-  operationSocket.emit(req.body.type, req.body.data);
+  hostOperations.sendToOpsClients(req.body.type, req.body.data);
   res.send({
     success: 'delivered',
   });
@@ -158,20 +156,20 @@ app.post('/deploymentProgress/:deploymentId', function(req, res) {
       .then(() => {})
       .cactch(() => {});
 
-    operationSocket.emit('deploymentProgress', body);
+    hostOperations.sendToOpsClients('deploymentProgress', body);
   }
   // Send an empty response
   res.send();
 });
 
-
-// Authenticate sockets used for VgaTerminals
+//
+// // Authenticate sockets used for VgaTerminals
 app.use(async (req, res, next)=>{
     if(req.path.startsWith("/terminal/")){
         let token = req.query.ws_token;
         let userId = req.query.user_id;
         let isValid = await wsTokens.isValid(token, userId);
-        
+
         if (!isValid) {
           return next(new Error('authentication error'));
         }
@@ -181,6 +179,10 @@ app.use(async (req, res, next)=>{
 
 app.ws('/terminal/:hostId/:project/:instance', (socket, req) => {
     vgaTerminals.openTerminal(socket, req);
+})
+
+app.ws('/node/operations', (socket, req) => {
+    hostOperations.addClientSocket(socket)
 })
 
 
@@ -210,17 +212,7 @@ terminalsIo.on('connect', function(socket) {
     });
 });
 
-// Authenticate socket io
-io.use(async (socket, next) => {
-  let token = socket.handshake.query.ws_token;
-  let userId = socket.handshake.query.user_id;
-  let isValid = await wsTokens.isValid(token, userId);
 
-  if (isValid) {
-    return next();
-  }
-  return next(new Error('authentication error'));
-});
 
 if(!usingSqllite){
     var con = mysql.createConnection({
@@ -249,6 +241,17 @@ if(!usingSqllite){
     var con = new sqlite3.Database(process.env.DB_SQLITE);
 }
 
+// Authenticate socket io
+io.use(async (socket, next) => {
+  let token = socket.handshake.query.ws_token;
+  let userId = socket.handshake.query.user_id;
+  let isValid = await wsTokens.isValid(token, userId);
+
+  if (isValid) {
+    return next();
+  }
+  return next(new Error('authentication error'));
+});
 
 hosts = new Hosts(con, fs, rp);
 wsTokens = new WsTokens(con);
