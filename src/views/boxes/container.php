@@ -1787,7 +1787,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
                                     // is first connected (in this case when the
                                     // operations socket is setup - which will
                                     // always come before this) but to be safe ...
-                                    consoleSocket = new WebSocket(`wss://lxd.local/node/console?${$.param($.extend({
+                                    consoleSocket = new WebSocket(`wss://${getQueryVar("host", window.location.hostname)}:${getQueryVar("port", 443)}/node/console?${$.param($.extend({
                                         ws_token: userDetails.apiToken,
                                         user_id: userDetails.userId,
                                         pid: data.processId,

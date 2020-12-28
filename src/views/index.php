@@ -541,7 +541,7 @@ $("#sidebar-ul").on("click", ".nav-item", function(){
     $(this).find(".nav-link").addClass("text-info");
 })
 
-let operationSocket = new WebSocket(`wss://lxd.local/node/operations?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}`)
+let operationSocket = new WebSocket(`wss://${getQueryVar("host", window.location.hostname)}:${getQueryVar("port", 443)}/node/operations?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}`)
 
 operationSocket.onmessage = (msg) => {
     msg = JSON.parse(msg.data);
