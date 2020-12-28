@@ -86,7 +86,7 @@
         if (password === undefined) {
             password = spice_query_var('password', '');
         }
-        var path = spice_query_var('path', '/terminal');
+        var path = spice_query_var('path', '/node/terminal');
 
         if ((!host) || (!port)) {
             console.log("must specify host and port in URL");

@@ -177,7 +177,7 @@ app.use(async (req, res, next)=>{
     next();
 });
 
-app.ws('/terminal/:hostId/:project/:instance', (socket, req) => {
+app.ws('/node/terminal/:hostId/:project/:instance', (socket, req) => {
     vgaTerminals.openTerminal(socket, req);
 })
 
