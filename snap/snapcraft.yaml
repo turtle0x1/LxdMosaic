@@ -48,8 +48,6 @@ apps:
 hooks:
   configure:
     plugs: [network, network-bind]
-  pre-refresh:
-    plugs: [network, network-bind]
 
 parts:
   apache:
