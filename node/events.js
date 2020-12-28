@@ -5,20 +5,23 @@ const fs = require('fs'),
   http = require('http'),
   https = require('https'),
   expressWs = require('express-ws'),
+  bodyParser = require('body-parser');
   path = require('path'),
   cors = require('cors'),
   rp = require('request-promise'),
   mysql = require('mysql'),
+  sqlite3 = require('sqlite3').verbose(),
   Hosts = require('./Hosts'),
   WsTokens = require('./WsTokens'),
-  sqlite3 = require('sqlite3').verbose();
-(HostOperations = require('./HostOperations'));
-  (Terminals = require('./Terminals'));
-  (bodyParser = require('body-parser'));
-  (hosts = null),
-  (hostOperations = null),
-  (terminals = null),
-  (wsTokens = null);
+  HostOperations = require('./HostOperations'),
+  Terminals = require('./Terminals'),
+  VgaTerminals = require("./VgaTerminals"),
+  hosts = null,
+  hostOperations = null,
+  terminals = null,
+  wsTokens = null,
+  vgaTerminals = null;
+
 
 var dotenv = require('dotenv')
 var dotenvExpand = require('dotenv-expand')
@@ -93,7 +96,9 @@ var httpsServer = https.createServer(
   app
 );
 
-var io = require('socket.io')(httpsServer);
+expressWs(app, httpsServer)
+
+var io = require('socket.io')(httpsServer, { origins: '*:*'});
 
 var operationSocket = io.of('/operations');
 
@@ -159,6 +164,26 @@ app.post('/deploymentProgress/:deploymentId', function(req, res) {
   res.send();
 });
 
+
+// Authenticate sockets used for VgaTerminals
+app.use(async (req, res, next)=>{
+    if(req.path.startsWith("/terminal/")){
+        let token = req.query.ws_token;
+        let userId = req.query.user_id;
+        let isValid = await wsTokens.isValid(token, userId);
+        
+        if (!isValid) {
+          return next(new Error('authentication error'));
+        }
+    }
+    next();
+});
+
+app.ws('/terminal/:hostId/:project/:instance', (socket, req) => {
+    vgaTerminals.openTerminal(socket, req);
+})
+
+
 var terminalsIo = io.of('/terminals');
 
 terminalsIo.on('connect', function(socket) {
@@ -185,7 +210,17 @@ terminalsIo.on('connect', function(socket) {
     });
 });
 
+// Authenticate socket io
+io.use(async (socket, next) => {
+  let token = socket.handshake.query.ws_token;
+  let userId = socket.handshake.query.user_id;
+  let isValid = await wsTokens.isValid(token, userId);
 
+  if (isValid) {
+    return next();
+  }
+  return next(new Error('authentication error'));
+});
 
 if(!usingSqllite){
     var con = mysql.createConnection({
@@ -215,26 +250,16 @@ if(!usingSqllite){
 }
 
 
-
-io.use(async (socket, next) => {
-  let token = socket.handshake.query.ws_token;
-  let userId = socket.handshake.query.user_id;
-  let isValid = await wsTokens.isValid(token, userId);
-
-  if (isValid) {
-    return next();
-  }
-  return next(new Error('authentication error'));
-});
-
 hosts = new Hosts(con, fs, rp);
 wsTokens = new WsTokens(con);
 hostOperations = new HostOperations(fs);
 terminals = new Terminals(rp);
+vgaTerminals = new VgaTerminals(rp, hosts);
 
-createWebSockets();
+
 httpsServer.listen(3000, function() {});
 
+createWebSockets();
 process.on('SIGINT', function() {
   hostOperations.closeSockets();
   terminals.closeAll();
