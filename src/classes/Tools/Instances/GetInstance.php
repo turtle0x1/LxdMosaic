@@ -39,7 +39,8 @@ class GetInstance
             "haveMetrics"=>$haveMetrics,
             "snapshots"=>$snapshots,
             "deploymentDetails"=>$deploymentDetails,
-            "backupsSupported"=>$hostSupportsBackups
+            "backupsSupported"=>$hostSupportsBackups,
+            "project"=>$host->callClientMethod("getProject")
         ];
     }
 }
