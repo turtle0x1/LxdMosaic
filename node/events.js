@@ -106,24 +106,12 @@ function createWebSockets() {
   });
 }
 
-app.get('/hosts/reload/', function(req, res) {
-  createWebSockets();
-  res.send({
-    success: 'reloaded',
-  });
-});
-
-app.post('/hosts/message/', function(req, res) {
-  hostOperations.sendToOpsClients(req.body.type, req.body.data);
-  res.send({
-    success: 'delivered',
-  });
-});
-
+//NOT authenticated because its not interesting but access may be required
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+//NOT authenticated because its proxied by PHP which does auth
 app.post('/terminals', function(req, res) {
   // Create a identifier for the console, this should allow multiple consolses
   // per user
@@ -132,6 +120,23 @@ app.post('/terminals', function(req, res) {
   res.send();
 });
 
+//NOT authenticated because its called by php
+app.get('/hosts/reload/', function(req, res) {
+  createWebSockets();
+  res.send({
+    success: 'reloaded',
+  });
+});
+
+//NOT authenticated because its called by php
+app.post('/hosts/message/', function(req, res) {
+  hostOperations.sendToOpsClients(req.body.type, req.body.data);
+  res.send({
+    success: 'delivered',
+  });
+});
+
+//NOT authenticated because its called by php
 app.post('/deploymentProgress/:deploymentId', function(req, res) {
   let body = req.body;
 
@@ -162,19 +167,25 @@ app.post('/deploymentProgress/:deploymentId', function(req, res) {
   res.send();
 });
 
-//
-// // Authenticate sockets used for VgaTerminals
-app.use(async (req, res, next)=>{
-    if(req.path.startsWith("/terminal/")){
-        let token = req.query.ws_token;
-        let userId = req.query.user_id;
-        let isValid = await wsTokens.isValid(token, userId);
 
-        if (!isValid) {
-          return next(new Error('authentication error'));
-        }
+// Authenticate all access to node websockets
+app.use(async (req, res, next)=>{
+    if(req.path === "/" || req.path === ""){
+        next()
     }
-    next();
+
+    let token = req.query.ws_token;
+    let userId = req.query.user_id;
+    let isValid = await wsTokens.isValid(token, userId);
+
+    if (!isValid) {
+        console.log(req.path);
+        return next(new Error('authentication error'));
+    }else{
+        console.log("valid");
+        console.log(console.log(req.path));
+        next();
+    }
 });
 
 app.ws('/node/terminal/:hostId/:project/:instance', (socket, req) => {
@@ -185,25 +196,22 @@ app.ws('/node/operations', (socket, req) => {
     hostOperations.addClientSocket(socket)
 })
 
-
-var terminalsIo = io.of('/terminals');
-
-terminalsIo.on('connect', function(socket) {
-  let host = socket.handshake.query.hostId,
-    container = socket.handshake.query.container,
-    uuid = socket.handshake.query.pid,
-    shell = socket.handshake.query.shell;
+app.ws('/node/console', (socket, req) => {
+     let host = req.query.hostId,
+         container = req.query.container,
+         uuid = req.query.pid,
+         shell = req.query.shell;
 
   terminals
     .createTerminalIfReq(socket, hosts.getHosts(), host, container, uuid, shell)
     .then(() => {
       //NOTE When user inputs from browser
-      socket.on('data', function(msg) {
+      socket.on("message", (msg) => {
         terminals.sendToTerminal(uuid, msg);
       });
 
-      socket.on('close', function(uuid) {
-        terminals.close(uuid);
+      socket.on('close', () => {
+          terminals.close(uuid);
       });
     })
     .catch(() => {
@@ -240,18 +248,6 @@ if(!usingSqllite){
 }else{
     var con = new sqlite3.Database(process.env.DB_SQLITE);
 }
-
-// Authenticate socket io
-io.use(async (socket, next) => {
-  let token = socket.handshake.query.ws_token;
-  let userId = socket.handshake.query.user_id;
-  let isValid = await wsTokens.isValid(token, userId);
-
-  if (isValid) {
-    return next();
-  }
-  return next(new Error('authentication error'));
-});
 
 hosts = new Hosts(con, fs, rp);
 wsTokens = new WsTokens(con);

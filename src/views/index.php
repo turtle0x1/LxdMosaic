@@ -628,7 +628,7 @@ operationSocket.onmessage = (msg) => {
 
 $(".sidebar-nav").on("click", ".nav-item", function(){
     if(consoleSocket !== undefined && currentTerminalProcessId !== null){
-        consoleSocket.emit("close", currentTerminalProcessId);
+        consoleSocket.close();
         currentTerminalProcessId = null;
     }
 });

@@ -71,11 +71,12 @@ module.exports = class Terminals {
           console.log(error)
         );
 
-        this.activeTerminals[internalUuid].on('message', data => {
+        this.activeTerminals[internalUuid].on("message", (data) => {
           const buf = Buffer.from(data);
           data = buf.toString();
-          socket.emit('data', data);
+          socket.send(data);
         });
+
         this.sendToTerminal(internalUuid, '\n');
         resolve(true);
         return;
@@ -100,22 +101,26 @@ module.exports = class Terminals {
             rejectUnauthorized: false,
           };
 
-          const lxdWs = new WebSocket(
+          let lxdWs = new WebSocket(
             url +
               openResult.operation +
               '/websocket?secret=' +
               openResult.metadata.metadata.fds['0'],
-            wsoptions
+              wsoptions
           );
 
           lxdWs.on('error', error => console.log(error));
 
           lxdWs.on('message', data => {
-            const buf = Buffer.from(data);
-            data = buf.toString();
-            socket.emit('data', data);
+              const buf = Buffer.from(data);
+              data = buf.toString();
+              if(socket.readyState == 1){
+                socket.send(data);
+              }
           });
+
           this.activeTerminals[internalUuid] = lxdWs;
+
           resolve(true);
         })
         .catch(() => {
