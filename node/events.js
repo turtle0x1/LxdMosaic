@@ -98,8 +98,6 @@ var httpsServer = https.createServer(
 
 expressWs(app, httpsServer)
 
-var io = require('socket.io')(httpsServer);
-
 function createWebSockets() {
   hosts.loadHosts().then(hostDetails => {
     hostOperations.setupWebsockets(hostDetails);
@@ -179,11 +177,8 @@ app.use(async (req, res, next)=>{
     let isValid = await wsTokens.isValid(token, userId);
 
     if (!isValid) {
-        console.log(req.path);
         return next(new Error('authentication error'));
     }else{
-        console.log("valid");
-        console.log(console.log(req.path));
         next();
     }
 });

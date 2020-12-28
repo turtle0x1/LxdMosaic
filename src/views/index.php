@@ -73,8 +73,6 @@ if ($haveServers->haveAny() !== true) {
 
       <link rel="stylesheet" href="/assets/dist/external.fontawesome.css">
 
-      <!-- <script src="/socket.io/socket.io.js"></script> -->
-
       <script src="/assets/lxdMosaic/globalFunctions.js"></script>
       <script src="/assets/lxdMosaic/globalDetails.js"></script>
       <script>
