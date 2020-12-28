@@ -14,6 +14,7 @@ Added
     Show users who can access a project on project view
     View storage volumes
     Attach volumes to instances
+    View VGA console for virtual machines (#238)
 
 Changed
     Support backups & backup schedules in different projects
