@@ -53,10 +53,14 @@ mkdir -p /var/www/LxdMosaic/src/sensitiveData/backups
 chown -R apache:apache /var/www/LxdMosaic/src/sensitiveData/
 chown -R apache:apache /var/www/LxdMosaic/src/sensitiveData/backups
 
+if test -f "/etc/php.ini"; then
+    sed -i -e "s/memory_limit = .*/memory_limit = -1/g" /etc/php.ini
+fi
+
 # Move in LxdManager
 cd /var/www/LxdMosaic || exit
 
-git checkout v0.9.3
+git checkout v0.10.2
 
 npm install
 

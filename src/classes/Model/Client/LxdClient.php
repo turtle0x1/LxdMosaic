@@ -4,20 +4,20 @@ namespace dhope0000\LXDClient\Model\Client;
 use GuzzleHttp\Client as GuzzleClient;
 use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 use \Opensaucesystems\Lxd\Client;
-use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\App\RouteApi;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\User\GetUserProject;
 
 class LxdClient
 {
     private $clientBag = [];
 
     public function __construct(
-        FetchUserProject $fetchUserProject,
-        RouteApi $routeApi
+        RouteApi $routeApi,
+        GetUserProject $getUserProject
     ) {
-        $this->fetchUserProject = $fetchUserProject;
         $this->routeApi = $routeApi;
+        $this->getUserProject = $getUserProject;
     }
 
     public function getClientWithHost(Host $host, $checkCache = true, $setProject = true)
@@ -37,7 +37,7 @@ class LxdClient
                 $userId = $this->routeApi->getUserId();
                 $project = "default";
                 if (!empty($userId)) {
-                    $project = $this->fetchUserProject->fetchOrDefault($userId, $host->getHostId());
+                    $project = $this->getUserProject->getForHost($userId, $host);
                 }
             }
             $client->setProject($project);

@@ -14,6 +14,8 @@ use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
 use dhope0000\LXDClient\Objects\Host;
 
+use dhope0000\LXDClient\Tools\Instances\Backups\DownloadFile;
+
 class StoreBackupLocally
 {
     private $getSetting;
@@ -27,30 +29,40 @@ class StoreBackupLocally
         Filesystem $filesystem,
         InsertInstanceBackup $insertInstanceBackup,
         DeleteRemoteBackup $deleteRemoteBackup,
-        HasExtension $hasExtension
+        HasExtension $hasExtension,
+        DownloadFile $downloadFile
     ) {
         $this->hasExtension = $hasExtension;
         $this->getSetting = $getSetting;
         $this->filesystem = $filesystem;
         $this->insertInstanceBackup = $insertInstanceBackup;
         $this->deleteRemoteBackup = $deleteRemoteBackup;
+        $this->downloadFile = $downloadFile;
     }
 
-    public function store(Host $host, string $instance, string $backup, bool $deleteRemote)
+    public function store(Host $host, string $project, string $instance, string $backup, bool $deleteRemote)
     {
+        set_time_limit(0);
+
         $hostId = $host->getHostId();
         if ($this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP) !== true) {
             throw new \Exception("Host doesn't support backups", 1);
         }
 
-        $backupDir = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::BACKUP_DIRECTORY);
-        $backupDir = $this->makeDirectory($backupDir, $hostId, $instance);
+        if (isset($_ENV["SNAP"])) {
+            $backupDir = $_ENV["SNAP_COMMON"];
+        } else {
+            $backupDir = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::BACKUP_DIRECTORY);
+        }
 
-        $backupInfo = $this->downloadBackup($host, $backupDir, $instance, $backup);
+        $backupDir = $this->makeDirectory($backupDir, $hostId, $project, $instance);
+
+        $backupInfo = $this->downloadBackup($host, $project, $instance, $backupDir, $backup);
 
         $this->insertInstanceBackup->insert(
             (new \DateTime($backupInfo["created"])),
             $hostId,
+            $project,
             $instance,
             $backup,
             $backupInfo["backupFile"]
@@ -65,8 +77,9 @@ class StoreBackupLocally
 
     private function downloadBackup(
         Host $host,
-        string $backupDir,
+        string $project,
         string $instance,
+        string $backupDir,
         string $backup
     ) :array {
         $backupInfo = $host->instances->backups->info($instance, $backup);
@@ -75,9 +88,7 @@ class StoreBackupLocally
 
         $backupFilePath = "$backupDir/$backupFileName";
 
-        $this->filesystem->touch($backupFilePath);
-
-        $this->filesystem->appendToFile($backupFilePath, $host->instances->backups->export($instance, $backup));
+        $this->downloadFile->download($host, $project, $instance, $backupFilePath, $backup);
 
         return [
             "backupFile"=>$backupFilePath,
@@ -85,11 +96,11 @@ class StoreBackupLocally
         ];
     }
 
-    private function makeDirectory(string $backupDir, int $hostId, string $instance) :string
+    private function makeDirectory(string $backupDir, int $hostId, string $project, string $instance) :string
     {
         try {
             $this->filesystem = new Filesystem();
-            $path = "$backupDir/$hostId/$instance";
+            $path = "$backupDir/$hostId/$project/$instance";
 
             if ($this->filesystem->exists($path)) {
                 return $path;

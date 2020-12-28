@@ -33,6 +33,6 @@ class GetSettings
                     `settingId` ASC
                 ";
         $do = $this->database->query($sql);
-        return $do->fetchAll();
+        return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

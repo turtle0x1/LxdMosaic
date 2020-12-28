@@ -1,7 +1,7 @@
 <div id="backupsBox" class="boxSlide">
 <div id="backupsOverview">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 border-right">
             <div class="card bg-dark">
                 <div class="card-header">
                     <h4>Instance Backups</h4>
@@ -64,6 +64,9 @@
 
                   </div>
                   <div class="card-body">
+                      <div class="d-none text-center font-weight-bold mb-2" id="ghostInstanceText">
+                          <i class="fas fa-ghost text-success mr-2"></i>This instance has been deleted, this backup is all that remains!
+                      </div>
                       <table class="table table-bordered table-dark" id="backupContainerTable">
                           <thead>
                             <tr>
@@ -125,7 +128,7 @@ function makeLineData(data, setLabel){
     };
 }
 
-$(document).on("click", ".deleteBackup", function(){
+$("#containerBackupDetails").on("click", ".deleteBackup", function(){
     let tr = $(this).parents("tr");
     let backupId = tr.data("backupId");
     let x = {backupId: backupId};
@@ -138,6 +141,13 @@ $(document).on("click", ".deleteBackup", function(){
         }
 
         tr.remove();
+
+        $.each(currentContainerBackups.allBackups, (index, details)=>{
+            if(details.id == backupId){
+                // console.log(index);
+                currentContainerBackups.allBackups.splice(index, 1)
+            }
+        })
     });
 
 });
@@ -183,34 +193,91 @@ $(document).on("click", "#disableInstanceSchedule", function(){
         }
     });
 });
+
+$(document).on("click", ".toggleDaySelected", function(){
+    $(this).toggleClass("badge-secondary");
+    $(this).toggleClass("badge-primary");
+});
+
+$(document).on("change", "#scheduleBackupFrequency", function(){
+    if($(this).val() == "weekly"){
+        $("#weeklyBackupScheduleDiv").removeClass("d-none")
+        $("#monthlyBackupScheduleDiv").addClass("d-none")
+    }else if($(this).val() == "monthly"){
+        $("#weeklyBackupScheduleDiv").addClass("d-none")
+        $("#monthlyBackupScheduleDiv").removeClass("d-none")
+    }else{
+        $("#weeklyBackupScheduleDiv").addClass("d-none")
+        $("#monthlyBackupScheduleDiv").addClass("d-none")
+    }
+});
+
 $(document).on("click", "#scheduleInstanceBackup", function(){
     $.confirm({
-        title: `Schedule Instance Backup`,
+        title: `Schedule Backup`,
         content: `
-            <div class="alert alert-warning">
-                <b>Be careful backups runs in parallel!</b> If you schedule lots
-                at once LXD itself (and therefor LXDMosaic) may become
-                unresponsive while the backups run!
-            </div>
             <div class="form-group">
-                <label>Frequency</label>
+                <label><b>Frequency</b></label>
                 <select class="form-control" id="scheduleBackupFrequency">
                     <option value=""></option>
                     <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
                 </select>
             </div>
+            <div id="weeklyBackupScheduleDiv" class="d-none">
+                <label><b>Select Days Of Week</b></label>
+                <div>
+                    <div data-day="0" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Sunday
+                    </div>
+                    <div data-day="1" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Monday
+                    </div>
+                    <div data-day="2" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Tuesday
+                    </div>
+                    <div data-day="3" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Wednesday
+                    </div>
+                    <div data-day="4" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Thursday
+                    </div>
+                    <div data-day="5" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Friday
+                    </div>
+                    <div data-day="6" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                        Saturday
+                    </div>
+                </div>
+            </div>
+            <div id="monthlyBackupScheduleDiv" class="d-none">
+                <div class="form-group">
+                    <label><b>Day Of Month (1-31)</b></label>
+                    <br/>
+                    <small><i class="fas fa-info-circle mr-2 text-info"></i>Safer to use start of month!</small>
+                    <input class="form-control" id="bMonthlyDayOfMonth"/>
+                </div>
+            </div>
             <div class="form-group">
-                <label>24 Hour Time (00:00-23:59)</label>
+                <div>
+                    <label><b>At This Time (00:00-23:59)</b></label>
+                    <br/>
+                    <small><i class="fas fa-info-circle mr-2 text-info"></i>Input or pick from the dropdown!</small>
+                </div>
                 <input class="form-control" id="scheduleBackupTime" />
             </div>
             <div class="form-group">
-                <label>Strategy</label>
+                <label><b>Strategy</b></label>
                 <select class="form-control" id="scheduleBackupStrategy">
                 </select>
             </div>
             <div class="form-group">
-                <label>Number Of Backups To Keep</label>
+                <label><b>Number Of Backups To Keep</b></label>
                 <input value="7" class="form-control" id="scheduleRetention"/>
+            </div>
+            <div class="mt-2">
+                <i class="fas fa-info-circle mr-2 text-warning"></i>Multiple backups at the same time may stall LXD!
             </div>
         `,
         buttons: {
@@ -249,13 +316,33 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                         return false;
                     }
 
+                    let daysOfWeek = [];
+
+                    if(frequency == "weekly"){
+                        $("#weeklyBackupScheduleDiv").find(".badge-primary").map(function(){
+                            daysOfWeek.push($(this).data("day"));
+                        });
+                    }
+
+                    let dayOfMonth = 0;
+                    if(frequency == "monthly"){
+                        dayOfMonth = $("#bMonthlyDayOfMonth").val();
+                        if(!$.isNumeric(dayOfMonth) || dayOfMonth == 0){
+                            $.alert("Day of month must number 1 - 31");
+                            $("#bMonthlyDayOfMonth").focus();
+                            return false;
+                        }
+                    }
+
                     let x = {
                         frequency: frequency,
                         time: time,
                         strategy: strategy,
                         hostId: currentContainerBackups.hostId,
                         instance: currentContainerBackups.name,
-                        retention: retention
+                        retention: retention,
+                        daysOfWeek: daysOfWeek,
+                        dayOfMonth: dayOfMonth
                     }
 
                     ajaxRequest(globalUrls.instances.backups.schedule, x, (data)=>{
@@ -316,6 +403,12 @@ $(document).on("click", ".viewContainerBackups", function(){
 
     let trs = "";
 
+    if(currentContainerBackups.containerExists == false){
+        $("#ghostInstanceText").removeClass("d-none");
+    }else{
+        $("#ghostInstanceText").addClass("d-none");
+    }
+
     if(currentContainerBackups.allBackups.length > 0){
         $.each(currentContainerBackups.allBackups, (_, backup)=>{
             trs += `<tr data-backup-id="${backup.id}">
@@ -336,7 +429,7 @@ $(document).on("click", ".viewContainerBackups", function(){
         });
     }else{
         trs += `<tr>
-            <td class="alert alert-danger text-center" colspan="999">No Backups</td>
+            <td class="text-warning text-center" colspan="999"><i class="fas fa-info-circle mr-2"></i>No Backups - Consider Scheduling Backups Above</td>
         </tr>`
     }
 
@@ -360,26 +453,41 @@ function loadBackupsOverview() {
         let backupTrs = "";
 
         currentBackups = data.allBackups;
-
-        $.each(data.allBackups, (host, hostDetails)=>{
-            backupTrs += `<tr class="bg-success"><td class="text-center" colspan="999">${host}</tr></tr>`;
-            $.each(hostDetails.containers, (containerIndex, container)=>{
-
-                let trClass = container.lastBackup.neverBackedUp || !container.containerExists ? "danger" : "success";
-
-                let createdDate = container.containerExists ? moment(container.created).fromNow() : "Deleted";
-                let date = "Never";
-                let viewButton = "Host Doesn't support backups";
-
-                let instanceName = container.name
-
-                let ghostIcon = '<i class="fas fa-ghost" data-toggle="tooltip" data-placement="bottom" title="Instance Deleted" class="btn btn-outline-primary btn-sm"></i>'
-
-                if(container.containerExists){
-                    instanceName += ghostIcon;
+        if(data.allBackups.length == 0){
+            backupTrs = `<tr>
+                <td colspan="999" class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No instances / backups!</td>
+            </tr>`;
+        }else{
+            $.each(data.allBackups, (host, hostDetails)=>{
+                backupTrs += `<tr><td class="text-center text-success" colspan="999"><i class="fas fa-server mr-2"></i>${host}</tr></tr>`;
+                if(!hostDetails.supportsBackups){
+                    backupTrs += `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-warning mr-2"></i>Doesn't support backups!</td></tr>`
+                    return true;
                 }
 
-                if(hostDetails.supportsBackups){
+                if(hostDetails.containers.length == 0){
+                    backupTrs += `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-warning mr-2"></i>No Instances In Project!</td></tr>`
+                    return true;
+                }
+
+                $.each(hostDetails.containers, (containerIndex, container)=>{
+
+                    let trClass = container.lastBackup.neverBackedUp ? "danger" : "success";
+
+                    let createdDate = container.containerExists ? moment(container.created).fromNow() : "Deleted";
+                    let date = "Never";
+                    let viewButton = "Host Doesn't support backups";
+
+                    let instanceName = container.name
+
+                    let ghostIcon = '<i class="fas fa-ghost" data-toggle="tooltip" data-placement="bottom" title="Instance Deleted" class="btn btn-outline-primary btn-sm"></i>'
+
+                    if(container.containerExists){
+                        instanceName += ghostIcon;
+                    }else{
+                        trClass = "success";
+                    }
+
                     instanceName = `<a
                         href="#"
                         class="viewContainerBackups"
@@ -389,24 +497,25 @@ function loadBackupsOverview() {
                         data-container="${container.name}">
                         ${container.name} ${!container.containerExists ? ghostIcon : ""}
                     </a>`;
-                }
+
+                    if(container.lastBackup.hasOwnProperty("backupDateCreated")){
+                        date = moment(container.lastBackup.backupDateCreated).fromNow()
+                    }
+
+                    let upToString = container.strategyName == "" ? "" :  ` / ${container.scheduleRetention}`;
+
+                    backupTrs += `<tr>
+                        <td>${instanceName}</td>
+                        <td>${container.strategyName} ${container.scheduleString}</td>
+                        <td class='text-${trClass}'>${date}</td>
+                        <td>${container.allBackups.length} ${upToString}</td>
+                        <td>${formatBytes(container.totalSize)}</td>
+                    </tr>`
+                });
+            })
+        }
 
 
-                if(container.lastBackup.hasOwnProperty("backupDateCreated")){
-                    date = moment(container.lastBackup.backupDateCreated).fromNow()
-                }
-
-                let upToString = container.strategyName == "" ? "" :  ` / ${container.scheduleRetention} scheduled to keep`;
-
-                backupTrs += `<tr class="alert alert-${trClass}">
-                    <td>${instanceName}</td>
-                    <td>${container.strategyName} ${container.scheduleString}</td>
-                    <td>${date}</td>
-                    <td>${container.allBackups.length} ${upToString}</td>
-                    <td>${formatBytes(container.totalSize)}</td>
-                </tr>`
-            });
-        })
         $("#containerBackupTable > tbody").empty().append(backupTrs);
         $("#containerBackupTable > tbody").find('[data-toggle="tooltip"]').tooltip()
 

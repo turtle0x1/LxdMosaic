@@ -21,9 +21,8 @@
                     <label
                         data-toggle="tooltip"
                         data-placement="bottom"
-                        title="Used to impose resource limits akin to different cloud provider limits!">
-                         Instance Type (Optional)
-                        <i class="fas fa-question-circle"></i></label>
+                        title="Used to impose resource limits akin to different cloud provider limits!">Instance Type (Optional)
+                        <i class="fas fa-question-circle text-info"></i></label>
                     <select id="newContainerInstanceType" class="form-control"></select>
                 </div>
             </div>
@@ -37,9 +36,8 @@
                         title="Only profiles on all hosts will appear!
                             <br/>
                             <br/>
-                            Remember the default profile usually contains storage information & network details!">
-                        Profiles
-                        <i class="fas fa-question-circle"></i>
+                            Remember the default profile usually contains storage information & network details!">Profiles
+                        <i class="fas fa-question-circle text-info"></i>
                     </label>
                     <input id="newContainerProfiles" type="text" class="form-control"/>
                 </div>
@@ -53,14 +51,12 @@
         </div>
         <div class="form-group">
             <label>  </label>
-            <label
-                data-toggle="tooltip"
+            <label data-toggle="tooltip"
                 data-placement="top"
                 title="Currently an image needs to have been imported into atleast
                 one server on the network to use it here! Images will be downloaded
-                onto hosts that dont have the selected image.">
-                Image
-                <i class="fas fa-question-circle"></i>
+                onto hosts that dont have the selected image.">Image
+                <i class="fas fa-question-circle text-info"></i>
             </label>
             <input id="newContainerImage" type="text" class="form-control"/>
         </div>
@@ -92,7 +88,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="create">Create Container</button>
+        <button type="button" class="btn btn-primary createContainer" data-start="0">Create</button>
+        <button type="button" class="btn btn-success createContainer" data-start="1">Create & Start</button>
       </div>
     </div>
   </div>
@@ -111,7 +108,10 @@
         tokenLimit: 1,
         propertyToSearch: "description",
         theme: "facebook",
-        tokenValue: "details"
+        tokenValue: "details",
+        setExtraSearchParams: ()=>{
+            return {type: "container"};
+        }
     });
 
     $("#newContainerHosts").tokenInput(globalUrls.hosts.search.search, {
@@ -206,7 +206,7 @@
         $(this).parents("tr").find("input[name=value]").val($(this).find(":selected").data("value"));
     });
 
-    $("#modal-container-create").on("click", "#create", function(){
+    $("#modal-container-create").on("click", ".createContainer", function(){
         let btn = $(this);
 
         btn.html('<i class="fa fa-cog fa-spin"></i>Creating..');
@@ -217,15 +217,22 @@
         let image = $("#newContainerImage").tokenInput("get");
         let instanceType = $("#newContainerInstanceType").val();
 
+
+        let defaultBtnText = "Create";
+
+        if(btn.data("start") == 1){
+            defaultBtnText = "Create & Start";
+        }
+
         if(image.length == 0 || !image[0].hasOwnProperty("details")){
-            btn.html('Create Container');
+            btn.html(defaultBtnText);
             $("#modal-container-create").find(".btn").attr("disabled", false);
             makeToastr(JSON.stringify({state: "error", message: "Please select image"}));
             return false;
         }
 
         if(hosts.length == 0 || !image[0].hasOwnProperty("details")){
-            btn.html('Create Container');
+            btn.html(defaultBtnText);
             $("#modal-container-create").find(".btn").attr("disabled", false);
             makeToastr(JSON.stringify({state: "error", message: "Please select host/s"}));
             return false;
@@ -259,7 +266,7 @@
         });
 
         if(invalid){
-            btn.html('Create Container');
+            btn.html(defaultBtnText);
             $("#modal-container-create").find(".btn").attr("disabled", false);
             makeToastr(JSON.stringify({state: "error", message: message}));
             return false;
@@ -272,12 +279,13 @@
             imageDetails: image[0]["details"],
             instanceType: instanceType,
             gpus: gpus,
-            config: config
+            config: config,
+            start: parseInt(btn.data("start"))
         };
 
         ajaxRequest(globalUrls.instances.create, x, function(data){
             let x = makeToastr(data);
-            btn.html('Create Container');
+            btn.html(defaultBtnText);
             $("#modal-container-create").find(".btn").attr("disabled", false);
             if(x.state == "error"){
                 return false;

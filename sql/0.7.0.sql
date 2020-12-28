@@ -19,4 +19,4 @@ CREATE TABLE `User_Api_Tokens` (
 );
 
 INSERT INTO `Users` (`User_ID`, `User_Name`, `User_Password`, `User_Admin`) VALUES
-    (1, "admin", "$2y$10$K5t0CK89OD8Xj2/S4KQ8Pub6/ChNmh5C7B9ehxOOQ.jUUOL1UqkPy", 1);
+    (1, "admin", "", 1);

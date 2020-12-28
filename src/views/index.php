@@ -56,19 +56,9 @@ if ($haveServers->haveAny() !== true) {
       <meta name="msapplication-TileImage" content="/assets/lxdMosaic/favicons/ms-icon-144x144.png">
       <meta name="theme-color" content="#ffffff">
 
-      <script
-          src="https://code.jquery.com/jquery-3.3.1.min.js"
-          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-          crossorigin="anonymous"></script>
-
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script>
-
-
-      <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
 
       <!-- <link rel="stylesheet" href="/assets/xterm/xterm.css" /> -->
-
-      <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
 
       <!-- Main styles for this application-->
       <link href="/assets/dist/external.dist.css" rel="stylesheet">
@@ -81,21 +71,9 @@ if ($haveServers->haveAny() !== true) {
       <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
       <title>LXD Mosaic</title>
 
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-      <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-      <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
-
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="/assets/dist/external.fontawesome.css">
 
       <script src="/socket.io/socket.io.js"></script>
-
-      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
-
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
 
       <script src="/assets/lxdMosaic/globalFunctions.js"></script>
       <script src="/assets/lxdMosaic/globalDetails.js"></script>
@@ -103,10 +81,23 @@ if ($haveServers->haveAny() !== true) {
           var currentContainerDetails = null;
 
           var globalUrls = {
+              universe: {
+                getEntities: '/api/Universe/GetEntitiesFromUniverseController/get'
+              },
               dashboard: {
                   get: "/api/Dashboard/GetController/get"
               },
               instances: {
+                  volumes: {
+                    assign: "/api/Instances/Volumes/AttachVolumesController/attach"  
+                  },
+                  comment: {
+                      set: "/api/Instances/Comments/SetInstanceCommentController/set",
+                  },
+                  profiles: {
+                    remove: "/api/Instances/Profiles/RemoveProfileController/remove",
+                    assign: "/api/Instances/Profiles/AssignProfilesController/assign",
+                  },
                   metrics: {
                       getAllAvailableMetrics: "/api/Instances/Metrics/GetAllAvailableMetricsController/get",
                       getGraphData: "/api/Instances/Metrics/GetGraphDataController/get",
@@ -175,29 +166,43 @@ if ($haveServers->haveAny() !== true) {
                   restore: '/api/Backups/RestoreBackupController/restore'
               },
               clusters: {
-                getAll: "/api/Clusters/GetAllController/get",
                 getCluster: "/api/Clusters/GetClusterController/get"
               },
               settings: {
+                ldap: {
+                    save: "/api/InstanceSettings/Ldap/SaveLdapSettingsController/save",
+                },
                 recordedActions: {
                     getLastResults: "/api/InstanceSettings/RecordedActions/GetLastController/get"
                 },
                 users: {
+                    allowedProjects: {
+                        grantAcess: '/api/User/AllowedProjects/GrantAccessController/grant',
+                        revokeAccess: '/api/User/AllowedProjects/RevokeAccessController/revoke',
+                        getAllowed: '/api/User/AllowedProjects/GetUserAllowedProjectsController/get'
+                    },
                     resetPassword: '/api/InstanceSettings/Users/ResetPasswordController/reset',
                     add: '/api/InstanceSettings/Users/AddUserController/add',
                     getAll: '/api/InstanceSettings/Users/GetUsersController/getAll',
                 },
                 getAll: "/api/InstanceSettings/GetAllSettingsController/getAll",
                 saveAll: "/api/InstanceSettings/SaveAllSettingsController/saveAll",
-                getOverview: "/api/InstanceSettings/GetSettingsOverviewController/get"
+                getMyOverview: "/api/InstanceSettings/GetMySettingsOverviewController/get"
               },
               networks: {
+                  tools: {
+                      findIpAddress: "/api/Networks/Tools/FindIpAddressController/find"
+                  },
                   getAll: "/api/Networks/GetHostsNetworksController/get",
                   get: "/api/Networks/GetNetworkController/get",
                   deleteNetwork: "/api/Networks/DeleteNetworkController/delete",
                   createNetwork: "/api/Networks/CreateNetworkController/create"
               },
               storage: {
+                  volumes: {
+                      get: "/api/Storage/Volumes/GetStorageVolumeController/get",
+                      getOnHost: "/api/Storage/Volumes/GetHostStorageVolumesController/get",
+                  },
                   getAll: "/api/Storage/GetHostsStorageController/get",
                   getPool: "/api/Storage/GetHostsStoragePoolController/get",
                   deletePool: "/api/Storage/DeleteStoragePoolController/delete",
@@ -215,7 +220,8 @@ if ($haveServers->haveAny() !== true) {
               },
               profiles: {
                   search:{
-                      getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles"
+                      getCommonProfiles: "/api/Profiles/Search/SearchProfiles/getAllCommonProfiles",
+                      searchHostProfiles: "/api/Profiles/Search/SearchProfiles/searchHostProfiles"
                   },
                   getProfile: '/api/Profiles/GetProfileController/get',
                   getAllProfiles: '/api/Profiles/GetAllProfilesController/getAllProfiles',
@@ -245,7 +251,6 @@ if ($haveServers->haveAny() !== true) {
                   },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
-                  getClustersAndStandloneHosts: "/api/Hosts/GetClustersAndStandloneHostsController/get",
                   delete: "/api/Hosts/DeleteHostController/delete",
                   getHostOverview: "/api/Hosts/GetHostOverviewController/get"
               },
@@ -264,10 +269,10 @@ if ($haveServers->haveAny() !== true) {
                       update: '/api/Images/UpdateImagePropertiesController/update',
                       get: '/api/Images/GetImagePropertiesController/getAll'
                   },
-                  getLinuxContainersOrgImages: "/api/Images/GetLinuxContainersOrgImagesController/get",
+                  getLinuxContainersOrgImages: "/api/Images/SearchRemoteImagesController/get",
                   delete: "/api/Images/DeleteImagesController/delete",
                   getAll: "/api/Images/GetImagesController/getAllHostImages",
-                  import: "/api/Images/ImportLinuxContainersByAliasController/import",
+                  import: "/api/Images/ImportRemoteImagesController/import",
               },
               cloudConfig: {
                   search: {
@@ -282,6 +287,10 @@ if ($haveServers->haveAny() !== true) {
                   getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
               },
               user: {
+                  tokens: {
+                      create: '/api/User/Tokens/CreateTokenController/create',
+                      delete: '/api/User/Tokens/DeleteTokenController/delete',
+                  },
                   dashboard: {
                     graphs: {
                        add: '/api/User/Dashboard/Graphs/AddGraphController/add',
@@ -291,9 +300,14 @@ if ($haveServers->haveAny() !== true) {
                     get: '/api/User/Dashboard/GetDashboardController/get',
                     delete: '/api/User/Dashboard/DeleteDashboardController/delete'
                   },
+                  getUserOverview:'/api/User/GetUserOverviewController/get',
                   setHostProject: '/api/User/SetHostProjectController/set'
               },
               projects: {
+                  search:{
+                    getCommonToHosts: '/api/Projects/Search/GetCommonToHostsProjectsController/get',
+                  },
+                  getOverview: '/api/Projects/GetProjectsOverviewController/get',
                   create: '/api/Projects/CreateProjectController/create',
                   getAllFromHosts: '/api/Projects/GetHostsProjectsController/get',
                   info: '/api/Projects/GetProjectInfoController/get',
@@ -387,7 +401,6 @@ if ($haveServers->haveAny() !== true) {
           <input value="" name="path"/>
           <input value="" name="container"/>
           <input value="1" type="number" name="download"/>
-
       </form>
     <header class="app-header navbar navbar-dark bg-dark">
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
@@ -447,15 +460,23 @@ if ($haveServers->haveAny() !== true) {
           </li>
         </ul>
       <ul class="nav navbar-nav ml-auto d-md-down-none">
+          <li class="nav-item px-3 btn btn-outline-purple pull-right" id="openSearch">
+                <a> <i class="fas fa-search"></i></a>
+          </li>
+          <?php if ($isAdmin === 1) : ?>
           <li class="nav-item px-3 btn btn-outline-primary pull-right" id="addNewServer">
-                <a> <i class="fas fa-plus"></i> Server </a>
+                <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-server"></i> </a>
            </li>
+          <?php endif; ?>
           <li class="nav-item px-3 btn btn-outline-success pull-right" id="createContainer">
-                <a> <i class="fas fa-plus"></i> Container </a>
+                <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-box"></i> </a>
            </li>
           <li class="nav-item px-3 btn btn-outline-success pull-right" id="createVm">
-                <a> <i class="fas fa-plus"></i> VM </a>
+                <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-vr-cardboard"></i></a>
            </li>
+           <a href="/logout" class="nav-item px-3 btn btn-outline-secondary pull-right" style="height: 35px;">
+                <i style="line-height: 1.25rem" class="fas fa-sign-out-alt"></i>
+            </a>
       </ul>
     </header>
     <div class="app-body">
@@ -589,6 +610,11 @@ if(typeof io !== "undefined"){
 
            liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} mr-2'></span>${description}`);
 
+           if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("download_progress")){
+               let progress = msg.metadata.metadata["download_progress"].replace("rootfs: ", "");
+               liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} mr-2'></span>${description} - ${progress}`);
+           }
+
            if(msg.metadata.err !== ""){
                $(liItem).data({
                    toggle: "tooltip",
@@ -715,47 +741,58 @@ var unknownServerDetails = {
 
 function createDashboardSidebar()
 {
-    ajaxRequest(globalUrls.hosts.getClustersAndStandloneHosts, {}, (data)=>{
-        data = $.parseJSON(data);
+    ajaxRequest(globalUrls.universe.getEntities, {}, (data)=>{
+        data = makeToastr(data);
+
         let hosts = `
             <li class="nav-item container-overview">
                 <a class="nav-link" href="#">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>`;
+
         $.each(data.clusters, function(i, item){
             hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
 
+            hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
+
             $.each(item.members, function(_, host){
                 let disabled = "";
+                let expandBtn = '<button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>';
 
-                if(host.status !== "Online"){
+                if(!host.hostOnline){
                     disabled = "disabled text-warning text-strikethrough";
+                    expandBtn = '';
                 }
+
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link viewServer ${disabled}" href="#">
                         <i class="fas fa-server"></i> ${host.alias}
-                        <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                        ${expandBtn}
                     </a>
-                    <ul class="nav-dropdown-items">
+                    <ul class="nav-dropdown-items hostInstancesUl">
                     </ul>
                 </li>`;
             });
         });
+
         hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+
         $.each(data.standalone.members, function(_, host){
             let disabled = "";
+            let expandBtn = '<button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>';
 
             if(host.hostOnline == false){
                 disabled = "disabled text-warning text-strikethrough";
+                expandBtn = '';
             }
 
             hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                 <a class="nav-link viewServer ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${host.alias}
-                    <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                    ${expandBtn}
                 </a>
-                <ul class="nav-dropdown-items">
+                <ul class="nav-dropdown-items hostInstancesUl">
                 </ul>
             </li>`;
         });
@@ -763,11 +800,55 @@ function createDashboardSidebar()
     });
 }
 
+$(document).on("click", '.search-panel .dropdown-menu', function(e) {
+   e.preventDefault();
+   var target = $(e.target)
+   let targetData = target.data();
+   if(!targetData.hasOwnProperty("search")){
+       targetData = target.parent().data();
+   }
+
+   let search = "";
+   if (targetData.search == "containers"){
+       search = "container";
+   } else if (targetData.search == "vms"){
+       search = "vm";
+   }
+
+   $(this).parents("ul").find('.search_concept').html(`<i class="fas fa-${targetData.icon}"></i>`).data("filter", search)
+
+   let ul = target.parents("ul");
+   ul.parents("li").find(".hostInstancesUl").css("min-height", "200px");
+   let inputSearch = ul.find(".filterHostsInstances").val().toLowerCase();
+   ul.find(".view-container").filter(function(){
+       $(this).toggle($(this).data("type").toLowerCase().indexOf(search) > -1 && $(this).text().toLowerCase().indexOf(inputSearch) > -1)
+   });
+});
+
 function addHostContainerList(hostId, hostAlias) {
     ajaxRequest(globalUrls.hosts.instances.getHostContainers, {hostId: hostId}, (data)=>{
         data = makeToastr(data);
         let containers = "";
         if(Object.keys(data).length > 0){
+
+            if(Object.keys(data).length > 5){
+                containers += `<li class="">
+                    <div class="input-group pl-3 pr-3">
+                        <div class="input-group-btn search-panel">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="search_concept" data-filter=""><i class="fas fa-filter"></i></span> <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                              <li class='dropdown-item' data-search="all" data-icon="filter"><a href="#"><i class="fas fa-filter mr-2"></i>All</a></li>
+                              <li class='dropdown-item' data-search="containers" data-icon="box"><a href="#"><i class="fas fa-box mr-2"></i>Containers</a></li>
+                              <li class='dropdown-item' data-search="vms" data-icon="vr-cardboard"><a href="#"><i class="fas fa-vr-cardboard mr-2"></i>Virtual Machines</a></li>
+                            </ul>
+                        </div>
+                        <input type="text" class="form-control filterHostsInstances" placeholder="Search instances...">
+                    </div>
+                </li>`
+            }
+
             $.each(data, function(containerName, details){
                 let active = "";
                 if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
@@ -777,18 +858,37 @@ function addHostContainerList(hostId, hostAlias) {
                 }
 
                 let typeFa = "box";
+                let type = "container";
 
                 if(details.hasOwnProperty("type") && details.type == "virtual-machine"){
                     typeFa = "vr-cardboard";
+                    type = "vm";
+                }
+
+                let osIconMap = {
+                    centos: 'centos',
+                    opensuse: 'suse',
+                    fedora: 'fedora',
+                    ubuntu: 'ubuntu'
+                };
+
+                let osIcon = "linux";
+
+                let instanceImage = details.config["image.os"].toLowerCase();
+
+                if(osIconMap.hasOwnProperty(instanceImage)){
+                    osIcon = osIconMap[instanceImage];
                 }
 
                 containers += `<li class="nav-item view-container"
                     data-host-id="${hostId}"
                     data-container="${containerName}"
-                    data-alias="${hostAlias}">
+                    data-alias="${hostAlias}"
+                    data-type="${type}">
                   <a class="nav-link ${active}" href="#">
                     <i class="nav-icon ${statusCodeIconMap[details.state.status_code]}"></i>
                     <i class="nav-icon fas fa-${typeFa}"></i>
+                    <i class="nav-icon fab fa-${osIcon}"></i>
                     ${containerName}
                   </a>
                 </li>`;
@@ -801,7 +901,20 @@ function addHostContainerList(hostId, hostAlias) {
     });
 }
 
+$(document).on("keyup", ".filterHostsInstances", function(e){
+    let ul = $(this).parents("ul");
+    let search = $(this).val().toLowerCase();
+    let typeFilter = $(this).parents("ul").find(".search_concept").data("filter");
+    ul.parents("li").find(".hostInstancesUl").css("min-height", "200px");
+    ul.find(".view-container").filter(function(){
+        $(this).toggle($(this).text().toLowerCase().indexOf(search) > -1 && $(this).data("type").toLowerCase().indexOf(typeFilter) > -1)
+    });
+});
+
 $(document).on("click", ".cluster-title", function(e){
+    if(!userDetails.isAdmin){
+        return false;
+    }
     let x = $(this).data();
     $("#sidebar-ul").find(".text-info").removeClass("text-info");
     $("#sidebar-ul").find(".active").removeClass("active");
@@ -817,6 +930,7 @@ $(document).on("click", ".showServerInstances", function(e){
     if(parentLi.hasClass("open")){
         parentLi.find("ul").empty();
         parentLi.removeClass("open");
+        parentLi.find(".hostInstancesUl").css("min-height", "0px");
         $(this).html('<i class="fas fa-caret-left"></i>')
         return false;
     }else{
@@ -888,22 +1002,26 @@ function loadDashboard(){
         let hostsTrs = "";
 
         $.each(data.clustersAndHosts.clusters, function(i, item){
-            hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
+
+            let cTitleClass = userDetails.isAdmin ? "cluster-title" : "cluster-title-not-admin";
+
+            hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title ${cTitleClass} text-success pl-1 pt-2"><u>Cluster ${i}</u></li>`;
 
             hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
 
             $.each(item.members, function(_, host){
                 let disabled = "";
-
+                let expandBtn = '<button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>';
                 if(!host.hostOnline){
                     disabled = "disabled text-warning text-strikethrough";
+                    expandBtn = '';
                 }
 
-                let projects = "Not Available";
+                let projects = "<div class='text-center text-info'><i class='fas fa-info-circle mr-2'></i>Not Supported</div>";
 
                 if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
                     projects = "<select class='form-control changeHostProject'>";
-                    $.each(host.resources.projects, function(o, project){
+                    $.each(host.projects, function(o, project){
                         let selected = project == host.currentProject ? "selected" : "";
                             projects += `<option data-alias="${alias}" data-host='${data.hostId}'
                                 value='${project}' ${selected}>
@@ -912,14 +1030,20 @@ function loadDashboard(){
                     projects += "</select>";
                 }
 
-                hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+
+
+                if(host.hostOnline == true){
+                    hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+                }
+
+
 
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                     <a class="nav-link viewServer ${disabled}" href="#">
                         <i class="fas fa-server"></i> ${host.alias}
-                        <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                        ${expandBtn}
                     </a>
-                    <ul class="nav-dropdown-items">
+                    <ul class="nav-dropdown-items hostInstancesUl">
                     </ul>
                 </li>`;
             });
@@ -961,17 +1085,19 @@ function loadDashboard(){
 
         $.each(data.clustersAndHosts.standalone.members, function(_, host){
             let disabled = "";
+            let expandBtn = '<button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>';
 
             if(host.hostOnline == false){
                 disabled = "disabled text-warning text-strikethrough";
+                expandBtn = '';
             }
 
-            let projects = "<b> Not Available </b>";
+            let projects = "<div class='text-center text-info'><i class='fas fa-info-circle mr-2'></i>Not Supported</div>";
 
 
             if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
                 projects = "<select class='form-control changeHostProject'>";
-                $.each(host.resources.projects, function(o, project){
+                $.each(host.projects, function(o, project){
                     let selected = project == host.currentProject ? "selected" : "";
                         projects += `<option data-alias="${alias}" data-host='${host.hostId}'
                             value='${project}' ${selected}>
@@ -979,14 +1105,16 @@ function loadDashboard(){
                 });
                 projects += "</select>";
             }
-            hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+            if(host.hostOnline == true){
+                hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+            }
 
             hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList nav-dropdown">
                 <a class="nav-link viewServer ${disabled}" href="#">
                     <i class="fas fa-server"></i> ${host.alias}
-                    <button class="btn btn-outline-secondary float-right showServerInstances"><i class="fas fa-caret-left"></i></button>
+                    ${expandBtn}
                 </a>
-                <ul class="nav-dropdown-items">
+                <ul class="nav-dropdown-items hostInstancesUl">
                 </ul>
             </li>`;
         });
@@ -1119,6 +1247,46 @@ function setContDetsByTreeItem(node)
     }
     return currentContainerDetails;
 }
+
+$(document).on("click", "#openSearch", function(){
+    $.confirm({
+        title: `Search`,
+        content: `
+            <div class="form-group">
+                <label>IP Address IPV4/IPV6</label>
+                <input class="form-control" name="ip" />
+            </div>
+        `,
+        buttons: {
+            cancel: {
+                btnClass: "btn btn-secondary",
+                text: "cancel"
+            },
+            search: {
+                btnClass: "btn btn-success",
+                text: "Search",
+                action: function(){
+                    let x = {
+                        ip: this.$content.find("input[name=ip]").val()
+                    }
+
+                    ajaxRequest(globalUrls.networks.tools.findIpAddress, x, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            return false;
+                        }
+                        if(data.result == false){
+                            makeToastr({state: "error", message: "Couldn't find instance"})
+                            return false;
+                        }
+                        currentContainerDetails = data.result;
+                        loadContainerView(data.result);
+                    });
+                }
+            }
+        }
+    });
+});
 
 $(document).on("click", "#addNewServer", function(){
     $("#modal-hosts-add").modal("show");

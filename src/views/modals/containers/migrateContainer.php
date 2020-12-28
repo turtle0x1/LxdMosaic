@@ -34,6 +34,15 @@
   </div>
 </div>
 <script>
+    $("#migrateModal-targetHost").tokenInput(globalUrls.hosts.search.search, {
+        queryParam: "hostSearch",
+        propertyToSearch: "host",
+        tokenValue: "hostId",
+        preventDuplicates: false,
+        tokenLimit: 1,
+        theme: "facebook"
+    });
+
     $("#modal-container-migrate").on("shown.bs.modal", function(){
         if(!$.isPlainObject(currentContainerDetails)){
             $("#modal-container-migrate").modal("toggle");
@@ -46,21 +55,18 @@
         }
         $(".migrateModal-containerName").html(currentContainerDetails.container);
         $("#migrateModal-currentHost").html(currentContainerDetails.alias);
-
-        ajaxRequest(globalUrls.hosts.getAllHosts, {}, function(data){
-            let result = $.parseJSON(data);
-            let html = "";
-            $.each(result, function(i, item){
-                html += `<option value='${item.Host_ID}'>${item.Host_Alias}</option>`;
-            });
-            $("#migrateModal-targetHost").empty().append(html);
-        });
-
     });
 
     $("#modal-container-migrate").on("click", ".migrate", function(){
+        let targetHost = $("#migrateModal-targetHost").tokenInput("get");
+
+        if(targetHost.length == 0){
+            $.alert("Please select target host");
+            return false;
+        }
+
         let x = $.extend({
-            destination: $("#migrateModal-targetHost").val()
+            destination: targetHost[0].hostId
         }, currentContainerDetails);
 
         ajaxRequest(globalUrls.instances.migrate, x, function(data){

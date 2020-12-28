@@ -1,8 +1,26 @@
 <phpunit bootstrap="tests/bootstrap.php">
+    <!-- "Tests should need to run in order" blah blah blah -->
     <testsuites>
+        <!-- Add the local LXD server to the DB -->
         <testsuite name="test">
-           <directory>tests</directory>
+           <directory>tests/seedHosts</directory>
          </testsuite>
+         <!--
+            Create instances, profiles, storage, networks or what ever
+            to fetch later on
+        -->
+        <testsuite name="test">
+           <directory>tests/seedEntities</directory>
+         </testsuite>
+         <!--
+            Basicly testing GET methods but because you can create
+            more complex entities and know they exist (because seedEntities
+            runs first) you can test more complex situations (beyond just
+            calling the "default" profile / project / storage or whatever)
+        -->
+         <testsuite name="test">
+            <directory>tests/test</directory>
+          </testsuite>
     </testsuites>
     <filter>
       <whitelist processUncoveredFilesFromWhitelist="false">

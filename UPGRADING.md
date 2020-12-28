@@ -30,6 +30,27 @@ systemctl restart httpd
 
 ```
 
+## 0.9.X -> 0.10.0
+```
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout v0.10.0
+
+npm i
+
+composer install --no-dev
+
+# Restart node server - be careful may interupt console sessions
+pm2 restart all
+
+#Ubuntu
+systemctl restart apache2
+#Centos
+systemctl restart httpd
+```
+
 ## 0.8.X -> 0.9.0
 ```
 # Remove all the cron jobs from the users crontab

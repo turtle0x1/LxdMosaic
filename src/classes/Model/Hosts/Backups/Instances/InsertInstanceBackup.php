@@ -14,6 +14,7 @@ class InsertInstanceBackup
     public function insert(
         \DateTime $backupDateCreated,
         int $hostId,
+        string $project,
         string $instance,
         string $backup,
         string $localPath
@@ -22,13 +23,15 @@ class InsertInstanceBackup
                 (
                     `CB_Backup_Date_Created`,
                     `CB_Host_ID`,
+                    `CB_Project`,
                     `CB_Container`,
                     `CB_Backup`,
                     `CB_Local_Path`
                 ) VALUES (
                     :backupDateCreated,
                     :hostId,
-                    :container,
+                    :project,
+                    :instance,
                     :backup,
                     :localPath
                 );";
@@ -36,10 +39,11 @@ class InsertInstanceBackup
         $do->execute([
             ":backupDateCreated"=>$backupDateCreated->format("Y-m-d H:i:s"),
             ":hostId"=>$hostId,
-            ":container"=>$instance,
+            ":project"=>$project,
+            ":instance"=>$instance,
             ":backup"=>$backup,
             ":localPath"=>$localPath
         ]);
-        return $do->rowCount() ? true : false;
+        return $this->database->lastInsertId();
     }
 }

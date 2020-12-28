@@ -1,16 +1,84 @@
 Unreleased
 
 Added
+    Cron job to disable backup schedules for offline hosts & deleted instances
+    Limit not-admin users to servers/projects
+    View to view & delete hosts in settings
+    Show instance limits on instance view (#288)
+    Get & set comments in the user.comment key for an instance (#283)
+    Show project consumption on project overview
+    Filter by name & instance type in sidebar on hosts with more than 5 instances
+    Show OS icon in sidebar (#296)
+    Button to start an instance on creation (#294)
+    LDAP user syncing & login (#171, #272, #300)
+    Show users who can access a project on project view
+    View storage volumes
+    Attach volumes to instances
+
+Changed
+    Support backups & backup schedules in different projects
+    Disable backup schedules when deleting instance
+    Use buttons for bulk instance actions instead of dropdown
+    Dont show carat when host is offline
+    Replace nav button text with icons
+    Go back to default font
+    Split project restrictions into their own table on frontend
+    Remove all usage of cdns (so the it should work offline) (#293)
+    Allow setting admin password on first run (#299)
+    Show operation download progress if available (#316)
+
+Fixed
+    Switching projects in snap broken
+    An issue with bulk deleting running instances
+    Reseting user password by pressing enter leads to undefined behaviour (#282)
+    Console session doubling input (#301)
+    Remove card-columns from images which prevents a jumpy UI
+    Attempts to gather offline hosts metrics breaks script
+
+0.10.2 - 30/10/2020
+
+Fixed
+    Cant access instance files (#273)
+
+0.10.1 - 21/10/2020
+
+Fixed
+    Fix an issue with node trying to use wrong sql methods (#269)
+
+0.10.0 - 20/10/2020
+
+Added
     Support for setting addtional restriction keys on projects (#229)
+    Search for instance by ip address (#233)
+    Remove profile from instance (#224)
+    Support weekly & monthly backups (#251)
+    Networks feature to project creation (#252)
+    Support for permanent API keys (#181)
+    Some local user analytics (#219)
+    Support for "ubuntu daily" & "ubuntu" (ubuntu-release) image remotes
 
 Fixed
     Changing cluster member alias breaks UI (#234) (Slight caveat that the
         node server wont return operations for a cluster member with an alias
         that doesn't match the LXD server_name)
+    Dont show deleted backups
+    Fix server overview doesnt load properly when system details missing (#262)
+    Deleting last project when on project blocks UI (#261)
+    used_by on networks now returning null & preventing UI from loading
+    Reading files in instances not in the default project
 
 Changed
     Used buttons instead of dropdown to change instance state
     Slight improvement to create container UX
+    HostsCollection implmenets JsonSerializable so it can be logged properly
+    Use guzzle sink to prevent oom issue using backups in the browser (#242)
+    Allow running php script "forever" when importing a backup (#245)
+    Only search for image types applicable to instance being created
+    Use simplestreams to read images from remote sources
+    Improve import images UX
+    Improve virtual machine creation UI & UX
+    Added optional extensions filter to search hosts api
+    Ensure host supports projects before appearing in create project dropdown (#259)
 
 0.9.3
 

@@ -14,7 +14,7 @@ class CreateVirutalMachine
         $this->createInstance = $createInstance;
     }
 
-    public function create(string $name, string $username, HostsCollection $hosts)
+    public function create(string $name, string $username, HostsCollection $hosts, array $imageDetails, bool $start)
     {
         $config = [];
         $config["user.vendor-data"] = $this->getVendorData($username);
@@ -37,18 +37,18 @@ class CreateVirutalMachine
             );
         }
 
-        $imageDetails = [
-            "server"=>"https://cloud-images.ubuntu.com/releases",
-            "fingerprint"=>"5cba5a1288273a5c49056c8966595516a2d874ec6fa9bf7ca796399d0daeee9d",
-            "protocol"=>"simplestreams"
-        ];
-
         $this->createInstance->create(
             LxdInstanceTypes::VM,
             $name,
             [$profileName, "default"],
             $hosts,
-            $imageDetails
+            $imageDetails,
+            "",
+            [],
+            "",
+            null,
+            [],
+            $start
         );
 
         return true;
@@ -64,10 +64,6 @@ class CreateVirutalMachine
                groups: lxd
                shell: /bin/bash
                sudo: ALL=(ALL) NOPASSWD:ALL
-
-            runcmd:
-             - mount -t 9p config /mnt/
-             - cd /mnt && ./install.sh
-             - reboot';
+         ';
     }
 }

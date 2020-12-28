@@ -12,8 +12,8 @@ class GetHostsStoragePoolController
         $this->getStoragePool = $getStoragePool;
     }
 
-    public function get(Host $host, string $poolName)
+    public function get(int $userId, Host $host, string $poolName)
     {
-        return $this->getStoragePool->get($host, $poolName);
+        return $this->getStoragePool->get($userId, $host, $poolName);
     }
 }

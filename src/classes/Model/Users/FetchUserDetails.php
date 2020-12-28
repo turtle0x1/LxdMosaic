@@ -11,10 +11,43 @@ class FetchUserDetails
         $this->database = $database->dbObject;
     }
 
+    public function adminPasswordBlank()
+    {
+        $sql = "SELECT
+                    1
+                FROM
+                    `Users`
+                WHERE
+                    `User_Admin` = 1
+                AND
+                    `User_ID` = 1
+                AND
+                    `User_Password` = ''
+                ";
+        $do = $this->database->query($sql);
+        return $do->fetchColumn() ? true : false;
+    }
+
     public function fetchHash(string $username)
     {
         $sql = "SELECT
                     `User_Password`
+                FROM
+                    `Users`
+                WHERE
+                    `User_Name` = :username
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":username"=>$username
+        ]);
+        return $do->fetchColumn();
+    }
+
+    public function fetchLdapId(string $username)
+    {
+        $sql = "SELECT
+                    `User_Ldap_ID`
                 FROM
                     `Users`
                 WHERE
@@ -57,5 +90,23 @@ class FetchUserDetails
             ":userId"=>$userId
         ]);
         return $do->fetchColumn();
+    }
+
+    public function isFromLdap(int $userId)
+    {
+        $sql = "SELECT
+                    1
+                FROM
+                    `Users`
+                WHERE
+                    `User_ID` = :userId
+                AND
+                    `User_Ldap_ID` IS NOT NULL
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":userId"=>$userId
+        ]);
+        return $do->fetch() ? true : false;
     }
 }

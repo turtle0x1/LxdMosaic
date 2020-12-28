@@ -47,7 +47,7 @@
             <div class="col-md-8">
                 <div class="card bg-dark">
                     <div class="card-header bg-dark">
-                        <h5> <a> Used By </a> </h5>
+                        <h5> Used By <i class="fas fa-layer-group float-right"></i> </h5>
                     </div>
                     <div class="card-body bg-dark">
                         <table class="table table-bordered table-dark" id="networkUsedBy">
@@ -166,7 +166,7 @@ function viewNetwork(hostId, network, alias)
             });
         }
 
-        if(data.used_by.length == 0){
+        if(data.used_by == null || data.used_by.length == 0){
             usedByHtml += `<tr><td>Not Used</td></tr>`
         }else{
             $.each(data.used_by, function(key, value){

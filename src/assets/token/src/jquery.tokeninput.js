@@ -47,6 +47,7 @@ var DEFAULT_SETTINGS = {
     tokenFormatter: function(item) { return "<li><p>" + item[this.propertyToSearch] + "</p></li>" },
 
 	// Callbacks
+    setExtraSearchParams: null,
     onResult: null,
     onAdd: null,
     onDelete: null,
@@ -115,7 +116,10 @@ var methods = {
     },
     get: function() {
     	return this.data("tokenInputObject").getTokens();
-   	}
+   	},
+    getCache: function(){
+        return this.data("tokenInputObject").getCache();
+    }
 }
 
 // Expose the .tokenInput function to jQuery as a plugin
@@ -388,10 +392,15 @@ $.TokenList = function (input, url_or_data, settings) {
                 delete_token($(this));
             }
         });
+        cache = new $.TokenList.Cache();
     }
 
     this.add = function(item) {
         add_token(item);
+    }
+
+    this.getCache = function() {
+        return cache.getAll();
     }
 
     this.remove = function(item) {
@@ -765,7 +774,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 var url = computeURL();
                 // Extract exisiting get params
                 var ajax_params = {};
-                ajax_params.data = {};
+                ajax_params.data = $.isFunction(settings.setExtraSearchParams) ? settings.setExtraSearchParams() : {};
                 if(url.indexOf("?") > -1) {
                     var parts = url.split("?");
                     ajax_params.url = parts[0];
@@ -856,5 +865,9 @@ $.TokenList.Cache = function (options) {
     this.get = function (query) {
         return data[query];
     };
+
+    this.getAll = function(){
+        return data;
+    }
 };
 }(jQuery));

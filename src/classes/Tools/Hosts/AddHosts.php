@@ -7,6 +7,7 @@ use dhope0000\LXDClient\Tools\Hosts\GenerateCert;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Tools\Node\Hosts;
 use dhope0000\LXDClient\Model\Client\LxdClient;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class AddHosts
 {
@@ -15,17 +16,25 @@ class AddHosts
         GenerateCert $generateCert,
         GetDetails $getDetails,
         Hosts $hosts,
-        LxdClient $lxdClient
+        LxdClient $lxdClient,
+        FetchUserDetails $fetchUserDetails
     ) {
         $this->generateCert = $generateCert;
         $this->addHost = $addHost;
         $this->getDetails = $getDetails;
         $this->hosts = $hosts;
         $this->lxdClient = $lxdClient;
+        $this->fetchUserDetails = $fetchUserDetails;
     }
 
-    public function add(array $hostsDetails)
+    public function add($userId, array $hostsDetails)
     {
+        $isAdmin = $this->fetchUserDetails->isAdmin($userId) === "1";
+
+        if (!$isAdmin) {
+            throw new \Exception("Not allowed to add hosts", 1);
+        }
+
         foreach ($hostsDetails as $hostsDetail) {
             $this->validateDetails($hostsDetail);
 
@@ -81,7 +90,7 @@ class AddHosts
                             "alias"=>$member
                         ];
                     }
-                    $this->add($extraMembersToAdd);
+                    $this->add($userId, $extraMembersToAdd);
                 }
             } catch (\Http\Client\Exception\NetworkException $e) {
                 throw new \Exception("Can't connect to ". $hostsDetail['name'] . ", is lxd running and the port open?", 1);

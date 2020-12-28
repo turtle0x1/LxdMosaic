@@ -10,8 +10,6 @@ certs/**
 site/**
 test.php
 python/sysMetrics/offlineLogs/**
-
 snap/plugins/__pycache__/
 *.snap
-
 coverage/*

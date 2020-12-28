@@ -2,47 +2,17 @@
 
 namespace dhope0000\LXDClient\Tools\Projects;
 
-use dhope0000\LXDClient\Tools\Hosts\HasExtension;
-use dhope0000\LXDClient\Tools\Hosts\GetClustersAndStandaloneHosts;
+use dhope0000\LXDClient\Tools\Universe;
 
 class GetHostsProjects
 {
-    public function __construct(
-        GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts,
-        HasExtension $hasExtension
-    ) {
-        $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;
-        $this->hasExtension = $hasExtension;
+    public function __construct(Universe $universe)
+    {
+        $this->universe = $universe;
     }
 
-    public function getAll()
+    public function getAll($userId)
     {
-        $clusters = $this->getClustersAndStandaloneHosts->get(true);
-
-        foreach ($clusters["clusters"] as $clusterIndex => $cluster) {
-            foreach ($cluster["members"] as $hostIndex => &$host) {
-                $host->setCustomProp("projects", $this->getHostProjects($host));
-            }
-        }
-
-        foreach ($clusters["standalone"]["members"] as $hostIndex => &$host) {
-            $host->setCustomProp("projects", $this->getHostProjects($host));
-        }
-
-        return $clusters;
-    }
-
-
-    private function getHostProjects($host)
-    {
-        if (!$host->hostOnline()) {
-            return [];
-        }
-
-        if (!$this->hasExtension->checkWithHost($host, "projects")) {
-            return [];
-        }
-
-        return $host->projects->all();
+        return $this->universe->getEntitiesUserHasAccesTo($userId, "projects");
     }
 }

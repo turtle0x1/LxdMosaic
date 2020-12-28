@@ -27,6 +27,7 @@
               <div class="col-md-12">
                   <div class="form-group">
                       <b> Hosts </b>
+                      <small><i class="fas fa-info-circle mr-2 text-info"></i>Only finds hosts that support projects</small>
                       <input class="form-control" id="newProjectHosts"/>
                   </div>
               </div>
@@ -43,6 +44,16 @@
                           </tr>
                       </thead>
                       <tbody>
+                          <tr>
+                              <td> Networks </td>
+                              <td> Separate set of networks for the project (Requires > LXD 4.6) </td>
+                              <td>
+                                  <select id="networksValue" class="form-control">
+                                      <option value="true" selected>true</option>
+                                      <option value="false">false</option>
+                                  </select>
+                              </td>
+                          </tr>
                           <tr>
                               <td> Images </td>
                               <td> Separate set of images and image aliases for the project </td>
@@ -257,7 +268,10 @@
         propertyToSearch: "host",
         tokenValue: "hostId",
         preventDuplicates: false,
-        theme: "facebook"
+        theme: "facebook",
+        setExtraSearchParams: ()=>{
+            return {extensionRequirements: ["projects"]}
+        }
     });
 
     $("#restrictionsTable, #restrictionWarning").hide();
@@ -307,6 +321,7 @@
             name: projectName,
             hosts: hosts,
             config: {
+                "features.networks": $("#modal-projects-create #networksValue").val(),
                 "features.images": $("#modal-projects-create #imagesValue").val(),
                 "features.profiles": $("#modal-projects-create #profilesValue").val(),
                 "features.storage.volumes": $("#modal-projects-create #storageValue").val()

@@ -10,16 +10,20 @@ use dhope0000\LXDClient\Tools\User\ValidateToken;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class RouteController
 {
+    public $loginError = null;
+
     public function __construct(
         UserSession $userSession,
         LogUserIn $logUserIn,
         RouteApi $routeApi,
         RouteView $routeView,
         RouteAssets $routeAssets,
-        ValidateToken $validateToken
+        ValidateToken $validateToken,
+        FetchUserDetails $fetchUserDetails
     ) {
         $this->validateToken = $validateToken;
         $this->userSession = $userSession;
@@ -28,46 +32,71 @@ class RouteController
         $this->routeView = $routeView;
         $this->routeAssets = $routeAssets;
         $this->session = new Session(new NativeSessionStorage(), new NamespacedAttributeBag());
+        $this->fetchUserDetails = $fetchUserDetails;
     }
 
     public function routeRequest($explodedPath)
     {
+        $canSkipAuth = in_array(implode("/", $explodedPath), [
+            "assets/lxdMosaic/logo.png",
+            "assets/dist/login.dist.css",
+            "assets/dist/login.dist.js",
+            "assets/dist/external.fontawesome.css",
+            "assets/fontawesome/webfonts/fa-solid-900.ttf",
+            "api/InstanceSettings/FirstRunController/run"
+        ]);
+
+        $adminPassBlank = $this->fetchUserDetails->adminPasswordBlank();
+
+        if ($adminPassBlank == true && !$canSkipAuth) {
+            $this->routeView->route(["views", "firstRun"]);
+            exit;
+        }
+
         if (isset($explodedPath[0]) && $explodedPath[0] == "api") {
-            $headers = getallheaders();
+            $headers = ["userid"=>1];
 
-            // PHP-FPM strikes again
-            $headers = array_change_key_case($headers);
+            if (!$canSkipAuth) {
+                $headers = getallheaders();
 
-            if (!isset($headers["userid"]) || !isset($headers["apitoken"])) {
-                http_response_code(403);
-                echo json_encode(["error"=>"Missing either user id or token"]);
-                exit;
-            }
+                // PHP-FPM strikes again
+                $headers = array_change_key_case($headers);
 
-            if (!$this->validateToken->validate($headers["userid"], $headers["apitoken"])) {
-                http_response_code(403);
-                echo json_encode(["error"=>"Not valid token"]);
-                exit;
+                if (!isset($headers["userid"]) || !isset($headers["apitoken"])) {
+                    http_response_code(403);
+                    echo json_encode(["error"=>"Missing either user id or token"]);
+                    exit;
+                }
+
+                if (!$this->validateToken->validate($headers["userid"], $headers["apitoken"])) {
+                    http_response_code(403);
+                    echo json_encode(["error"=>"Not valid token"]);
+                    exit;
+                }
             }
 
             $this->routeApi->route($explodedPath, $headers);
             exit;
         }
 
-        $logoReq = implode("/", $explodedPath) === "assets/lxdMosaic/logo.png";
-
         $this->session->start();
-        
+
         $loginSet = isset($_POST["login"]);
 
-        if ($this->userSession->isLoggedIn() !== true && !$loginSet && !$logoReq) {
+        if ($this->userSession->isLoggedIn() !== true && !$loginSet && !$canSkipAuth) {
             http_response_code(403);
             require __DIR__ . "/../../views/login.php";
             exit;
         } elseif ($loginSet) {
-            if ($this->logUserIn->login($_POST["username"], $_POST["password"]) !== true) {
-                // Should never fire login throws exceptions
-                throw new \Exception("Couldn't login", 1);
+            //TODO fairly certian this creates a vunreabilty but this whole
+            //     thing is a mess
+            try {
+                $this->logUserIn->login($_POST["username"], $_POST["password"]);
+            } catch (\Throwable $e) {
+                $this->loginError = $e->getMessage();
+                http_response_code(403);
+                require __DIR__ . "/../../views/login.php";
+                return false;
             }
         } elseif (isset($explodedPath[0]) && $explodedPath[0] == "logout") {
             $this->userSession->logout();

@@ -18,11 +18,17 @@ class GetHostContainerStatus
 
         foreach ($allProfiles["clusters"] as $cluster) {
             foreach ($cluster["members"] as &$host) {
+                if (!$host->hostOnline()) {
+                    continue;
+                }
                 $this->addHostDetails($host);
             }
         }
 
         foreach ($allProfiles["standalone"]["members"] as &$host) {
+            if (!$host->hostOnline()) {
+                continue;
+            }
             $this->addHostDetails($host);
         }
 

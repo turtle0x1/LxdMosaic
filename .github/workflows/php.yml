@@ -49,4 +49,10 @@ jobs:
       run: cat examples/tests_lxd_init.yaml | sudo lxd init --preseed
 
     - name: run tests
-      run: vendor/bin/phpunit --coverage-text --colors=never
+      run: /usr/bin/php7.4 -dxdebug.mode=coverage vendor/bin/phpunit --coverage-html=./coverage
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: test-coverage
+        path: coverage/
+        retention-days: 1

@@ -11,25 +11,25 @@ class SearchController
         $this->getAllImages = $getAllImages;
     }
 
-    public function getAllAvailableImages(string $search)
+    public function getAllAvailableImages(int $userId, string $search, string $type = "")
     {
-        $allImages = $this->getAllImages->getAllHostImages();
+        $allImages = $this->getAllImages->getAllHostImages($userId);
         $output = [];
         $seenFingerPrints = [];
         $unknownCount = 0;
         foreach ($allImages["standalone"]["members"] as $host) {
-            $this->doWork($output, $seenFingerPrints, $host->getCustomProp("images"), $unknownCount, $search);
+            $this->doWork($output, $seenFingerPrints, $host->getCustomProp("images"), $unknownCount, $search, $type, $host);
         }
 
         foreach ($allImages["clusters"] as $cluster) {
             foreach ($cluster["members"] as $host) {
-                $this->doWork($output, $seenFingerPrints, $host->getCustomProp("images"), $unknownCount, $search);
+                $this->doWork($output, $seenFingerPrints, $host->getCustomProp("images"), $unknownCount, $search, $type, $host);
             }
         }
         return $output;
     }
 
-    private function doWork(&$output, &$seenFingerPrints, $images, & $unknownCount, $search)
+    private function doWork(&$output, &$seenFingerPrints, $images, & $unknownCount, $search, $type, $host)
     {
         foreach ($images as $image) {
             if (in_array($image["fingerprint"], $seenFingerPrints)) {
@@ -49,11 +49,15 @@ class SearchController
             if (!isset($image["update_source"]) || empty($image["update_source"])) {
                 $image["update_source"] = [
                     "protocol"=>"lxd",
-                    "server"=>$host,
+                    "server"=>$host->getUrl(),
                     "provideMyHostsCert"=>true
                 ];
             } else {
                 $image["update_source"]["provideMyHostsCert"] = false;
+            }
+
+            if (!empty($type) && isset($image["type"]) && $image["type"] !== $type) {
+                continue;
             }
 
             $output[] = [

@@ -27,17 +27,21 @@ class GetAllClusters
         return $this->calculateClusterStats($clusters, $removeResources);
     }
 
-    private function createClusterGroupsWithInfo()
+    public function convertHostsToClusters($hosts)
     {
-        $clusterId = 0;
-
-        $clusters = [];
-
-        $hostsInACluster = [];
-
-        $hosts = $this->hostList->getOnlineHostsWithDetails();
-
+        $hostByUrl = [];
         foreach ($hosts as $host) {
+            $hostByUrl[$host->getUrl()] = $host;
+        }
+
+        $clusterId = 0;
+        $clusters = [];
+        $hostsInACluster = [];
+        foreach ($hosts as $host) {
+            if ($host->hostOnline() === false) {
+                continue;
+            }
+
             // I belive one host can only belong to one cluster so until that
             // isn't true then we can skip checking hosts we already know
             // are in a cluster some where
@@ -52,11 +56,11 @@ class GetAllClusters
             $clusterMembers = $host->cluster->members->all(LxdRecursionLevels::INSTANCE_FULL_RECURSION);
 
             foreach ($clusterMembers as $member) {
-                $memberHostObj = $this->getDetails->fetchHostByUrl($member["url"]);
-
-                if (empty($memberHostObj)) {
+                if (!isset($hostByUrl[$member["url"]])) {
                     continue;
                 }
+
+                $memberHostObj = $hostByUrl[$member["url"]];
 
                 $memberHostObj->setCustomProp("clusterInfo", $member);
                 $memberHostObj->setCustomProp("resources", $this->getResources->getHostExtended($memberHostObj));
@@ -69,6 +73,12 @@ class GetAllClusters
         }
 
         return $clusters;
+    }
+
+    private function createClusterGroupsWithInfo()
+    {
+        $hosts = $this->hostList->getOnlineHostsWithDetails();
+        return $this->convertHostsToClusters($hosts);
     }
 
     private function calculateClusterStats(array $clusters, bool $removeResources)

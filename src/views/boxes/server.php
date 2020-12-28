@@ -4,6 +4,7 @@
             <div class="col-md-12">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                     <h1 id="serverHeading"></h1>
+                    <?php if ($isAdmin === 1) : ?>
                     <div class="btn-toolbar float-right">
                       <div class="btn-group mr-2">
                         <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Host" id="editHost">
@@ -14,6 +15,7 @@
                         </button>
                       </div>
                     </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -30,18 +32,23 @@
         <div class="row serverViewBox" id="serverInfoBox">
         <div class="col-md-7">
             <div class="card bg-dark">
-                <div class="card-header bg-dark">
-                    <h4> Instances
-                        <select id="serverContainerActions" class="form-control-sm float-right">
-                            <option value="" selected></option>
-                            <option value="start">Start</option>
-                            <option value="stop">Stop</option>
-                            <option value="delete">Delete</option>
-                        </select>
-                    </h4>
-
+                <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
+                    <h4><i class="fas fa-box mr-2"></i>Instances</h4>
+                    <div class="btn-toolbar float-right">
+                      <div class="btn-group mr-2">
+                        <button class="btn btn-success serverContainerActions" data-action="start" data-toggle="tooltip" data-placement="bottom" title="Start Instances" disabled>
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="btn btn-warning serverContainerActions" data-action="stop" data-toggle="tooltip" data-placement="bottom" title="Stop Instances" disabled>
+                            <i class="fas fa-stop"></i>
+                        </button>
+                        <button class="btn btn-danger serverContainerActions" data-action="delete" data-toggle="tooltip" data-placement="bottom" title="Delete Instances" disabled>
+                            <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
                 </div>
-                <div class="card-body table-responsive bg-dark">
+                <div class="card-body table-responsive">
                     <table id="containerTable" class="table table-dark table-bordered">
                         <thead>
                             <tr>
@@ -61,44 +68,27 @@
         </div>
         <div class="col-md-5">
             <div class="row">
-                <div class="col-md-6">
-                    <div class="card bg-dark">
-                        <div class="card-header">
-                            Instance Stats
-                        </div>
-                        <div class="card-body">
-                            <div id="serverInstancesOnlineBox">
-                            </div>
-                            <div class="alert alert-info" id="noContainersWarning">
-                                There are no instances on the host
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-md-6">
-                    <div class="card bg-dark">
-                        <div class="card-header">
-                            Memory Stats
-                        </div>
-                        <div class="card-body">
-                            <div id="serverMemoryUsageBox">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-md-12">
                     <div class="card bg-dark">
                         <div class="card-header">
-                            <h4>Host Details & Devices</h4>
+                            <h4><i class="fas fa-server mr-2"></i>Usage & Hardware</h4>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered table-dark" id="hostDetailsTable">
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <div class="mb-3">
+                                <h4><i class="fas fa-memory mr-2"></i>Server Memory Usage</h4>
+                                <div id="serverMemoryUsageBox"></div>
+                            </div>
+                            <div class="mb-3">
+                                <h4><i class="fas fa-boxes mr-2"></i>Project Instances Online</h4>
+                                <div id="serverInstancesOnlineBox"></div>
+                            </div>
+                            <div>
+                                <h4><i class="fas fa-server mr-2"></i>Server Hardware</h4>
+                                <table class="table table-bordered table-dark" id="hostDetailsTable">
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,6 +136,15 @@ var currentServer = {
 $(document).on("change", ".toggleStatusContainer", function(){
     let checked = $(this).is(":checked");
     let tr = $(this).parents("tr");
+
+    if(checked){
+        $(".serverContainerActions").attr("disabled", false);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("enable")
+    }else {
+        $(".serverContainerActions").attr("disabled", true);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("hide")
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
+    }
 
     $("#containerTable").find(`tr:gt(${tr.index() + 1})`).each(function(){
         if($(this).hasClass("statusRow")){
@@ -279,18 +278,45 @@ $(document).on("click", "#serverDetailsBtn, #serverProxyDevicesBtn", function(){
     }
 });
 
-$(document).on("change", "#toggleAllContainers", function(){
+$(document).on("change", "input[name=containerCheckbox]", function(){
+    if($("input[name=containerCheckbox]:checked").length > 0){
+        $(".serverContainerActions").attr("disabled", false);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("enable")
+    }else{
+        $(".serverContainerActions").attr("disabled", true);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("hide")
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
+    }
+});
+
+$(document).on("click", "#toggleAllContainers", function(){
     let checked = $(this).is(":checked");
+
+    if(checked){
+        $(".serverContainerActions").attr("disabled", false);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("enable")
+    }else {
+        $(".serverContainerActions").attr("disabled", true);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("hide")
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
+    }
+
     $("#containerTable").find("input[name=containerCheckbox]").each(function(){
         $(this).prop("checked", checked);
     });
 });
 
-$(document).on("change", "#serverContainerActions", function(){
-    let action = $(this).val();
+$(document).on("click", ".serverContainerActions", function(){
+    let action = $(this).data("action");
     if(action== ""){
         return false;
     }
+
+    let btn = $(this);
+
+    let origHtml = btn.html();
+
+    btn.html("<i class='fas fa-cog fa-spin'></i>");
 
     let checkboxes = $("#containerTable").find("input[name=containerCheckbox]");
 
@@ -311,11 +337,13 @@ $(document).on("change", "#serverContainerActions", function(){
 
     let url = globalUrls.hosts.instances[action]
 
-
     ajaxRequest(url, details, (data)=>{
+        btn.html(origHtml);
         data = makeToastr(data);
         loadServerView(details.hostId);
         $("#serverContainerActions").find("option[value='']").prop("selected", true);
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("hide")
+        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
     });
 });
 
@@ -334,6 +362,8 @@ function loadServerView(hostId)
     $("#serverDetailsBtn, #serverProxyDevicesBtn").removeClass("active");
     $("#serverDetailsBtn").addClass("active");
 
+    $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
+
     $("#sidebar-ul").find(".active").removeClass("active");
     $("#sidebar-ul").find(".text-info").removeClass("text-info");
     $("#sidebar-ul").find(`[data-hostId='${hostId}'] > a:eq(0)`).addClass("text-info");
@@ -350,13 +380,14 @@ function loadServerView(hostId)
 
         $("#serverHeading").text(ident);
 
-        $("#serverContainerActions").find("option[value='']").prop("selected", true);
+        $(".serverContainerActions").attr("disabled", true)
+        $("#toggleAllContainers").prop("checked", false);
 
         let containerHtml, hostDetailsTrs = "";
 
         let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
 
-        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white">CPU'S</td></tr>`
+        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white"><i class="fas fa-microchip mr-2"></i>CPU'S</td></tr>`
 
         $.each(data.resources.cpu.sockets, (_, item)=>{
             hostDetailsTrs += `<tr>
@@ -365,7 +396,7 @@ function loadServerView(hostId)
             </tr>`
         });
 
-        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white">GPU'S</td></tr>`
+        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white"><i class="fas fa-bolt mr-2"></i>GPU'S</td></tr>`
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
             $.each(data.resources.gpu.cards, function(i, gpu){
@@ -376,34 +407,59 @@ function loadServerView(hostId)
         }
 
         if(data.resources.hasOwnProperty("system")){
+
+            let mbProduct = "Not Set";
+            let chasisType = "Not Set";
+            let firmwareDetails = "Not Set";
+            let uuid = "Not Set";
+            let type = "Not Set";
+
+            if(data.resources.system != null){
+                type = data.resources.system.type;
+                uuid = data.resources.system.uuid;
+
+                if(data.resources.system.motherboard != null){
+                    mbProduct = data.resources.system.motherboard.product;
+                }
+
+                if(data.resources.system.chassis != null){
+                    chasisType = data.resources.system.chassis.type
+                }
+
+                if(data.resources.system.firmware  != null){
+                    firmwareDetails = `${data.resources.system.firmware.vendor}
+                    -
+                    ${data.resources.system.firmware.version}
+                    (${data.resources.system.firmware.date})`;
+                }
+            }
+
+
             hostDetailsTrs += `
                 <tr>
-                    <td colspan="999" class="bg-info text-center text-white">System Details</td>
+                    <td colspan="999" class="bg-info text-center text-white"><i class="fas fa-info-circle mr-2"></i>System Details</td>
                 </tr>
                 <tr>
                     <td>Motherboard</td>
-                    <td>${data.resources.system.motherboard.product}</td>
+                    <td>${mbProduct}</td>
                 </tr>
                 <tr>
                     <td>Type</td>
-                    <td>${data.resources.system.type}</td>
+                    <td>${type}</td>
                 </tr>
                 <tr>
                     <td>Chasis Type</td>
-                    <td>${data.resources.system.chassis.type}</td>
+                    <td>${chasisType}</td>
                 </tr>
                 <tr>
                     <td>System Firmware</td>
                     <td>
-                        ${data.resources.system.firmware.vendor}
-                        -
-                        ${data.resources.system.firmware.version}
-                        (${data.resources.system.firmware.date})
+                        ${firmwareDetails}
                     </td>
                 </tr>
                 <tr>
                     <td>UUID</td>
-                    <td>${data.resources.system.uuid}</td>
+                    <td>${uuid}</td>
                 </tr>
             `;
         }
@@ -457,67 +513,52 @@ function loadServerView(hostId)
                 });
             });
 
-            $("#serverInstancesOnlineBox").empty().append(`<canvas id="containerStatsChart" style="width: 100%;"></canvas>`);
-
-            new Chart($("#containerStatsChart"), {
-                type: 'pie',
-                  data: {
-                    labels: ['Online', 'Offline'],
-                    datasets: [{
-                      label: '# of containers',
-                      data: [data.containerStats.online, data.containerStats.offline],
-                      backgroundColor: [
-                        'rgba(46, 204, 113, 1)',
-                        'rgba(189, 195, 199, 1)'
-                      ],
-                      borderColor: [
-                          'rgba(46, 204, 113, 1)',
-                          'rgba(189, 195, 199, 1)'
-                      ],
-                      borderWidth: 1
-                    }]
-                  },
-                  options: {
-                   	cutoutPercentage: 40,
-                    responsive: false,
-                  }
-            });
-            $("#noContainersWarning").hide();
-            $("#serverInstancesOnlineBox").show();
+            let instanceStatsWidth = ((data.containerStats.online / (data.containerStats.online + data.containerStats.offline)) * 100)
+            $("#serverInstancesOnlineBox").empty().append(`<div class="mb-2">
+                <div class="progress">
+                    <div data-toggle="tooltip" data-placement="bottom" title="${data.containerStats.online}" class="progress-bar bg-success" style="width: ${instanceStatsWidth}%" role="progressbar" aria-valuenow="${data.containerStats.online}" aria-valuemin="0" aria-valuemax="${(data.containerStats.online + data.containerStats.offline)}"></div>
+                </div>
+            </div>`);
         }else{
-            $("#serverInstancesOnlineBox").hide();
-            $("#noContainersWarning").show();
-            containerHtml = `<tr><td class="alert alert-info text-center" colspan="999">No Instances</td></tr>`
+            $("#serverInstancesOnlineBox").empty().append(`<div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No instances!</div>`);
+            containerHtml = `<tr><td class="text-center" colspan="999"><i class="fas fa-info-circle text-info mr-2"></i>No instances!</td></tr>`
         }
 
         $("#containerTable > tbody").empty().append(containerHtml);
 
-        $("#serverMemoryUsageBox").empty().append(`<canvas id="memoryStatsChart" style="width: 100%;"></canvas>`);
+        let memoryWidth = ((data.resources.memory.used / data.resources.memory.total) * 100)
+        $("#serverMemoryUsageBox").empty().append(`<div class="mb-2">
+            <div class="progress">
+                <div data-toggle="tooltip" data-placement="bottom" title="${formatBytes(data.resources.memory.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.resources.memory.used}" aria-valuemin="0" aria-valuemax="${(data.resources.memory.total - data.resources.memory.used)}"></div>
+            </div>
+        </div>`);
 
-        new Chart($("#memoryStatsChart"), {
-            type: 'pie',
-              data: {
-                labels: ['Used', 'Free'],
-                datasets: [{
-                  label: '# of containers',
-                  data: [data.resources.memory.used, (data.resources.memory.total - data.resources.memory.used)],
-                  backgroundColor: [
-                    'rgba(46, 204, 113, 1)',
-                    'rgba(189, 195, 199, 1)'
-                  ],
-                  borderColor: [
-                      'rgba(46, 204, 113, 1)',
-                      'rgba(189, 195, 199, 1)'
-                  ],
-                  borderWidth: 1
-                }]
-              },
-              options: {
-               	cutoutPercentage: 40,
-                responsive: false,
-                tooltips: toolTipsBytesCallbacks
-              }
-        });
+        // $("#serverMemoryUsageBox").empty().append(`<canvas id="memoryStatsChart" style="width: 100%;"></canvas>`);
+        //
+        // new Chart(, {
+        //     type: 'pie',
+        //       data: {
+        //         labels: ['Used', 'Free'],
+        //         datasets: [{
+        //           label: '# of containers',
+        //           data: [, ( - data.resources.memory.used)],
+        //           backgroundColor: [
+        //             'rgba(46, 204, 113, 1)',
+        //             'rgba(189, 195, 199, 1)'
+        //           ],
+        //           borderColor: [
+        //               'rgba(46, 204, 113, 1)',
+        //               'rgba(189, 195, 199, 1)'
+        //           ],
+        //           borderWidth: 1
+        //         }]
+        //       },
+        //       options: {
+        //        	cutoutPercentage: 40,
+        //         responsive: false,
+        //         tooltips: toolTipsBytesCallbacks
+        //       }
+        // });
     });
 }
 

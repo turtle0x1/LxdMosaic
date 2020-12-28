@@ -1,14 +1,42 @@
 body {
     background-color: #a8a8a8;
-    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
+    font-size: .9rem !important;
+}
+
+.btn-purple {
+    background-color: #563d7c;
+    color: white;
+}
+
+.btn-outline-purple {
+    background-color: transparent;
+    border-color: #563d7c;
+    color: #563d7c;
+}
+
+.btn-outline-purple:hover {
+    background-color: #563d7c;
+    color: white;
+}
+
+.btn-purple:hover {
+    color: white;
 }
 
 .ui-timepicker-container{
     z-index: 999999999 !important;
 }
 
+.c-sidebar-nav-title {
+    cursor: default;
+}
+
 .cluster-title:hover {
     color: #167495 !important; /* Eugh */
+}
+
+.cluster-title-not-admin:hover {
+	color: #4dbd74 !important;
 }
 
 .text-underline {
@@ -23,6 +51,9 @@ body {
     cursor: pointer;
 }
 
+.sidebar .nav-dropdown-toggle.disabled::before {
+    display: none !important;
+}
 
 .disabled {
     cursor: not-allowed;
@@ -343,10 +374,6 @@ a:hover {
 
 .nav-link:hover {
     cursor: pointer;
-}
-
-body, table {
-    font-size: 0.9rem;
 }
 
 h1 {

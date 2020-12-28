@@ -192,6 +192,12 @@
             </u></h4>
             <div class="btn-toolbar float-right">
               <div class="btn-group mr-2">
+                  <button data-toggle="tooltip" data-placement="bottom" title="Attach Volume" class="btn btn-sm btn-success" id="attachVolumesBtn">
+                      <i class="fas fa-hdd"></i>
+                  </button>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Assign Profiles" class="btn btn-sm btn-purple" id="assignProfilesBtn">
+                      <i class="fas fa-users"></i>
+                  </button>
                   <button data-toggle="tooltip" data-placement="bottom" title="Create Image" class="btn btn-sm btn-secondary" id="craeteImage">
                       <i class="fas fa-image"></i>
                   </button>
@@ -266,6 +272,8 @@
               Up Time: <span id="container-upTime"></span>
               <br/>
               Deployment: <span id="container-deployment"></span>
+              <br/>
+              Comment <button class="btn btn-sm btn-outline-primary ml-1 mr-1" id="editInstanceComment"><i class="fas fa-edit"></i></button>: <span id="container-comment"></span>
           </div>
         </div>
         <div class="card text-white bg-dark">
@@ -302,6 +310,7 @@
                       <thead class="thead-inverse">
                           <tr>
                               <th> Name </th>
+                              <th></th>
                           </tr>
                       </thead>
                       <tbody>
@@ -319,6 +328,24 @@
                       <thead class="thead-inverse">
                           <tr>
                               <th> Name </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                </table>
+          </div>
+        </div>
+        <div class="card bg-dark">
+            <div class="card-body table-responsive">
+                <h5 class="text-white">
+                    <u>Limits</u>
+                    <i class="fas fa-user-secret float-right"></i>
+                </h5>
+                <table class="table table-dark table-bordered" id="limitsTable">
+                      <thead class="thead-inverse">
+                          <tr>
+                              <th> Key </th>
+                              <th> Value </th>
                           </tr>
                       </thead>
                       <tbody>
@@ -478,7 +505,7 @@
 
 var term = new Terminal();
 var consoleSocket;
-var currentTerminalProcessId;
+var currentTerminalProcessId = null;
 
 function loadContainerViewAfter(data = null, milSeconds = 2000)
 {
@@ -699,6 +726,38 @@ function deleteContainerConfirm(hostId, hostAlias, container)
                             }
                             loadContainerTreeAfter(1000, hostId, hostAlias);
                             currentContainerDetails = null;
+                        }
+                    });
+                }
+            }
+        }
+    });
+}
+
+function editInstanceComment(hostId, hostAlias, container)
+{
+    $.confirm({
+        title: 'Set ' + hostAlias + '/' + container + ' Comment',
+        content: `<div class="form-group">
+            <label>Comment</label>
+            <textarea class="form-control" name="comment"></textarea>
+        </div>
+        `,
+        buttons: {
+            cancel: function () {},
+            set: {
+                btnClass: 'btn-success',
+                action: function () {
+                    let x = {
+                        hostId: hostId,
+                        container: container,
+                        comment: this.$content.find('textarea[name=comment]').val()
+                    };
+                    ajaxRequest(globalUrls.instances.comment.set, x, function(data){
+                        let r = makeToastr(data);
+
+                        if(r.state == "success"){
+                            loadContainerView(currentContainerDetails);
                         }
                     });
                 }
@@ -1037,12 +1096,30 @@ function loadContainerView(data)
         $("#container-cpuTime").text(containerCpuTime);
         $("#container-createdAt").text(moment(x.details.created_at).format("MMM DD YYYY h:mm A"));
 
+        let limitsTrs = "";
+
+        $.each(x.details.config, (key, value)=>{
+            if(key.startsWith("limit")){
+                limitsTrs += `<tr>
+                    <td>${key}</td>
+                    <td>${value}</td>
+                </tr>`
+            }
+        });
+
+        if(limitsTrs == ""){
+            limitsTrs = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-success mr-2'></i>No Limits</td></tr>";
+        }
+
+
+        $("#limitsTable > tbody").empty().append(limitsTrs);
+
         if(x.details.hasOwnProperty("last_used_at")){
             let last_used_at = moment(x.details.last_used_at);
             if(last_used_at.format("YYYY") == "1970"){
                 $("#container-upTime").text("Not Started Yet");
             }else if(!disableActions){
-                $("#container-upTime").text("Not Running");
+                $("#container-upTime").text("Offline");
             }else{
                 let now = moment(new Date());
 
@@ -1063,6 +1140,14 @@ function loadContainerView(data)
 
         $("#container-deployment").html(deployment);
 
+        let userComment = "";
+
+        if(x.details.config.hasOwnProperty("user.comment") !== false){
+            userComment = nl2br(x.details.config["user.comment"]);
+        }
+
+        $("#container-comment").html(userComment);
+
         let snapshotTrHtml = "";
 
         if(x.snapshots.length == 0){
@@ -1081,7 +1166,10 @@ function loadContainerView(data)
             profileTrHtml = "<tr><td colspan='999' class='text-center'> No Profiles </td></tr>"
         }else{
             $.each(x.details.profiles, function(i, item){
-                profileTrHtml += `<tr><td><a href='#' data-profile=${item} class='toProfile'>${item}</a></td></tr>`;
+                profileTrHtml += `<tr data-profile="${item}">
+                    <td><a href='#' data-profile=${item} class='toProfile'>${item}</a></td>
+                    <td><button class='btn btn-sm btn-outline-danger removeProfile'><i class="fas fa-trash"></i></button></td>
+                </tr>`;
             });
         }
 
@@ -1089,17 +1177,26 @@ function loadContainerView(data)
 
         let networkData = "";
 
-        $.each(x.state.network,  function(i, item){
-            if(i == "lo"){
-                return;
-            }
-            networkData += `<div class='padding-bottom: 2em;'><b>${i}:</b><br/>`;
-            let lastKey = item.addresses.length - 1;
-            $.each(item.addresses, function(i, item){
-                networkData += `<span style='padding-left:3em'>${item.address}<br/></span>`;
+        if(x.state.network !== null){
+            $.each(x.state.network,  function(i, item){
+                if(i == "lo"){
+                    return;
+                }
+                networkData += `<div class='padding-bottom: 2em;'><b>${i}:</b><br/>`;
+                let lastKey = item.addresses.length - 1;
+                $.each(item.addresses, function(i, item){
+                    networkData += `<span style='padding-left:3em'>${item.address}<br/></span>`;
+                });
+                networkData += "</div>";
             });
-            networkData += "</div>";
-        });
+
+            if(networkData == ""){
+                networkData = '<div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Only local interface present!</div>';
+            }
+        }else{
+            networkData = '<div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Instance Offline</div>';
+        }
+
         $("#networkDetails").empty().append(networkData);
 
         let memoryLabels = [],
@@ -1119,7 +1216,7 @@ function loadContainerView(data)
                     <i class="fas fa-memory float-right"></i>
                 </h5>
                 <div style="width: 100%;">
-                <canvas id="memoryData"></canvas></div>`);
+                <canvas id="memoryData" height="200"></canvas></div>`);
 
             new Chart($("#memoryData"), {
                 type: "bar",
@@ -1147,7 +1244,7 @@ function loadContainerView(data)
                     <i class="fas fa-hdd float-right"></i>
                 </h5>
                 <div style="width: 100%;">
-                <canvas id="storageData"></canvas></div>`);
+                <canvas id="storageData" height="200"></canvas></div>`);
 
 
             let storageKeys = Object.keys(x.state.disk);
@@ -1163,7 +1260,7 @@ function loadContainerView(data)
                 data: {
                     labels: storageLabels,
                     datasets: [{
-                      label: 'Memory',
+                      label: 'Space Used',
                       data: storageData,
                       backgroundColor: storageColors,
                       borderColor: storageColors,
@@ -1181,11 +1278,13 @@ function loadContainerView(data)
                 <u> Memory Usage </u>
                 <i class="fas fa-memory float-right"></i>
             </h5>
-            <div class="alert alert-info text-center">Instance Not Running</div>`);
+            <div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Instance Offline</div>`);
+
             $("#storageDataCard").empty().append(`<h5 class="text-white">
-                            <u> Disk Usage </u>
-                            <i class="fas fa-hdd float-right"></i>
-                        </h5><div class="alert alert-info text-center">Instance Not Running</div>`);
+                <u> Disk Usage </u>
+                <i class="fas fa-hdd float-right"></i>
+            </h5>
+            <div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Instance Offline</div>`);
         }
 
 
@@ -1195,6 +1294,19 @@ function loadContainerView(data)
         $('html, body').animate({scrollTop:0},500);
     });
 }
+
+$("#containerBox").on("click", ".removeProfile", function(){
+    console.log(currentContainerDetails);
+    let tr = $(this).parents("tr");
+    let profile = tr.data("profile");
+    ajaxRequest(globalUrls.instances.profiles.remove, {...{profile: profile}, ...currentContainerDetails}, (data)=>{
+        data = makeToastr(data);
+        if(data.state == "error"){
+            return false;
+        }
+        tr.remove();
+    });
+});
 
 $("#containerBox").on("click", "#createBackup", function(){
     backupContainerConfirm(
@@ -1307,6 +1419,10 @@ $("#containerBox").on("click", ".importBackup", function(){
             },
         }
     });
+});
+
+$("#containerBox").on("click", "#editInstanceComment", function(){
+    editInstanceComment(currentContainerDetails.hostId, currentContainerDetails.alias, currentContainerDetails.container);
 });
 
 $("#containerBox").on("click", ".renameContainer", function(){
@@ -1616,7 +1732,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
     $("#containerConsole").show();
 
 
-    if(!$.isNumeric(currentTerminalProcessId)){
+    if(currentTerminalProcessId === null){
         const terminalContainer = document.getElementById('terminal-container');
         // Clean terminal
         while (terminalContainer.children.length) {
@@ -1734,6 +1850,14 @@ $("#containerBox").on("click", ".editContainerSettings", function(){
     $("#modal-container-editSettings").modal("show");
 });
 
+$("#containerBox").on("click", "#assignProfilesBtn", function(){
+    $("#modal-container-assignProfiles").modal("show");
+});
+
+$("#containerBox").on("click", "#attachVolumesBtn", function(){
+    $("#modal-container-attachVolumes").modal("show");
+});
+
 $("#containerBox").on("click", "#craeteImage", function(){
     $("#modal-container-createImage").modal("show");
 });
@@ -1766,4 +1890,6 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
     require __DIR__ . "/../modals/containers/files/uploadFile.php";
     require __DIR__ . "/../modals/instances/vms/createVm.php";
     require __DIR__ . "/../modals/containers/createImage.php";
+    require __DIR__ . "/../modals/containers/assignProfiles.php";
+    require __DIR__ . "/../modals/instances/attachVolumes.php";
 ?>

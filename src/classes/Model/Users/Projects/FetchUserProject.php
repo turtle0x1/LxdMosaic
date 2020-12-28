@@ -11,7 +11,7 @@ class FetchUserProject
         $this->database = $database->dbObject;
     }
 
-    public function fetchOrDefault(int $userId, int $hostId)
+    public function fetch(int $userId, int $hostId)
     {
         $sql = "SELECT
                     `UHP_Project`
@@ -27,7 +27,23 @@ class FetchUserProject
             ":userId"=>$userId,
             ":hostId"=>$hostId
         ]);
-        $result = $do->fetchColumn();
-        return empty($result) ? "default" : $result;
+        return $do->fetchColumn();
+    }
+
+    public function fetchCurrentProjects(int $userId)
+    {
+        $sql = "SELECT
+                    `UHP_Host_ID`,
+                    `UHP_Project`
+                FROM
+                    `User_Host_Projects`
+                WHERE
+                    `UHP_User_ID` = :userId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":userId"=>$userId
+        ]);
+        return $do->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 }
