@@ -86,16 +86,28 @@ function SpiceConn(o)
     this.warnings = [];
 
     this.ws.addEventListener('open', function(e) {
-        console.log("made");
         DEBUG > 0 && console.log(">> WebSockets.onopen");
         DEBUG > 0 && console.log("id " + this.parent.connection_id +"; type " + this.parent.type);
 
-        /***********************************************************************
-        **          WHERE IT ALL REALLY BEGINS
-        ***********************************************************************/
-        this.parent.send_hdr();
-        this.parent.wire_reader.request(SpiceLinkHeader.prototype.buffer_size());
-        this.parent.state = "start";
+        //NOTE We add the delay here because the proxy takes a "little while"
+        //     to fully open
+        var delayInMilliseconds = 1000; // 1 second
+
+        setTimeout(()=> {
+            let indicator = document.getElementById("spiceLoadingIndicator");
+            if(indicator !== null){
+                indicator.remove()
+            }
+
+            /***********************************************************************
+            **          WHERE IT ALL REALLY BEGINS
+            ***********************************************************************/
+            this.parent.send_hdr();
+            this.parent.wire_reader.request(SpiceLinkHeader.prototype.buffer_size());
+            this.parent.state = "start";
+        }, delayInMilliseconds);
+
+
     });
     this.ws.addEventListener('error', function(e) {
         if ('url' in e.target) {
