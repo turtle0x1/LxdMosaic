@@ -9,6 +9,10 @@ module.exports = class HostOperations {
 
   sendToOpsClients(type, msg)
   {
+      //Silly but sometimes msg is a string :shrug:
+      if(typeof msg == "string"){
+          msg = JSON.parse(msg);
+      }
       msg.mosaicType = type;
       msg = JSON.stringify(msg);
       this.sockets.forEach(socket=>{
