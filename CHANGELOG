@@ -1,4 +1,4 @@
-Unreleased
+0.11.0 - 29/12/2020 (Happy 2 year birthday LXDMosaic)
 
 Added
     Cron job to disable backup schedules for offline hosts & deleted instances

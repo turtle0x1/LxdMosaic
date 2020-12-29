@@ -84,7 +84,7 @@ fi
 # Move in LxdManager
 cd /var/www/LxdMosaic || exit
 
-git checkout v0.10.2
+git checkout v0.11.0
 
 npm install || exit $?
 
@@ -127,6 +127,8 @@ mysql < sql/0.5.0.sql
 mysql < sql/0.6.0.sql
 mysql < sql/0.7.0.sql
 mysql < sql/0.9.0.sql
+
+vendor/bin/phinx migrate -e mysql
 
 PASSWD=""
 

@@ -30,6 +30,37 @@ systemctl restart httpd
 
 ```
 
+## 0.10.X -> 0.11.0
+```
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout v0.11.0
+
+npm i
+
+composer install --no-dev
+
+vendor/bin/phinx migrate -e mysql
+
+# New apache config required (dont forget to update any domain names etc)
+
+## Ubuntu
+cp examples/lxd_manager.conf /etc/apache2/sites-available/
+
+## Centos
+cp examples/lxd_manager_centos.conf /etc/httpd/conf.d/
+
+# Restart node server - be careful may interupt console sessions
+pm2 restart all
+
+#Ubuntu
+systemctl restart apache2
+#Centos
+systemctl restart httpd
+```
+
 ## 0.9.X -> 0.10.0
 ```
 cd /var/www/LxdMosaic
