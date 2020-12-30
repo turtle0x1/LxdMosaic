@@ -188,7 +188,6 @@
             <h4 class="pt-1"> <u>
                 <span id="container-currentState"></span>
                 <span id="container-containerNameDisplay"></span>
-                <span id="container-imageDescription"></span>
             </u></h4>
             <div class="btn-toolbar float-right">
               <div class="btn-group mr-2">
@@ -262,6 +261,8 @@
               Host: <span id="container-hostNameDisplay"></span>
               <br/>
               Project: <span id="instanceProject"></span>
+              <br/>
+              Image: <span class="d-inline" id="container-imageDescription"></span>
               <br/>
               <a
                   href="https://github.com/lxc/pylxd/issues/242#issuecomment-323272318"
@@ -1092,7 +1093,7 @@ function loadContainerView(data)
         $("#container-hostNameDisplay").text(currentContainerDetails.alias);
         $("#container-containerNameDisplay").text(data.container);
         $("#instanceProject").text(x.project);
-        $("#container-imageDescription").html(` - ${os} (${version})`);
+        $("#container-imageDescription").text(`${os} (${version})`);
         $("#container-cpuTime").text(containerCpuTime);
         $("#container-createdAt").text(moment(x.details.created_at).format("MMM DD YYYY h:mm A"));
 
