@@ -33,6 +33,10 @@
           <b> Hosts </b>
           <input class="form-control" name="hosts"  id="newVmHosts"/>
       </div>
+      <div class="form-group">
+          <b> Memory Limit (1GB Default) </b>
+          <input class="form-control" name="memoryLimit" value="1GB" />
+      </div>
       <div class="">
           <div class="mb-2">
               <i class="fas fa-info-circle text-info mr-2"></i>Your account password will be set to <code>ubuntu</code>
@@ -76,6 +80,7 @@ $("#newVmHosts").tokenInput(globalUrls.hosts.search.search, {
 
 $("#modal-vms-create").on("hide.bs.modal", function(){
     $("#modal-vms-create input").val("");
+    $("#modal-vms-create input[name=memoryLimit]").val("1GB");
     $("#newVmHosts").tokenInput("clear");
     $("#newVirtualMachineImage").tokenInput("clear");
 });
@@ -115,6 +120,9 @@ $("#modal-vms-create").on("click", ".createVirtualMachine", function(){
         return false;
     }
 
+    let memoryLimitInput = $("#modal-vms-create input[name=memoryLimit]");
+    let memoryLimit = memoryLimitInput.val();
+
     btn.html('<i class="fa fa-cog fa-spin"></i>Creating..');
     $("#modal-vms-create").find(".btn").attr("disabled", true);
 
@@ -123,7 +131,8 @@ $("#modal-vms-create").on("click", ".createVirtualMachine", function(){
         username: username,
         imageDetails: image[0]["details"],
         name: name,
-        start: parseInt(btn.data("start"))
+        start: parseInt(btn.data("start")),
+        memoryLimit: memoryLimit
     }
 
     let defaultBtnText = "Create";

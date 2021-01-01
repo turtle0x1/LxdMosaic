@@ -14,8 +14,14 @@ class CreateVirutalMachine
         $this->createInstance = $createInstance;
     }
 
-    public function create(string $name, string $username, HostsCollection $hosts, array $imageDetails, bool $start)
-    {
+    public function create(
+        string $name,
+        string $username,
+        HostsCollection $hosts,
+        array $imageDetails,
+        bool $start,
+        string $memoryLimit = "1GB"
+    ) {
         $config = [];
         $config["user.vendor-data"] = $this->getVendorData($username);
 
@@ -47,7 +53,7 @@ class CreateVirutalMachine
             [],
             "",
             null,
-            [],
+            ["limits.memory"=>$memoryLimit],
             $start
         );
 
