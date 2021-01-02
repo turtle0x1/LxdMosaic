@@ -9,7 +9,7 @@ module.exports = class VgaTerminals {
 
   openTerminal(clientSocket, req){
       this.hosts.loadHosts().then(hosts=>{
-        let hostDetails = hosts[req.params.hostId];
+        let hostDetails = hosts[req.query.hostId];
 
         if(!hostDetails.supportsVms){
             clientSocket.close()
@@ -17,9 +17,9 @@ module.exports = class VgaTerminals {
         }
 
         let hostId = hostDetails.hostId;
-        let instance = req.params.instance;
+        let instance = req.query.instance;
         let userId = req.query.user_id;
-        let project = req.params.project;
+        let project = req.query.project;
 
         if(!this.instanceSockets.hasOwnProperty(hostId)){
             this.instanceSockets[hostId] = {}

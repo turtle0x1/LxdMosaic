@@ -16,11 +16,13 @@ const fs = require('fs'),
   HostOperations = require('./HostOperations'),
   Terminals = require('./Terminals'),
   VgaTerminals = require("./VgaTerminals"),
+  AllowedProjects = require("./classes/AllowedProjects"),
   hosts = null,
   hostOperations = null,
   terminals = null,
   wsTokens = null,
-  vgaTerminals = null;
+  vgaTerminals = null,
+  allowedProjects = null;
 
 
 var dotenv = require('dotenv')
@@ -174,16 +176,17 @@ app.use(async (req, res, next)=>{
 
     let token = req.query.ws_token;
     let userId = req.query.user_id;
-    let isValid = await wsTokens.isValid(token, userId);
+    let tokenIsValid = await wsTokens.isValid(token, userId);
+    let canAccessProject = await allowedProjects.canAccessHostProject(userId, req.query.hostId, req.query.project)
 
-    if (!isValid) {
+    if (!tokenIsValid || !canAccessProject) {
         return next(new Error('authentication error'));
     }else{
         next();
     }
 });
 
-app.ws('/node/terminal/:hostId/:project/:instance', (socket, req) => {
+app.ws('/node/terminal/', (socket, req) => {
     vgaTerminals.openTerminal(socket, req);
 })
 
@@ -193,7 +196,7 @@ app.ws('/node/operations', (socket, req) => {
 
 app.ws('/node/console', (socket, req) => {
      let host = req.query.hostId,
-         container = req.query.container,
+         container = req.query.instance,
          uuid = req.query.pid,
          shell = req.query.shell,
          project = req.query.project;
@@ -246,6 +249,7 @@ if(!usingSqllite){
 }
 
 hosts = new Hosts(con, fs, rp);
+allowedProjects = new AllowedProjects(con);
 wsTokens = new WsTokens(con);
 hostOperations = new HostOperations(fs);
 terminals = new Terminals(rp);

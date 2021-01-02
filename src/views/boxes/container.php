@@ -103,7 +103,7 @@
           uri += path[0] == '/' ? path : ('/' + path);
         }
 
-        uri = `${uri}/${hostId}/${project}/${instance}?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}`
+        uri = `${uri}/?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}&hostId=${hostId}&project=${project}&instance=${instance}`
 
         try
         {
@@ -1796,7 +1796,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
                                         shell: shell,
                                         userId: userDetails.userId,
                                         host: currentContainerDetails.hostId,
-                                        container: currentContainerDetails.container,
+                                        instance: currentContainerDetails.container,
                                         project: project
                                     }, currentContainerDetails))}`);
 
