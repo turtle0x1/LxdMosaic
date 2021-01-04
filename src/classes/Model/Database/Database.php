@@ -14,4 +14,19 @@ class Database
         }
         $this->dbObject->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
+
+    public function beginTransaction()
+    {
+        $this->dbObject->beginTransaction();
+    }
+
+    public function commitTransaction()
+    {
+        $this->dbObject->commit();
+    }
+    
+    public function rollbackTransaction()
+    {
+        $this->dbObject->rollback();
+    }
 }
