@@ -20,24 +20,9 @@ $getClustersAndHosts = $container->make("dhope0000\LXDClient\Tools\Hosts\GetClus
 
 $storagePools = $getStorageDetails->getAll();
 
-$totalStorageUsage = 0;
-$totalStorageAvailable = 0;
+$totalStorageUsage = $storagePools["stats"]["storage"]["used"];
+$totalStorageAvailable = $storagePools["stats"]["storage"]["total"];
 
-foreach ($storagePools["clusters"] as $cluster) {
-    foreach ($cluster["members"] as $host) {
-        foreach ($host->getCustomProp("pools") as $pool) {
-            $totalStorageUsage += $pool["resources"]["space"]["used"];
-            $totalStorageAvailable += $pool["resources"]["space"]["total"];
-        }
-    }
-}
-
-foreach ($storagePools["standalone"]["members"] as $host) {
-    foreach ($host->getCustomProp("pools") as $pool) {
-        $totalStorageUsage += $pool["resources"]["space"]["used"];
-        $totalStorageAvailable += $pool["resources"]["space"]["total"];
-    }
-}
 
 /**
  * Memory usage
@@ -49,13 +34,21 @@ $totalMemory = 0;
 
 foreach ($resources["clusters"] as $cluster) {
     foreach ($cluster["members"] as $host) {
+        if (!$host->hostOnline()) {
+            continue;
+        }
         $host = $host->getCustomProp("resources");
         $totalMemory += $host["memory"]["used"];
     }
 }
 
 foreach ($resources["standalone"]["members"] as $host) {
+    if (!$host->hostOnline()) {
+        continue;
+    }
+
     $host = $host->getCustomProp("resources");
+
     $totalMemory += $host["memory"]["used"];
 }
 

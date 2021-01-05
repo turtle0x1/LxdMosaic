@@ -6,7 +6,8 @@ Changed
 
 Fixed
     Storage progress bar calculation is incorrect (#333)
-    
+    An error gathering fleet storage usasge data
+
 0.11.0 - 29/12/2020 (Happy 2 year birthday LXDMosaic)
 
 Added
