@@ -1048,7 +1048,7 @@ function loadDashboard(){
         let formatedStorageTitle = "Not Enough Data"
 
         if(data.analyticsData.hasOwnProperty("storageUsage")){
-            storageWidth = ((data.analyticsData.storageUsage.used / data.analyticsData.storageUsage.available) * 100)
+            storageWidth = ((parseInt(data.analyticsData.storageUsage.used) / (parseInt(data.analyticsData.storageUsage.used) + parseInt(data.analyticsData.storageUsage.available))) * 100);
             formatedStorageTitle = formatBytes(data.analyticsData.storageUsage.used);
         }
 

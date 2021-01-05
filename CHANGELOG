@@ -4,6 +4,9 @@ Changed
     Image shown as part of instance details instead of title
     Allow setting memory limit when creating a VM (#330)
 
+Fixed
+    Storage progress bar calculation is incorrect (#333)
+    
 0.11.0 - 29/12/2020 (Happy 2 year birthday LXDMosaic)
 
 Added
