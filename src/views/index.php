@@ -1065,7 +1065,7 @@ function loadDashboard(){
             <div>
                 <label>Storage</label>
                 <div class="progress">
-                    <div data-toggle="tooltip" data-placement="bottom" title="${formatedStorageTitle}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${data.stats.memory.used}" aria-valuemin="0" aria-valuemax="${(data.stats.memory.total - data.stats.memory.used)}"></div>
+                    <div data-toggle="tooltip" data-placement="bottom" title="${formatedStorageTitle}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${data.analyticsData.storageUsage.used}" aria-valuemin="0" aria-valuemax="${(data.analyticsData.storageUsage.available - data.analyticsData.storageUsage.used)}"></div>
                     </div>
             </div>
             `
