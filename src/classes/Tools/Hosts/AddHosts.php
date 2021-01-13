@@ -5,7 +5,6 @@ namespace dhope0000\LXDClient\Tools\Hosts;
 use dhope0000\LXDClient\Model\Hosts\AddHost as AddHostModel;
 use dhope0000\LXDClient\Tools\Hosts\GenerateCert;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
-use dhope0000\LXDClient\Tools\Node\Hosts;
 use dhope0000\LXDClient\Model\Client\LxdClient;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
@@ -15,14 +14,12 @@ class AddHosts
         AddHostModel $addHost,
         GenerateCert $generateCert,
         GetDetails $getDetails,
-        Hosts $hosts,
         LxdClient $lxdClient,
         FetchUserDetails $fetchUserDetails
     ) {
         $this->generateCert = $generateCert;
         $this->addHost = $addHost;
         $this->getDetails = $getDetails;
-        $this->hosts = $hosts;
         $this->lxdClient = $lxdClient;
         $this->fetchUserDetails = $fetchUserDetails;
     }
@@ -96,8 +93,6 @@ class AddHosts
                 throw new \Exception("Can't connect to ". $hostsDetail['name'] . ", is lxd running and the port open?", 1);
             }
         }
-
-        $this->hosts->reloadHosts();
 
         return true;
     }

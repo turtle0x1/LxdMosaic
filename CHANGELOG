@@ -3,11 +3,12 @@ Unreleased
 Changed
     Image shown as part of instance details instead of title
     Allow setting memory limit when creating a VM (#330)
+    Support subscribing to different project operations socket (#332)
 
 Fixed
     Storage progress bar calculation is incorrect (#333)
     An error gathering fleet storage usasge data
-     memory stats are used in the storage part of the widget (#332) 
+     memory stats are used in the storage part of the widget (#332)
 
 0.11.0 - 29/12/2020 (Happy 2 year birthday LXDMosaic)
 

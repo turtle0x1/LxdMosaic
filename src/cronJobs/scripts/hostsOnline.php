@@ -24,7 +24,6 @@ function disableHost($hostId, $urlAndPort, $sendMessageAndReload = true, $change
     $changeStatus->setOffline($hostId);
     if ($sendMessageAndReload) {
         $reloadNode->sendMessage("hostChange", ["host"=>$urlAndPort,"offline"=>true]);
-        $reloadNode->reloadHosts();
     }
 }
 
@@ -40,7 +39,6 @@ foreach ($allHosts as $host) {
 
         if ($host["Host_Online"] != true) {
             $reloadNode->sendMessage("hostChange", ["host"=>$host["Host_Url_And_Port"],"offline"=>false]);
-            $reloadNode->reloadHosts();
         }
     } catch (\Http\Client\Exception\NetworkException $e) {
         disableHost($host["Host_ID"], $host["Host_Url_And_Port"], $host["Host_Online"] == true, $changeStatus, $reloadNode);
@@ -50,7 +48,5 @@ foreach ($allHosts as $host) {
         // "failed to begin transaction: call exec-sql (budget 0s): receive: header: EOF"
         // which is pretty useful i guess to log
         disableHost($host["Host_ID"], $host["Host_Url_And_Port"], $host["Host_Online"] == true, $changeStatus, $reloadNode);
-    } finally {
-        $reloadNode->reloadHosts();
     }
 }

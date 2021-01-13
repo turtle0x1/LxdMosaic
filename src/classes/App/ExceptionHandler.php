@@ -4,7 +4,6 @@ namespace dhope0000\LXDClient\App;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Model\Hosts\ChangeStatus;
-use dhope0000\LXDClient\Tools\Node\Hosts;
 
 class ExceptionHandler
 {
@@ -13,11 +12,10 @@ class ExceptionHandler
     /**
      * @Inject
      */
-    public function inject(GetDetails $getDetails, ChangeStatus $changeStatus, Hosts $hosts)
+    public function inject(GetDetails $getDetails, ChangeStatus $changeStatus)
     {
         $this->getDetails = $getDetails;
         $this->changeStatus = $changeStatus;
-        $this->hosts = $hosts;
     }
 
     public function register()
@@ -39,7 +37,6 @@ class ExceptionHandler
             if (is_numeric($hostId)) {
                 http_response_code(205);
                 $this->changeStatus->setOffline($hostId);
-                $this->hosts->reloadHosts();
             }
         }
 

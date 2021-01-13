@@ -100,12 +100,6 @@ var httpsServer = https.createServer(
 
 expressWs(app, httpsServer)
 
-function createWebSockets() {
-  hosts.loadHosts().then(hostDetails => {
-    hostOperations.setupWebsockets(hostDetails);
-  });
-}
-
 //NOT authenticated because its not interesting but access may be required
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
@@ -118,14 +112,6 @@ app.post('/terminals', function(req, res) {
   uuid = terminals.getInternalUuid(req.body.host, req.body.container);
   res.json({ processId: uuid });
   res.send();
-});
-
-//NOT authenticated because its called by php
-app.get('/hosts/reload/', function(req, res) {
-  createWebSockets();
-  res.send({
-    success: 'reloaded',
-  });
 });
 
 //NOT authenticated because its called by php
@@ -191,7 +177,10 @@ app.ws('/node/terminal/', (socket, req) => {
 })
 
 app.ws('/node/operations', (socket, req) => {
-    hostOperations.addClientSocket(socket)
+    let host = req.query.hostId,
+        userId = req.query.userId,
+        project = req.query.project;
+    hostOperations.addClientSocket(socket, userId, host, project)
 })
 
 app.ws('/node/console', (socket, req) => {
@@ -251,14 +240,12 @@ if(!usingSqllite){
 hosts = new Hosts(con, fs, rp);
 allowedProjects = new AllowedProjects(con);
 wsTokens = new WsTokens(con);
-hostOperations = new HostOperations(fs);
+hostOperations = new HostOperations(hosts);
 terminals = new Terminals(rp);
 vgaTerminals = new VgaTerminals(rp, hosts);
 
-
 httpsServer.listen(3000, function() {});
 
-createWebSockets();
 process.on('SIGINT', function() {
   hostOperations.closeSockets();
   terminals.closeAll();
