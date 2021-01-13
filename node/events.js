@@ -114,10 +114,6 @@ app.post('/terminals', function(req, res) {
   res.send();
 });
 
-//TODO Remove whole thing from php
-app.get('/hosts/reload/', function(req, res) {
-});
-
 //NOT authenticated because its called by php
 app.post('/hosts/message/', function(req, res) {
   hostOperations.sendToOpsClients(req.body.type, req.body.data);
