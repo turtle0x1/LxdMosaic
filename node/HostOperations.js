@@ -1,13 +1,13 @@
 var WebSocket = require('ws');
 
 module.exports = class HostOperations {
-  constructor(fs, webSocket) {
-    this.fs = fs;
+  constructor(hosts) {
+    this.hosts = hosts;
     this.operationSockets = {};
-    this.sockets = [];
+    this.clientSockets = [];
   }
 
-  sendToOpsClients(type, msg)
+  sendToOpsClients(hostId, project, type, msg)
   {
       //Silly but sometimes msg is a string :shrug:
       if(typeof msg == "string"){
@@ -15,61 +15,90 @@ module.exports = class HostOperations {
       }
       msg.mosaicType = type;
       msg = JSON.stringify(msg);
-      this.sockets.forEach(socket=>{
+      this.clientSockets[hostId][project].forEach(socket=>{
           if(socket.readyState == 1){
-
               socket.send(msg);
           }
       })
   }
 
-  addClientSocket(socket)
+  addClientSocket(socket, userId, host, project)
   {
-      this.sockets.push(socket)
-  }
+      this.hosts.loadHosts().then(hosts=>{
+        let hostDetails = hosts[host];
 
-  setupWebsockets(hostDetails) {
-    return new Promise((resolve, reject) => {
-      let keys = Object.keys(hostDetails);
-      for (let i = 0; i < keys.length; i++) {
-        let details = hostDetails[keys[i]];
+        this.getSocket(userId, hostDetails, project).then(()=>{
 
-        const wsoptions = {
-          cert: details.cert,
-          key: details.key,
-          rejectUnauthorized: false,
-        };
-        // Only create a socket if we don't already have one for the host
-        if (!this.operationSockets.hasOwnProperty(details.hostId)) {
-          this.operationSockets[details.hostId] = new WebSocket(
-            'wss://' + details.hostWithOutProto + '/1.0/events?type=operation',
-            wsoptions
-          );
+        });
 
-          this.operationSockets[details.hostId].on('message', (data) => {
-            var buf = Buffer.from(data);
-            let message = JSON.parse(data.toString());
-
-            message.hostAlias = details.alias;
-            message.hostId = details.hostId;
-            message.host = details.hostWithOutProtoOrPort;
-
-            if(message.hasOwnProperty("location") && message.location !== "" && message.location !== "none" && message.location !== details.alias){
-                return;
-            }
-
-            this.sendToOpsClients("operationUpdate", message)
-          });
+        if(!this.clientSockets.hasOwnProperty(hostDetails.hostId)){
+            this.clientSockets[hostDetails.hostId] = {};
         }
-      }
-      resolve();
-    });
+
+        if(!this.clientSockets[hostDetails.hostId].hasOwnProperty(project)){
+            this.clientSockets[hostDetails.hostId][project] = [];
+        }
+
+        this.clientSockets[hostDetails.hostId][project].push(socket)
+      });
+
   }
 
   closeSockets() {
-    let keys = Object.keys(this.operationSockets);
-    for (let i = 0; i < keys.length; i++) {
-      this.operationSockets[keys[i]].close();
-    }
+    Object.keys(this.operationSockets).forEach((host)=>{
+        Object.keys(this.operationSockets[host]).forEach((project)=>{
+            this.operationSockets[host][project].close();
+        });
+    });
+
+    Object.keys(this.clientSockets).forEach((host)=>{
+        Object.keys(this.clientSockets[host]).forEach((project)=>{
+            this.clientSockets[host][project].forEach((_, i)=>{
+                this.clientSockets[host][project][i].close();
+            });
+        });
+    });
+  }
+
+
+  getSocket(userId, hostDetails, project){
+      return new Promise((resolve, reject) => {
+          const wsoptions = {
+            cert: hostDetails.cert,
+            key: hostDetails.key,
+            rejectUnauthorized: false,
+          };
+
+           if(this.operationSockets.hasOwnProperty(hostDetails.hostId) && this.operationSockets[hostDetails.hostId].hasOwnProperty(project)){
+               resolve(true);
+           }else{
+               if(!this.operationSockets.hasOwnProperty(hostDetails.hostId)){
+                    this.operationSockets[hostDetails.hostId] = {};
+               }
+
+               this.operationSockets[hostDetails.hostId][project] = new WebSocket(
+                 'wss://' + hostDetails.hostWithOutProto + `/1.0/events?type=operation&project=${project}`,
+                 wsoptions
+               );
+
+               this.operationSockets[hostDetails.hostId][project].on('message', (data) => {
+                 var buf = Buffer.from(data);
+                 let message = JSON.parse(data.toString());
+
+                 message.hostAlias = hostDetails.alias;
+                 message.hostId = hostDetails.hostId;
+                 message.host = hostDetails.hostWithOutProtoOrPort;
+                 message.project = project;
+
+                 if(message.hasOwnProperty("location") && message.location !== "" && message.location !== "none" && message.location !== details.alias){
+                     return;
+                 }
+
+                 this.sendToOpsClients(hostDetails.hostId, project, "operationUpdate", message)
+               });
+
+               resolve(true)
+           }
+      });
   }
 };
