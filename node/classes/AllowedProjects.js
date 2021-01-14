@@ -28,7 +28,7 @@ module.exports = class AllowedProjects {
                         )`;
 
         if(process.env.hasOwnProperty("DB_SQLITE") && process.env.DB_SQLITE !== ""){
-            this.con.get(sql, [userId, hostId, project], function(err, results) {
+            this.con.all(sql, [userId, hostId, project], function(err, results) {
                 resolve(results.length >= 1);
             });
         }else{
@@ -44,7 +44,7 @@ module.exports = class AllowedProjects {
           let sql = `SELECT 1 FROM Users WHERE User_ID = ? AND User_Admin = 1`;
 
           if(process.env.hasOwnProperty("DB_SQLITE") && process.env.DB_SQLITE !== ""){
-              this.con.get(sql, [userId], function(err, results) {
+              this.con.all(sql, [userId], function(err, results) {
                   resolve(results.length >= 1);
               });
           }else{
