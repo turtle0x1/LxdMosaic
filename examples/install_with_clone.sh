@@ -84,7 +84,7 @@ fi
 # Move in LxdManager
 cd /var/www/LxdMosaic || exit
 
-git checkout v0.11.1
+git checkout v0.11.2
 
 npm install || exit $?
 

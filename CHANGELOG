@@ -1,8 +1,9 @@
-Unreleased
+0.11.2 - 14/01/2021
 
 Fixed
     Trying to access undefined property of analytics data when theres no info
     Incorrect calculation for total storage usage
+    SNAP not building because of new sqlite3 release
 
 0.11.1 - 13/01/2021
 
