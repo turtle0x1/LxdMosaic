@@ -89,7 +89,7 @@ git checkout v0.11.2
 npm install || exit $?
 
 # Install Dependecies
-composer install --no-dev || exit $?
+export COMPOSER_ALLOW_SUPERUSER=1; composer install --no-dev || exit $?
 
 PASSWD=`openssl rand -base64 29 | tr -d "=+/" | cut -c1-25`
 
