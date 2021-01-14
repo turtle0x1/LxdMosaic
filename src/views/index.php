@@ -965,10 +965,14 @@ function loadDashboard(){
 
         let storageWidth = 0;
         let formatedStorageTitle = "Not Enough Data"
+        let totalStorage = 0;
+        let usedStorage = 0;
 
         if(data.analyticsData.hasOwnProperty("storageUsage")){
             storageWidth = ((parseInt(data.analyticsData.storageUsage.used) / (parseInt(data.analyticsData.storageUsage.used) + parseInt(data.analyticsData.storageUsage.available))) * 100);
             formatedStorageTitle = formatBytes(data.analyticsData.storageUsage.used);
+            totalStorage = parseInt(data.analyticsData.storageUsage.used) + parseInt(data.analyticsData.storageUsage.available);
+            usedStorage = data.analyticsData.storageUsage.used;
         }
 
 
@@ -984,7 +988,7 @@ function loadDashboard(){
             <div>
                 <label>Storage</label>
                 <div class="progress">
-                    <div data-toggle="tooltip" data-placement="bottom" title="${formatedStorageTitle}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${data.analyticsData.storageUsage.used}" aria-valuemin="0" aria-valuemax="${(data.analyticsData.storageUsage.available - data.analyticsData.storageUsage.used)}"></div>
+                    <div data-toggle="tooltip" data-placement="bottom" title="${formatedStorageTitle}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${usedStorage}" aria-valuemin="0" aria-valuemax="${totalStorage}"></div>
                     </div>
             </div>
             `
