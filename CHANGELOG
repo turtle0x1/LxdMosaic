@@ -1,4 +1,4 @@
-Unreleased
+0.11.4 - 17/01/2021
 
 Fixed
     Host being shown as null in operation list when alias not set (#325)
