@@ -49,4 +49,21 @@ class FetchLatestData
         $do->execute();
         return $do->fetch(\PDO::FETCH_ASSOC);
     }
+
+    public function fetchAll()
+    {
+        $sql = "SELECT
+                    `FA_Date_Created` as `dateTime`,
+                    `FA_Total_Memory_Usage` as `memoryUsage`,
+                    `FA_Active_Containers` as `activeContainers`,
+                    `FA_Total_Storage_Usage` as `storageUsage`,
+                    `FA_Total_Storage_Available` as `storageAvailable`
+                FROM
+                    `Fleet_Analytics`
+                ORDER BY
+                    `FA_ID` ASC
+                ";
+        $do = $this->database->query($sql);
+        return $do->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
