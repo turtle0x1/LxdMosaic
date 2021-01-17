@@ -155,7 +155,6 @@ if ($haveServers->haveAny() !== true) {
               //NOTE The url can't be "Analytics" because some ad blockers
               //     will block it by default
               analytics: {
-                  getLatestData: "/api/AnalyticData/GetLatestDataController/get",
                   getAllData: '/api/AnalyticData/DownloadHistoryController/download'
               },
               backups: {
