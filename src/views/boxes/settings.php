@@ -230,6 +230,75 @@
         </div>
     </div>
 </div>
+<div id="retiredData" class="settingsBox">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card bg-dark" id="usersCard">
+              <div class="card-header" role="tab" >
+                <h5>
+                  <a class="text-white">
+                      <i class="fas fa-chart-line mr-2"></i>Fleet Analytics
+                  </a>
+                </h5>
+              </div>
+              <div class="card-body">
+                  <p>
+                      The dashboard graphs were driven by data aggregated about all your hosts,
+                      this data wasn't stored on a per host / project basis.
+                  </p>
+                  <p>
+                      This made data like "Active Containers" wrong,
+                      we have since added a new way of gathering data by host & project.
+                  </p>
+                  <p>
+                      Because this has been around for so long you may want to
+                      keep a copy before it is deleted in the next release!
+                  </p>
+                  <p class="font-italic">Sample Data</p>
+                  <table class="table table-dark table-bordered table-sm" id="retiredData">
+                      <thead>
+                          <tr>
+                              <th>Date</th>
+                              <th>Total Memory Usage (Int)</th>
+                              <th>Active Containers (Int)</th>
+                              <th>Total Storage Usage (Int)</th>
+                              <th>Total Storage Available (Int)</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>2021-01-17 16:00:00</td>
+                              <td>123</td>
+                              <td>123</td>
+                              <td>123</td>
+                              <td>123</td>
+                          </tr>
+                          <tr>
+                              <td>2021-01-17 16:05:00</td>
+                              <td>123</td>
+                              <td>123</td>
+                              <td>123</td>
+                              <td>123</td>
+                          </tr>
+                          <tr>
+                              <td>2021-01-17 16:10:00</td>
+                              <td>123</td>
+                              <td>123</td>
+                              <td>123</td>
+                              <td>123</td>
+                          </tr>
+                      </tbody>
+                  </table>
+                </div>
+                <div class="card-footer bg-dark">
+                    <button class="btn btn-primary float-right" id="downloadOldFleetAnalytics">
+                        <i class="fas fa-download mr-2"></i>Download CSV
+                    </button>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -271,7 +340,13 @@ function loadSettingsView()
             <a class="nav-link" href="#">
                 <i class="fas fa-history mr-2"></i>Recorded Actions
             </a>
-        </li>`
+        </li>
+        <li class="nav-item retired-data-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-eraser mr-2"></i>Retired Data
+            </a>
+        </li>
+        `
     }
 
     $("#sidebar-ul").empty().append(hosts);
@@ -515,6 +590,34 @@ $("#sidebar-ul").on("click", ".recorded-actions-overview", function(){
     $(".settingsBox").hide();
     $("#recordedActionsBox").show();
     addBreadcrumbs(["Recorded Actions"], ["active"], true);
+});
+
+$("#sidebar-ul").on("click", ".retired-data-overview", function(){
+    loadRecordedActions();
+    $(".settingsBox").hide();
+    $("#retiredData").show();
+    addBreadcrumbs(["Retired Data"], ["active"], true);
+});
+
+$("#retiredData").on("click", "#downloadOldFleetAnalytics", function(){
+    ajaxRequest(globalUrls.analytics.getAllData, {}, (data)=>{
+        data = makeToastr(data)
+        csv = 'Date,Total Memory Usage,Active Containers,Total Storage Usage,Total Storage Available\n';
+
+        //merge the data with CSV
+        data.forEach(function(row) {
+            csv += Object.values(row).join(',');
+            csv += "\n";
+        });
+
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+        hiddenElement.target = '_blank';
+
+        //provide the name for the CSV file to be downloaded
+        hiddenElement.download = 'LXDMosaic_Fleet_Analytics.csv';
+        hiddenElement.click();
+    });
 });
 
 $("#usersList").on("click", ".viewUser", function(){
