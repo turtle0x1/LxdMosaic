@@ -85,7 +85,11 @@ module.exports = class HostOperations {
                  var buf = Buffer.from(data);
                  let message = JSON.parse(data.toString());
 
-                 message.hostAlias = hostDetails.alias;
+                 let alias = hostDetails.alias;
+                 if(alias == null || alias == ""){
+                     alias = hostDetails.hostWithOutProtoOrPort;
+                 }
+                 message.hostAlias = alias;
                  message.hostId = hostDetails.hostId;
                  message.host = hostDetails.hostWithOutProtoOrPort;
                  message.project = project;
