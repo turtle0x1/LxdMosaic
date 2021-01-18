@@ -104,7 +104,7 @@ class RouteController
             exit;
         }
 
-        $routesForViewRoute = ["index", "login", "views"];
+        $routesForViewRoute = ["index", "login", "views", "terminal"];
 
         if (!isset($explodedPath[0]) || in_array($explodedPath[0], $routesForViewRoute)) {
             $this->routeView->route($explodedPath);
