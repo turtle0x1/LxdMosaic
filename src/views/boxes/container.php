@@ -1719,11 +1719,37 @@ $("#containerBox").on("click", "#goToTerminal", function() {
     $(".instanceViewBox").hide();
     $("#containerTerminal").show();
 
-    $("#spice-screen").append(`<h4 id="spiceLoadingIndicator"> <i class="fas fa-cog fa-spin"></i> </h4>`)
-    let project = $("#instanceProject").text();
+    $.confirm({
+        title: 'What Size Monitor?!',
+        content: `What size monitor do you plan on using?`,
+        buttons: {
+            back: function(){
+                $("#goToDetails").trigger("click");
+            },
+            go: {
+                text: "800x640",
+                keys: ['enter'],
+                btnClass: "btn-success",
+                action: function(){
+                    $("#spice-screen").append(`<h4 id="spiceLoadingIndicator"> <i class="fas fa-cog fa-spin"></i> </h4>`)
+                    let project = $("#instanceProject").text();
 
-    window.disconnectFromTerminal();
-    window.connectToTerminal(undefined, currentContainerDetails.hostId, project, currentContainerDetails.container);
+                    window.disconnectFromTerminal();
+                    window.connectToTerminal(undefined, currentContainerDetails.hostId, project, currentContainerDetails.container);
+                }
+            },
+            goLarge: {
+                text: "> 800x640 (Opens New Tab)",
+                btnClass: "btn-primary",
+                action: function(){
+                    let project = $("#instanceProject").text();
+                    let x = {hostId: currentContainerDetails.hostId, project: project, instance: currentContainerDetails.container};
+                    window.open("/terminal?" + $.param(x), "_blank");
+                }
+            }
+        }
+    });
+
 });
 
 $("#containerBox").on("click", "#goToConsole", function() {
