@@ -16,7 +16,7 @@ class MigrateInstanceController implements \dhope0000\LXDClient\Interfaces\Recor
      */
     public function migrate(Host $hostId, $container, Host $destination)
     {
-        $this->migrate->migrate($hostId, $container, $destination, $container);
+        $this->migrate->migrate($hostId, $container, $destination, $container, true);
         return array("success"=>"Instance Has Been Migrated");
     }
 }

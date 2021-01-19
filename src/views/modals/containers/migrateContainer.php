@@ -2,25 +2,19 @@
 <div class="modal fade" id="modal-container-migrate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Migrate Instance<b><span class="migrateModal-containerName"></span></b></h5>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-people-carry mr-2"></i>Migrating Instance <b><span class="migrateModal-containerName"></span></b></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span class="text-white" aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="alert alert-danger ">
-            This falty at best (avoid using this if possible)
+        <div class="mb-2">
+            <i class="fas fa-info-circle text-warning mr-2"></i>Migrating an instance is a copy followed by a <b>delete</b>
         </div>
-        <div class="alert alert-info ">
-            Migrating a instance will <b> move </b> it from one host to another
-        </div>
-        <h5>
-            <b> Moving </b> <span class="migrateModal-containerName"></span> <br/>
-            <b> From Host: </b> <span id="migrateModal-currentHost"></span>
-        </h5>
+        <b>Origin: </b> <span id="migrateModal-currentHost"></span>
         <div class="form-group">
-            <b><label> To Host </label></b>
+            <b><label>Destination</label></b>
             <select class="form-control" name="" id="migrateModal-targetHost">
                 <option value="">Todo Load Hosts</option>
             </select>
@@ -65,12 +59,17 @@
             return false;
         }
 
+        let btn = $(this);
+        btn.html(`<i class="fas fa-cog fa-spin mr-2"></i>Migrating`)
+        $("#modal-container-migrate").find("button").attr("disabled", true);
         let x = $.extend({
             destination: targetHost[0].hostId
         }, currentContainerDetails);
 
         ajaxRequest(globalUrls.instances.migrate, x, function(data){
             makeToastr(data);
+            btn.text(`Migrate`)
+            $("#modal-container-migrate").find("button").attr("disabled", false);
             if(data.hasOwnProperty("state") && data.state == "error"){
                 return false;
             }

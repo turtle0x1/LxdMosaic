@@ -82,6 +82,9 @@ function openHostOperationSocket(hostId, project)
                 if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("download_progress")){
                     let progress = msg.metadata.metadata["download_progress"].replace("rootfs: ", "");
                     liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} mr-2'></span>${description} - ${progress}`);
+                }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("fs_progress")){
+                    let progress = msg.metadata.metadata["fs_progress"];
+                    liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} mr-2'></span>${description} ${progress}`);
                 }
 
                 if(msg.metadata.err !== ""){
