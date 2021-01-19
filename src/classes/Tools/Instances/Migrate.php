@@ -11,6 +11,9 @@ class Migrate
         Host $destinationHost,
         string $newContainerName
     ) {
+        $this->hostUrlIsLocalhostCheck($sourceHost, "source");
+        $this->hostUrlIsLocalhostCheck($destinationHost, "destination");
+
         $sourceHost->instances->migrate(
             $destinationHost->getClient(),
             $instance,
@@ -18,5 +21,12 @@ class Migrate
             true
         );
         return true;
+    }
+
+    private function hostUrlIsLocalhostCheck(Host $host, string $type)
+    {
+        if (parse_url($host->getUrl())["host"] == "localhost") {
+            throw new \Exception("Your $type server has a URL of 'localhost', this wont work!", 1);
+        }
     }
 }
