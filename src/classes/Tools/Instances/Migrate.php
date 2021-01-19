@@ -9,7 +9,8 @@ class Migrate
         Host $sourceHost,
         string $instance,
         Host $destinationHost,
-        string $newContainerName
+        string $newContainerName,
+        bool $delete = false
     ) {
         $this->hostUrlIsLocalhostCheck($sourceHost, "source");
         $this->hostUrlIsLocalhostCheck($destinationHost, "destination");
@@ -20,6 +21,11 @@ class Migrate
             $newContainerName,
             true
         );
+
+        if ($delete) {
+            $sourceHost->instances->remove($instance);
+        }
+
         return true;
     }
 
