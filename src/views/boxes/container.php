@@ -1854,7 +1854,10 @@ $("#containerBox").on("click", ".copyContainer", function(){
 });
 
 $("#containerBox").on("click", ".migrateContainer", function(){
-    $("#modal-container-migrate").modal("show");
+    $("#modal-container-migrate").modal({
+        backdrop: 'static',
+        keyboard: false
+    });
 });
 
 $("#containerBox").on("click", ".takeSnapshot", function(){
