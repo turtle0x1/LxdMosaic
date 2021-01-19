@@ -12,8 +12,10 @@ class Migrate
         string $newContainerName,
         bool $delete = false
     ) {
-        $this->hostUrlIsLocalhostCheck($sourceHost, "source");
-        $this->hostUrlIsLocalhostCheck($destinationHost, "destination");
+        $this->checkIfMigratingToSameHost($sourceHost, $destinationHost);
+        
+        $this->checkIfHostUrlIsLocalhost($sourceHost, "source");
+        $this->checkIfHostUrlIsLocalhost($destinationHost, "destination");
 
         $sourceHost->instances->migrate(
             $destinationHost->getClient(),
@@ -29,7 +31,14 @@ class Migrate
         return true;
     }
 
-    private function hostUrlIsLocalhostCheck(Host $host, string $type)
+    public function checkIfMigratingToSameHost(Host $source, Host $destination)
+    {
+        if ($source->getUrl() === $destination->getUrl()) {
+            throw new \Exception("You must use two different hosts to migrate", 1);
+        }
+    }
+
+    private function checkIfHostUrlIsLocalhost(Host $host, string $type)
     {
         if (parse_url($host->getUrl())["host"] == "localhost") {
             throw new \Exception("Your $type server has a URL of 'localhost', this wont work!", 1);
