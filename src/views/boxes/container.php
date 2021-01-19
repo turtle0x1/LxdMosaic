@@ -1745,6 +1745,7 @@ $("#containerBox").on("click", "#goToTerminal", function() {
                     let project = $("#instanceProject").text();
                     let x = {hostId: currentContainerDetails.hostId, project: project, instance: currentContainerDetails.container};
                     window.open("/terminal?" + $.param(x), "_blank");
+                    $("#goToDetails").trigger("click");
                 }
             }
         }
