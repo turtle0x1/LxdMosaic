@@ -1861,7 +1861,7 @@ $("#containerBox").on("click", ".migrateContainer", function(){
 });
 
 $("#containerBox").on("click", ".takeSnapshot", function(){
-    $("#modal-container-snapshot").modal("show");
+    snapshotContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);
 });
 
 $("#containerBox").on("click", ".editContainerSettings", function(){
