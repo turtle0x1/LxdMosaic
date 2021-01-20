@@ -3,15 +3,18 @@ namespace dhope0000\LXDClient\Tools\Images;
 
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class DeleteImages
 {
     public function __construct(
         GetDetails $getDetails,
-        FetchAllowedProjects $fetchAllowedProjects
+        FetchAllowedProjects $fetchAllowedProjects,
+        FetchUserDetails $fetchUserDetails
     ) {
         $this->getDetails = $getDetails;
         $this->fetchAllowedProjects = $fetchAllowedProjects;
+        $this->fetchUserDetails = $fetchUserDetails;
     }
 
     public function delete(int $userId, array $imageData)
@@ -19,6 +22,7 @@ class DeleteImages
         $output = [];
         $hostCache = [];
 
+        $isAdmin = (bool) $this->fetchUserDetails->isAdmin($userId);
         $allowedHostsProjects = $this->fetchAllowedProjects->fetchAll($userId);
 
         foreach ($imageData as $image) {
@@ -28,7 +32,7 @@ class DeleteImages
                 //NOTE we dont need to check the project because they cant
                 //     set it, so it will try to use the project they
                 //     are currently set to
-                if (!isset($allowedHostsProjects[$image["hostId"]])) {
+                if (!$isAdmin && !isset($allowedHostsProjects[$image["hostId"]])) {
                     throw new \Exception("No access to host", 1);
                 }
 
