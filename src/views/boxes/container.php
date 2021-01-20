@@ -1901,7 +1901,6 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
 </script>
 <?php
     require __DIR__ . "/../modals/containers/migrateContainer.php";
-    require __DIR__ . "/../modals/containers/takeSnapshot.php";
     require __DIR__ . "/../modals/containers/restoreSnapshot.php";
     require __DIR__ . "/../modals/containers/createContainer.php";
     require __DIR__ . "/../modals/containers/editSettings.php";
