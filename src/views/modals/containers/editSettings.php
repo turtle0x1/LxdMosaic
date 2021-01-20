@@ -2,29 +2,28 @@
 <div class="modal fade" id="modal-container-editSettings" tabindex="-1" aria-labelledby="exampleModalLongTitle" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Edit Settings <b><span class="editSettings-containerName"></span></b></h5>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="exampleModalLongTitle">
+            <i class="fas fa-cog mr-2"></i>Settings For
+            <span class="editSettings-containerName"></span>
+        </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span class="text-white" aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <h5>
-            <b> On Host: </b> <span id="editSettings-currentHost"></span>
-        </h5>
-        <div class="alert alert-warning">
-            This uses the update strategy so its currently <b> not possible to
-            delete existing keys. </b>
+        <div class="mb-3 text-center">
+            <i class="fas fa-info-circle text-warning mr-2"></i>
+            Currently not possible to delete existing keys.
         </div>
-        <div id="editSettings-list"></div>
-        <br/>
-        <button class="btn btn-primary" id="addNewSettingRow">
+        <div class="d-block" id="editSettings-list"></div>
+        <button class="btn btn-success mt-2 float-right" id="addNewSettingRow">
             Add Setting
         </button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="addSettings">Add Settings</button>
+        <button type="button" class="btn btn-primary" id="addSettings">Save Settings</button>
       </div>
     </div>
   </div>
@@ -108,6 +107,8 @@
     });
 
     $("#modal-container-editSettings").on("click", "#addSettings", function(){
+        let btn = $(this);
+
         let inputGroups = $("#editSettings-list").find(".input-group");
         let data = {
             settings: {}
@@ -137,9 +138,14 @@
             return false;
         }
 
+        btn.html(`<i class="fas fa-cog fa-spin mr-2"></i>Updating Settings`);
+        btn.attr("disabled", true);
+
         data = $.extend(data, currentContainerDetails);
         ajaxRequest(globalUrls.instances.setSettings, data, function(data){
             data = makeToastr(data);
+            btn.html(`Save Settings`);
+            btn.attr("disabled", false);
             if(data.state == "success"){
                 $("#modal-container-editSettings").modal("toggle");
             }
@@ -148,7 +154,7 @@
 
     $("#modal-container-editSettings").on("click", "#addNewSettingRow", function(){
         $("#editSettings-list").append(
-            `<div style='margin-bottom: 5px; border-bottom: 1px solid black; padding: 10px;' class='input-group'>
+            `<div style='margin-bottom: 5px; border-bottom: 1px solid #D3D3D3; padding: 10px;' class='input-group'>
             <div class='col-md-4'>
                 <div class='input-group-prepend'>
                     <select name='key' class='form-control settingSelect' style='width: 100%'> ${reamingSettingSelectOptions}</select>
