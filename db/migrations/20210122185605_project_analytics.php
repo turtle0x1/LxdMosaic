@@ -21,7 +21,8 @@ final class ProjectAnalytics extends AbstractMigration
             ('Memory', 'limits.memory'),
             ('Networks', 'limits.networks'),
             ('Processes', 'limits.processes'),
-            ('Virtual Machines', 'limits.virtual-machine')
+            ('Virtual Machines', 'limits.virtual-machine'),
+            ('Instances', 'limits.instances')
         ");
 
         $table = $this->table('Project_Analytics', ['id' => "PA_ID", 'primary_key' => ["PA_ID"]]);
