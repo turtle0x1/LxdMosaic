@@ -1004,7 +1004,7 @@ function loadDashboard(){
         $("#sidebar-ul").empty().append(hosts);
 
         let displayItems = {
-            "Containers": {
+            "Instances": {
                 formatBytes: false,
                 icon: 'fas fa-box'
             },
