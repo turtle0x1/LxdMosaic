@@ -7,6 +7,7 @@ use dhope0000\LXDClient\Model\Users\Dashboard\FetchUserDashboards;
 use dhope0000\LXDClient\Tools\Universe;
 use dhope0000\LXDClient\Tools\Hosts\GetResources;
 use dhope0000\LXDClient\Tools\User\GetUserProject;
+use dhope0000\LXDClient\Tools\ProjectAnalytics\GetGraphableProjectAnalytics;
 
 class GetDashboard
 {
@@ -15,13 +16,15 @@ class GetDashboard
         FetchUserDashboards $fetchUserDashboards,
         Universe $universe,
         GetResources $getResources,
-        GetUserProject $getUserProject
+        GetUserProject $getUserProject,
+        GetGraphableProjectAnalytics $getGraphableProjectAnalytics
     ) {
         $this->fetchUserProject = $fetchUserProject;
         $this->fetchUserDashboards = $fetchUserDashboards;
         $this->universe = $universe;
         $this->getResources = $getResources;
         $this->getUserProject = $getUserProject;
+        $this->getGraphableProjectAnalytics = $getGraphableProjectAnalytics;
     }
 
     public function get($userId)
@@ -31,12 +34,14 @@ class GetDashboard
         $stats = $this->getStatsFromClustersAndHosts($clustersAndHosts);
         $analyticsData = ["warning"=>"Not Enough Data, 10 minutes is minimum time"];
         $dashboards = $this->fetchUserDashboards->fetchAll($userId);
+        $projectGraphData = $this->getGraphableProjectAnalytics->getCurrent();
 
         return [
             "userDashboards"=>$dashboards,
             "clustersAndHosts"=>$clustersAndHosts,
             "stats"=>$stats,
-            "analyticsData"=>$analyticsData
+            "analyticsData"=>$analyticsData,
+            "projectGraphData"=>$projectGraphData
         ];
     }
 
