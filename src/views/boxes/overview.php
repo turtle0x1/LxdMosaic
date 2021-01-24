@@ -53,62 +53,7 @@
               </div>
           </div>
           <div class="col-lg-7">
-              <div class="row">
-                  <div class="col-md-6">
-                      <div class="card bg-dark">
-                          <div class="card-header">
-                              <h4>Current Usage</h4>
-                          </div>
-                          <div class="card-body" id="currentMemoryUsageCardBody">
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-md-6">
-                      <div class="card bg-dark">
-                          <div class="card-header">
-                              <h4> Memory Usage </h4>
-                          </div>
-                          <div class="card-body" >
-                              <div class="text-center notEnoughData">
-                                  <i class="fas fa-info-circle text-warning mr-2"></i>Check again in 10 minutes!
-                              </div>
-                              <div id="dashboardMemoryHistoryBox">
-                              </div>
-                          </div>
-                      </div>
-
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col-md-6">
-                      <div class="card bg-dark">
-                          <div class="card-header">
-                              <h4> Running Instances </h4>
-                          </div>
-                          <div class="card-body" >
-                              <div class="text-center notEnoughData">
-                                  <i class="fas fa-info-circle text-warning mr-2"></i>Check again in 10 minutes!
-                              </div>
-                              <div id="dashboardRunningInstancesBox">
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-md-6">
-                      <div class="card bg-dark">
-                          <div class="card-header">
-                              <h4>Storage Usage</h4>
-                          </div>
-                          <div class="card-body" >
-                              <div class="text-center notEnoughData">
-                                  <i class="fas fa-info-circle text-warning mr-2"></i>Check again in 10 minutes!
-                              </div>
-                              <div id="dashboardStorageHistoryBox">
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+            
           </div>
 </div>
 </div>

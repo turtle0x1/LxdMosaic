@@ -32,7 +32,6 @@ class GetDashboard
         $clustersAndHosts = $this->universe->getEntitiesUserHasAccesTo($userId, "projects");
         $clustersAndHosts = $this->addCurrentProjects($userId, $clustersAndHosts);
         $stats = $this->getStatsFromClustersAndHosts($clustersAndHosts);
-        $analyticsData = ["warning"=>"Not Enough Data, 10 minutes is minimum time"];
         $dashboards = $this->fetchUserDashboards->fetchAll($userId);
         $projectGraphData = $this->getGraphableProjectAnalytics->getCurrent();
 
@@ -40,7 +39,6 @@ class GetDashboard
             "userDashboards"=>$dashboards,
             "clustersAndHosts"=>$clustersAndHosts,
             "stats"=>$stats,
-            "analyticsData"=>$analyticsData,
             "projectGraphData"=>$projectGraphData
         ];
     }

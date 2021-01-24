@@ -867,10 +867,6 @@ $(document).on("click", ".viewServer", function(){
     let hostAlias = parentLi.data("alias");
 
 
-    $("#dashboardStorageHistoryBox").empty();
-    $("#dashboardRunningInstancesBox").empty();
-    $("#dashboardMemoryHistoryBox").empty();
-    $("#currentMemoryUsageCardBody").empty();
 
     currentContainerDetails = null;
     loadServerView(hostId);
@@ -961,40 +957,6 @@ function loadDashboard(){
             });
         });
 
-        let memoryWidth = ((data.stats.memory.used / data.stats.memory.total) * 100)
-
-        let storageWidth = 0;
-        let formatedStorageTitle = "Not Enough Data"
-        let totalStorage = 0;
-        let usedStorage = 0;
-
-        if(data.analyticsData.hasOwnProperty("storageUsage")){
-            storageWidth = ((parseInt(data.analyticsData.storageUsage.used) / (parseInt(data.analyticsData.storageUsage.used) + parseInt(data.analyticsData.storageUsage.available))) * 100);
-            formatedStorageTitle = formatBytes(data.analyticsData.storageUsage.used);
-            totalStorage = parseInt(data.analyticsData.storageUsage.used) + parseInt(data.analyticsData.storageUsage.available);
-            usedStorage = data.analyticsData.storageUsage.used;
-        }
-
-
-
-        $("#currentMemoryUsageCardBody").empty().append(
-            `
-            <div class="mb-2">
-                <label>Memory</label>
-                <div class="progress">
-                    <div data-toggle="tooltip" data-placement="bottom" title="${formatBytes(data.stats.memory.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.stats.memory.used}" aria-valuemin="0" aria-valuemax="${(data.stats.memory.total - data.stats.memory.used)}"></div>
-                </div>
-            </div>
-            <div>
-                <label>Storage</label>
-                <div class="progress">
-                    <div data-toggle="tooltip" data-placement="bottom" title="${formatedStorageTitle}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${usedStorage}" aria-valuemin="0" aria-valuemax="${totalStorage}"></div>
-                    </div>
-            </div>
-            `
-        );
-
-        $("#currentMemoryUsageCardBody").find('[data-toggle="tooltip"]').tooltip({html: true})
 
         hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
         hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Standalone Hosts</td></tr>`
@@ -1038,105 +1000,6 @@ function loadDashboard(){
         });
         $("#dashboardHostTable > tbody").empty().append(hostsTrs);
         $("#sidebar-ul").empty().append(hosts);
-
-        if(data.analyticsData.hasOwnProperty("warning")){
-            $("#memoryUsage, #activeContainers, #recentStorageCanvas, #stroageUsage").hide().parents(".card-body").find(".notEnoughData").show();
-            return false;
-        }
-
-        $("#dashboardMemoryHistoryBox, #dashboardRunningInstancesBox, #dashboardStorageHistoryBox, #dashboardStorageUsageBox").show().parents(".card-body").find(".notEnoughData").hide();
-
-
-        $("#dashboardStorageHistoryBox").empty().append(`<canvas id="recentStorageCanvas" height="200"></canvas>`);
-        $("#dashboardRunningInstancesBox").empty().append(`<canvas id="activeContainers" height="200"></canvas>`);
-        $("#dashboardMemoryHistoryBox").empty().append(`<canvas id="memoryUsage" height="200"></canvas>`);
-
-        var mCtx = $('#memoryUsage');
-        var acCtx = $('#activeContainers');
-        var tsuCtx = $('#recentStorageCanvas');
-
-        let sum = data.analyticsData.activeContainers.data.reduce(getSum);
-
-        let scaleStep = sum > 30 ? 10 : 1;
-
-        new Chart(acCtx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: "Fleet Active Containers",
-                        borderColor: 'rgba(46, 204, 113, 1)',
-                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
-                        pointBorderColor: "rgba(46, 204, 113, 1)",
-                        data: data.analyticsData.activeContainers.data,
-                    }
-                ],
-                labels: data.analyticsData.activeContainers.labels
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: scaleStep
-                        }
-                    }]
-                }
-            }
-        });
-
-        new Chart(mCtx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: "Memory Usage",
-                        borderColor: 'rgba(46, 204, 113, 1)',
-                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
-                        pointBorderColor: "rgba(46, 204, 113, 1)",
-                        data: data.analyticsData.memory.data,
-                    }
-                ],
-                labels: data.analyticsData.memory.labels
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                scales: scalesBytesCallbacks,
-                tooltips: toolTipsBytesCallbacks
-            }
-        });
-
-        new Chart(tsuCtx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: "Storage Usage",
-                        borderColor: 'rgba(46, 204, 113, 1)',
-                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
-                        pointBorderColor: "rgba(46, 204, 113, 1)",
-                        data: data.analyticsData.recentStorageUsage.data,
-                    }
-                ],
-                labels: data.analyticsData.recentStorageUsage.labels
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Fleet Storage Usage'
-                },
-                legend: {
-                    display: false
-                },
-                scales: scalesBytesCallbacks,
-                tooltips: toolTipsBytesCallbacks
-          }
-        });
     });
 }
 
