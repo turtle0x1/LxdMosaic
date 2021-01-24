@@ -33,7 +33,7 @@
         </div>
     </div>
     <div class="row mb-2" id="generalDashboard">
-          <div class="col-lg-5">
+          <div class="col-lg-4">
               <div class="card bg-dark">
                   <div class="card-header">
                       <h4>Hosts</h4>
@@ -52,8 +52,24 @@
                   </div>
               </div>
           </div>
-          <div class="col-lg-7">
-            
+          <div class="col-lg-8">
+              <div class="row">
+                  <div class="col-md-12">
+                      <h4><i class="fas fa-chart-bar mr-2"></i>Project Analytics</h4>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-12">
+                    <div class="input-group mb-3">
+                      <div class="input-group-append">
+                        <span class="input-group-text"><i class="fas fa-filter"></i></span>
+                      </div>
+                      <input type="text" class="form-control" placeholder="Filter Projects..." value="" id="filterDashProjectAnalyticsProject">
+                    </div>
+                  </div>
+              </div>
+              <div id="overviewGraphs">
+              </div>
           </div>
 </div>
 </div>
@@ -72,6 +88,15 @@ $(document).on("click", "#editDashboardGraphs", function(){
         $(".removeDashGraph").show()
     }
 });
+
+$("#overviewBox").on("keyup", "#filterDashProjectAnalyticsProject", function(e){
+    let ul = $("#overviewGraphs");
+    let search = $(this).val().toLowerCase();
+    ul.find(".projectRow").filter(function(){
+        $(this).toggle($(this).data("project").toLowerCase().indexOf(search) > -1)
+    });
+});
+
 
 function loadUserDashboardGraphs()
 {

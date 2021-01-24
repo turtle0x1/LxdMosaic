@@ -527,7 +527,9 @@ if ($haveServers->haveAny() !== true) {
 </html>
 <script type='text/javascript'>
 
-$("#userDashboard").hide();
+$(".boxSlide").hide();
+$("#filterDashProjectAnalyticsProject").val("")
+$("#overviewGraphs").html("<h1 class='text-center'><i class='fas fa-cog fa-spin'></i></h1>");
 
 $("#sidebar-ul").on("click", ".nav-item", function(){
     if($(this).hasClass("nav-dropdown")){
@@ -1000,6 +1002,126 @@ function loadDashboard(){
         });
         $("#dashboardHostTable > tbody").empty().append(hostsTrs);
         $("#sidebar-ul").empty().append(hosts);
+
+        let displayItems = {
+            "Containers": {
+                formatBytes: false,
+                icon: 'fas fa-box'
+            },
+            "Disk": {
+                formatBytes: true,
+                icon: 'fas fa-hdd'
+            },
+            "Memory": {
+                formatBytes: true,
+                icon: 'fas fa-memory'
+            }
+        }
+
+        $("#overviewGraphs").empty();
+
+        $.each(data.projectGraphData, (alias, projects)=>{
+            $.each(projects, (project, analytics)=>{
+                let y = $(`
+                <div class="row projectRow" data-project="${project}">
+                    <div class="col-md-12 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                        <h4><i class="fas fa-server text-info mr-2"></i>${alias}</h4>
+                        <h4><i class="fas fa-project-diagram text-info mr-2"></i>${project}</h4>
+                    </div>
+                    <div class="row graphs">
+                    </div>
+                </div>
+                `);
+
+                $.each(displayItems, (title, config)=>{
+                    let labels = [];
+                    let values = [];
+                    let limits = [];
+
+                    let cId = project + "-" + title.toLowerCase();
+
+                    $.each(data.projectGraphData[alias][project][title], (_, entry)=>{
+                        labels.push(moment(entry.created).format("HH:mm"))
+                        values.push(entry.value)
+                        limits.push(entry.limit)
+                    });
+
+                    var totalUsage = values.reduce(function(a, b){
+                        return parseInt(a) + parseInt(b);
+                    }, 0);
+
+                    let canvas = `<canvas height="200" width="200" id="${cId}"></canvas>`;
+
+                    if(totalUsage == 0){
+                        canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary mr-2"></i>No Usage</div>'
+                    }
+
+
+                    let x = $(`<div class='col-md-4'>
+                          <div class="card bg-dark">
+                              <div class="card-header">
+                                  <i class="${config.icon} mr-2"></i>${title}
+                              </div>
+                              <div class="card-body">
+                                ${canvas}
+                              </div>
+                          </div>
+                      </div>`);
+
+                    if(totalUsage > 0){
+                        let graphDataSets = [
+                            {
+                                label: "total",
+                                borderColor: 'rgba(46, 204, 113, 1)',
+                                pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                                pointBorderColor: "rgba(46, 204, 113, 1)",
+                                data: values
+                            }
+                        ];
+
+                        let filtLimits = limits.filter(onlyUnique)
+                        //
+                        if(filtLimits.length !== 1 || filtLimits[0] !== null){
+                            graphDataSets.push({
+                                label: "limit",
+                                borderColor: '#09F',
+                                pointBackgroundColor: "#09F",
+                                pointBorderColor: "#09F",
+                                data: limits
+                            })
+                        }
+
+                        let options = {responsive: true};
+
+                        if (config.formatBytes) {
+                              options.scales = scalesBytesCallbacks;
+                              options.tooltips = toolTipsBytesCallbacks
+                        }else{
+                            options.scales = {
+                                yAxes: [{
+                                  ticks: {
+                                    precision: 0,
+                                    beginAtZero: true
+                                  }
+                                }]
+                            }
+                        }
+
+                        new Chart(x.find("#" + cId), {
+                          type: 'line',
+                          data: {
+                              datasets: graphDataSets,
+                              labels: labels
+                          },
+                          options: options
+                        });
+                    }
+                    y[0].append(x[0]);
+                });
+
+                $("#overviewGraphs").append(y)
+            });
+        });
     });
 }
 
