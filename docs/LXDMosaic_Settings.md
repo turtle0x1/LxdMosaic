@@ -44,6 +44,24 @@ With strong password policy enabled a password must be;
  - Include 1 number
  - Include 1 letter
 
+## Project Analytics History
+
+Value: string
+
+Default: -1 day
+
+How long should we store the project analytics for, expressed as string like;
+
+  - -X hours
+  - -Y days
+  - -Z months
+
+the data is gathered for every hosts project/s, every 5 minutes.
+
+**this builds up quickly, be careful!**
+
+Per Day = ((N projects * 8 different usages & limits) * 12 segmants of five minutes in an hour) * 24 hours
+
 ## LDAP
 
 ### Ldap Server
