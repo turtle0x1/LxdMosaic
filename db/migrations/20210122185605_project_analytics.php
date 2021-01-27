@@ -35,5 +35,12 @@ final class ProjectAnalytics extends AbstractMigration
             ->addForeignKey('PA_Type_ID', 'Project_Analytics_Types', 'PAT_ID', ['delete'=> 'CASCADE', 'update'=> 'RESTRICT'])
             ->addForeignKey('PA_Host_ID', 'Hosts', 'Host_ID', ['delete'=> 'CASCADE', 'update'=> 'RESTRICT'])
             ->create();
+
+        if ($this->isMigratingUp()) {
+            // Add new setting
+            $this->execute("INSERT INTO `Instance_Settings`(`IS_ID`, `IS_Name`) VALUES (9, 'Project Analytics Storage')");
+            // Enforce strong passwords by default
+            $this->execute("INSERT INTO `Instance_Settings_Values`(`ISV_IS_ID`, `ISV_Value`) VALUES (9, '-1 day')");
+        }
     }
 }
