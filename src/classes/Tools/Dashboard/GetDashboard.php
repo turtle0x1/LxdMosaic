@@ -33,7 +33,7 @@ class GetDashboard
         $clustersAndHosts = $this->addCurrentProjects($userId, $clustersAndHosts);
         $stats = $this->getStatsFromClustersAndHosts($clustersAndHosts);
         $dashboards = $this->fetchUserDashboards->fetchAll($userId);
-        $projectGraphData = $this->getGraphableProjectAnalytics->getCurrent();
+        $projectGraphData = $this->getGraphableProjectAnalytics->getCurrent($userId);
 
         return [
             "userDashboards"=>$dashboards,

@@ -17,6 +17,7 @@ class FetchAnalytics
     ) {
         $sql = "SELECT
                     `PA_Date_Created` as `created`,
+                    `PA_Host_ID` as `hostId`,
                     `PA_Project` as `project`,
                     `PA_Value` as `value`,
                     `PA_Limit` as `limit`,
