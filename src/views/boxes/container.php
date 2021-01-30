@@ -1083,7 +1083,7 @@ function loadContainerView(data)
         let containerCpuTime = nanoSecondsToHourMinutes(x.state.cpu.usage);
 
         let os = x.details.config.hasOwnProperty("image.os") ? x.details.config["image.os"] : "<b style='color: #ffc107'>Can't find OS</b>";
-        let version = "<b style='color: #ffc107'>Cant find verison</b>";
+        let version = "<b style='color: #ffc107'>Cant find version</b>";
         if(x.details.config.hasOwnProperty("image.version")){
             version = x.details.config["image.version"];
         }else if(x.details.config.hasOwnProperty("image.release")){
