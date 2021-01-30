@@ -785,8 +785,11 @@ function addHostContainerList(hostId, hostAlias) {
                 };
 
                 let osIcon = "linux";
+                let instanceImage = ""
 
-                let instanceImage = details.config["image.os"].toLowerCase();
+                if(details.config.hasOwnProperty("image.os") && details.config["images.os"] != null){
+                    instanceImage = details.config["image.os"].toLowerCase();
+                }
 
                 if(osIconMap.hasOwnProperty(instanceImage)){
                     osIcon = osIconMap[instanceImage];
