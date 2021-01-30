@@ -1093,7 +1093,7 @@ function loadContainerView(data)
         $("#container-hostNameDisplay").text(currentContainerDetails.alias);
         $("#container-containerNameDisplay").text(data.container);
         $("#instanceProject").text(x.project);
-        $("#container-imageDescription").text(`${os} (${version})`);
+        $("#container-imageDescription").html(`${os} (${version})`);
         $("#container-cpuTime").text(containerCpuTime);
         $("#container-createdAt").text(moment(x.details.created_at).format("MMM DD YYYY h:mm A"));
 
