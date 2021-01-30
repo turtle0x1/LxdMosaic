@@ -787,7 +787,7 @@ function addHostContainerList(hostId, hostAlias) {
                 let osIcon = "linux";
                 let instanceImage = ""
 
-                if(details.config.hasOwnProperty("image.os") && details.config["images.os"] != null){
+                if(details.config.hasOwnProperty("image.os") && details.config["image.os"] != null){
                     instanceImage = details.config["image.os"].toLowerCase();
                 }
 
