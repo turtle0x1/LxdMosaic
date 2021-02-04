@@ -1719,11 +1719,38 @@ $("#containerBox").on("click", "#goToTerminal", function() {
     $(".instanceViewBox").hide();
     $("#containerTerminal").show();
 
-    $("#spice-screen").append(`<h4 id="spiceLoadingIndicator"> <i class="fas fa-cog fa-spin"></i> </h4>`)
-    let project = $("#instanceProject").text();
+    $.confirm({
+        title: 'What Size Monitor?!',
+        content: `What size monitor do you plan on using?`,
+        buttons: {
+            back: function(){
+                $("#goToDetails").trigger("click");
+            },
+            go: {
+                text: "800x640",
+                keys: ['enter'],
+                btnClass: "btn-success",
+                action: function(){
+                    $("#spice-screen").append(`<h4 id="spiceLoadingIndicator"> <i class="fas fa-cog fa-spin"></i> </h4>`)
+                    let project = $("#instanceProject").text();
 
-    window.disconnectFromTerminal();
-    window.connectToTerminal(undefined, currentContainerDetails.hostId, project, currentContainerDetails.container);
+                    window.disconnectFromTerminal();
+                    window.connectToTerminal(undefined, currentContainerDetails.hostId, project, currentContainerDetails.container);
+                }
+            },
+            goLarge: {
+                text: "> 800x640 (Opens New Tab)",
+                btnClass: "btn-primary",
+                action: function(){
+                    let project = $("#instanceProject").text();
+                    let x = {hostId: currentContainerDetails.hostId, project: project, instance: currentContainerDetails.container};
+                    window.open("/terminal?" + $.param(x), "_blank");
+                    $("#goToDetails").trigger("click");
+                }
+            }
+        }
+    });
+
 });
 
 $("#containerBox").on("click", "#goToConsole", function() {
@@ -1827,11 +1854,14 @@ $("#containerBox").on("click", ".copyContainer", function(){
 });
 
 $("#containerBox").on("click", ".migrateContainer", function(){
-    $("#modal-container-migrate").modal("show");
+    $("#modal-container-migrate").modal({
+        backdrop: 'static',
+        keyboard: false
+    });
 });
 
 $("#containerBox").on("click", ".takeSnapshot", function(){
-    $("#modal-container-snapshot").modal("show");
+    snapshotContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);
 });
 
 $("#containerBox").on("click", ".editContainerSettings", function(){
@@ -1871,7 +1901,6 @@ $("#containerBox").on("click", ".viewSnapsnot", function(){
 </script>
 <?php
     require __DIR__ . "/../modals/containers/migrateContainer.php";
-    require __DIR__ . "/../modals/containers/takeSnapshot.php";
     require __DIR__ . "/../modals/containers/restoreSnapshot.php";
     require __DIR__ . "/../modals/containers/createContainer.php";
     require __DIR__ . "/../modals/containers/editSettings.php";

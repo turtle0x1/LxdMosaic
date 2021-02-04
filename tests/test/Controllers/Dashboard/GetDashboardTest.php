@@ -20,7 +20,7 @@ final class GetDashboardTest extends TestCase
             true
         );
         // Assert the top level of the response hasnt changed
-        $exepctedTopKeys = ["userDashboards", "clustersAndHosts", "stats", "analyticsData"];
+        $exepctedTopKeys = ["userDashboards", "clustersAndHosts", "stats", "projectGraphData"];
 
         $this->assertEquals($exepctedTopKeys, array_keys($result));
         // Assert hosts are being output with the expected keys from LXDMosaic

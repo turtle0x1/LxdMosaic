@@ -2,36 +2,39 @@
 <div class="modal fade" id="modal-container-createImage" tabindex="-1" aria-labelledby="exampleModalLongTitle" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Create Image</b></h5>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="exampleModalLongTitle">
+            <i class="fas fa-image mr-2"></i>Create Image From</b>
+            <span id="createImage-instanceName"></span>
+        </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span class="text-white" aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
           <div class="form-group">
-              <label> Image Alias </label>
-              <input class="form-control" name="alias" />
+              <label> Alias </label>
+              <input class="form-control" placeholder="myImage" name="alias" />
           </div>
-          <div>
+          <div class="mt-2 mb-2">
               Public
               <br/>
-              <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="public" id="yesRadio" value="1">
-                  <label class="form-check-label" for="yesRadio">Yes</label>
-              </div>
               <div class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" name="public" id="noRadio" value="0">
                   <label class="form-check-label" for="noRadio">No</label>
               </div>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="public" id="yesRadio" value="1">
+                  <label class="form-check-label" for="yesRadio">Yes</label>
+              </div>
           </div>
           <div class="form-group">
               <label> OS (Optional) </label>
-              <input class="form-control" name="os" />
+              <input class="form-control" placeholder="Ubuntu" name="os" />
           </div>
           <div class="form-group">
-              <label> Image Description (Optional) </label>
-              <textarea class="form-control" name="description"></textarea>
+              <label> Description (Optional) </label>
+              <textarea class="form-control" placeholder="apache2 and our web app installed!" name="description"></textarea>
           </div>
       </div>
       <div class="modal-footer">
@@ -81,6 +84,7 @@
         $("#modal-container-createImage textarea[name=description]").val("")
         $("#modal-container-createImage #yesRadio").prop("checked", false);
         $("#modal-container-createImage #noRadio").prop("checked", true);
+        $("#createImage-instanceName").text("");
 
     });
 
@@ -97,6 +101,8 @@
             alert("container isn't set");
             return false;
         }
+
+        $("#createImage-instanceName").text(currentContainerDetails.container);
     });
 
 

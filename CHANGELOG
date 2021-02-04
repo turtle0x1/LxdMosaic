@@ -1,7 +1,18 @@
 Unreleased
 
+Changed
+    Instance's will now be deleted after a migration
+
 Added
     Tooltips to buttons in the navigation bar (#342)
+    Cron job to gather project analytics
+    Cron job to remove old project analytics
+    Option to load vm console in its own tab (#324)
+    View in settings to download old analytics data (#315)
+
+Removed
+    Cron job to gather old dashboard metrics (#315)
+
 
 0.11.6 - 30/01/2021
 

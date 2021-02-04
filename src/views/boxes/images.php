@@ -273,7 +273,12 @@
             imageData: [currentImageDetails]
         };
         ajaxRequest(globalUrls.images.delete, x, function(data){
-            makeToastr(data);
+            data = makeToastr(data);
+
+            if(data.state == "error"){
+                return false;
+            }
+
             loadImageOverviewAfter();
             currentImageDetails = {
                 hostId: null,

@@ -61,7 +61,9 @@ module.exports = class VgaTerminals {
               });
 
               clientSocket.on("message", (data)=>{
-                  lxdWebSocket.send(data);
+                  if(lxdWebSocket.readyState == 1) {
+                      lxdWebSocket.send(data);
+                  }
               });
 
               lxdWebSocket.on('message', (data) => {

@@ -25,6 +25,11 @@ function makeToastr(x) {
     return x;
 }
 
+// https://stackoverflow.com/a/14438954/4008082
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
+
 
 function formatBytes(bytes,decimals) {
    if(bytes == 0) return '0 Bytes';
@@ -182,6 +187,7 @@ function getSum(total, num) {
 var scalesBytesCallbacks = {
   yAxes: [{
     ticks: {
+      beginAtZero: true,
       callback: function(value, index, values) {
           return formatBytes(value);
       }

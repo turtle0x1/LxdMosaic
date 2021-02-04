@@ -155,7 +155,7 @@ if ($haveServers->haveAny() !== true) {
               //NOTE The url can't be "Analytics" because some ad blockers
               //     will block it by default
               analytics: {
-                  getLatestData: "/api/AnalyticData/GetLatestDataController/get"
+                  getAllData: '/api/AnalyticData/DownloadHistoryController/download'
               },
               backups: {
                   strategies: {
@@ -527,7 +527,9 @@ if ($haveServers->haveAny() !== true) {
 </html>
 <script type='text/javascript'>
 
-$("#userDashboard").hide();
+$(".boxSlide").hide();
+$("#filterDashProjectAnalyticsProject").val("")
+$("#overviewGraphs").html("<h1 class='text-center'><i class='fas fa-cog fa-spin'></i></h1>");
 
 $("#sidebar-ul").on("click", ".nav-item", function(){
     if($(this).hasClass("nav-dropdown")){
@@ -870,10 +872,6 @@ $(document).on("click", ".viewServer", function(){
     let hostAlias = parentLi.data("alias");
 
 
-    $("#dashboardStorageHistoryBox").empty();
-    $("#dashboardRunningInstancesBox").empty();
-    $("#dashboardMemoryHistoryBox").empty();
-    $("#currentMemoryUsageCardBody").empty();
 
     currentContainerDetails = null;
     loadServerView(hostId);
@@ -964,40 +962,6 @@ function loadDashboard(){
             });
         });
 
-        let memoryWidth = ((data.stats.memory.used / data.stats.memory.total) * 100)
-
-        let storageWidth = 0;
-        let formatedStorageTitle = "Not Enough Data"
-        let totalStorage = 0;
-        let usedStorage = 0;
-
-        if(data.analyticsData.hasOwnProperty("storageUsage")){
-            storageWidth = ((parseInt(data.analyticsData.storageUsage.used) / (parseInt(data.analyticsData.storageUsage.used) + parseInt(data.analyticsData.storageUsage.available))) * 100);
-            formatedStorageTitle = formatBytes(data.analyticsData.storageUsage.used);
-            totalStorage = parseInt(data.analyticsData.storageUsage.used) + parseInt(data.analyticsData.storageUsage.available);
-            usedStorage = data.analyticsData.storageUsage.used;
-        }
-
-
-
-        $("#currentMemoryUsageCardBody").empty().append(
-            `
-            <div class="mb-2">
-                <label>Memory</label>
-                <div class="progress">
-                    <div data-toggle="tooltip" data-placement="bottom" title="${formatBytes(data.stats.memory.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.stats.memory.used}" aria-valuemin="0" aria-valuemax="${(data.stats.memory.total - data.stats.memory.used)}"></div>
-                </div>
-            </div>
-            <div>
-                <label>Storage</label>
-                <div class="progress">
-                    <div data-toggle="tooltip" data-placement="bottom" title="${formatedStorageTitle}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${usedStorage}" aria-valuemin="0" aria-valuemax="${totalStorage}"></div>
-                    </div>
-            </div>
-            `
-        );
-
-        $("#currentMemoryUsageCardBody").find('[data-toggle="tooltip"]').tooltip({html: true})
 
         hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
         hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Standalone Hosts</td></tr>`
@@ -1042,103 +1006,124 @@ function loadDashboard(){
         $("#dashboardHostTable > tbody").empty().append(hostsTrs);
         $("#sidebar-ul").empty().append(hosts);
 
-        if(data.analyticsData.hasOwnProperty("warning")){
-            $("#memoryUsage, #activeContainers, #recentStorageCanvas, #stroageUsage").hide().parents(".card-body").find(".notEnoughData").show();
-            return false;
+        let displayItems = {
+            "Instances": {
+                formatBytes: false,
+                icon: 'fas fa-box'
+            },
+            "Disk": {
+                formatBytes: true,
+                icon: 'fas fa-hdd'
+            },
+            "Memory": {
+                formatBytes: true,
+                icon: 'fas fa-memory'
+            }
         }
 
-        $("#dashboardMemoryHistoryBox, #dashboardRunningInstancesBox, #dashboardStorageHistoryBox, #dashboardStorageUsageBox").show().parents(".card-body").find(".notEnoughData").hide();
+        $("#overviewGraphs").empty();
 
+        $.each(data.projectGraphData, (alias, projects)=>{
+            $.each(projects, (project, analytics)=>{
+                let y = $(`
+                <div class="row projectRow" data-project="${project}">
+                    <div class="col-md-12 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                        <h4><i class="fas fa-server text-info mr-2"></i>${alias}</h4>
+                        <h4><i class="fas fa-project-diagram text-info mr-2"></i>${project}</h4>
+                    </div>
+                    <div class="row graphs">
+                    </div>
+                </div>
+                `);
 
-        $("#dashboardStorageHistoryBox").empty().append(`<canvas id="recentStorageCanvas" height="200"></canvas>`);
-        $("#dashboardRunningInstancesBox").empty().append(`<canvas id="activeContainers" height="200"></canvas>`);
-        $("#dashboardMemoryHistoryBox").empty().append(`<canvas id="memoryUsage" height="200"></canvas>`);
+                $.each(displayItems, (title, config)=>{
+                    let labels = [];
+                    let values = [];
+                    let limits = [];
 
-        var mCtx = $('#memoryUsage');
-        var acCtx = $('#activeContainers');
-        var tsuCtx = $('#recentStorageCanvas');
+                    let cId = project + "-" + title.toLowerCase();
 
-        let sum = data.analyticsData.activeContainers.data.reduce(getSum);
+                    $.each(data.projectGraphData[alias][project][title], (_, entry)=>{
+                        labels.push(moment(entry.created).format("HH:mm"))
+                        values.push(entry.value)
+                        limits.push(entry.limit)
+                    });
 
-        let scaleStep = sum > 30 ? 10 : 1;
+                    var totalUsage = values.reduce(function(a, b){
+                        return parseInt(a) + parseInt(b);
+                    }, 0);
 
-        new Chart(acCtx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: "Fleet Active Containers",
-                        borderColor: 'rgba(46, 204, 113, 1)',
-                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
-                        pointBorderColor: "rgba(46, 204, 113, 1)",
-                        data: data.analyticsData.activeContainers.data,
+                    let canvas = `<canvas height="200" width="200" id="${cId}"></canvas>`;
+
+                    if(totalUsage == 0){
+                        canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary mr-2"></i>No Usage</div>'
                     }
-                ],
-                labels: data.analyticsData.activeContainers.labels
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: scaleStep
+
+
+                    let x = $(`<div class='col-md-4'>
+                          <div class="card bg-dark">
+                              <div class="card-header">
+                                  <i class="${config.icon} mr-2"></i>${title}
+                              </div>
+                              <div class="card-body">
+                                ${canvas}
+                              </div>
+                          </div>
+                      </div>`);
+
+                    if(totalUsage > 0){
+                        let graphDataSets = [
+                            {
+                                label: "total",
+                                borderColor: 'rgba(46, 204, 113, 1)',
+                                pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                                pointBorderColor: "rgba(46, 204, 113, 1)",
+                                data: values
+                            }
+                        ];
+
+                        let filtLimits = limits.filter(onlyUnique)
+                        //
+                        if(filtLimits.length !== 1 || filtLimits[0] !== null){
+                            graphDataSets.push({
+                                label: "limit",
+                                borderColor: '#09F',
+                                pointBackgroundColor: "#09F",
+                                pointBorderColor: "#09F",
+                                data: limits
+                            })
                         }
-                    }]
-                }
-            }
-        });
 
-        new Chart(mCtx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: "Memory Usage",
-                        borderColor: 'rgba(46, 204, 113, 1)',
-                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
-                        pointBorderColor: "rgba(46, 204, 113, 1)",
-                        data: data.analyticsData.memory.data,
-                    }
-                ],
-                labels: data.analyticsData.memory.labels
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                scales: scalesBytesCallbacks,
-                tooltips: toolTipsBytesCallbacks
-            }
-        });
+                        let options = {responsive: true};
 
-        new Chart(tsuCtx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: "Storage Usage",
-                        borderColor: 'rgba(46, 204, 113, 1)',
-                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
-                        pointBorderColor: "rgba(46, 204, 113, 1)",
-                        data: data.analyticsData.recentStorageUsage.data,
+                        if (config.formatBytes) {
+                              options.scales = scalesBytesCallbacks;
+                              options.tooltips = toolTipsBytesCallbacks
+                        }else{
+                            options.scales = {
+                                yAxes: [{
+                                  ticks: {
+                                    precision: 0,
+                                    beginAtZero: true
+                                  }
+                                }]
+                            }
+                        }
+
+                        new Chart(x.find("#" + cId), {
+                          type: 'line',
+                          data: {
+                              datasets: graphDataSets,
+                              labels: labels
+                          },
+                          options: options
+                        });
                     }
-                ],
-                labels: data.analyticsData.recentStorageUsage.labels
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Fleet Storage Usage'
-                },
-                legend: {
-                    display: false
-                },
-                scales: scalesBytesCallbacks,
-                tooltips: toolTipsBytesCallbacks
-          }
+                    y[0].append(x[0]);
+                });
+
+                $("#overviewGraphs").append(y)
+            });
         });
     });
 }

@@ -3,28 +3,28 @@
 namespace dhope0000\LXDClient\Tools\Dashboard;
 
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
-use dhope0000\LXDClient\Tools\Analytics\GetLatestData;
 use dhope0000\LXDClient\Model\Users\Dashboard\FetchUserDashboards;
 use dhope0000\LXDClient\Tools\Universe;
 use dhope0000\LXDClient\Tools\Hosts\GetResources;
 use dhope0000\LXDClient\Tools\User\GetUserProject;
+use dhope0000\LXDClient\Tools\ProjectAnalytics\GetGraphableProjectAnalytics;
 
 class GetDashboard
 {
     public function __construct(
         FetchUserProject $fetchUserProject,
-        GetLatestData $getLatestData,
         FetchUserDashboards $fetchUserDashboards,
         Universe $universe,
         GetResources $getResources,
-        GetUserProject $getUserProject
+        GetUserProject $getUserProject,
+        GetGraphableProjectAnalytics $getGraphableProjectAnalytics
     ) {
         $this->fetchUserProject = $fetchUserProject;
-        $this->getLatestData = $getLatestData;
         $this->fetchUserDashboards = $fetchUserDashboards;
         $this->universe = $universe;
         $this->getResources = $getResources;
         $this->getUserProject = $getUserProject;
+        $this->getGraphableProjectAnalytics = $getGraphableProjectAnalytics;
     }
 
     public function get($userId)
@@ -32,14 +32,14 @@ class GetDashboard
         $clustersAndHosts = $this->universe->getEntitiesUserHasAccesTo($userId, "projects");
         $clustersAndHosts = $this->addCurrentProjects($userId, $clustersAndHosts);
         $stats = $this->getStatsFromClustersAndHosts($clustersAndHosts);
-        $analyticsData = $this->getLatestData->get();
         $dashboards = $this->fetchUserDashboards->fetchAll($userId);
+        $projectGraphData = $this->getGraphableProjectAnalytics->getCurrent($userId);
 
         return [
             "userDashboards"=>$dashboards,
             "clustersAndHosts"=>$clustersAndHosts,
             "stats"=>$stats,
-            "analyticsData"=>$analyticsData
+            "projectGraphData"=>$projectGraphData
         ];
     }
 

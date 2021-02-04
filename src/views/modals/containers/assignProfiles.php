@@ -2,22 +2,17 @@
 <div class="modal fade" id="modal-container-assignProfiles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Assign Profiles</h5>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fa-users mr-2"></i>Assigning Profiles To <span id="assingProfilesInstanceName"></span></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span class="text-white" aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
           <div class="form-group">
-              <div>
-                  <label class="div-inline">Profiles</label>
-                  <div class="text-info d-inline">
-                      <i class="fas fa-info-circle mr-1"></i>Only searches profiles on this instances server!
-                  </div>
-              </div>
-
+              <label class="div-inline">Profiles</label>
               <input class="form-control" id="newProfilesListInput"/>
+              <small class="form-text text-muted"><i class="fas fa-info-circle mr-1 text-info"></i>Only searches profiles on this instances server!</small>
           </div>
       </div>
       <div class="modal-footer">
@@ -77,5 +72,7 @@
             alert("container isn't set");
             return false;
         }
+
+        $("#assingProfilesInstanceName").text(currentContainerDetails.container);
     });
 </script>

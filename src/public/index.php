@@ -21,6 +21,7 @@ $container->injectOn($exceptionHandler);
 $router = $container->make("dhope0000\LXDClient\App\RouteController");
 
 $path = ltrim($_SERVER['REQUEST_URI'], '/');    // Trim leading slash(es)
-$explodedPath = array_filter(explode('/', $path));  // Split path on slashes
+$path = parse_url($path);
+$explodedPath = array_filter(explode('/', $path["path"]));  // Split path on slashes
 
 $router->routeRequest($explodedPath);
