@@ -30,6 +30,7 @@ class FetchUsers
         $do->execute();
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
+
     public function fetchLdapIds()
     {
         $sql = "SELECT
@@ -41,5 +42,19 @@ class FetchUsers
                 ";
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    public function fetchAnyAdminUserId()
+    {
+        $sql = "SELECT
+                    `User_ID`
+                FROM
+                    `Users`
+                WHERE
+                    `User_Admin` = 1
+                LIMIT 1;
+                ";
+        $do = $this->database->query($sql);
+        return $do->fetchColumn();
     }
 }

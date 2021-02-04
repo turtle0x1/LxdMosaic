@@ -58,6 +58,7 @@ class GetProjectsOverview
                     $limits["limits.containers"]["value"]++;
                 }
 
+                $limits["limits.instances"]["value"]++;
                 $limits["limits.memory"]["value"] += $instance["state"]["memory"]["usage"];
                 $limits["limits.processes"]["value"] += $instance["state"]["processes"];
                 $limits["limits.cpu"]["value"] += $instance["state"]["cpu"]["usage"];
@@ -85,6 +86,7 @@ class GetProjectsOverview
             "limits.networks"=>["limit"=>null, "value"=>0],
             "limits.processes"=>["limit"=>null, "value"=>0],
             "limits.virtual-machine"=>["limit"=>null, "value"=>0],
+            "limits.instances"=>["limit"=>null, "value"=>0],
         ];
 
         foreach ($expectedKeys as $key=>$details) {

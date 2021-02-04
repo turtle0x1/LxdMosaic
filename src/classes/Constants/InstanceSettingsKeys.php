@@ -11,4 +11,5 @@ class InstanceSettingsKeys
     const LDAP_LOOKUP_USER_PASS = 6;
     const LDAP_BASE_DN = 7;
     const STRONG_PASSWORD_POLICY = 8;
+    const PROJECT_ANALYTICS_STORAGE = 9;
 }
