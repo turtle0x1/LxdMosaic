@@ -195,7 +195,8 @@ if ($haveServers->haveAny() !== true) {
                   getAll: "/api/Networks/GetHostsNetworksController/get",
                   get: "/api/Networks/GetNetworkController/get",
                   deleteNetwork: "/api/Networks/DeleteNetworkController/delete",
-                  createNetwork: "/api/Networks/CreateNetworkController/create"
+                  createNetwork: "/api/Networks/CreateNetworkController/create",
+                  getDashboard: "/api/Networks/GetNetworksDashboardController/get"
               },
               storage: {
                   volumes: {

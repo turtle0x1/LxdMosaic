@@ -9,6 +9,7 @@ Added
     Cron job to remove old project analytics
     Option to load vm console in its own tab (#324)
     View in settings to download old analytics data (#315)
+    Network dashboard (#167)
 
 Removed
     Cron job to gather old dashboard metrics (#315)
