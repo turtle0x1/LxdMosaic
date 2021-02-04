@@ -14,6 +14,10 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12" id="networksOverview">
+            </div>
+        </div>
     </div>
     <div id="networkInfo">
         <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
@@ -133,6 +137,47 @@ function loadNetworksView()
         });
 
         $("#sidebar-ul").empty().append(hosts);
+    });
+    // Dont normally like 2 requests to load dashboard but this could be slow
+    ajaxRequest(globalUrls.networks.getDashboard, {}, (data)=>{
+        data = $.parseJSON(data);
+        let html = "";
+        $("#networksOverview").empty().append(`<h4 class="text-center"><i class="fas fa-cog fa-spin"></i></h4>`)
+        $.each(data.standalone.members, (_, host)=>{
+            if(!host.hostOnline || host.instances.length == 0){
+                return true;
+            }
+            let hostTotals = host.totals;
+            let hostHtml = {};
+            $.each(host.instances, (instance, interfaces)=>{
+                $.each(interfaces, (interfaceName, iTotals)=>{
+                    $.each(iTotals, (key, used)=>{
+                        if(!hostHtml.hasOwnProperty(key)){
+                            hostHtml[key] = "";
+                        }
+
+                        let percent = (used / hostTotals[key]) * 100
+                        let formatedUsed = key.includes("packets") ? parseFloat(used).toLocaleString('en') : formatBytes(used)
+                        let formatedTotal = key.includes("packets") ? parseFloat(hostTotals[key]).toLocaleString('en') : formatBytes(hostTotals[key])
+                        let formatedPercent = parseFloat(percent).toFixed(2);
+                        hostHtml[key] += `${instance} - ${interfaceName} - ${key} - ${formatedPercent}% <div class="progress mb-2" data-toggle="tooltip" data-placement="right" title="${formatedTotal}">
+                            <div class="progress-bar" role="progressbar" data-toggle="tooltip" title="${formatedUsed} - ${formatedPercent}%" style="width: ${percent}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>`
+                    });
+
+                });
+            });
+            html += `<div class='row mb-2'>
+                <div class="col-md-12">
+                    <h4><i class="fas fa-server mr-2"></i>${host.alias} <i class="fas fa-project-diagram ml-2 mr-2"></i>${host.project}</h4>
+                </div>
+            `
+            $.each(Object.keys(hostHtml), (_, key)=>{
+                html += `<div class="col-md-3 border-right">${hostHtml[key]}</div>`;
+            });
+            html += `</div>`;
+        });
+        $("#networksOverview").empty().append(html).find('[data-toggle="tooltip"]').tooltip();
     });
 }
 
