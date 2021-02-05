@@ -486,6 +486,9 @@ if ($haveServers->haveAny() !== true) {
 
           </ul>
         </nav>
+        <div class="sidebar-footer">
+            <small class="float-right">Powered by LXDMosaic</small>
+        </div>
       </div>
       <main class="main">
         <!-- Breadcrumb-->
