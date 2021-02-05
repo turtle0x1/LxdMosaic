@@ -7,6 +7,7 @@ $getSetting = $this->container->make("dhope0000\LXDClient\Model\InstanceSettings
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 $recordActionsEnabled = $getSetting->getSettingLatestValue(InstanceSettingsKeys::RECORD_ACTIONS);
+$siteTitle = $getSetting->getSettingLatestValue(InstanceSettingsKeys::SITE_TITLE);
 
 $userId = $userSession->getUserId();
 $isAdmin = (int) $validatePermissions->isAdmin($userId);
@@ -69,7 +70,7 @@ if ($haveServers->haveAny() !== true) {
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-      <title>LXD Mosaic</title>
+      <title><?= $siteTitle ?></title>
 
       <link rel="stylesheet" href="/assets/dist/external.fontawesome.css">
 
@@ -405,7 +406,7 @@ if ($haveServers->haveAny() !== true) {
     <header class="app-header navbar navbar-dark bg-dark">
       <a class="navbar-brand mr-2" href="#">
              <img src="/assets/lxdMosaic/logo.png" class="mr-2 ml-2" style="width: 25px; height: 25px;" alt="">
-             LXD Mosaic
+             <?= $siteTitle ?>
       </a>
       <ul class="navbar-nav mr-auto d-md-down-none" id="mainNav">
           <li class="nav-item active">
