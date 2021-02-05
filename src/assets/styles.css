@@ -3,6 +3,14 @@ body {
     font-size: .9rem !important;
 }
 
+.sidebar-header {
+    height: 55px;
+    text-align: left !important;
+    padding-left: 0px !important;
+    background-color: #2f353a !important;
+    border-bottom: 1px solid grey;
+}
+
 .btn-purple {
     background-color: #563d7c;
     color: white;
@@ -121,6 +129,11 @@ html[dir=rtl] .sidebar {
   margin-right: -300px;
 }
 
+@media (max-width: 991.98px) {
+    .app-body {
+        margin-top: 0px;
+    }
+}
 @media (max-width: 991.98px) {
     .sidebar {
         width: 300px;
