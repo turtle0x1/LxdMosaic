@@ -403,16 +403,10 @@ if ($haveServers->haveAny() !== true) {
           <input value="1" type="number" name="download"/>
       </form>
     <header class="app-header navbar navbar-dark bg-dark">
-      <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
-        <i class="fas fa-bars" style="color: #dd4814;"></i>
-      </button>
-      <a class="navbar-brand" href="#">
-             <img src="/assets/lxdMosaic/logo.png" style="width: 25px; height: 25px; margin-left: 1px; margin-right: 5px;" alt="">
-        LXD Mosaic
+      <a class="navbar-brand mr-2" href="#">
+             <img src="/assets/lxdMosaic/logo.png" class="mr-2 ml-2" style="width: 25px; height: 25px;" alt="">
+             LXD Mosaic
       </a>
-      <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
-        <i class="fas fa-bars" style="color: #dd4814;"></i>
-      </button>
       <ul class="navbar-nav mr-auto d-md-down-none" id="mainNav">
           <li class="nav-item active">
             <a class="nav-link overview">
@@ -486,10 +480,14 @@ if ($haveServers->haveAny() !== true) {
 
           </ul>
         </nav>
-        <div class="sidebar-footer">
-            <small class="float-right">Powered by LXDMosaic</small>
+        <div class="sidebar-footer d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+            <button class="btn btn-sm text-white sidebar-toggler" style="background-color:transparent; border: 1px solid grey;"  data-toggle="sidebar-lg-show">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <small class="">Powered by LXDMosaic</small>
         </div>
       </div>
+
       <main class="main">
         <!-- Breadcrumb-->
         <ol class="breadcrumb" id="mainBreadcrumb">
@@ -514,6 +512,9 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/backups.php";
                     require __DIR__ . "/boxes/settings.php";
                 ?>
+                <button class="btn btn-dark sidebar-toggler" style="z-index: 990; position: fixed; bottom: 0; left: 0" type="button" data-toggle="sidebar-lg-show">
+                  <i class="fas fa-bars"></i>
+                </button>
             </div>
             <div class="col-md-2">
                 <div class="tree well" id="">

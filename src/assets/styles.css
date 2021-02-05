@@ -104,6 +104,7 @@ body {
 }
 
 .app-body .sidebar {
+  z-index: 999999;
   flex: 0 0 300px;
   order: -1;
 }
