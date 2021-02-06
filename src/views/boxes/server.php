@@ -2,8 +2,8 @@
     <div id="serverOverview">
         <div class="row">
             <div class="col-md-12">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                    <h1 id="serverHeading"></h1>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-1">
+                    <h1><i class="fas fa-server mr-2"></i><span id="serverHeading"></span</h1>
                     <?php if ($isAdmin === 1) : ?>
                     <div class="btn-toolbar float-right">
                       <div class="btn-group mr-2">
@@ -19,6 +19,21 @@
                 </div>
             </div>
         </div>
+        <div class="row mb-2">
+            <div class="col-md-6 border-bottom">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                    <h4><i class="fas fa-memory mr-2"></i>Server Memory Usage</h4>
+                    <h4 id="serverMemoryUsagePercentage"></h4>
+                </div>
+                <div id="serverMemoryUsageBox"></div>
+            </div>
+            <div class="col-md-6 border-bottom">
+                <div class="mb-3">
+                    <h4><i class="fas fa-boxes mr-2"></i>Project Instances Online</h4>
+                    <div id="serverInstancesOnlineBox"></div>
+                </div>
+            </div>
+        </div>
         <div class="row border-bottom pb-2 mb-2">
                 <div class="col-md-12 text-center justify-content">
                     <button type="button" class="btn text-white btn-outline-primary active" id="serverDetailsBtn" data-view="serverInfoBox">
@@ -30,7 +45,7 @@
                 </div>
         </div>
         <div class="row serverViewBox" id="serverInfoBox">
-        <div class="col-md-7">
+        <div class="col-md-8">
             <div class="card bg-dark">
                 <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                     <h4><i class="fas fa-box mr-2"></i>Instances</h4>
@@ -66,24 +81,15 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card bg-dark">
                         <div class="card-header">
-                            <h4><i class="fas fa-server mr-2"></i>Usage & Hardware</h4>
+                            <h4><i class="fas fa-server mr-2"></i>Hardware</h4>
                         </div>
                         <div class="card-body">
-                            <div class="mb-3">
-                                <h4><i class="fas fa-memory mr-2"></i>Server Memory Usage</h4>
-                                <div id="serverMemoryUsageBox"></div>
-                            </div>
-                            <div class="mb-3">
-                                <h4><i class="fas fa-boxes mr-2"></i>Project Instances Online</h4>
-                                <div id="serverInstancesOnlineBox"></div>
-                            </div>
                             <div>
-                                <h4><i class="fas fa-server mr-2"></i>Server Hardware</h4>
                                 <table class="table table-bordered table-dark" id="hostDetailsTable">
                                     <tbody>
                                     </tbody>
@@ -533,32 +539,11 @@ function loadServerView(hostId)
             </div>
         </div>`);
 
-        // $("#serverMemoryUsageBox").empty().append(`<canvas id="memoryStatsChart" style="width: 100%;"></canvas>`);
-        //
-        // new Chart(, {
-        //     type: 'pie',
-        //       data: {
-        //         labels: ['Used', 'Free'],
-        //         datasets: [{
-        //           label: '# of containers',
-        //           data: [, ( - data.resources.memory.used)],
-        //           backgroundColor: [
-        //             'rgba(46, 204, 113, 1)',
-        //             'rgba(189, 195, 199, 1)'
-        //           ],
-        //           borderColor: [
-        //               'rgba(46, 204, 113, 1)',
-        //               'rgba(189, 195, 199, 1)'
-        //           ],
-        //           borderWidth: 1
-        //         }]
-        //       },
-        //       options: {
-        //        	cutoutPercentage: 40,
-        //         responsive: false,
-        //         tooltips: toolTipsBytesCallbacks
-        //       }
-        // });
+        let memUsagePercent = (data.resources.memory.used / data.resources.memory.total) * 100;
+
+        $("#serverMemoryUsagePercentage").text(`${parseFloat(memUsagePercent).toFixed(2)}%`);
+
+        $("#serverBox").find("[data-toggle='tooltip']").tooltip();
     });
 }
 
