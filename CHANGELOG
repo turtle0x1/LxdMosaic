@@ -2,6 +2,7 @@ Unreleased
 
 Changed
     Instance's will now be deleted after a migration
+    Site title based on user input or default of "LXD Mosaic" (#239)
 
 Added
     Tooltips to buttons in the navigation bar (#342)
@@ -10,6 +11,7 @@ Added
     Option to load vm console in its own tab (#324)
     View in settings to download old analytics data (#315)
     Network dashboard (#167)
+    Setting to store site title (#239)
 
 Removed
     Cron job to gather old dashboard metrics (#315)

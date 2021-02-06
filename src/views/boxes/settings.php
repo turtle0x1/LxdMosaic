@@ -872,7 +872,7 @@ $("#usersList").on("click", ".resetPassword", function(e){
     });
 });
 
-$("#settingsOverview").on("click", "#saveSettings", function(){
+$("#instanceSettingsBox").on("click", "#saveSettings", function(){
     let settings = [];
     $("#settingListTable > tbody > tr").each(function(){
         let tr = $(this);

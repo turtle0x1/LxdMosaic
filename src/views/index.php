@@ -7,6 +7,7 @@ $getSetting = $this->container->make("dhope0000\LXDClient\Model\InstanceSettings
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 $recordActionsEnabled = $getSetting->getSettingLatestValue(InstanceSettingsKeys::RECORD_ACTIONS);
+$siteTitle = $getSetting->getSettingLatestValue(InstanceSettingsKeys::SITE_TITLE);
 
 $userId = $userSession->getUserId();
 $isAdmin = (int) $validatePermissions->isAdmin($userId);
@@ -69,7 +70,7 @@ if ($haveServers->haveAny() !== true) {
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-      <title>LXD Mosaic</title>
+      <title><?= $siteTitle ?></title>
 
       <link rel="stylesheet" href="/assets/dist/external.fontawesome.css">
 
@@ -395,99 +396,100 @@ if ($haveServers->haveAny() !== true) {
           });
       </script>
   </head>
-  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <body class="app sidebar-fixed aside-menu-fixed sidebar-lg-show">
       <form style="display: none;" method="POST" id="downloadContainerFileForm" action="/api/Instances/Files/GetPathController/get">
           <input value="" name="hostId"/>
           <input value="" name="path"/>
           <input value="" name="container"/>
           <input value="1" type="number" name="download"/>
       </form>
-    <header class="app-header navbar navbar-dark bg-dark">
-      <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
-        <i class="fas fa-bars" style="color: #dd4814;"></i>
-      </button>
-      <a class="navbar-brand" href="#">
-             <img src="/assets/lxdMosaic/logo.png" style="width: 25px; height: 25px; margin-left: 1px; margin-right: 5px;" alt="">
-        LXD Mosaic
-      </a>
-      <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
-        <i class="fas fa-bars" style="color: #dd4814;"></i>
-      </button>
-      <ul class="navbar-nav mr-auto d-md-down-none" id="mainNav">
-          <li class="nav-item active">
-            <a class="nav-link overview">
-              <i class="fas fa-tachometer-alt"></i>
-              <span class="hideNavText"> Dashboard </span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewBackups">
-              <i class="fas fa-save"></i> <span class="hideNavText"> Backups </span> </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewCloudConfigFiles">
-              <i class="fa fa-cogs"></i> <span class="hideNavText"> Cloud Config </span></a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link viewDeployments">
-              <i class="fas fa-rocket"></i> <span class="hideNavText"> Deployments </span></a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link viewImages">
-              <i class="fa fa-images"></i> <span class="hideNavText"> Images </span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewNetwork">
-              <i class="fas fa-network-wired"></i> <span class="hideNavText"> Networks </span> </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewProfiles callFunc">
-              <i class="fas fa-users"></i>
-              <span class="hideNavText"> Profiles </span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewProjects">
-              <i class="fas fa-project-diagram"></i> <span class="hideNavText"> Projects </span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewStorage">
-              <i class="fas fa-hdd"></i> <span class="hideNavText"> Storage </span> </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link viewSettings">
-              <i class="fas fa-wrench"></i> <span class="hideNavText"> Settings </span> </a>
-          </li>
-        </ul>
-      <ul class="nav navbar-nav ml-auto d-md-down-none">
-          <li class="nav-item px-3 btn btn-outline-purple pull-right" data-toggle="tooltip" data-placement="bottom" title="Search" id="openSearch">
-                <a> <i class="fas fa-search"></i></a>
-          </li>
-          <?php if ($isAdmin === 1) : ?>
-          <li class="nav-item px-3 btn btn-outline-primary pull-right" data-toggle="tooltip" data-placement="bottom" title="Add a new host" id="addNewServer">
-                <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-server"></i> </a>
-           </li>
-          <?php endif; ?>
-          <li class="nav-item px-3 btn btn-outline-success pull-right" data-toggle="tooltip" data-placement="bottom" title="Create a container" id="createContainer">
-                <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-box"></i> </a>
-           </li>
-          <li class="nav-item px-3 btn btn-outline-success pull-right" data-toggle="tooltip" data-placement="bottom" title="Create a VM" id="createVm">
-                <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-vr-cardboard"></i></a>
-           </li>
-           <a href="/logout" class="nav-item px-3 btn btn-outline-secondary pull-right" data-toggle="tooltip" data-placement="bottom" title="Logout" style="height: 35px;">
-                <i style="line-height: 1.25rem" class="fas fa-sign-out-alt"></i>
-            </a>
-      </ul>
-    </header>
     <div class="app-body">
       <div class="sidebar">
+          <div class="sidebar-header d-flex align-items-center" href="#">
+             <img src="/assets/lxdMosaic/logo.png" class="mr-2 ml-2" style="width: 25px; height: 25px;" alt="">
+             <h4 class="d-inline" style="margin-bottom: 0px;"><?= $siteTitle ?></h4>
+          </div>
         <nav class="sidebar-nav">
           <ul class="nav" id="sidebar-ul">
 
           </ul>
         </nav>
+        <div class="sidebar-footer d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+            <button class="btn btn-sm text-white sidebar-toggler" style="background-color:transparent; border: 1px solid grey;"  data-toggle="sidebar-lg-show">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <small class="">Powered by LXDMosaic</small>
+        </div>
       </div>
+
       <main class="main">
+          <header class="app-header navbar navbar-dark" style="background-color: #3a4149; padding-left: 1rem;">
+            <ul class="navbar-nav mr-auto d-md-down-none" id="mainNav">
+                <li class="nav-item active">
+                  <a class="nav-link overview">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="hideNavText"> Dashboard </span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link viewBackups">
+                    <i class="fas fa-save"></i> <span class="hideNavText"> Backups </span> </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link viewCloudConfigFiles">
+                    <i class="fa fa-cogs"></i> <span class="hideNavText"> Cloud Config </span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link viewDeployments">
+                    <i class="fas fa-rocket"></i> <span class="hideNavText"> Deployments </span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link viewImages">
+                    <i class="fa fa-images"></i> <span class="hideNavText"> Images </span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link viewNetwork">
+                    <i class="fas fa-network-wired"></i> <span class="hideNavText"> Networks </span> </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link viewProfiles callFunc">
+                    <i class="fas fa-users"></i>
+                    <span class="hideNavText"> Profiles </span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link viewProjects">
+                    <i class="fas fa-project-diagram"></i> <span class="hideNavText"> Projects </span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link viewStorage">
+                    <i class="fas fa-hdd"></i> <span class="hideNavText"> Storage </span> </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link viewSettings">
+                    <i class="fas fa-wrench"></i> <span class="hideNavText"> Settings </span> </a>
+                </li>
+              </ul>
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item px-3 btn btn-outline-purple pull-right" data-toggle="tooltip" data-placement="bottom" title="Search" id="openSearch">
+                      <a> <i class="fas fa-search"></i></a>
+                </li>
+                <?php if ($isAdmin === 1) : ?>
+                <li class="nav-item px-3 btn btn-outline-primary pull-right" data-toggle="tooltip" data-placement="bottom" title="Add a new host" id="addNewServer">
+                      <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-server"></i> </a>
+                 </li>
+                <?php endif; ?>
+                <li class="nav-item px-3 btn btn-outline-success pull-right" data-toggle="tooltip" data-placement="bottom" title="Create a container" id="createContainer">
+                      <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-box"></i> </a>
+                 </li>
+                <li class="nav-item px-3 btn btn-outline-success pull-right" data-toggle="tooltip" data-placement="bottom" title="Create a VM" id="createVm">
+                      <a> <i class="fas fa-plus mr-2"></i><i class="fas fa-vr-cardboard"></i></a>
+                 </li>
+                 <a href="/logout" class="nav-item px-3 btn btn-outline-secondary pull-right" data-toggle="tooltip" data-placement="bottom" title="Logout" style="height: 35px;">
+                      <i style="line-height: 1.25rem" class="fas fa-sign-out-alt"></i>
+                  </a>
+            </ul>
+          </header>
         <!-- Breadcrumb-->
         <ol class="breadcrumb" id="mainBreadcrumb">
             <li class="breadcrumb-item active">Dashboard</li>
@@ -511,6 +513,9 @@ if ($haveServers->haveAny() !== true) {
                     require __DIR__ . "/boxes/backups.php";
                     require __DIR__ . "/boxes/settings.php";
                 ?>
+                <button class="btn btn-dark sidebar-toggler" style="z-index: 990; position: fixed; bottom: 0; left: 0" type="button" data-toggle="sidebar-lg-show">
+                  <i class="fas fa-bars"></i>
+                </button>
             </div>
             <div class="col-md-2">
                 <div class="tree well" id="">
