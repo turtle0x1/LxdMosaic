@@ -12,6 +12,10 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12" id="profileCards">
+        </div>
+    </div>
 </div>
 <div id="profileDetails">
     <div class="row border-bottom">
@@ -160,6 +164,62 @@ function makeHostHtml(hosthtml, host, selectedProfile = null, selectedHost = nul
     return hosthtml;
 }
 
+function makeHostProfileCard(hostId, hostName, profiles)
+{
+    if(Object.keys(profiles).length == 0){
+        return "";
+    }
+
+    let tbody = "";
+
+    $.each(profiles, (profileName, profileValues)=>{
+
+        let vDataIcon = profileValues.hasVendorData == 1 ? 'check text-success' : 'times';
+        let userVDataIcon = profileValues.hasUserData == 1 ? 'check text-success' : 'times';
+
+        tbody += `<tr>
+            <td><a href="#" data-profile="${profileName}" data-host-alias="${hostName}" data-host-id="${hostId}" class='loadProfileFromDash'>${profileName}</a></td>
+            <td><i class="fas fa-${userVDataIcon}"></i></td>
+            <td><i class="fas fa-${vDataIcon}"></i></td>
+            <td>${profileValues.proxy}</td>
+            <td>${profileValues.usb}</td>
+            <td>${profileValues.disk}</td>
+            <td>${profileValues.tpm}</td>
+            <td>${profileValues.gpu}</td>
+            <td>${profileValues.instances.length}</td>
+        </tr>`;
+    })
+
+    return `<div class="card bg-dark text-white">
+        <div class="card-header">
+            <h4><i class='fas fa-server mr-2'></i>${hostName}</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-dark table-bordered">
+                <thead>
+                    <tr>
+                        <td>Profile</td>
+                        <td>User Data</td>
+                        <td>Vendor Data</td>
+                        <td>Proxies</td>
+                        <td>USB's</td>
+                        <td>Disks</td>
+                        <td>TPM's</td>
+                        <td>GPU's</td>
+                        <td>Instances</td>
+                    </tr>
+                </thead>
+                <tbody>
+                ${tbody}
+                </tbody>
+            </table>
+        </div>
+    </div>`;
+}
+
+$("#profileOverview").on("click", ".loadProfileFromDash", function(){
+    viewProfile($(this).data("profile"), $(this).data("hostAlias"), $(this).data("hostId"));
+});
 
 function loadProfileView(selectedProfile = null, selectedHost = null, callback = null)
 {
@@ -194,6 +254,23 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
         if($.isFunction(callback)){
             callback();
         }
+    });
+    
+    $("#profileCards").empty().append(`<h4 class='text-center'><i class="fas fa-cog fa-spin"></i></h4>`)
+    ajaxRequest(globalUrls.profiles.getDashboard, null, function(data){
+        var data = $.parseJSON(data);
+        let cards = "";
+
+        $.each(data.clusters, (clusterIndex, cluster)=>{
+            $.each(cluster.members, (_, host)=>{
+                cards += makeHostProfileCard(host.hostId, `Cluster ${clusterIndex}`, host.profiles);
+            })
+        });
+
+        $.each(data.standalone.members, (_, host)=>{
+            cards += makeHostProfileCard(host.hostId, host.alias, host.profiles);
+        });
+        $("#profileCards").empty().append(cards);
     });
 }
 
