@@ -230,6 +230,7 @@ if ($haveServers->haveAny() !== true) {
                   rename: '/api/Profiles/RenameProfileController/rename',
                   copy: '/api/Profiles/CopyProfileController/copyProfile',
                   create: '/api/Profiles/CreateProfileController/create',
+                  getDashboard: '/api/Profiles/GetProfilesDashboardController/get',
               },
               hosts: {
                   gpu: {
