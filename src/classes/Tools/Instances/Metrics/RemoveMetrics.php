@@ -26,8 +26,26 @@ class RemoveMetrics
     {
         $metrics = $this->fetchMetrics->fetchGroupedByFiveMinutes();
         $groupedByHost = $this->groupMetrics($metrics);
-        $idsToDelete = $this->averageAndInsertGrouped($groupedByHost);
-        $this->deleteMetrics->deleteByIds($idsToDelete);
+        $result = $this->averageGrouped($groupedByHost);
+        
+        if (!empty($result["toDelete"])) {
+            $this->deleteMetrics->deleteByIds($result["toDelete"]);
+        }
+
+        $this->insertMetrics($result["toInsert"]);
+    }
+
+    public function insertMetrics(array $toInsert)
+    {
+        foreach ($toInsert as $metric) {
+            $this->insertMetric->insert(
+                $metric[0],
+                $metric[1],
+                $metric[2],
+                $metric[3],
+                $metric[4]
+            );
+        }
     }
 
     public function groupMetrics($metrics)
@@ -43,7 +61,7 @@ class RemoveMetrics
             if (!isset($groupedByHost[$hostId])) {
                 $groupedByHost[$hostId] = [];
             }
-            
+
             if (!isset($groupedByHost[$hostId][$project])) {
                 $groupedByHost[$hostId][$project] = [];
             }
@@ -64,9 +82,10 @@ class RemoveMetrics
         return $groupedByHost;
     }
 
-    public function averageAndInsertGrouped(array $groupedByHost)
+    public function averageGrouped(array $groupedByHost)
     {
         $idsToDelete = [];
+        $toInsert = [];
         foreach ($groupedByHost as $hostId => $projects) {
             foreach ($projects as $project => $instances) {
                 foreach ($instances as $instance => $types) {
@@ -100,18 +119,18 @@ class RemoveMetrics
                             $newDate = (new \DateTime($dTime))->modify("+5 minutes");
 
                             // Inserting in a loop is slow should probably try to batch
-                            $this->insertMetric->insert(
+                            $toInsert[] = [
                                 $newDate->format("Y-m-d H:i:s"),
                                 $hostId,
                                 $instance,
                                 $typeId,
                                 json_encode($periodAverages)
-                            );
+                            ];
                         }
                     }
                 }
             }
         }
-        return $idsToDelete;
+        return ["toDelete"=>$idsToDelete, "toInsert"=>$toInsert];
     }
 }
