@@ -30,4 +30,17 @@ class DeleteMetrics
         ]);
         return $do->rowCount() ? true : false;
     }
+
+    public function deleteByIds(array $ids)
+    {
+        $qMarks = join(',', array_fill(0, count($ids), '?'));
+        $sql = "DELETE FROM
+                    `Instance_Metric_Values`
+                WHERE
+                    `IMV_ID` IN ($qMarks)
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute($ids);
+        return $do->rowCount() ? true : false;
+    }
 }

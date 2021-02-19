@@ -81,4 +81,26 @@ class FetchMetrics
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function fetchGroupedByFiveMinutes()
+    {
+        $sql = "SELECT
+                    `IMV_ID` as `id`,
+                    `IMV_Host_ID` as `hostId`,
+                    `IMV_Instance_Name` as `instance`,
+                    `IMV_Project_Name` as `project`,
+                    `IMV_IMT_ID` as `typeId`,
+                    FROM_UNIXTIME(
+                        FLOOR(UNIX_TIMESTAMP(`IMV_Date`) / 300) * 300
+                    ) as `dTime`,
+                    `IMV_Data` as `data`,
+                    `IMV_Date` as `origDate`
+                FROM
+                    `Instance_Metric_Values`
+                WHERE
+                    `IMV_Date` < now() - interval 1 DAY
+        ";
+        $do = $this->database->query($sql);
+        return $do->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
