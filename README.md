@@ -41,6 +41,10 @@ your support needs aren't best serviced.
 
 `sudo snap install lxdmosaic`
 
+You can set the ports using the following command
+
+`sudo snap set lxdmosaic ports.http=81 ports.https=444`
+
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/lxdmosaic)
 
 ### Install script
