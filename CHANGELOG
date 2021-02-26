@@ -18,6 +18,7 @@ Removed
 
 Fixed
     Cant create backups from web ui (#351)
+    Instance host name breadcumb not correct when changing project (#350)
 
 
 0.11.6 - 30/01/2021
