@@ -943,7 +943,7 @@ function loadDashboard(){
                     projects = "<select class='form-control changeHostProject'>";
                     $.each(host.projects, function(o, project){
                         let selected = project == host.currentProject ? "selected" : "";
-                            projects += `<option data-alias="${alias}" data-host='${data.hostId}'
+                            projects += `<option data-alias="${host.alias}" data-host='${data.hostId}'
                                 value='${project}' ${selected}>
                                 ${project}</option>`;
                     });
@@ -989,7 +989,7 @@ function loadDashboard(){
                 projects = "<select class='form-control changeHostProject'>";
                 $.each(host.projects, function(o, project){
                     let selected = project == host.currentProject ? "selected" : "";
-                        projects += `<option data-alias="${alias}" data-host='${host.hostId}'
+                        projects += `<option data-alias="${host.alias}" data-host='${host.hostId}'
                             value='${project}' ${selected}>
                             ${project}</option>`;
                 });
