@@ -21,7 +21,7 @@ final class RemoveMetricsTest extends TestCase
                 "project"=>"default",
                 "instance"=>"test",
                 "typeId"=>1,
-                "dTime"=>(new \DateTime("now -30days"))->setTime(00, 00)->format("Y-m-d H:i:s"),
+                "dTime"=>(new \DateTime("2021-01-20"))->setTime(00, 00)->format("Y-m-d H:i:s"),
                 "data"=>json_encode([
                     "usage" => 1,
                     "swap_usage" => 0,
@@ -35,7 +35,7 @@ final class RemoveMetricsTest extends TestCase
                 "project"=>"default",
                 "instance"=>"test",
                 "typeId"=>1,
-                "dTime"=>(new \DateTime("now -30days"))->setTime(00, 00)->format("Y-m-d H:i:s"),
+                "dTime"=>(new \DateTime("2021-01-20"))->setTime(00, 00)->format("Y-m-d H:i:s"),
                 "data"=>json_encode([
                     "usage" => 2,
                     "swap_usage" => 0,
@@ -49,7 +49,7 @@ final class RemoveMetricsTest extends TestCase
                 "project"=>"default",
                 "instance"=>"test",
                 "typeId"=>1,
-                "dTime"=>(new \DateTime("now -30days"))->setTime(00, 00)->format("Y-m-d H:i:s"),
+                "dTime"=>(new \DateTime("2021-01-20"))->setTime(00, 00)->format("Y-m-d H:i:s"),
                 "data"=>json_encode([
                     "usage" => 3,
                     "swap_usage" => 0,
