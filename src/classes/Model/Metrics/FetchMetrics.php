@@ -82,7 +82,7 @@ class FetchMetrics
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function fetchGroupedByFiveMinutes()
+    public function fetchGroupedByFiveMinutes(\DateTimeInterface $olderThan)
     {
         $sql = "SELECT
                     `IMV_ID` as `id`,
@@ -98,9 +98,14 @@ class FetchMetrics
                 FROM
                     `Instance_Metric_Values`
                 WHERE
-                    `IMV_Date` < now() - interval 1 DAY
+                    `IMV_Date` < :olderThan
+                ORDER BY
+                    `IMV_Date` ASC
         ";
-        $do = $this->database->query($sql);
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":olderThan"=>$olderThan->format("Y-m-d H:i:s")
+        ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

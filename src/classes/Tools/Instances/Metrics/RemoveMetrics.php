@@ -24,10 +24,19 @@ class RemoveMetrics
 
     public function remove()
     {
-        $metrics = $this->fetchMetrics->fetchGroupedByFiveMinutes();
+        $olderThan = new \DateTime("-1 day");
+        $olderThan->setTime(
+            $olderThan->format('H'),
+            $olderThan->format('i'),
+            00
+        );
+
+        
+
+        $metrics = $this->fetchMetrics->fetchGroupedByFiveMinutes($olderThan);
         $groupedByHost = $this->groupMetrics($metrics);
         $result = $this->averageGrouped($groupedByHost);
-        
+
         if (!empty($result["toDelete"])) {
             $this->deleteMetrics->deleteByIds($result["toDelete"]);
         }
@@ -90,11 +99,22 @@ class RemoveMetrics
             foreach ($projects as $project => $instances) {
                 foreach ($instances as $instance => $types) {
                     foreach ($types as $typeId => $dTimes) {
+                        $numberOfDTimes = count($dTimes);
+                        $i = 0;
                         foreach ($dTimes as $dTime => $metrics) {
                             $noEntries = count($metrics);
+                            $i ++;
+
                             // Already been averaged no point re-averaging
-                            if ($noEntries == 1) {
+                            if ($noEntries < 5) {
                                 continue;
+                            }
+
+                            // If there are 6 entries then the first one is
+                            // already an average
+                            if ($noEntries == 6) {
+                                unset($metrics[array_keys($metrics)[0]]);
+                                $noEntries--;
                             }
 
                             $keys = [];
