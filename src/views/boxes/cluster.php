@@ -58,7 +58,7 @@ function loadClusterView(clusterId){
 
         let membersHtml = "";
 
-        if(cluster.members.length <= 3){
+        if(cluster.members.length < 3){
             $("#twoMemberWarning").show();
         }else{
             $("#twoMemberWarning").hide();
