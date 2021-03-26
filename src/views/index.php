@@ -178,12 +178,14 @@ if ($haveServers->haveAny() !== true) {
                 users: {
                     allowedProjects: {
                         grantAcess: '/api/User/AllowedProjects/GrantAccessController/grant',
+                        grantAcessToProject: '/api/User/AllowedProjects/GrantAccessToProjectController/grant',
                         revokeAccess: '/api/User/AllowedProjects/RevokeAccessController/revoke',
                         getAllowed: '/api/User/AllowedProjects/GetUserAllowedProjectsController/get'
                     },
                     resetPassword: '/api/InstanceSettings/Users/ResetPasswordController/reset',
                     add: '/api/InstanceSettings/Users/AddUserController/add',
                     getAll: '/api/InstanceSettings/Users/GetUsersController/getAll',
+                    search: '/api/InstanceSettings/Users/SeachUsersController/search'
                 },
                 getAll: "/api/InstanceSettings/GetAllSettingsController/getAll",
                 saveAll: "/api/InstanceSettings/SaveAllSettingsController/saveAll",
@@ -306,12 +308,16 @@ if ($haveServers->haveAny() !== true) {
                   setHostProject: '/api/User/SetHostProjectController/set'
               },
               projects: {
+                  users: {
+                    getUsersWithAccess: '/api/Projects/Users/GetUsersWithAccessController/get'
+                  },
                   search:{
                     getCommonToHosts: '/api/Projects/Search/GetCommonToHostsProjectsController/get',
                   },
                   getOverview: '/api/Projects/GetProjectsOverviewController/get',
                   create: '/api/Projects/CreateProjectController/create',
                   getAllFromHosts: '/api/Projects/GetHostsProjectsController/get',
+                  getProjectsOverview: '/api/Projects/GetHostsProjectsOverviewController/get',
                   info: '/api/Projects/GetProjectInfoController/get',
                   rename: '/api/Projects/RenameProjectController/rename',
                   delete: '/api/Projects/DeleteProjectController/delete',
@@ -1288,9 +1294,15 @@ $(document).on("click", ".viewBackups", function(){
     loadBackupsView();
     changeActiveNav(".viewBackups")
 });
+
+$(document).on("click", ".openProjectAccess", function(){
+    projectAccessObj = $(this).data();
+    $("#modal-projects-access").modal("show");
+});
 </script>
 <?php
     require_once __DIR__ . "/modals/hosts/addHosts.php";
     require_once __DIR__ . "/modals/images/import.php";
+    require_once __DIR__ . "/modals/projects/projectAccess.php";
 ?>
 </html>

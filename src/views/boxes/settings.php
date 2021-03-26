@@ -299,6 +299,12 @@
             </div>
         </div>
     </div>
+    <div id="userProjectOverview" class="settingsBox">
+        <div class="row">
+            <div class="col-md-12" id="allProjectsOverview">
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -334,6 +340,11 @@ function loadSettingsView()
         <li class="nav-item users-overview">
             <a class="nav-link" href="#">
                 <i class="fas fa-users-cog mr-2"></i>Users
+            </a>
+        </li>
+        <li class="nav-item user-project-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-users-cog mr-2"></i>User Project Access
             </a>
         </li>
         <li class="nav-item recorded-actions-overview">
@@ -375,6 +386,78 @@ function loadSettingsView()
         $("#apiKeyTable > tbody").empty().append(trs);
     });
 
+}
+
+function makeHostUserOverview(html, host){
+    let disabled = "";
+
+    if(host.hostOnline == false){
+        disabled = "disabled text-warning text-strikethrough";
+    }
+
+    html += `<div class="card mb-2 bg-dark text-white">
+        <div class="card-header">
+            <h4 class="${disabled}">
+                <i class="fas fa-server"></i> ${host.alias}
+            </h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-dark">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Users</th>
+                        <th>Manage</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+    $.each(host.projects, function(project, details){
+        html += `<tr>
+            <td>${project}</td>
+        `;
+        let noOfUser = details.users.length;
+        if(noOfUser > 0){
+            html += `<td>`
+            $.each(details.users.slice(0, 10), (_, user)=>{
+                html += `<div class="badge badge-primary m-2">${user.userName}</div>`
+            });
+
+            if(noOfUser >= 10){
+                html += `<a href='#'>+ ${noOfUser - 10} more</a>`
+            }
+            html += `</td>`
+        }else{
+            html += `<td><small><i class="fas fa-info-circle text-info mr-2"></i>No Users Have Access</small></td>`
+        }
+
+        html += `<td><button class="btn btn-primary openProjectAccess" data-host-id="${host.hostId}" data-project="${project}"><i class="fas fa-users"></i></button></td>`
+
+        html += `</tr>`;
+    });
+
+    html += "</tbody></table></div></div>";
+    return html;
+}
+
+function loadProjectAccesOverview(){
+    ajaxRequest(globalUrls.projects.getProjectsOverview, {}, (data)=>{
+        data = $.parseJSON(data);
+        let hosts = "";
+        $.each(data.clusters, (clusterIndex, cluster)=>{
+            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            $.each(cluster.members, (_, host)=>{
+                hosts = makeHostUserOverview(hosts, host)
+            })
+        });
+
+        $.each(data.standalone.members, (_, host)=>{
+            hosts = makeHostUserOverview(hosts, host)
+        });
+
+        $("#allProjectsOverview").empty().append(hosts);
+    });
 }
 
 function loadRecordedActions(ammount = 30){
@@ -597,6 +680,13 @@ $("#sidebar-ul").on("click", ".retired-data-overview", function(){
     $(".settingsBox").hide();
     $("#retiredData").show();
     addBreadcrumbs(["Retired Data"], ["active"], true);
+});
+
+$("#sidebar-ul").on("click", ".user-project-overview", function(){
+    loadProjectAccesOverview();
+    $(".settingsBox").hide();
+    $("#userProjectOverview").show();
+    addBreadcrumbs(["User Projects"], ["active"], true);
 });
 
 $("#retiredData").on("click", "#downloadOldFleetAnalytics", function(){
