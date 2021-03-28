@@ -4,6 +4,8 @@ namespace dhope0000\LXDClient\Tools\Ldap;
 
 use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
+use dhope0000\LXDClient\Exceptions\Users\CantFindUserException;
+use dhope0000\LXDClient\Exceptions\Users\PasswordIncorrectException;
 
 class Ldap
 {
@@ -34,6 +36,32 @@ class Ldap
             throw new \Exception("Couldn't login with acount $adminUser", 1);
         }
         return $con;
+    }
+
+    /**
+     * Returns username that can be looked up in the DB
+     */
+    public function verifyAccount($con, $username, $password) :string
+    {
+        $baseDn = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_BASE_DN);
+        $filter = "(|(cn=$username,{$baseDn})(mail=$username))"; // where to look for specified "user name"
+
+        $attrs = array("dn", "cn");
+        $search = ldap_search($con, $baseDn, $filter, $attrs);
+        $entries = ldap_get_entries($con, $search);
+        if ($entries["count"] == 0) {
+            throw new CantFindUserException($username);
+        }
+
+        $bind = @ldap_bind($con, $entries[0]["dn"], $password);
+
+        if (!$bind) {
+            throw new PasswordIncorrectException($username);
+        }
+
+        // Return a CN we can look up in the DB incase user logged in with
+        // a mail account
+        return $entries[0]["cn"][0];
     }
 
     public function getAdminBoundConnection()
