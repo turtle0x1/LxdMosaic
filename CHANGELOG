@@ -12,6 +12,7 @@ Added
     View in settings to download old analytics data (#315)
     Network dashboard (#167)
     Setting to store site title (#239)
+    Allow logging in with LDAP mail address (#359)
 
 Removed
     Cron job to gather old dashboard metrics (#315)

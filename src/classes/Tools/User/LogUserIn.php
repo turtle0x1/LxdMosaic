@@ -10,6 +10,8 @@ use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 use dhope0000\LXDClient\Tools\Ldap\Ldap;
+use dhope0000\LXDClient\Exceptions\Users\CantFindUserException;
+use dhope0000\LXDClient\Exceptions\Users\PasswordIncorrectException;
 
 class LogUserIn
 {
@@ -31,34 +33,37 @@ class LogUserIn
 
     public function login(string $username, string $password)
     {
-        $ldapId = $this->fetchUserDetails->fetchLdapId($username);
+        $isLdapUser = !is_null($this->fetchUserDetails->fetchLdapId($username));
+        $passwordHash = $this->fetchUserDetails->fetchHash($username);
 
-        if (!empty($ldapId)) {
-            $server = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_SERVER);
+        $server = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_SERVER);
 
-            if (empty($server)) {
-                throw new \Exception("Contact your admin, login can't be resolved until then!", 1);
-            }
+        $haveLdapServer = !empty($server);
+        $havePasswordHash = !empty($passwordHash);
 
-            $baseDn = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_BASE_DN);
-            try {
-                $ldapconn = $this->ldap->getAdminBoundConnection($server);
-                $this->ldap->bindLdapOrThrow($ldapconn, "cn=$username,{$baseDn}", $password);
-            } catch (\Throwable $e) {
-                throw new \Exception("Password incorrect", 1);
-            }
-        } else {
-            $hash = $this->fetchUserDetails->fetchHash($username);
-
-            if (empty($hash)) {
-                throw new \Exception("Username not found", 1);
-            }
-            if (password_verify($password, $hash) !== true) {
-                throw new \Exception("Password incorrect", 1);
-            }
+        //NOTE This will throw in "error" if the ldap server param has been unset
+        // and the user is trying to login with an email address!
+        if (!$haveLdapServer && !$havePasswordHash) {
+            throw new CantFindUserException($username);
         }
 
-
+        // Local user
+        if ($havePasswordHash && !$isLdapUser) {
+            if (password_verify($password, $passwordHash) !== true) {
+                throw new PasswordIncorrectException($username);
+            }
+        } elseif ($isLdapUser || $haveLdapServer) {
+            try {
+                $ldapconn = $this->ldap->getAdminBoundConnection($server);
+            } catch (\Throwable $e) {
+                throw new \Exception("Can't login right now - contact admin", 1);
+            }
+            // Will throw if cant find user / cant bind & gives us back a
+            // username that we should be able to fetch from DB
+            $username = $this->ldap->verifyAccount($ldapconn, $username, $password);
+        } elseif ($isLdapUser || !$haveLdapServer) {
+            throw new \Exception("Can't login right now - contact admin", 1);
+        }
 
         $userId = $this->fetchUserDetails->fetchId($username);
 
