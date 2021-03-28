@@ -44,6 +44,23 @@ class FetchUsers
         return $do->fetchAll(\PDO::FETCH_COLUMN);
     }
 
+    public function search(string $search)
+    {
+        $sql = "SELECT
+                    `User_ID` as `id`,
+                    `User_Name` as `name`
+                FROM
+                    `Users`
+                WHERE
+                    `User_Name` LIKE :userName
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":userName"=>"%$search%"
+        ]);
+        return $do->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function fetchAnyAdminUserId()
     {
         $sql = "SELECT

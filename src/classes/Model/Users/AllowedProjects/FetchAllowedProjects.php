@@ -28,6 +28,22 @@ class FetchAllowedProjects
         ]);
         return $do->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_COLUMN, 1);
     }
+
+    public function fetchAllUsersPermissions()
+    {
+        $sql = "SELECT
+                    `UAP_Host_ID` as `hostId`,
+                    `UAP_Project` as `project`,
+                    `UAP_User_ID` as `userId`,
+                    `User_Name` as `userName`
+                FROM
+                    `User_Allowed_Projects`
+                LEFT JOIN `Users` ON
+                    `User_ID` = `UAP_User_ID`
+                ";
+        $do = $this->database->query($sql);
+        return $do->fetchAll(\PDO::FETCH_ASSOC);
+    }
     public function fetchForHost(int $userId, int $hostId)
     {
         $sql = "SELECT
@@ -45,6 +61,29 @@ class FetchAllowedProjects
             ":hostId"=>$hostId
         ]);
         return $do->fetchAll(\PDO::FETCH_COLUMN, 0);
+    }
+
+    public function fetchForHostProject(int $hostId, string $project)
+    {
+        $sql = "SELECT
+                    `UAP_ID` as `id`,
+                    `UAP_User_ID` as `userId`,
+                    `Users`.`User_Name` as `userName`
+                FROM
+                    `User_Allowed_Projects`
+                LEFT JOIN `Users` ON
+                	`Users`.`User_ID` = `UAP_User_ID`
+                WHERE
+                    `UAP_Host_ID` = :hostId
+                AND
+                    `UAP_Project` = :project
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId,
+            ":project"=>$project
+        ]);
+        return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function fetchUsersCanAcessProject(int $hostId, string $project)
