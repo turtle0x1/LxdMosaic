@@ -44,7 +44,8 @@ class Ldap
     public function verifyAccount($con, $username, $password) :string
     {
         $baseDn = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_BASE_DN);
-        $filter = "(|(cn=$username,{$baseDn})(mail=$username))"; // where to look for specified "user name"
+        $username = ldap_escape($username, "", LDAP_ESCAPE_FILTER);
+        $filter = "(|(cn=$username)(mail=$username))"; // where to look for specified "user name"
 
         $attrs = array("dn", "cn");
         $search = ldap_search($con, $baseDn, $filter, $attrs);
