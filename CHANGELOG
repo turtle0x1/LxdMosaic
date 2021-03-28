@@ -6,8 +6,7 @@ Changed
 
 Added
     Tooltips to buttons in the navigation bar (#342)
-    Cron job to gather project analytics
-    Cron job to remove old project analytics
+    Cron job to gather project analytics (#314)
     Option to load vm console in its own tab (#324)
     View in settings to download old analytics data (#315)
     Network dashboard (#167)
