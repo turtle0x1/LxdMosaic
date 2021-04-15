@@ -30,6 +30,29 @@ systemctl restart httpd
 
 ```
 
+## 0.11.X -> 0.12.0
+```
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout v0.12.0
+
+npm i
+
+composer install --no-dev
+
+vendor/bin/phinx migrate -e mysql
+
+# Restart node server - be careful may interupt console sessions
+pm2 restart all
+
+#Ubuntu
+systemctl restart apache2
+#Centos
+systemctl restart httpd
+```
+
 ## 0.10.X -> 0.11.0
 ```
 cd /var/www/LxdMosaic
