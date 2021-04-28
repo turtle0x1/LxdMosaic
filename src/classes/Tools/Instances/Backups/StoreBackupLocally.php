@@ -65,7 +65,8 @@ class StoreBackupLocally
             $project,
             $instance,
             $backup,
-            $backupInfo["backupFile"]
+            $backupInfo["backupFile"],
+            $backupInfo["filesize"]
         );
 
         if ($deleteRemote) {
@@ -91,6 +92,7 @@ class StoreBackupLocally
         $this->downloadFile->download($host, $project, $instance, $backupFilePath, $backup);
 
         return [
+            "filesize"=>filesize($backupFilePath),
             "backupFile"=>$backupFilePath,
             "created"=>$backupInfo["created_at"]
         ];

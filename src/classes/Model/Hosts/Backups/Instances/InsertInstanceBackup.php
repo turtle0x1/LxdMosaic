@@ -17,7 +17,8 @@ class InsertInstanceBackup
         string $project,
         string $instance,
         string $backup,
-        string $localPath
+        string $localPath,
+        int $filesize
     ) {
         $sql = "INSERT INTO `Container_Backups`
                 (
@@ -26,14 +27,16 @@ class InsertInstanceBackup
                     `CB_Project`,
                     `CB_Container`,
                     `CB_Backup`,
-                    `CB_Local_Path`
+                    `CB_Local_Path`,
+                    `CB_Filesize`
                 ) VALUES (
                     :backupDateCreated,
                     :hostId,
                     :project,
                     :instance,
                     :backup,
-                    :localPath
+                    :localPath,
+                    :filesize
                 );";
         $do = $this->database->prepare($sql);
         $do->execute([
@@ -42,7 +45,8 @@ class InsertInstanceBackup
             ":project"=>$project,
             ":instance"=>$instance,
             ":backup"=>$backup,
-            ":localPath"=>$localPath
+            ":localPath"=>$localPath,
+            ":filesize"=>$filesize
         ]);
         return $this->database->lastInsertId();
     }
