@@ -21,7 +21,8 @@ final class RestoreBackupControllerTest extends TestCase
             "default",
             "fakeInstance",
             "fakeBackupName",
-            "/not/a/real/path"
+            "/not/a/real/path",
+            0
         );
     }
 

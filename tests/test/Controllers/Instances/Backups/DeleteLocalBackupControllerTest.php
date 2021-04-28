@@ -11,7 +11,7 @@ final class DeleteLocalBackupControllerTest extends TestCase
         $builder->useAnnotations(true);
         $container = $builder->build();
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
-        
+
         $this->database = $container->get("dhope0000\LXDClient\Model\Database\Database");
         $this->database->dbObject->beginTransaction();
         $inesrtBackup = $container->make("dhope0000\LXDClient\Model\Hosts\Backups\Instances\InsertInstanceBackup");
@@ -21,7 +21,8 @@ final class DeleteLocalBackupControllerTest extends TestCase
             "default",
             "fakeInstance",
             "fakeBackupName",
-            "/not/a/real/path"
+            "/not/a/real/path",
+            0
         );
     }
 
