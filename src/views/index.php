@@ -1057,7 +1057,7 @@ function loadDashboard(){
                     let cId = project + "-" + title.toLowerCase();
 
                     $.each(data.projectGraphData[alias][project][title], (_, entry)=>{
-                        labels.push(moment(entry.created).format("HH:mm"))
+                        labels.push(moment.utc(entry.created).local().format("HH:mm"))
                         values.push(entry.value)
                         limits.push(entry.limit)
                     });
