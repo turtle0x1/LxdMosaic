@@ -12,6 +12,8 @@ class Database
             $this->dbObject = new \PDO("mysql:host=" . $_ENV["DB_HOST"] . ";
             dbname=" . $_ENV["DB_NAME"] ."", $_ENV["DB_USER"], $_ENV["DB_PASS"]);
         }
+        $tz = (new \DateTime('now', new \DateTimeZone('UTC')))->format('P');
+        $this->dbObject->exec("SET time_zone='$tz';");
         $this->dbObject->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
