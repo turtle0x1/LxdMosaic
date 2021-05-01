@@ -564,9 +564,13 @@ function loadInstanceSettings(){
                 </i>`,
         }
 
-        $.each(data.settings, function(_, item){
+        let currentTimezone = "";
 
-            if(ldapKeys.includes(parseInt(item.settingId))){
+        $.each(data.settings, function(_, item){
+            if(item.settingId == 11){
+                currentTimezone = item.currentValue;
+                return true;
+            }else if(ldapKeys.includes(parseInt(item.settingId))){
                 let extraText = ldapExtraText.hasOwnProperty(item.settingId) ? ldapExtraText[item.settingId] : "";
                 let tr = `<tr data-setting-id="${item.settingId}">
                         <td>${item.settingName}${extraText}</td>
@@ -581,6 +585,18 @@ function loadInstanceSettings(){
                 trs += tr;
             }
         });
+
+        let timezoneOptions = "<option value=''>Please select</option>";
+
+        $.each(data.timezones, (_, timezone)=>{
+            let s = timezone == currentTimezone ? "selected" : "";
+            timezoneOptions += `<option value="${timezone}" ${s}>${timezone}</option>`
+        });
+
+        trs += `<tr data-setting-id="11">
+            <td>Timezone</td>
+            <td><select name="settingValue" class="form-control">${timezoneOptions}</select></td>
+        </tr>`
 
         if(data.versionDetails.cantSeeGithub){
             $("#currentVersion").text("Cant see github");
@@ -969,7 +985,7 @@ $("#instanceSettingsBox").on("click", "#saveSettings", function(){
 
         settings.push({
             id: tr.data("settingId"),
-            value: tr.find("input[name=settingValue]").val()
+            value: tr.find("[name=settingValue]").val()
         });
     });
     ajaxRequest(globalUrls.settings.saveAll, {settings: settings}, (data)=>{
