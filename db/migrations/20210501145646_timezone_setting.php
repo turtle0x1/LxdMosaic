@@ -21,7 +21,8 @@ final class TimezoneSetting extends AbstractMigration
         if ($this->isMigratingUp()) {
             // Add new setting
             $this->execute("INSERT INTO `Instance_Settings`(`IS_ID`, `IS_Name`) VALUES (11, 'Timezone')");
-            $this->execute("INSERT INTO `Instance_Settings_Values`(`ISV_IS_ID`, `ISV_Value`) VALUES (11, 'UTC')");
+            $date = (new \DateTime("now", new \DateTimeZone("UTC")))->format("Y-m-d H:i:s");
+            $this->execute("INSERT INTO `Instance_Settings_Values`(`ISV_Date`, `ISV_IS_ID`, `ISV_Value`) VALUES ('$date', 11, 'UTC')");
         }
     }
 }
