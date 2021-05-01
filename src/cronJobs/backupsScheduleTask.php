@@ -15,7 +15,10 @@ $o = $container->make("dhope0000\LXDClient\Tools\Hosts\Backups\Schedules\GetAllH
 $createBackupSchedule = $container->make("dhope0000\LXDClient\Tools\Backups\Schedule\BackupStringToObject");
 $clustersAndStandalone = $o->get();
 
-function addSchedulesToSchedule(Schedule &$schedule, $host, $createBackupSchedule)
+$getInstanceSetting = $container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting");
+$timezone = $getInstanceSetting->getSettingLatestValue(dhope0000\LXDClient\Constants\InstanceSettingsKeys::TIMEZONE);
+
+function addSchedulesToSchedule(Schedule &$schedule, $host, $createBackupSchedule, $timezone)
 {
     $scheduleItems = $host->getCustomProp("schedules");
     $executeString = PHP_BINARY . '  ' . __DIR__ . '/scripts/backupContainer.php';
@@ -36,12 +39,14 @@ function addSchedulesToSchedule(Schedule &$schedule, $host, $createBackupSchedul
         if ($tSchedule->getRange() == "daily") {
             foreach ($tSchedule->getTimes() as $time) {
                 $task = $schedule->run("$executeString $argString")->description($name . " daily@" . $time);
+                $task->timezone($timezone);
                 $task->daily()->at($time);
             }
         } elseif ($tSchedule->getRange() == "weekly") {
             foreach ($tSchedule->getDaysOfWeek() as $dayOfWeek) {
                 foreach ($tSchedule->getTimes() as $time) {
                     $task = $schedule->run("$executeString $argString")->description($name . " " . $dayOfWeekList[$dayOfWeek] . "@" . $time);
+                    $task->timezone($timezone);
                     $task->weeklyOn($dayOfWeek, $time);
                 }
             }
@@ -49,6 +54,7 @@ function addSchedulesToSchedule(Schedule &$schedule, $host, $createBackupSchedul
             foreach ($tSchedule->getTimes() as $time) {
                 $tParts = explode(":", $time);
                 $task = $schedule->run("$executeString $argString")->description($name . " monthly@" . $time);
+                $task->timezone($timezone);
                 $task->cron("{$tParts[1]} {$tParts[0]} {$tSchedule->getDayOfMonth()} * *");
             }
         } else {
@@ -59,12 +65,12 @@ function addSchedulesToSchedule(Schedule &$schedule, $host, $createBackupSchedul
 
 foreach ($clustersAndStandalone["clusters"] as $cluster) {
     foreach ($cluster["members"] as $member) {
-        addSchedulesToSchedule($schedule, $member, $createBackupSchedule);
+        addSchedulesToSchedule($schedule, $member, $createBackupSchedule, $timezone);
     }
 }
 
 foreach ($clustersAndStandalone["standalone"]["members"] as $member) {
-    addSchedulesToSchedule($schedule, $member, $createBackupSchedule);
+    addSchedulesToSchedule($schedule, $member, $createBackupSchedule, $timezone);
 }
 
 
