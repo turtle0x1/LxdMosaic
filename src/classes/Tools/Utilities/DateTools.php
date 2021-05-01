@@ -32,4 +32,9 @@ class DateTools
         }
         return $times;
     }
+
+    public function getTimezoneList()
+    {
+        return timezone_identifiers_list();
+    }
 }
