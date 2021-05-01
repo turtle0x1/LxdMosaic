@@ -13,4 +13,5 @@ class InstanceSettingsKeys
     const STRONG_PASSWORD_POLICY = 8;
     const PROJECT_ANALYTICS_STORAGE = 9;
     const SITE_TITLE = 10;
+    const TIMEZONE = 11;
 }
