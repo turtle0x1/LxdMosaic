@@ -59,8 +59,10 @@ class StoreBackupLocally
 
         $backupInfo = $this->downloadBackup($host, $project, $instance, $backupDir, $backup);
 
+        $backupDate = (new \DateTime($backupInfo["created"]))->setTimezone(new \DateTimeZone("UTC"));
+
         $this->insertInstanceBackup->insert(
-            (new \DateTime($backupInfo["created"])),
+            $backupDate,
             $hostId,
             $project,
             $instance,
