@@ -1,7 +1,7 @@
 <?php
 
 $_ENV = getenv();
-
+date_default_timezone_set("UTC");
 require __DIR__ . "/../../../vendor/autoload.php";
 
 use dhope0000\LXDClient\Constants\Constants;

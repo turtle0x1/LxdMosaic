@@ -11,10 +11,10 @@ source: src/cronJobs
 # to make sure all the existing tasks files are renamed accordingly.
 suffix: Task.php
 
-# Timezone is used to calculate task run time
-# This option is very important and not setting it is deprecated
-# and will result in exception in 2.0 version.
-timezone: Europe/London
+#NOTE Every job that runs at a specific time has its timezone controlled by
+#     the setting saved in the database not by this, but its required to be
+#      by crunz
+timezone: UTC
 
 # This option define which timezone should be used for log files
 # If false, system default timezone will be used

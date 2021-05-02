@@ -67,23 +67,19 @@ class GetMetricsForContainer
         }
 
         foreach ($period as $key => $value) {
-            $dateString = $value->format("d-m-Y");
+            $dateString = $value->format("Y-m-d");
 
             $startMinute = 0;
             $startHour = 0;
-            $stopAtNow = $dateString === $period->getEndDate()->format("d-m-Y");
+            $stopAtNow = $dateString === $period->getEndDate()->format("Y-m-d");
 
             // If this day is the start date
-            if ($period->getStartDate()->format("d-m-Y") === $dateString) {
+            if ($period->getStartDate()->format("Y-m-d") === $dateString) {
                 $startHour = $period->getStartDate()->format("H");
                 $startMinute = $period->getStartDate()->format("i");
             }
 
-            $prefixFormat = $value->format("Y") === (new \DateTime)->format("Y") ? "d M" : "d M Y";
-
-            $prefix = $moreThanOneDay ?  $value->format($prefixFormat) . " " : "";
-
-            $dataByDate[$dateString] = DateTools::hoursRange($startHour, 24, $step, $prefix, $stopAtNow, $startMinute);
+            $dataByDate[$dateString] = DateTools::hoursRange($startHour, 24, $step, "", $stopAtNow, $startMinute);
         }
 
         foreach ($allMetrics as $metricsIndex => $metricEntry) {
@@ -111,16 +107,8 @@ class GetMetricsForContainer
 
             $format = "H:i";
 
-            if ($moreThanOneDay) {
-                if ($date->format("Y") === (new \DateTime)->format("Y")) {
-                    $format = "d M H:i";
-                } else {
-                    $format = "d M Y H:i";
-                }
-            }
-
-            if (array_key_exists($date->format($format), $dataByDate[$date->format("d-m-Y")])) {
-                $dataByDate[$date->format("d-m-Y")][$date->format($format)] = $data;
+            if (array_key_exists($date->format($format), $dataByDate[$date->format("Y-m-d")])) {
+                $dataByDate[$date->format("Y-m-d")][$date->format($format)] = $data;
             }
         }
 
@@ -129,7 +117,11 @@ class GetMetricsForContainer
         $outData = [];
 
         foreach ($dataByDate as $date => $data) {
-            $labels = array_merge($labels, array_keys($data));
+            $times = array_keys($data);
+            foreach ($times as $time) {
+                $labels[] = $date . " " . $time;
+            }
+
             $outData = array_merge($outData, array_values($data));
         }
         return [

@@ -413,7 +413,7 @@ $(document).on("click", ".viewContainerBackups", function(){
         $.each(currentContainerBackups.allBackups, (_, backup)=>{
             trs += `<tr data-backup-id="${backup.id}">
                 <td>${backup.name}</td>
-                <td>${moment(backup.backupDateCreated).fromNow()}</td>
+                <td>${moment.utc(backup.backupDateCreated).local().fromNow()}</td>
                 <td>${formatBytes(backup.filesize)}</td>
                 <td>
                     <button class="btn btn-sm btn-outline-warning restoreBackup">
@@ -474,7 +474,6 @@ function loadBackupsOverview() {
 
                     let trClass = container.lastBackup.neverBackedUp ? "danger" : "success";
 
-                    let createdDate = container.containerExists ? moment(container.created).fromNow() : "Deleted";
                     let date = "Never";
                     let viewButton = "Host Doesn't support backups";
 
@@ -499,7 +498,7 @@ function loadBackupsOverview() {
                     </a>`;
 
                     if(container.lastBackup.hasOwnProperty("backupDateCreated")){
-                        date = moment(container.lastBackup.backupDateCreated).fromNow()
+                        date = moment.utc(container.lastBackup.backupDateCreated).local().fromNow()
                     }
 
                     let upToString = container.strategyName == "" ? "" :  ` / ${container.scheduleRetention}`;

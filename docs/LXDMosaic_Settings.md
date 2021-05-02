@@ -62,6 +62,18 @@ the data is gathered for every hosts project/s, every 5 minutes.
 
 Per Day = ((N projects * 8 different usages & limits) * 12 segmants of five minutes in an hour) * 24 hours
 
+## Timezone
+
+Value: string
+
+Default: UTC
+
+Regardless of this setting everything stored in the DB & dates retrived from the
+API will be UTC.
+
+This setting is used to make sure cron jobs like backups run at the time the
+user is expecting.
+
 ## LDAP
 
 ### Ldap Server

@@ -1589,11 +1589,17 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
         let tooltips = data.formatBytes ? toolTipsBytesCallbacks : [];
 
         scales.yAxes[0].gridLines = {drawBorder: false}
+        let labels = [];
+        data.labels.forEach((element) => {
+            let d = moment.utc(element).local();
+            let f = d.isSame(moment(), 'day') ? "HH:mm" : "MMM Do HH:mm";
+            labels.push(d.format(f))
+        });
 
         new Chart($("#metricGraph"), {
             type: "line",
             data: {
-                labels: data.labels,
+                labels: labels,
                 datasets: [{
                     label: `Data`,
                     fill: false,
@@ -1702,7 +1708,7 @@ $("#containerBox").on("click", "#goToEvents", function() {
             $.each(data, (_, instanceEvent)=>{
                 trs += `<tr>
                     <td>${instanceEvent.userName}</td>
-                    <td>${moment(instanceEvent.date).format("llll")}</td>
+                    <td>${moment.utc(instanceEvent.date).local().format("llll")}</td>
                     <td>${instanceEvent.controllerName == "" ? instanceEvent.controller : instanceEvent.controllerName}</td>
                     <td>${instanceEvent.params}</td>
                 </tr>`
