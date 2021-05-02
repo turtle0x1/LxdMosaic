@@ -228,11 +228,11 @@ function viewDeployment(deploymentId)
 
                     if(container.hasOwnProperty("mosaicInfo")){
                         if(container.mosaicInfo.phoneHomeDate){
-                            phonedHome = `<i class='fas fa-check'></i> ${moment(container.mosaicInfo.phoneHomeDate).fromNow()}`;
+                            phonedHome = `<i class='fas fa-check'></i> ${moment.utc(container.mosaicInfo.phoneHomeDate).local().fromNow()}`;
                         }
 
                         if(container.mosaicInfo.lastStart){
-                            hasBeenSeenStarted = moment(container.mosaicInfo.lastStart).fromNow();
+                            hasBeenSeenStarted = moment.utc(container.mosaicInfo.lastStart).local().fromNow();
                         }
                     }
 
