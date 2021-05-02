@@ -1,3 +1,14 @@
+Unreleased
+
+Added
+    Setting for storing timezone (#371)
+
+Changed
+    Store all dates in UTC (#370)
+    Display dates in UTC (#370)
+    Run cron jobs at time specified by timezone setting (#372)
+
+
 0.12.0 - 15/04/2020
 
 Changed
