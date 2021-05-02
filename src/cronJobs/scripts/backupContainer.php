@@ -30,6 +30,8 @@ if (!is_numeric($strategy)) {
 
 $getHost = $container->make("dhope0000\LXDClient\Model\Hosts\GetDetails");
 $backupInstance = $container->make("dhope0000\LXDClient\Tools\Instances\Backups\BackupInstance");
+$getInstanceSetting = $container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting");
+$timezone = $getInstanceSetting->getSettingLatestValue(dhope0000\LXDClient\Constants\InstanceSettingsKeys::TIMEZONE);
 
 $host = $getHost->fetchHost($hostId);
 
@@ -39,7 +41,7 @@ $backupInstance->create(
     $host,
     $instance,
     $project,
-    (new \DateTime())->format("Y-m-d H:i:s"),
+    (new \DateTime())->setTimezone(new \DateTimeZone($timezone))->format("Y-m-d H:i:s"),
     true,
     $importAndDelete
 );
