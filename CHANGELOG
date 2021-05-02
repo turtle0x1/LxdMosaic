@@ -8,6 +8,9 @@ Changed
     Display dates in UTC (#370)
     Run cron jobs at time specified by timezone setting (#372)
 
+Fixed
+    Enforcing backup retention limit
+
 
 0.12.0 - 15/04/2020
 

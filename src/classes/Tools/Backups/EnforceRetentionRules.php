@@ -7,6 +7,7 @@ use dhope0000\LXDClient\Tools\Hosts\Backups\Schedules\GetAllHostsSchedules;
 use dhope0000\LXDClient\Tools\Instances\Backups\DeleteLocalBackup;
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Constants\BackupStrategies;
+use dhope0000\LXDClient\Model\Users\FetchUsers;
 
 class EnforceRetentionRules
 {
@@ -15,11 +16,13 @@ class EnforceRetentionRules
     public function __construct(
         GetAllHostsSchedules $getAllHostsSchedules,
         FetchInstanceBackups $fetchInstanceBackups,
-        DeleteLocalBackup $deleteLocalBackup
+        DeleteLocalBackup $deleteLocalBackup,
+        FetchUsers $fetchUsers
     ) {
         $this->getAllHostsSchedules = $getAllHostsSchedules;
         $this->fetchInstanceBackups = $fetchInstanceBackups;
         $this->deleteLocalBackup = $deleteLocalBackup;
+        $this->fetchUsers = $fetchUsers;
     }
 
     public function enforce()
@@ -41,6 +44,7 @@ class EnforceRetentionRules
     {
         $scheduleItems = $host->getCustomProp("schedules");
 
+        $adminUserId = $this->fetchUsers->fetchAnyAdminUserId();
 
         foreach ($scheduleItems as $item) {
             $instanceBackups  = [];
@@ -66,7 +70,7 @@ class EnforceRetentionRules
 
             if ($item["strategyId"] == BackupStrategies::IMPORT_AND_DELETE) {
                 for ($i = 0; $i < $toRemoveCount; $i++) {
-                    $this->deleteLocalBackup->delete($instanceBackups[$i]["id"]);
+                    $this->deleteLocalBackup->delete($adminUserId, $instanceBackups[$i]["id"]);
                 }
             }
         }
