@@ -1708,7 +1708,7 @@ $("#containerBox").on("click", "#goToEvents", function() {
             $.each(data, (_, instanceEvent)=>{
                 trs += `<tr>
                     <td>${instanceEvent.userName}</td>
-                    <td>${moment(instanceEvent.date).format("llll")}</td>
+                    <td>${moment.utc(instanceEvent.date).local().format("llll")}</td>
                     <td>${instanceEvent.controllerName == "" ? instanceEvent.controller : instanceEvent.controllerName}</td>
                     <td>${instanceEvent.params}</td>
                 </tr>`
