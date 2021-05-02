@@ -377,7 +377,7 @@ function loadSettingsView()
         }else{
             $.each(data.permanentTokens, (_, token)=>{
                 trs += `<tr>
-                    <td>${moment(token.created).format("llll")}</td>
+                    <td>${moment.utc(token.created).local().format("llll")}</td>
                     <td><button class="btn btn-danger btn-sm deleteToken" id="${token.id}" ><i class="fas fa-trash"></i></button></td>
                 </tr>`;
             });
@@ -469,7 +469,7 @@ function loadRecordedActions(ammount = 30){
             $.each(data, (_, item)=>{
                 trs += `<tr>
                     <td>${item.userName}</td>
-                    <td>${moment(item.date).fromNow()}</td>
+                    <td>${moment.utc(item.date).local().fromNow()}</td>
                     <td>${item.controllerName == "" ? item.controller : item.controllerName}</td>
                     <td class="text-break">${item.params}</td>
                 </tr>`;
@@ -503,7 +503,7 @@ function loadUsers(){
 
                 trs += `<tr data-user-id="${user.id}">
                     <td><a href="#" id="${user.id}" class='viewUser'>${user.username}</a></td>
-                    <td>${moment(user.created).fromNow()}</td>
+                    <td>${moment.utc(user.created).local().fromNow()}</td>
                     <td><i class="fas fa-${isAdmin} ${isAdminTClass}"></i></td>
                     <td>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
