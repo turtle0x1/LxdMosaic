@@ -876,13 +876,20 @@ function copyContainerConfirm(hostId, container) {
         title: 'Copy Container!',
         content: `
             <div class="form-group">
-                <label> New Host </label>
-                <input class="form-control" maxlength="63" name="newHost"/>
+                <label> Destination </label>
+                <select class="form-control" name="destination"></select>
             </div>
             <div class="form-group">
                 <label> Name </label>
                 <input class="form-control validateName" maxlength="63" name="name"/>
-            </div>`,
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="copyInstanceProfiles">
+                <label class="form-check-label" for="copyInstanceProfiles">
+                    Copy Profiles
+                </label>
+            </div>
+            `,
         buttons: {
             cancel: function(){},
             copy: {
@@ -890,22 +897,29 @@ function copyContainerConfirm(hostId, container) {
                 btnClass: 'btn-blue',
                 action: function () {
                     let modal = this;
-                    let d = this.$content.find("input[name=newHost]").tokenInput("get");
-                    let btn  = $(this);
+
+                    let option = modal.$content.find("select[name=destination] option:selected");
+                    let optGroup = option.parent("optgroup");
+
+                    if(optGroup.length == 0){
+                        makeToastr({state: 'error', message: "Select Destination"})
+                        return false;
+                    }
+
+                    let newHostId = optGroup.attr("id");
+                    let targetProject = option.val();
 
                     modal.buttons.copy.setText('<i class="fa fa-cog fa-spin"></i>Copying..'); // let the user know
                     modal.buttons.copy.disable();
                     modal.buttons.cancel.disable();
 
-                    if(d.length == 0){
-                        return false;
-                    }
-
                     let x = {
                         newContainer: modal.$content.find("input[name=name]").val(),
-                        newHostId: d[0].hostId,
+                        copyProfiles: modal.$content.find("input[id=copyInstanceProfiles]").is(":checked") ? 1 : 0,
+                        newHostId: newHostId,
                         hostId: hostId,
-                        container: container
+                        container: container,
+                        targetProject: targetProject
                     };
 
                     ajaxRequest(globalUrls.instances.copy, x, function(data){
@@ -924,15 +938,35 @@ function copyContainerConfirm(hostId, container) {
             },
         },
         onContentReady: function () {
-            // bind to events
             var jc = this;
-            this.$content.find('input[name=newHost]').tokenInput(globalUrls.hosts.search.search, {
-                queryParam: "hostSearch",
-                propertyToSearch: "host",
-                tokenValue: "hostId",
-                preventDuplicates: false,
-                tokenLimit: 1,
-                theme: "facebook"
+            ajaxRequest(globalUrls.projects.getAllFromHosts, {}, function(data){
+                data = $.parseJSON(data);
+                let options = "<option value=''>Please select</option>";
+                $.each(data.clusters, (clusterIndex, cluster)=>{
+                    options += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+                    $.each(cluster.members, (_, host)=>{
+                        if(host.hostOnline == 0){
+                            return true;
+                        }
+                        options += `<optgroup id="${host.hostId}" label="${host.alias}">`
+                        $.each(host.projects, (project, _)=>{
+                            options += `<option value="${project}">${project}</option>`
+                        });
+                        options += `</optgroup>`
+                    })
+                });
+
+                $.each(data.standalone.members, (_, host)=>{
+                    if(host.hostOnline == 0){
+                        return true;
+                    }
+                    options += `<optgroup id="${host.hostId}" label="${host.alias}">`
+                    $.each(host.projects, (_, project)=>{
+                        options += `<option value="${project}">${project}</option>`
+                    });
+                    options += `</optgroup>`
+                });
+                jc.$content.find("select[name=destination]").empty().append(options);
             });
         }
     });
