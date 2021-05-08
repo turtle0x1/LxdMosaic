@@ -39,6 +39,9 @@
                     <button type="button" class="btn text-white btn-outline-primary active" id="serverDetailsBtn" data-view="serverInfoBox">
                         <i class="fas fa-info pr-2"></i>Details
                     </button>
+                    <button type="button" class="btn text-white btn-outline-primary" id="serverWarningsBtn" data-view="serverWarningsBox">
+                        <i class="fas fa-exclamation-triangle pr-2" style="color: white !important;"></i>Warnings
+                    </button>
                     <button type="button" class="btn text-white btn-outline-primary" id="serverProxyDevicesBtn" data-view="serverProxyBox">
                         <i class="fas fa-exchange-alt pr-2"></i>Proxy Devices
                     </button>
@@ -118,6 +121,31 @@
                                     <th>Name</th>
                                     <th>Source</th>
                                     <th>Destination</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row serverViewBox" id="serverWarningsBox">
+            <div class="col-md-12">
+                <div class="card bg-dark">
+                    <div class="card-header text-white">
+                        <h4>Warnings</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-dark" id="serverWarningTable">
+                            <thead>
+                                <tr>
+                                    <th>Severity</th>
+                                    <th>Type</th>
+                                    <th>Last Message</th>
+                                    <th>Status</th>
+                                    <th>Acknowledge</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
@@ -244,8 +272,8 @@ $(document).on("click", "#addProxyDevice", function(){
     $("#modal-hosts-instnaces-addProxyDevice").modal("show");
 });
 
-$(document).on("click", "#serverDetailsBtn, #serverProxyDevicesBtn", function(){
-    $("#serverDetailsBtn, #serverProxyDevicesBtn").removeClass("active")
+$(document).on("click", "#serverDetailsBtn, #serverProxyDevicesBtn, #serverWarningsBtn", function(){
+    $("#serverDetailsBtn, #serverProxyDevicesBtn, #serverWarningsBtn").removeClass("active")
     $(this).addClass("active")
     $(".serverViewBox").hide();
     $(`#${$(this).data("view")}`).show();
@@ -280,6 +308,40 @@ $(document).on("click", "#serverDetailsBtn, #serverProxyDevicesBtn", function(){
             }
 
             $("#serverProxyTable > tbody").empty().append(x);
+        });
+    }else if($(this).data("view") == "serverWarningsBox"){
+        ajaxRequest(globalUrls.hosts.warnings.getOnHost, currentServer, (data)=>{
+            data = makeToastr(data);
+
+            let x = "";
+            if(Object.keys(data).length){
+                $.each(data, (_, warning)=>{
+                    let ackButton = '-';
+                    if(warning.status != "acknowledged"){
+                        ackButton = `<button class="btn btn-success ackWarning">
+                            <i class="fas fa-check" style="color: white !important;"></i>
+                        </button>`
+                    }
+                    x += `<tr id="${warning.uuid}">
+                        <td>${warning.severity}</td>
+                        <td>${warning.type}</td>
+                        <td>${warning.last_message}</td>
+                        <td>${warning.status}</td>
+                        <td>
+                            ${ackButton}
+                        </td>
+                        <td>
+                            <button class="btn btn-danger deleteWarning">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>`
+                });
+            }else{
+                x += `<tr><td colspan="999" class="text-center text-info">No Warnings</td></tr>`
+            }
+
+            $("#serverWarningTable > tbody").empty().append(x);
         });
     }
 });

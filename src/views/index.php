@@ -253,6 +253,9 @@ if ($haveServers->haveAny() !== true) {
                       start: "/api/Hosts/Instances/StartInstancesController/start",
                       getHostContainers: "/api/Hosts/Instances/GetHostsInstancesController/get"
                   },
+                  warnings: {
+                    getOnHost: "/api/Hosts/Warnings/GetHostWarningsController/getOnHost",
+                  },
                   getAllHosts: "/api/Hosts/GetHostsController/getAllHosts",
                   getOverview: "/api/Hosts/GetOverviewController/get",
                   delete: "/api/Hosts/DeleteHostController/delete",
