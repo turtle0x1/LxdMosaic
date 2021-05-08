@@ -139,6 +139,15 @@ class RouteApi
                 }
 
                 $o[$name] = $this->getDetails->fetchHost($passedArguments["hostId"]);
+            } elseif ($name == "targetProject") {
+                $targetProject = "";
+                if (!$userIsAdmin && (isset($passedArguments["targetProject"]) && !empty($passedArguments["targetProject"]))) {
+                    $targetProject = $passedArguments["targetProject"];
+                    $this->canAccessProject($allowedProjects, $passedArguments["hostId"], $targetProject);
+                } elseif ($userIsAdmin && (isset($passedArguments["targetProject"]) && !empty($passedArguments["targetProject"]))) {
+                    $targetProject = $passedArguments["targetProject"];
+                }
+                $o[$name] = $targetProject;
             } elseif ($type == "dhope0000\LXDClient\Objects\Host") {
                 if (!$userIsAdmin) {
                     if (is_null($project) && isset($currentProjects[$passedArguments[$name]])) {
