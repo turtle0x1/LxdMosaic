@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "613f14717dd320b917047b754cb87ace",
+    "content-hash": "23ca6a4ca57d5f43e0b5b61f75e479c7",
     "packages": [
         {
             "name": "cakephp/core",
@@ -215,12 +215,12 @@
             "version": "v1.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/clue/php-stream-filter.git",
+                "url": "https://github.com/clue/stream-filter.git",
                 "reference": "5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-stream-filter/zipball/5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71",
+                "url": "https://api.github.com/repos/clue/stream-filter/zipball/5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71",
                 "reference": "5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71",
                 "shasum": ""
             },
@@ -296,16 +296,16 @@
         },
         {
             "name": "dhope0000/lxd",
-            "version": "v0.18.2",
+            "version": "v0.19.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/turtle0x1/php-lxd.git",
-                "reference": "49f5fb57f4adcddffdc301fcf64c2d79172d4d2e"
+                "reference": "4ea316031478c7e2eb3326e385bee65d2e70fec9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/49f5fb57f4adcddffdc301fcf64c2d79172d4d2e",
-                "reference": "49f5fb57f4adcddffdc301fcf64c2d79172d4d2e",
+                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/4ea316031478c7e2eb3326e385bee65d2e70fec9",
+                "reference": "4ea316031478c7e2eb3326e385bee65d2e70fec9",
                 "shasum": ""
             },
             "require": {
@@ -362,7 +362,7 @@
                 "lxd",
                 "wrapper"
             ],
-            "time": "2020-12-23T00:04:07+00:00"
+            "time": "2021-05-08T15:27:27+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -5171,12 +5171,12 @@
             "version": "1.9.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "9dc4f203e36f2b486149058bade43c851dd97451"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/9dc4f203e36f2b486149058bade43c851dd97451",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/9dc4f203e36f2b486149058bade43c851dd97451",
                 "reference": "9dc4f203e36f2b486149058bade43c851dd97451",
                 "shasum": ""
             },
@@ -5222,5 +5222,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

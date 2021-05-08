@@ -18,9 +18,11 @@ class CopyInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAc
         Host $host,
         string $container,
         string $newContainer,
-        Host $newHostId
+        Host $newHostId,
+        string $targetProject = "",
+        int $copyProfiles = 0
     ) {
-        $this->copy->copy($host, $container, $newContainer, $newHostId);
+        $this->copy->copy($host, $container, $newContainer, $newHostId, $targetProject, (bool) $copyProfiles);
         return ["state"=>"success", "message"=>"Copying $container to $newContainer"];
     }
 }
