@@ -54,15 +54,19 @@ class GetBackupsOverview
                 $this->createYearArray($filesByMonthYear, $year);
             }
 
-            $filesize = 0;
-            // We should be doing something more agressive in this case!
-            if (file_exists($backup["localPath"])) {
+
+            $filesize = $backup["filesize"];
+            // After 6 months or so this  can be removed, most backup should have
+            // thier size stored in the database then.
+            if ($filesize == 0  && file_exists($backup["localPath"])) {
                 $filesize = filesize($backup["localPath"]);
             }
 
             $backup["filesize"] = $filesize;
 
-            $backups[$index] = $backup;
+            if ($backup["deletedDate"] != null) {
+                unset($backups[$index]);
+            }
 
             $sizeByMonthYear[$year][$month] += $filesize;
             $filesByMonthYear[$year][$month] ++;
