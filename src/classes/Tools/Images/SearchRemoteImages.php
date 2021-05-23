@@ -51,7 +51,8 @@ class SearchRemoteImages
 
             krsort($product["versions"]);
 
-            $v  = array_reverse($product["versions"]);
+            $v = array_reverse($product["versions"]);
+
             $product = array_pop($v);
 
             if (!isset($product["items"]["lxd.tar.xz"])) {
@@ -69,10 +70,19 @@ class SearchRemoteImages
             foreach ($sList as $fingerKey) {
                 if (isset($lxdFolder[$fingerKey])) {
                     if (!isset($output[$imOs])) {
-                        $output[$imOs] = [];
+                        $output[$imOs] = [
+                            "default"=>[],
+                            "cloud-init"=>[]
+                        ];
                     }
 
-                    $output[$imOs][$imRelease] = $lxdFolder[$fingerKey];
+                    $variant = "default";
+
+                    if (strpos($lxdFolder["path"], "cloud")) {
+                        $variant = "cloud-init";
+                    }
+
+                    $output[$imOs][$variant][$imRelease] = $lxdFolder[$fingerKey];
                 }
             }
         }
