@@ -327,15 +327,20 @@
             }
 
             let html = "";
-            $.each(x, (os, versions)=>{
-                html += `<div class="mt-3 osGroup"><h5 class="d-flex pb-3">${os}</h5>`;
-                $.each(versions, (version, fingerPrint)=>{
-                    html += `<div class="d-inline m-4">
-                        <span class="badge badge-secondary imageForImport" data-fingerprint="${fingerPrint}" data-alias="${version}" data-os="${os}">
-                        <i class="fas fa-image"></i>
-                        ${version}
-                        </span>
-                    </div>`
+            $.each(x, (os, variants)=>{
+                html += `<div class="mt-3 osGroup"><h5 class="d-flex pb-1">${os}</h5>`;
+                $.each(variants, (variant, versions)=>{
+                    if(Object.values(versions).length > 0){
+                        html += `<div class="d-block mb-2 mt-2"><i>${variant}</i></div>`
+                        $.each(versions, (version, fingerPrint)=>{
+                            html += `<div class="d-inline mr-4 mb-3 mt-3">
+                                <span class="badge badge-secondary imageForImport" data-fingerprint="${fingerPrint}" data-alias="${version}" data-os="${os}">
+                                <i class="fas fa-image"></i>
+                                ${version}
+                                </span>
+                            </div>`
+                        });
+                    }
                 });
                 html += `</div>`;
             });
