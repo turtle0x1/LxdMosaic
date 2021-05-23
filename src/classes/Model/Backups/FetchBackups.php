@@ -21,9 +21,11 @@ class FetchBackups
                     `CB_Container` as `container`,
                     `CB_Backup` as `name`,
                     `CB_Local_Path` as `localPath`,
-                    `CB_Project` as `project`
+                    `CB_Project` as `project`,
+                    `CB_Deleted` as `deletedDate`,
+                    `CB_Filesize` as `filesize`
                 FROM
-                `Container_Backups`
+                    `Container_Backups`
                 ORDER BY
                     `storedDateCreated` DESC
                 ";
@@ -41,7 +43,9 @@ class FetchBackups
                     `CB_Container` as `container`,
                     `CB_Backup` as `name`,
                     `CB_Local_Path` as `localPath`,
-                    `CB_Project` as `project`
+                    `CB_Project` as `project`,
+                    `CB_Deleted` as `deletedDate`,
+                    `CB_Filesize` as `filesize`
                 FROM
                     `Container_Backups`
                 WHERE
