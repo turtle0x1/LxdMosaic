@@ -374,6 +374,21 @@ $(document).on("click", "#toggleAllContainers", function(){
     });
 });
 
+$(document).on("click", ".ackWarning", function(){
+    let warningId = $(this).parents("tr").attr("id");
+    let td = $(this).parents("td");
+    let btn = $(this);
+    btn.attr("disabled", true);
+    ajaxRequest(globalUrls.hosts.warnings.acknowledge, {hostId: currentServer.hostId, id: warningId}, (data)=>{
+        data = makeToastr(data);
+        if(data.hasOwnProperty("error") || data.state == "error"){
+            btn.attr("disabled", false);
+            return false;
+        }
+        td.empty().append("-");
+    });
+});
+
 $(document).on("click", ".serverContainerActions", function(){
     let action = $(this).data("action");
     if(action== ""){
