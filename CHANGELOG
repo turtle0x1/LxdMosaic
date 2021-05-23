@@ -4,6 +4,7 @@ Added
     Setting for storing timezone (#371)
     Support for copying instances between projects (#375)
     Optionally copying profiles when copying instance
+    Show image variants when searching images from remotes (#380)
 
 Changed
     Store all dates in UTC (#370)
