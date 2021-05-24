@@ -459,7 +459,7 @@ function loadServerView(hostId)
     $(".boxSlide, #serverDetails, #serverProxyBox").hide();
     $("#serverOverview, #serverBox, #serverInfoBox").show();
 
-    $("#serverDetailsBtn, #serverProxyDevicesBtn").removeClass("active");
+    $("#serverDetailsBtn, #serverProxyDevicesBtn, #serverWarningsBtn").removeClass("active");
     $("#serverDetailsBtn").addClass("active");
 
     $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
