@@ -35,7 +35,7 @@ class DeleteLocalBackup
         if (file_exists($backup["localPath"])) {
             unlink($backup["localPath"]);
         }
-        $this->deleteBackup->delete($backupId);
+        $this->deleteBackup->setDeleted($backupId);
         return true;
     }
 }

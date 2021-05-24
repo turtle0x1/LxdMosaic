@@ -24,4 +24,20 @@ class DeleteBackup
         ]);
         return $do->rowCount() ? true : false;
     }
+
+    public function setDeleted(int $backupId)
+    {
+        $sql = "UPDATE
+                    `Container_Backups`
+                SET
+                    `CB_Deleted` = CURRENT_TIMESTAMP
+                WHERE
+                    `CB_ID` = :backupId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":backupId"=>$backupId
+        ]);
+        return $do->rowCount() ? true : false;
+    }
 }
