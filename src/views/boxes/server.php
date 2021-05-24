@@ -389,6 +389,23 @@ $(document).on("click", ".ackWarning", function(){
     });
 });
 
+$(document).on("click", ".deleteWarning", function(){
+    let tr = $(this).parents("tr");
+    let warningId = tr.attr("id");
+    let btn = $(this);
+    btn.html("<i class='fas fa-cog fa-spin'></i>")
+    tr.find("button").attr("disabled", true);
+    ajaxRequest(globalUrls.hosts.warnings.delete, {hostId: currentServer.hostId, id: warningId}, (data)=>{
+        data = makeToastr(data);
+        if(data.hasOwnProperty("error") || data.state == "error"){
+            btn.html("<i class='fas fa-trash'></i>")
+            tr.find("button").attr("disabled", false);
+            return false;
+        }
+        tr.remove();
+    });
+});
+
 $(document).on("click", ".serverContainerActions", function(){
     let action = $(this).data("action");
     if(action== ""){
