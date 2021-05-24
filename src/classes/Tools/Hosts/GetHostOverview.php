@@ -5,15 +5,19 @@ namespace dhope0000\LXDClient\Tools\Hosts;
 use dhope0000\LXDClient\Tools\Instances\GetHostsInstances;
 use dhope0000\LXDClient\Tools\Hosts\GetResources;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Hosts\HasExtension;
+use dhope0000\LXDClient\Constants\LxdApiExtensions;
 
 class GetHostOverview
 {
     public function __construct(
         GetHostsInstances $getHostsInstances,
-        GetResources $getResources
+        GetResources $getResources,
+        HasExtension $hasExtension
     ) {
         $this->getHostsInstances = $getHostsInstances;
         $this->getResources = $getResources;
+        $this->hasExtension = $hasExtension;
     }
 
     public function get(Host $host)
@@ -21,11 +25,13 @@ class GetHostOverview
         $containers = $this->getHostsInstances->getContainers($host);
         $sortedContainers = $this->sortContainersByState($containers);
         $containerStats = $this->calcContainerStats($containers);
+        $supportsWarnings = $this->hasExtension->checkWithHost($host, LxdApiExtensions::WARNINGS);
         return [
             "header"=>$host,
             "containers"=>$sortedContainers,
             "containerStats"=>$containerStats,
-            "resources"=>$this->getResources->getHostExtended($host)
+            "resources"=>$this->getResources->getHostExtended($host),
+            "supportsWarnings"=>$supportsWarnings
         ];
     }
 
