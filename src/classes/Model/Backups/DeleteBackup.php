@@ -11,16 +11,16 @@ class DeleteBackup
         $this->database = $database->dbObject;
     }
 
-    public function delete(int $backupId)
+    public function deleteBefore(\DateTimeInterface $before)
     {
         $sql = "DELETE FROM
                     `Container_Backups`
                 WHERE
-                    `CB_ID` = :backupId
+                    `CB_Deleted` < :before
                 ";
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":backupId"=>$backupId
+            ":before"=>$before->format("Y-m-d H:i:s")
         ]);
         return $do->rowCount() ? true : false;
     }
