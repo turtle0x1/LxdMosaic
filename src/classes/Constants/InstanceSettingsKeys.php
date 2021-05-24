@@ -14,4 +14,5 @@ class InstanceSettingsKeys
     const PROJECT_ANALYTICS_STORAGE = 9;
     const SITE_TITLE = 10;
     const TIMEZONE = 11;
+    const BACKUP_HISTORY = 12;
 }
