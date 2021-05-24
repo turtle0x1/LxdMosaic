@@ -39,6 +39,7 @@ final class GetHostOverviewControllerTest extends TestCase
             'containers',
             'containerStats',
             'resources',
+            'supportsWarnings'
         ], array_keys($result));
 
         $this->assertEquals([
