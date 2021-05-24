@@ -74,6 +74,18 @@ API will be UTC.
 This setting is used to make sure cron jobs like backups run at the time the
 user is expecting.
 
+## Backup History
+
+Value: string
+
+Default: -1 year
+
+How long should we store backup history for, expressed as string like;
+
+  - -X hours
+  - -Y days
+  - -Z months
+
 ## LDAP
 
 ### Ldap Server
