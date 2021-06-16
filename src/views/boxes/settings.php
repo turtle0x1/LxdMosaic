@@ -305,9 +305,54 @@
             </div>
         </div>
     </div>
+    <div id="instanceTypesOverview" class="settingsBox">
+        <div class="row">
+            <div class="col-md-2" id="">
+                <div class="card bg-dark text-white">
+                    <div class="card-header">
+                        <h4>Providers</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group" id="providersList">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10" id="">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 id="providerName"></h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card bg-dark">
+                            <div class="card-body">
+                                <table id="providerTypesTable" class="table table-bordered table-dark">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>CPU</td>
+                                            <td>Memory</td>
+                                            <td>Delete</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+
+// Bad this is a global but saves 2 extra api's
+var allInstanceTypes = {};
 
 function loadSettingsView()
 {
@@ -315,6 +360,8 @@ function loadSettingsView()
     $(".settingsBox").hide();
     $("#settingsOverview, #settingsBox").show();
     $(".sidebar-fixed").addClass("sidebar-lg-show");
+
+    allInstanceTypes = {};
 
     let hosts = `
     <li class="nav-item my-settings">
@@ -335,6 +382,11 @@ function loadSettingsView()
         <li class="nav-item instance-settings">
             <a class="nav-link" href="#">
                 <i class="fas fa-sliders-h mr-2"></i>LXDMosaic Settings
+            </a>
+        </li>
+        <li class="nav-item instance-types-overview">
+            <a class="nav-link" href="#">
+                <i class="fas fa-cloud mr-2"></i>Instance Types
             </a>
         </li>
         <li class="nav-item users-overview">
@@ -547,6 +599,21 @@ function loadInstancesHostsView(){
     });
 }
 
+function loadInstanceTypes(){
+    ajaxRequest(globalUrls.instances.instanceTypes.getInstanceTypes, {}, function(data){
+        data = $.parseJSON(data);
+        allInstanceTypes = data;
+        let h = "";
+        $.each(data, function(provider, templates){
+            h += ` <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-dark provider" id="${provider}">
+                ${provider}
+                <span class="badge badge-primary badge-pill">${templates.length}</span>
+              </li>`
+        });
+        $("#providersList").empty().append(h);
+    });
+}
+
 function loadInstanceSettings(){
     ajaxRequest(globalUrls.settings.getAll, {}, (data)=>{
         data = makeToastr(data);
@@ -677,6 +744,13 @@ $("#sidebar-ul").on("click", ".instance-settings", function(){
     addBreadcrumbs(["LXDMosaic Settings"], ["active"], true);
 });
 
+$("#sidebar-ul").on("click", ".instance-types-overview", function(){
+    loadInstanceTypes();
+    $(".settingsBox").hide();
+    $("#instanceTypesOverview").show();
+    addBreadcrumbs(["LXDMosaic Settings"], ["active"], true);
+});
+
 $("#sidebar-ul").on("click", ".users-overview", function(){
     loadUsers();
     $(".settingsBox").hide();
@@ -724,6 +798,33 @@ $("#retiredData").on("click", "#downloadOldFleetAnalytics", function(){
         hiddenElement.download = 'LXDMosaic_Fleet_Analytics.csv';
         hiddenElement.click();
     });
+});
+
+$("#instanceTypesOverview").on("click", ".deleteType", function(){
+    let tr = $(this).parents("tr");
+    let x = {typeId: tr.attr("id")}
+    ajaxRequest( globalUrls.instances.instanceTypes.deleteInstanceType, x, (data)=>{
+        data = makeToastr(data);
+        if(data.hasOwnProperty("error") || data.state == "error"){
+            return false;
+        }
+        tr.remove();
+    });
+});
+
+$("#instanceTypesOverview").on("click", ".provider", function(){
+    let types = allInstanceTypes[$(this).attr("id")];
+    $("#providerName").text($(this).attr("id"));
+    let trs = "";
+    $.each(types, (_, type)=>{
+        trs += `<tr id="${type.id}">
+            <td>${type.instanceName}</td>
+            <td>${type.cpu}</td>
+            <td>${type.mem}</td>
+            <td><button class="btn btn-danger deleteType"><i class="fas fa-trash"></i></button></td>
+        </tr>`
+    });
+    $("#providerTypesTable > tbody").empty().append(trs);
 });
 
 $("#usersList").on("click", ".viewUser", function(){
