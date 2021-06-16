@@ -15,6 +15,7 @@ class FetchInstanceTypes
     {
         $sql = "SELECT
                     `ITP_ID` as `providerId`,
+                    `IT_ID` as `id`,
                     `ITP_Name` as `providerName`,
                     `IT_Name` as `instanceName`,
                     `IT_CPU` as  `cpu`,
