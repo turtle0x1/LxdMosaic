@@ -64,6 +64,9 @@ class LxdClient
             'cert' => [
                 $certPath,
                 ''
+            ],
+            'curl' => [
+                CURLOPT_UNIX_SOCKET_PATH => '/var/snap/lxd/common/lxd/unix.socket'
             ]
         ];
 
@@ -80,7 +83,7 @@ class LxdClient
     {
         $guzzle = new GuzzleClient($config);
         $adapter = new GuzzleAdapter($guzzle);
-        $client = new Client($adapter, null, $urlAndPort);
+        $client = new Client($adapter, null, 'http://unix.socket/');
         $this->clientBag[$urlAndPort] = $client;
         return $client;
     }
