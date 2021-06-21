@@ -319,9 +319,15 @@
                 </div>
             </div>
             <div class="col-md-10" id="">
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-12">
-                        <h4 id="providerName"></h4>
+                        <h4 class="d-inline" id="providerName"></h4>
+                        <button class="btn btn-danger float-right d-inline" id="addInstanceType">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <button class="btn btn-primary float-right d-inline" id="deleteProvider">
+                            <i class="fas fa-plus"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="row">
@@ -354,6 +360,8 @@
 // Bad this is a global but saves 2 extra api's
 var allInstanceTypes = {};
 
+var currentProvider;
+
 function loadSettingsView()
 {
     $(".boxSlide").hide();
@@ -362,6 +370,7 @@ function loadSettingsView()
     $(".sidebar-fixed").addClass("sidebar-lg-show");
 
     allInstanceTypes = {};
+    currentProvider = null;
 
     let hosts = `
     <li class="nav-item my-settings">
@@ -605,7 +614,7 @@ function loadInstanceTypes(){
         allInstanceTypes = data;
         let h = "";
         $.each(data, function(provider, templates){
-            h += ` <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-dark provider" id="${provider}">
+            h += ` <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-dark provider" data-provider-id="${templates[0].providerId}" id="${provider}">
                 ${provider}
                 <span class="badge badge-primary badge-pill">${templates.length}</span>
               </li>`
@@ -812,7 +821,60 @@ $("#instanceTypesOverview").on("click", ".deleteType", function(){
     });
 });
 
+$("#instanceTypesOverview").on("click", "#addInstanceType", function(){
+    $.confirm({
+        title: 'Create Instance Type!',
+        content: `
+        <div class="form-group">
+            <label>Name</label>
+            <input class="form-control" name="name"/>
+        </div>
+        <div class="form-group">
+            <label>CPU Cores Limit (E.G 2.0)</label>
+            <input class="form-control" name="cpu"/>
+        </div>
+        <div class="form-group">
+            <label>Memory Limit (In GB)</label>
+            <input class="form-control" name="memory"/>
+        </div>
+        `,
+        buttons: {
+            cancel: function () {
+                //close
+            },
+            formSubmit: {
+                text: 'Create',
+                btnClass: 'btn-blue',
+                action: function () {
+                    var name = this.$content.find('input[name=name]').val().trim();
+                    var cpu = this.$content.find('input[name=cpu]').val().trim();
+                    var memory = this.$content.find('input[name=memory]').val().trim();
+                    if(name == ""){
+                        $.alert('Please provide a name');
+                        return false;
+                    }else if(cpu == ""){
+                        $.alert('Please provide a cpu limit');
+                        return false;
+                    }else if(memory == ""){
+                        $.alert('Please provide a memory limit');
+                        return false;
+                    }
+                    let x = {name, cpu, mem: memory, providerId: currentProvider};
+                    ajaxRequest(globalUrls.instances.instanceTypes.addInstanceType, x, (response)=>{
+                        response = makeToastr(response);
+                        if(response.state == "error"){
+                            return false;
+                        }
+                        tr.remove();
+                    });
+                }
+            }
+        }
+    });
+});
+
 $("#instanceTypesOverview").on("click", ".provider", function(){
+    currentProvider = $(this).data("providerId")
     let types = allInstanceTypes[$(this).attr("id")];
     $("#providerName").text($(this).attr("id"));
     let trs = "";
