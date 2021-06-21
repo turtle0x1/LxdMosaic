@@ -322,10 +322,10 @@
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <h4 class="d-inline" id="providerName"></h4>
-                        <button class="btn btn-danger float-right d-inline" id="addInstanceType">
+                        <button class="btn btn-danger float-right d-inline" id="deleteProvider">
                             <i class="fas fa-trash"></i>
                         </button>
-                        <button class="btn btn-primary float-right d-inline" id="deleteProvider">
+                        <button class="btn btn-primary float-right d-inline" id="addInstanceType">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
@@ -866,6 +866,32 @@ $("#instanceTypesOverview").on("click", "#addInstanceType", function(){
                             return false;
                         }
                         tr.remove();
+                    });
+                }
+            }
+        }
+    });
+});
+
+$("#instanceTypesOverview").on("click", "#deleteProvider", function(){
+    $.confirm({
+        title: 'Delete Provider ?!',
+        content: `Deleting a provider will delete all instance types.`,
+        buttons: {
+            cancel: function () {
+                //close
+            },
+            formSubmit: {
+                text: 'Im Sure',
+                btnClass: 'btn-danger',
+                action: function () {
+                    let x = {providerId: currentProvider};
+                    ajaxRequest(globalUrls.instances.instanceTypes.providers.removeProvider, x, (response)=>{
+                        response = makeToastr(response);
+                        if(response.state == "error"){
+                            return false;
+                        }
+                        loadInstanceTypes()
                     });
                 }
             }
