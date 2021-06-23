@@ -14,6 +14,8 @@ Changed
 Fixed
     Enforcing backup retention limit
 
+Breaking API Changes
+    Change response of GetInstanceTypes api
 
 0.12.0 - 15/04/2020
 

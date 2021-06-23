@@ -183,11 +183,15 @@
         ajaxRequest(globalUrls.instances.instanceTypes.getInstanceTypes, {}, function(data){
             data = $.parseJSON(data);
             let h = "<option value=''>Please Select</option>";
-            $.each(data, function(provider, templates){
+            $.each(data, function(provider, provDetails){
                 h += `<optgroup label='${provider}'>`;
-                $.each(templates, function(o, t){
-                    h += `<option value="${t.instanceName}">${t.instanceName} (CPU: ${t.cpu}, Mem: ${t.mem}GB)</option>`;
-                })
+                if(provDetails.types.length == 0){
+                    h += `<option value="">No Limits</option>`;
+                }else{
+                    $.each(provDetails.types, function(o, t){
+                        h += `<option value="${t.instanceName}">${t.instanceName} (CPU: ${t.cpu}, Mem: ${t.mem}GB)</option>`;
+                    })
+                }
                 h += `</optgroup>`;
             });
             $("#newContainerInstanceType").empty().append(h);
