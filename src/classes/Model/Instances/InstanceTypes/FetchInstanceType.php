@@ -31,6 +31,6 @@ class FetchInstanceType
         $do->execute([
             ":name"=>$name
         ]);
-        return $do->fetchAll(\PDO::FETCH_ASSOC);
+        return $do->fetch(\PDO::FETCH_ASSOC);
     }
 }
