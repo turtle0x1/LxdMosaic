@@ -307,10 +307,12 @@
     </div>
     <div id="instanceTypesOverview" class="settingsBox">
         <div class="row">
-            <div class="col-md-2" id="">
+            <div class="col-md-2">
                 <div class="card bg-dark text-white">
                     <div class="card-header">
-                        <h4>Providers</h4>
+                        <h4>Providers
+                            <button class="btn btn-outline-primary float-right" id="addProvider"><i class="fas fa-plus"></i></button>
+                        </h4>
                     </div>
                     <div class="card-body">
                         <ul class="list-group" id="providersList">
@@ -318,7 +320,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-10" id="">
+            <div class="col-md-10" id="instanceTypesOverviewProviderDetailsSplash">
+                <h4 class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Choose a provider</h4>
+            </div>
+            <div class="col-md-10" id="instanceTypesOverviewProviderDetails">
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <h4 class="d-inline" id="providerName"></h4>
@@ -609,14 +614,16 @@ function loadInstancesHostsView(){
 }
 
 function loadInstanceTypes(){
+    $("#instanceTypesOverviewProviderDetailsSplash").show();
+    $("#instanceTypesOverviewProviderDetails").hide();
     ajaxRequest(globalUrls.instances.instanceTypes.getInstanceTypes, {}, function(data){
         data = $.parseJSON(data);
         allInstanceTypes = data;
         let h = "";
-        $.each(data, function(provider, templates){
-            h += ` <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-dark provider" data-provider-id="${templates[0].providerId}" id="${provider}">
+        $.each(data, function(provider, provDetails){
+            h += ` <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-dark provider" data-provider-id="${provDetails.providerId}" id="${provider}">
                 ${provider}
-                <span class="badge badge-primary badge-pill">${templates.length}</span>
+                <span class="badge badge-primary badge-pill">${provDetails.types.length}</span>
               </li>`
         });
         $("#providersList").empty().append(h);
@@ -865,7 +872,43 @@ $("#instanceTypesOverview").on("click", "#addInstanceType", function(){
                         if(response.state == "error"){
                             return false;
                         }
-                        tr.remove();
+                        loadInstanceTypes();
+                    });
+                }
+            }
+        }
+    });
+});
+$("#instanceTypesOverview").on("click", "#addProvider", function(){
+    $.confirm({
+        title: 'Create Instance Type!',
+        content: `
+        <div class="form-group">
+            <label>Name</label>
+            <input class="form-control" name="name"/>
+        </div>
+        `,
+        buttons: {
+            cancel: function () {
+                //close
+            },
+            formSubmit: {
+                text: 'Create',
+                btnClass: 'btn-blue',
+                action: function () {
+                    var name = this.$content.find('input[name=name]').val().trim();
+
+                    if(name == ""){
+                        $.alert('Please provide a name');
+                        return false;
+                    }
+                    let x = {name};
+                    ajaxRequest(globalUrls.instances.instanceTypes.providers.add, x, (response)=>{
+                        response = makeToastr(response);
+                        if(response.state == "error"){
+                            return false;
+                        }
+                        loadInstanceTypes();
                     });
                 }
             }
@@ -900,8 +943,10 @@ $("#instanceTypesOverview").on("click", "#deleteProvider", function(){
 });
 
 $("#instanceTypesOverview").on("click", ".provider", function(){
+    $("#providersList").find(".active").removeClass("active");
+    $(this).addClass("active");
     currentProvider = $(this).data("providerId")
-    let types = allInstanceTypes[$(this).attr("id")];
+    let types = allInstanceTypes[$(this).attr("id")].types
     $("#providerName").text($(this).attr("id"));
     let trs = "";
     $.each(types, (_, type)=>{
@@ -913,6 +958,8 @@ $("#instanceTypesOverview").on("click", ".provider", function(){
         </tr>`
     });
     $("#providerTypesTable > tbody").empty().append(trs);
+    $("#instanceTypesOverviewProviderDetailsSplash").hide();
+    $("#instanceTypesOverviewProviderDetails").show();
 });
 
 $("#usersList").on("click", ".viewUser", function(){

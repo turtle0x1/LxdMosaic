@@ -3,6 +3,10 @@ body {
     font-size: .9rem !important;
 }
 
+.provider {
+    cursor: pointer;
+}
+
 .sidebar-header {
     height: 55px;
     text-align: left !important;

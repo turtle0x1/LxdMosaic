@@ -139,6 +139,7 @@ if ($haveServers->haveAny() !== true) {
                   },
                   instanceTypes: {
                       providers: {
+                          add: '/api/Instances/InstanceTypes/Providers/AddController/add',
                           removeProvider: '/api/Instances/InstanceTypes/Providers/RemoveController/remove'
                       },
                       addInstanceType: "/api/Instances/InstanceTypes/AddController/add",
