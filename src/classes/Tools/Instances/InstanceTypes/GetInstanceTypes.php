@@ -17,9 +17,17 @@ class GetInstanceTypes
         $output = [];
         foreach ($types as $type) {
             if (!isset($output[$type["providerName"]])) {
-                $output[$type["providerName"]] = [];
+                $output[$type["providerName"]] = [
+                    "providerId"=>$type["providerId"],
+                    "types"=>[]
+                ];
             }
-            $output[$type["providerName"]][] = $type;
+
+            if ($type["id"] == null) {
+                continue;
+            }
+
+            $output[$type["providerName"]]["types"][] = $type;
         }
         return $output;
     }

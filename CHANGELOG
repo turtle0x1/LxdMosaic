@@ -5,6 +5,7 @@ Added
     Support for copying instances between projects (#375)
     Optionally copying profiles when copying instance
     Show image variants when searching images from remotes (#380)
+    Support managing instance providers & their types (#395)
 
 Changed
     Store all dates in UTC (#370)
@@ -14,6 +15,8 @@ Changed
 Fixed
     Enforcing backup retention limit
 
+Breaking API Changes
+    Change response of GetInstanceTypes api
 
 0.12.0 - 15/04/2020
 

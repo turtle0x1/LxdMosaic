@@ -138,7 +138,13 @@ if ($haveServers->haveAny() !== true) {
                       importContainerBackup: "/api/Instances/Backups/ImportBackupController/import"
                   },
                   instanceTypes: {
-                      getInstanceTypes: "/api/Instances/InstanceTypes/GetAllController/getAll"
+                      providers: {
+                          add: '/api/Instances/InstanceTypes/Providers/AddController/add',
+                          removeProvider: '/api/Instances/InstanceTypes/Providers/RemoveController/remove'
+                      },
+                      addInstanceType: "/api/Instances/InstanceTypes/AddController/add",
+                      getInstanceTypes: "/api/Instances/InstanceTypes/GetAllController/getAll",
+                      deleteInstanceType: "/api/Instances/InstanceTypes/DeleteController/delete"
                   },
                   settings: {
                       getAllAvailableSettings: "/api/Instances/Settings/GetAllAvailableSettingsController/getAll",

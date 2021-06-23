@@ -5,15 +5,18 @@ namespace dhope0000\LXDClient\Tools\Instances;
 use dhope0000\LXDClient\Tools\Hosts\Instances\HostsHaveInstance;
 use dhope0000\LXDClient\Tools\Hosts\Images\ImportImageIfNotHave;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use dhope0000\LXDClient\Model\Instances\InstanceTypes\FetchInstanceType;
 
 class CreateInstance
 {
     public function __construct(
         HostsHaveInstance $hostsHaveInstance,
-        ImportImageIfNotHave $importImageIfNotHave
+        ImportImageIfNotHave $importImageIfNotHave,
+        FetchInstanceType $fetchInstanceType
     ) {
         $this->hostsHaveInstance = $hostsHaveInstance;
         $this->importImageIfNotHave = $importImageIfNotHave;
+        $this->fetchInstanceType = $fetchInstanceType;
     }
     /**
      * TODO Combine the two profiles array
@@ -92,8 +95,7 @@ class CreateInstance
             "type"=>$type,
             "fingerprint"=>$imageDetails["fingerprint"],
             "profiles"=>$profiles,
-            "server"=>$server,
-            "instance_type"=>$instanceType
+            "server"=>$server
         ];
         if (is_array($gpus) && !empty($gpus)) {
             $x["devices"] = [];
@@ -108,6 +110,29 @@ class CreateInstance
 
         if (!empty($config)) {
             $x["config"] = $config;
+        }
+
+        if ($instanceType !== "") {
+            $instanceType = $this->fetchInstanceType->fetchByName($instanceType);
+
+            if (!isset($x["config"])) {
+                $x["config"] = [];
+            }
+
+            // From here https://github.com/lxc/lxd/blob/e1761309baa166d32e449fb5bb369481c9a456f1/lxd/instance_instance_types.go#L262
+            $cpuCores = (int) $instanceType["cpu"];
+            if ((float) $cpuCores < $instanceType["cpu"]) {
+                $cpuCores++;
+            }
+
+            $cpuTime = (int)($instanceType["cpu"] / (float) $cpuCores * 100.0);
+
+            $x["config"]["limits.cpu"] = (string) $cpuCores;
+            if ($cpuTime < 100) {
+                $x["config"]["limits.cpu.allowance"] = $cpuTime . "%";
+            }
+
+            $x["config"]["limits.memory"] = (int) ($instanceType["mem"] * 1024) . "MB";
         }
 
         return $x;

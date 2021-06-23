@@ -4,14 +4,14 @@ namespace dhope0000\LXDClient\Model\Instances\InstanceTypes;
 
 use dhope0000\LXDClient\Model\Database\Database;
 
-class FetchInstanceTypes
+class FetchInstanceType
 {
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function fetchAll()
+    public function fetchByName($name)
     {
         $sql = "SELECT
                     `ITP_ID` as `providerId`,
@@ -21,14 +21,16 @@ class FetchInstanceTypes
                     `IT_CPU` as  `cpu`,
                     `IT_Mem` as `mem`
                 FROM
-                    `Instace_Type_Providers`
-                LEFT JOIN `Instance_Types` ON
+                    `Instance_Types`
+                LEFT JOIN `Instace_Type_Providers` ON
                     `Instace_Type_Providers`.`ITP_ID` = `Instance_Types`.`IT_Provider_ID`
-                ORDER BY
-                    `IT_ID`,
-                    `ITP_ID`
+                WHERE
+                    `IT_Name` = :name
                 ";
-        $do = $this->database->query($sql);
-        return $do->fetchAll(\PDO::FETCH_ASSOC);
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":name"=>$name
+        ]);
+        return $do->fetch(\PDO::FETCH_ASSOC);
     }
 }
