@@ -21,8 +21,8 @@ class FetchInstanceTypes
                     `IT_CPU` as  `cpu`,
                     `IT_Mem` as `mem`
                 FROM
-                    `Instance_Types`
-                LEFT JOIN `Instace_Type_Providers` ON
+                    `Instace_Type_Providers`
+                LEFT JOIN `Instance_Types` ON
                     `Instace_Type_Providers`.`ITP_ID` = `Instance_Types`.`IT_Provider_ID`
                 ORDER BY
                     `IT_ID`,
