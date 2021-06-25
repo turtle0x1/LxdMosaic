@@ -567,7 +567,7 @@ function loadUsers(){
                     resetPasswordBtn = '';
                 }
 
-                trs += `<tr data-user-id="${user.id}">
+                trs += `<tr data-user-id="${user.id}" data-is-admin="${user.isAdmin}">
                     <td><a href="#" id="${user.id}" class='viewUser'>${user.username}</a></td>
                     <td>${moment.utc(user.created).local().fromNow()}</td>
                     <td><i class="fas fa-${isAdmin} ${isAdminTClass}"></i></td>
@@ -578,6 +578,7 @@ function loadUsers(){
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <a class="dropdown-item setUserProject" href="#">Set Projects Access</a>
                           ${resetPasswordBtn}
+                          <a class="dropdown-item toggleUserAdmin bg-danger" href="#">Toggle User Admin</a>
                         </div>
                     </td>
                 </tr>`;
@@ -738,6 +739,53 @@ $("#hostListTable").on("click", ".deleteHost", function(){
                             return false;
                         }
                         tr.remove();
+                        modal.close();
+                    });
+                    return false;
+                }
+            }
+        }
+    });
+});
+$("#usersTable").on("click", ".toggleUserAdmin", function(){
+    let tr = $(this).parents("tr");
+    console.log(tr.data());
+    let isAdmin = tr.data("isAdmin");
+    let title = isAdmin ? "Revoke Admin Privileges?" : "Grant Admin Privileges?";
+    let doingTxt = isAdmin ? "Revoking..." : "Granting...";
+    // If they are already an admin we are trying to revoke
+    let status = isAdmin ? 0 : 1;
+    let targetUser = tr.data("userId");
+    $.confirm({
+        title: title,
+        content: 'Are you sure you want todo this?!',
+        buttons: {
+            cancel: function () {},
+            yes: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin mr-2"></i>' + doingTxt); // let the user know
+                    this.buttons.yes.disable();
+                    this.buttons.cancel.disable();
+                    var modal = this;
+                    ajaxRequest(globalUrls.settings.users.toggleAdminStatus, {targetUser, status}, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            this.buttons.yes.enable();
+                            this.buttons.yes.setText('Yes'); // let the user know
+                            this.buttons.cancel.enable();
+                            return false;
+                        }
+                        let isAdmin = "times-circle";
+                        let isAdminTClass = "text-success";
+
+                        if(status == 1){
+                            isAdmin = "check-circle"
+                            isAdminTClass = "text-warning";
+                        }
+
+                        tr.find("td:eq(2)").html(`<i class="fas fa-${isAdmin} ${isAdminTClass}"></i>`)
+                        tr.data("isAdmin", status);
                         modal.close();
                     });
                     return false;
