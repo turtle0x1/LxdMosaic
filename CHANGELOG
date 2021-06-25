@@ -6,6 +6,7 @@ Added
     Optionally copying profiles when copying instance
     Show image variants when searching images from remotes (#380)
     Support managing instance providers & their types (#395)
+    Toggle admin status (#394)
 
 Changed
     Store all dates in UTC (#370)
