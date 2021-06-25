@@ -28,9 +28,9 @@ class ToggleAdminStatus
         }
 
         if ($status == 1 && $isAlreadyAdmin) {
-            throw new \Exception("Trying to make an admin user a user.", 1);
+            throw new \Exception("Trying to make an admin user an admin user.", 1);
         } elseif ($status == 0 && !$isAlreadyAdmin) {
-            throw new \Exception("Trying to make an non admin user a non admin user.", 1);
+            throw new \Exception("Trying to make an non-admin user a non-admin user.", 1);
         }
 
         $this->updateAdminStatus->update($targetUser, $status);
