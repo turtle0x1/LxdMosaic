@@ -20,7 +20,7 @@ final class DisableLogin extends AbstractMigration
     {
         $table = $this->table('Users');
         // https://github.com/cakephp/phinx/issues/764#issuecomment-304271946
-        $table->addColumn('User_Login_Disabled', 'boolean', ['null'=>true])
+        $table->addColumn('User_Login_Disabled', 'boolean', ['null'=>false, "default"=>0])
              ->update();
     }
 }
