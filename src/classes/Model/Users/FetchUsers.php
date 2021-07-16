@@ -20,7 +20,8 @@ class FetchUsers
                     `User_Date_Created` as `created`,
                     `User_Name` as `username`,
                     `User_Admin` as `isAdmin`,
-                    $mod
+                    $mod,
+                    `User_Login_Disabled` as `isDisabled`
                 FROM
                     `Users`
                 ORDER BY
