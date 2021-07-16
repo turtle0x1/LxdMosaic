@@ -214,6 +214,7 @@
                               <th>User</th>
                               <th>Added</th>
                               <th>Admin</th>
+                              <th>Disabled</th>
                               <th>Settings</th>
                           </tr>
                       </thead>
@@ -561,16 +562,27 @@ function loadUsers(){
                     isAdminTClass = "text-warning";
                 }
 
+                let isDisabled = "times-circle";
+                let isDisabledTClass = "text-success";
+
+                if(user.isDisabled == 1){
+                    isDisabled = "check-circle"
+                    isDisabledTClass = "text-warning";
+                }
+
                 let resetPasswordBtn = '<a class="dropdown-item resetPassword" href="#">Reset Password</a>';
 
                 if(parseInt(user.fromLdap) == 1){
                     resetPasswordBtn = '';
                 }
 
-                trs += `<tr data-user-id="${user.id}" data-is-admin="${user.isAdmin}">
+                let isDisabledVal = user.isDisabled;
+
+                trs += `<tr data-user-id="${user.id}" data-is-admin="${user.isAdmin}" data-is-disabled=${isDisabledVal}>
                     <td><a href="#" id="${user.id}" class='viewUser'>${user.username}</a></td>
                     <td>${moment.utc(user.created).local().fromNow()}</td>
                     <td><i class="fas fa-${isAdmin} ${isAdminTClass}"></i></td>
+                    <td><i class="fas fa-${isDisabled} ${isDisabledTClass}"></i></td>
                     <td>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <i class="fas fa-wrench"></i>
@@ -578,6 +590,7 @@ function loadUsers(){
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <a class="dropdown-item setUserProject" href="#">Set Projects Access</a>
                           ${resetPasswordBtn}
+                          <a class="dropdown-item toggleUserLogin bg-warning" href="#">Toggle User Login</a>
                           <a class="dropdown-item toggleUserAdmin bg-danger" href="#">Toggle User Admin</a>
                         </div>
                     </td>
@@ -749,7 +762,6 @@ $("#hostListTable").on("click", ".deleteHost", function(){
 });
 $("#usersTable").on("click", ".toggleUserAdmin", function(){
     let tr = $(this).parents("tr");
-    console.log(tr.data());
     let isAdmin = tr.data("isAdmin");
     let title = isAdmin ? "Revoke Admin Privileges?" : "Grant Admin Privileges?";
     let doingTxt = isAdmin ? "Revoking..." : "Granting...";
@@ -786,6 +798,55 @@ $("#usersTable").on("click", ".toggleUserAdmin", function(){
 
                         tr.find("td:eq(2)").html(`<i class="fas fa-${isAdmin} ${isAdminTClass}"></i>`)
                         tr.data("isAdmin", status);
+                        modal.close();
+                    });
+                    return false;
+                }
+            }
+        }
+    });
+});
+
+$("#usersTable").on("click", ".toggleUserLogin", function(){
+    let tr = $(this).parents("tr");
+    let isDisabled = parseInt(tr.data("isDisabled")) === 1
+    let title = isDisabled ? "Enable Login?" : "Disable Login?";
+    let doingTxt = isDisabled ? "Granting..." : "Revoking...";
+    let status = isDisabled ? 0 : 1;
+    let targetUser = tr.data("userId");
+    $.confirm({
+        title: title,
+        content: 'Are you sure you want todo this?!',
+        buttons: {
+            cancel: function () {},
+            yes: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin mr-2"></i>' + doingTxt); // let the user know
+                    this.buttons.yes.disable();
+                    this.buttons.cancel.disable();
+                    var modal = this;
+                    let x = {targetUser, status};
+
+                    ajaxRequest(globalUrls.settings.users.toggleLoginStatus, x, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            this.buttons.yes.enable();
+                            this.buttons.yes.setText('Yes'); // let the user know
+                            this.buttons.cancel.enable();
+                            return false;
+                        }
+                        let isDisabledIcon = "times-circle";
+                        let isDisabledTClass = "text-success";
+
+                        if(status == 1){
+                            isDisabledIcon = "check-circle"
+                            isDisabledTClass = "text-warning";
+                        }
+
+                        tr.find("td:eq(3)").html(`<i class="fas fa-${isDisabledIcon} ${isDisabledTClass}"></i>`)
+
+                        tr.data("isDisabled", status);
                         modal.close();
                     });
                     return false;
