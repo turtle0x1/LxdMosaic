@@ -11,7 +11,7 @@ Added
 
 Changed
     Store all dates in UTC (#370)
-    Display dates in UTC (#370)
+    Display dates in local browser time (#370)
     Run cron jobs at time specified by timezone setting (#372)
 
 Fixed
