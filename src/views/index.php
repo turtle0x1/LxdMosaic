@@ -192,7 +192,8 @@ if ($haveServers->haveAny() !== true) {
                     add: '/api/InstanceSettings/Users/AddUserController/add',
                     getAll: '/api/InstanceSettings/Users/GetUsersController/getAll',
                     search: '/api/InstanceSettings/Users/SeachUsersController/search',
-                    toggleAdminStatus: '/api/User/ToggleAdminStatusController/toggle'
+                    toggleAdminStatus: '/api/User/ToggleAdminStatusController/toggle',
+                    toggleLoginStatus: '/api/User/ToggleLoginStatusController/toggle'
                 },
                 getAll: "/api/InstanceSettings/GetAllSettingsController/getAll",
                 saveAll: "/api/InstanceSettings/SaveAllSettingsController/saveAll",
