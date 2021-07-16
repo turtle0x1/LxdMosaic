@@ -15,7 +15,7 @@ class ToggleLoginStatusController
         $this->validatePermissions = $validatePermissions;
     }
 
-    public function toggle(int $userId, int $targetUser, int $status = null)
+    public function toggle(int $userId, int $targetUser, int $status)
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         $this->toggleLoginStatus->toggle($targetUser, $status);
