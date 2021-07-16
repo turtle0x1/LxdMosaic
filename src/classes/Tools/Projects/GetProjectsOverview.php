@@ -58,20 +58,23 @@ class GetProjectsOverview
             $instances = $member->instances->all(2);
 
             foreach ($instances as $instance) {
-                if ($instance["type"] == "virtual-machine") {
+                if (isset($instance["type"]) && $instance["type"] == "virtual-machine") {
                     $limits["limits.virtual-machine"]["value"]++;
                 } else {
                     $limits["limits.containers"]["value"]++;
                 }
 
                 $limits["limits.instances"]["value"]++;
-                $limits["limits.memory"]["value"] += $instance["state"]["memory"]["usage"];
-                $limits["limits.processes"]["value"] += $instance["state"]["processes"];
-                $limits["limits.cpu"]["value"] += $instance["state"]["cpu"]["usage"];
+                
+                if (isset($instance["state"])) {
+                    $limits["limits.memory"]["value"] += $instance["state"]["memory"]["usage"];
+                    $limits["limits.processes"]["value"] += $instance["state"]["processes"];
+                    $limits["limits.cpu"]["value"] += $instance["state"]["cpu"]["usage"];
 
-                //TODO https://github.com/lxc/lxd/issues/8173
-                if ($instance["state"]["disk"] != null) {
-                    $limits["limits.disk"]["value"] += $instance["state"]["disk"]["root"]["usage"];
+                    //TODO https://github.com/lxc/lxd/issues/8173
+                    if ($instance["state"]["disk"] != null) {
+                        $limits["limits.disk"]["value"] += $instance["state"]["disk"]["root"]["usage"];
+                    }
                 }
             }
             $limits["limits.networks"]["value"] = count($member->networks->all());
