@@ -456,7 +456,7 @@ $(document).on("click", "#editHost", function(){
 
 function loadServerView(hostId)
 {
-    $(".boxSlide, #serverDetails, #serverProxyBox").hide();
+    $(".boxSlide, .serverViewBox").hide();
     $("#serverOverview, #serverBox, #serverInfoBox").show();
 
     $("#serverDetailsBtn, #serverProxyDevicesBtn, #serverWarningsBtn").removeClass("active");
@@ -495,6 +495,12 @@ function loadServerView(hostId)
                 <td>${$.isNumeric(item.cores) ? item.cores : item.cores.length} Cores</td>
             </tr>`
         });
+
+        if(data.supportsWarnings){
+            $("#serverWarningsBtn").show()
+        }else{
+            $("#serverWarningsBtn").hide()
+        }
 
         hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white"><i class="fas fa-bolt mr-2"></i>GPU'S</td></tr>`
 
