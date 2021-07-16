@@ -17,6 +17,7 @@ Changed
 Fixed
     Enforcing backup retention limit
     Typo in the reset admin password docs (#410)
+    Hosts that dont support projects break project analytics (#404)
 
 Breaking API Changes
     Change response of GetInstanceTypes api

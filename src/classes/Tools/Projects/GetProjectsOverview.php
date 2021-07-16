@@ -3,12 +3,14 @@
 namespace dhope0000\LXDClient\Tools\Projects;
 
 use dhope0000\LXDClient\Tools\Universe;
+use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 
 class GetProjectsOverview
 {
-    public function __construct(Universe $universe)
+    public function __construct(Universe $universe, HasExtension $hasExtension)
     {
         $this->universe = $universe;
+        $this->hasExtension = $hasExtension;
     }
 
     //Based on https://github.com/lxc/lxd/issues/7946#issuecomment-703367651
@@ -43,9 +45,13 @@ class GetProjectsOverview
         $hostProjects = [];
 
         foreach ($member->getCustomProp("projects") as $project) {
-            $projectDetails = $member->projects->info($project, 2);
+            $projectConfig = [];
 
-            $limits = $this->getLimitValues($projectDetails["config"]);
+            if ($this->hasExtension->checkWithHost($member, "projects")) {
+                $projectConfig = $member->projects->info($project, 2)["config"];
+            }
+
+            $limits = $this->getLimitValues($projectConfig);
 
             $member->setProject($project);
 
