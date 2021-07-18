@@ -10,27 +10,19 @@
   </div>
   <div class="modal-body">
       <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Name</span>
-          </div>
+          <span class="input-group-text">Name</span>
           <input type="text" placeholder="My Proxy" id="proxyName" class="form-control" />
       </div>
       <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Source</span>
-          </div>
+          <span class="input-group-text">Source</span>
           <input type="text" placeholder="tcp:0.0.0.0:5000" id="proxySource" class="form-control" />
       </div>
       <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Destination</span>
-          </div>
+          <span class="input-group-text">Destination</span>
           <input type="text" placeholder="tcp:0.0.0.0:80" id="proxyDestination" class="form-control" />
       </div>
       <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Instance</span>
-          </div>
+          <span class="input-group-text">Instance</span>
           <select class="form-control" id="proxyDeviceInstance">
           </select>
       </div>

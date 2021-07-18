@@ -39,13 +39,13 @@
       </div>
       <div class="">
           <div class="mb-2">
-              <i class="fas fa-info-circle text-info mr-2"></i>Your account password will be set to <code>ubuntu</code>
+              <i class="fas fa-info-circle text-info me-2"></i>Your account password will be set to <code>ubuntu</code>
           </div>
           <div class="mb-2">
-              <i class="fas fa-info-circle text-info mr-2"></i>You should wait 30~ seconds after first boot before attempting to access the console
+              <i class="fas fa-info-circle text-info me-2"></i>You should wait 30~ seconds after first boot before attempting to access the console
           </div>
           <div class="">
-              <i class="fas fa-info-circle text-info mr-2"></i>Password ssh is not enabled by default
+              <i class="fas fa-info-circle text-info me-2"></i>Password ssh is not enabled by default
           </div>
       </div>
   </div>

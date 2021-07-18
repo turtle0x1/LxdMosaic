@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title" id="exampleModalLongTitle">
-            <i class="fas fa-image mr-2"></i>Create Image From</b>
+            <i class="fas fa-image me-2"></i>Create Image From</b>
             <span id="createImage-instanceName"></span>
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

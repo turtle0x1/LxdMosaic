@@ -4,8 +4,8 @@
             <div class="col-md-12 text-center">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
                     <h4> Networks </h4>
-                    <div class="btn-toolbar float-right">
-                      <div class="btn-group mr-2">
+                    <div class="btn-toolbar float-end">
+                      <div class="btn-group me-2">
                           <button data-toggle="tooltip" data-placement="bottom" title="Create network" class="btn btn-primary" id="createNetwork">
                               <i class="fas fa-plus"></i>
                           </button>
@@ -24,7 +24,7 @@
             <div class="col-md-12">
                 <h4>
                     <span  id="networkName"></span>
-                    <button class="btn btn-danger float-right" id="deleteNetwork">
+                    <button class="btn btn-danger float-end" id="deleteNetwork">
                         <i class="fas fa-trash"></i>
                     </button>
                 </h4>
@@ -32,7 +32,7 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                  <div class="card bg-dark">
+                  <div class="card bg-dark text-white">
                     <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
@@ -49,9 +49,9 @@
                   </div>
             </div>
             <div class="col-md-8">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                     <div class="card-header bg-dark">
-                        <h5> Used By <i class="fas fa-layer-group float-right"></i> </h5>
+                        <h5> Used By <i class="fas fa-layer-group float-end"></i> </h5>
                     </div>
                     <div class="card-body bg-dark">
                         <table class="table table-bordered table-dark" id="networkUsedBy">
@@ -81,13 +81,17 @@ function makeNetworkHostSidebarHtml(hosthtml, host){
         disabled = "disabled text-warning text-strikethrough";
     }
 
-    hosthtml += `<li class="nav-item nav-dropdown">
-        <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+    let currentId = "a";
+
+    hosthtml += `<li class="mb-2">
+        <a class="d-inline href="#">
             <i class="fas fa-server"></i> ${host.alias}
         </a>
-        <ul class="nav-dropdown-items">`;
-
-
+        <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline ${disabled} float-end me-2" data-bs-toggle="collapse" data-bs-target="#${currentId}" aria-expanded="true">
+            <i class="fas fa-caret-down"></i>
+        </button>
+        <div class=" mt-2 bg-dark text-white" id="${currentId}">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small hostInstancesUl" style="display: inline;">`
 
     $.each(host.networks, function(_, network){
         hosthtml += `<li class="nav-item view-network"
@@ -124,13 +128,13 @@ function loadNetworksView()
 
 
         $.each(data.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
             $.each(cluster.members, (_, host)=>{
                 hosts = makeNetworkHostSidebarHtml(hosts, host)
             })
         });
 
-        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+        hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Standalone Hosts</u></li>`;
 
         $.each(data.standalone.members, (_, host)=>{
             hosts = makeNetworkHostSidebarHtml(hosts, host)
@@ -169,11 +173,11 @@ function loadNetworksView()
             });
             html += `<div class='row mb-2'>
                 <div class="col-md-12">
-                    <h4><i class="fas fa-server mr-2"></i>${host.alias} <i class="fas fa-project-diagram ml-2 mr-2"></i>${host.project}</h4>
+                    <h4><i class="fas fa-server me-2"></i>${host.alias} <i class="fas fa-project-diagram ms-2 me-2"></i>${host.project}</h4>
                 </div>
             `
             $.each(Object.keys(hostHtml), (_, key)=>{
-                html += `<div class="col-md-3 border-right">${hostHtml[key]}</div>`;
+                html += `<div class="col-md-3 border-end">${hostHtml[key]}</div>`;
             });
             html += `</div>`;
         });

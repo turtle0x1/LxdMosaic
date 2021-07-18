@@ -27,7 +27,7 @@
               <div class="col-md-12">
                   <div class="form-group">
                       <b> Hosts </b>
-                      <small><i class="fas fa-info-circle mr-2 text-info"></i>Only finds hosts that support projects</small>
+                      <small><i class="fas fa-info-circle me-2 text-info"></i>Only finds hosts that support projects</small>
                       <input class="form-control" id="newProjectHosts"/>
                   </div>
               </div>

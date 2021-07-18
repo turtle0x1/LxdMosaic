@@ -14,7 +14,7 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                     <div class="card-header">
                         <h4>Nodes</h4>
                     </div>
@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                     <div class="card-header">
                         <h4>Stats</h4>
                     </div>

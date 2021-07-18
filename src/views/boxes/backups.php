@@ -1,8 +1,8 @@
 <div id="backupsBox" class="boxSlide">
 <div id="backupsOverview">
     <div class="row">
-        <div class="col-md-6 border-right">
-            <div class="card bg-dark">
+        <div class="col-md-6 border-end">
+            <div class="card bg-dark text-white">
                 <div class="card-header">
                     <h4>Instance Backups</h4>
                 </div>
@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="col-md-6" id="graphCards">
-              <div class="card bg-dark">
+              <div class="card bg-dark text-white">
                   <div class="card-header">
                       <h4> Disk Usage </h4>
                   </div>
@@ -32,7 +32,7 @@
                       <canvas style="width: 100%; max-height: 400px; width: 400px;" id="backupsSizeChart"></canvas>
                   </div>
               </div>
-              <div class="card bg-dark">
+              <div class="card bg-dark text-white">
                   <div class="card-header">
                       <h4> # Backup Files </h4>
                   </div>
@@ -42,14 +42,14 @@
               </div>
         </div>
         <div class="col-md-6" id="containerBackupDetails">
-              <div class="card bg-dark">
+              <div class="card bg-dark text-white">
                   <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
                       <h4>
                           <span id="backupContainerName"></span>
                           Backups
                       </h4>
                       <div class="btn-toolbar">
-                        <div class="btn-group mr-2">
+                        <div class="btn-group me-2">
                             <button data-toggle="tooltip" data-placement="bottom" title="Schedule Backup" class="btn btn-outline-primary btn-sm" id="scheduleInstanceBackup">
                                 <i class="fas fa-clock"></i>
                             </button>
@@ -65,7 +65,7 @@
                   </div>
                   <div class="card-body">
                       <div class="d-none text-center font-weight-bold mb-2" id="ghostInstanceText">
-                          <i class="fas fa-ghost text-success mr-2"></i>This instance has been deleted, this backup is all that remains!
+                          <i class="fas fa-ghost text-success me-2"></i>This instance has been deleted, this backup is all that remains!
                       </div>
                       <table class="table table-bordered table-dark" id="backupContainerTable">
                           <thead>
@@ -255,7 +255,7 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                 <div class="form-group">
                     <label><b>Day Of Month (1-31)</b></label>
                     <br/>
-                    <small><i class="fas fa-info-circle mr-2 text-info"></i>Safer to use start of month!</small>
+                    <small><i class="fas fa-info-circle me-2 text-info"></i>Safer to use start of month!</small>
                     <input class="form-control" id="bMonthlyDayOfMonth"/>
                 </div>
             </div>
@@ -263,7 +263,7 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                 <div>
                     <label><b>At This Time (00:00-23:59)</b></label>
                     <br/>
-                    <small><i class="fas fa-info-circle mr-2 text-info"></i>Input or pick from the dropdown!</small>
+                    <small><i class="fas fa-info-circle me-2 text-info"></i>Input or pick from the dropdown!</small>
                 </div>
                 <input class="form-control" id="scheduleBackupTime" />
             </div>
@@ -277,7 +277,7 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                 <input value="7" class="form-control" id="scheduleRetention"/>
             </div>
             <div class="mt-2">
-                <i class="fas fa-info-circle mr-2 text-warning"></i>Multiple backups at the same time may stall LXD!
+                <i class="fas fa-info-circle me-2 text-warning"></i>Multiple backups at the same time may stall LXD!
             </div>
         `,
         buttons: {
@@ -429,7 +429,7 @@ $(document).on("click", ".viewContainerBackups", function(){
         });
     }else{
         trs += `<tr>
-            <td class="text-warning text-center" colspan="999"><i class="fas fa-info-circle mr-2"></i>No Backups - Consider Scheduling Backups Above</td>
+            <td class="text-warning text-center" colspan="999"><i class="fas fa-info-circle me-2"></i>No Backups - Consider Scheduling Backups Above</td>
         </tr>`
     }
 
@@ -455,18 +455,18 @@ function loadBackupsOverview() {
         currentBackups = data.allBackups;
         if(data.allBackups.length == 0){
             backupTrs = `<tr>
-                <td colspan="999" class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No instances / backups!</td>
+                <td colspan="999" class="text-center"><i class="fas fa-info-circle text-info me-2"></i>No instances / backups!</td>
             </tr>`;
         }else{
             $.each(data.allBackups, (host, hostDetails)=>{
-                backupTrs += `<tr><td class="text-center text-success" colspan="999"><i class="fas fa-server mr-2"></i>${host}</tr></tr>`;
+                backupTrs += `<tr><td class="text-center text-success" colspan="999"><i class="fas fa-server me-2"></i>${host}</tr></tr>`;
                 if(!hostDetails.supportsBackups){
-                    backupTrs += `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-warning mr-2"></i>Doesn't support backups!</td></tr>`
+                    backupTrs += `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-warning me-2"></i>Doesn't support backups!</td></tr>`
                     return true;
                 }
 
                 if(hostDetails.containers.length == 0){
-                    backupTrs += `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-warning mr-2"></i>No Instances In Project!</td></tr>`
+                    backupTrs += `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-warning me-2"></i>No Instances In Project!</td></tr>`
                     return true;
                 }
 

@@ -17,12 +17,12 @@
                       <input class="form-control" id="projectAccessUserSearch"/>
                   </div>
                   <div class="">
-                      <button class="btn btn-primary float-right" id="grantAccess">
+                      <button class="btn btn-primary float-end" id="grantAccess">
                           Add Users
                       </button>
                   </div>
               </div>
-              <div class="col-md-6 border-left">
+              <div class="col-md-6 border-start">
                   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3">
                       <h5>Users With Access</h5>
                       <button class="btn btn-sm btn-danger mb-2">
@@ -31,9 +31,7 @@
                   </div>
 
                   <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1"><i class="fas fa-filter"></i></span>
-                    </div>
+                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-filter"></i></span>
                     <input type="text" class="form-control" placeholder="Filter users..." aria-label="Username" aria-describedby="basic-addon1">
                   </div>
                   <div id="usersWithAccess">
@@ -97,7 +95,7 @@ $("#modal-projects-access").on("shown.bs.modal", function(){
             html += `<div class='text-center'><i class='fas fa-info-circle text-primary'></i> No users have access other than admin </i>`
         }else{
             $.each(data, (_, user)=>{
-                html += `<span class='badge badge-secondary m-2' id="${user.userId}"><i class='fas fa-user text-primary mr-2'></i>${user.userName}<i class="ml-2 fas fa-times revokeAccess"></i></span>`;
+                html += `<span class='badge badge-secondary m-2' id="${user.userId}"><i class='fas fa-user text-primary me-2'></i>${user.userName}<i class="ms-2 fas fa-times revokeAccess"></i></span>`;
             });
         }
         $("#usersWithAccess").empty().append(html);

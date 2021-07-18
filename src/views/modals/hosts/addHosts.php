@@ -39,10 +39,8 @@ let inputTemplate = `<div class="input-group mb-3 serverGroup">
     <input placeholder="ip / hostname"  name="connectDetails" class="form-control" autocomplete="off"/>
     <input placeholder="trust password" name="trustPassword"  type="password" class="form-control trustPasswordInput" autocomplete="off"/>
     <input placeholder="alias" name="alias"  class="form-control" autocomplete="off"/>
-    <div class="input-group-append">
     <button class="btn btn-danger removeRow" type="button"><i class="fa fa-trash"></i></button>
-    </div>
-    </button></div>`;
+</div>`;
 
 $("#modal-hosts-add").on("shown.bs.modal", function(){
     $("#inputBoxes").empty().append(inputTemplate);

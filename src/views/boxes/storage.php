@@ -4,8 +4,8 @@
             <div class="col-md-12 text-center">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
                     <h4> Storage </h4>
-                    <div class="btn-toolbar float-right">
-                      <div class="btn-group mr-2">
+                    <div class="btn-toolbar float-end">
+                      <div class="btn-group me-2">
                           <button data-toggle="tooltip" data-placement="bottom" title="Create storage pool" class="btn btn-primary" id="createPool">
                               <i class="fas fa-plus"></i>
                           </button>
@@ -16,7 +16,7 @@
         </div>
         <div class="row">
             <div class="col-md-9">
-                  <div class="card bg-dark">
+                  <div class="card bg-dark text-white">
                     <div class="card-header " role="tab" >
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
@@ -58,7 +58,7 @@
             <div class="col-md-12">
                 <h4>
                     <span class="text-white" id="storagePoolName"></span>
-                    <button class="btn btn-danger float-right" id="deletePool">
+                    <button class="btn btn-danger float-end" id="deletePool">
                         <i class="fas fa-trash"></i>
                     </button>
                 </h4>
@@ -66,7 +66,7 @@
         </div>
         <div class="row">
             <div class="col-md-3">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                   <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                     <h5>
                       <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
@@ -81,7 +81,7 @@
                     </div>
                   </div>
                 </div>
-                  <div class="card bg-dark">
+                  <div class="card bg-dark text-white">
                     <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
@@ -98,9 +98,9 @@
                   </div>
             </div>
             <div class="col-md-3">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                   <div class="card-header" role="tab">
-                    <h5>Volumes <i class="fas fa-database float-right"></i></h5>
+                    <h5>Volumes <i class="fas fa-database float-end"></i></h5>
                   </div>
                   <div class="card-body">
                       <table class="table table-bordered table-dark" id="storageVolumeTable">
@@ -117,9 +117,9 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                     <div class="card-header">
-                        <h5>Used By <i class="fas fa-layer-group float-right"></i> </h5>
+                        <h5>Used By <i class="fas fa-layer-group float-end"></i> </h5>
                     </div>
                     <div class="card-body table-responsive  bg-dark">
                         <table class="table table-bordered table-dark" id="storagePoolUsedBy">
@@ -140,17 +140,17 @@
         <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
             <div class="col-md-12">
                 <h4>
-                    <i class="fas fa-database text-white mr-2"></i>
+                    <i class="fas fa-database text-white me-2"></i>
                     <span class="text-white" id="storageVolumeName"></span>
                 </h4>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                   <div class="card-header">
                     <h5>
-                        <i class="fas fa-cog mr-2"></i>Config
+                        <i class="fas fa-cog me-2"></i>Config
                     </h5>
                   </div>
                   <div class="card-body">
@@ -166,10 +166,10 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                   <div class="card-header">
                     <h5>
-                        <i class="fas fa-layer-group float-right"></i>Used By
+                        <i class="fas fa-layer-group float-end"></i>Used By
                     </h5>
                   </div>
                   <div class="card-body">
@@ -197,12 +197,18 @@ function makeStorageHostSidebarHtml(hosthtml, host, tableListHtml){
     if(host.hostOnline == false){
         disabled = "disabled text-warning text-strikethrough";
     }
+    
+    let currentId = "a";
 
-    hosthtml += `<li class="nav-item nav-dropdown">
-        <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+    hosthtml += `<li class="mb-2">
+        <a class="d-inline href="#">
             <i class="fas fa-server"></i> ${host.alias}
         </a>
-        <ul class="nav-dropdown-items">`;
+        <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline ${disabled} float-end me-2" data-bs-toggle="collapse" data-bs-target="#${currentId}" aria-expanded="true">
+            <i class="fas fa-caret-down"></i>
+        </button>
+        <div class=" mt-2 bg-dark text-white" id="${currentId}">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small hostInstancesUl" style="display: inline;">`
 
 
     if(host.hostOnline == true) {
@@ -297,7 +303,7 @@ function loadStorageView()
         // $("#currentStorageUsageTotal").find('[data-toggle="tooltip"]').tooltip({html: true})
 
         $.each(data.hostDetails.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
             $.each(cluster.members, (_, host)=>{
                 let html = makeStorageHostSidebarHtml(hosts, host, tableList)
                 hosts = html.hosthtml;
@@ -305,7 +311,7 @@ function loadStorageView()
             })
         });
 
-        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+        hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Standalone Hosts</u></li>`;
 
         $.each(data.hostDetails.standalone.members, (_, host)=>{
             let html = makeStorageHostSidebarHtml(hosts, host, tableList)
@@ -359,7 +365,7 @@ function viewStoragePool(hostId, hostAlias, poolName)
         let volumesHtml = "";
 
         if(data.volumes.length == 0){
-            volumesHtml += `<tr><td class="text-center" colspan="2"><i class="fas fa-info-circle text-info mr-2"></i>No Volumes</td></tr>`
+            volumesHtml += `<tr><td class="text-center" colspan="2"><i class="fas fa-info-circle text-info me-2"></i>No Volumes</td></tr>`
         }else{
             $.each(data.volumes, function(key, value){
                 volumesHtml += `<tr>
@@ -393,7 +399,7 @@ function viewStorageVolume(hostId, hostAlias, poolName, volumeName, path, projec
         let configKeys = Object.keys(data.config);
         if(configKeys.length == 0){
             volumeConfigTrs = `<tr>
-                <td colspan="2" class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No Config</td>
+                <td colspan="2" class="text-center"><i class="fas fa-info-circle text-info me-2"></i>No Config</td>
             </tr>`;
 
         }else{
@@ -408,7 +414,7 @@ function viewStorageVolume(hostId, hostAlias, poolName, volumeName, path, projec
         let volumeUsedByTrs = "";
 
         if(data.used_by.length == 0){
-            volumeUsedByTrs += `<tr><td class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Not Used</td></tr>`
+            volumeUsedByTrs += `<tr><td class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Not Used</td></tr>`
         }else{
             $.each(data.used_by, function(key, value){
                 volumeUsedByTrs += `<tr><td>${value}</td></tr>`

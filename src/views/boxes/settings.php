@@ -2,15 +2,15 @@
     <div id="settingsOverview" class="settingsBox">
         <div class="row">
             <div class="col-md-6">
-                  <div class="card bg-dark">
+                  <div class="card bg-dark text-white">
                   <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
                             My Permanent API keys
                         </a>
                         </h5>
-                        <div class="btn-toolbar float-right">
-                            <div class="btn-group mr-2">
+                        <div class="btn-toolbar float-end">
+                            <div class="btn-group me-2">
                                 <button class="btn btn-success" id="createToken">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -37,7 +37,7 @@
 </div>
 <div id="instanceSettingsBox" class="settingsBox row">
     <div class="col-md-6">
-        <div class="card bg-dark">
+        <div class="card bg-dark text-white">
           <div class="card-header bg-dark" role="tab" >
             <h5>
               <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
@@ -62,15 +62,15 @@
             </div>
           </div>
         </div>
-          <div class="card bg-dark">
+          <div class="card bg-dark text-white">
           <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
               <h5>
                 <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
                   General Settings
                 </a>
                 </h5>
-                <div class="btn-toolbar float-right">
-                    <div class="btn-group mr-2">
+                <div class="btn-toolbar float-end">
+                    <div class="btn-group me-2">
                         <a target="_blank" class="btn btn-primary" href="https://lxdmosaic.readthedocs.io/en/latest/LXDMosaic_Settings/">
                             <i class="fas fa-book-open"></i>
                         </a>
@@ -97,15 +97,15 @@
           </div>
     </div>
     <div class="col-md-6">
-      <div class="card bg-dark">
+      <div class="card bg-dark text-white">
       <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
           <h5>
             <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
               LDAP Settings
             </a>
             </h5>
-            <div class="btn-toolbar float-right">
-                <div class="btn-group mr-2">
+            <div class="btn-toolbar float-end">
+                <div class="btn-group me-2">
                     <button class="btn btn-success" id="saveLdapSettings">
                         <i class="fas fa-save"></i>
                     </button>
@@ -115,10 +115,10 @@
         <div id="" class="collapse in show" role="tabpanel" >
           <div class="card-body bg-dark">
             <div class="text-center mb-2">
-                <small class="font-italic"><i class="fas fa-info-circle text-info mr-2"></i>Users sync'd on the hour every hour!</small>
+                <small class="font-italic"><i class="fas fa-info-circle text-info me-2"></i>Users sync'd on the hour every hour!</small>
             </div>
             <div class="text-center mb-2">
-                <small class="font-italic"><i class="fas fa-info-circle text-warning mr-2"></i>Setting LDAP Server to empty value will disable LDAP syncing &amp; login!</small>
+                <small class="font-italic"><i class="fas fa-info-circle text-warning me-2"></i>Setting LDAP Server to empty value will disable LDAP syncing &amp; login!</small>
             </div>
             <table class="table table-dark table-bordered" id="ldapSettingListTable">
                 <thead>
@@ -136,13 +136,13 @@
     </div>
 </div>
 <div id="recordedActionsBox" class="settingsBox">
-    <div class="card bg-dark" id="recordedActionsCard">
+    <div class="card bg-dark text-white" id="recordedActionsCard">
       <div class="card-header bg-dark" role="tab" >
         <h5>
           <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#lastRecordedActions" aria-expanded="true" aria-controls="lastRecordedActions">
             Last <span id="actionCount"></span> Recorded Actions
           </a>
-          <button class="btn btn-primary float-right" id="loadMoreRecordedActions">
+          <button class="btn btn-primary float-end" id="loadMoreRecordedActions">
               <i class="fas fa-search-plus"></i>
           </button>
         </h5>
@@ -166,7 +166,7 @@
     </div>
 </div>
 <div id="instanceHostsBox" class="settingsBox">
-    <div class="card bg-dark" id="recordedActionsCard">
+    <div class="card bg-dark text-white" id="recordedActionsCard">
       <div class="card-header bg-dark" role="tab" >
         <h5>
           <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#allHostsList" aria-expanded="true" aria-controls="allHostsList">
@@ -195,13 +195,13 @@
 <div id="usersList" class="settingsBox">
     <div class="row">
         <div class="col-md-5">
-            <div class="card bg-dark" id="usersCard">
+            <div class="card bg-dark text-white" id="usersCard">
               <div class="card-header" role="tab" >
                 <h5>
                   <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
                     Users
                   </a>
-                  <button class="btn btn-success float-right" id="addUser">
+                  <button class="btn btn-success float-end" id="addUser">
                       <i class="fas fa-plus"></i>
                   </button>
                 </h5>
@@ -234,11 +234,11 @@
 <div id="retiredData" class="settingsBox">
     <div class="row">
         <div class="col-md-12">
-            <div class="card bg-dark" id="usersCard">
+            <div class="card bg-dark text-white" id="usersCard">
               <div class="card-header" role="tab" >
                 <h5>
                   <a class="text-white">
-                      <i class="fas fa-chart-line mr-2"></i>Fleet Analytics
+                      <i class="fas fa-chart-line me-2"></i>Fleet Analytics
                   </a>
                 </h5>
               </div>
@@ -292,8 +292,8 @@
                   </table>
                 </div>
                 <div class="card-footer bg-dark">
-                    <button class="btn btn-primary float-right" id="downloadOldFleetAnalytics">
-                        <i class="fas fa-download mr-2"></i>Download CSV
+                    <button class="btn btn-primary float-end" id="downloadOldFleetAnalytics">
+                        <i class="fas fa-download me-2"></i>Download CSV
                     </button>
                 </div>
               </div>
@@ -312,7 +312,7 @@
                 <div class="card bg-dark text-white">
                     <div class="card-header">
                         <h4>Providers
-                            <button class="btn btn-outline-primary float-right" id="addProvider"><i class="fas fa-plus"></i></button>
+                            <button class="btn btn-outline-primary float-end" id="addProvider"><i class="fas fa-plus"></i></button>
                         </h4>
                     </div>
                     <div class="card-body">
@@ -322,23 +322,23 @@
                 </div>
             </div>
             <div class="col-md-10" id="instanceTypesOverviewProviderDetailsSplash">
-                <h4 class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Choose a provider</h4>
+                <h4 class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Choose a provider</h4>
             </div>
             <div class="col-md-10" id="instanceTypesOverviewProviderDetails">
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <h4 class="d-inline" id="providerName"></h4>
-                        <button class="btn btn-danger float-right d-inline" id="deleteProvider">
+                        <button class="btn btn-danger float-end d-inline" id="deleteProvider">
                             <i class="fas fa-trash"></i>
                         </button>
-                        <button class="btn btn-primary float-right d-inline" id="addInstanceType">
+                        <button class="btn btn-primary float-end d-inline" id="addInstanceType">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card bg-dark">
+                        <div class="card bg-dark text-white">
                             <div class="card-body">
                                 <table id="providerTypesTable" class="table table-bordered table-dark">
                                     <thead>
@@ -381,7 +381,7 @@ function loadSettingsView()
     let hosts = `
     <li class="nav-item my-settings">
         <a class="nav-link text-info" href="#">
-            <i class="fas fa-user mr-2"></i>My Settings
+            <i class="fas fa-user me-2"></i>My Settings
         </a>
     </li>`
 
@@ -391,37 +391,37 @@ function loadSettingsView()
         hosts += `
         <li class="nav-item instance-hosts">
             <a class="nav-link" href="#">
-                <i class="fas fa-server mr-2"></i>Hosts
+                <i class="fas fa-server me-2"></i>Hosts
             </a>
         </li>
         <li class="nav-item instance-settings">
             <a class="nav-link" href="#">
-                <i class="fas fa-sliders-h mr-2"></i>LXDMosaic Settings
+                <i class="fas fa-sliders-h me-2"></i>LXDMosaic Settings
             </a>
         </li>
         <li class="nav-item instance-types-overview">
             <a class="nav-link" href="#">
-                <i class="fas fa-cloud mr-2"></i>Instance Types
+                <i class="fas fa-cloud me-2"></i>Instance Types
             </a>
         </li>
         <li class="nav-item users-overview">
             <a class="nav-link" href="#">
-                <i class="fas fa-users-cog mr-2"></i>Users
+                <i class="fas fa-users-cog me-2"></i>Users
             </a>
         </li>
         <li class="nav-item user-project-overview">
             <a class="nav-link" href="#">
-                <i class="fas fa-users-cog mr-2"></i>User Project Access
+                <i class="fas fa-users-cog me-2"></i>User Project Access
             </a>
         </li>
         <li class="nav-item recorded-actions-overview">
             <a class="nav-link" href="#">
-                <i class="fas fa-history mr-2"></i>Recorded Actions
+                <i class="fas fa-history me-2"></i>Recorded Actions
             </a>
         </li>
         <li class="nav-item retired-data-overview">
             <a class="nav-link" href="#">
-                <i class="fas fa-eraser mr-2"></i>Retired Data
+                <i class="fas fa-eraser me-2"></i>Retired Data
             </a>
         </li>
         `
@@ -440,7 +440,7 @@ function loadSettingsView()
         let trs = "";
 
         if(data.permanentTokens.length == 0){
-            trs = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-success mr-2'></i>No Permanent API Keys!</td></tr>"
+            trs = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-success me-2'></i>No Permanent API Keys!</td></tr>"
         }else{
             $.each(data.permanentTokens, (_, token)=>{
                 trs += `<tr>
@@ -496,7 +496,7 @@ function makeHostUserOverview(html, host){
             }
             html += `</td>`
         }else{
-            html += `<td><small><i class="fas fa-info-circle text-info mr-2"></i>No Users Have Access</small></td>`
+            html += `<td><small><i class="fas fa-info-circle text-info me-2"></i>No Users Have Access</small></td>`
         }
 
         html += `<td><button class="btn btn-primary openProjectAccess" data-host-id="${host.hostId}" data-project="${project}"><i class="fas fa-users"></i></button></td>`
@@ -513,7 +513,7 @@ function loadProjectAccesOverview(){
         data = $.parseJSON(data);
         let hosts = "";
         $.each(data.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
             $.each(cluster.members, (_, host)=>{
                 hosts = makeHostUserOverview(hosts, host)
             })
@@ -651,11 +651,11 @@ function loadInstanceSettings(){
         let ldapKeys = [4, 5, 6, 7];
         let ldapTrs = "";
         let ldapExtraText = {
-            5: `<i class="fas fa-info-circle text-info ml-2" data-toggle="tooltip"
+            5: `<i class="fas fa-info-circle text-info ms-2" data-toggle="tooltip"
                 data-placement="bottom"
                 title="The LDAP user that performs lookups E.G <code>cn=administrator,cn=Users,dc=example,dc=com</code>">
                 </i>`,
-            7: `<i class="fas fa-info-circle text-info ml-2" data-toggle="tooltip"
+            7: `<i class="fas fa-info-circle text-info ms-2" data-toggle="tooltip"
                 data-placement="bottom"
                 title="DN To Search Users for E.G <code>ou=user_folder,dc=example,dc=com</code>">
                 </i>`,
@@ -776,7 +776,7 @@ $("#usersTable").on("click", ".toggleUserAdmin", function(){
             yes: {
                 btnClass: 'btn-danger',
                 action: function () {
-                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin mr-2"></i>' + doingTxt); // let the user know
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin me-2"></i>' + doingTxt); // let the user know
                     this.buttons.yes.disable();
                     this.buttons.cancel.disable();
                     var modal = this;
@@ -822,7 +822,7 @@ $("#usersTable").on("click", ".toggleUserLogin", function(){
             yes: {
                 btnClass: 'btn-danger',
                 action: function () {
-                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin mr-2"></i>' + doingTxt); // let the user know
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin me-2"></i>' + doingTxt); // let the user know
                     this.buttons.yes.disable();
                     this.buttons.cancel.disable();
                     var modal = this;
@@ -1082,7 +1082,7 @@ $("#usersList").on("click", ".viewUser", function(){
         data = makeToastr(data);
         let x = `<div class="mb-3 text-center">
             <h4 class="text-underline">
-                <i class="fas fa-user mr-2"></i>Viewing <code>${userName}</code> latest attempted actions
+                <i class="fas fa-user me-2"></i>Viewing <code>${userName}</code> latest attempted actions
             </h4>
         </div>`;
 
@@ -1104,18 +1104,18 @@ $("#usersList").on("click", ".viewUser", function(){
         };
 
         if(data.length == 0){
-            x += `<div class="text-center"><h5><i class="fas fa-info-circle text-info mr-2"></i>No Recorded Actions</h5></div>`;
+            x += `<div class="text-center"><h5><i class="fas fa-info-circle text-info me-2"></i>No Recorded Actions</h5></div>`;
         }else{
             $.each(data, (category, methods)=>{
                 x += `<div class='mb-3 pb-2 border-bottom'>
-                    <h1><i class="${categoryIcons[category]} mr-2"></i>${category}
+                    <h1><i class="${categoryIcons[category]} me-2"></i>${category}
                     </h1>
                     <div class="row">`
                 let c = Math.floor(12 / Object.keys(methods).length);
                 let i = 0 ;
                 $.each(methods, (method, events)=>{
-                    let bl = i == 0 ? "" : "border-left";
-                    x += `<div class="col-md-${c} ${bl} text-center"><h4><i class="${methodIcons[method]} mr-2"></i> ${method} - ${events.length}</h4></div>`;
+                    let bl = i == 0 ? "" : "border-start";
+                    x += `<div class="col-md-${c} ${bl} text-center"><h4><i class="${methodIcons[method]} me-2"></i> ${method} - ${events.length}</h4></div>`;
                     i++;
                 });
                 x += `</div></div>`
@@ -1234,7 +1234,7 @@ $("#usersList").on("click", "#addUser", function(){
                 <label>Password</label>
                 <input type="password" class="form-control" name="password" required />
             </div>
-            <i class="fas fa-info-circle text-warning mr-2"></i>Users wont be able to login until you grant access to projects!
+            <i class="fas fa-info-circle text-warning me-2"></i>Users wont be able to login until you grant access to projects!
         </form>`,
         buttons: {
             cancel: {

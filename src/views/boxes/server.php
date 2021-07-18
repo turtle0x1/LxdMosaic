@@ -3,10 +3,10 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-1">
-                    <h1><i class="fas fa-server mr-2"></i><span id="serverHeading"></span</h1>
+                    <h1><i class="fas fa-server me-2"></i><span id="serverHeading"></span</h1>
                     <?php if ($isAdmin === 1) : ?>
-                    <div class="btn-toolbar float-right">
-                      <div class="btn-group mr-2">
+                    <div class="btn-toolbar float-end">
+                      <div class="btn-group me-2">
                         <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Host" id="editHost">
                             <i class="fas fa-cog"></i>
                         </button>
@@ -22,14 +22,14 @@
         <div class="row mb-2">
             <div class="col-md-6 border-bottom">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                    <h4><i class="fas fa-memory mr-2"></i>Server Memory Usage</h4>
+                    <h4><i class="fas fa-memory me-2"></i>Server Memory Usage</h4>
                     <h4 id="serverMemoryUsagePercentage"></h4>
                 </div>
                 <div id="serverMemoryUsageBox"></div>
             </div>
             <div class="col-md-6 border-bottom">
                 <div class="mb-3">
-                    <h4><i class="fas fa-boxes mr-2"></i>Project Instances Online</h4>
+                    <h4><i class="fas fa-boxes me-2"></i>Project Instances Online</h4>
                     <div id="serverInstancesOnlineBox"></div>
                 </div>
             </div>
@@ -37,23 +37,23 @@
         <div class="row border-bottom pb-2 mb-2">
                 <div class="col-md-12 text-center justify-content">
                     <button type="button" class="btn text-white btn-outline-primary active" id="serverDetailsBtn" data-view="serverInfoBox">
-                        <i class="fas fa-info pr-2"></i>Details
+                        <i class="fas fa-info pe-2"></i>Details
                     </button>
                     <button type="button" class="btn text-white btn-outline-primary" id="serverWarningsBtn" data-view="serverWarningsBox">
-                        <i class="fas fa-exclamation-triangle pr-2" style="color: white !important;"></i>Warnings
+                        <i class="fas fa-exclamation-triangle pe-2" style="color: white !important;"></i>Warnings
                     </button>
                     <button type="button" class="btn text-white btn-outline-primary" id="serverProxyDevicesBtn" data-view="serverProxyBox">
-                        <i class="fas fa-exchange-alt pr-2"></i>Proxy Devices
+                        <i class="fas fa-exchange-alt pe-2"></i>Proxy Devices
                     </button>
                 </div>
         </div>
         <div class="row serverViewBox" id="serverInfoBox">
         <div class="col-md-8">
-            <div class="card bg-dark">
+            <div class="card bg-dark text-white">
                 <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
-                    <h4><i class="fas fa-box mr-2"></i>Instances</h4>
-                    <div class="btn-toolbar float-right">
-                      <div class="btn-group mr-2">
+                    <h4><i class="fas fa-box me-2"></i>Instances</h4>
+                    <div class="btn-toolbar float-end">
+                      <div class="btn-group me-2">
                         <button class="btn btn-success serverContainerActions" data-action="start" data-toggle="tooltip" data-placement="bottom" title="Start Instances" disabled>
                             <i class="fas fa-play"></i>
                         </button>
@@ -87,9 +87,9 @@
         <div class="col-md-4">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card bg-dark">
+                    <div class="card bg-dark text-white">
                         <div class="card-header">
-                            <h4><i class="fas fa-server mr-2"></i>Hardware</h4>
+                            <h4><i class="fas fa-server me-2"></i>Hardware</h4>
                         </div>
                         <div class="card-body">
                             <div>
@@ -106,10 +106,10 @@
         </div>
         <div class="row serverViewBox" id="serverProxyBox">
             <div class="col-md-12">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                     <div class="card-header text-white">
                         <h4>Proxy Devices
-                        <button class="btn btn-sm btn-primary float-right" id="addProxyDevice">
+                        <button class="btn btn-sm btn-primary float-end" id="addProxyDevice">
                             <i class="fas fa-plus"></i>
                         </button>
                         </h4>
@@ -133,7 +133,7 @@
         </div>
         <div class="row serverViewBox" id="serverWarningsBox">
             <div class="col-md-12">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                     <div class="card-header text-white">
                         <h4>Warnings</h4>
                     </div>
@@ -487,7 +487,7 @@ function loadServerView(hostId)
 
         let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
 
-        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white"><i class="fas fa-microchip mr-2"></i>CPU'S</td></tr>`
+        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white"><i class="fas fa-microchip me-2"></i>CPU'S</td></tr>`
 
         $.each(data.resources.cpu.sockets, (_, item)=>{
             hostDetailsTrs += `<tr>
@@ -502,7 +502,7 @@ function loadServerView(hostId)
             $("#serverWarningsBtn").hide()
         }
 
-        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white"><i class="fas fa-bolt mr-2"></i>GPU'S</td></tr>`
+        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white"><i class="fas fa-bolt me-2"></i>GPU'S</td></tr>`
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
             $.each(data.resources.gpu.cards, function(i, gpu){
@@ -543,7 +543,7 @@ function loadServerView(hostId)
 
             hostDetailsTrs += `
                 <tr>
-                    <td colspan="999" class="bg-info text-center text-white"><i class="fas fa-info-circle mr-2"></i>System Details</td>
+                    <td colspan="999" class="bg-info text-center text-white"><i class="fas fa-info-circle me-2"></i>System Details</td>
                 </tr>
                 <tr>
                     <td>Motherboard</td>
@@ -626,8 +626,8 @@ function loadServerView(hostId)
                 </div>
             </div>`);
         }else{
-            $("#serverInstancesOnlineBox").empty().append(`<div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No instances!</div>`);
-            containerHtml = `<tr><td class="text-center" colspan="999"><i class="fas fa-info-circle text-info mr-2"></i>No instances!</td></tr>`
+            $("#serverInstancesOnlineBox").empty().append(`<div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>No instances!</div>`);
+            containerHtml = `<tr><td class="text-center" colspan="999"><i class="fas fa-info-circle text-info me-2"></i>No instances!</td></tr>`
         }
 
         $("#containerTable > tbody").empty().append(containerHtml);

@@ -4,7 +4,7 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <h4> Profiles </h4>
-                <div class="btn-group mr-2">
+                <div class="btn-group me-2">
                     <button data-toggle="tooltip" data-placement="bottom" title="Create Profile" class="btn btn-primary" id="createProfile">
                         <i class="fas fa-plus"></i>
                     </button>
@@ -23,8 +23,8 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
             <h4 id="profileNameTitle"> <u>
             </u></h4>
-            <div class="btn-toolbar float-right">
-              <div class="btn-group mr-2">
+            <div class="btn-toolbar float-end">
+              <div class="btn-group me-2">
                   <button data-toggle="tooltip" data-placement="bottom" title="Copy Profile" class="btn btn-primary" id="copyProfile">
                       <i class="fas fa-copy"></i>
                   </button>
@@ -41,12 +41,12 @@
     </div>
     <div class="row mt-2">
 <div class="col-md-4">
-      <div class="card bg-dark">
+      <div class="card bg-dark text-white">
         <div class="card-header bg-dark" role="tab" id="profileDevicesHeading">
           <h5>
             <a id="devicesAriaToggle" class="text-white" data-toggle="collapse" data-parent="#profileDevicesHeading" href="#profileDevicesCard" aria-expanded="true" aria-controls="profileDevicesCard">
               Devices
-              <i class="nav-icon fa fa-cog float-right"></i>
+              <i class="nav-icon fa fa-cog float-end"></i>
             </a>
           </h5>
         </div>
@@ -68,12 +68,12 @@
       <br/>
 </div>
 <div class="col-md-5">
-    <div class="card bg-dark">
+    <div class="card bg-dark text-white">
       <div class="card-header bg-dark" role="tab" id="configDeviceCardHeading">
         <h5>
           <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#configDeviceCard" aria-expanded="true" aria-controls="configDeviceCard">
             Configuration
-            <i class="fas fa-cogs float-right"></i>
+            <i class="fas fa-cogs float-end"></i>
           </a>
         </h5>
       </div>
@@ -95,12 +95,12 @@
     </div>
 </div>
 <div class="col-md-3">
-      <div class="card bg-dark">
+      <div class="card bg-dark text-white">
         <div class="card-header bg-dark" role="tab" id="usedByCard">
           <h5>
             <a data-toggle="collapse" class="text-white" data-parent="#accordion" href="#usedByCollapse" aria-expanded="true" aria-controls="usedByCollapse">
               Used By
-              <i class="fas fa-layer-group float-right"></i>
+              <i class="fas fa-layer-group float-end"></i>
             </a>
           </h5>
         </div>
@@ -137,11 +137,17 @@ function makeHostHtml(hosthtml, host, selectedProfile = null, selectedHost = nul
         disabled = "disabled text-warning text-strikethrough";
     }
 
-    hosthtml += `<li class="nav-item nav-dropdown">
-        <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+    let currentId = "a";
+
+    hosthtml += `<li class="mb-2">
+        <a class="d-inline href="#">
             <i class="fas fa-server"></i> ${host.alias}
         </a>
-        <ul class="nav-dropdown-items">`;
+        <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline ${disabled} float-end me-2" data-bs-toggle="collapse" data-bs-target="#${currentId}" aria-expanded="true">
+            <i class="fas fa-caret-down"></i>
+        </button>
+        <div class=" mt-2 bg-dark text-white" id="${currentId}">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small hostInstancesUl" style="display: inline;">`
 
     $.each(host.profiles, function(_, profileName){
         let active = "";
@@ -192,7 +198,7 @@ function makeHostProfileCard(hostId, hostName, profiles)
 
     return `<div class="card bg-dark text-white">
         <div class="card-header">
-            <h4><i class='fas fa-server mr-2'></i>${hostName}</h4>
+            <h4><i class='fas fa-server me-2'></i>${hostName}</h4>
         </div>
         <div class="card-body">
             <table class="table table-dark table-bordered">
@@ -237,13 +243,13 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
 
 
         $.each(data.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
             $.each(cluster.members, (_, host)=>{
                 hosts = makeHostHtml(hosts, host, selectedProfile, selectedHost)
             })
         });
 
-        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+        hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Standalone Hosts</u></li>`;
 
         $.each(data.standalone.members, (_, host)=>{
             hosts = makeHostHtml(hosts, host, selectedProfile, selectedHost)
@@ -255,7 +261,7 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
             callback();
         }
     });
-    
+
     $("#profileCards").empty().append(`<h4 class='text-center'><i class="fas fa-cog fa-spin"></i></h4>`)
     ajaxRequest(globalUrls.profiles.getDashboard, null, function(data){
         var data = $.parseJSON(data);
@@ -282,7 +288,7 @@ function createTableRowsHtml(data, childPropertyToSearch)
 {
     let html = "";
     if(data.length == 0){
-        html = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-info mr-2'></i>No Settings!</td></tr>"
+        html = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-info me-2'></i>No Settings!</td></tr>"
     }else{
         $.each(data, function(x, y){
             if($.isPlainObject(y)){
@@ -330,7 +336,7 @@ function viewProfile(profileId, hostAlias, hostId){
         let profileUsedByHtml = "";
 
         if(usedBy.length == 0){
-            profileUsedByHtml = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-info mr-2'></i>Not Used!</td></tr>"
+            profileUsedByHtml = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-info me-2'></i>Not Used!</td></tr>"
         }else{
             $.each(usedBy, function(_, instance){
                 profileUsedByHtml += `<tr><td>${instance}</td></tr>`;

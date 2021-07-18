@@ -3,8 +3,8 @@
     <div class="col-md-12">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
         <h4>Cloud Config</h4>
-        <div class="btn-toolbar float-right">
-          <div class="btn-group mr-2">
+        <div class="btn-toolbar float-end">
+          <div class="btn-group me-2">
               <button data-toggle="tooltip" data-placement="bottom" title="Create Cloud Config" class="btn btn-block btn-primary" id="createCloudConfig">
                   <i class="fa fa-plus"></i>
               </button>
@@ -16,8 +16,8 @@
 <div  id="cloudConfigContents">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
         <h1></h1>
-        <div class="btn-toolbar float-right">
-          <div class="btn-group mr-2">
+        <div class="btn-toolbar float-end">
+          <div class="btn-group me-2">
               <button data-toggle="tooltip" data-placement="bottom" title="Save Cloud Config" class="btn btn-success save">
                   <i class="fas fa-save"></i>
               </button>
@@ -34,12 +34,12 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-12">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                   <div class="card-header bg-dark" role="tab" >
                     <h5>
                       <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                         Image
-                        <i class="fas float-right fa-image"></i>
+                        <i class="fas float-end fa-image"></i>
                       </a>
                     </h5>
                   </div>
@@ -53,12 +53,12 @@
         </div>
         <div class="row">
             <div class="col-md-7">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                   <div class="card-header bg-dark" role="tab" id="cloudConfig-actionsHeading">
                     <h5>
                       <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-editorCollapse" aria-expanded="true" aria-controls="cloudConfig-editorCollapse">
                         Cloud Config File
-                        <i class="fas float-right fa-file"></i>
+                        <i class="fas float-end fa-file"></i>
                       </a>
                     </h5>
                   </div>
@@ -70,18 +70,18 @@
                 </div>
             </div>
             <div class="col-md-5">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                   <div class="card-header bg-dark" role="tab">
                     <h5>
                       <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-envVariablesCollapse" aria-expanded="true" aria-controls="cloudConfig-envVariablesCollapse">
                         Enviroment Variables
-                        <i class="fas float-right fa-file"></i>
+                        <i class="fas float-end fa-file"></i>
                       </a>
                     </h5>
                   </div>
                   <div class="bg-dark" id="cloudConfig-envVariablesCollapse" class="collapse show" role="tabpanel" aria-labelledby="cloudConfig-actionsHeading">
                     <div class="card-block bg-dark">
-                        <button class="btn btn-primary float-right mb-2" id="addEnvVariableRow">
+                        <button class="btn btn-primary float-end mb-2" id="addEnvVariableRow">
                             <i class="fas fa-plus"></i>
                         </button>
                         <table class="table table-bordered table-dark text-white" id="cloudConfigEnvTable">
@@ -162,17 +162,23 @@ function loadCloudConfigTree()
         loadCloudConfigOverview();
         var data = $.parseJSON(data);
         let hosts = `
-        <li class="nav-item cloudConfig-overview">
-            <a class="nav-link text-info" href="#">
-                <i class="fas fa-tachometer-alt"></i> Overview
+        <li class="mb-2 cloudConfig-overview">
+            <a class="" style="text-decoration: none;" href="#">
+                <i class="fas fa-tachometer-alt mr-5"></i> Overview
             </a>
         </li>`;
+        let currentId = "a";
         $.each(data, function(i, item){
-            hosts += `<li class="nav-item nav-dropdown open">
-                <a class="nav-link nav-dropdown-toggle" href="#">
-                    <i class="nav-icon fas fa-caret-down"></i> ${i}
+
+            hosts += `<li class="mb-2">
+                <a class="d-inline href="#">
+                    <i class="fas fa-server me-2"></i>${i}
                 </a>
-                <ul class="nav-dropdown-items">`;
+                <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#${currentId}" aria-expanded="true">
+                    <i class="fas fa-caret-down"></i>
+                </button>
+                <div class=" mt-2 bg-dark text-white" id="${currentId}">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small hostInstancesUl" style="display: inline;">`
 
             $.each(item, function(o, z){
                 hosts += `<li class="nav-item view-cloudConifg"
@@ -185,7 +191,9 @@ function loadCloudConfigTree()
                   </a>
                 </li>`;
             });
-            hosts += "</ul></li>";
+            hosts += `</ul></div></li>`
+            currentId = nextLetter(currentId)
+
         });
 
         $("#sidebar-ul").empty().append(hosts);

@@ -6,17 +6,15 @@
 <div id="imagesBox" class="boxSlide">
 <!-- <h4> Container: <`span id="containerName"></span> </h4> -->
 <div class="col-md-12" id="imageSplash">
-    <div class="card bg-dark">
+    <div class="card bg-dark text-white">
       <div class="card-header" role="tab" id="container-imagesHeading">
         <h5 class="text-white">Search Remote Servers For Images</h5>
       </div>
       <div id="imagesOverviewDetails" class="card-body bg-dark table-responsive">
             <div id="remoteImagesTableBox">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
-                    <div class="input-group mb-2 mr-sm-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">Server</div>
-                        </div>
+                    <div class="input-group mb-2 me-sm-2">
+                        <div class="input-group-text">Server</div>
                         <select id="searchImages-server" class="form-control">
                             <option value="" selected>Select...</option>
                             <option value="linuxcontainers">linuxcontainers</option>
@@ -24,20 +22,16 @@
                             <option value="ubuntu-daily">ubuntu-daily</option>
                         </select>
                     </div>
-                    <div class="input-group mb-2 mr-sm-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">Type</div>
-                        </div>
+                    <div class="input-group mb-2 me-sm-2">
+                        <div class="input-group-text">Type</div>
                         <select id="searchImages-type" class="form-control">
                             <option value="" selected>Select...</option>
                             <option value="container">Container</option>
                             <option value="virtual-machine">Virtual Machine</option>
                         </select>
                     </div>
-                    <div class="input-group mb-2 mr-sm-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">Arch</div>
-                        </div>
+                    <div class="input-group mb-2 me-sm-2">
+                        <div class="input-group-text">Arch</div>
                         <select id="searchImages-arch" class="form-control">
                             <option value="" selected>Select...</option>
                             <option value="amd64">amd64</option>
@@ -58,10 +52,10 @@
 
                 <div class="mt-1" id="remoteImagesTable">
                     <div class="border-top pt-2 text-info" id="imagesInstructions">
-                        <i class="fas fa-info-circle mr-2"></i>Select some images then click import!
+                        <i class="fas fa-info-circle me-2"></i>Select some images then click import!
                     </div>
                     <div>
-                        <button class="btn btn-outline-secondary float-right" id="importImagesBtn"> Import </button>
+                        <button class="btn btn-outline-secondary float-end" id="importImagesBtn"> Import </button>
                     </div>
                     <div id="remoteImageList">
                     </div>
@@ -75,8 +69,8 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
             <h4 id="imageName"> <u>
             </u></h4>
-            <div class="btn-toolbar float-right">
-              <div class="btn-group mr-2">
+            <div class="btn-toolbar float-end">
+              <div class="btn-group me-2">
                   <button data-toggle="tooltip" data-placement="bottom" title="Update Image" class="btn btn-sm btn-info" id="updateImageProperties">
                       <i class="fas fa-pencil-alt"></i>
                   </button>
@@ -106,7 +100,7 @@
             <div class="card bg-dark text-white">
                 <div class="card-header">
                     <h4>Aliases
-                        <button class="btn btn-sm btn-outline-primary float-right" id="createAlias">
+                        <button class="btn btn-sm btn-outline-primary float-end" id="createAlias">
                             <i class="fas fa-plus"></i>
                         </button>
                     </h4>
@@ -166,11 +160,17 @@
             disabled = "disabled text-warning text-strikethrough";
         }
 
-        hosthtml += `<li class="nav-item nav-dropdown">
-            <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+        let currentId = "a";
+
+        hosthtml += `<li class="mb-2">
+            <a class="d-inline href="#">
                 <i class="fas fa-server"></i> ${host.alias}
             </a>
-            <ul class="nav-dropdown-items">`;
+            <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline ${disabled} float-end me-2" data-bs-toggle="collapse" data-bs-target="#${currentId}" aria-expanded="true">
+                <i class="fas fa-caret-down"></i>
+            </button>
+            <div class=" mt-2 bg-dark text-white" id="${currentId}">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small hostInstancesUl" style="display: inline;">`
 
         $.each(host.images, function(_, image){
             let active = "";
@@ -333,7 +333,7 @@
                     if(Object.values(versions).length > 0){
                         html += `<div class="d-block mb-2 mt-2"><i>${variant}</i></div>`
                         $.each(versions, (version, fingerPrint)=>{
-                            html += `<div class="d-inline mr-4 mb-3 mt-3">
+                            html += `<div class="d-inline me-4 mb-3 mt-3">
                                 <span class="badge badge-secondary imageForImport" data-fingerprint="${fingerPrint}" data-alias="${version}" data-os="${os}">
                                 <i class="fas fa-image"></i>
                                 ${version}
@@ -346,7 +346,7 @@
             });
 
 
-            $("#remoteImageList").empty().append(html).find(".osGroup").find("div:eq(0)").removeClass("m-4").addClass("mr-4");
+            $("#remoteImageList").empty().append(html).find(".osGroup").find("div:eq(0)").removeClass("m-4").addClass("me-4");
             $("#importImagesBtn, #imagesInstructions").show();
         });
     }
@@ -366,13 +366,13 @@
 
 
             $.each(data.clusters, (clusterIndex, cluster)=>{
-                hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+                hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
                 $.each(cluster.members, (_, host)=>{
                     hosts = makeImagesHtml(hosts, host)
                 })
             });
 
-            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+            hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Standalone Hosts</u></li>`;
 
             $.each(data.standalone.members, (_, host)=>{
                 hosts = makeImagesHtml(hosts, host)
@@ -541,7 +541,7 @@
                                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
                                         <b><u class='alias-name'>${name}</u></b>
                                         <div class="btn-toolbar">
-                                          <div class="btn-group mr-2">
+                                          <div class="btn-group me-2">
                                               <button data-toggle="tooltip" data-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
                                               <button data-toggle="tooltip" data-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
                                               <button data-toggle="tooltip" data-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>
@@ -597,7 +597,7 @@
                             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
                                 <b><u class='alias-name'>${alias.name}</u></b>
                                 <div class="btn-toolbar">
-                                  <div class="btn-group mr-2">
+                                  <div class="btn-group me-2">
                                       <button data-toggle="tooltip" data-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
                                       <button data-toggle="tooltip" data-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
                                       <button data-toggle="tooltip" data-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>

@@ -3,14 +3,14 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title"><i class="fas fa-people-carry mr-2"></i>Migrating Instance <b><span class="migrateModal-containerName"></span></b></h5>
+        <h5 class="modal-title"><i class="fas fa-people-carry me-2"></i>Migrating Instance <b><span class="migrateModal-containerName"></span></b></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span class="text-white" aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div class="mb-2">
-            <i class="fas fa-info-circle text-warning mr-2"></i>Migrating an instance is a copy followed by a <b>delete</b>
+            <i class="fas fa-info-circle text-warning me-2"></i>Migrating an instance is a copy followed by a <b>delete</b>
         </div>
         <b>Origin: </b> <span id="migrateModal-currentHost"></span>
         <div class="form-group">
@@ -60,7 +60,7 @@
         }
 
         let btn = $(this);
-        btn.html(`<i class="fas fa-cog fa-spin mr-2"></i>Migrating`)
+        btn.html(`<i class="fas fa-cog fa-spin me-2"></i>Migrating`)
         $("#modal-container-migrate").find("button").attr("disabled", true);
         let x = $.extend({
             destination: targetHost[0].hostId

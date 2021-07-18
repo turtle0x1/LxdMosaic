@@ -4,8 +4,8 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <h4> Projects </h4>
-                <div class="btn-toolbar float-right">
-                  <div class="btn-group mr-2">
+                <div class="btn-toolbar float-end">
+                  <div class="btn-group me-2">
                       <button data-toggle="tooltip" data-placement="bottom" title="Create Project" class="btn btn-primary" id="createProject">
                           <i class="fas fa-plus"></i>
                       </button>
@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 card-decks" id="projectCards">
+        <div class="col-md-12" id="projectCards">
         </div>
     </div>
 </div>
@@ -25,8 +25,8 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <h4 id="projectName"></h4>
                 <small id="projectDescription"></small>
-                <div class="btn-toolbar float-right">
-                  <div class="btn-group mr-2">
+                <div class="btn-toolbar float-end">
+                  <div class="btn-group me-2">
                       <button data-toggle="tooltip" data-placement="bottom" title="Rename Project"  class="btn btn-success" id="renameProject">
                           <i class="fas fa-edit"></i>
                       </button>
@@ -40,12 +40,12 @@
     </div>
 <div class="row">
     <div class="col-md-4">
-          <div class="card bg-dark">
+          <div class="card bg-dark text-white">
             <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
               <h5>
                 <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
                   Config
-                  <i class="float-right fas fa-cog"></i>
+                  <i class="float-end fas fa-cog"></i>
                 </a>
               </h5>
             </div>
@@ -66,12 +66,12 @@
               </div>
             </div>
           </div>
-          <div class="card bg-dark">
+          <div class="card bg-dark text-white">
             <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
               <h5>
                 <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
                   Restrictions
-                  <i class="float-right fas fa-lock"></i>
+                  <i class="float-end fas fa-lock"></i>
                 </a>
               </h5>
             </div>
@@ -94,12 +94,12 @@
           </div>
     </div>
     <div class="col-md-4">
-        <div class="card bg-dark">
+        <div class="card bg-dark text-white">
           <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
             <h5>
               <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
                 Users
-                <i class="float-right fas fa-users"></i>
+                <i class="float-end fas fa-users"></i>
               </a>
             </h5>
           </div>
@@ -121,12 +121,12 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card bg-dark">
+        <div class="card bg-dark text-white">
           <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
             <h5>
               <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
                 Used By
-                <i class="fas fa-layer-group float-right"></i>
+                <i class="fas fa-layer-group float-end"></i>
               </a>
             </h5>
           </div>
@@ -164,11 +164,17 @@ function makeProjectHostSidebarHtml(hosthtml, host){
         disabled = "disabled text-warning text-strikethrough";
     }
 
-    hosthtml += `<li class="nav-item nav-dropdown">
-        <a class="nav-link nav-dropdown-toggle ${disabled}" href="#">
+    let currentId = "a";
+
+    hosthtml += `<li class="mb-2">
+        <a class="d-inline href="#">
             <i class="fas fa-server"></i> ${host.alias}
         </a>
-        <ul class="nav-dropdown-items">`;
+        <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline ${disabled} float-end me-2" data-bs-toggle="collapse" data-bs-target="#${currentId}" aria-expanded="true">
+            <i class="fas fa-caret-down"></i>
+        </button>
+        <div class=" mt-2 bg-dark text-white" id="${currentId}">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small hostInstancesUl" style="display: inline;">`
 
     if(host.projects.length > 0){
         $.each(host.projects, function(_, project){
@@ -227,7 +233,7 @@ function makeProjectCard(hostName, projects){
 
     return `<div class="card bg-dark text-white">
         <div class="card-header">
-            <h4><i class='fas fa-server mr-2'></i>${hostName}</h4>
+            <h4><i class='fas fa-server me-2'></i>${hostName}</h4>
         </div>
         <div class="card-body">
             <table class="table table-dark table-bordered">
@@ -278,13 +284,13 @@ function loadProjectView()
         </li>`;
 
         $.each(data.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
             $.each(cluster.members, (_, host)=>{
                 hosts = makeProjectHostSidebarHtml(hosts, host)
             })
         });
 
-        hosts += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Standalone Hosts</u></li>`;
+        hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Standalone Hosts</u></li>`;
 
         $.each(data.standalone.members, (_, host)=>{
             hosts = makeProjectHostSidebarHtml(hosts, host)
@@ -317,7 +323,7 @@ function viewProject(project, hostId, hostAlias){
         let projectUsedBy = "";
         let emptyProject = data.used_by.length < 2;
         if(data.used_by.length == 0){
-            projectUsedBy += "<tr><td class='text-center'><i class='fas fa-info-circle text-info mr-2'></i>Not used</td></tr>"
+            projectUsedBy += "<tr><td class='text-center'><i class='fas fa-info-circle text-info me-2'></i>Not used</td></tr>"
         }else{
             $.each(data.used_by, function(i, item){
                 projectUsedBy += `<tr><td>${item}</td></tr>`;
@@ -341,7 +347,7 @@ function viewProject(project, hostId, hostAlias){
         });
 
         if(restrictionsConfig == ""){
-            restrictionsConfig = `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No Restrictions</td></tr>`
+            restrictionsConfig = `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-info me-2"></i>No Restrictions</td></tr>`
         }
 
         let usersList = "";
@@ -359,7 +365,7 @@ function viewProject(project, hostId, hostAlias){
 $("#projectsBox").on("click", "#deleteProject", function(){
     $.confirm({
         title: "Delete Project?!",
-        content: `<i class="fas fa-info-circle text-info mr-2"></i>Users currently using this project will be assigned back to <code>default</code> project`,
+        content: `<i class="fas fa-info-circle text-info me-2"></i>Users currently using this project will be assigned back to <code>default</code> project`,
         theme: 'dark',
         buttons: {
             cancel: {},

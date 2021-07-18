@@ -6,8 +6,8 @@
                     <div class="col-md-12 text-center">
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
                             <h4> Deployments </h4>
-                            <div class="btn-toolbar float-right">
-                              <div class="btn-group mr-2">
+                            <div class="btn-toolbar float-end">
+                              <div class="btn-group me-2">
                                   <button data-toggle="tooltip" data-placement="bottom" title="Create Deployment" class="btn btn-primary" id="createDeployment">
                                       <i class="fas fa-plus"></i>
                                   </button>
@@ -30,8 +30,8 @@
                     <div class="col-md-12 text-center">
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
                             <h4 id="deploymentName"></h4>
-                            <div class="btn-toolbar float-right">
-                              <div class="btn-group mr-2">
+                            <div class="btn-toolbar float-end">
+                              <div class="btn-group me-2">
                                   <button data-toggle="tooltip" data-placement="bottom" title="Deploy Instances" class="btn btn-primary" id="deploy">
                                       <i class="fas fa-plus"></i>
                                   </button>
@@ -75,7 +75,7 @@
         </div> -->
         <div class="row">
             <div class="col-md-3">
-                  <div class="card bg-dark">
+                  <div class="card bg-dark text-white">
                     <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
@@ -99,7 +99,7 @@
                   </div>
             </div>
             <div class="col-md-9">
-                <div class="card bg-dark">
+                <div class="card bg-dark text-white">
                     <div class="card-header bg-dark">
                         <h5> <a> Instances In Deployment </a> </h5>
                     </div>
