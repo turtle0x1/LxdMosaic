@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fa-users me-2"></i>Assigning Profiles To <span id="assingProfilesInstanceName"></span></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span class="text-white" aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -16,7 +16,7 @@
           </div>
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" id="assignProfiles" class="btn btn-primary">Assign Profiles</button>
       </div>
     </div>
