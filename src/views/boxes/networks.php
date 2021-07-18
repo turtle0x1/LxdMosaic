@@ -6,7 +6,7 @@
                     <h4> Networks </h4>
                     <div class="btn-toolbar float-end">
                       <div class="btn-group me-2">
-                          <button data-toggle="tooltip" data-placement="bottom" title="Create network" class="btn btn-primary" id="createNetwork">
+                          <button data-toggle="tooltip" data-bs-placement="bottom" title="Create network" class="btn btn-primary" id="createNetwork">
                               <i class="fas fa-plus"></i>
                           </button>
                       </div>
@@ -164,7 +164,7 @@ function loadNetworksView()
                         let formatedUsed = key.includes("packets") ? parseFloat(used).toLocaleString('en') : formatBytes(used)
                         let formatedTotal = key.includes("packets") ? parseFloat(hostTotals[key]).toLocaleString('en') : formatBytes(hostTotals[key])
                         let formatedPercent = parseFloat(percent).toFixed(2);
-                        hostHtml[key] += `${instance} - ${interfaceName} - ${key} - ${formatedPercent}% <div class="progress mb-2" data-toggle="tooltip" data-placement="right" title="${formatedTotal}">
+                        hostHtml[key] += `${instance} - ${interfaceName} - ${key} - ${formatedPercent}% <div class="progress mb-2" data-toggle="tooltip" data-bs-placement="right" title="${formatedTotal}">
                             <div class="progress-bar" role="progressbar" data-toggle="tooltip" title="${formatedUsed} - ${formatedPercent}%" style="width: ${percent}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>`
                     });

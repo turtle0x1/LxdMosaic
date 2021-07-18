@@ -8,7 +8,7 @@
                             <h4> Deployments </h4>
                             <div class="btn-toolbar float-end">
                               <div class="btn-group me-2">
-                                  <button data-toggle="tooltip" data-placement="bottom" title="Create Deployment" class="btn btn-primary" id="createDeployment">
+                                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Create Deployment" class="btn btn-primary" id="createDeployment">
                                       <i class="fas fa-plus"></i>
                                   </button>
                               </div>
@@ -32,16 +32,16 @@
                             <h4 id="deploymentName"></h4>
                             <div class="btn-toolbar float-end">
                               <div class="btn-group me-2">
-                                  <button data-toggle="tooltip" data-placement="bottom" title="Deploy Instances" class="btn btn-primary" id="deploy">
+                                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Deploy Instances" class="btn btn-primary" id="deploy">
                                       <i class="fas fa-plus"></i>
                                   </button>
-                                  <button data-toggle="tooltip" data-placement="bottom" title="Start Deployment" class="btn btn-success" id="startDeployment">
+                                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Start Deployment" class="btn btn-success" id="startDeployment">
                                       <i class="fas fa-play" style="color: white !important;"></i>
                                   </button>
-                                  <button data-toggle="tooltip" data-placement="bottom" title="Stop Deployment" class="btn btn-warning" id="stopDeployment">
+                                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Stop Deployment" class="btn btn-warning" id="stopDeployment">
                                       <i class="fas fa-stop"></i>
                                   </button>
-                                  <button data-toggle="tooltip" data-placement="bottom" title="Delete Deployment" class="btn btn-danger" id="deleteDeployment">
+                                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete Deployment" class="btn btn-danger" id="deleteDeployment">
                                       <i class="fas fa-trash"></i>
                                   </button>
                               </div>

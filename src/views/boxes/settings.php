@@ -652,11 +652,11 @@ function loadInstanceSettings(){
         let ldapTrs = "";
         let ldapExtraText = {
             5: `<i class="fas fa-info-circle text-info ms-2" data-toggle="tooltip"
-                data-placement="bottom"
+                data-bs-placement="bottom"
                 title="The LDAP user that performs lookups E.G <code>cn=administrator,cn=Users,dc=example,dc=com</code>">
                 </i>`,
             7: `<i class="fas fa-info-circle text-info ms-2" data-toggle="tooltip"
-                data-placement="bottom"
+                data-bs-placement="bottom"
                 title="DN To Search Users for E.G <code>ou=user_folder,dc=example,dc=com</code>">
                 </i>`,
         }

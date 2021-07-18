@@ -71,10 +71,10 @@
             </u></h4>
             <div class="btn-toolbar float-end">
               <div class="btn-group me-2">
-                  <button data-toggle="tooltip" data-placement="bottom" title="Update Image" class="btn btn-sm btn-info" id="updateImageProperties">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Update Image" class="btn btn-sm btn-info" id="updateImageProperties">
                       <i class="fas fa-pencil-alt"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Delete Image" class="btn btn-sm btn-danger" id="deleteImage">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete Image" class="btn btn-sm btn-danger" id="deleteImage">
                       <i class="fas fa-trash"></i>
                   </button>
               </div>
@@ -114,8 +114,8 @@
                 <div class="card-header">
                     <h4>Extended Details</h4>
                 </div>
-                <div class="card-body">
-                    <table class="table table-responsive table-dark table-bordered" id="imageExtendedDetailsTable">
+                <div class="card-body table-responsive">
+                    <table class="table  table-dark table-bordered" id="imageExtendedDetailsTable">
                         <tbody>
 
                         </tbody>
@@ -542,9 +542,9 @@
                                         <b><u class='alias-name'>${name}</u></b>
                                         <div class="btn-toolbar">
                                           <div class="btn-group me-2">
-                                              <button data-toggle="tooltip" data-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
-                                              <button data-toggle="tooltip" data-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
-                                              <button data-toggle="tooltip" data-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>
+                                              <button data-toggle="tooltip" data-bs-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
+                                              <button data-toggle="tooltip" data-bs-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
+                                              <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>
                                           </div>
                                         </div>
                                     </div>
@@ -598,9 +598,9 @@
                                 <b><u class='alias-name'>${alias.name}</u></b>
                                 <div class="btn-toolbar">
                                   <div class="btn-group me-2">
-                                      <button data-toggle="tooltip" data-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
-                                      <button data-toggle="tooltip" data-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
-                                      <button data-toggle="tooltip" data-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>
+                                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
+                                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
+                                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>
                                   </div>
                                 </div>
                             </div>

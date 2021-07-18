@@ -6,7 +6,7 @@
                 <h4> Projects </h4>
                 <div class="btn-toolbar float-end">
                   <div class="btn-group me-2">
-                      <button data-toggle="tooltip" data-placement="bottom" title="Create Project" class="btn btn-primary" id="createProject">
+                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Create Project" class="btn btn-primary" id="createProject">
                           <i class="fas fa-plus"></i>
                       </button>
                   </div>
@@ -27,10 +27,10 @@
                 <small id="projectDescription"></small>
                 <div class="btn-toolbar float-end">
                   <div class="btn-group me-2">
-                      <button data-toggle="tooltip" data-placement="bottom" title="Rename Project"  class="btn btn-success" id="renameProject">
+                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Rename Project"  class="btn btn-success" id="renameProject">
                           <i class="fas fa-edit"></i>
                       </button>
-                      <button data-toggle="tooltip" data-placement="bottom" title="Delete Project"  class="btn btn-danger" id="deleteProject">
+                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete Project"  class="btn btn-danger" id="deleteProject">
                           <i class="fas fa-trash"></i>
                       </button>
                   </div>
@@ -40,7 +40,7 @@
     </div>
 <div class="row">
     <div class="col-md-4">
-          <div class="card bg-dark text-white">
+          <div class="card mb-2 bg-dark text-white">
             <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
               <h5>
                 <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
@@ -231,7 +231,7 @@ function makeProjectCard(hostName, projects){
         tbody += "</tr>";
     })
 
-    return `<div class="card bg-dark text-white">
+    return `<div class="card mb-2 bg-dark text-white">
         <div class="card-header">
             <h4><i class='fas fa-server me-2'></i>${hostName}</h4>
         </div>

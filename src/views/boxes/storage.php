@@ -6,7 +6,7 @@
                     <h4> Storage </h4>
                     <div class="btn-toolbar float-end">
                       <div class="btn-group me-2">
-                          <button data-toggle="tooltip" data-placement="bottom" title="Create storage pool" class="btn btn-primary" id="createPool">
+                          <button data-toggle="tooltip" data-bs-placement="bottom" title="Create storage pool" class="btn btn-primary" id="createPool">
                               <i class="fas fa-plus"></i>
                           </button>
                       </div>
@@ -296,7 +296,7 @@ function loadStorageView()
         // $("#currentStorageUsageTotal").empty().append(`<div class="mb-2">
         //     <label>Memory</label>
         //     <div class="progress">
-        //         <div data-toggle="tooltip" data-placement="bottom" title="${formatBytes(data.stats.storage.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.stats.storage.used}" aria-valuemin="0" aria-valuemax="${(data.stats.storage.total - data.stats.storage.used)}"></div>
+        //         <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(data.stats.storage.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.stats.storage.used}" aria-valuemin="0" aria-valuemax="${(data.stats.storage.total - data.stats.storage.used)}"></div>
         //     </div>
         // </div>`);
         //

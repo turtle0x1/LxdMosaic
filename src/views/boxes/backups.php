@@ -50,13 +50,13 @@
                       </h4>
                       <div class="btn-toolbar">
                         <div class="btn-group me-2">
-                            <button data-toggle="tooltip" data-placement="bottom" title="Schedule Backup" class="btn btn-outline-primary btn-sm" id="scheduleInstanceBackup">
+                            <button data-toggle="tooltip" data-bs-placement="bottom" title="Schedule Backup" class="btn btn-outline-primary btn-sm" id="scheduleInstanceBackup">
                                 <i class="fas fa-clock"></i>
                             </button>
-                            <button data-toggle="tooltip" data-placement="bottom" title="Disable Backup Schedule" class="btn btn-outline-warning btn-sm" id="disableInstanceSchedule">
+                            <button data-toggle="tooltip" data-bs-placement="bottom" title="Disable Backup Schedule" class="btn btn-outline-warning btn-sm" id="disableInstanceSchedule">
                                 <i class="fas fa-power-off"></i>
                             </button>
-                            <button data-toggle="tooltip" data-placement="bottom" title="Back To Graphs" class="btn btn-outline-primary btn-sm" id="backToBackupGraphs">
+                            <button data-toggle="tooltip" data-bs-placement="bottom" title="Back To Graphs" class="btn btn-outline-primary btn-sm" id="backToBackupGraphs">
                                 <i class="fas fa-arrow-left"></i>
                             </button>
                         </div>
@@ -479,7 +479,7 @@ function loadBackupsOverview() {
 
                     let instanceName = container.name
 
-                    let ghostIcon = '<i class="fas fa-ghost" data-toggle="tooltip" data-placement="bottom" title="Instance Deleted" class="btn btn-outline-primary btn-sm"></i>'
+                    let ghostIcon = '<i class="fas fa-ghost" data-toggle="tooltip" data-bs-placement="bottom" title="Instance Deleted" class="btn btn-outline-primary btn-sm"></i>'
 
                     if(container.containerExists){
                         instanceName += ghostIcon;

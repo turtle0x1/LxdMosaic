@@ -166,20 +166,20 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
               <div class="btn-toolbar">
                 <div class="btn-group me-2">
-                    <button data-toggle="tooltip" data-placement="bottom" title="Start Instance" class="btn btn-sm btn-success changeInstanceState" data-action="start">
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Start Instance" class="btn btn-sm btn-success changeInstanceState" data-action="start">
                         <i class="fas fa-play"></i>
                     </button>
-                    <button data-toggle="tooltip" data-placement="bottom" title="Stop Instance" class="btn btn-sm btn-danger changeInstanceState" data-action="stop">
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Stop Instance" class="btn btn-sm btn-danger changeInstanceState" data-action="stop">
                         <i class="fas fa-stop"></i>
                     </button>
-                    <button data-toggle="tooltip" data-placement="bottom" title="Restart Instance" class="btn btn-sm btn-warning changeInstanceState" data-action="restart">
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Restart Instance" class="btn btn-sm btn-warning changeInstanceState" data-action="restart">
                         <i class="fa fa-sync"></i>
                     </button>
                     <hr/>
-                    <button data-toggle="tooltip" data-placement="bottom" title="Freeze Instance" class="btn btn-sm btn-info changeInstanceState" data-action="freeze">
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Freeze Instance" class="btn btn-sm btn-info changeInstanceState" data-action="freeze">
                         <i class="fas fa-snowflake"></i>
                     </button>
-                    <button data-toggle="tooltip" data-placement="bottom" title="Unfreeze Instance" class="btn btn-sm btn-primary changeInstanceState" data-action="unfreeze">
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Unfreeze Instance" class="btn btn-sm btn-primary changeInstanceState" data-action="unfreeze">
                         <i class="fas fa-mug-hot"></i>
                     </button>
                 </div>
@@ -191,32 +191,32 @@
             </u></h4>
             <div class="btn-toolbar">
               <div class="btn-group me-2">
-                  <button data-toggle="tooltip" data-placement="bottom" title="Attach Volume" class="btn btn-sm btn-success" id="attachVolumesBtn">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Attach Volume" class="btn btn-sm btn-success" id="attachVolumesBtn">
                       <i class="fas fa-hdd"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Assign Profiles" class="btn btn-sm btn-purple" id="assignProfilesBtn">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Assign Profiles" class="btn btn-sm btn-purple" id="assignProfilesBtn">
                       <i class="fas fa-users"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Create Image" class="btn btn-sm btn-secondary" id="craeteImage">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Create Image" class="btn btn-sm btn-secondary" id="craeteImage">
                       <i class="fas fa-image"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
                       <i class="fas fa-cog"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Snapshot" class="btn btn-sm btn-success takeSnapshot">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Snapshot" class="btn btn-sm btn-success takeSnapshot">
                       <i class="fas fa-camera"></i>
                   </button>
                   <hr/>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Copy Instance" class="btn btn-sm btn-info copyContainer">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Copy Instance" class="btn btn-sm btn-info copyContainer">
                       <i class="fas fa-copy"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Migrate Instance" class="btn btn-sm btn-primary migrateContainer">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Migrate Instance" class="btn btn-sm btn-primary migrateContainer">
                       <i class="fas fa-people-carry"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Rename Instance" class="btn btn-sm btn-warning renameContainer">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Rename Instance" class="btn btn-sm btn-warning renameContainer">
                       <i class="fas fa-edit"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Delete" class="btn btn-sm btn-danger deleteContainer">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete" class="btn btn-sm btn-danger deleteContainer">
                       <i class="fas fa-trash"></i>
                   </button>
               </div>

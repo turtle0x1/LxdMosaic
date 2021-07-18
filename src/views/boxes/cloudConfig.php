@@ -5,7 +5,7 @@
         <h4>Cloud Config</h4>
         <div class="btn-toolbar float-end">
           <div class="btn-group me-2">
-              <button data-toggle="tooltip" data-placement="bottom" title="Create Cloud Config" class="btn btn-block btn-primary" id="createCloudConfig">
+              <button data-toggle="tooltip" data-bs-placement="bottom" title="Create Cloud Config" class="btn btn-block btn-primary" id="createCloudConfig">
                   <i class="fa fa-plus"></i>
               </button>
           </div>
@@ -18,14 +18,14 @@
         <h1></h1>
         <div class="btn-toolbar float-end">
           <div class="btn-group me-2">
-              <button data-toggle="tooltip" data-placement="bottom" title="Save Cloud Config" class="btn btn-success save">
+              <button data-toggle="tooltip" data-bs-placement="bottom" title="Save Cloud Config" class="btn btn-success save">
                   <i class="fas fa-save"></i>
               </button>
               <hr/>
-              <button data-toggle="tooltip" data-placement="bottom" title="Deploy Cloud Config" class="btn btn-primary" id="deployCloudConfig">
+              <button data-toggle="tooltip" data-bs-placement="bottom" title="Deploy Cloud Config" class="btn btn-primary" id="deployCloudConfig">
                   <i class="fas fa-play" style="color: white !important;"></i>
               </button>
-              <button data-toggle="tooltip" data-placement="bottom" title="Delete Cloud Config" class="btn btn-danger" id="deleteCloudConfig">
+              <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete Cloud Config" class="btn btn-danger" id="deleteCloudConfig">
                   <i class="fas fa-trash"></i>
               </button>
           </div>

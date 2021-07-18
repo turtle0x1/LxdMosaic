@@ -475,21 +475,21 @@ if ($haveServers->haveAny() !== true) {
               </li>
           </ul>
           <ul class="nav ms-auto">
-              <li class="nav-item px-3 btn btn-outline-purple pull-right" data-toggle="tooltip" data-placement="bottom" title="Search" id="openSearch">
+              <li class="nav-item px-3 btn btn-outline-purple pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Search" id="openSearch">
                     <a> <i class="fas fa-search"></i></a>
               </li>
               <?php if ($isAdmin === 1) : ?>
-              <li class="nav-item px-3 btn btn-outline-primary pull-right" data-toggle="tooltip" data-placement="bottom" title="Add a new host" id="addNewServer">
+              <li class="nav-item px-3 btn btn-outline-primary pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Add a new host" id="addNewServer">
                     <a> <i class="fas fa-plus me-2"></i><i class="fas fa-server"></i> </a>
                </li>
               <?php endif; ?>
-              <li class="nav-item px-3 btn btn-outline-success pull-right" data-toggle="tooltip" data-placement="bottom" title="Create a container" id="createContainer">
+              <li class="nav-item px-3 btn btn-outline-success pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Create a container" id="createContainer">
                     <a> <i class="fas fa-plus me-2"></i><i class="fas fa-box"></i> </a>
                </li>
-              <li class="nav-item px-3 btn btn-outline-success pull-right" data-toggle="tooltip" data-placement="bottom" title="Create a VM" id="createVm">
+              <li class="nav-item px-3 btn btn-outline-success pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Create a VM" id="createVm">
                     <a> <i class="fas fa-plus me-2"></i><i class="fas fa-vr-cardboard"></i></a>
                </li>
-               <a href="/logout" class="nav-item px-3 btn btn-outline-secondary pull-right" data-toggle="tooltip" data-placement="bottom" title="Logout" style="height: 35px;">
+               <a href="/logout" class="nav-item px-3 btn btn-outline-secondary pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Logout" style="height: 35px;">
                     <i style="line-height: 1.25rem" class="fas fa-sign-out-alt"></i>
                 </a>
           </ul>

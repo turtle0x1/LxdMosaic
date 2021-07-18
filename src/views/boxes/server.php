@@ -7,10 +7,10 @@
                     <?php if ($isAdmin === 1) : ?>
                     <div class="btn-toolbar float-end">
                       <div class="btn-group me-2">
-                        <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Host" id="editHost">
+                        <button class="btn btn-primary" data-toggle="tooltip" data-bs-placement="bottom" title="Edit Host" id="editHost">
                             <i class="fas fa-cog"></i>
                         </button>
-                        <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Delete Host" id="deleteHost">
+                        <button class="btn btn-danger" data-toggle="tooltip" data-bs-placement="bottom" title="Delete Host" id="deleteHost">
                             <i class="fas fa-trash"></i>
                         </button>
                       </div>
@@ -54,13 +54,13 @@
                     <h4><i class="fas fa-box me-2"></i>Instances</h4>
                     <div class="btn-toolbar float-end">
                       <div class="btn-group me-2">
-                        <button class="btn btn-success serverContainerActions" data-action="start" data-toggle="tooltip" data-placement="bottom" title="Start Instances" disabled>
+                        <button class="btn btn-success serverContainerActions" data-action="start" data-toggle="tooltip" data-bs-placement="bottom" title="Start Instances" disabled>
                             <i class="fas fa-play"></i>
                         </button>
-                        <button class="btn btn-warning serverContainerActions" data-action="stop" data-toggle="tooltip" data-placement="bottom" title="Stop Instances" disabled>
+                        <button class="btn btn-warning serverContainerActions" data-action="stop" data-toggle="tooltip" data-bs-placement="bottom" title="Stop Instances" disabled>
                             <i class="fas fa-stop"></i>
                         </button>
-                        <button class="btn btn-danger serverContainerActions" data-action="delete" data-toggle="tooltip" data-placement="bottom" title="Delete Instances" disabled>
+                        <button class="btn btn-danger serverContainerActions" data-action="delete" data-toggle="tooltip" data-bs-placement="bottom" title="Delete Instances" disabled>
                             <i class="fas fa-trash"></i>
                         </button>
                       </div>
@@ -74,7 +74,7 @@
                                 <td> Name </td>
                                 <td> Disk Usage </td>
                                 <td> Memory Usage </td>
-                                <td> <a href="#" data-toggle="tooltip" data-placement="bottom" title="Excluding local interface bytes sent & received"> Network Usage </a> </td>
+                                <td> <a href="#" data-toggle="tooltip" data-bs-placement="bottom" title="Excluding local interface bytes sent & received"> Network Usage </a> </td>
                                 <td> Gather Metrics</td>
                             </tr>
                         </thead>
@@ -622,7 +622,7 @@ function loadServerView(hostId)
             let instanceStatsWidth = ((data.containerStats.online / (data.containerStats.online + data.containerStats.offline)) * 100)
             $("#serverInstancesOnlineBox").empty().append(`<div class="mb-2">
                 <div class="progress">
-                    <div data-toggle="tooltip" data-placement="bottom" title="${data.containerStats.online}" class="progress-bar bg-success" style="width: ${instanceStatsWidth}%" role="progressbar" aria-valuenow="${data.containerStats.online}" aria-valuemin="0" aria-valuemax="${(data.containerStats.online + data.containerStats.offline)}"></div>
+                    <div data-toggle="tooltip" data-bs-placement="bottom" title="${data.containerStats.online}" class="progress-bar bg-success" style="width: ${instanceStatsWidth}%" role="progressbar" aria-valuenow="${data.containerStats.online}" aria-valuemin="0" aria-valuemax="${(data.containerStats.online + data.containerStats.offline)}"></div>
                 </div>
             </div>`);
         }else{
@@ -635,7 +635,7 @@ function loadServerView(hostId)
         let memoryWidth = ((data.resources.memory.used / data.resources.memory.total) * 100)
         $("#serverMemoryUsageBox").empty().append(`<div class="mb-2">
             <div class="progress">
-                <div data-toggle="tooltip" data-placement="bottom" title="${formatBytes(data.resources.memory.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.resources.memory.used}" aria-valuemin="0" aria-valuemax="${(data.resources.memory.total - data.resources.memory.used)}"></div>
+                <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(data.resources.memory.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.resources.memory.used}" aria-valuemin="0" aria-valuemax="${(data.resources.memory.total - data.resources.memory.used)}"></div>
             </div>
         </div>`);
 

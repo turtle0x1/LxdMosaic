@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
                 <ul class="nav nav-tabs" id="userDashboardsList">
                 </ul>
-                <button class="btn btn-outline-primary" id="newDashboardBtn" data-toggle="tooltip" data-placement="bottom" title="Create dashboard">
+                <button class="btn btn-outline-primary" id="newDashboardBtn" data-toggle="tooltip" data-bs-placement="bottom" title="Create dashboard">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -15,13 +15,13 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
                 <div id="dashboardTitle"></div>
                 <div class="btn-toolbar float-end">
-                    <button class="btn btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Add graph" id="addDashMetricGraph">
+                    <button class="btn btn-outline-primary" data-toggle="tooltip" data-bs-placement="bottom" title="Add graph" id="addDashMetricGraph">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button class="btn btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Dashboard" id="editDashboardGraphs">
+                    <button class="btn btn-outline-primary" data-toggle="tooltip" data-bs-placement="bottom" title="Edit Dashboard" id="editDashboardGraphs">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-outline-danger" data-toggle="tooltip" data-placement="bottom" title="Delete Dashboard" id="deleteDashboard">
+                    <button class="btn btn-outline-danger" data-toggle="tooltip" data-bs-placement="bottom" title="Delete Dashboard" id="deleteDashboard">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
