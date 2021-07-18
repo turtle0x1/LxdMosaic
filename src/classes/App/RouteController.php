@@ -106,11 +106,17 @@ class RouteController
 
         $routesForViewRoute = ["index", "login", "views", "terminal"];
 
-        if (!isset($explodedPath[0]) || in_array($explodedPath[0], $routesForViewRoute)) {
+        $path = "";
+        if (isset($explodedPath[0])) {
+            $parts = parse_url($explodedPath[0]);
+            $path = $parts["path"];
+        }
+
+        if ($path == "" || in_array($path, $routesForViewRoute)) {
             $this->routeView->route($explodedPath);
-        } elseif ($explodedPath[0] == "assets") {
+        } elseif ($path == "assets") {
             $this->routeAssets->route($explodedPath);
-        } elseif ($explodedPath[0] == "terminals?cols=80&rows=24") {
+        } elseif ($path == "terminals") {
             $port = '3000';
 
             $url = $_SERVER['REQUEST_SCHEME']

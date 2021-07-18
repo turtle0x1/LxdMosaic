@@ -109,7 +109,7 @@ app.get('/', function(req, res) {
 app.post('/terminals', function(req, res) {
   // Create a identifier for the console, this should allow multiple consolses
   // per user
-  uuid = terminals.getInternalUuid(req.body.host, req.body.container);
+  uuid = terminals.getInternalUuid(req.body.host, req.body.container, req.query.cols, req.query.rows);
   res.json({ processId: uuid });
   res.send();
 });
@@ -195,7 +195,12 @@ app.ws('/node/console', (socket, req) => {
     .then(() => {
       //NOTE When user inputs from browser
       socket.on("message", (msg) => {
-        terminals.sendToTerminal(uuid, msg);
+        let resizeCommand = msg.match(/resize-window\:cols=([0-9]+)&rows=([0-9]+)/);
+        if(resizeCommand){
+            terminals.resize(uuid, resizeCommand[1], resizeCommand[2])
+        }else{
+            terminals.sendToTerminal(uuid, msg);
+        }
       });
 
       socket.on('close', () => {
