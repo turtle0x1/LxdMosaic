@@ -7,9 +7,7 @@
             <i class="fas fa-cog me-2"></i>Settings For
             <span class="editSettings-containerName"></span>
         </h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span class="text-white" aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="mb-3 text-center">

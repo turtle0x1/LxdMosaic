@@ -8,9 +8,7 @@
                 <span class="restoreSnapshotModal-containerName"></span>
             </b>
         </h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <dl class="row">
@@ -46,7 +44,7 @@
             <div class="offset-md-3 col-md-6 text-center">
                 <h5
                     data-toggle="tooltip"
-                    data-placement="top"
+                    data-bs-placement="top"
                     data-animation="false"
                     title='You can create new instances from a snapshot instaed of
                     restoring "on top off" an existing instance'>

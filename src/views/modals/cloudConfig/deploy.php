@@ -4,9 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Deploy Cloud Config</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
@@ -21,7 +19,7 @@
           <div class="form-group">
               <label
                   data-toggle="tooltip"
-                  data-placement="top"
+                  data-bs-placement="top"
                   title="Currently an image needs to have been imported into atleast
                   one server on the network to use it here! Images will be downloaded
                   onto hosts that dont have the selected image.">
@@ -38,7 +36,7 @@
           <div class="form-group">
               <label
                   data-toggle="tooltip"
-                  data-placement="top"
+                  data-bs-placement="top"
                   title="Only profiles on all hosts will appear!
                       <br/>
                       <br/>

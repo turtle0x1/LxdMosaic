@@ -4,9 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Create Container</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -20,7 +18,7 @@
                 <div class="form-group">
                     <label
                         data-toggle="tooltip"
-                        data-placement="bottom"
+                        data-bs-placement="bottom"
                         title="Used to impose resource limits akin to different cloud provider limits!">Instance Type (Optional)
                         <i class="fas fa-question-circle text-info"></i></label>
                     <select id="newContainerInstanceType" class="form-control"></select>
@@ -32,7 +30,7 @@
                 <div class="form-group">
                     <label
                         data-toggle="tooltip"
-                        data-placement="top"
+                        data-bs-placement="top"
                         title="Only profiles on all hosts will appear!
                             <br/>
                             <br/>
@@ -52,7 +50,7 @@
         <div class="form-group">
             <label>  </label>
             <label data-toggle="tooltip"
-                data-placement="top"
+                data-bs-placement="top"
                 title="Currently an image needs to have been imported into atleast
                 one server on the network to use it here! Images will be downloaded
                 onto hosts that dont have the selected image.">Image
