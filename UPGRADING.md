@@ -30,6 +30,32 @@ systemctl restart httpd
 
 ```
 
+## 0.12.X -> 0.13.0
+```
+# Make sure to read release notes on github for this release.
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout v0.13.0
+
+npm i
+
+composer install --no-dev
+
+vendor/bin/phinx migrate -e mysql
+
+# Restart node server - be careful may interupt console sessions
+pm2 restart all
+
+#Ubuntu
+systemctl restart apache2
+#Centos
+systemctl restart httpd
+
+# SET THE TIMEZONE SETTING AS ADMIN IN THE USER INTERFACE.
+```
+
 ## 0.11.X -> 0.12.0
 ```
 cd /var/www/LxdMosaic
