@@ -66,7 +66,7 @@
         </div>
         <div class="row">
             <div class="col-md-3">
-                <div class="card bg-dark text-white">
+                <div class="card mb-2 bg-dark text-white">
                   <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                     <h5>
                       <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">

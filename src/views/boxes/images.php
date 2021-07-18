@@ -643,7 +643,7 @@
 
                 let prettyName = key.replace(/_/g, " ");
 
-                trs += `<tr><th style='text-transform: capitalize;'>${prettyName}</th><td class='td-${key}'>${val}</td></tr>`;
+                trs += `<tr><th style='text-transform: capitalize;'>${prettyName}</th><td class='td-${key} text-break'>${val}</td></tr>`;
             });
 
             $("#imageExtendedDetailsTable > tbody").empty().append(trs);

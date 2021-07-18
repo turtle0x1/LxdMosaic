@@ -34,7 +34,7 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-12">
-                <div class="card bg-dark text-white">
+                <div class="card mb-2 bg-dark text-white">
                   <div class="card-header bg-dark" role="tab" >
                     <h5>
                       <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">

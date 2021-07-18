@@ -1005,17 +1005,16 @@ function loadContainerBackups()
         if(x.remoteBackups.length > 0){
             $.each(x.remoteBackups, function(_, item){
 
-                let trClass = 'danger',
-                    downloadedLocallySym = '<i class="fas fa-times-circle"></i>',
-                    importHtml = `<button class="btn btn-primary importBackup">Import</button>`;
+
+                let  downloadedLocallySym = '<i class="fas fa-times-circle text-danger"></i>',
+                    importHtml = `<button class="btn btn-primary importBackup"><i class="fas fa-download"></i></button>`;
 
                 if(item.storedLocally){
-                    trClass = 'success';
-                    downloadedLocallySym = '<i class="fas fa-check-circle"></i>';
+                    downloadedLocallySym = '<i class="fas fa-check-circle text-success"></i>';
                     importHtml = "<b class='text-info'>Already Imported</b>"
                 }
 
-                remoteBackups += `<tr data-name="${item.name}" class="alert alert-${trClass}">
+                remoteBackups += `<tr data-name="${item.name}" class="">
                     <td>${item.name}</td>
                     <td>${moment(item.created_at).fromNow()}</td>
                     <td>${downloadedLocallySym}</td>
