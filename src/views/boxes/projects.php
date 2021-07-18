@@ -284,13 +284,13 @@ function loadProjectView()
         </li>`;
 
         $.each(data.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
             $.each(cluster.members, (_, host)=>{
                 hosts = makeProjectHostSidebarHtml(hosts, host)
             })
         });
 
-        hosts += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Standalone Hosts</u></li>`;
+        hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
 
         $.each(data.standalone.members, (_, host)=>{
             hosts = makeProjectHostSidebarHtml(hosts, host)
