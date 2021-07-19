@@ -358,8 +358,8 @@
             data = $.parseJSON(data);
             let a = "text-info";
             let hosts = `
-            <li class="nav-item viewImages">
-                <a class="nav-link ${a}" href="#">
+            <li class="mt-2 viewImages">
+                <a class="${a}" href="#">
                     <i class="fas fa-tachometer-alt"></i> Overview
                 </a>
             </li>`;

@@ -379,8 +379,8 @@ function loadSettingsView()
     currentProvider = null;
 
     let hosts = `
-    <li class="nav-item my-settings">
-        <a class="nav-link text-info" href="#">
+    <li class="mt-2 my-settings">
+        <a class="text-info" href="#">
             <i class="fas fa-user me-2"></i>My Settings
         </a>
     </li>`
@@ -389,38 +389,38 @@ function loadSettingsView()
         $("#saveSettings, #saveLdapSettings, #addUser, #recordedActionsCard, #usersCard").remove();
     }else{
         hosts += `
-        <li class="nav-item instance-hosts">
-            <a class="nav-link" href="#">
+        <li class="instance-hosts">
+            <a class="" href="#">
                 <i class="fas fa-server me-2"></i>Hosts
             </a>
         </li>
-        <li class="nav-item instance-settings">
-            <a class="nav-link" href="#">
+        <li class="instance-settings">
+            <a class="" href="#">
                 <i class="fas fa-sliders-h me-2"></i>LXDMosaic Settings
             </a>
         </li>
-        <li class="nav-item instance-types-overview">
-            <a class="nav-link" href="#">
+        <li class="instance-types-overview">
+            <a class="" href="#">
                 <i class="fas fa-cloud me-2"></i>Instance Types
             </a>
         </li>
-        <li class="nav-item users-overview">
-            <a class="nav-link" href="#">
+        <li class="users-overview">
+            <a class="" href="#">
                 <i class="fas fa-users-cog me-2"></i>Users
             </a>
         </li>
-        <li class="nav-item user-project-overview">
-            <a class="nav-link" href="#">
+        <li class="user-project-overview">
+            <a class="" href="#">
                 <i class="fas fa-users-cog me-2"></i>User Project Access
             </a>
         </li>
-        <li class="nav-item recorded-actions-overview">
-            <a class="nav-link" href="#">
+        <li class="recorded-actions-overview">
+            <a class="" href="#">
                 <i class="fas fa-history me-2"></i>Recorded Actions
             </a>
         </li>
-        <li class="nav-item retired-data-overview">
-            <a class="nav-link" href="#">
+        <li class="retired-data-overview">
+            <a class="" href="#">
                 <i class="fas fa-eraser me-2"></i>Retired Data
             </a>
         </li>

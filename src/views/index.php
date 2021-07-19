@@ -691,8 +691,8 @@ function createDashboardSidebar()
         data = makeToastr(data);
 
         let hosts = `
-            <li class="nav-item container-overview">
-                <a class="nav-link" href="#">
+            <li class="mt-2 container-overview">
+                <a class="" href="#">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>`;
@@ -790,7 +790,7 @@ function addHostContainerList(hostId, hostAlias) {
 
             if(Object.keys(data).length > 5){
                 containers += `<li class="">
-                    <div class="input-group ps-3 pe-3 mb-2">
+                    <div class="input-group pe-3 mb-2" style="padding-left: 5px;">
                         <div class="input-group-btn search-panel">
                             <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
                                 <span class="search_concept" data-filter=""><i class="fas fa-filter"></i></span> <span class="caret"></span>

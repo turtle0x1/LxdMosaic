@@ -120,8 +120,8 @@ function loadNetworksView()
 
 
         let hosts = `
-        <li class="nav-item network-overview">
-            <a class="nav-link text-info" href="#">
+        <li class="mt-2 network-overview">
+            <a class="text-info" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;

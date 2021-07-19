@@ -235,8 +235,8 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
 
         let a = selectedProfile == null ? "text-info" : "";
         let hosts = `
-        <li class="nav-item profile-overview">
-            <a class="nav-link ${a}" href="#">
+        <li class="mt-2 profile-overview">
+            <a class="${a}" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;

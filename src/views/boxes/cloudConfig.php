@@ -162,7 +162,7 @@ function loadCloudConfigTree()
         loadCloudConfigOverview();
         var data = $.parseJSON(data);
         let hosts = `
-        <li class="mb-2 cloudConfig-overview">
+        <li class="mb-2 mt-2 cloudConfig-overview">
             <a class="" style="text-decoration: none;" href="#">
                 <i class="fas fa-tachometer-alt mr-5"></i> Overview
             </a>

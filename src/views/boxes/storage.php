@@ -197,7 +197,7 @@ function makeStorageHostSidebarHtml(hosthtml, host, tableListHtml){
     if(host.hostOnline == false){
         disabled = "disabled text-warning text-strikethrough";
     }
-    
+
     let currentId = "a";
 
     hosthtml += `<li class="mb-2">
@@ -254,8 +254,8 @@ function loadStorageView()
         data = $.parseJSON(data);
 
         let hosts = `
-        <li class="nav-item storage-overview">
-            <a class="nav-link text-info" href="#">
+        <li class="mt-2 storage-overview">
+            <a class="text-info" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;
