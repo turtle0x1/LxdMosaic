@@ -131,7 +131,7 @@ function addBreadcrumbs(names, classes, preserveRoot = true)
 function changeActiveNav(newActiveSelector)
 {
     $("#mainNav").find(".active").removeClass("active");
-    $("#mainNav").find(newActiveSelector).parent(".nav-item").addClass("active");
+    $("#mainNav").find(newActiveSelector).addClass("active");
 }
 
 function makeNodeMissingPopup()

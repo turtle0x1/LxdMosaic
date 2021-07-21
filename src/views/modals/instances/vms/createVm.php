@@ -4,9 +4,7 @@
 <div class="modal-content">
   <div class="modal-header">
     <h5 class="modal-title">Create VM</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
       <div class="form-group">
@@ -20,7 +18,7 @@
       <div class="form-group">
           <label
               data-toggle="tooltip"
-              data-placement="top"
+              data-bs-placement="top"
               title="Currently an image needs to have been imported into atleast
               one server on the network to use it here! Images will be downloaded
               onto hosts that dont have the selected image.">
@@ -39,18 +37,18 @@
       </div>
       <div class="">
           <div class="mb-2">
-              <i class="fas fa-info-circle text-info mr-2"></i>Your account password will be set to <code>ubuntu</code>
+              <i class="fas fa-info-circle text-info me-2"></i>Your account password will be set to <code>ubuntu</code>
           </div>
           <div class="mb-2">
-              <i class="fas fa-info-circle text-info mr-2"></i>You should wait 30~ seconds after first boot before attempting to access the console
+              <i class="fas fa-info-circle text-info me-2"></i>You should wait 30~ seconds after first boot before attempting to access the console
           </div>
           <div class="">
-              <i class="fas fa-info-circle text-info mr-2"></i>Password ssh is not enabled by default
+              <i class="fas fa-info-circle text-info me-2"></i>Password ssh is not enabled by default
           </div>
       </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
     <button type="button" class="btn btn-primary createVirtualMachine" data-start="0">Create</button>
     <button type="button" class="btn btn-success createVirtualMachine" data-start="1">Create & Start</button>
   </div>

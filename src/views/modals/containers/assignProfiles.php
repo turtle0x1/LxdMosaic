@@ -3,20 +3,18 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fa-users mr-2"></i>Assigning Profiles To <span id="assingProfilesInstanceName"></span></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span class="text-white" aria-hidden="true">&times;</span>
-        </button>
+        <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fa-users me-2"></i>Assigning Profiles To <span id="assingProfilesInstanceName"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
           <div class="form-group">
               <label class="div-inline">Profiles</label>
               <input class="form-control" id="newProfilesListInput"/>
-              <small class="form-text text-muted"><i class="fas fa-info-circle mr-1 text-info"></i>Only searches profiles on this instances server!</small>
+              <small class="form-text text-muted"><i class="fas fa-info-circle me-1 text-info"></i>Only searches profiles on this instances server!</small>
           </div>
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" id="assignProfiles" class="btn btn-primary">Assign Profiles</button>
       </div>
     </div>

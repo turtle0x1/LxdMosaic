@@ -4,39 +4,29 @@
 <div class="modal-content">
   <div class="modal-header">
     <h5 class="modal-title" id="exampleModalLongTitle">Add Proxy Device</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
       <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Name</span>
-          </div>
+          <span class="input-group-text">Name</span>
           <input type="text" placeholder="My Proxy" id="proxyName" class="form-control" />
       </div>
       <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Source</span>
-          </div>
+          <span class="input-group-text">Source</span>
           <input type="text" placeholder="tcp:0.0.0.0:5000" id="proxySource" class="form-control" />
       </div>
       <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Destination</span>
-          </div>
+          <span class="input-group-text">Destination</span>
           <input type="text" placeholder="tcp:0.0.0.0:80" id="proxyDestination" class="form-control" />
       </div>
       <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Instance</span>
-          </div>
+          <span class="input-group-text">Instance</span>
           <select class="form-control" id="proxyDeviceInstance">
           </select>
       </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
     <button type="button" class="btn btn-primary" id="addProxyDeviceBtn">Add</button>
   </div>
 </div>

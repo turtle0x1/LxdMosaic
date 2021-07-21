@@ -7,7 +7,6 @@ const replace = require("gulp-replace");
 function css(){
     return src([
         "node_modules/bootstrap/dist/css/bootstrap.min.css",
-        "node_modules/@coreui/coreui/dist/css/coreui.css",
         "node_modules/jquery-confirm/dist/jquery-confirm.min.css",
         "node_modules/toastr/build/toastr.min.css",
         "node_modules/xterm/dist/xterm.css",
@@ -28,7 +27,6 @@ function js(){
     return src([
             "node_modules/jquery/dist/jquery.min.js",
             "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-            "node_modules/@coreui/coreui/dist/js/coreui.min.js",
             "node_modules/moment/min/moment.min.js",
             "node_modules/ace-builds/src-min/ace.js",
             "node_modules/ace-builds/src-min/theme-monokai.js",
@@ -40,7 +38,8 @@ function js(){
             "node_modules/jquery-timepicker/jquery.timepicker.js",
             "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js",
             "node_modules/jquery-contextmenu/dist/jquery.ui.position.min.js",
-            "node_modules/chart.js/dist/Chart.min.js"
+            "node_modules/chart.js/dist/Chart.min.js",
+            "node_modules/masonry-layout/dist/masonry.pkgd.min.js"
         ])
         .pipe(minify({
             noSource: true
@@ -100,7 +99,6 @@ function preAuthJs(){
             "node_modules/jquery/dist/jquery.min.js",
             "node_modules/@popperjs/core/dist/umd/popper.min.js",
             "node_modules/bootstrap/dist/js/bootstrap.min.js",
-            "node_modules/@coreui/coreui/dist/js/coreui.min.js",
             "node_modules/toastr/build/toastr.min.js"
         ])
         .pipe(minify({

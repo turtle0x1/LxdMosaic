@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
                 <ul class="nav nav-tabs" id="userDashboardsList">
                 </ul>
-                <button class="btn btn-outline-primary" id="newDashboardBtn" data-toggle="tooltip" data-placement="bottom" title="Create dashboard">
+                <button class="btn btn-outline-primary" id="newDashboardBtn" data-toggle="tooltip" data-bs-placement="bottom" title="Create dashboard">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -14,14 +14,14 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
                 <div id="dashboardTitle"></div>
-                <div class="btn-toolbar float-right">
-                    <button class="btn btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Add graph" id="addDashMetricGraph">
+                <div class="btn-toolbar float-end">
+                    <button class="btn btn-outline-primary" data-toggle="tooltip" data-bs-placement="bottom" title="Add graph" id="addDashMetricGraph">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button class="btn btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Dashboard" id="editDashboardGraphs">
+                    <button class="btn btn-outline-primary" data-toggle="tooltip" data-bs-placement="bottom" title="Edit Dashboard" id="editDashboardGraphs">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-outline-danger" data-toggle="tooltip" data-placement="bottom" title="Delete Dashboard" id="deleteDashboard">
+                    <button class="btn btn-outline-danger" data-toggle="tooltip" data-bs-placement="bottom" title="Delete Dashboard" id="deleteDashboard">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -34,7 +34,7 @@
     </div>
     <div class="row mb-2" id="generalDashboard">
           <div class="col-lg-4">
-              <div class="card bg-dark">
+              <div class="card bg-dark text-white">
                   <div class="card-header">
                       <h4>Hosts</h4>
                   </div>
@@ -55,15 +55,13 @@
           <div class="col-lg-8">
               <div class="row">
                   <div class="col-md-12">
-                      <h4><i class="fas fa-chart-bar mr-2"></i>Project Analytics</h4>
+                      <h4><i class="fas fa-chart-bar me-2"></i>Project Analytics</h4>
                   </div>
               </div>
               <div class="row">
                   <div class="col-md-12">
                     <div class="input-group mb-3">
-                      <div class="input-group-append">
-                        <span class="input-group-text"><i class="fas fa-filter"></i></span>
-                      </div>
+                      <span class="input-group-text"><i class="fas fa-filter"></i></span>
                       <input type="text" class="form-control" placeholder="Filter Projects..." value="" id="filterDashProjectAnalyticsProject">
                     </div>
                   </div>
@@ -113,7 +111,7 @@ function loadUserDashboardGraphs()
         dashboardRefreshInterval = setInterval(loadUserDashboardGraphs, 90000);
 
         $.each(data.graphsData, (i, graph)=>{
-            let x = $(`<div class="card bg-dark" id="${graph.graphId}">
+            let x = $(`<div class="card bg-dark text-white" id="${graph.graphId}">
                 <div class="card-header">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
                         <h5>${graph.graphName}</h5>
@@ -311,7 +309,7 @@ $(document).on("click", "#addDashMetricGraph", function(){
             </div>
             <div class="form-group">
                 <label>Range</label>
-                <select class="form-control float-right" id="addDashMetricRangeSelect" disabled>
+                <select class="form-control float-end" id="addDashMetricRangeSelect" disabled>
                     <option value="">Please Select</option>
                     <option value="-15 minutes">Last 15 Minutes</option>
                     <option value="-30 minutes">Last 30 Minutes</option>

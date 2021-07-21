@@ -77,17 +77,17 @@ function openHostOperationSocket(hostId, project)
                     return;
                 }
 
-                liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} mr-2'></span>${description}`);
+                liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} me-2'></span>${description}`);
 
                 if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("download_progress")){
                     let progress = msg.metadata.metadata["download_progress"].replace("rootfs: ", "");
-                    liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} mr-2'></span>${description} - ${progress}`);
+                    liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} me-2'></span>${description} - ${progress}`);
                 }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("fs_progress")){
                     let progress = msg.metadata.metadata["fs_progress"];
-                    liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} mr-2'></span>${description} ${progress}`);
+                    liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} me-2'></span>${description} ${progress}`);
                 }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("create_image_from_container_pack_progress")){
                     let progress = msg.metadata.metadata["create_image_from_container_pack_progress"].replace("Image pack:", "")
-                    liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} mr-2'></span>${description} ${progress}`);
+                    liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} me-2'></span>${description} ${progress}`);
                 }
 
                 if(msg.metadata.err !== ""){

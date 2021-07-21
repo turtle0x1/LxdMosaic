@@ -48,7 +48,7 @@ body {
           LXD Mosaic
         </a>
 
-      <ul class="nav navbar-nav ml-auto">
+      <ul class="nav navbar-nav ms-auto">
       <button class="btn btn-success nav-item" id="launchLxdMosaic">Launch LXD Mosaic <i class="fas fa-rocket"></i></button>
     </ul>
     </nav>
@@ -57,15 +57,15 @@ body {
         <div class="col-sm-12 col-lg-6 offset-lg-1 mb-3 mb-lg-0">
             <div class="card bg-dark text-white">
                 <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                    <h4 class=''><i class="fas fa-server mr-2"></i>Hosts</h4>
+                    <h4 class=''><i class="fas fa-server me-2"></i>Hosts</h4>
                 </div>
                 <div class="card-body">
-                    <small class="font-italic"><i class="fa fa-info-circle text-info mr-2"></i>Add one host in a cluster and the rest will be discovered (attempted using the same trust password!)</small>
+                    <small class="font-italic"><i class="fa fa-info-circle text-info me-2"></i>Add one host in a cluster and the rest will be discovered (attempted using the same trust password!)</small>
                     <div class="mt-2 mb-5 d-block">
-                        <button class="btn btn-sm btn-primary float-left" id="addServer">
-                            <i class="fas fa-plus mr-2"></i>Host
+                        <button class="btn btn-sm btn-primary float-start" id="addServer">
+                            <i class="fas fa-plus me-2"></i>Host
                         </button>
-                        <div class="form-check float-right">
+                        <div class="form-check float-end">
                           <input class="form-check-input" type="checkbox" value="" id="showPasswordCheck" autocomplete="off">
                           <label class="form-check-label" for="showPasswordCheck">
                             Show Passwords
@@ -82,16 +82,16 @@ body {
         <div class="col-sm-12 col-lg-4">
             <div class="card bg-dark text-white">
                 <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                    <h4 class=''><i class="fas fa-users mr-2"></i>Users</h4>
+                    <h4 class=''><i class="fas fa-users me-2"></i>Users</h4>
                 </div>
                 <div class="card-body">
-                    <small class="d-block font-italic mb-2"><i class="fa fa-info-circle text-warning mr-2"></i>You will have to assign users other than <code>admin</code> to projects before they can login!</small>
-                    <small class="d-block font-italic"><i class="fa fa-info-circle text-info mr-2"></i>LDAP can also be configured later!</small>
+                    <small class="d-block font-italic mb-2"><i class="fa fa-info-circle text-warning me-2"></i>You will have to assign users other than <code>admin</code> to projects before they can login!</small>
+                    <small class="d-block font-italic"><i class="fa fa-info-circle text-info me-2"></i>LDAP can also be configured later!</small>
                     <div class="mt-2 mb-5 d-block">
-                        <button class="btn btn-sm btn-primary  float-left" id="addUser">
-                            <i class="fas fa-plus mr-2"></i>User
+                        <button class="btn btn-sm btn-primary  float-start" id="addUser">
+                            <i class="fas fa-plus me-2"></i>User
                         </button>
-                        <div class="form-check float-right">
+                        <div class="form-check float-end">
                           <input class="form-check-input" type="checkbox" value="" id="showUserPasswordCheck" autocomplete="off">
                           <label class="form-check-label" for="showUserPasswordCheck">
                             Show Passwords
@@ -100,9 +100,7 @@ body {
                     </div>
                     <div id="userGroups" class="d-block mt-2">
                         <div class="input-group mb-3 userGroup" id="adminUserGroup">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user-secret"></i></span>
-                            </div>
+                            <span class="input-group-text"><i class="fas fa-user-secret"></i></span>
                             <input placeholder="username" name="username" class="form-control" value="admin" autocomplete="new-password" disabled/>
                             <input placeholder="password" name="password" type="password" class="form-control" autocomplete="new-password"/>
                         </div>
@@ -117,29 +115,21 @@ body {
 <script>
 
 let hostTemplate = `<div class="input-group mb-3 serverGroup">
-    <div class="input-group-prepend">
-        <span class="input-group-text serverLabel"></span>
-    </div>
+    <span class="input-group-text serverLabel"></span>
     <input placeholder="ip / hostname" name="connectDetails" class="form-control" autocomplete="new-password"/>
     <input placeholder="trust password" name="trustPassword" type="password" class="form-control trustPasswordInput" autocomplete="new-password"/>
     <input placeholder="Alias (Optional)" name="alias" type="text" class="form-control"/>
-    <div class="input-group-append">
-        <button class="btn btn-sm btn-outline-secondary removeRow" type="button">
-            <i class="fas fa-trash"></i>
-        </button>
-    </div>
+    <button class="btn btn-sm btn-outline-secondary removeRow" type="button">
+        <i class="fas fa-trash"></i>
+    </button>
 </div>`;
 let userTemplate = `<div class="input-group mb-3 userGroup">
-    <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fas fa-user"></i></span>
-    </div>
+    <span class="input-group-text"><i class="fas fa-user"></i></span>
     <input placeholder="username" name="username" class="form-control" autocomplete="new-password"/>
     <input placeholder="password" name="password" type="password" class="form-control trustPasswordInput" autocomplete="new-password"/>
-    <div class="input-group-append">
-        <button class="btn btn-sm btn-outline-secondary removeRow" type="button">
-            <i class="fas fa-trash"></i>
-        </button>
-    </div>
+    <button class="btn btn-sm btn-outline-secondary removeRow" type="button">
+        <i class="fas fa-trash"></i>
+    </button>
 </div>`;
 
 $(function(){

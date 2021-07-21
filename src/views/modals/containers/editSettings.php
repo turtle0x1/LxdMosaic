@@ -4,25 +4,23 @@
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title" id="exampleModalLongTitle">
-            <i class="fas fa-cog mr-2"></i>Settings For
+            <i class="fas fa-cog me-2"></i>Settings For
             <span class="editSettings-containerName"></span>
         </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span class="text-white" aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="mb-3 text-center">
-            <i class="fas fa-info-circle text-warning mr-2"></i>
+            <i class="fas fa-info-circle text-warning me-2"></i>
             Currently not possible to delete existing keys.
         </div>
         <div class="d-block" id="editSettings-list"></div>
-        <button class="btn btn-success mt-2 float-right" id="addNewSettingRow">
+        <button class="btn btn-success mt-2 float-end" id="addNewSettingRow">
             Add Setting
         </button>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="addSettings">Save Settings</button>
       </div>
     </div>
@@ -58,11 +56,9 @@
                 $.each(data.existingSettings, function(i, item){
                     existingSettingsHtml += `<div style='margin-bottom: 5px; border-bottom: 1px solid black; padding: 10px;' class='input-group'>
                     <div class='col-md-4'>
-                        <div class='input-group-prepend'>
-                            <select name='key' class='form-control settingSelect' disabled='disabled' style='width: 100%'>
-                                <option value='${item.key}' selected>${item.key}</option>
-                             </select>
-                            </div>
+                        <select name='key' class='form-control settingSelect' disabled='disabled' style='width: 100%'>
+                            <option value='${item.key}' selected>${item.key}</option>
+                         </select>
                     </div>
                     <div class='col-md-4'>
                         <div class='description'>${item.description}</div>
@@ -138,7 +134,7 @@
             return false;
         }
 
-        btn.html(`<i class="fas fa-cog fa-spin mr-2"></i>Updating Settings`);
+        btn.html(`<i class="fas fa-cog fa-spin me-2"></i>Updating Settings`);
         btn.attr("disabled", true);
 
         data = $.extend(data, currentContainerDetails);
@@ -156,9 +152,7 @@
         $("#editSettings-list").append(
             `<div style='margin-bottom: 5px; border-bottom: 1px solid #D3D3D3; padding: 10px;' class='input-group'>
             <div class='col-md-4'>
-                <div class='input-group-prepend'>
-                    <select name='key' class='form-control settingSelect' style='width: 100%'> ${reamingSettingSelectOptions}</select>
-                    </div>
+                <select name='key' class='form-control settingSelect' style='width: 100%'> ${reamingSettingSelectOptions}</select>
             </div>
             <div class='col-md-4'>
                 <div class='description'></div>

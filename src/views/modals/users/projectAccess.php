@@ -3,21 +3,19 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">User Projects</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
           <div class="row">
               <div class="col-md-6">
                   <h4>Grant Access</h4>
                   <div id="grantAccessAdminWarning">
-                      <i class="fas fa-info-circle text-info mr-2"></i>Admin - can access all projects!
+                      <i class="fas fa-info-circle text-info me-2"></i>Admin - can access all projects!
                   </div>
                   <div id="grantAccessInputs">
                       <div class="form-group">
                           <label>Host/s</label>
-                          <small class="d-block"><i class="fas fa-info-circle text-info mr-2"></i>Hosts without projects support will restrict the search to default</small>
+                          <small class="d-block"><i class="fas fa-info-circle text-info me-2"></i>Hosts without projects support will restrict the search to default</small>
                           <input id="grantAccesHosts" class="form-control"/>
                       </div>
                       <label>Project</label>
@@ -31,12 +29,12 @@
                           <tbody>
                           </tbody>
                       </table>
-                      <button id="grantAccessButton" class="btn btn-primary float-right" disabled="disabled">
+                      <button id="grantAccessButton" class="btn btn-primary float-end" disabled="disabled">
                           Grant Access
                       </button>
                   </div>
               </div>
-              <div class="col-md-6 border-left">
+              <div class="col-md-6 border-start">
                 <h4>Current Access</h4>
                 <table class="table table-bordered" id="projectAccessTable">
                     <thead>
@@ -59,7 +57,7 @@
         targetUser: null
     }
 
-    var grantAccesProjectTableDefaultRow = '<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Pick host/s</td></tr>';
+    var grantAccesProjectTableDefaultRow = '<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Pick host/s</td></tr>';
 
     function loadHostsProjects(token){
         let hostIds = mapObjToSignleDimension($("#grantAccesHosts").tokenInput("get"), "hostId");
@@ -158,15 +156,15 @@
 
             if(data.isAdmin === true){
                 trs += `<tr>
-                    <td colspan="999" class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Admin - can access all projects!</td>
+                    <td colspan="999" class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Admin - can access all projects!</td>
                 </tr>`
             }else if(data.projects.length == 0){
                 trs += `<tr>
-                    <td colspan="999" class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>No Access</td>
+                    <td colspan="999" class="text-center"><i class="fas fa-info-circle text-info me-2"></i>No Access</td>
                 </tr>`
             }else{
                 $.each(data.projects, (_, host)=>{
-                    trs += `<tr><td colspan="999" class="text-center"><i class="fas fa-server text-info mr-2"></i>${host.alias}</td></tr>`
+                    trs += `<tr><td colspan="999" class="text-center"><i class="fas fa-server text-info me-2"></i>${host.alias}</td></tr>`
                     $.each(host.projects, (_, project)=>{
                         trs += `<tr>
                             <td>${project}</td>

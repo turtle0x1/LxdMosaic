@@ -83,65 +83,8 @@ body {
     cursor: pointer;
 }
 
-
-/* Core UI overrides  */
-
-.bg-info {
-    background-color: #17a2b8 !important;
-}
-
-.sidebar .nav-dropdown.open .nav-link {
-    color: #fff;
-}
-
-.sidebar .sidebar-nav {
-  position: relative;
-  flex: 1;
-  overflow-x: hidden;
-  overflow-y: auto;
-  width: 300px;
-}
-.sidebar .nav {
-  width: 300px;
-  flex-direction: column;
-  min-height: 100%;
-  padding: 0;
-}
-
-.sidebar-minimized .sidebar .nav-dropdown-items .nav-item {
-  width: 300px;
-}
-.sidebar-minimized .sidebar .nav-dropdown-items .nav-item .nav-link {
-  width: 300px;
-}
-
-.app-body .sidebar {
-  z-index: 999999;
-  flex: 0 0 300px;
-  order: -1;
-}
-
 .hideNavText {
     display: none;
-}
-
-html:not([dir=rtl]) .sidebar {
-  margin-left: -300px;
-}
-
-html[dir=rtl] .sidebar {
-  margin-right: -300px;
-}
-
-@media (max-width: 991.98px) {
-    .app-body {
-        margin-top: 0px;
-    }
-}
-@media (max-width: 991.98px) {
-    .sidebar {
-        width: 300px;
-    }
 }
 
 @media (min-width: 1700px) {
@@ -149,159 +92,6 @@ html[dir=rtl] .sidebar {
         display: inline;
     }
 }
-
-@media (min-width: 992px) {
-  .sidebar-fixed .sidebar {
-    position: fixed;
-    z-index: 1019;
-    width: 300px;
-    height: 100vh;
-  }
-
-}
-
-@media (min-width: 576px) {
-    html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed .main,
-  html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed .app-footer,
-  html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
-  html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
-      margin-left: 300px;
-    }
-    html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed.sidebar-minimized .main,
-  html:not([dir=rtl]) .sidebar-sm-show.sidebar-fixed.sidebar-minimized .app-footer,
-  html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .main,
-  html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
-      margin-left: 300px;
-    }
-    html:not([dir=rtl]) .sidebar-sm-show.breadcrumb-fixed .breadcrumb,
-  html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
-      left: 300px;
-    }
-    html[dir=rtl] .sidebar-sm-show.sidebar-fixed .main,
-  html[dir=rtl] .sidebar-sm-show.sidebar-fixed .app-footer,
-  html[dir=rtl] .sidebar-show.sidebar-fixed .main,
-  html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
-      margin-right: 300px;
-    }
-    html[dir=rtl] .sidebar-sm-show.sidebar-fixed.sidebar-minimized .main,
-  html[dir=rtl] .sidebar-sm-show.sidebar-fixed.sidebar-minimized .app-footer,
-  html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .main,
-  html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
-      margin-right: 300px;
-    }
-    html[dir=rtl] .sidebar-sm-show.breadcrumb-fixed .breadcrumb,
-  html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
-      right: 300px;
-    }
-}
-
-@media (min-width: 768px) {
-  html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed .main,
-html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed .app-footer,
-html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
-html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
-    margin-left: 300px;
-  }
- html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed.sidebar-minimized .main,
-html:not([dir=rtl]) .sidebar-md-show.sidebar-fixed.sidebar-minimized .app-footer,
-html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .main,
-html:not([dir=rtl]) .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
-    margin-left: 300px;
-  }
-  html:not([dir=rtl]) .sidebar-md-show.breadcrumb-fixed .breadcrumb,
-html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
-    left: 300px;
-  }
-  html[dir=rtl] .sidebar-md-show.sidebar-fixed .main,
-html[dir=rtl] .sidebar-md-show.sidebar-fixed .app-footer,
-html[dir=rtl] .sidebar-show.sidebar-fixed .main,
-html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
-    margin-right: 300px;
-  }
-  html[dir=rtl] .sidebar-md-show.sidebar-fixed.sidebar-minimized .main,
-html[dir=rtl] .sidebar-md-show.sidebar-fixed.sidebar-minimized .app-footer,
-html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .main,
-html[dir=rtl] .sidebar-show.sidebar-fixed.sidebar-minimized .app-footer {
-    margin-right: 300px;
-  }
-  html[dir=rtl] .sidebar-md-show.breadcrumb-fixed .breadcrumb,
-html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
-    right: 300px;
-  }
-}
-
-@media (min-width: 992px) {
-  html:not([dir=rtl]) .sidebar-lg-show.sidebar-fixed .main,
-html:not([dir=rtl]) .sidebar-lg-show.sidebar-fixed .app-footer,
-html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
-html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
-    margin-left: 300px;
-  }
-  html:not([dir=rtl]) .sidebar-lg-show.breadcrumb-fixed .breadcrumb,
-html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
-    left: 300px;
-  }
-  html[dir=rtl] .sidebar-lg-show.sidebar-fixed .main,
-html[dir=rtl] .sidebar-lg-show.sidebar-fixed .app-footer,
-html[dir=rtl] .sidebar-show.sidebar-fixed .main,
-html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
-    margin-right: 300px;
-  }
-  html[dir=rtl] .sidebar-lg-show.breadcrumb-fixed .breadcrumb,
-html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
-    right: 300px;
-  }
-}
-
-@media (min-width: 1300px) {
-  html:not([dir=rtl]) .sidebar-xl-show.sidebar-fixed .main,
-html:not([dir=rtl]) .sidebar-xl-show.sidebar-fixed .app-footer,
-html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
-html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
-    margin-left: 300px;
-  }
-  html:not([dir=rtl]) .sidebar-xl-show.breadcrumb-fixed .breadcrumb,
-html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
-    left: 300px;
-  }
-  html[dir=rtl] .sidebar-xl-show.sidebar-fixed .main,
-html[dir=rtl] .sidebar-xl-show.sidebar-fixed .app-footer,
-html[dir=rtl] .sidebar-show.sidebar-fixed .main,
-html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
-    margin-right: 300px;
-  }
-  html[dir=rtl] .sidebar-xl-show.breadcrumb-fixed .breadcrumb,
-html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
-    right: 300px;
-  }
-}
-
-@media (min-width: 1300px) {
-  html:not([dir=rtl]) .sidebar-xl-show.sidebar-fixed .main,
-html:not([dir=rtl]) .sidebar-xl-show.sidebar-fixed .app-footer,
-html:not([dir=rtl]) .sidebar-show.sidebar-fixed .main,
-html:not([dir=rtl]) .sidebar-show.sidebar-fixed .app-footer {
-    margin-left: 300px;
-  }
-  html:not([dir=rtl]) .sidebar-xl-show.breadcrumb-fixed .breadcrumb,
-html:not([dir=rtl]) .sidebar-show.breadcrumb-fixed .breadcrumb {
-    left: 300px;
-  }
-  html[dir=rtl] .sidebar-xl-show.sidebar-fixed .main,
-html[dir=rtl] .sidebar-xl-show.sidebar-fixed .app-footer,
-html[dir=rtl] .sidebar-show.sidebar-fixed .main,
-html[dir=rtl] .sidebar-show.sidebar-fixed .app-footer {
-    margin-right: 300px;
-  }
-  html[dir=rtl] .sidebar-xl-show.breadcrumb-fixed .breadcrumb,
-html[dir=rtl] .sidebar-show.breadcrumb-fixed .breadcrumb {
-    right: 300px;
-  }
-}
-
-
-/* End core ui over rides */
-
 
 li.breadcrumb-item:nth-child(1) {
     cursor: pointer;
@@ -340,10 +130,6 @@ li.breadcrumb-item:nth-child(1) {
     height: 500px;
 }
 
-.app-header .nav-item.active .nav-link {
-    color: #20a8d8;
-}
-
 .app-header .nav-item {
     padding-left: 5px;
     padding-right: 5px;
@@ -373,13 +159,6 @@ li.breadcrumb-item:nth-child(1) {
     color: #20a8d8;
 }
 
-
-a:hover {
-  color: #167495;
-  color: #20a8d8;
-  text-decoration: underline;
-}
-
 .card-hover-primary:hover{
     background-color: #20a8d8;
     color: white;
@@ -404,6 +183,51 @@ h4 {
 
 a {
     font-weight: 200;
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+  color: #167495;
+  color: #20a8d8;
+}
+
+.nav-link {
+    color: white;
+}
+
+.nav-link.active {
+    color: #0dcaf0 !important;
+}
+
+.nav-icon {
+    padding-right: 5px;
+}
+
+.view-container {
+    padding-left: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.view-container > a{
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.view-container.active {
+    color: #09F !important;
+    background-color:  #09F !important;
+    border: 1px solid #09F !important;
+    border-radius: 5px !important;
+}
+
+.view-container:hover {
+    color: #09F !important;
+    background-color:  #09F !important;
+    border: 1px solid #09F !important;
+    border-radius: 5px !important;
 }
 
 .app-header .nav-item {

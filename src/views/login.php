@@ -79,9 +79,9 @@
       <form class="form-signin" action="/" method="POST">
         <img class="mb-4" src="/assets/lxdMosaic/logo.png" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">LXD Mosaic</h1>
-        <label for="inputEmail" class="sr-only">Username</label>
+        <label for="inputEmail" class="visually-hidden">Username</label>
         <input id="username" class="form-control" placeholder="Username" name="username" required="" autofocus="">
-        <label for="inputPassword" class="sr-only">Password</label>
+        <label for="inputPassword" class="visually-hidden">Password</label>
         <input type="password" id="password" class="form-control" name="password" placeholder="Password" required="">
         <?= $this->loginError == null ? "" : "<div class='text-danger'>! {$this->loginError}</div>" ?>
         <button class="btn btn-lg btn-primary btn-block" name="login" value="1" type="submit">Sign in</button>

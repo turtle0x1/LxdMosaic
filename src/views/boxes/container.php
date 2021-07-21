@@ -164,22 +164,22 @@
     <div class="row border-bottom mb-2">
     <div class="col-md-12 text-center">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
-              <div class="btn-toolbar float-right">
-                <div class="btn-group mr-2">
-                    <button data-toggle="tooltip" data-placement="bottom" title="Start Instance" class="btn btn-sm btn-success changeInstanceState" data-action="start">
+              <div class="btn-toolbar">
+                <div class="btn-group me-2">
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Start Instance" class="btn btn-sm btn-success changeInstanceState" data-action="start">
                         <i class="fas fa-play"></i>
                     </button>
-                    <button data-toggle="tooltip" data-placement="bottom" title="Stop Instance" class="btn btn-sm btn-danger changeInstanceState" data-action="stop">
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Stop Instance" class="btn btn-sm btn-danger changeInstanceState" data-action="stop">
                         <i class="fas fa-stop"></i>
                     </button>
-                    <button data-toggle="tooltip" data-placement="bottom" title="Restart Instance" class="btn btn-sm btn-warning changeInstanceState" data-action="restart">
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Restart Instance" class="btn btn-sm btn-warning changeInstanceState" data-action="restart">
                         <i class="fa fa-sync"></i>
                     </button>
                     <hr/>
-                    <button data-toggle="tooltip" data-placement="bottom" title="Freeze Instance" class="btn btn-sm btn-info changeInstanceState" data-action="freeze">
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Freeze Instance" class="btn btn-sm btn-info changeInstanceState" data-action="freeze">
                         <i class="fas fa-snowflake"></i>
                     </button>
-                    <button data-toggle="tooltip" data-placement="bottom" title="Unfreeze Instance" class="btn btn-sm btn-primary changeInstanceState" data-action="unfreeze">
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Unfreeze Instance" class="btn btn-sm btn-primary changeInstanceState" data-action="unfreeze">
                         <i class="fas fa-mug-hot"></i>
                     </button>
                 </div>
@@ -189,34 +189,34 @@
                 <span id="container-currentState"></span>
                 <span id="container-containerNameDisplay"></span>
             </u></h4>
-            <div class="btn-toolbar float-right">
-              <div class="btn-group mr-2">
-                  <button data-toggle="tooltip" data-placement="bottom" title="Attach Volume" class="btn btn-sm btn-success" id="attachVolumesBtn">
+            <div class="btn-toolbar">
+              <div class="btn-group me-2">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Attach Volume" class="btn btn-sm btn-success" id="attachVolumesBtn">
                       <i class="fas fa-hdd"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Assign Profiles" class="btn btn-sm btn-purple" id="assignProfilesBtn">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Assign Profiles" class="btn btn-sm btn-purple" id="assignProfilesBtn">
                       <i class="fas fa-users"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Create Image" class="btn btn-sm btn-secondary" id="craeteImage">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Create Image" class="btn btn-sm btn-secondary" id="craeteImage">
                       <i class="fas fa-image"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
                       <i class="fas fa-cog"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Snapshot" class="btn btn-sm btn-success takeSnapshot">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Snapshot" class="btn btn-sm btn-success takeSnapshot">
                       <i class="fas fa-camera"></i>
                   </button>
                   <hr/>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Copy Instance" class="btn btn-sm btn-info copyContainer">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Copy Instance" class="btn btn-sm btn-info copyContainer">
                       <i class="fas fa-copy"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Migrate Instance" class="btn btn-sm btn-primary migrateContainer">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Migrate Instance" class="btn btn-sm btn-primary migrateContainer">
                       <i class="fas fa-people-carry"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Rename Instance" class="btn btn-sm btn-warning renameContainer">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Rename Instance" class="btn btn-sm btn-warning renameContainer">
                       <i class="fas fa-edit"></i>
                   </button>
-                  <button data-toggle="tooltip" data-placement="bottom" title="Delete" class="btn btn-sm btn-danger deleteContainer">
+                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete" class="btn btn-sm btn-danger deleteContainer">
                       <i class="fas fa-trash"></i>
                   </button>
               </div>
@@ -227,25 +227,25 @@
     <div class="row border-bottom mb-2 pb-2" id="containerViewBtns">
         <div class="col-md-12 text-center justify-content">
             <button type="button" class="btn text-white btn-outline-primary active" id="goToDetails">
-                <i class="fas fa-info pr-2"></i>Details
+                <i class="fas fa-info pe-2"></i>Details
             </button>
             <button type="button" class="btn text-white btn-outline-primary" id="goToConsole">
-                <i class="fas fa-terminal pr-2"></i>Console
+                <i class="fas fa-terminal pe-2"></i>Console
             </button>
             <button type="button" class="btn text-white btn-outline-primary" id="goToTerminal">
-                <i class="fas fa-tv pr-2"></i>Terminal
+                <i class="fas fa-tv pe-2"></i>Terminal
             </button>
             <button type="button" class="btn text-white btn-outline-primary" id="goToBackups">
-                <i class="fas fa-save pr-2"></i>Backups
+                <i class="fas fa-save pe-2"></i>Backups
             </button>
             <button type="button" class="btn text-white btn-outline-primary" id="goToFiles">
-                <i class="fas fa-save pr-2"></i>Files
+                <i class="fas fa-save pe-2"></i>Files
             </button>
             <button type="button" class="btn text-white btn-outline-primary" id="goToMetrics">
-                <i class="fas fa-chart-bar pr-2"></i>Metrics
+                <i class="fas fa-chart-bar pe-2"></i>Metrics
             </button>
             <button type="button" class="btn text-white btn-outline-primary" id="goToEvents">
-                <i class="fas fa-book-open pr-2"></i>Events
+                <i class="fas fa-book-open pe-2"></i>Events
             </button>
             <div class="btn-toolbar  mb-2 mb-md-0">
 
@@ -255,9 +255,9 @@
 <div id="containerDetails" class="instanceViewBox">
 <div class="row">
     <div class="col-md-5">
-        <div class="card text-white bg-dark">
+        <div class="card mb-2 text-white bg-dark">
           <div class="card-body">
-              <h5> <u> Instance Details <i class="fas float-right fa-info-circle"></i> </u> </h5>
+              <h5> <u> Instance Details <i class="fas float-end fa-info-circle"></i> </u> </h5>
               Host: <span id="container-hostNameDisplay"></span>
               <br/>
               Project: <span id="instanceProject"></span>
@@ -274,12 +274,12 @@
               <br/>
               Deployment: <span id="container-deployment"></span>
               <br/>
-              Comment <button class="btn btn-sm btn-outline-primary ml-1 mr-1" id="editInstanceComment"><i class="fas fa-edit"></i></button>: <span id="container-comment"></span>
+              Comment <button class="btn btn-sm btn-outline-primary ms-1 me-1" id="editInstanceComment"><i class="fas fa-edit"></i></button>: <span id="container-comment"></span>
           </div>
         </div>
-        <div class="card text-white bg-dark">
+        <div class="card mb-2 text-white bg-dark">
           <div class="card-body">
-            <h5> <u> Network Information <i class="fas float-right fa-network-wired"></i> </u> </h5>
+            <h5> <u> Network Information <i class="fas float-end fa-network-wired"></i> </u> </h5>
                 <div class="col-md-12" id="networkDetails">
                 </div>
 
@@ -287,12 +287,12 @@
 </div>
     </div>
     <div class="col-md-4">
-        <div class="card bg-dark">
+        <div class="card mb-2 bg-dark text-white">
             <div class="card-body" id="memoryDataCard">
 
             </div>
         </div>
-        <div class="card bg-dark">
+        <div class="card mb-2 bg-dark text-white">
             <div class="card-body" id="storageDataCard">
 
             </div>
@@ -300,12 +300,12 @@
 
     </div>
     <div class="col-md-3">
-        <div class="card bg-dark">
+        <div class="card mb-2 bg-dark text-white">
 
             <div class="card-body table-responsive">
                 <h5 class="text-white">
                     <u> Profiles </u>
-                    <i class="fas fa-users float-right"></i>
+                    <i class="fas fa-users float-end"></i>
                 </h5>
                 <table class="table table-dark table-bordered"id="profileData">
                       <thead class="thead-inverse">
@@ -319,11 +319,11 @@
                 </table>
             </div>
         </div>
-        <div class="card bg-dark">
+        <div class="card mb-2 bg-dark text-white">
             <div class="card-body table-responsive">
                 <h5 class="text-white">
                     <u>Snapshots</u>
-                    <i class="fas fa-images float-right"></i>
+                    <i class="fas fa-images float-end"></i>
                 </h5>
                 <table class="table table-dark table-bordered"id="snapshotData">
                       <thead class="thead-inverse">
@@ -336,11 +336,11 @@
                 </table>
           </div>
         </div>
-        <div class="card bg-dark">
+        <div class="card mb-2 bg-dark text-white">
             <div class="card-body table-responsive">
                 <h5 class="text-white">
                     <u>Limits</u>
-                    <i class="fas fa-user-secret float-right"></i>
+                    <i class="fas fa-user-secret float-end"></i>
                 </h5>
                 <table class="table table-dark table-bordered" id="limitsTable">
                       <thead class="thead-inverse">
@@ -377,7 +377,7 @@
     </div>
     <div class="row" id="backupDetailsRow">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card bg-dark text-white">
                 <div class="card-header bg-dark">
                     <h4> LXDMosaic Instance Backups </h4>
                 </div>
@@ -397,11 +397,11 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card">
+            <div class="card bg-dark text-white">
                 <div class="card-header bg-dark">
                     <h4>
                         LXD Instance Backups
-                        <button class="btn btn-success float-right" id="createBackup">
+                        <button class="btn btn-success float-end" id="createBackup">
                             Create
                         </button>
                     </h4>
@@ -440,7 +440,7 @@
         <br/>
         You can right click between the files /  folders to upload new files
     </div>
-    <div class="card-columns" id="filesystemTable">
+    <div class="row" data-masonry='{"percentPosition": true }' id="filesystemTable" style="padding-bottom: 50px;">
     </div>
 </div>
 <div id="containerEvents"  class="col-md-12 instanceViewBox">
@@ -468,7 +468,7 @@
     <div class="card bg-dark text-white">
         <div class="card-header">
             Metric Graph
-            <select class="float-right" id="metricRangePicker" disabled>
+            <select class="float-end" id="metricRangePicker" disabled>
                 <option value="">Please Select</option>
                 <option value="-15 minutes">Last 15 Minutes</option>
                 <option value="-30 minutes">Last 30 Minutes</option>
@@ -487,9 +487,9 @@
                 <option value="-1 months">Last 1 Month</option>
                 <option value="-2 months">Last 2 Months</option>
             </select>
-            <select class="float-right form-control-sm" id="metricTypeFilterSelect" disabled>
+            <select class="float-end form-control-sm" id="metricTypeFilterSelect" disabled>
             </select>
-            <select class="float-right" id="metricTypeSelect">
+            <select class="float-end" id="metricTypeSelect">
             </select>
 
 
@@ -943,7 +943,7 @@ function copyContainerConfirm(hostId, container) {
                 data = $.parseJSON(data);
                 let options = "<option value=''>Please select</option>";
                 $.each(data.clusters, (clusterIndex, cluster)=>{
-                    options += `<li class="c-sidebar-nav-title text-success pl-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+                    options += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
                     $.each(cluster.members, (_, host)=>{
                         if(host.hostOnline == 0){
                             return true;
@@ -1005,17 +1005,16 @@ function loadContainerBackups()
         if(x.remoteBackups.length > 0){
             $.each(x.remoteBackups, function(_, item){
 
-                let trClass = 'danger',
-                    downloadedLocallySym = '<i class="fas fa-times-circle"></i>',
-                    importHtml = `<button class="btn btn-primary importBackup">Import</button>`;
+
+                let  downloadedLocallySym = '<i class="fas fa-times-circle text-danger"></i>',
+                    importHtml = `<button class="btn btn-primary importBackup"><i class="fas fa-download"></i></button>`;
 
                 if(item.storedLocally){
-                    trClass = 'success';
-                    downloadedLocallySym = '<i class="fas fa-check-circle"></i>';
+                    downloadedLocallySym = '<i class="fas fa-check-circle text-success"></i>';
                     importHtml = "<b class='text-info'>Already Imported</b>"
                 }
 
-                remoteBackups += `<tr data-name="${item.name}" class="alert alert-${trClass}">
+                remoteBackups += `<tr data-name="${item.name}" class="">
                     <td>${item.name}</td>
                     <td>${moment(item.created_at).fromNow()}</td>
                     <td>${downloadedLocallySym}</td>
@@ -1143,7 +1142,7 @@ function loadContainerView(data)
         });
 
         if(limitsTrs == ""){
-            limitsTrs = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-success mr-2'></i>No Limits</td></tr>";
+            limitsTrs = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-success me-2'></i>No Limits</td></tr>";
         }
 
 
@@ -1226,10 +1225,10 @@ function loadContainerView(data)
             });
 
             if(networkData == ""){
-                networkData = '<div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Only local interface present!</div>';
+                networkData = '<div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Only local interface present!</div>';
             }
         }else{
-            networkData = '<div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Instance Offline</div>';
+            networkData = '<div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Instance Offline</div>';
         }
 
         $("#networkDetails").empty().append(networkData);
@@ -1248,7 +1247,7 @@ function loadContainerView(data)
             $("#memoryDataCard").empty().append(`
                 <h5 class="text-white">
                     <u> Memory Usage </u>
-                    <i class="fas fa-memory float-right"></i>
+                    <i class="fas fa-memory float-end"></i>
                 </h5>
                 <div style="width: 100%;">
                 <canvas id="memoryData" height="200"></canvas></div>`);
@@ -1276,7 +1275,7 @@ function loadContainerView(data)
             $("#storageDataCard").empty().append(`
                 <h5 class="text-white">
                     <u> Disk Usage </u>
-                    <i class="fas fa-hdd float-right"></i>
+                    <i class="fas fa-hdd float-end"></i>
                 </h5>
                 <div style="width: 100%;">
                 <canvas id="storageData" height="200"></canvas></div>`);
@@ -1311,15 +1310,15 @@ function loadContainerView(data)
         }else{
             $("#memoryDataCard").empty().append(`<h5 class="text-white">
                 <u> Memory Usage </u>
-                <i class="fas fa-memory float-right"></i>
+                <i class="fas fa-memory float-end"></i>
             </h5>
-            <div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Instance Offline</div>`);
+            <div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Instance Offline</div>`);
 
             $("#storageDataCard").empty().append(`<h5 class="text-white">
                 <u> Disk Usage </u>
-                <i class="fas fa-hdd float-right"></i>
+                <i class="fas fa-hdd float-end"></i>
             </h5>
-            <div class="text-center"><i class="fas fa-info-circle text-info mr-2"></i>Instance Offline</div>`);
+            <div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Instance Offline</div>`);
         }
 
 
@@ -1509,23 +1508,24 @@ function loadFileSystemPath(path){
                  }
                  if(path !== "/"){
 
-                     h = `<div class="card bg-dark w-10 goUpDirectory">
+                     h = `<div class="col-md-4"><div class="card bg-dark textg-white mb-2 mt-2 goUpDirectory">
                         <div class="card-body text-center">
-                            <i class="fas fa-circle fa-3x"></i>
-                            <i class="fas fa-circle fa-3x"></i>
+                            <i class="fas fa-circle text-white fa-3x"></i>
+                            <i class="fas fa-circle text-white fa-3x"></i>
                             <h4>Back</h4>
                         </div>
-                      </div>`;
+                      </div></div>`;
                  }
                  $.each(data.contents, function(_, item){
                      let icon = `<i class="fas fa-3x fa-${item.isDirectory ? "folder" : "file"}"></i>`
 
-                     h += `
-                     <div class="card filesystemObject bg-dark w-10" data-name="${item.name}" data-path="${path}${item.name}">
+                     h += `<div class="col-md-4">
+                     <div class="card bg-dark text-white mb-2 mt-2 filesystemObject bg-dark" data-name="${item.name}" data-path="${path}${item.name}">
                         <div class="card-body text-center">
                             ${icon}
                             <h4>${item.name}</h4>
                         </div>
+                      </div>
                       </div>
                      `
                  });
