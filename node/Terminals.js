@@ -8,13 +8,18 @@ module.exports = class Terminals {
     this.internalUuidMap = {};
   }
 
-  getInternalUuid(host, container) {
+  getInternalUuid(host, container, cols, rows) {
     let key = `${host}.${container}`;
     if (this.internalUuidMap.hasOwnProperty(key)) {
       return this.internalUuidMap[key];
     }
     let internalUuid = internalUuidv1();
-    this.internalUuidMap[key] = internalUuid;
+
+    this.internalUuidMap[key] = {
+        "uuid": internalUuid,
+        "cols": cols,
+        "rows": rows
+    };
     return internalUuid;
   }
 
@@ -23,8 +28,29 @@ module.exports = class Terminals {
       return;
     }
 
-    this.activeTerminals[internalUuid].send(
+    this.activeTerminals[internalUuid][0].send(
       msg,
+      {
+        binary: true,
+      },
+      () => {}
+    );
+  }
+
+  resize(internalUuid, cols, rows) {
+    if (this.activeTerminals[internalUuid] == undefined) {
+      return;
+    }
+
+    this.internalUuidMap[internalUuid].cols = cols
+    this.internalUuidMap[internalUuid].rows = rows
+
+    this.activeTerminals[internalUuid]["control"].send(
+      JSON.stringify({
+          command: "window-resize",
+          height: parseInt(rows),
+          width: parseInt(cols)
+      }),
       {
         binary: true,
       },
@@ -37,11 +63,12 @@ module.exports = class Terminals {
       return;
     }
 
-    this.activeTerminals[internalUuid].send(
+    this.activeTerminals[internalUuid][0].send(
       'exit\r\n',
       { binary: true },
       () => {
-        this.activeTerminals[internalUuid].close();
+        this.activeTerminals[internalUuid][0].close();
+        this.activeTerminals[internalUuid]["control"].close();
         delete this.activeTerminals[internalUuid];
       }
     );
@@ -68,11 +95,11 @@ module.exports = class Terminals {
   ) {
     return new Promise((resolve, reject) => {
       if (this.activeTerminals[internalUuid] !== undefined) {
-        this.activeTerminals[internalUuid].on('error', error =>
+        this.activeTerminals[internalUuid][0].on('error', error =>
           console.log(error)
         );
 
-        this.activeTerminals[internalUuid].on("message", (data) => {
+        this.activeTerminals[internalUuid][0].on("message", (data) => {
           const buf = Buffer.from(data);
           data = buf.toString();
           socket.send(data);
@@ -85,7 +112,15 @@ module.exports = class Terminals {
 
       let hostDetails = hosts[host];
 
-      this.openLxdOperation(hostDetails, project, container, shell)
+      let cols = 80;
+      let rows = 24;
+
+      if (this.internalUuidMap.hasOwnProperty(`${host}.${container}`)) {
+        cols = this.internalUuidMap[`${host}.${container}`].cols
+        rows = this.internalUuidMap[`${host}.${container}`].rows
+      }
+
+      this.openLxdOperation(hostDetails, project, container, shell, cols, rows)
         .then(openResult => {
           let url = `wss://${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}`;
 
@@ -93,7 +128,11 @@ module.exports = class Terminals {
           // with their process-id but it wont be in the internalUuidMap
           // so we need to re add it
           if (!this.internalUuidMap.hasOwnProperty(`${host}.${container}`)) {
-            this.internalUuidMap[`${host}.${container}`] = internalUuid;
+            this.internalUuidMap[`${host}.${container}`] = {
+                "uuid": internalUuid,
+                cols: null,
+                rows: null,
+            };
           }
 
           const wsoptions = {
@@ -110,6 +149,14 @@ module.exports = class Terminals {
               wsoptions
           );
 
+          let controlSocket = new WebSocket(
+            url +
+              openResult.operation +
+              '/websocket?secret=' +
+              openResult.metadata.metadata.fds['control'],
+              wsoptions
+          );
+
           lxdWs.on('error', error => console.log(error));
 
           lxdWs.on('message', data => {
@@ -120,7 +167,10 @@ module.exports = class Terminals {
               }
           });
 
-          this.activeTerminals[internalUuid] = lxdWs;
+          this.activeTerminals[internalUuid] = {
+             0: lxdWs,
+             "control": controlSocket
+          };
 
           resolve(true);
         })
@@ -130,15 +180,15 @@ module.exports = class Terminals {
     });
   }
 
-  openLxdOperation(hostDetails, project, container, shell) {
+  openLxdOperation(hostDetails, project, container, shell, cols, rows) {
     let execOptions = this.createExecOptions(hostDetails, project, container);
 
-    execOptions.body = this.getExecBody(shell);
+    execOptions.body = this.getExecBody(shell, cols, rows);
 
     return this.rp(execOptions);
   }
 
-  getExecBody(toUseShell = null) {
+  getExecBody(toUseShell = null, cols, rows) {
     let shell = ['bash'];
 
     if (typeof shell == 'string' && shell !== '') {
@@ -154,6 +204,8 @@ module.exports = class Terminals {
       },
       'wait-for-websocket': true,
       interactive: true,
+      height: parseInt(rows),
+      width: parseInt(cols)
     };
   }
 

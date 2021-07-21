@@ -357,7 +357,7 @@
     </div>
 </div>
 </div>
-<div id="containerConsole" class="instanceViewBox">
+<div id="containerConsole" class="instanceViewBox" style="height: 100%; width: 100%;">
     <div id="terminal-container"></div>
 </div>
 <div id="containerTerminal" class="instanceViewBox">
@@ -504,7 +504,8 @@
 <script src="/assets/dist/xterm.js"></script>
 <script>
 
-var term = new Terminal();
+var term = null;
+var fitAddon = new window.FitAddon.FitAddon()
 var consoleSocket;
 var currentTerminalProcessId = null;
 
@@ -1790,12 +1791,17 @@ $("#containerBox").on("click", "#goToTerminal", function() {
             }
         }
     });
+});
 
+$(window).resize(function() {
+  if(term){
+      let x = fitAddon.proposeDimensions();
+      consoleSocket.send(`resize-window:cols=${x.cols}&rows=${x.rows}`)
+      fitAddon.fit()
+  }
 });
 
 $("#containerBox").on("click", "#goToConsole", function() {
-    Terminal.applyAddon(attach);
-
     $(".instanceViewBox").hide();
     $("#containerConsole").show();
 
@@ -1833,9 +1839,13 @@ $("#containerBox").on("click", "#goToConsole", function() {
                         }
 
                         term = new Terminal({});
+                        term.loadAddon(fitAddon)
+
+
                         let project = $("#instanceProject").text();
 
                         term.open(terminalContainer);
+                        fitAddon.fit()
 
                         // fit is called within a setTimeout, cols and rows need this.
                         setTimeout(() => {
@@ -1867,7 +1877,8 @@ $("#containerBox").on("click", "#goToConsole", function() {
                                         project: project
                                     }, currentContainerDetails))}`);
 
-                                    term.attach(consoleSocket);
+                                    term.loadAddon(new window.AttachAddon.AttachAddon(consoleSocket));
+                                    fitAddon.fit()
                                 },
                                 error: function(){
                                     makeNodeMissingPopup();

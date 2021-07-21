@@ -9,7 +9,7 @@ function css(){
         "node_modules/bootstrap/dist/css/bootstrap.min.css",
         "node_modules/jquery-confirm/dist/jquery-confirm.min.css",
         "node_modules/toastr/build/toastr.min.css",
-        "node_modules/xterm/dist/xterm.css",
+        "node_modules/xterm/css/xterm.css",
         "src/assets/token/styles/token-input.css",
         "src/assets/token/styles/token-input-facebook.css",
         "node_modules/dropzone/dist/min/basic.min.css",
@@ -50,8 +50,9 @@ function js(){
 
 function xterm(){
     return src([
-            "node_modules/xterm/dist/xterm.js",
-            "node_modules/xterm/dist/addons/attach/attach.js"
+            "node_modules/xterm/lib/xterm.js",
+            "node_modules/xterm-addon-attach/lib/xterm-addon-attach.js",
+            "node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"
         ])
         .pipe(minify({
             noSource: true
