@@ -44,7 +44,7 @@
     "sqlite3": "5.0.0",
     "utf-8-validate": "^5.0.2",
     "uuid": "^3.4.0",
-    "ws": "^6.2.1",
+    "ws": "^6.2.2",
     "xterm-addon-attach": "^0.6.0",
     "xterm-addon-fit": "^0.5.0"
   },
