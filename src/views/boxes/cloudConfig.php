@@ -33,30 +33,11 @@
     </div>
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-12">
-                <div class="card mb-2 bg-dark text-white">
-                  <div class="card-header bg-dark" role="tab" >
-                    <h5>
-                      <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Image
-                        <i class="fas float-end fa-image"></i>
-                      </a>
-                    </h5>
-                  </div>
-                  <div id="collapseOne" class="collapse in show" role="tabpanel" >
-                    <div class="card-body bg-dark">
-                        <input class="form-control" id="cloudConfigImage"/>
-                    </div>
-                  </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-md-7">
                 <div class="card bg-dark text-white">
                   <div class="card-header bg-dark" role="tab" id="cloudConfig-actionsHeading">
                     <h5>
-                      <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-editorCollapse" aria-expanded="true" aria-controls="cloudConfig-editorCollapse">
+                      <a class="text-white">
                         Cloud Config File
                         <i class="fas float-end fa-file"></i>
                       </a>
@@ -70,12 +51,27 @@
                 </div>
             </div>
             <div class="col-md-5">
+                <div class="card mb-2 bg-dark text-white">
+                  <div class="card-header bg-dark" role="tab" >
+                    <h5>
+                      <a class="text-white">
+                        Image
+                        <i class="fas float-end fa-image"></i>
+                      </a>
+                    </h5>
+                  </div>
+                  <div id="collapseOne" class="collapse in show" role="tabpanel" >
+                    <div class="card-body bg-dark">
+                        <input class="form-control" id="cloudConfigImage"/>
+                    </div>
+                  </div>
+                </div>
                 <div class="card bg-dark text-white">
                   <div class="card-header bg-dark" role="tab">
                     <h5>
-                      <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfig-envVariablesCollapse" aria-expanded="true" aria-controls="cloudConfig-envVariablesCollapse">
-                        Enviroment Variables
-                        <i class="fas float-end fa-file"></i>
+                      <a class="text-white">
+                        Environment Variables
+                        <i class="fas fa-user-cog float-end "></i>
                       </a>
                     </h5>
                   </div>
