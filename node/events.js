@@ -249,6 +249,9 @@ hostOperations = new HostOperations(hosts);
 terminals = new Terminals(rp);
 vgaTerminals = new VgaTerminals(rp, hosts);
 
+// Prevent races, just loads on init
+hosts.loadHosts()
+
 httpsServer.listen(3000, function() {});
 
 process.on('SIGINT', function() {
