@@ -1,3 +1,9 @@
+Unreleased
+
+
+Fixed
+    First run doesn't toggle passwords properly (#390)
+
 0.13.0 - 18/07/2020
 
 Added

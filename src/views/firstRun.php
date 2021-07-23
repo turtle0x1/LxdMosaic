@@ -154,9 +154,9 @@ $(document).on("change", "#showPasswordCheck", function(){
 
 $(document).on("change", "#showUserPasswordCheck", function(){
     if($(this).is(":checked")){
-        $("#userGroups").find(".trustPasswordInput").attr("type", "text");
+        $("#userGroups").find("input[name=password]").attr("type", "text");
     }else{
-        $("#userGroups").find(".trustPasswordInput").attr("type", "password");
+        $("#userGroups").find("input[name=password]").attr("type", "password");
     }
 });
 
