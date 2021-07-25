@@ -106,11 +106,13 @@ function openHostOperationSocket(hostId, project)
                 liItem.html(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code, timestamp))
 
                 if(msg.metadata.err !== ""){
-                    $(liItem).data({
-                        toggle: "tooltip",
-                        placement: "bottom",
-                        title: msg.metadata.err
-                    }).addClass("btn-link text-danger").tooltip();
+                    liItem.attr("data-bs-toggle", "popover")
+                    .attr("data-bs-placement", "bottom")
+                    .attr("data-bs-content", msg.metadata.err)
+                    .attr("data-bs-trigger", "hover")
+                    .attr("data-title", "Error")
+                    .addClass("btn-link text-danger")
+                    .popover()
                 }
             }else{
                 hostOpList.prepend(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code, timestamp));
