@@ -4,6 +4,7 @@ Changed
     Use correct width for terminal on init
     Resize terminal on window resize
     Upgrade to bootstrap 5
+    Remove operations from sidebar that are complete / failed older than 5 minutes (#407)
 
 Fixed
     First run doesn't toggle passwords properly (#390)
