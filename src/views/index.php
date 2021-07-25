@@ -566,11 +566,6 @@ $(".sidebar-nav").on("click", ".nav-item", function(){
     }
 });
 
-function makeOperationHtmlItem(id, icon, description, statusCode)
-{
-    return `<div id='${id}'><span data-status='${statusCode}' class='${icon} me-2'></span>${description}</div>`;
-}
-
 window.setInterval(function(){
 
 }, 500);
@@ -588,6 +583,7 @@ $(function(){
     $('[data-toggle="tooltip"]').tooltip({html: true})
     loadDashboard();
     createDashboardSidebar();
+    window.setInterval(clearOldOperations, 60 * 1000);
     $.contextMenu({
             selector: '.view-container',
             items: {

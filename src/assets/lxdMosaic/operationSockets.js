@@ -1,9 +1,27 @@
 var currentSockets = {};
 
+function makeOperationHtmlItem(id, icon, description, statusCode, timestamp)
+{
+    return `<div class="op" id='${id}' data-timestamp="${timestamp}" data-status='${statusCode}' ><span class='${icon} me-2'></span>${description}</div>`;
+}
+
+// Called in a internval in the index.php page
+function clearOldOperations()
+{
+    let minutesAgo = moment().subtract("5", "minutes");
+    $("#operationsList").find(".op").each(function(){
+        if([200, 400, 401].includes($(this).data("status"))){
+            let t = moment($(this).data("timestamp"));
+            if(t.isBefore(minutesAgo)){
+                $(this).remove();
+            }
+        }
+    });
+}
+
 function openHostOperationSocket(hostId, project)
 {
     if(currentSockets.hasOwnProperty(hostId) && currentSockets[hostId].hasOwnProperty(project)){
-        console.log("already got");
         return true;
     }else if(currentSockets.hasOwnProperty(hostId) && !currentSockets[hostId].hasOwnProperty(project) && Object.keys(currentSockets[hostId]).length > 0){
         Object.keys(currentSockets[hostId]).forEach((project)=>{
@@ -34,6 +52,7 @@ function openHostOperationSocket(hostId, project)
             let icon = statusCodeIconMap[msg.metadata.status_code];
             let description = msg.metadata.hasOwnProperty("description") ? msg.metadata.description : "No Description Available";
             let host = msg.host;
+            let timestamp = msg.timestamp;
             let hostList = $("#operationsList").find(`[data-host='${host}']`);
 
             let loadServerOviewDescriptions = [
@@ -72,23 +91,19 @@ function openHostOperationSocket(hostId, project)
                 // the operation list to say running even though the socket has closed
                 // so this is a work around as im pretty once an event goes to 200 that
                 // is it finished
-                let span = liItem.find("span:eq(0)");
-                if(span.data("status") == 200){
+                if(liItem.data("status") == 200){
                     return;
                 }
 
-                liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} me-2'></span>${description}`);
-
                 if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("download_progress")){
-                    let progress = msg.metadata.metadata["download_progress"].replace("rootfs: ", "");
-                    liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} me-2'></span>${description} - ${progress}`);
+                    description += msg.metadata.metadata["download_progress"].replace("rootfs: ", "");
                 }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("fs_progress")){
-                    let progress = msg.metadata.metadata["fs_progress"];
-                    liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} me-2'></span>${description} ${progress}`);
+                    description += msg.metadata.metadata["fs_progress"];
                 }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("create_image_from_container_pack_progress")){
-                    let progress = msg.metadata.metadata["create_image_from_container_pack_progress"].replace("Image pack:", "")
-                    liItem.html(`<span data-status='${msg.metadata.status_code}' class='${icon} me-2'></span>${description} ${progress}`);
+                    description += msg.metadata.metadata["create_image_from_container_pack_progress"].replace("Image pack:", "")
                 }
+
+                liItem.html(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code, timestamp))
 
                 if(msg.metadata.err !== ""){
                     $(liItem).data({
@@ -97,9 +112,8 @@ function openHostOperationSocket(hostId, project)
                         title: msg.metadata.err
                     }).addClass("btn-link text-danger").tooltip();
                 }
-
             }else{
-                hostOpList.prepend(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code));
+                hostOpList.prepend(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code, timestamp));
             }
         }
     }
