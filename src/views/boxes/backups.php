@@ -216,7 +216,7 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
     $.confirm({
         title: `Schedule Backup`,
         content: `
-            <div class="form-group">
+            <div class="mb-2">
                 <label><b>Frequency</b></label>
                 <select class="form-control" id="scheduleBackupFrequency">
                     <option value=""></option>
@@ -252,14 +252,14 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                 </div>
             </div>
             <div id="monthlyBackupScheduleDiv" class="d-none">
-                <div class="form-group">
+                <div class="mb-2">
                     <label><b>Day Of Month (1-31)</b></label>
                     <br/>
                     <small><i class="fas fa-info-circle me-2 text-info"></i>Safer to use start of month!</small>
                     <input class="form-control" id="bMonthlyDayOfMonth"/>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="mb-2">
                 <div>
                     <label><b>At This Time (00:00-23:59)</b></label>
                     <br/>
@@ -267,12 +267,12 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                 </div>
                 <input class="form-control" id="scheduleBackupTime" />
             </div>
-            <div class="form-group">
+            <div class="mb-2">
                 <label><b>Strategy</b></label>
                 <select class="form-control" id="scheduleBackupStrategy">
                 </select>
             </div>
-            <div class="form-group">
+            <div class="mb-2">
                 <label><b>Number Of Backups To Keep</b></label>
                 <input value="7" class="form-control" id="scheduleRetention"/>
             </div>

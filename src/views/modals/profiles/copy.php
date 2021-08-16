@@ -12,11 +12,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <div class="form-group">
+          <div class="mb-2">
               <b> Select Hosts To Copy To </b>
               <input class="form-control" id="profileCopyTargets"/>
           </div>
-          <div class="form-group">
+          <div class="mb-2">
               <b> New Profile Name </b>
               <input class="form-control" id="profileCopyNewName"/>
           </div>

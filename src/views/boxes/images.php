@@ -212,7 +212,7 @@
                     let x = "";
                     $.each(data, (key, val)=>{
                         x += `<form action="" class="formName">
-                        <div class="form-group">
+                        <div class="mb-2">
                             <b>${key.replace(/_/g, " ")}</b>
                             <input type="text" name="${key}" value="${val}" class="form-control" required />
                         </div>
@@ -405,7 +405,7 @@
             title: `Renaming "${currentName}" Alias!`,
             content: `
             <form action="" class="formName">
-                <div class="form-group">
+                <div class="mb-2">
                     <label>New name</label>
                     <input type="text" name="name" class="form-control" required />
                 </div>
@@ -456,7 +456,7 @@
             title: `Updating "${currentName}" Description!`,
             content: `
             <form action="" class="formName">
-                <div class="form-group">
+                <div class="mb-2">
                     <label>Description</label>
                     <textarea type="text" name="description" class="form-control">${currentDescription}</textarea>
                 </div>
@@ -501,11 +501,11 @@
             title: 'Create Image Alias!',
             content: `
             <form action="" class="formName">
-                <div class="form-group">
+                <div class="mb-2">
                     <label>Name</label>
                     <input type="text" name="name" class="form-control" required />
                 </div>
-                <div class="form-group">
+                <div class="mb-2">
                     <label>Description (Optional)</label>
                     <textarea class="form-control" name="description"></textarea>
                 </div>

@@ -11,7 +11,7 @@
             <i class="fas fa-info-circle text-warning me-2"></i>Migrating an instance is a copy followed by a <b>delete</b>
         </div>
         <b>Origin: </b> <span id="migrateModal-currentHost"></span>
-        <div class="form-group">
+        <div class="mb-2">
             <b><label>Destination</label></b>
             <select class="form-control" name="" id="migrateModal-targetHost">
                 <option value="">Todo Load Hosts</option>

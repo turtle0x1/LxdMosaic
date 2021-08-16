@@ -7,15 +7,15 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
-      <div class="form-group">
+      <div class="mb-2">
           <b> Name </b>
           <input class="form-control" name="name" />
       </div>
-      <div class="form-group">
+      <div class="mb-2">
           <b> Username </b>
           <input class="form-control" name="username" />
       </div>
-      <div class="form-group">
+      <div class="mb-2">
           <label
               data-toggle="tooltip"
               data-bs-placement="top"
@@ -27,11 +27,11 @@
           </label>
           <input id="newVirtualMachineImage" type="text" class="form-control"/>
       </div>
-      <div class="form-group">
+      <div class="mb-2">
           <b> Hosts </b>
           <input class="form-control" name="hosts"  id="newVmHosts"/>
       </div>
-      <div class="form-group">
+      <div class="mb-2">
           <b> Memory Limit (1GB Default) </b>
           <input class="form-control" name="memoryLimit" value="1GB" />
       </div>

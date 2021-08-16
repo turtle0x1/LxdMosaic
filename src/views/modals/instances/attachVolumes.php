@@ -7,15 +7,15 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body bg-light">
-          <div class="form-group">
+          <div class="mb-2">
               <label>Volume</label>
               <select class="form-control" name="volume"></select>
           </div>
-          <div class="form-group">
+          <div class="mb-2">
               <label>Device Name</label>
               <input class="form-control" name="name" placeholder="dataDisk" />
           </div>
-          <div class="form-group">
+          <div class="mb-2">
               <label>Instance Path</label>
               <input class="form-control" name="path" placeholder="/opt/my/data" />
           </div>

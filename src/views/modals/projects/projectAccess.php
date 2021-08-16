@@ -10,7 +10,7 @@
           <div class="row">
               <div class="col-md-6">
                   <h5>Manage Users</h5>
-                  <div class="form-group">
+                  <div class="mb-2">
                       <b> New Users </b>
                       <input class="form-control" id="projectAccessUserSearch"/>
                   </div>

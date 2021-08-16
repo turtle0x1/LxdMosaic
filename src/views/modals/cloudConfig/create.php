@@ -7,15 +7,15 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <div class="form-group">
+          <div class="mb-2">
               <label> Name </label>
               <input class="form-control" name="name" />
           </div>
-          <div class="form-group">
+          <div class="mb-2">
               <label> Namespace </label>
               <input class="form-control" name="namespace" />
           </div>
-          <div class="form-group">
+          <div class="mb-2">
               <label> Description </label>
               <textarea class="form-control" name="description"></textarea>
           </div>

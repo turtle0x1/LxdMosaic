@@ -9,13 +9,13 @@
       <div class="modal-body">
           <div class="row">
               <div class="col-md-6">
-                  <div class="form-group">
+                  <div class="mb-2">
                       <b> Name </b>
                       <input class="form-control" id="newProjectName"/>
                   </div>
               </div>
               <div class="col-md-6">
-                  <div class="form-group">
+                  <div class="mb-2">
                       <b> Description (Optional) </b>
                       <textarea class="form-control" id="newProjectDescription"></textarea>
                   </div>
@@ -23,7 +23,7 @@
           </div>
           <div class="row">
               <div class="col-md-12">
-                  <div class="form-group">
+                  <div class="mb-2">
                       <b> Hosts </b>
                       <small><i class="fas fa-info-circle me-2 text-info"></i>Only finds hosts that support projects</small>
                       <input class="form-control" id="newProjectHosts"/>
