@@ -8,15 +8,15 @@
       </div>
       <div class="modal-body">
 
-          <div class="form-group">
+          <div class="mb-2">
               <label> Instance Name </label>
               <input class="form-control" name="containerName" />
           </div>
-          <div class="form-group">
+          <div class="mb-2">
               <label> Hosts </label>
               <input class="form-control" id="deployCloudConfigHosts" />
           </div>
-          <div class="form-group">
+          <div class="mb-2">
               <label
                   data-toggle="tooltip"
                   data-bs-placement="top"
@@ -28,12 +28,12 @@
               </label>
               <input class="form-control" id="deployCloudConfigImage" />
           </div>
-          <div class="form-group">
+          <div class="mb-2">
               <label> Profile Name (Optional) </label>
               <input class="form-control" name="profileName" />
           </div>
 
-          <div class="form-group">
+          <div class="mb-2">
               <label
                   data-toggle="tooltip"
                   data-bs-placement="top"
@@ -46,7 +46,7 @@
               </label>
               <input class="form-control" id="deployCloudConfigProfiles"/>
           </div>
-          <div class="form-group">
+          <div class="mb-2">
               <label> GPU's (Optional) </label>
               <select class="form-control" id="deployContainerGpu" multiple>
                   <option value="">Please select a host </option>

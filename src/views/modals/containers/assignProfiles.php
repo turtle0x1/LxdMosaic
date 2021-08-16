@@ -7,7 +7,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <div class="form-group">
+          <div class="mb-2">
               <label class="div-inline">Profiles</label>
               <input class="form-control" id="newProfilesListInput"/>
               <small class="form-text text-muted"><i class="fas fa-info-circle me-1 text-info"></i>Only searches profiles on this instances server!</small>

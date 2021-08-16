@@ -32,7 +32,7 @@
             </div>
             <div class="col-md-6 text-center">
                 <h5 clas="pull-left"><u> Rename Snapshot </u></h5>
-                <div class="form-group">
+                <div class="mb-2">
                     <input class="form-control" name="newSnapshotName" type="string" />
                 </div>
                 <button class="btn btn-primary renameSnapshot">
@@ -51,11 +51,11 @@
                     <u> New Instance </u>
                     <i class="fas fa-question-circle"></i>
                 </h5>
-                <div class="form-group">
+                <div class="mb-2">
                     <label> Target Host </label>
                     <input class="form-control" id="modal-container-restoreSnapshot-newTargetHost" type="string" />
                 </div>
-                <div class="form-group">
+                <div class="mb-2">
                     <label> New Instance Name </label>
                     <input class="form-control" id="modal-container-restoreSnapshot-newName" type="string" />
                 </div>

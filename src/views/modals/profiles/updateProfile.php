@@ -10,7 +10,7 @@
           <div  class="container">
           <div class="row">
               <div class="col-md-8">
-                  <div class="form-group" id="selectProfileFormGroup">
+                  <div class="mb-2" id="selectProfileFormGroup">
                       <b> Select Profile </b>
                       <select class="form-control" id="profileSelect"></select>
                   </div>
@@ -20,7 +20,7 @@
               <div class="row">
                   <div class="col-sm-8 col-md-8 col-lg-8">
                   <b>Select Servers To Update</b>
-                  <div class="form-group">
+                  <div class="mb-2">
                          <input type="search" class="form-control" id="severSearch" placeholder="Search Servers">
                   </div>
                   </div>

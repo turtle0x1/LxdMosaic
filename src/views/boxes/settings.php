@@ -941,15 +941,15 @@ $("#instanceTypesOverview").on("click", "#addInstanceType", function(){
     $.confirm({
         title: 'Create Instance Type!',
         content: `
-        <div class="form-group">
+        <div class="mb-2">
             <label>Name</label>
             <input class="form-control" name="name"/>
         </div>
-        <div class="form-group">
+        <div class="mb-2">
             <label>CPU Cores Limit (E.G 2.0)</label>
             <input class="form-control" name="cpu"/>
         </div>
-        <div class="form-group">
+        <div class="mb-2">
             <label>Memory Limit (In GB)</label>
             <input class="form-control" name="memory"/>
         </div>
@@ -992,7 +992,7 @@ $("#instanceTypesOverview").on("click", "#addProvider", function(){
     $.confirm({
         title: 'Create Instance Type!',
         content: `
-        <div class="form-group">
+        <div class="mb-2">
             <label>Name</label>
             <input class="form-control" name="name"/>
         </div>
@@ -1131,7 +1131,7 @@ $("#settingsOverview").on("click", "#createToken", function(){
     $.confirm({
         title: 'Create Permanent API Key!',
         content: `
-        <div class="form-group">
+        <div class="mb-2">
             <label>Token</label>
             <input class="form-control" name="token"/>
         </div>
@@ -1188,7 +1188,7 @@ $("#recordedActionsBox").on("click", "#loadMoreRecordedActions", function(){
         Loading to many logs may crash your browser!
     </div>
     <form action="" class="formName">
-        <div class="form-group">
+        <div class="mb-2">
             <label>Ammount Of Logs To Fetch</label>
             <input type="text" value="30" class="ammount form-control" required />
         </div>
@@ -1226,11 +1226,11 @@ $("#usersList").on("click", "#addUser", function(){
     $.confirm({
         title: 'Create user!',
         content: `<form action="" class="formName">
-            <div class="form-group">
+            <div class="mb-2">
                 <label>Username</label>
                 <input type="text" class="form-control" name="username" required />
             </div>
-            <div class="form-group">
+            <div class="mb-2">
                 <label>Password</label>
                 <input type="password" class="form-control" name="password" required />
             </div>
@@ -1281,7 +1281,7 @@ $("#usersList").on("click", ".resetPassword", function(e){
         backgroundDismiss: true,
         title: 'Reset password!',
         content: `<form>
-            <div class="form-group">
+            <div class="mb-2">
                 <label>Password</label>
                 <input type="password" class="form-control" name="password" required />
             </div>

@@ -9,13 +9,13 @@
       <div class="modal-body">
         <div class="row">
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="mb-2">
                   <label> Name </label>
                   <input type="text" name="name" id="newContainerName" class="form-control"/>
               </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
+                <div class="mb-2">
                     <label
                         data-toggle="tooltip"
                         data-bs-placement="bottom"
@@ -27,7 +27,7 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">
+                <div class="mb-2">
                     <label
                         data-toggle="tooltip"
                         data-bs-placement="top"
@@ -41,13 +41,13 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
+                <div class="mb-2">
                     <label> Hosts To Create On </label>
                     <input id="newContainerHosts" type="text" class="form-control"/>
                 </div>
             </div>
         </div>
-        <div class="form-group">
+        <div class="mb-2">
             <label>  </label>
             <label data-toggle="tooltip"
                 data-bs-placement="top"
@@ -58,7 +58,7 @@
             </label>
             <input id="newContainerImage" type="text" class="form-control"/>
         </div>
-        <div class="form-group">
+        <div class="mb-2">
             <label> GPU's (Optional) </label>
             <select class="form-control" id="newContainerGpus" multiple>
                 <option value="">Please select a host </option>

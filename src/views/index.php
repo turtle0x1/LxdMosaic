@@ -1159,7 +1159,7 @@ $(document).on("click", "#openSearch", function(){
     $.confirm({
         title: `Search`,
         content: `
-            <div class="form-group">
+            <div class="mb-2">
                 <label>IP Address IPV4/IPV6</label>
                 <input class="form-control" name="ip" />
             </div>

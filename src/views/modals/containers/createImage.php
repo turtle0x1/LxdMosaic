@@ -10,7 +10,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <div class="form-group">
+          <div class="mb-2">
               <label> Alias </label>
               <input class="form-control" placeholder="myImage" name="alias" />
           </div>
@@ -26,11 +26,11 @@
                   <label class="form-check-label" for="yesRadio">Yes</label>
               </div>
           </div>
-          <div class="form-group">
+          <div class="mb-2">
               <label> OS (Optional) </label>
               <input class="form-control" placeholder="Ubuntu" name="os" />
           </div>
-          <div class="form-group">
+          <div class="mb-2">
               <label> Description (Optional) </label>
               <textarea class="form-control" placeholder="apache2 and our web app installed!" name="description"></textarea>
           </div>

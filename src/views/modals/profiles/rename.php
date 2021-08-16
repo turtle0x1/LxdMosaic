@@ -8,7 +8,7 @@
       </div>
       <div class="modal-body">
           <b> Host: </b> <span id="renameProfile-host"></span>
-          <div class="form-group">
+          <div class="mb-2">
               <b> New Profile Name </b>
               <input class="form-control" id="newProfileName"/>
           </div>

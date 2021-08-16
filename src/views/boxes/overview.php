@@ -207,7 +207,7 @@ $(document).on("click", ".viewDashboard", function(){
 $(document).on("click", "#newDashboardBtn", function(){
     $.confirm({
         title: "Create a Dashboard",
-        content: `<div class="form-group">
+        content: `<div class="mb-2">
             <label>Name</label>
             <input class="form-control" name="name" />
         </div>`,
@@ -286,28 +286,28 @@ $(document).on("click", "#addDashMetricGraph", function(){
     $.confirm({
         title: "Add A Graph",
         content: `
-            <div class="form-group">
+            <div class="mb-2">
                 <label>Name</label>
                 <input class="form-control" name="name" />
             </div>
-            <div class="form-group">
+            <div class="mb-2">
                 <label>Instance</label>
                 <select id="addDashMetricInstanceSelect" class="form-control">
                 </select>
             </div>
-            <div class="form-group">
+            <div class="mb-2">
                 <label>Metric</label>
                 <select id="addDashMetricMetricSelect" class="form-control disabled" disabled>
                     <option value=''>Select Instance</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="mb-2">
                 <label>Filter</label>
                 <select id="addDashMetricFilterSelect" class="form-control disabled" disabled>
                     <option value=''>Select Metric</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="mb-2">
                 <label>Range</label>
                 <select class="form-control float-end" id="addDashMetricRangeSelect" disabled>
                     <option value="">Please Select</option>

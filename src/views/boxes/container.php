@@ -576,7 +576,7 @@ function restoreBackupContainerConfirm(backupId, hostAlias, container, callback 
     $.confirm({
         title: `Backup Instance - ${hostAlias} / ${container} `,
         content: `
-            <div class="form-group">
+            <div class="mb-2">
                 <label> Target Host </label>
                 <input class="form-control" name="targetHost"/>
             </div>
@@ -642,7 +642,7 @@ function backupContainerConfirm(hostId, hostAlias, container, callback = null, w
     $.confirm({
         title: `Backup Instance - ${hostAlias} / ${container} `,
         content: `
-            <div class="form-group">
+            <div class="mb-2">
                 <label> Backup Name </label>
                 <input class="form-control validateName" maxlength="63" name="name"/>
             </div>
@@ -740,7 +740,7 @@ function editInstanceComment(hostId, hostAlias, container)
 {
     $.confirm({
         title: 'Set ' + hostAlias + '/' + container + ' Comment',
-        content: `<div class="form-group">
+        content: `<div class="mb-2">
             <label>Comment</label>
             <textarea class="form-control" name="comment"></textarea>
         </div>
@@ -773,7 +773,7 @@ function renameContainerConfirm(hostId, container, reloadView, hostAlias)
     $.confirm({
         title: 'Rename Instance!',
         content: `
-            <div class="form-group">
+            <div class="mb-2">
                 <label> New Name </label>
                 <input class="form-control validateName" maxlength="63" name="name"/>
             </div>`,
@@ -828,7 +828,7 @@ function snapshotContainerConfirm(hostId, container)
     $.confirm({
         title: 'Snapshot Instance - ' + container,
         content: `
-            <div class="form-group">
+            <div class="mb-2">
                 <label> Snapshot Name </label>
                 <input class="form-control validateName" maxlength="63" name="name"/>
             </div>`,
@@ -876,11 +876,11 @@ function copyContainerConfirm(hostId, container) {
     $.confirm({
         title: 'Copy Container!',
         content: `
-            <div class="form-group">
+            <div class="mb-2">
                 <label> Destination </label>
                 <select class="form-control" name="destination"></select>
             </div>
-            <div class="form-group">
+            <div class="mb-2">
                 <label> Name </label>
                 <input class="form-control validateName" maxlength="63" name="name"/>
             </div>
@@ -1816,7 +1816,7 @@ $("#containerBox").on("click", "#goToConsole", function() {
         $.confirm({
             title: 'Instance Shell!',
             content: `
-                <div class="form-group">
+                <div class="mb-2">
                     <label> Shell </label>
                     <input class="form-control" value="bash" maxlength="63" name="shell"/>
                 </div>

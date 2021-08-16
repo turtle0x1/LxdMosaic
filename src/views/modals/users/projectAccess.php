@@ -13,7 +13,7 @@
                       <i class="fas fa-info-circle text-info me-2"></i>Admin - can access all projects!
                   </div>
                   <div id="grantAccessInputs">
-                      <div class="form-group">
+                      <div class="mb-2">
                           <label>Host/s</label>
                           <small class="d-block"><i class="fas fa-info-circle text-info me-2"></i>Hosts without projects support will restrict the search to default</small>
                           <input id="grantAccesHosts" class="form-control"/>

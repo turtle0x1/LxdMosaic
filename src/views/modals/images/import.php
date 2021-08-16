@@ -7,7 +7,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-            <div class="form-group">
+            <div class="mb-2">
                 <label> Hosts To Import Images To </label>
                 <input id="hostsToImportImagesTo" class="form-control" />
             </div>
