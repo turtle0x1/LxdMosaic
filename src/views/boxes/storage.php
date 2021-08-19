@@ -142,10 +142,19 @@
     <div id="volumeDetails">
         <div class="row mb-4" style="border-bottom: 1px solid black; padding-bottom: 10px">
             <div class="col-md-12">
-                <h4>
-                    <i class="fas fa-database text-white me-2"></i>
-                    <span class="text-white" id="storageVolumeName"></span>
-                </h4>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                    <h4>
+                        <i class="fas fa-database text-white me-2"></i>
+                        <span class="text-white" id="storageVolumeName"></span>
+                    </h4>
+                    <div class="btn-toolbar float-end">
+                      <div class="btn-group me-2">
+                          <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete volume" class="btn btn-danger" id="deleteVolume">
+                              <i class="fas fa-trash"></i>
+                          </button>
+                      </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -193,6 +202,7 @@
 <script>
 
 var currentPool = {};
+var currentVolume = {};
 
 function makeStorageHostSidebarHtml(hosthtml, host, tableListHtml){
     let disabled = "";
@@ -395,6 +405,7 @@ $("#storageDetails").on("click", ".viewVolume", function(){
 
 function viewStorageVolume(hostId, hostAlias, poolName, volumeName, path, project) {
     let x = {hostId: hostId, pool: poolName, path: path, project: project};
+    currentVolume = x;
     addBreadcrumbs(["Storage", hostAlias, poolName, "volumes", volumeName ], ["viewStorage", "", "", "", "active"], false);
     $("#storageVolumeName").text(volumeName)
     ajaxRequest(globalUrls.storage.volumes.get, x, (data)=>{
@@ -462,6 +473,32 @@ $("#storageDetails").on("click", "#createVolume", function(){
     createVolumeObj.pool = currentPool.poolName
     createVolumeObj.hostId = currentPool.hostId
     $("#modal-storage-createVolume").modal("show");
+});
+$("#volumeDetails").on("click", "#deleteVolume", function(){
+    $.confirm({
+        title: 'Delete Storage Volume?',
+        content: 'This can\'t be undone?!',
+        buttons: {
+            cancel: function () {},
+            yes: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin"></i>Deleting..'); // let the user know
+                    this.buttons.yes.disable();
+                    this.buttons.cancel.disable();
+                    var modal = this;
+                    ajaxRequest(globalUrls.storage.volumes.delete, currentVolume, (data)=>{
+                        data = makeToastr(data);
+                        modal.close();
+                        if(data.state == "success"){
+                            loadStorageView();
+                        }
+                    });
+                    return false;
+                }
+            }
+        }
+    });
 });
 
 </script>

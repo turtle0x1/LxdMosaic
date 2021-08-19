@@ -214,6 +214,7 @@ if ($haveServers->haveAny() !== true) {
                       get: "/api/Storage/Volumes/GetStorageVolumeController/get",
                       getOnHost: "/api/Storage/Volumes/GetHostStorageVolumesController/get",
                       create: "/api/Storage/Volumes/CreateStorageVolumeController/create",
+                      delete: "/api/Storage/Volumes/DeleteStorageVolumeController/delete",
                   },
                   getAll: "/api/Storage/GetHostsStorageController/get",
                   getPool: "/api/Storage/GetHostsStoragePoolController/get",
