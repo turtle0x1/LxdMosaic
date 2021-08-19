@@ -213,6 +213,7 @@ if ($haveServers->haveAny() !== true) {
                   volumes: {
                       get: "/api/Storage/Volumes/GetStorageVolumeController/get",
                       getOnHost: "/api/Storage/Volumes/GetHostStorageVolumesController/get",
+                      create: "/api/Storage/Volumes/CreateStorageVolumeController/create",
                   },
                   getAll: "/api/Storage/GetHostsStorageController/get",
                   getPool: "/api/Storage/GetHostsStoragePoolController/get",

@@ -58,8 +58,11 @@
             <div class="col-md-12">
                 <h4>
                     <span class="text-white" id="storagePoolName"></span>
-                    <button class="btn btn-danger float-end" id="deletePool">
+                    <button class="btn btn-danger float-end" data-toggle="tooltip" data-bs-placement="bottom" title="Delete pool" id="deletePool">
                         <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="btn btn-primary float-end" data-toggle="tooltip" data-bs-placement="bottom" title="Create volume" id="createVolume">
+                        <i class="fas fa-plus"></i>
                     </button>
                 </h4>
             </div>
@@ -335,7 +338,7 @@ $("#storageOverview").on("click", "#createPool", function(){
 
 function viewStoragePool(hostId, hostAlias, poolName)
 {
-    currentPool = {hostId: hostId, poolName: poolName, hostAlias: hostAlias};
+    currentPool = {hostId: hostId, poolName: poolName, hostAlias: hostAlias, driver: null};
     $("#storageOverview, #volumeDetails").hide();
     $("#storageDetails").show();
 
@@ -346,6 +349,7 @@ function viewStoragePool(hostId, hostAlias, poolName)
         let configHtml = "",
             usedByHtml = "";
 
+        currentPool.driver = data.driver
         $("#storagePoolName").text(`Storage Pool: ${data.name} (${data.driver})`);
 
         $.each(data.config, function(key, value){
@@ -453,9 +457,16 @@ $("#storageDetails").on("click", "#deletePool", function(){
         }
     });
 });
+$("#storageDetails").on("click", "#createVolume", function(){
+    createVolumeObj.driver = currentPool.driver
+    createVolumeObj.pool = currentPool.poolName
+    createVolumeObj.hostId = currentPool.hostId
+    $("#modal-storage-createVolume").modal("show");
+});
 
 </script>
 
 <?php
     require __DIR__ . "/../modals/storage/createPool.php";
+    require __DIR__ . "/../modals/storage/createVolume.php";
 ?>
