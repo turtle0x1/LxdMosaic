@@ -37,6 +37,9 @@ class GetGraphableProjectAnalytics
         $allowedProjects = $this->fetchAllowedProjects->fetchAll($userId);
 
         $output = [];
+
+        $typeTotals = [];
+
         foreach ($entries as $entry) {
             $alias = $entry["hostAlias"];
             $project = $entry["project"];
@@ -62,12 +65,26 @@ class GetGraphableProjectAnalytics
                 $output[$alias][$project][$type] = [];
             }
 
+            if (!isset($typeTotals[$type])) {
+                $typeTotals[$type] = [];
+            }
+
+            if (!isset($typeTotals[$type][$entry["created"]])) {
+                $typeTotals[$type][$entry["created"]] = 0;
+            }
+
+            $typeTotals[$type][$entry["created"]] += $entry["value"];
+
             $output[$alias][$project][$type][] = [
                 "created"=>$entry["created"],
                 "value"=>$entry["value"],
                 "limit"=>$entry["limit"]
             ];
         }
-        return $output;
+
+        return [
+            "totals"=>$typeTotals,
+            "projectAnalytics"=>$output
+        ];
     }
 }

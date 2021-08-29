@@ -1030,17 +1030,22 @@ function loadDashboard(){
             "Memory": {
                 formatBytes: true,
                 icon: 'fas fa-memory'
+            },
+            "Processes": {
+                formatBytes: false,
+                icon: 'fas fa-microchip'
             }
         }
 
         $("#overviewGraphs").empty();
+        $("#totalsGraphs").empty();
 
-        $.each(data.projectGraphData, (alias, projects)=>{
+        $.each(data.projectGraphData.projectAnalytics, (alias, projects)=>{
             $.each(projects, (project, analytics)=>{
                 let y = $(`
                 <div class="row projectRow" data-project="${project}">
                     <div class="col-md-12 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                        <h4><i class="fas fa-server text-info me-2"></i>${alias}</h4>
+                        <h4 class="mb-2"><i class="fas fa-server text-info me-2"></i>${alias}</h4>
                         <h4><i class="fas fa-project-diagram text-info me-2"></i>${project}</h4>
                     </div>
                     <div class="row graphs">
@@ -1055,7 +1060,7 @@ function loadDashboard(){
 
                     let cId = project + "-" + title.toLowerCase();
 
-                    $.each(data.projectGraphData[alias][project][title], (_, entry)=>{
+                    $.each(data.projectGraphData.projectAnalytics[alias][project][title], (_, entry)=>{
                         labels.push(moment.utc(entry.created).local().format("HH:mm"))
                         values.push(entry.value)
                         limits.push(entry.limit)
@@ -1072,7 +1077,7 @@ function loadDashboard(){
                     }
 
 
-                    let x = $(`<div class='col-md-4'>
+                    let x = $(`<div class='col-md-3'>
                           <div class="card bg-dark text-white">
                               <div class="card-header">
                                   <i class="${config.icon} me-2"></i>${title}
@@ -1137,6 +1142,97 @@ function loadDashboard(){
                 $("#overviewGraphs").append(y)
             });
         });
+
+        let y = $(`<div class="row mb-2" ></div>`)
+        $.each(displayItems, (title, config)=>{
+
+
+            let labels = [];
+            let values = [];
+            let limits = [];
+
+            let cId = title.toLowerCase();
+
+            $.each(data.projectGraphData.totals[title], (created, value)=>{
+                labels.push(moment.utc(created).local().format("HH:mm"))
+                values.push(value)
+            });
+
+            var totalUsage = values.reduce(function(a, b){
+                return parseInt(a) + parseInt(b);
+            }, 0);
+
+            let canvas = `<canvas height="200" width="200" id="${cId}"></canvas>`;
+
+            if(totalUsage == 0){
+                canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
+            }
+
+
+            let x = $(`<div class='col-md-3'>
+                  <div class="card bg-dark text-white">
+                      <div class="card-body">
+                        <h4 class="mb-3 text-center"><i class="${config.icon} me-2"></i>${title}</h4>
+                        ${canvas}
+                      </div>
+                  </div>
+              </div>`);
+
+            if(totalUsage > 0){
+                let graphDataSets = [
+                    {
+                        label: "total",
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                        pointBorderColor: "rgba(46, 204, 113, 1)",
+                        data: values
+                    }
+                ];
+
+                let options = {responsive: true};
+
+                if (config.formatBytes) {
+                      options.scales = scalesBytesCallbacks;
+                      options.tooltips = toolTipsBytesCallbacks
+                }else{
+                    options.scales = {
+                        yAxes: [{
+                          ticks: {
+                            precision: 0
+                          }
+                      }],
+                    }
+                }
+
+                options.legend = {
+                    display: false
+                 },
+
+                 // scales.yAxes.ticks
+                options.scales.yAxes[0].ticks.beginAtZero = false;
+                options.scales.xAxes = [{
+                  ticks: {
+                        callback: function(){
+                            console.log("me");
+                            return '';
+                        }
+                      }
+                  }]
+
+                new Chart(x.find("#" + cId), {
+                  type: 'line',
+                  data: {
+                      datasets: graphDataSets,
+                      labels: labels
+                  },
+                  options: options
+                });
+            }
+            y[0].append(x[0]);
+
+
+        });
+        $("#totalsGraphs").append(y)
     });
 }
 
