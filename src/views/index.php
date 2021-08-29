@@ -935,7 +935,7 @@ function loadDashboard(){
     }
 
     $("#userDashboardGraphs").empty();
-    $(".boxSlide, #userDashboard").hide();
+    $(".boxSlide, #userDashboard, #projectAnalyticsDashboard").hide();
     $("#overviewBox, #generalDashboard").show();
     setBreadcrumb("Dashboard", "active overview");
     changeActiveNav(".overview")
@@ -945,6 +945,10 @@ function loadDashboard(){
 
         let lis = `<li class="nav-item">
           <a class="nav-link active viewDashboard" id="generalDashboardLink" href="#">General</a>
+
+        </li>
+        <li class="nav-item">
+            <a class="nav-link viewDashboard" id="projectAnalyticsDashboardLink" href="#">Project Analytics</a>
         </li>`;
 
         $.each(data.userDashboards, (_, dashboard)=>{
@@ -1209,8 +1213,14 @@ function loadDashboard(){
                  },
 
                  // scales.yAxes.ticks
+                options.scales.yAxes[0].gridLines = {
+                    color: "rgba(0, 0, 0, 0)",
+                }
                 options.scales.yAxes[0].ticks.beginAtZero = false;
                 options.scales.xAxes = [{
+                    gridLines: {
+             color: "rgba(0, 0, 0, 0)",
+         },
                   ticks: {
                         callback: function(){
                             console.log("me");
