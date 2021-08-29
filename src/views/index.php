@@ -480,17 +480,29 @@ if ($haveServers->haveAny() !== true) {
               <li class="nav-item px-3 btn btn-outline-purple pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Search" id="openSearch">
                     <a> <i class="fas fa-search"></i></a>
               </li>
-              <?php if ($isAdmin === 1) : ?>
-              <li class="nav-item px-3 btn btn-outline-primary pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Add a new host" id="addNewServer">
-                    <a> <i class="fas fa-plus me-2"></i><i class="fas fa-server"></i> </a>
-               </li>
-              <?php endif; ?>
-              <li class="nav-item px-3 btn btn-outline-success pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Create a container" id="createContainer">
-                    <a> <i class="fas fa-plus me-2"></i><i class="fas fa-box"></i> </a>
-               </li>
-              <li class="nav-item px-3 btn btn-outline-success pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Create a VM" id="createVm">
-                    <a> <i class="fas fa-plus me-2"></i><i class="fas fa-vr-cardboard"></i></a>
-               </li>
+              <li class="nav-item dropdown">
+                  <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                     <i class="fas fa-project-diagram"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton1" style="min-width: 20vw;">
+                      <div class="px-4 py-3" id="navProjectControlHostList">
+                      </div>
+                  </ul>
+              </li>
+              <li class="nav-item dropdown">
+                  <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                     <i class="fas fa-plus"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton1">
+                      <?php if ($isAdmin === 1) : ?>
+                       <li><a id="addNewServer" class="dropdown-item" href="#"><i class="fas fa-server me-2"></i>Add Server</a></li>
+                      <?php endif; ?>
+
+                    <li><a id="createContainer" class="dropdown-item" href="#"><i class="fas fa-box me-2"></i>Create Container</a></li>
+                    <li><a id="createVm" class="dropdown-item" href="#"><i class="fas fa-vr-cardboard me-2"></i>Create VM</a></li>
+
+                  </ul>
+              </li>
                <a href="/logout" class="nav-item px-3 btn btn-outline-secondary pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Logout" style="height: 35px;">
                     <i style="line-height: 1.25rem" class="fas fa-sign-out-alt"></i>
                 </a>
@@ -943,13 +955,13 @@ function loadDashboard(){
 
         $("#userDashboardsList").empty().append(lis);
 
-        let hostsTrs = "";
+        let projectsDropdown = "";
 
         $.each(data.clustersAndHosts.clusters, function(i, item){
 
             let cTitleClass = userDetails.isAdmin ? "cluster-title" : "cluster-title-not-admin";
 
-            hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
+            projectsDropdown += `<b>Cluster ${i}</b>`
 
             $.each(item.members, function(_, host){
                 let disabled = "";
@@ -971,12 +983,12 @@ function loadDashboard(){
                 }
 
                 if(host.hostOnline == true){
-                    hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+                    projectsDropdown += `<div><b>${host.alias}</b>${projects}</div>`
                 }
             });
         });
 
-        hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Standalone Hosts</td></tr>`
+        projectsDropdown += `<b class="text-success">Standalone Hosts</b>`
 
         $.each(data.clustersAndHosts.standalone.members, function(_, host){
             let disabled = "";
@@ -999,11 +1011,11 @@ function loadDashboard(){
             }
 
             if(host.hostOnline == true){
-                hostsTrs += `<tr data-host-id="${host.hostId}"><td><a data-id="${host.hostId}" class="viewHost" href="#">${host.alias}</a></td><td>${projects}</td></tr>`
+                projectsDropdown += `<div><i class="fas fa-server me-2"></i><b>${host.alias}</b>${projects}</div>`;
                 openHostOperationSocket(host.hostId, host.currentProject);
             }
         });
-        $("#dashboardHostTable > tbody").empty().append(hostsTrs);
+        $("#navProjectControlHostList").empty().append(projectsDropdown);
 
 
         let displayItems = {
@@ -1205,11 +1217,12 @@ $(document).on("change", ".changeHostProject", function(){
     let selected = $(this).find(":selected");
 
     let x = {
-        hostId: selected.parents("tr").data("hostId"),
+        hostId: selected.data("host"),
         project: selected.val()
     };
 
     ajaxRequest(globalUrls.user.setHostProject, x, function(data){
+        selected.parents(".dropdown-menu").removeClass("show");
         makeToastr(data);
         addHostContainerList(x.hostId, selected.data("alias"));
         openHostOperationSocket(x.hostId, selected.val());
