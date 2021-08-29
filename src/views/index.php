@@ -165,6 +165,10 @@ if ($haveServers->haveAny() !== true) {
                   getAllData: '/api/AnalyticData/DownloadHistoryController/download'
               },
               backups: {
+                  profiles: {
+                    getOverview: '/api/Backups/Profiles/GetProfilesBackupsOverviewController/get',
+                  },
+                  //TODO These should all be under an "instance" key
                   strategies: {
                     getAll: "/api/Backups/Strategies/GetStrategiesController/get",
                   },
