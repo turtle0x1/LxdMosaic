@@ -11,7 +11,8 @@
         "doctrine/annotations": "^1.10",
         "lavary/crunz": "^2.2",
         "symfony/routing": "^5.1",
-        "robmorgan/phinx": "^0.12.4"
+        "robmorgan/phinx": "^0.12.4",
+        "symfony/yaml": "^5.3"
     },
     "autoload": {
         "psr-4": {
