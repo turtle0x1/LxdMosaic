@@ -503,6 +503,13 @@ if ($haveServers->haveAny() !== true) {
 
                   </ul>
               </li>
+              <li class="nav-item dropdown">
+                  <button class="btn btn-outline-info dropdown-toggle" type="button" id="operationsDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+                     <i class="fas fa-bell"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end px-3" aria-labelledby="operationsDropdownButton" id="operationsList" style="min-width: 20vw;">
+                  </ul>
+              </li>
                <a href="/logout" class="nav-item px-3 btn btn-outline-secondary pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Logout" style="height: 35px;">
                     <i style="line-height: 1.25rem" class="fas fa-sign-out-alt"></i>
                 </a>
@@ -521,7 +528,7 @@ if ($haveServers->haveAny() !== true) {
                 <div class="container-fluid">
                   <div id="dashboard" class="animated fadeIn">
                     <div class="row">
-                        <div class="col-md-10" id="boxHolder">
+                        <div class="col-md-12" id="boxHolder">
                             <?php
                                 require __DIR__ . "/boxes/overview.php";
                                 require __DIR__ . "/boxes/container.php";
@@ -538,12 +545,6 @@ if ($haveServers->haveAny() !== true) {
                                 require __DIR__ . "/boxes/settings.php";
                                 require __DIR__ . "/boxes/searchResult.php";
                             ?>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="tree well" id="">
-                            <b> Operations </b>
-                            <div id="operationsList"></div>
-                            </div>
                         </div>
                     </div>
                   </div>

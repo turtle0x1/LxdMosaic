@@ -254,7 +254,7 @@
     </div>
 <div id="containerDetails" class="instanceViewBox">
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-4">
         <div class="card mb-2 text-white bg-dark">
           <div class="card-body">
               <h5> <u> Instance Details <i class="fas float-end fa-info-circle"></i> </u> </h5>
@@ -299,7 +299,7 @@
         </div>
 
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="card mb-2 bg-dark text-white">
 
             <div class="card-body table-responsive">

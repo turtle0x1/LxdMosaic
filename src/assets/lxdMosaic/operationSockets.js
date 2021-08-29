@@ -19,6 +19,30 @@ function clearOldOperations()
     });
 }
 
+function calcRunningOps()
+{
+    let total = 0;
+    $("#operationsList").find(".op").each(function(){
+        console.log(parseInt($(this).data("status")));
+        if(parseInt($(this).data("status")) === 103){
+            console.log($(this));
+            total++;
+        }
+    });
+    let badge = $("#operationsDropdownButton").find(".badge");
+
+    if(total == 0){
+        badge.remove()
+    }
+
+    if(badge.length > 0){
+        badge.text(`${total}`)
+    }else{
+        $("#operationsDropdownButton").append(`<span class="badge bg-secondary">${total}</span>`)
+    }
+
+}
+
 function openHostOperationSocket(hostId, project)
 {
     if(currentSockets.hasOwnProperty(hostId) && currentSockets[hostId].hasOwnProperty(project)){
@@ -103,7 +127,7 @@ function openHostOperationSocket(hostId, project)
                     description += msg.metadata.metadata["create_image_from_container_pack_progress"].replace("Image pack:", "")
                 }
 
-                liItem.html(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code, timestamp))
+                liItem.replaceWith(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code, timestamp))
 
                 if(msg.metadata.err !== ""){
                     liItem.attr("data-bs-toggle", "popover")
@@ -117,6 +141,7 @@ function openHostOperationSocket(hostId, project)
             }else{
                 hostOpList.prepend(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code, timestamp));
             }
+            calcRunningOps()
         }
     }
 
