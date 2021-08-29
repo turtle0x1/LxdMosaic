@@ -1,138 +1,89 @@
 <div id="settingsBox" class="boxSlide">
-    <div id="settingsOverview" class="settingsBox">
-        <div class="row">
-            <div class="col-md-6">
-                  <div class="card bg-dark text-white">
+<div id="instanceSettingsBox" class="settingsBox">
+    <div class="row">
+        <div class="col-md-6">
+            <h4>LXDMosaic Details</h4>
+        </div>
+        <div class="col-md-6">
+            <span class="badge bg-primary float-end" id="newVersion">
+            </span>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+              <div class="card bg-dark text-white">
                   <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
                       <h5>
                         <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
-                            My Permanent API keys
+                          General Settings
                         </a>
                         </h5>
                         <div class="btn-toolbar float-end">
                             <div class="btn-group me-2">
-                                <button class="btn btn-success" id="createToken">
-                                    <i class="fas fa-plus"></i>
+                                <a target="_blank" class="btn btn-primary" href="https://lxdmosaic.readthedocs.io/en/latest/LXDMosaic_Settings/">
+                                    <i class="fas fa-book-open"></i>
+                                </a>
+                                <button class="btn btn-success" id="saveSettings">
+                                    <i class="fas fa-save"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div id="" class="collapse in show" role="tabpanel" >
+                    <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
                       <div class="card-body bg-dark">
-                        <table class="table table-dark table-bordered" id="apiKeyTable">
+                        <table class="table table-dark table-bordered" id="settingListTable">
                             <thead>
                                 <tr>
-                                    <th>Date Created</th>
-                                    <th>Delete</th>
+                                    <th>Setting</th>
+                                    <th>Value</th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
                         </table>
                       </div>
-                    </div>
                   </div>
-            </div>
-         </div>
-</div>
-<div id="instanceSettingsBox" class="settingsBox row">
-    <div class="col-md-6">
-        <div class="card bg-dark text-white">
-          <div class="card-header bg-dark" role="tab" >
-            <h5>
-              <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
-                LXDMosaic Details
-              </a>
-            </h5>
-          </div>
-          <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
-            <div class="card-body bg-dark">
-              <table class="table table-dark table-bordered" id="">
-                  <tbody>
-                      <tr>
-                          <th>Current Version</th>
-                          <td id="currentVersion"></td>
-                      </tr>
-                      <tr>
-                          <th>New Version</th>
-                          <td id="newVersion"></td>
-                      </tr>
-                  </tbody>
-              </table>
-            </div>
-          </div>
+              </div>
         </div>
+        <div class="col-md-6">
           <div class="card bg-dark text-white">
-          <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
-              <h5>
-                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
-                  General Settings
-                </a>
-                </h5>
-                <div class="btn-toolbar float-end">
-                    <div class="btn-group me-2">
-                        <a target="_blank" class="btn btn-primary" href="https://lxdmosaic.readthedocs.io/en/latest/LXDMosaic_Settings/">
-                            <i class="fas fa-book-open"></i>
-                        </a>
-                        <button class="btn btn-success" id="saveSettings">
-                            <i class="fas fa-save"></i>
-                        </button>
+              <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
+                  <h5>
+                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+                      LDAP Settings
+                    </a>
+                    </h5>
+                    <div class="btn-toolbar float-end">
+                        <div class="btn-group me-2">
+                            <button class="btn btn-success" id="saveLdapSettings">
+                                <i class="fas fa-save"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div id="currentSettingsTable" class="collapse in show" role="tabpanel" >
-              <div class="card-body bg-dark">
-                <table class="table table-dark table-bordered" id="settingListTable">
-                    <thead>
-                        <tr>
-                            <th>Setting</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card bg-dark text-white">
-      <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
-          <h5>
-            <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
-              LDAP Settings
-            </a>
-            </h5>
-            <div class="btn-toolbar float-end">
-                <div class="btn-group me-2">
-                    <button class="btn btn-success" id="saveLdapSettings">
-                        <i class="fas fa-save"></i>
-                    </button>
+                <div id="" class="collapse in show" role="tabpanel" >
+                  <div class="card-body bg-dark">
+                    <div class="text-center mb-2">
+                        <small class="font-italic"><i class="fas fa-info-circle text-info me-2"></i>Users sync'd on the hour every hour!</small>
+                    </div>
+                    <div class="text-center mb-2">
+                        <small class="font-italic"><i class="fas fa-info-circle text-warning me-2"></i>Setting LDAP Server to empty value will disable LDAP syncing &amp; login!</small>
+                    </div>
+                    <table class="table table-dark table-bordered" id="ldapSettingListTable">
+                        <thead>
+                            <tr>
+                                <th>Setting</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                  </div>
                 </div>
-            </div>
-        </div>
-        <div id="" class="collapse in show" role="tabpanel" >
-          <div class="card-body bg-dark">
-            <div class="text-center mb-2">
-                <small class="font-italic"><i class="fas fa-info-circle text-info me-2"></i>Users sync'd on the hour every hour!</small>
-            </div>
-            <div class="text-center mb-2">
-                <small class="font-italic"><i class="fas fa-info-circle text-warning me-2"></i>Setting LDAP Server to empty value will disable LDAP syncing &amp; login!</small>
-            </div>
-            <table class="table table-dark table-bordered" id="ldapSettingListTable">
-                <thead>
-                    <tr>
-                        <th>Setting</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
           </div>
         </div>
-      </div>
     </div>
 </div>
 <div id="recordedActionsBox" class="settingsBox">
@@ -372,55 +323,51 @@ function loadSettingsView()
 {
     $(".boxSlide").hide();
     $(".settingsBox").hide();
-    $("#settingsOverview, #settingsBox").show();
+    $("#settingsBox").show();
+    $("#instanceSettingsBox").show();
     $(".sidebar-fixed").addClass("sidebar-lg-show");
 
     allInstanceTypes = {};
     currentProvider = null;
 
-    let hosts = `
-    <li class="mt-2 my-settings">
-        <a class="text-info" href="#">
-            <i class="fas fa-user me-2"></i>My Settings
-        </a>
-    </li>`
+    let hosts = '';
 
     if(!userDetails.isAdmin){
         $("#saveSettings, #saveLdapSettings, #addUser, #recordedActionsCard, #usersCard").remove();
     }else{
         hosts += `
-        <li class="instance-hosts">
-            <a class="" href="#">
-                <i class="fas fa-server me-2"></i>Hosts
-            </a>
-        </li>
-        <li class="instance-settings">
-            <a class="" href="#">
+        <li class="nav-item instance-settings">
+            <a class="nav-link text-info" href="#">
                 <i class="fas fa-sliders-h me-2"></i>LXDMosaic Settings
             </a>
         </li>
-        <li class="instance-types-overview">
-            <a class="" href="#">
+        <li class="nav-item instance-hosts">
+            <a class="nav-link " href="#">
+                <i class="fas fa-server me-2"></i>Hosts
+            </a>
+        </li>
+        <li class="nav-item instance-types-overview">
+            <a class="nav-link " href="#">
                 <i class="fas fa-cloud me-2"></i>Instance Types
             </a>
         </li>
-        <li class="users-overview">
-            <a class="" href="#">
+        <li class="nav-item users-overview">
+            <a class="nav-link " href="#">
                 <i class="fas fa-users-cog me-2"></i>Users
             </a>
         </li>
-        <li class="user-project-overview">
-            <a class="" href="#">
+        <li class="nav-item user-project-overview">
+            <a class="nav-link " href="#">
                 <i class="fas fa-users-cog me-2"></i>User Project Access
             </a>
         </li>
-        <li class="recorded-actions-overview">
-            <a class="" href="#">
+        <li class="nav-item recorded-actions-overview">
+            <a class="nav-link " href="#">
                 <i class="fas fa-history me-2"></i>Recorded Actions
             </a>
         </li>
-        <li class="retired-data-overview">
-            <a class="" href="#">
+        <li class="nav-item retired-data-overview">
+            <a class="nav-link " href="#">
                 <i class="fas fa-eraser me-2"></i>Retired Data
             </a>
         </li>
@@ -429,29 +376,10 @@ function loadSettingsView()
 
     $("#sidebar-ul").empty().append(hosts);
 
-    addBreadcrumbs(["Settings", "My Settings"], ["viewSettings", "active"], false);
-
-    ajaxRequest(globalUrls.settings.getMyOverview, {}, (data)=>{
-        data = makeToastr(data);
-        if(data.hasOwnProperty("state") && data.state == "error"){
-            return false;
-        }
-
-        let trs = "";
-
-        if(data.permanentTokens.length == 0){
-            trs = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-success me-2'></i>No Permanent API Keys!</td></tr>"
-        }else{
-            $.each(data.permanentTokens, (_, token)=>{
-                trs += `<tr>
-                    <td>${moment.utc(token.created).local().format("llll")}</td>
-                    <td><button class="btn btn-danger btn-sm deleteToken" id="${token.id}" ><i class="fas fa-trash"></i></button></td>
-                </tr>`;
-            });
-        }
-
-        $("#apiKeyTable > tbody").empty().append(trs);
-    });
+    loadInstanceSettings();
+    $(".settingsBox").hide();
+    $("#instanceSettingsBox").show();
+    addBreadcrumbs(["LXDMosaic Settings"], ["active"], true);
 
 }
 
@@ -488,7 +416,7 @@ function makeHostUserOverview(html, host){
         if(noOfUser > 0){
             html += `<td>`
             $.each(details.users.slice(0, 10), (_, user)=>{
-                html += `<div class="badge badge-primary m-2">${user.userName}</div>`
+                html += `<div class="badge bg-primary m-2">${user.userName}</div>`
             });
 
             if(noOfUser >= 10){
@@ -637,7 +565,7 @@ function loadInstanceTypes(){
         $.each(data, function(provider, provDetails){
             h += ` <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-dark provider" data-provider-id="${provDetails.providerId}" id="${provider}">
                 ${provider}
-                <span class="badge badge-primary badge-pill">${provDetails.types.length}</span>
+                <span class="badge bg-primary bg-pill">${provDetails.types.length}</span>
               </li>`
         });
         $("#providersList").empty().append(h);
@@ -1075,7 +1003,6 @@ $("#usersList").on("click", ".viewUser", function(){
     let x = {targetUser: $(this).attr("id") }
     let userName = $(this).text();
 
-    $("#settingsOverview").hide();
     $("#userDetails").show();
     addBreadcrumbs(["Users", userName], ["", "active"]);
     ajaxRequest(globalUrls.user.getUserOverview, x, (data)=>{
@@ -1124,59 +1051,6 @@ $("#usersList").on("click", ".viewUser", function(){
 
         $("#userDetails").empty().append(x);
 
-    });
-});
-
-$("#settingsOverview").on("click", "#createToken", function(){
-    $.confirm({
-        title: 'Create Permanent API Key!',
-        content: `
-        <div class="mb-2">
-            <label>Token</label>
-            <input class="form-control" name="token"/>
-        </div>
-        `,
-        buttons: {
-            cancel: function () {
-                //close
-            },
-            formSubmit: {
-                text: 'Create',
-                btnClass: 'btn-blue',
-                action: function () {
-                    var token = this.$content.find('input[name=token]').val().trim();
-                    if(token == ""){
-                        $.alert('Please provide a token');
-                        return false;
-                    }
-                    let x = {token: token};
-                    ajaxRequest(globalUrls.user.tokens.create, x, (response)=>{
-                        response = makeToastr(response);
-                        if(response.state == "error"){
-                            return false;
-                        }
-                        tr.remove();
-                    });
-                }
-            }
-        },
-        onContentReady: function () {
-            // bind to events
-            var jc = this;
-            this.$content.find('input[name=token]').val(Math.random().toString(36).substring(2));
-        }
-    });
-});
-
-$("#settingsOverview").on("click", ".deleteToken", function(){
-    let tr = $(this).parents("tr");
-    let x = {tokenId: $(this).attr("id")};
-    ajaxRequest(globalUrls.user.tokens.delete, x, (response)=>{
-        response = makeToastr(response);
-        if(response.state == "error"){
-            return false;
-        }
-        tr.remove();
     });
 });
 

@@ -2,7 +2,7 @@
     <div class="row mb-2">
         <div class="col-md-12">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
-                <ul class="nav nav-tabs" id="userDashboardsList">
+                <ul class="nav nav-tabs w-100" id="userDashboardsList">
                 </ul>
                 <button class="btn btn-outline-primary" id="newDashboardBtn" data-toggle="tooltip" data-bs-placement="bottom" title="Create dashboard">
                     <i class="fas fa-plus"></i>
@@ -51,9 +51,6 @@
     <div class="mb-2" id="generalDashboard">
           <div class="row">
               <div class="col-lg-12">
-                  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                      <h4><i class="fas fa-chart-bar me-2"></i>Totals</h4>
-                  </div>
                   <div id="totalsGraphs">
                   </div>
               </div>

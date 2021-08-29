@@ -39,6 +39,7 @@ function calcRunningOps()
         badge.text(`${total}`)
     }else{
         $("#operationsDropdownButton").append(`<span class="badge bg-secondary">${total}</span>`)
+        $("#operationsList").append(`<li id="noOps"><div class="dropdown-item" href="#"><i class="fas fa-info-circle text-info me-2"></i>No Operations In Progress</div></li>`)
     }
 
 }
@@ -61,6 +62,7 @@ function openHostOperationSocket(hostId, project)
 
     operationSocket.onmessage = (msg) => {
         msg = JSON.parse(msg.data);
+        $("#noOps").remove();
 
         if(msg.mosaicType == "hostChange"){
             let data = $.parseJSON(msg);
@@ -126,7 +128,6 @@ function openHostOperationSocket(hostId, project)
                 }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("create_image_from_container_pack_progress")){
                     description += msg.metadata.metadata["create_image_from_container_pack_progress"].replace("Image pack:", "")
                 }
-
                 liItem.replaceWith(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code, timestamp))
 
                 if(msg.metadata.err !== ""){

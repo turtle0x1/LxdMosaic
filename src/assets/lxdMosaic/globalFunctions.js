@@ -130,6 +130,9 @@ function addBreadcrumbs(names, classes, preserveRoot = true)
 
 function changeActiveNav(newActiveSelector)
 {
+    $("#buttonsNavbar").find(".active").each(function(){
+        $(this).removeClass("active");
+    })
     $("#mainNav").find(".active").removeClass("active");
     $("#mainNav").find(newActiveSelector).addClass("active");
 }

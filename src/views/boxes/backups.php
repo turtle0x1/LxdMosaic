@@ -195,8 +195,8 @@ $(document).on("click", "#disableInstanceSchedule", function(){
 });
 
 $(document).on("click", ".toggleDaySelected", function(){
-    $(this).toggleClass("badge-secondary");
-    $(this).toggleClass("badge-primary");
+    $(this).toggleClass("bg-secondary");
+    $(this).toggleClass("bg-primary");
 });
 
 $(document).on("change", "#scheduleBackupFrequency", function(){
@@ -228,25 +228,25 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
             <div id="weeklyBackupScheduleDiv" class="d-none">
                 <label><b>Select Days Of Week</b></label>
                 <div>
-                    <div data-day="0" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                    <div data-day="0" class="badge bg-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
                         Sunday
                     </div>
-                    <div data-day="1" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                    <div data-day="1" class="badge bg-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
                         Monday
                     </div>
-                    <div data-day="2" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                    <div data-day="2" class="badge bg-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
                         Tuesday
                     </div>
-                    <div data-day="3" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                    <div data-day="3" class="badge bg-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
                         Wednesday
                     </div>
-                    <div data-day="4" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                    <div data-day="4" class="badge bg-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
                         Thursday
                     </div>
-                    <div data-day="5" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                    <div data-day="5" class="badge bg-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
                         Friday
                     </div>
-                    <div data-day="6" class="badge badge-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
+                    <div data-day="6" class="badge bg-secondary d-block m-2 toggleDaySelected" style="cursor: pointer;">
                         Saturday
                     </div>
                 </div>
@@ -319,7 +319,7 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                     let daysOfWeek = [];
 
                     if(frequency == "weekly"){
-                        $("#weeklyBackupScheduleDiv").find(".badge-primary").map(function(){
+                        $("#weeklyBackupScheduleDiv").find(".bg-primary").map(function(){
                             daysOfWeek.push($(this).data("day"));
                         });
                     }

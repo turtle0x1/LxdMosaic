@@ -93,7 +93,7 @@ $("#modal-projects-access").on("shown.bs.modal", function(){
             html += `<div class='text-center'><i class='fas fa-info-circle text-primary'></i> No users have access other than admin </i>`
         }else{
             $.each(data, (_, user)=>{
-                html += `<span class='badge badge-secondary m-2' id="${user.userId}"><i class='fas fa-user text-primary me-2'></i>${user.userName}<i class="ms-2 fas fa-times revokeAccess"></i></span>`;
+                html += `<span class='badge bg-secondary m-2' id="${user.userId}"><i class='fas fa-user text-primary me-2'></i>${user.userName}<i class="ms-2 fas fa-times revokeAccess"></i></span>`;
             });
         }
         $("#usersWithAccess").empty().append(html);

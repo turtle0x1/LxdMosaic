@@ -290,7 +290,7 @@
     $(document).on("click", "#importImagesBtn", function(e){
         e.preventDefault();
         let y = []
-        $.each($(".imageForImport.badge-primary"), function(){
+        $.each($(".imageForImport.bg-primary"), function(){
             y.push($(this).data());
         });
         imagesToImport = y;
@@ -300,10 +300,10 @@
     });
 
     $(document).on("click", ".imageForImport", function(){
-        $(this).toggleClass("badge-secondary");
-        $(this).toggleClass("badge-primary");
+        $(this).toggleClass("bg-secondary");
+        $(this).toggleClass("bg-primary");
 
-        if($(".imageForImport.badge-primary").length == 0){
+        if($(".imageForImport.bg-primary").length == 0){
             $("#importImagesBtn").removeClass("btn-primary")
             $("#importImagesBtn").addClass("btn-outline-secondary")
         }else{
@@ -334,7 +334,7 @@
                         html += `<div class="d-block mb-2 mt-2"><i>${variant}</i></div>`
                         $.each(versions, (version, fingerPrint)=>{
                             html += `<div class="d-inline me-4 mb-3 mt-3">
-                                <span class="badge badge-secondary imageForImport" data-fingerprint="${fingerPrint}" data-alias="${version}" data-os="${os}">
+                                <span class="badge bg-secondary imageForImport" data-fingerprint="${fingerPrint}" data-alias="${version}" data-os="${os}">
                                 <i class="fas fa-image"></i>
                                 ${version}
                                 </span>

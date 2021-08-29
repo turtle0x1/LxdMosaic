@@ -426,7 +426,7 @@ if ($haveServers->haveAny() !== true) {
   </form>
   <body style="overflow: hidden;">
      <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-          <a class="navbar-brand col-lg-2 me-0 px-3" href="#" style="width: 300px;">
+          <a class="navbar-brand col-lg-2 me-0 px-2" href="#" style="width: 300px;">
               <img src="/assets/lxdMosaic/logo.png" class="me-1 ms-1" style="width: 25px; height: 25px;" alt="">
               <?= $siteTitle ?>
           </a>
@@ -471,17 +471,13 @@ if ($haveServers->haveAny() !== true) {
                 <a class="nav-link viewStorage">
                   <i class="fas fa-hdd"></i> <span class="hideNavText"> Storage </span> </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link viewSettings">
-                  <i class="fas fa-wrench"></i> <span class="hideNavText"> Settings </span> </a>
-              </li>
           </ul>
-          <ul class="nav ms-auto">
+          <ul class="nav ms-auto" id="buttonsNavbar">
               <li class="nav-item px-3 btn btn-outline-purple pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Search" id="openSearch">
                     <a> <i class="fas fa-search"></i></a>
               </li>
               <li class="nav-item dropdown">
-                  <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" >
                      <i class="fas fa-project-diagram"></i>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton1" style="min-width: 20vw;">
@@ -497,7 +493,6 @@ if ($haveServers->haveAny() !== true) {
                       <?php if ($isAdmin === 1) : ?>
                        <li><a id="addNewServer" class="dropdown-item" href="#"><i class="fas fa-server me-2"></i>Add Server</a></li>
                       <?php endif; ?>
-
                     <li><a id="createContainer" class="dropdown-item" href="#"><i class="fas fa-box me-2"></i>Create Container</a></li>
                     <li><a id="createVm" class="dropdown-item" href="#"><i class="fas fa-vr-cardboard me-2"></i>Create VM</a></li>
 
@@ -508,11 +503,24 @@ if ($haveServers->haveAny() !== true) {
                      <i class="fas fa-bell"></i>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end px-3" aria-labelledby="operationsDropdownButton" id="operationsList" style="min-width: 20vw;">
+                      <li id="noOps"><div class="dropdown-item" href="#"><i class="fas fa-info-circle text-info me-2"></i>No Operations In Progress</div></li>
                   </ul>
               </li>
-               <a href="/logout" class="nav-item px-3 btn btn-outline-secondary pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Logout" style="height: 35px;">
-                    <i style="line-height: 1.25rem" class="fas fa-sign-out-alt"></i>
-                </a>
+              <?php if ($isAdmin === 1) : ?>
+                  <li class="nav-item px-3 btn btn-outline-warning viewSettings" data-toggle="tooltip" data-bs-placement="bottom" title="Admin Settings">
+                        <a> <i class="fas fa-cogs"></i></a>
+                  </li>
+              <?php endif; ?>
+              <li class="nav-item dropdown">
+                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="myAccountBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                     <i class="fas fa-user"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="myAccountBtn">
+                      <li><a class="dropdown-item " id="viewMySettings" href="#">My Settings</a></li>
+                      <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                  </ul>
+              </li>
+
           </ul>
       </header>
       <div class="container-fluid">
@@ -543,7 +551,7 @@ if ($haveServers->haveAny() !== true) {
                                 require __DIR__ . "/boxes/server.php";
                                 require __DIR__ . "/boxes/backups.php";
                                 require __DIR__ . "/boxes/settings.php";
-                                require __DIR__ . "/boxes/searchResult.php";
+                                require __DIR__ . "/boxes/mySettings.php";
                             ?>
                         </div>
                     </div>
@@ -945,16 +953,16 @@ function loadDashboard(){
         data = makeToastr(data);
 
         let lis = `<li class="nav-item">
-          <a class="nav-link active viewDashboard" id="generalDashboardLink" href="#">General</a>
+          <a class="nav-link active viewDashboard" id="generalDashboardLink" href="#"><i class="fas fa-tachometer-alt me-2"></i>General</a>
 
         </li>
         <li class="nav-item">
-            <a class="nav-link viewDashboard" id="projectAnalyticsDashboardLink" href="#">Project Analytics</a>
+            <a class="nav-link viewDashboard" id="projectAnalyticsDashboardLink" href="#"><i class="fas fa-chart-bar me-2"></i>Project Analytics</a>
         </li>`;
 
         $.each(data.userDashboards, (_, dashboard)=>{
             lis += `<li class="nav-item">
-              <a class="nav-link viewDashboard" id="${dashboard.id}" href="#">${dashboard.name}</a>
+              <a class="nav-link viewDashboard" id="${dashboard.id}" href="#"><i class="fas fa-house-user me-2"></i>${dashboard.name}</a>
             </li>`;
         });
 
@@ -1393,10 +1401,19 @@ $(document).on("click", ".viewCloudConfigFiles, .cloudConfig-overview", function
     changeActiveNav(".viewCloudConfigFiles")
 });
 
-$(document).on("click", ".viewSettings", function(){
-    setBreadcrumb("Settings", "active");
+$(document).on("click", "#viewMySettings, .viewMySettings", function(){
+    setBreadcrumb("My Settings", "viewMySettings active");
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    loadMySettings();
+    changeActiveNav(null)
+    $("#myAccountBtn").addClass("active");
+});
+
+$(document).on("click", ".viewSettings, .viewSettingsBreadcrumb", function(){
+    setBreadcrumb("Admin Settings", "viewSettingsBreadcrumb active");
     loadSettingsView();
-    changeActiveNav(".viewSettings")
+    changeActiveNav(null)
+    $(".viewSettings").addClass("active");
 });
 
 $(document).on("click", ".viewBackups", function(){
