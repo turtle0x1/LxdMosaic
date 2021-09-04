@@ -17,7 +17,8 @@ class FetchInstanceBackups
                     `CB_ID` as `id`,
                     `CB_Backup_Date_Created` as `dateCreated`,
                     `CB_Backup` as `backupName`,
-                    `CB_Local_Path` as `localFilePath`
+                    `CB_Local_Path` as `localFilePath`,
+                    `CB_Filesize` as `fileszie`
                 FROM
                     `Container_Backups`
                 WHERE

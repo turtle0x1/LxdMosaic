@@ -40,7 +40,7 @@ class GetInstanceBackups
     private function addFileSizeToLocal(array &$localBackups)
     {
         foreach ($localBackups as $index => $backup) {
-            $fileSize = 0;
+            $fileSize = $backup["fileszie"];
             if (file_exists($backup["localFilePath"])) {
                 $fileSize = filesize($backup["localFilePath"]);
             }
