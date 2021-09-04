@@ -160,23 +160,27 @@ var currentProject = {
     project: null
 };
 
-function makeProjectHostSidebarHtml(hosthtml, host){
+function makeProjectHostSidebarHtml(hosthtml, host, id){
     let disabled = "";
     if(host.hostOnline == false){
         disabled = "disabled text-warning text-strikethrough";
     }
 
-    let currentId = "a";
-
     hosthtml += `<li class="mb-2">
-        <a class="d-inline href="#">
+        <a class="d-inline ${disabled}" href="#">
             <i class="fas fa-server"></i> ${host.alias}
-        </a>
-        <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline ${disabled} float-end me-2" data-bs-toggle="collapse" data-bs-target="#${currentId}" aria-expanded="true">
+        </a>`;
+
+    if(host.hostOnline == true){
+        hosthtml += `<button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#projects-host-${id}" aria-expanded="true">
             <i class="fas fa-caret-down"></i>
-        </button>
-        <div class=" mt-2 bg-dark text-white" id="${currentId}">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small hostInstancesUl" style="display: inline;">`
+        </button>`
+    }else{
+        return hosthtml;
+    }
+
+    hosthtml += `<div class=" mt-2 bg-dark text-white show" id="projects-host-${id}">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
 
     if(host.projects.length > 0){
         $.each(host.projects, function(_, project){
@@ -285,17 +289,21 @@ function loadProjectView()
             </a>
         </li>`;
 
+        let id = 0;
+
         $.each(data.clusters, (clusterIndex, cluster)=>{
             hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
             $.each(cluster.members, (_, host)=>{
-                hosts = makeProjectHostSidebarHtml(hosts, host)
+                hosts = makeProjectHostSidebarHtml(hosts, host, id)
+                id++
             })
         });
 
         hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
 
         $.each(data.standalone.members, (_, host)=>{
-            hosts = makeProjectHostSidebarHtml(hosts, host)
+            hosts = makeProjectHostSidebarHtml(hosts, host, id)
+            id++
         });
 
 

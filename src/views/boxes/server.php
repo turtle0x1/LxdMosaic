@@ -487,7 +487,7 @@ function loadServerView(hostId)
 
         let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
 
-        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white"><i class="fas fa-microchip me-2"></i>CPU'S</td></tr>`
+        hostDetailsTrs += `<tr><td colspan="999" class="text-center text-info"><i class="fas fa-microchip me-2"></i>CPU'S</td></tr>`
 
         $.each(data.resources.cpu.sockets, (_, item)=>{
             hostDetailsTrs += `<tr>
@@ -502,7 +502,7 @@ function loadServerView(hostId)
             $("#serverWarningsBtn").hide()
         }
 
-        hostDetailsTrs += `<tr><td colspan="999" class="bg-info text-center text-white"><i class="fas fa-bolt me-2"></i>GPU'S</td></tr>`
+        hostDetailsTrs += `<tr><td colspan="999" class="text-center text-info"><i class="fas fa-bolt me-2"></i>GPU'S</td></tr>`
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
             $.each(data.resources.gpu.cards, function(i, gpu){
@@ -543,7 +543,7 @@ function loadServerView(hostId)
 
             hostDetailsTrs += `
                 <tr>
-                    <td colspan="999" class="bg-info text-center text-white"><i class="fas fa-info-circle me-2"></i>System Details</td>
+                    <td colspan="999" class="text-center text-info"><i class="fas fa-info-circle me-2"></i>System Details</td>
                 </tr>
                 <tr>
                     <td>Motherboard</td>

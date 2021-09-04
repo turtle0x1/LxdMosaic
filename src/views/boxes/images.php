@@ -153,43 +153,53 @@
         return image.aliases.length == 0 ? `${image.properties.os}-${version}` : image.aliases[0].name;
     }
 
-    function makeImagesHtml(hosthtml, host, selectedProfile = null, selectedHost = null){
+    function makeHostImagesSidebarHtml(hosthtml, host, id, selectedProfile = null, selectedHost = null){
         let disabled = "";
 
         if(host.hostOnline == false){
             disabled = "disabled text-warning text-strikethrough";
         }
 
-        let currentId = "a";
-
         hosthtml += `<li class="mb-2">
-            <a class="d-inline href="#">
+            <a class="d-inline ${disabled}" href="#">
                 <i class="fas fa-server"></i> ${host.alias}
-            </a>
-            <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline ${disabled} float-end me-2" data-bs-toggle="collapse" data-bs-target="#${currentId}" aria-expanded="true">
+            </a>`;
+
+        if(host.hostOnline == true){
+            hosthtml += `<button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#images-host-${id}" aria-expanded="true">
                 <i class="fas fa-caret-down"></i>
-            </button>
-            <div class=" mt-2 bg-dark text-white" id="${currentId}">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small hostInstancesUl" style="display: inline;">`
+            </button>`
+        }else{
+            return hosthtml;
+        }
 
-        $.each(host.images, function(_, image){
-            let active = "";
+        hosthtml += `<div class="mt-2 bg-dark text-white show" id="images-host-${id}">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 " style="display: inline;">`
 
-            let imageName = makeImageName(image);
+        if(host.images.length == 0){
+            hosthtml += `<li><a class="text-warning nav-link"><i class="fas fa-times me-2"></i>No Images</a></li>`
+        }else{
+            $.each(host.images, function(_, image){
+                let active = "";
 
-            let icon = image.hasOwnProperty("type") && image.type == "container" ? "box" : "vr-cardboard";
+                let imageName = makeImageName(image);
 
-            hosthtml += `<li class="nav-item view-image ${active}"
-                data-host-id="${host.hostId}"
-                data-fingerprint="${image.fingerprint}"
-                data-host-alias="${host.alias}"
-                >
-              <a class="nav-link" href="#">
-                <i class="nav-icon fa fa-${icon}"></i>
-                ${imageName}
-              </a>
-            </li>`;
-        });
+                let icon = image.hasOwnProperty("type") && image.type == "container" ? "box" : "vr-cardboard";
+
+                hosthtml += `<li class="nav-item view-image ${active}"
+                    data-host-id="${host.hostId}"
+                    data-fingerprint="${image.fingerprint}"
+                    data-host-alias="${host.alias}"
+                    >
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon fa fa-${icon}"></i>
+                    ${imageName}
+                  </a>
+                </li>`;
+            });
+        }
+
+
         hosthtml += "</ul></li>";
         return hosthtml;
     }
@@ -364,18 +374,21 @@
                 </a>
             </li>`;
 
+            let id = 0;
 
             $.each(data.clusters, (clusterIndex, cluster)=>{
                 hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
                 $.each(cluster.members, (_, host)=>{
-                    hosts = makeImagesHtml(hosts, host)
+                    hosts = makeHostImagesSidebarHtml(hosts, host, id)
+                    id++
                 })
             });
 
             hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
 
             $.each(data.standalone.members, (_, host)=>{
-                hosts = makeImagesHtml(hosts, host)
+                hosts = makeHostImagesSidebarHtml(hosts, host, id)
+                id++
             });
 
             $("#sidebar-ul").empty().append(hosts);

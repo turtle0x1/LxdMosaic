@@ -416,6 +416,15 @@ if ($haveServers->haveAny() !== true) {
                   viewProfile(profile, currentContainerDetails.alias, currentContainerDetails.hostId);
               });
           });
+
+
+          $(document).on("click", ".toggleDropdown", function(){
+             if($(this).find(".fa-caret-down").length){
+                 $(this).find(".fa-caret-down").removeClass("fa-caret-down").addClass("fa-caret-left")
+             }else{
+                 $(this).find(".fa-caret-left").removeClass("fa-caret-left").addClass("fa-caret-down")
+             }
+          });                    
       </script>
   </head>
   <form style="display: none;" method="POST" id="downloadContainerFileForm" action="/api/Instances/Files/GetPathController/get">

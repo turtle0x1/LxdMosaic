@@ -163,18 +163,18 @@ function loadCloudConfigTree()
                 <i class="fas fa-tachometer-alt mr-5"></i> Overview
             </a>
         </li>`;
-        let currentId = "a";
+        let id = 0;
         $.each(data, function(i, item){
 
             hosts += `<li class="mb-2">
                 <a class="d-inline href="#">
                     <i class="fas fa-layer-group me-2"></i>${i}
                 </a>
-                <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#${currentId}" aria-expanded="true">
+                <button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#cloudConfig-namespace-${id}" aria-expanded="true">
                     <i class="fas fa-caret-down"></i>
                 </button>
-                <div class=" mt-2 bg-dark text-white" id="${currentId}">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small hostInstancesUl" style="display: inline;">`
+                <div class=" mt-2 bg-dark text-white show" id="cloudConfig-namespace-${id}">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
 
             $.each(item, function(o, z){
                 hosts += `<li class="nav-item view-cloudConifg"
@@ -187,9 +187,8 @@ function loadCloudConfigTree()
                   </a>
                 </li>`;
             });
+            id++
             hosts += `</ul></div></li>`
-            currentId = nextLetter(currentId)
-
         });
 
         $("#sidebar-ul").empty().append(hosts);
