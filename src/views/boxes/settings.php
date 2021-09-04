@@ -2,7 +2,7 @@
 <div id="instanceSettingsBox" class="settingsBox">
     <div class="row">
         <div class="col-md-6">
-            <h4>LXDMosaic Details</h4>
+            <h4>LXDMosaic Settings</h4>
         </div>
         <div class="col-md-6">
             <span class="badge bg-primary float-end" id="newVersion">
@@ -801,7 +801,7 @@ $("#sidebar-ul").on("click", ".instance-types-overview", function(){
     loadInstanceTypes();
     $(".settingsBox").hide();
     $("#instanceTypesOverview").show();
-    addBreadcrumbs(["LXDMosaic Settings"], ["active"], true);
+    addBreadcrumbs(["Instance Types"], ["active"], true);
 });
 
 $("#sidebar-ul").on("click", ".users-overview", function(){

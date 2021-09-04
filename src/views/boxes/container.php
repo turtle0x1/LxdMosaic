@@ -426,19 +426,10 @@
     </div>
 </div>
 <div id="containerFiles"  class="col-md-12 instanceViewBox">
-    <div class="alert alert-danger">
-        Do not use this over a metered internet connection.
-        To Correctly indentify the whether the something is a dir or a file
-        we have to get the file and check the response, so the file is "downloaded".
-        <br/>
-        <br/>
-        This will also probably <b> underperform or break </b> on large directories until
-        LXD changes the directory struct indictating if its a file or directory
-    </div>
     <div class="alert alert-info">
-        You can right click to delete a file / folder
+        <i class="fas fa-info-circle text-info me-2"></i>You can right click to delete a file / folder
         <br/>
-        You can right click between the files /  folders to upload new files
+        <i class="fas fa-info-circle text-info me-2"></i>You can right click between the files /  folders to upload new files
     </div>
     <div class="row" data-masonry='{"percentPosition": true }' id="filesystemTable" style="padding-bottom: 50px;">
     </div>
@@ -1331,7 +1322,6 @@ function loadContainerView(data)
 }
 
 $("#containerBox").on("click", ".removeProfile", function(){
-    console.log(currentContainerDetails);
     let tr = $(this).parents("tr");
     let profile = tr.data("profile");
     ajaxRequest(globalUrls.instances.profiles.remove, {...{profile: profile}, ...currentContainerDetails}, (data)=>{
@@ -1566,9 +1556,30 @@ function loadFileSystemPath(path){
 }
 
 $("#containerBox").on("click", "#goToFiles", function(){
-    $(".instanceViewBox").hide();
-    $("#containerFiles").show();
-    loadFileSystemPath("/");
+    $.confirm({
+        title: 'DONT USE ON METERED CONNECTIONS!',
+        content: `<i class="fas fa-info-circle  text-danger me-2"></i>Do not use this over a metered internet connection.
+        To Correctly indentify the if something is a directory or a file we have to download the file and check which could cost alot on big files.
+        <br/>
+        <br/>
+        <i class="fas fa-info-circle  text-danger me-2"></i>This will also probably <b> underperform or break </b> on large directories until
+        LXD changes the directory struct indictating if its a file or directory`,
+        type: 'red',
+        buttons: {
+            back: function(){
+                $("#goToDetails").trigger("click");
+            },
+            goLarge: {
+                text: "View Files",
+                btnClass: "btn-primary",
+                action: function(){
+                    $(".instanceViewBox").hide();
+                    $("#containerFiles").show();
+                    loadFileSystemPath("/");
+                }
+            }
+        }
+    });
 });
 
 $("#containerBox").on("change", "#metricTypeSelect", function(){

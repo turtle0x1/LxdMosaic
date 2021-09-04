@@ -472,11 +472,11 @@ if ($haveServers->haveAny() !== true) {
                   <i class="fas fa-hdd"></i> <span class="hideNavText"> Storage </span> </a>
               </li>
           </ul>
-          <ul class="nav ms-auto" id="buttonsNavbar">
-              <li class="nav-item px-3 btn btn-outline-purple pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Search" id="openSearch">
-                    <a> <i class="fas fa-search"></i></a>
-              </li>
-              <li class="nav-item dropdown">
+          <div class="btn-group ms-auto" id="buttonsNavbar">
+              <button class="btn btn-outline-purple pt-2 pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Search" id="openSearch">
+                  <i class="fas fa-search"></i>
+              </button>
+              <div class="btn-group">
                   <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" >
                      <i class="fas fa-project-diagram"></i>
                   </button>
@@ -484,8 +484,8 @@ if ($haveServers->haveAny() !== true) {
                       <div class="px-4 py-3" id="navProjectControlHostList">
                       </div>
                   </ul>
-              </li>
-              <li class="nav-item dropdown">
+              </div>
+              <div class="btn-group dropdown">
                   <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                      <i class="fas fa-plus"></i>
                   </button>
@@ -497,21 +497,21 @@ if ($haveServers->haveAny() !== true) {
                     <li><a id="createVm" class="dropdown-item" href="#"><i class="fas fa-vr-cardboard me-2"></i>Create VM</a></li>
 
                   </ul>
-              </li>
-              <li class="nav-item dropdown">
+              </div>
+              <div class="btn-group dropdown">
                   <button class="btn btn-outline-info dropdown-toggle" type="button" id="operationsDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                      <i class="fas fa-bell"></i>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end px-3" aria-labelledby="operationsDropdownButton" id="operationsList" style="min-width: 20vw;">
                       <li id="noOps"><div class="dropdown-item" href="#"><i class="fas fa-info-circle text-info me-2"></i>No Operations In Progress</div></li>
                   </ul>
-              </li>
+              </div>
               <?php if ($isAdmin === 1) : ?>
-                  <li class="nav-item px-3 btn btn-outline-warning viewSettings" data-toggle="tooltip" data-bs-placement="bottom" title="Admin Settings">
-                        <a> <i class="fas fa-cogs"></i></a>
-                  </li>
+                  <button class="btn btn-outline-warning viewSettings" data-toggle="tooltip" data-bs-placement="bottom" title="Admin Settings">
+                        <i class="fas fa-cogs"></i>
+                  </button>
               <?php endif; ?>
-              <li class="nav-item dropdown">
+              <div class="btn-group dropdown">
                   <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="myAccountBtn" data-bs-toggle="dropdown" aria-expanded="false">
                      <i class="fas fa-user"></i>
                   </button>
@@ -519,9 +519,9 @@ if ($haveServers->haveAny() !== true) {
                       <li><a class="dropdown-item " id="viewMySettings" href="#">My Settings</a></li>
                       <li><a class="dropdown-item" href="/logout">Logout</a></li>
                   </ul>
-              </li>
+              </div>
 
-          </ul>
+          </div>
       </header>
       <div class="container-fluid">
           <div class="row p-0">

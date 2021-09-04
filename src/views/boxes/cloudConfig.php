@@ -168,7 +168,7 @@ function loadCloudConfigTree()
 
             hosts += `<li class="mb-2">
                 <a class="d-inline href="#">
-                    <i class="fas fa-server me-2"></i>${i}
+                    <i class="fas fa-layer-group me-2"></i>${i}
                 </a>
                 <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#${currentId}" aria-expanded="true">
                     <i class="fas fa-caret-down"></i>
@@ -182,7 +182,7 @@ function loadCloudConfigTree()
                     data-name="${z.name}"
                     data-namespace="${i}">
                   <a class="nav-link" href="#">
-                    <i class="nav-icon fa fa-cog"></i>
+                    <i class="nav-icon fa fa-file-alt"></i>
                     ${z.name}
                   </a>
                 </li>`;

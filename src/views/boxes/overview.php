@@ -1,8 +1,8 @@
 <div id="overviewBox" class="boxSlide">
     <div class="row mb-2">
         <div class="col-md-12">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
-                <ul class="nav nav-tabs w-100" id="userDashboardsList">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center border-bottom">
+                <ul class="nav nav-tabs w-100" id="userDashboardsList" style="border: none !important;">
                 </ul>
                 <button class="btn btn-outline-primary" id="newDashboardBtn" data-toggle="tooltip" data-bs-placement="bottom" title="Create dashboard">
                     <i class="fas fa-plus"></i>
