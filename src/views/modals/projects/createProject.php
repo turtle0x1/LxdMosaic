@@ -248,6 +248,56 @@
                                   </select>
                               </td>
                           </tr>
+                          <tr>
+                              <td> PCI Devices </td>
+                              <td> Prevents use of devices of type "pci" </td>
+                              <td>
+                                  <select name="restricted.devices.pci" class="form-control">
+                                      <option value="block" class="default" selected>Block</option>
+                                      <option value="allow">Allow</option>
+                                  </select>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td> Proxy Devices </td>
+                              <td> Prevents use of devices of type "proxy" </td>
+                              <td>
+                                  <select name="restricted.devices.proxy" class="form-control">
+                                      <option value="block" class="default" selected>Block</option>
+                                      <option value="allow">Allow</option>
+                                  </select>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td> Backups </td>
+                              <td> Prevents the creation of any instance or volume backups. </td>
+                              <td>
+                                  <select name="restricted.backups" class="form-control">
+                                      <option value="block" class="default" selected>Block</option>
+                                      <option value="allow">Allow</option>
+                                  </select>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td> Snapshots </td>
+                              <td> Prevents the creation of any instance or volume snapshots. </td>
+                              <td>
+                                  <select name="restricted.snapshots" class="form-control">
+                                      <option value="block" class="default" selected>Block</option>
+                                      <option value="allow">Allow</option>
+                                  </select>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td> Cluster Target </td>
+                              <td> Prevents direct targeting of cluster members when creating or moving instances. </td>
+                              <td>
+                                  <select name="restricted.cluster.target" class="form-control">
+                                      <option value="block" class="default" selected>Block</option>
+                                      <option value="allow">Allow</option>
+                                  </select>
+                              </td>
+                          </tr>
                       </tbody>
                   </table>
               </div>
