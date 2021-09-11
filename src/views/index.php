@@ -56,6 +56,7 @@ if ($haveServers->haveAny() !== true) {
       <meta name="msapplication-TileColor" content="#ffffff">
       <meta name="msapplication-TileImage" content="/assets/lxdMosaic/favicons/ms-icon-144x144.png">
       <meta name="theme-color" content="#ffffff">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
 
       <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
 
@@ -424,7 +425,7 @@ if ($haveServers->haveAny() !== true) {
              }else{
                  $(this).find(".fa-caret-left").removeClass("fa-caret-left").addClass("fa-caret-down")
              }
-          });                    
+          });
       </script>
   </head>
   <form style="display: none;" method="POST" id="downloadContainerFileForm" action="/api/Instances/Files/GetPathController/get">
@@ -532,7 +533,7 @@ if ($haveServers->haveAny() !== true) {
 
           </div>
       </header>
-      <div class="container-fluid">
+      <div class="container-fluid" id="content">
           <div class="row p-0">
               <div class="d-flex flex-column flex-shrink-0 pt-1 text-white bg-dark" style="width: 300px;  padding-right: 0px;  height: 100vh; overflow-y: auto; padding-bottom: 25px;">
                 <ul class="flex-column scrollarea" id="sidebar-ul" style="list-style: none; padding-left: 0px;">
@@ -577,7 +578,8 @@ $(".boxSlide").hide();
 $("#filterDashProjectAnalyticsProject").val("")
 $("#overviewGraphs").html("<h1 class='text-center'><i class='fas fa-cog fa-spin'></i></h1>");
 
-$("#sidebar-ul").on("click", ".nav-item", function(){
+$("#sidebar-ul").on("click", ".nav-item, .view-container", function(){
+
     if($(this).hasClass("dropdown")){
         return;
     }
@@ -773,7 +775,7 @@ function createDashboardSidebar()
                     <i class="fas fa-caret-left"></i>
                 </button>
                 <div class="collapse mt-2 bg-dark text-white" id="${currentId}">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small hostInstancesUl" style="display: inline;">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 hostInstancesUl" style="display: inline;">
                     </ul>
                 </div>
              </li>`
@@ -873,11 +875,14 @@ function addHostContainerList(hostId, hostAlias) {
                     data-container="${containerName}"
                     data-alias="${hostAlias}"
                     data-type="${type}">
-                  <a class="text-white ${active}" href="#">
+                  <a class="nav-link p-0 m-0 ${active}" href="#">
                     <i class="nav-icon me-2 ${statusCodeIconMap[details.state.status_code]}"></i>
                     <i class="nav-icon me-2 fas fa-${typeFa}"></i>
                     <i class="nav-icon me-2 fab fa-${osIcon}"></i>
-                    ${containerName}
+                    <span class="text-truncate"></span>
+                    <span class="d-inline-block text-truncate" style="max-width: 150px;">
+                        ${containerName}
+                    </span>
                   </a>
                 </li>`;
             });
@@ -1276,9 +1281,6 @@ $(document).on("click", ".viewHost", function(){
 });
 
 $("#sidebar-ul").on("click", ".view-container", function(){
-    $("#sidebar-ul").find(".active").removeClass("active");
-    $(this).addClass("active")
-
     setContDetsByTreeItem($(this));
     loadContainerView(currentContainerDetails);
 });

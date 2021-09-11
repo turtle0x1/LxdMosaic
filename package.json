@@ -22,7 +22,7 @@
   "dependencies": {
     "@popperjs/core": "^2.9.2",
     "body-parser": "^1.19.0",
-    "bootstrap": "^5.0.2",
+    "bootstrap": "^5.1.1",
     "bufferutil": "^4.0.1",
     "chart.js": "^2.9.4",
     "cors": "^2.8.5",

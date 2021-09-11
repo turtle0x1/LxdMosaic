@@ -1,6 +1,6 @@
 body {
     background-color: #a8a8a8;
-    font-size: .9rem !important;
+    font-size: .85rem !important;
 }
 
 .provider {
@@ -187,10 +187,19 @@ h4 {
 }
 
 a {
-    font-weight: 200;
     color: white;
     text-decoration: none;
 }
+
+#content a {
+    color: #0dcaf0;
+}
+
+#sidebar-ul a {
+    color: white;
+}
+
+
 
 a:hover {
   color: #167495;
@@ -199,6 +208,9 @@ a:hover {
 
 .nav-link {
     color: white;
+}
+.nav-tabs .nav-link {
+    color: white !important;
 }
 
 .nav-link.active {
@@ -217,22 +229,7 @@ a:hover {
 }
 
 .view-container > a{
-    font-size: 1rem;
     text-decoration: none;
-}
-
-.view-container.active {
-    color: #09F !important;
-    background-color:  #09F !important;
-    border: 1px solid #09F !important;
-    border-radius: 5px !important;
-}
-
-.view-container:hover {
-    color: #09F !important;
-    background-color:  #09F !important;
-    border: 1px solid #09F !important;
-    border-radius: 5px !important;
 }
 
 .app-header .nav-item {
