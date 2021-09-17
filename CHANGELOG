@@ -1,5 +1,8 @@
 Unreleased
 
+Added
+    Control history duration on homepage
+
 Changed
     Use correct width for terminal on init
     Resize terminal on window resize

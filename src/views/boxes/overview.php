@@ -49,6 +49,30 @@
         </div>
     </div>
     <div class="mb-2" id="generalDashboard">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                        <h4><i class="fas fa-chart-bar me-2"></i>Overview</h4>
+                        <div class="input-group mb-3 w-25">
+                          <span class="input-group-text"><i class="fas fa-history"></i></span>
+                          <select class="form-control" id="overviewHistoryDuration">
+                                <option value="-30 mins" selected>30 Minutes</otion>
+                                <option value="-1 hour">1 Hour</otion>
+                                <option value="-3 hours">3 Hours</otion>
+                                <option value="-6 hours">6 Hours</otion>
+                                <option value="-12 hours">12 Hours</otion>
+                                <option value="-1 day">1 Day</otion>
+                                <option value="-3 day">3 Days</otion>
+                                <option value="-1 week">1 Week</otion>
+                                <option value="-2 week">2 Weeks</otion>
+                                <option value="-1 month">1 Month</otion>
+                          </select>
+                        </div>
+                </div>
+                <div id="overviewGraphs">
+                </div>
+            </div>
+        </div>
           <div class="row">
               <div class="col-lg-12">
                   <div id="totalsGraphs">
@@ -72,6 +96,129 @@ $(document).on("click", "#editDashboardGraphs", function(){
         $(this).removeClass("btn-outline-primary").addClass("btn-primary");
         $(".removeDashGraph").show()
     }
+});
+
+$(document).on("change", "#overviewHistoryDuration", function(e){
+    $("#totalsGraphs").empty().append(`<h4 class="text-center"><i class="fas fa-cog fa-spin"></i></h4>`)
+    ajaxRequest('/api/ProjectAnalytics/GetGraphableProjectAnalyticsController/get', {history: $(this).val()}, (data)=>{
+        let y = $(`<div class="row mb-2" ></div>`)
+        let displayItems = {
+            "Instances": {
+                formatBytes: false,
+                icon: 'fas fa-box'
+            },
+            "Disk": {
+                formatBytes: true,
+                icon: 'fas fa-hdd'
+            },
+            "Memory": {
+                formatBytes: true,
+                icon: 'fas fa-memory'
+            },
+            "Processes": {
+                formatBytes: false,
+                icon: 'fas fa-microchip'
+            }
+        }
+        data = makeToastr(data)
+        $.each(displayItems, (title, config)=>{
+
+
+            let labels = [];
+            let values = [];
+            let limits = [];
+
+            let cId = title.toLowerCase();
+
+            $.each(data.totals[title], (created, value)=>{
+                labels.push(moment.utc(created).local().format("HH:mm"))
+                values.push(value)
+            });
+
+            var totalUsage = values.reduce(function(a, b){
+                return parseInt(a) + parseInt(b);
+            }, 0);
+
+            let canvas = `<canvas height="200" width="200" id="${cId}"></canvas>`;
+
+            if(totalUsage == 0){
+                canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
+            }
+
+
+            let x = $(`<div class='col-md-3'>
+                  <div class="card bg-dark text-white">
+                      <div class="card-body">
+                        <h4 class="mb-3 text-center"><i class="${config.icon} me-2"></i>${title}</h4>
+                        ${canvas}
+                      </div>
+                  </div>
+              </div>`);
+
+            if(totalUsage > 0){
+                let graphDataSets = [
+                    {
+                        label: "total",
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                        pointBorderColor: "rgba(46, 204, 113, 1)",
+                        data: values
+                    }
+                ];
+
+                let options = {responsive: true};
+
+                if (config.formatBytes) {
+                      options.scales = scalesBytesCallbacks;
+                      options.tooltips = toolTipsBytesCallbacks
+                }else{
+                    options.scales = {
+                        yAxes: [{
+                          ticks: {
+                            precision: 0
+                          }
+                      }],
+                    }
+                }
+
+                options.legend = {
+                    display: false
+                 },
+
+                 options.elements = {
+                    point:{
+                        radius: 0
+                    }
+                }
+
+                 // scales.yAxes.ticks
+                options.scales.yAxes[0].gridLines = {
+                    color: "rgba(0, 0, 0, 0)",
+                }
+                options.scales.yAxes[0].ticks.beginAtZero = false;
+                options.scales.xAxes = [{
+                    gridLines: {
+                         color: "rgba(0, 0, 0, 0)",
+                     },
+                     ticks: {
+                        callback: function(){
+                            return '';
+                        }
+                      }
+                }]
+                new Chart(x.find("#" + cId), {
+                  type: 'line',
+                  data: {
+                      datasets: graphDataSets,
+                      labels: labels
+                  },
+                  options: options
+                });
+            }
+            y[0].append(x[0]);
+        });
+        $("#totalsGraphs").empty().append(y)
+    });
 });
 
 $("#overviewBox").on("keyup", "#filterDashProjectAnalyticsProject", function(e){

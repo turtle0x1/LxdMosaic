@@ -11,7 +11,7 @@ class GetController
         $this->getDashboard = $getDashboard;
     }
 
-    public function get($userId)
+    public function get($userId, string $history = "-30 minutes")
     {
         return $this->getDashboard->get($userId);
     }

@@ -27,13 +27,13 @@ class GetDashboard
         $this->getGraphableProjectAnalytics = $getGraphableProjectAnalytics;
     }
 
-    public function get($userId)
+    public function get($userId, string $history = "-30 minutes")
     {
         $clustersAndHosts = $this->universe->getEntitiesUserHasAccesTo($userId, "projects");
         $clustersAndHosts = $this->addCurrentProjects($userId, $clustersAndHosts);
         $stats = $this->getStatsFromClustersAndHosts($clustersAndHosts);
         $dashboards = $this->fetchUserDashboards->fetchAll($userId);
-        $projectGraphData = $this->getGraphableProjectAnalytics->getCurrent($userId);
+        $projectGraphData = $this->getGraphableProjectAnalytics->getCurrent($userId, $history);
 
         return [
             "userDashboards"=>$dashboards,

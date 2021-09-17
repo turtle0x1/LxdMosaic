@@ -22,9 +22,9 @@ class GetGraphableProjectAnalytics
         $this->fetchAllowedProjects = $fetchAllowedProjects;
     }
 
-    public function getCurrent(int $userId)
+    public function getCurrent(int $userId, string $history = "-30 minutes")
     {
-        $startDate = (new \DateTime())->modify("-30 minutes");
+        $startDate = (new \DateTime())->modify($history);
         $endDate = (new \DateTime());
 
         $enteries = $this->fetchAnalytics->fetchBetween($startDate, $endDate);
