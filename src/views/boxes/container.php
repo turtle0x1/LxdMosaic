@@ -185,26 +185,20 @@
                 </div>
               </div>
 
-            <h4 class="pt-1"> <u>
+            <h4 class="pt-1">
                 <span id="container-currentState"></span>
                 <span id="container-containerNameDisplay"></span>
-            </u></h4>
+            </h4>
             <div class="btn-toolbar">
               <div class="btn-group me-2">
                   <button data-toggle="tooltip" data-bs-placement="bottom" title="Attach Volume" class="btn btn-sm btn-success" id="attachVolumesBtn">
                       <i class="fas fa-hdd"></i>
-                  </button>
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Assign Profiles" class="btn btn-sm btn-purple" id="assignProfilesBtn">
-                      <i class="fas fa-users"></i>
                   </button>
                   <button data-toggle="tooltip" data-bs-placement="bottom" title="Create Image" class="btn btn-sm btn-secondary" id="craeteImage">
                       <i class="fas fa-image"></i>
                   </button>
                   <button data-toggle="tooltip" data-bs-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
                       <i class="fas fa-cog"></i>
-                  </button>
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Snapshot" class="btn btn-sm btn-success takeSnapshot">
-                      <i class="fas fa-camera"></i>
                   </button>
                   <hr/>
                   <button data-toggle="tooltip" data-bs-placement="bottom" title="Copy Instance" class="btn btn-sm btn-info copyContainer">
@@ -254,10 +248,13 @@
     </div>
 <div id="containerDetails" class="instanceViewBox">
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card mb-2 text-white bg-dark">
           <div class="card-body">
-              <h5> <u> Instance Details <i class="fas float-end fa-info-circle"></i> </u> </h5>
+              <h5>
+                  <i class="fas fa-info-circle text-info me-2"></i>
+                  Instance Details
+              </h5>
               Host: <span id="container-hostNameDisplay"></span>
               <br/>
               Project: <span id="instanceProject"></span>
@@ -274,19 +271,26 @@
               <br/>
               Deployment: <span id="container-deployment"></span>
               <br/>
-              Comment <button class="btn btn-sm btn-outline-primary ms-1 me-1" id="editInstanceComment"><i class="fas fa-edit"></i></button>: <span id="container-comment"></span>
           </div>
         </div>
+        <div class="card mb-2 bg-dark text-white">
+            <div class="card-body table-responsive">
+                <h5 class="text-white w-100">
+                    <i class="fas fa-comment text-info"></i>
+                    Comment
+                    <button class="btn btn-sm btn-outline-info float-end ms-1 me-1" id="editInstanceComment"><i class="fas fa-edit"></i></button>
+                </h5>
+                <span id="container-comment"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
         <div class="card mb-2 text-white bg-dark">
           <div class="card-body">
-            <h5> <u> Network Information <i class="fas float-end fa-network-wired"></i> </u> </h5>
-                <div class="col-md-12" id="networkDetails">
+                <div class="col-md-12" id="networkDetailsCard">
                 </div>
-
           </div>
-</div>
-    </div>
-    <div class="col-md-4">
+        </div>
         <div class="card mb-2 bg-dark text-white">
             <div class="card-body" id="memoryDataCard">
 
@@ -299,13 +303,15 @@
         </div>
 
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card mb-2 bg-dark text-white">
-
             <div class="card-body table-responsive">
                 <h5 class="text-white">
-                    <u> Profiles </u>
-                    <i class="fas fa-users float-end"></i>
+                    <i class="fas fa-users text-primary me-2"></i>
+                    Profiles
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Assign Profiles" class="btn btn-sm btn-outline-primary float-end" id="assignProfilesBtn">
+                        <i class="fas fa-users"></i>
+                    </button>
                 </h5>
                 <table class="table table-dark table-bordered"id="profileData">
                       <thead class="thead-inverse">
@@ -320,10 +326,13 @@
             </div>
         </div>
         <div class="card mb-2 bg-dark text-white">
-            <div class="card-body table-responsive">
+            <div class="card-body">
                 <h5 class="text-white">
-                    <u>Snapshots</u>
-                    <i class="fas fa-images float-end"></i>
+                    <i class="fas fa-images text-primary me-2"></i>
+                    Snapshots
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Snapshot" class="btn btn-sm btn-outline-primary float-end takeSnapshot">
+                        <i class="fas fa-camera"></i>
+                    </button>
                 </h5>
                 <table class="table table-dark table-bordered"id="snapshotData">
                       <thead class="thead-inverse">
@@ -336,11 +345,14 @@
                 </table>
           </div>
         </div>
+    </div>
+    <div class="col-md-3">
         <div class="card mb-2 bg-dark text-white">
             <div class="card-body table-responsive">
                 <h5 class="text-white">
-                    <u>Limits</u>
-                    <i class="fas fa-user-secret float-end"></i>
+                    <i class="fas fa-user-secret me-2 text-warning"></i>
+                    Limits
+
                 </h5>
                 <table class="table table-dark table-bordered" id="limitsTable">
                       <thead class="thead-inverse">
@@ -1021,8 +1033,20 @@ function loadContainerBackups()
 
         $("#remoteBackupTable > tbody").empty().append(remoteBackups);
     });
-
 }
+
+
+function titleCase(str) {
+   var splitStr = str.toLowerCase().split(' ');
+   for (var i = 0; i < splitStr.length; i++) {
+       // You do not need to check if i is larger than splitStr length, as your for does that for you
+       // Assign it back to the array
+       splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+   }
+   // Directly return the joined string
+   return splitStr.join(' ');
+}
+
 
 function loadContainerView(data)
 {
@@ -1134,7 +1158,7 @@ function loadContainerView(data)
         });
 
         if(limitsTrs == ""){
-            limitsTrs = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-success me-2'></i>No Limits</td></tr>";
+            limitsTrs = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-warning me-2'></i>No Limits</td></tr>";
         }
 
 
@@ -1170,6 +1194,8 @@ function loadContainerView(data)
 
         if(x.details.config.hasOwnProperty("user.comment") !== false){
             userComment = nl2br(x.details.config["user.comment"]);
+        }else{
+            userComment = `<div class="d-block text-center"><i class="fas fa-info-circle text-info me-2"></i> No Comment</div>`
         }
 
         $("#container-comment").html(userComment);
@@ -1177,10 +1203,16 @@ function loadContainerView(data)
         let snapshotTrHtml = "";
 
         if(x.snapshots.length == 0){
-            snapshotTrHtml = "<tr><td colspan='999' class='text-center'> No snapshots </td></tr>"
+            snapshotTrHtml += `<tr>
+                <td class='text-center' colspan='2'><i class='fas fa-info-circle text-primary me-2'></i> No snapshots </td>
+
+            </tr>`
         }else{
             $.each(x.snapshots, function(i, item){
-                snapshotTrHtml += `<tr><td><a href='#' id='${item}' class='viewSnapsnot'> ${item} </a></td></tr>`;
+                snapshotTrHtml += `<tr>
+                    <td><a href='#' id='${item}' class='viewSnapsnot'> ${item} </a></td>
+                    <td><button class='btn btn-sm btn-outline-danger removeProfile'><i class='fas fa-trash'></i></button></td>
+                </tr>`;
             });
         }
 
@@ -1189,7 +1221,7 @@ function loadContainerView(data)
         let profileTrHtml = "";
 
         if(x.details.profiles.length == 0){
-            profileTrHtml = "<tr><td colspan='999' class='text-center'> No Profiles </td></tr>"
+            profileTrHtml = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-primary me-2'></i>  No Profiles </td></tr>"
         }else{
             $.each(x.details.profiles, function(i, item){
                 profileTrHtml += `<tr data-profile="${item}">
@@ -1204,14 +1236,15 @@ function loadContainerView(data)
         let networkData = "";
 
         if(x.state.network !== null){
+            networkData += '<h5> <i class="fas fa-network-wired me-2 text-success"></i> Network Information </h5>'
             $.each(x.state.network,  function(i, item){
                 if(i == "lo"){
                     return;
                 }
-                networkData += `<div class='padding-bottom: 2em;'><b>${i}:</b><br/>`;
+                networkData += `<div><b>${i}</b><br/>`;
                 let lastKey = item.addresses.length - 1;
                 $.each(item.addresses, function(i, item){
-                    networkData += `<span style='padding-left:3em'>${item.address}<br/></span>`;
+                    networkData += `<span class="mt-3 ms-2">${item.address}<br/></span>`;
                 });
                 networkData += "</div>";
             });
@@ -1220,54 +1253,53 @@ function loadContainerView(data)
                 networkData = '<div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Only local interface present!</div>';
             }
         }else{
-            networkData = '<div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Instance Offline</div>';
+            networkData = '<h5> <i class="fas fa-network-wired me-2 text-danger"></i> Network Information </h5><div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>';
         }
 
-        $("#networkDetails").empty().append(networkData);
+        $("#networkDetailsCard").empty().append(networkData);
 
-        let memoryLabels = [],
-            memoryColors = [],
-            memoryData = [];
+        function unhumanize(text) {
+            var powers = {'k': 1, 'm': 2, 'g': 3, 't': 4};
+            var regex = /(\d+(?:\.\d+)?)\s?(k|m|g|t)?b?/i;
 
-        $.each(x.state.memory, function(i, item){
-            memoryLabels.push(i);
-            memoryColors.push(randomColor());
-            memoryData.push(item);
-        });
+            var res = regex.exec(text);
+
+            console.log(text);
+            console.log(res);
+
+            return res[1] * Math.pow(1024, powers[res[2].toLowerCase()]);
+        }
 
         if(x.state.status_code == 103){
-            $("#memoryDataCard").empty().append(`
-                <h5 class="text-white">
-                    <u> Memory Usage </u>
-                    <i class="fas fa-memory float-end"></i>
-                </h5>
-                <div style="width: 100%;">
-                <canvas id="memoryData" height="200"></canvas></div>`);
+            let totalMemory = x.totalMemory.total;
+            var regExp = /[a-zA-Z]/g;
 
-            new Chart($("#memoryData"), {
-                type: "bar",
-                data: {
-                    labels: memoryLabels,
-                    datasets: [{
-                      label: 'Memory',
-                      data: memoryData,
-                      backgroundColor: memoryColors,
-                      borderColor: memoryColors,
-                      borderWidth: 1
-                  }]
-                },
-                options: {
-                  cutoutPercentage: 40,
-                  responsive: false,
-                  scales: scalesBytesCallbacks,
-                  tooltips: toolTipsBytesCallbacks
-                }
+
+            if(regExp.test(totalMemory)){
+                totalMemory = unhumanize(totalMemory);
+            }
+
+            let memoryUsageHtml = `<h5 class="text-white">
+                <i class="fas fa-memory me-2 text-success"></i>
+                Memory Usage
+            </h5>`;
+            $.each(x.state.memory, function(i, item){
+                let memoryWidth = ((item / totalMemory) * 100)
+                memoryUsageHtml += `<div class="mb-2">
+                    <b>${titleCase(i.replace(/_/g, ' '))}</b>
+                    <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(totalMemory)} (Source: ${x.totalMemory.source})" class="progress ms-3 mt-2">
+                        <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(item)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${item}" aria-valuemin="0" aria-valuemax="${(totalMemory)}"></div>
+                    </div>
+                </div>`
             });
+
+            $("#memoryDataCard").empty().append(memoryUsageHtml)
+            $("#memoryDataCard").find('[data-toggle="tooltip"]').tooltip({html: true})
 
             $("#storageDataCard").empty().append(`
                 <h5 class="text-white">
-                    <u> Disk Usage </u>
-                    <i class="fas fa-hdd float-end"></i>
+                    <i class="fas fa-hdd me-2 text-success"></i>
+                    Disk Usage
                 </h5>
                 <div style="width: 100%;">
                 <canvas id="storageData" height="200"></canvas></div>`);
@@ -1299,18 +1331,21 @@ function loadContainerView(data)
                   tooltips: toolTipsBytesCallbacks
                 }
             });
+            $(".instanceStateIcon").removeClass("text-danger").addClass("text-primary")
         }else{
             $("#memoryDataCard").empty().append(`<h5 class="text-white">
-                <u> Memory Usage </u>
-                <i class="fas fa-memory float-end"></i>
+                <i class="fas fa-memory me-2 text-danger"></i>
+                Memory Usage
             </h5>
-            <div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Instance Offline</div>`);
+            <div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>`);
 
-            $("#storageDataCard").empty().append(`<h5 class="text-white">
-                <u> Disk Usage </u>
-                <i class="fas fa-hdd float-end"></i>
+            $("#storageDataCard").empty().append(`
+            <h5 class="text-white">
+                <i class="fas fa-hdd me-2 text-danger"></i>
+                Disk Usage
             </h5>
-            <div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Instance Offline</div>`);
+            <div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>`);
+            $(".instanceStateIcon").removeClass("text-primary").addClass("text-danger")
         }
 
 

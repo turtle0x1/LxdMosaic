@@ -33,6 +33,14 @@ class GetInstance
         $hostSupportsBackups = $this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP);
         $haveMetrics = (bool) count($this->fetchMetrics->fetchAllTypes($host->getHostId(), $instance));
 
+        $totalMemory = $host->resources->info()["memory"]["total"];
+        $memorySource = "Available On Host";
+
+        if (isset($details["config"]["limits.memory"])) {
+            $memorySource = "Instance Limit";
+            $totalMemory = $details["config"]["limits.memory"];
+        }
+
         return [
             "details"=>$details,
             "state"=>$state,
@@ -40,7 +48,11 @@ class GetInstance
             "snapshots"=>$snapshots,
             "deploymentDetails"=>$deploymentDetails,
             "backupsSupported"=>$hostSupportsBackups,
-            "project"=>$host->callClientMethod("getProject")
+            "project"=>$host->callClientMethod("getProject"),
+            "totalMemory"=>[
+                "source"=>$memorySource,
+                "total"=>$totalMemory
+            ]
         ];
     }
 }
