@@ -41,6 +41,12 @@ class GetInstance
             $totalMemory = $details["config"]["limits.memory"];
         }
 
+        foreach ($details["expanded_devices"] as $name => &$device) {
+            if ($device["type"] == "disk" && isset($device["pool"])) {
+                $state["disk"][$name]["poolSize"] = $host->storage->info($device["pool"])["config"]["size"];
+            }
+        }
+
         return [
             "details"=>$details,
             "state"=>$state,

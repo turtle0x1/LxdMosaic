@@ -338,6 +338,7 @@
                       <thead class="thead-inverse">
                           <tr>
                               <th> Name </th>
+                              <th></th>
                           </tr>
                       </thead>
                       <tbody>
@@ -1261,12 +1262,7 @@ function loadContainerView(data)
         function unhumanize(text) {
             var powers = {'k': 1, 'm': 2, 'g': 3, 't': 4};
             var regex = /(\d+(?:\.\d+)?)\s?(k|m|g|t)?b?/i;
-
             var res = regex.exec(text);
-
-            console.log(text);
-            console.log(res);
-
             return res[1] * Math.pow(1024, powers[res[2].toLowerCase()]);
         }
 
@@ -1295,58 +1291,44 @@ function loadContainerView(data)
 
             $("#memoryDataCard").empty().append(memoryUsageHtml)
             $("#memoryDataCard").find('[data-toggle="tooltip"]').tooltip({html: true})
-
-            $("#storageDataCard").empty().append(`
-                <h5 class="text-white">
-                    <i class="fas fa-hdd me-2 text-success"></i>
-                    Disk Usage
-                </h5>
-                <div style="width: 100%;">
-                <canvas id="storageData" height="200"></canvas></div>`);
-
-
-            let storageKeys = Object.keys(x.state.disk);
-            let storageColors = [];
-            let storageLabels = storageKeys;
-            let storageData = storageKeys.map((key)=>{
-                storageColors.push(randomColor());
-                return x.state.disk[key].usage;
-            });
-
-            new Chart($("#storageData"), {
-                type: "bar",
-                data: {
-                    labels: storageLabels,
-                    datasets: [{
-                      label: 'Space Used',
-                      data: storageData,
-                      backgroundColor: storageColors,
-                      borderColor: storageColors,
-                      borderWidth: 1
-                  }]
-                },
-                options: {
-                  responsive: false,
-                  scales: scalesBytesCallbacks,
-                  tooltips: toolTipsBytesCallbacks
-                }
-            });
-            $(".instanceStateIcon").removeClass("text-danger").addClass("text-primary")
         }else{
             $("#memoryDataCard").empty().append(`<h5 class="text-white">
                 <i class="fas fa-memory me-2 text-danger"></i>
                 Memory Usage
             </h5>
             <div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>`);
-
-            $("#storageDataCard").empty().append(`
-            <h5 class="text-white">
-                <i class="fas fa-hdd me-2 text-danger"></i>
-                Disk Usage
-            </h5>
-            <div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>`);
             $(".instanceStateIcon").removeClass("text-primary").addClass("text-danger")
         }
+
+        let storageHtml = `
+            <h5 class="text-white">
+                <i class="fas fa-hdd me-2 text-success"></i>
+                Disk Usage
+            </h5>
+            <div style="width: 100%;">`;
+
+        $.each(x.state.disk, (i, disk)=>{
+            var regExp = /[a-zA-Z]/g;
+
+            let totalStorage = disk.poolSize;
+
+            if(regExp.test(totalStorage)){
+                totalStorage = unhumanize(totalStorage);
+            }
+
+            let storageWidth = ((disk.usage / totalStorage) * 100)
+
+            storageHtml += `<div class="mb-2">
+                <b>${titleCase(i.replace(/_/g, ' '))}</b>
+                <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(totalStorage)}" class="progress ms-3 mt-2">
+                    <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(disk.usage)}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage)}"></div>
+                </div>
+            </div>`
+
+        });
+
+        $("#storageDataCard").empty().append(storageHtml)
+        $("#storageDataCard").find('[data-toggle="tooltip"]').tooltip({html: true})
 
 
 
