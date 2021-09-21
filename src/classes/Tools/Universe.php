@@ -10,6 +10,7 @@ use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Tools\User\GetUserProject;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
+use dhope0000\LXDClient\App\RouteApi;
 
 class Universe
 {
@@ -29,7 +30,8 @@ class Universe
         FetchUserProject $fetchUserProject,
         FetchUserDetails $fetchUserDetails,
         GetUserProject $getUserProject,
-        HasExtension $hasExtension
+        HasExtension $hasExtension,
+        RouteApi $routeApi
     ) {
         $this->fetchAllowedProjects = $fetchAllowedProjects;
         $this->hostList = $hostList;
@@ -38,6 +40,7 @@ class Universe
         $this->fetchUserDetails = $fetchUserDetails;
         $this->getUserProject = $getUserProject;
         $this->hasExtension = $hasExtension;
+        $this->routeApi = $routeApi;
     }
 
     public function getEntitiesUserHasAccesTo(int $userId, string $entity = null)
@@ -97,6 +100,12 @@ class Universe
                     $currentProject = $this->getUserProject->getForHost($userId, $host);
                 } else {
                     $currentProject = $userCurrentProjects[$host->getHostId()];
+                }
+
+                $reqProject = $this->routeApi->getRequestedProject();
+
+                if (!is_null($reqProject)) {
+                    $currentProject = $reqProject;
                 }
 
                 $entities = [];

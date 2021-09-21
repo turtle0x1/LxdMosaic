@@ -12,6 +12,7 @@ Changed
 
 Fixed
     First run doesn't toggle passwords properly (#390)
+    Cant over ride users current project with HTTP header in "Universe"
 
 0.13.0 - 18/07/2020
 
