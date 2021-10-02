@@ -12,7 +12,8 @@ Changed
 
 Fixed
     First run doesn't toggle passwords properly (#390)
-    Cant over ride users current project with HTTP header in "Universe"
+    Cant override users current project with HTTP header in "Universe"
+    Cant create directory storage pool
 
 0.13.0 - 18/07/2020
 
