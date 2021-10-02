@@ -1308,22 +1308,32 @@ function loadContainerView(data)
             <div style="width: 100%;">`;
 
         $.each(x.state.disk, (i, disk)=>{
-            var regExp = /[a-zA-Z]/g;
+            if(disk.hasOwnProperty("usage")){
+                var regExp = /[a-zA-Z]/g;
 
-            let totalStorage = disk.poolSize;
+                let totalStorage = disk.poolSize;
 
-            if(regExp.test(totalStorage)){
-                totalStorage = unhumanize(totalStorage);
+                if(regExp.test(totalStorage)){
+                    totalStorage = unhumanize(totalStorage);
+                }
+
+                let storageWidth = ((disk.usage / totalStorage) * 100)
+
+                storageHtml += `<div class="mb-2">
+                    <b>${titleCase(i.replace(/_/g, ' '))}</b>
+                    <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(totalStorage)}" class="progress ms-3 mt-2">
+                        <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(disk.usage)}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage.total)}"></div>
+                    </div>
+                </div>`
+            }else{
+                storageHtml += `<div class="mb-2">
+                    <b>${titleCase(i.replace(/_/g, ' '))}</b>
+                    <div class="ms-3 mt-2">
+                        <i class="fas fa-info-circle text-primary me-2"></i>No Usage information available.
+                    </div>
+                </div>`
             }
 
-            let storageWidth = ((disk.usage / totalStorage) * 100)
-
-            storageHtml += `<div class="mb-2">
-                <b>${titleCase(i.replace(/_/g, ' '))}</b>
-                <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(totalStorage)}" class="progress ms-3 mt-2">
-                    <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(disk.usage)}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage)}"></div>
-                </div>
-            </div>`
 
         });
 
