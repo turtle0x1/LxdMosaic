@@ -229,6 +229,9 @@
             <button type="button" class="btn text-white btn-outline-primary" id="goToTerminal">
                 <i class="fas fa-tv pe-2"></i>Terminal
             </button>
+            <button type="button" class="btn text-white btn-outline-primary" id="goToSnapshots">
+                <i class="fas fa-images pe-2"></i>Snapshots
+            </button>
             <button type="button" class="btn text-white btn-outline-primary" id="goToBackups">
                 <i class="fas fa-save pe-2"></i>Backups
             </button>
@@ -378,6 +381,45 @@
         <div class="col-md-12 text-center">
             <div id="spice-area">
                 <div id="spice-screen" class="spice-screen">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="containerSnapshots" class="instanceViewBox">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-2 text-white bg-dark">
+              <div class="card-body">
+                  <h5><i class="fas fa-clock text-primary me-2"></i>Schedule</h5>
+                  Schedule: <span id="insnaceSnapshotSchedule"></span>
+                  <br/>
+                  Pattern: <span id="instanceSnapshotPattern"></span>
+                  <br/>
+                  Expiry: <span id="instanceSnapshotExpiry"></span>
+                  <br/>
+                  Stopped: <span id="instanceSnapshotStopped"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card mb-2 text-white bg-dark">
+              <div class="card-body">
+                  <h5><i class="fas fa-image text-primary me-2"></i>Snapshots</h5>
+                  <table class="table table-dark table-bordered" id="instanceSnapshotsTable">
+                      <thead>
+                          <tr>
+                              <th>Snapshot</th>
+                              <th>Expires</th>
+                              <th>Size</th>
+                              <th>Restore</th>
+                              <th>Create Instance From</th>
+                              <th>Delete</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                  </table>
                 </div>
             </div>
         </div>
@@ -1760,6 +1802,140 @@ $(document).on("click", ".goUpDirectory", function(){
 $("#containerBox").on("click", "#goToDetails", function(){
     $(".instanceViewBox").hide();
     $("#containerDetails").show();
+});
+
+$("#containerBox").on("click", "#goToSnapshots", function() {
+    $(".instanceViewBox").hide();
+    $("#containerSnapshots").show();
+    ajaxRequest('/api/Instances/Snapshot/GetSnapshotsOverviewController/get', currentContainerDetails, (data)=>{
+        data = makeToastr(data);
+        if(data.schedule == null){
+
+        }else{
+            function replaceNull(item){
+                return item == null ? `<i class="fas fa-info-circle text-info ms-2 me-1"></i>Not Set` : item;
+            }
+            $("#insnaceSnapshotSchedule").html(replaceNull(data.schedule["snapshots.expiry"]))
+            $("#instanceSnapshotPattern").html(replaceNull(data.schedule["snapshots.pattern"]))
+            $("#instanceSnapshotExpiry").html(replaceNull(data.schedule["snapshots.schedule"]))
+            $("#instanceSnapshotStopped").html(replaceNull(data.schedule["snapshots.expiry.stopped"]))
+        }
+
+        let trs = "";
+        $.each(data.snapshots, (_, snapshot)=>{
+            let expires = "Never expries";
+            if(snapshot.hasOwnProperty("expires") && snapshot.expires !== "0001-01-01T00:00:00Z"){
+                expries = moment(snapshot.expires).format("llll");
+            }
+            trs += `<tr>
+                <td>${snapshot.name}</td>
+                <td>${expires}</td>
+                <td>${formatBytes(snapshot.size)}</td>
+                <td><button class="btn btn-outline-warning restoreSnapToOrigin"><i class="fas fa-trash-restore"></i></button></td>
+                <td><button class="btn btn-outline-success createFromSnapshot"><i class="fas fa-plus"></i></button></td>
+                <td><button class="btn btn-outline-danger createFromSnapshot"><i class="fas fa-trash"></i></button></td>
+            </tr>`
+        })
+        $("#instanceSnapshotsTable > tbody").empty().append(trs)
+    });
+});
+
+$("#instanceSnapshotsTable").on("click", ".restoreSnapToOrigin", function(){
+    let x = $.extend(snapshotDetails, currentContainerDetails);
+    ajaxRequest(globalUrls.instances.snapShots.restore, x, function(data){
+        let x = makeToastr(data);
+        if(x.hasOwnProperty("error")){
+            return false;
+        }
+        $("#modal-container-restoreSnapshot").modal("toggle");
+    });
+});
+
+
+$("#instanceSnapshotsTable").on("click", ".createFromSnapshot", function(){
+    $.confirm({
+        title: `Create From Snapshot!`,
+        content: `
+            <div class="mb-2">
+                <label> New Host </label>
+                <input class="form-control" name="targetHost"/>
+            </div>
+            <div class="mb-2">
+                <label> New Name </label>
+                <input class="form-control" id="modal-container-restoreSnapshot-newName" type="string" />
+            </div>
+            `,
+        buttons: {
+            cancel: function(){},
+            rename: {
+                text: 'Restore',
+                btnClass: 'btn-warning',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
+
+                    let targetHost = this.$content.find('input[name=targetHost]').tokenInput("get");
+
+                    if(targetHost.length == 0){
+                        $.alert("Please select target host");
+                        return false;
+                    }
+
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Restoring..'); // let the user know
+                    modal.buttons.rename.disable();
+                    modal.buttons.cancel.disable();
+
+                    let x = {
+                        newContainer: $("#modal-container-restoreSnapshot-newName").val(),
+                        hostId: currentContainerDetails.hostId,
+                        newHostId: currentContainerDetails.hostId,
+                        container: `${currentContainerDetails.container}/${snapshotDetails.snapshotName}`
+                    };
+
+                    let newHost = mapObjToSignleDimension($("#modal-container-restoreSnapshot-newTargetHost").tokenInput("get"), "hostId");
+
+                    if(newHost.length > 0){
+                        x.newHostId = newHost[0];
+                        $(".createFromSnapshot").html('<i class="fa fa-cog fa-spin"></i>Creating...')
+                    }
+
+                    ajaxRequest(globalUrls.instances.snapShots.createFrom, x, function(data){
+                        data = makeToastr(data);
+                        $(".createFromSnapshot").text("Create Container");
+                        if(data.state == "error"){
+                            return false;
+                        }
+                        $("#modal-container-restoreSnapshot").modal("toggle");
+                    });
+                    return false;
+                }
+            },
+        },
+        onContentReady: function () {
+            // bind to events
+            var jc = this;
+            this.$content.find('input[name=targetHost]').tokenInput(globalUrls.hosts.search.search, {
+                queryParam: "hostSearch",
+                propertyToSearch: "host",
+                tokenValue: "hostId",
+                preventDuplicates: false,
+                tokenLimit: 1,
+                theme: "facebook"
+            });
+        }
+    });
+});
+
+$("#instanceSnapshotsTable").on("click", ".deleteSnap", function(){
+    let x = $.extend(snapshotDetails, currentContainerDetails);
+    ajaxRequest(globalUrls.instances.snapShots.delete, x, function(data){
+        let r = makeToastr(data);
+        if(r.state == "error"){
+            return false;
+        }
+        $("#modal-container-restoreSnapshot").modal("toggle");
+        loadContainerViewAfter();
+    });
 });
 
 $("#containerBox").on("click", "#goToBackups", function() {
