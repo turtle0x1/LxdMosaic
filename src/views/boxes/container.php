@@ -338,12 +338,6 @@
                     </button>
                 </h5>
                 <table class="table table-dark table-bordered"id="snapshotData">
-                      <thead class="thead-inverse">
-                          <tr>
-                              <th> Name </th>
-                              <th></th>
-                          </tr>
-                      </thead>
                       <tbody>
                       </tbody>
                 </table>
@@ -391,7 +385,12 @@
         <div class="col-md-3">
             <div class="card mb-2 text-white bg-dark">
               <div class="card-body">
-                  <h5><i class="fas fa-clock text-primary me-2"></i>Schedule</h5>
+                  <div class="mb-2">
+                      <h5 class="d-inline">
+                          <i class="fas fa-clock text-primary me-2"></i>Schedule
+                      </h5>
+                      <button class="d-inline float-end btn btn-sm btn-outline-primary" id="scheduleInstanceSnapshots"><i class="fas fa-cog"></i></button>
+                  </div>
                   Schedule: <span id="insnaceSnapshotSchedule"></span>
                   <br/>
                   Pattern: <span id="instanceSnapshotPattern"></span>
@@ -412,9 +411,7 @@
                               <th>Snapshot</th>
                               <th>Expires</th>
                               <th>Size</th>
-                              <th>Restore</th>
-                              <th>Create Instance From</th>
-                              <th>Delete</th>
+                              <th>Options</th>
                           </tr>
                       </thead>
                       <tbody>
@@ -1254,7 +1251,6 @@ function loadContainerView(data)
             $.each(x.snapshots, function(i, item){
                 snapshotTrHtml += `<tr>
                     <td><a href='#' id='${item}' class='viewSnapsnot'> ${item} </a></td>
-                    <td><button class='btn btn-sm btn-outline-danger removeProfile'><i class='fas fa-trash'></i></button></td>
                 </tr>`;
             });
         }
@@ -1270,6 +1266,7 @@ function loadContainerView(data)
                 profileTrHtml += `<tr data-profile="${item}">
                     <td><a href='#' data-profile=${item} class='toProfile'>${item}</a></td>
                     <td><button class='btn btn-sm btn-outline-danger removeProfile'><i class="fas fa-trash"></i></button></td>
+
                 </tr>`;
             });
         }
@@ -1815,25 +1812,34 @@ $("#containerBox").on("click", "#goToSnapshots", function() {
             function replaceNull(item){
                 return item == null ? `<i class="fas fa-info-circle text-info ms-2 me-1"></i>Not Set` : item;
             }
-            $("#insnaceSnapshotSchedule").html(replaceNull(data.schedule["snapshots.expiry"]))
+            $("#insnaceSnapshotSchedule").html(replaceNull(data.schedule["snapshots.schedule"]))
             $("#instanceSnapshotPattern").html(replaceNull(data.schedule["snapshots.pattern"]))
-            $("#instanceSnapshotExpiry").html(replaceNull(data.schedule["snapshots.schedule"]))
-            $("#instanceSnapshotStopped").html(replaceNull(data.schedule["snapshots.expiry.stopped"]))
+            $("#instanceSnapshotExpiry").html(replaceNull(data.schedule["snapshots.expiry"]))
+            $("#instanceSnapshotStopped").html(replaceNull(data.schedule["snapshots.schedule.stopped"]))
         }
 
         let trs = "";
         $.each(data.snapshots, (_, snapshot)=>{
             let expires = "Never expries";
-            if(snapshot.hasOwnProperty("expires") && snapshot.expires !== "0001-01-01T00:00:00Z"){
-                expries = moment(snapshot.expires).format("llll");
+            if(snapshot.hasOwnProperty("expires_at") && snapshot.expires_at !== "0001-01-01T00:00:00Z"){
+                expires = moment(snapshot.expires_at).format("llll");
             }
-            trs += `<tr>
+            trs += `<tr id="${snapshot.name}">
                 <td>${snapshot.name}</td>
                 <td>${expires}</td>
                 <td>${formatBytes(snapshot.size)}</td>
-                <td><button class="btn btn-outline-warning restoreSnapToOrigin"><i class="fas fa-trash-restore"></i></button></td>
-                <td><button class="btn btn-outline-success createFromSnapshot"><i class="fas fa-plus"></i></button></td>
-                <td><button class="btn btn-outline-danger createFromSnapshot"><i class="fas fa-trash"></i></button></td>
+                <td>
+                    <div class="dropdown">
+                      <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item createFromSnapshot" href="#"><i class="fas fa-plus text-success me-2"></i>Create Instance From Snapshot</a></li>
+                            <li><a class="dropdown-item deleteSnap" href="#"><i class="fas fa-trash text-warning me-2"></i>Delete</a></li>
+                            <li><a class="dropdown-item restoreSnapToOrigin" href="#"><i class="fas fa-trash-restore text-danger me-2"></i>Restore To Origin</a></li>
+                      </ul>
+                    </div>
+                </td>
             </tr>`
         })
         $("#instanceSnapshotsTable > tbody").empty().append(trs)
@@ -1841,16 +1847,28 @@ $("#containerBox").on("click", "#goToSnapshots", function() {
 });
 
 $("#instanceSnapshotsTable").on("click", ".restoreSnapToOrigin", function(){
-    let x = $.extend(snapshotDetails, currentContainerDetails);
-    ajaxRequest(globalUrls.instances.snapShots.restore, x, function(data){
-        let x = makeToastr(data);
-        if(x.hasOwnProperty("error")){
-            return false;
+    let tr = $(this).parents("tr");
+    $.confirm({
+        title: "Restore snapshot?",
+        content: `This will reset the contents of your instance!`,
+        buttons: {
+            cancel: function() {},
+            restore: {
+                text: 'Restore',
+                btnClass: 'btn-danger',
+                action: function(){
+                    let x = $.extend({snapshotName: tr.attr("id")}, currentContainerDetails);
+                    ajaxRequest(globalUrls.instances.snapShots.restore, x, function(data){
+                        let x = makeToastr(data);
+                        if(x.hasOwnProperty("error")){
+                            return false;
+                        }
+                    });
+                }
+            }
         }
-        $("#modal-container-restoreSnapshot").modal("toggle");
     });
 });
-
 
 $("#instanceSnapshotsTable").on("click", ".createFromSnapshot", function(){
     $.confirm({
@@ -1926,16 +1944,119 @@ $("#instanceSnapshotsTable").on("click", ".createFromSnapshot", function(){
     });
 });
 
-$("#instanceSnapshotsTable").on("click", ".deleteSnap", function(){
-    let x = $.extend(snapshotDetails, currentContainerDetails);
-    ajaxRequest(globalUrls.instances.snapShots.delete, x, function(data){
-        let r = makeToastr(data);
-        if(r.state == "error"){
-            return false;
+
+
+$("#containerSnapshots").on("click", "#scheduleInstanceSnapshots", function(){
+    function updateInstanceSnapshotSchedule(stopped, modal){
+        let scheduleInput = modal.$content.find('input[name=schedule]');
+        let patternInput = modal.$content.find('input[name=pattern]');
+        let expiryInput = modal.$content.find('input[name=expiry]');
+
+        let schedule = scheduleInput.val()
+        let pattern = patternInput.val()
+        let expiry = expiryInput.val()
+
+        modal.buttons.stop.disable();
+        modal.buttons.start.disable();
+        modal.buttons.cancel.disable();
+
+        let x = {
+            hostId: currentContainerDetails.hostId,
+            container: `${currentContainerDetails.container}`,
+            schedule,
+            pattern,
+            expiry,
+            stopped
+        };
+
+        ajaxRequest(globalUrls.instances.snapShots.schedule, x, function(data){
+            data = makeToastr(data);
+            if(data.state == "error"){
+                modal.buttons.stop.enable();
+                modal.buttons.start.enable();
+                modal.buttons.cancel.enable();
+                return false;
+            }
+            modal.close()
+        });
+    }
+
+    $.confirm({
+        title: `Instance Snapshot Schedule`,
+        content: `
+            <div class="mb-2">
+                <label class="fw-bold"> Schedule </label>
+                <input class="form-control" name="schedule"/>
+                <div class="form-text">Cron expression, or a comma separated list of schedule aliases.</div>
+            </div>
+            <div class="mb-2">
+                <label class="fw-bold"> Pattern </label>
+                <input class="form-control" name="pattern"/>
+                <div class="form-text">Pongo2 template string which represents the snapshot name (used for scheduled snapshots and unnamed snapshots).</div>
+
+            </div>
+            <div class="mb-2">
+                <label class="fw-bold"> Expiry </label>
+                <input class="form-control" name="expiry"/>
+                <div class="form-text">Controls when snapshots are to be deleted (expects expression like 1M 2H 3d 4w 5m 6y).</div>
+            </div>`,
+        buttons: {
+            cancel: function(){},
+            stop: {
+                text: 'Stop Schedule',
+                btnClass: 'btn-danger',
+                action: function(){
+                    let modal = this;
+                    updateInstanceSnapshotSchedule(1, modal)
+                    return false;
+                }
+            },
+            start: {
+                text: 'Start Schedule',
+                btnClass: 'btn-success',
+                action: function () {
+                    let modal = this;
+                    updateInstanceSnapshotSchedule(0, modal)
+                    return false;
+                }
+            },
+        },
+        onContentReady: function () {
+            // bind to events
+            var jc = this;
+            ajaxRequest('/api/Instances/Snapshot/GetSnapshotsOverviewController/get', currentContainerDetails, (data)=>{
+                data = makeToastr(data);
+                jc.$content.find("input[name=schedule]").val(data.schedule["snapshots.schedule"])
+                jc.$content.find("input[name=pattern]").val(data.schedule["snapshots.pattern"])
+                jc.$content.find("input[name=expiry]").val(data.schedule["snapshots.expiry"])
+            })
         }
-        $("#modal-container-restoreSnapshot").modal("toggle");
-        loadContainerViewAfter();
     });
+});
+
+$("#instanceSnapshotsTable").on("click", ".deleteSnap", function(){
+    let tr = $(this).parents("tr");
+    $.confirm({
+        title: "Delete snapshot?",
+        buttons: {
+            cancel: function() {},
+            delete: {
+                text: 'Delete',
+                btnClass: 'btn-warning',
+                action: function(){
+                    let x = $.extend({snapshotName: tr.attr("id")}, currentContainerDetails);
+                    ajaxRequest(globalUrls.instances.snapShots.delete, x, function(data){
+                        let r = makeToastr(data);
+                        if(r.state == "error"){
+                            return false;
+                        }
+                        tr.remove();
+                    });
+                }
+            }
+        }
+    });
+
 });
 
 $("#containerBox").on("click", "#goToBackups", function() {
