@@ -391,13 +391,22 @@
                       </h5>
                       <button class="d-inline float-end btn btn-sm btn-outline-primary" id="scheduleInstanceSnapshots"><i class="fas fa-cog"></i></button>
                   </div>
-                  Schedule: <span id="insnaceSnapshotSchedule"></span>
-                  <br/>
-                  Pattern: <span id="instanceSnapshotPattern"></span>
-                  <br/>
-                  Expiry: <span id="instanceSnapshotExpiry"></span>
-                  <br/>
-                  Stopped: <span id="instanceSnapshotStopped"></span>
+                  <div>
+                      <label class="fw-bold d-block">Schedules</label>
+                      <div class="ps-3" id="insnaceSnapshotSchedule"></div>
+                  </div>
+                  <div>
+                      <label class="fw-bold d-block">Pattern</label>
+                      <div class="ps-3" id="instanceSnapshotPattern"></div>
+                  </div>
+                  <div>
+                      <label class="fw-bold d-block">Expiry</label>
+                      <div class="ps-3" id="instanceSnapshotExpiry"></div>
+                  </div>
+                  <div>
+                      <label class="fw-bold d-block">Stopped</label>
+                      <div class="ps-3" id="instanceSnapshotStopped"></div>
+                  </div>
                 </div>
             </div>
         </div>
@@ -1812,7 +1821,16 @@ $("#containerBox").on("click", "#goToSnapshots", function() {
             function replaceNull(item){
                 return item == null ? `<i class="fas fa-info-circle text-info ms-2 me-1"></i>Not Set` : item;
             }
-            $("#insnaceSnapshotSchedule").html(replaceNull(data.schedule["snapshots.schedule"]))
+            let schedules = "";
+            if(data.schedule["snapshots.schedule"] ==  null){
+                schedules = replaceNull(data.schedule["snapshots.schedule"])
+            }else{
+                let x = data.schedule["snapshots.schedule"].split(",");
+                $.each(x, (_, schedule)=>{
+                    schedules += `<div>${schedule}</div>`
+                });
+            }
+            $("#insnaceSnapshotSchedule").html(schedules)
             $("#instanceSnapshotPattern").html(replaceNull(data.schedule["snapshots.pattern"]))
             $("#instanceSnapshotExpiry").html(replaceNull(data.schedule["snapshots.expiry"]))
             $("#instanceSnapshotStopped").html(replaceNull(data.schedule["snapshots.schedule.stopped"]))
