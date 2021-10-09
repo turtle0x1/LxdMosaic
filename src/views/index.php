@@ -128,6 +128,7 @@ if ($haveServers->haveAny() !== true) {
                       restore: "/api/Instances/Snapshot/RestoreSnapshotController/restoreSnapshot",
                       rename: "/api/Instances/Snapshot/RenameSnapshotController/renameSnapshot",
                       createFrom: "/api/Instances/CopyInstanceController/copy",
+                      schedule: "/api/Instances/Snapshot/ScheduleSnapshotsController/schedule",
                   },
                   backups: {
                       delete: "/api/Instances/Backups/DeleteLocalBackupController/delete",
