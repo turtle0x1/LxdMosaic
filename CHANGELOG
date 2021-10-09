@@ -2,6 +2,7 @@ Unreleased
 
 Added
     Control history duration on homepage
+    Snapshot scheduling
 
 Changed
     Use correct width for terminal on init
