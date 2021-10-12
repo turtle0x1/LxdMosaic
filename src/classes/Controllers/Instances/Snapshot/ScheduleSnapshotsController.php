@@ -22,7 +22,7 @@ class ScheduleSnapshotsController implements \dhope0000\LXDClient\Interfaces\Rec
         string $schedule,
         string $pattern,
         string $expiry,
-        int $stopped
+        int $snapshotStopped
     ) {
         $this->scheduleSnapshots->schedule(
             $host,
@@ -30,7 +30,7 @@ class ScheduleSnapshotsController implements \dhope0000\LXDClient\Interfaces\Rec
             $schedule,
             $pattern,
             $expiry,
-            $stopped
+            $snapshotStopped
         );
 
         return ["state"=>"success", "message"=>"Scheduled snapshots for $container"];

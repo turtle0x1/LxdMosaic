@@ -20,7 +20,7 @@ class ScheduleSnapshots
         string $schedule,
         string $pattern,
         string $expiry,
-        int $stopped
+        int $snapshotStopped
     ) {
         if (!$this->hasExtension->checkWithHost($host, "snapshot_scheduling")) {
             throw new \Exception("Host doesn't support scheduling", 1);
@@ -35,7 +35,7 @@ class ScheduleSnapshots
         $config["config"]["snapshots.schedule"] = $schedule;
         $config["config"]["snapshots.pattern"] = $pattern;
         $config["config"]["snapshots.expiry"] = $expiry;
-        $config["config"]["snapshots.schedule.stopped"] = $stopped == 1 ? "true" : "false";
+        $config["config"]["snapshots.schedule.stopped"] = $snapshotStopped == 1 ? "true" : "false";
 
         $host->instances->replace($instance, $config, true);
     }

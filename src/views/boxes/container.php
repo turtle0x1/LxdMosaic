@@ -404,7 +404,7 @@
                       <div class="ps-3" id="instanceSnapshotExpiry"></div>
                   </div>
                   <div>
-                      <label class="fw-bold d-block">Stopped</label>
+                      <label class="fw-bold d-block">Snapshot When Stopped</label>
                       <div class="ps-3" id="instanceSnapshotStopped"></div>
                   </div>
                 </div>
@@ -1965,39 +1965,7 @@ $("#instanceSnapshotsTable").on("click", ".createFromSnapshot", function(){
 
 
 $("#containerSnapshots").on("click", "#scheduleInstanceSnapshots", function(){
-    function updateInstanceSnapshotSchedule(stopped, modal){
-        let scheduleInput = modal.$content.find('input[name=schedule]');
-        let patternInput = modal.$content.find('input[name=pattern]');
-        let expiryInput = modal.$content.find('input[name=expiry]');
 
-        let schedule = scheduleInput.val()
-        let pattern = patternInput.val()
-        let expiry = expiryInput.val()
-
-        modal.buttons.stop.disable();
-        modal.buttons.start.disable();
-        modal.buttons.cancel.disable();
-
-        let x = {
-            hostId: currentContainerDetails.hostId,
-            container: `${currentContainerDetails.container}`,
-            schedule,
-            pattern,
-            expiry,
-            stopped
-        };
-
-        ajaxRequest(globalUrls.instances.snapShots.schedule, x, function(data){
-            data = makeToastr(data);
-            if(data.state == "error"){
-                modal.buttons.stop.enable();
-                modal.buttons.start.enable();
-                modal.buttons.cancel.enable();
-                return false;
-            }
-            modal.close()
-        });
-    }
 
     $.confirm({
         title: `Instance Snapshot Schedule`,
@@ -2006,6 +1974,7 @@ $("#containerSnapshots").on("click", "#scheduleInstanceSnapshots", function(){
                 <label class="fw-bold"> Schedule </label>
                 <input class="form-control" name="schedule"/>
                 <div class="form-text">Cron expression, or a comma separated list of schedule aliases.</div>
+                <div class="form-text"><i class="fas fa-info-circle text-warning me-1"></i>Clear the schedule to stop more snapshots.</div>
             </div>
             <div class="mb-2">
                 <label class="fw-bold"> Pattern </label>
@@ -2017,24 +1986,54 @@ $("#containerSnapshots").on("click", "#scheduleInstanceSnapshots", function(){
                 <label class="fw-bold"> Expiry </label>
                 <input class="form-control" name="expiry"/>
                 <div class="form-text">Controls when snapshots are to be deleted (expects expression like 1M 2H 3d 4w 5m 6y).</div>
-            </div>`,
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="snapshotStoppedCheck">
+                <label class="form-check-label" for="snapshotStoppedCheck">
+                    Snapshot When Stopped?
+                </label>
+            </div>
+            `,
         buttons: {
             cancel: function(){},
-            stop: {
-                text: 'Stop Schedule',
-                btnClass: 'btn-danger',
-                action: function(){
-                    let modal = this;
-                    updateInstanceSnapshotSchedule(1, modal)
-                    return false;
-                }
-            },
-            start: {
-                text: 'Start Schedule',
+            update: {
+                text: 'Update Schedule',
                 btnClass: 'btn-success',
                 action: function () {
                     let modal = this;
-                    updateInstanceSnapshotSchedule(0, modal)
+                    let scheduleInput = modal.$content.find('input[name=schedule]');
+                    let patternInput = modal.$content.find('input[name=pattern]');
+                    let expiryInput = modal.$content.find('input[name=expiry]');
+
+                    let schedule = scheduleInput.val()
+                    let pattern = patternInput.val()
+                    let expiry = expiryInput.val()
+                    let snapshotStopped = modal.$content.find("#snapshotStoppedCheck").is(":checked") ? 1 : 0;
+
+                    modal.buttons.update.disable();
+                    modal.buttons.cancel.disable();
+
+
+
+                    let x = {
+                        hostId: currentContainerDetails.hostId,
+                        container: `${currentContainerDetails.container}`,
+                        schedule,
+                        pattern,
+                        expiry,
+                        snapshotStopped
+                    };
+
+                    ajaxRequest(globalUrls.instances.snapShots.schedule, x, function(data){
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            modal.buttons.update.enable();
+                            modal.buttons.cancel.enable();
+                            return false;
+                        }
+                        $("#goToSnapshots").trigger("click");
+                        modal.close()
+                    });
                     return false;
                 }
             },
@@ -2047,6 +2046,9 @@ $("#containerSnapshots").on("click", "#scheduleInstanceSnapshots", function(){
                 jc.$content.find("input[name=schedule]").val(data.schedule["snapshots.schedule"])
                 jc.$content.find("input[name=pattern]").val(data.schedule["snapshots.pattern"])
                 jc.$content.find("input[name=expiry]").val(data.schedule["snapshots.expiry"])
+                if(data.schedule["snapshots.schedule.stopped"] === "true"){
+                    jc.$content.find("#snapshotStoppedCheck").attr("checked", true);
+                }
             })
         }
     });
