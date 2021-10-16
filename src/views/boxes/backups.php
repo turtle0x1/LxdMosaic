@@ -144,7 +144,6 @@ $("#containerBackupDetails").on("click", ".deleteBackup", function(){
 
         $.each(currentContainerBackups.allBackups, (index, details)=>{
             if(details.id == backupId){
-                // console.log(index);
                 currentContainerBackups.allBackups.splice(index, 1)
             }
         })

@@ -89,7 +89,6 @@
         var path = spice_query_var('path', '/node/terminal');
 
         if ((!host) || (!port)) {
-            console.log("must specify host and port in URL");
             return;
         }
 
@@ -119,7 +118,6 @@
 
     function disconnect()
     {
-        console.log(">> disconnect");
         if (sc) {
             sc.stop();
         }
@@ -132,7 +130,6 @@
             document.getElementById('spice-area').removeEventListener('dragover', SpiceHtml5.handle_file_dragover, false);
             document.getElementById('spice-area').removeEventListener('drop', SpiceHtml5.handle_file_drop, false);
         }
-        console.log("<< disconnect");
     }
 
     function agent_connected(sc)

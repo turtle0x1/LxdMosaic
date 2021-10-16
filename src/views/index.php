@@ -1247,7 +1247,6 @@ function loadDashboard(){
          },
                   ticks: {
                         callback: function(){
-                            console.log("me");
                             return '';
                         }
                       }
