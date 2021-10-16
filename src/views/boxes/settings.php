@@ -620,7 +620,7 @@ function loadInstanceSettings(){
 
         trs += `<tr data-setting-id="11">
             <td>Timezone</td>
-            <td><select name="settingValue" class="form-control">${timezoneOptions}</select></td>
+            <td><select name="settingValue" class="form-select">${timezoneOptions}</select></td>
         </tr>`
 
         if(data.versionDetails.cantSeeGithub){

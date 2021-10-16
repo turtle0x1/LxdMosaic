@@ -21,7 +21,7 @@
       </div>
       <div class="input-group">
           <span class="input-group-text">Instance</span>
-          <select class="form-control" id="proxyDeviceInstance">
+          <select class="form-select" id="proxyDeviceInstance">
           </select>
       </div>
   </div>

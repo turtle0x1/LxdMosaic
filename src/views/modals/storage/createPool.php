@@ -17,7 +17,7 @@
           </div>
           <div class="mb-2">
               <b> Driver </b>
-              <select class="form-control" name="driver" id="newStorageDriver">
+              <select class="form-select" name="driver" id="newStorageDriver">
                   <option value="">Please Select </option>
                   <option value="zfs">ZFS</option>
                   <option value="Btrfs">BTRFS</option>

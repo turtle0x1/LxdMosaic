@@ -21,7 +21,7 @@
                         data-bs-placement="bottom"
                         title="Used to impose resource limits akin to different cloud provider limits!">Instance Type (Optional)
                         <i class="fas fa-question-circle text-info"></i></label>
-                    <select id="newContainerInstanceType" class="form-control"></select>
+                    <select id="newContainerInstanceType" class="form-select"></select>
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
         </div>
         <div class="mb-2">
             <label> GPU's (Optional) </label>
-            <select class="form-control" id="newContainerGpus" multiple>
+            <select class="form-select" id="newContainerGpus" multiple>
                 <option value="">Please select a host </option>
             </select>
             <div id="gpuWarning" class="alert alert-danger">

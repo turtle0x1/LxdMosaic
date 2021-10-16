@@ -12,7 +12,7 @@
               <div class="col-md-8">
                   <div class="mb-2" id="selectProfileFormGroup">
                       <b> Select Profile </b>
-                      <select class="form-control" id="profileSelect"></select>
+                      <select class="form-select" id="profileSelect"></select>
                   </div>
               </div>
           </div>

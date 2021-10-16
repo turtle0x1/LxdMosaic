@@ -48,7 +48,7 @@
           </div>
           <div class="mb-2">
               <label> GPU's (Optional) </label>
-              <select class="form-control" id="deployContainerGpu" multiple>
+              <select class="form-select" id="deployContainerGpu" multiple>
                   <option value="">Please select a host </option>
               </select>
               <div id="deployContainerGpuWarning" class="alert alert-danger">

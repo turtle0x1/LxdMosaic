@@ -13,8 +13,7 @@
         <b>Origin: </b> <span id="migrateModal-currentHost"></span>
         <div class="mb-2">
             <b><label>Destination</label></b>
-            <select class="form-control" name="" id="migrateModal-targetHost">
-                <option value="">Todo Load Hosts</option>
+            <select class="form-select" name="" id="migrateModal-targetHost">
             </select>
         </div>
       </div>

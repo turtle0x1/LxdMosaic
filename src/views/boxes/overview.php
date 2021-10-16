@@ -55,7 +55,7 @@
                         <h4><i class="fas fa-chart-bar me-2"></i>Overview</h4>
                         <div class="input-group mb-3 w-25">
                           <span class="input-group-text"><i class="fas fa-history"></i></span>
-                          <select class="form-control" id="overviewHistoryDuration">
+                          <select class="form-select" id="overviewHistoryDuration">
                                 <option value="-30 mins" selected>30 Minutes</otion>
                                 <option value="-1 hour">1 Hour</otion>
                                 <option value="-3 hours">3 Hours</otion>
@@ -436,24 +436,24 @@ $(document).on("click", "#addDashMetricGraph", function(){
             </div>
             <div class="mb-2">
                 <label>Instance</label>
-                <select id="addDashMetricInstanceSelect" class="form-control">
+                <select id="addDashMetricInstanceSelect" class="form-select">
                 </select>
             </div>
             <div class="mb-2">
                 <label>Metric</label>
-                <select id="addDashMetricMetricSelect" class="form-control disabled" disabled>
+                <select id="addDashMetricMetricSelect" class="form-select disabled" disabled>
                     <option value=''>Select Instance</option>
                 </select>
             </div>
             <div class="mb-2">
                 <label>Filter</label>
-                <select id="addDashMetricFilterSelect" class="form-control disabled" disabled>
+                <select id="addDashMetricFilterSelect" class="form-select disabled" disabled>
                     <option value=''>Select Metric</option>
                 </select>
             </div>
             <div class="mb-2">
                 <label>Range</label>
-                <select class="form-control float-end" id="addDashMetricRangeSelect" disabled>
+                <select class="form-select float-end" id="addDashMetricRangeSelect" disabled>
                     <option value="">Please Select</option>
                     <option value="-15 minutes">Last 15 Minutes</option>
                     <option value="-30 minutes">Last 30 Minutes</option>

@@ -15,7 +15,7 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
                     <div class="input-group mb-2 me-sm-2">
                         <div class="input-group-text">Server</div>
-                        <select id="searchImages-server" class="form-control">
+                        <select id="searchImages-server" class="form-select">
                             <option value="" selected>Select...</option>
                             <option value="linuxcontainers">linuxcontainers</option>
                             <option value="ubuntu-release">ubuntu-release</option>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="input-group mb-2 me-sm-2">
                         <div class="input-group-text">Type</div>
-                        <select id="searchImages-type" class="form-control">
+                        <select id="searchImages-type" class="form-select">
                             <option value="" selected>Select...</option>
                             <option value="container">Container</option>
                             <option value="virtual-machine">Virtual Machine</option>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="input-group mb-2 me-sm-2">
                         <div class="input-group-text">Arch</div>
-                        <select id="searchImages-arch" class="form-control">
+                        <select id="searchImages-arch" class="form-select">
                             <option value="" selected>Select...</option>
                             <option value="amd64">amd64</option>
                             <option value="i386">i386</option>

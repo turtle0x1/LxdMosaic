@@ -9,7 +9,7 @@
       <div class="modal-body bg-light">
           <div class="mb-2">
               <label>Volume</label>
-              <select class="form-control" name="volume"></select>
+              <select class="form-select" name="volume"></select>
           </div>
           <div class="mb-2">
               <label>Device Name</label>

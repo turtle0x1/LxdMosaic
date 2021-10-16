@@ -217,7 +217,7 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
         content: `
             <div class="mb-2">
                 <label><b>Frequency</b></label>
-                <select class="form-control" id="scheduleBackupFrequency">
+                <select class="form-select" id="scheduleBackupFrequency">
                     <option value=""></option>
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -268,7 +268,7 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
             </div>
             <div class="mb-2">
                 <label><b>Strategy</b></label>
-                <select class="form-control" id="scheduleBackupStrategy">
+                <select class="form-select" id="scheduleBackupStrategy">
                 </select>
             </div>
             <div class="mb-2">
