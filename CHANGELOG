@@ -16,6 +16,7 @@ Changed
     Improve create project modal UI / UX
     Support limits when creating a project (#434)
     Show packets_dropped_outbound & packets_dropped_inbound on networks overview
+    Support project limits on projects frontend
 
 Fixed
     First run doesn't toggle passwords properly (#390)

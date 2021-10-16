@@ -40,61 +40,81 @@
             </div>
         </div>
     </div>
-<div class="row">
-    <div class="col-md-4">
-          <div class="card mb-2 bg-dark text-white">
-            <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
-              <h5>
-                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
-                  Config
-                  <i class="float-end fas fa-cog"></i>
-                </a>
-              </h5>
-            </div>
-            <div id="projectConfig" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
-              <div class="card-block bg-dark table-responsive">
-                  <div id="collapseOne" class="collapse in show" role="tabpanel" >
-                      <table class="table table-dark table-bordered" id="projectConfigTable">
-                          <thead>
-                              <tr>
-                                  <th> Key </th>
-                                  <th> Value </th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                      </table>
-                   </div>
+    <div class="row">
+        <div class="col-md-4">
+              <div class="card mb-2 bg-dark text-white">
+                <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
+                  <h5>
+                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
+                      Config
+                      <i class="float-end fas fa-cog"></i>
+                    </a>
+                  </h5>
+                </div>
+                <div id="projectConfig" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
+                  <div class="card-block bg-dark table-responsive">
+                      <div id="collapseOne" class="collapse in show" role="tabpanel" >
+                          <table class="table table-dark table-bordered" id="projectConfigTable">
+                              <thead>
+                                  <tr>
+                                      <th> Key </th>
+                                      <th> Value </th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                          </table>
+                       </div>
+                  </div>
+                </div>
               </div>
+              <div class="card bg-dark text-white">
+                <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
+                  <h5>
+                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
+                      Restrictions
+                      <i class="float-end fas fa-lock"></i>
+                    </a>
+                  </h5>
+                </div>
+                <div class="card-body bg-dark table-responsive">
+                      <div id="collapseOne" class="collapse in show" role="tabpanel" >
+                          <table class="table table-dark table-bordered" id="restrictionsListTable">
+                              <thead>
+                                  <tr>
+                                      <th> Key </th>
+                                      <th> Value </th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                          </table>
+                       </div>
+                  </div>
             </div>
-          </div>
-          <div class="card bg-dark text-white">
-            <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
-              <h5>
-                <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
-                  Restrictions
-                  <i class="float-end fas fa-lock"></i>
-                </a>
-              </h5>
-            </div>
-            <div id="projectConfig" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
-              <div class="card-block bg-dark table-responsive">
-                  <div id="collapseOne" class="collapse in show" role="tabpanel" >
-                      <table class="table table-dark table-bordered" id="restrictionsListTable">
-                          <thead>
-                              <tr>
-                                  <th> Key </th>
-                                  <th> Value </th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                      </table>
-                   </div>
-              </div>
-            </div>
-          </div>
-    </div>
+            <div class="card mt-2 bg-dark text-white">
+                    <div class="card-header">
+                        <h5>
+                          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
+                            Limits
+                            <i class="float-end fas fa-user-secret"></i>
+                          </a>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-dark table-bordered" id="projectLimitsTable">
+                            <thead>
+                                <tr>
+                                    <th> Key </th>
+                                    <th> Value </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
     <div class="col-md-4">
         <div class="card bg-dark text-white">
           <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
@@ -106,7 +126,7 @@
             </h5>
           </div>
           <div id="projectUsedBy" class="collapse show" role="tabpanel" aria-labelledby="projectsActionHeading">
-            <div class="card-block bg-dark table-responsive">
+            <div class="card-body bg-dark table-responsive">
                 <div id="collapseOne" class="collapse in show" role="tabpanel" >
                     <table class="table table-dark table-bordered" id="projectUsersTable">
                         <thead>
@@ -347,9 +367,12 @@ function viewProject(project, hostId, hostAlias){
 
         let projectConfig = "";
         let restrictionsConfig = "";
+        let limitsConfig = "";
 
         $.each(data.config, function(i, item){
-            if(i.startsWith("features")){
+            if(i.startsWith("limits")){
+                limitsConfig += `<tr><td>${i.replace("limits.", "")}</td><td>${item}</td></tr>`;
+            }else if(i.startsWith("features")){
                 projectConfig += `<tr><td>${i.replace("features.", "")}</td><td>${item}</td></tr>`;
             }else{
                 restrictionsConfig += `<tr><td>${i.replace("restricted.", "")}</td><td>${item}</td></tr>`;
@@ -359,6 +382,9 @@ function viewProject(project, hostId, hostAlias){
         if(restrictionsConfig == ""){
             restrictionsConfig = `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-info me-2"></i>No Restrictions</td></tr>`
         }
+        if(limitsConfig == ""){
+            limitsConfig = `<tr><td colspan="999" class="text-center"><i class="fas fa-info-circle text-info me-2"></i>No Limits</td></tr>`
+        }
 
         let usersList = "";
         $.each(data.users, (_, user)=>{
@@ -367,6 +393,7 @@ function viewProject(project, hostId, hostAlias){
 
         $("#projectUsersTable > tbody").empty().append(usersList);
         $("#restrictionsListTable > tbody").empty().append(restrictionsConfig);
+        $("#projectLimitsTable > tbody").empty().append(limitsConfig);
         $("#projectConfigTable > tbody").empty().append(projectConfig);
     });
 }
