@@ -174,7 +174,7 @@ function loadNetworksView()
                         let formatedTotal = key.includes("packets") ? parseFloat(hostTotals[key]).toLocaleString('en') : formatBytes(hostTotals[key])
                         let formatedPercent = parseFloat(percent).toFixed(2);
                         let instanceName = instance.length > 10 ? `<a href="#" class="text-primary" data-toggle="tooltip" data-bs-placement="bottom" title="${instance}">${instance.substring(0,10)}...</a>` : instance;
-                        hostHtml[key] += `${instanceName} - ${interfaceName} - ${key} - ${formatedPercent}% <div class="progress mb-2" data-toggle="tooltip" data-bs-placement="right" title="${formatedTotal}">
+                        hostHtml[key] += `<div class="text-truncate">${instanceName} - ${interfaceName} - ${formatedPercent}%</div> <div class="progress mb-2" data-toggle="tooltip" data-bs-placement="right" title="${formatedTotal}">
                             <div class="progress-bar" role="progressbar" data-toggle="tooltip" title="${formatedUsed} - ${formatedPercent}%" style="width: ${percent}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>`
                     });
@@ -186,8 +186,21 @@ function loadNetworksView()
                     <h4><i class="fas fa-server me-2"></i>${host.alias} <i class="fas fa-project-diagram ms-2 me-2"></i>${host.project}</h4>
                 </div>
             `
-            $.each(Object.keys(hostHtml), (_, key)=>{
-                html += `<div class="col-md-3 border-end">${hostHtml[key]}</div>`;
+            let length = (Object.keys(hostHtml).length)
+            $.each(Object.keys(hostHtml), (index, key)=>{
+                // Skip some of the new metrics (errors_received, errors_sent),
+                // there is now 8 network metrics and bootstrap uses 12 colums
+                // so we only display 6 as its easy math
+                if(length > 4){
+                    if([4, 5].includes(index)){
+                        return true;
+                    }
+                }
+
+                html += `<div class="col-md-2 border-end">
+                    <div class="text-truncate"><b class="text-wrap d-block">${key}</b></div>
+                    ${hostHtml[key]}
+                </div>`;
             });
             html += `</div>`;
         });

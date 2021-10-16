@@ -54,6 +54,10 @@ class GetNetworksDashboard
             "bytes_sent"=>0,
             "packets_received"=>0,
             "packets_sent"=>0,
+            "errors_received"=>0,
+            "errors_sent"=>0,
+            "packets_dropped_outbound"=>0,
+            "packets_dropped_inbound"=>0
         ];
 
         foreach ($instances as $instance) {
@@ -67,7 +71,9 @@ class GetNetworksDashboard
                 }
                 $output[$instance["name"]][$networkName] = $network["counters"];
                 foreach ($network["counters"] as $key => $total) {
-                    $totals[$key] += $total;
+                    if (isset($totals[$key])) {
+                        $totals[$key] += $total;
+                    }
                 }
             }
         }
