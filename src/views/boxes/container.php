@@ -2099,11 +2099,38 @@ $("#containerBox").on("click", "#goToEvents", function() {
         if(data.length > 0){
             $.each(data, (_, instanceEvent)=>{
                 let eName = instanceEvent.controllerName == "" ? instanceEvent.controller : instanceEvent.controllerName;
+
+                let params = "-";
+                let userParams = instanceEvent.params;
+                let userKeys = Object.keys(instanceEvent.params);
+                if(userKeys.length > 0){
+                    params  = ""
+                    $.each(userKeys, (_, key)=>{
+                        let t = typeof userParams[key]
+                        if(t !== "array" && t !== "object"){
+                            params += `<div class="mb-1">
+                                ${key}: ${userParams[key]}
+                            </div>`
+                        // NOTE 1 level recursion not traversing whole tree's
+                        } else if(t === "object"){
+                            let pKeys = Object.keys(userParams[key]);
+                            params += `<div class="mb-1">
+                                ${key}:
+                            </div>`
+                            $.each(pKeys, (_, k)=>{
+                                params += `<div class="mb-1 ps-2">
+                                    ${k}: ${userParams[key][k]}
+                                </div>`
+                            });
+                        }
+                    });
+                }
+
                 trs += `<tr data-user-name="${instanceEvent.userName}" data-event-name="${eName}">
                     <td>${instanceEvent.userName}</td>
                     <td>${moment.utc(instanceEvent.date).local().format("llll")}</td>
                     <td>${eName}</td>
-                    <td>${instanceEvent.params}</td>
+                    <td>${params}</td>
                 </tr>`
                 if(!filterEventUsers.includes(instanceEvent.userName)){
                     filterEventUsers.push(instanceEvent.userName);

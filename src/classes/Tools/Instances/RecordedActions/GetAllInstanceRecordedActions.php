@@ -17,8 +17,22 @@ class GetAllInstanceRecordedActions
     public function get(Host $host, string $instance)
     {
         $logs = $this->fetchRecordedActions->fetchForHostInstance($host->getHostId(), $instance);
+        $paramsToRemove = [
+            "host",
+            "container",
+            "instance",
+            "userId"
+        ];
+
         foreach ($logs as &$log) {
             $log["controllerName"] = $this->routeToNameMapping->getControllerName($log["controller"]);
+            $d = json_decode($log["params"], true);
+            foreach ($paramsToRemove as $toRemove) {
+                if (isset($d[$toRemove])) {
+                    unset($d[$toRemove]);
+                }
+            }
+            $log["params"] = $d;
         }
         return $logs;
     }
