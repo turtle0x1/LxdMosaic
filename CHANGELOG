@@ -15,6 +15,7 @@ Fixed
     First run doesn't toggle passwords properly (#390)
     Cant override users current project with HTTP header in "Universe"
     Cant create directory storage pool
+    Cant use shells other than bash
 
 0.13.0 - 18/07/2020
 

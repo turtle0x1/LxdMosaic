@@ -191,8 +191,8 @@ module.exports = class Terminals {
   getExecBody(toUseShell = null, cols, rows) {
     let shell = ['bash'];
 
-    if (typeof shell == 'string' && shell !== '') {
-      shell = [shell];
+    if (typeof toUseShell == 'string' && toUseShell !== '') {
+      shell = [toUseShell];
     }
 
     return {
