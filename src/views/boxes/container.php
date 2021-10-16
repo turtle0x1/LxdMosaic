@@ -2094,21 +2094,93 @@ $("#containerBox").on("click", "#goToEvents", function() {
     ajaxRequest('/api/Instances/RecordedActions/GetHostInstanceEventsController/get', currentContainerDetails, (data)=>{
         data = makeToastr(data);
         let trs = "";
+        let filterEventOptions = [];
+        let filterEventUsers = [];
         if(data.length > 0){
             $.each(data, (_, instanceEvent)=>{
-                trs += `<tr>
+                let eName = instanceEvent.controllerName == "" ? instanceEvent.controller : instanceEvent.controllerName;
+                trs += `<tr data-user-name="${instanceEvent.userName}" data-event-name="${eName}">
                     <td>${instanceEvent.userName}</td>
                     <td>${moment.utc(instanceEvent.date).local().format("llll")}</td>
-                    <td>${instanceEvent.controllerName == "" ? instanceEvent.controller : instanceEvent.controllerName}</td>
+                    <td>${eName}</td>
                     <td>${instanceEvent.params}</td>
                 </tr>`
+                if(!filterEventUsers.includes(instanceEvent.userName)){
+                    filterEventUsers.push(instanceEvent.userName);
+                }
+                if(!filterEventOptions.includes(eName)){
+                    filterEventOptions.push(eName);
+                }
             });
         }else{
             trs = "<tr><td colspan='999' class='text-center'>No Logs</td></tr>"
         }
+        let filters = '<li><h6 class="dropdown-header p-0"><i class="fas fa-filter me-2"></i>Users</h6></li>';
+        $.each(filterEventUsers, (i, userName)=>{
+            filters += `<div class="ps-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input userFilter" data-user-name="${userName}" id="${i}UserFilter" checked>
+                    <label class="form-check-label" for="${i}UserFilter">
+                        ${userName}
+                    </label>
+                </div>
+            </div>`
+        });
+        filters += '<li><h6 class="dropdown-header p-0"><i class="fas fa-filter me-2"></i>Events</h6></li>';
+        $.each(filterEventOptions, (i, option)=>{
+            filters += `<div class="ps-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input eventFilter" data-event-name="${option}" id="${i}EventFilter" checked>
+                    <label class="form-check-label" for="${i}EventFilter">
+                        ${option}
+                    </label>
+                </div>
+            </div>`
+        });
 
+        $("#filterEventsUl").empty().append(filters);
         $("#containerEventsTable > tbody").empty().append(trs);
     });
+});
+
+$("#filterEventsUl").on("click", ".userFilter, .eventFilter", function(){
+    let users = $("#filterEventsUl").find(".userFilter").map(function(){
+        if($(this).is(":checked")){
+            return $(this).data("userName");
+        }
+    });
+    let events = $("#filterEventsUl").find(".eventFilter").map(function(){
+        if($(this).is(":checked")){
+            return $(this).data("eventName");
+        }
+    });
+
+    users = Object.values(users)
+    events = Object.values(events)
+
+    $("#containerEventsTable > tbody > tr").each(function(){
+        let inEventFilter = true;
+        let inUserFilter = true;
+        let d = $(this).data();
+        if(users.length > 0 && !users.includes(d.userName)){
+            inUserFilter = false;
+        }
+        if(events.length > 0 && !events.includes(d.eventName)){
+            inEventFilter = false;
+        }
+
+        if(inEventFilter && inUserFilter){
+            $(this).show();
+        }else{
+            $(this).hide();
+        }
+    });
+});
+
+$('.dropdown-menu').on('click', function(e) {
+    if($(this).hasClass('dropdown-menu-form')) {
+        e.stopPropagation();
+    }
 });
 
 $("#containerBox").on("click", "#goToTerminal", function() {

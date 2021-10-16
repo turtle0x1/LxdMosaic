@@ -3,6 +3,7 @@ Unreleased
 Added
     Control history duration on homepage
     Snapshot scheduling
+    Filter events table by user & event name on frontend
 
 Changed
     Use correct width for terminal on init
