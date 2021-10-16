@@ -2106,6 +2106,9 @@ $("#containerBox").on("click", "#goToEvents", function() {
                 if(userKeys.length > 0){
                     params  = ""
                     $.each(userKeys, (_, key)=>{
+                        if(userParams[key] == null){
+                            return true;
+                        }
                         let t = typeof userParams[key]
                         if(t !== "array" && t !== "object"){
                             params += `<div class="mb-1">
