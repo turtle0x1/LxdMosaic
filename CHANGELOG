@@ -18,6 +18,8 @@ Changed
     Show packets_dropped_outbound & packets_dropped_inbound on networks overview
     Support project limits on projects frontend
     Don't require filling out image when deploying cloud-config
+    Support choosing project when deploying cloud-config
+    Only allow choosing one host when deploying cloud-config (only on frontend)
 
 Fixed
     First run doesn't toggle passwords properly (#390)

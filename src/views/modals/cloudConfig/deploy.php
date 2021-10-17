@@ -7,14 +7,13 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-
           <div class="mb-2">
               <label> Instance Name </label>
               <input class="form-control" name="containerName" />
           </div>
           <div class="mb-2">
-              <label> Hosts </label>
-              <input class="form-control" id="deployCloudConfigHosts" />
+              <label> Where To Deploy </label>
+              <select class="form-select" id="deployCloudConfigHosts"></select>
           </div>
           <div class="mb-2">
               <label> Profile Name (Optional) </label>
@@ -47,7 +46,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="deployCloudConfig">Create</button>
+        <button type="button" class="btn btn-primary" id="deployCloudConfig">Deploy</button>
       </div>
     </div>
   </div>
@@ -67,49 +66,29 @@ $("#deployCloudConfigProfiles").tokenInput(globalUrls.profiles.search.getCommonP
     preventDuplicates: false
 });
 
-$("#deployCloudConfigHosts").tokenInput(globalUrls.hosts.search.search, {
-    queryParam: "hostSearch",
-    propertyToSearch: "host",
-    tokenValue: "hostId",
-    preventDuplicates: false,
-    theme: "facebook",
-    onAdd: function(token){
-        let h = $("#deployCloudConfigHosts").tokenInput("get")
-        if(h.length > 1){
-            $("#deployContainerGpuWarning").show();
-            $("#deployContainerGpu").hide();
-        }else{
-            let x = {hostId: h[0].hostId}
-            ajaxRequest(globalUrls.hosts.gpu.getAll, x, (data)=>{
-                data =  $.parseJSON(data);
-                //TODO if len == 0
-                let gpus = "";
-                $.each(data, function(i, item){
-                    gpus += `<option value="${item.pci_address}">${item.product}</option>`
-                });
-                $("#deployContainerGpu").empty().append(gpus);
+$("#modal-cloudConfig-deploy").on("change", "#deployCloudConfigHosts", function() {
+    let hostId = $(this).find(":selected").parents("optgroup").attr("id")
+    if($.isNumeric(hostId)){
+        ajaxRequest(globalUrls.hosts.gpu.getAll, {hostId}, (data)=>{
+            data =  $.parseJSON(data);
+            //TODO if len == 0
+            let gpus = "";
+            $.each(data, function(i, item){
+                gpus += `<option value="${item.pci_address}">${item.product}</option>`
             });
-        }
-    },
-    onDelete: function(){
-        let h = $("#deployCloudConfigHosts").tokenInput("get")
-        if(h.length > 1){
-            $("#deployContainerGpuWarning").show();
-            $("#deployContainerGpu").hide();
-        }else{
-            if(h.length == 0){
-                $("#deployContainerGpu").empty().append("<option value=''>Please select a host</option>");
-            }
-            $("#deployContainerGpuWarning").hide();
-            $("#deployContainerGpu").show();
-        }
+            $("#deployContainerGpu").empty().append(gpus);
+        });
+    }else{
+        $("#deployContainerGpu").empty().append("<option value=''>Please select a host</option>");
     }
-});
+})
 
 $("#modal-cloudConfig-deploy").on("hide.bs.modal", function(){
-    $("#modal-cloudConfig-deploy input").val("");
-    $("#deployCloudConfigProfiles").tokenInput("clear");
-    $("#deployCloudConfigHosts").tokenInput("clear");
+    if($("#deployCloudConfigProfiles").length){
+        $("#modal-cloudConfig-deploy input").val("");
+        $("#deployCloudConfigProfiles").tokenInput("clear");
+        $("#deployCloudConfigHosts").empty()
+    }
 });
 
 $("#modal-cloudConfig-deploy").on("shown.bs.modal", function(){
@@ -118,11 +97,47 @@ $("#modal-cloudConfig-deploy").on("shown.bs.modal", function(){
         makeToastr(JSON.stringify({state: "error", message: "Developer fail - set cloud config id to open this modal"}));
         return false;
     }
+
+    ajaxRequest(globalUrls.projects.getAllFromHosts, {}, function(data){
+        data = $.parseJSON(data);
+        let options = "<option value=''>Please select</option>";
+        $.each(data.clusters, (clusterIndex, cluster)=>{
+            options += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            $.each(cluster.members, (_, host)=>{
+                if(host.hostOnline == 0){
+                    return true;
+                }
+                options += `<optgroup id="${host.hostId}" label="${host.alias}">`
+                $.each(host.projects, (project, _)=>{
+                    options += `<option value="${project}">${project}</option>`
+                });
+                options += `</optgroup>`
+            })
+        });
+
+        $.each(data.standalone.members, (_, host)=>{
+            if(host.hostOnline == 0){
+                return true;
+            }
+            options += `<optgroup id="${host.hostId}" label="${host.alias}">`
+            $.each(host.projects, (_, project)=>{
+                options += `<option value="${project}">${project}</option>`
+            });
+            options += `</optgroup>`
+        });
+        $("#deployCloudConfigHosts").empty().append(options);
+    });
 });
 
 $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
+    let btn = $(this);
+
+    btn.attr("disabled", true);
+    btn.html(`<i class="fas fa-cog fa-spin me-2"></i>Deploying...`)
+
     let profileIds = mapObjToSignleDimension($("#deployCloudConfigProfiles").tokenInput("get"), "profile");
-    let hosts = mapObjToSignleDimension($("#deployCloudConfigHosts").tokenInput("get"), "hostId");
+    let hostId = $("#deployCloudConfigHosts").find(":selected").parents("optgroup").attr("id");
+    let project = $("#deployCloudConfigHosts").find(":selected").val()
 
     let containerNameInput = $("#modal-cloudConfig-deploy input[name=containerName]");
     let containerName = containerNameInput.val();
@@ -132,31 +147,34 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
     if(containerName == ""){
         makeToastr(JSON.stringify({state: "error", message: "Please provide instance name"}));
         containerNameInput.focus()
+        btn.attr("disabled", false);
+        btn.html(`Deploy`)
         return false;
-    } else if(hosts.length == 0){
-        makeToastr(JSON.stringify({state: "error", message: "Please provide atleast one host"}));
+    } else if(!$.isNumeric(hostId)){
+        makeToastr(JSON.stringify({state: "error", message: "Please choose a destination"}));
         $("#deployCloudConfigHosts").focus();
+        btn.attr("disabled", false);
+        btn.html(`Deploy`)
         return false;
     }
 
-    let gpus = [];
-
-    if(hosts.length == 1){
-        gpus = $("#deployContainerGpu").val();
-    }
+    let gpus = $("#deployContainerGpu").val();
 
     let x = {
-        hosts: hosts,
+        hosts: [hostId],
         containerName: containerName,
         cloudConfigId: deployCloudConfigObj.cloudConfigId,
         profileName: profileName,
         additionalProfiles: profileIds,
-        gpus: gpus
+        gpus: gpus,
+        project: project
     };
 
     ajaxRequest(globalUrls.cloudConfig.deploy, x, (response)=>{
         response = makeToastr(response);
         if(response.state == "error"){
+            btn.attr("disabled", false);
+            btn.html(`Deploy`)
             return false;
         }
         $("#modal-cloudConfig-deploy").modal("toggle");

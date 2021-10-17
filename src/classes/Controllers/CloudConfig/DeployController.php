@@ -20,7 +20,8 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
         int $cloudConfigId,
         $profileName = "",
         $additionalProfiles = [],
-        $gpus = []
+        $gpus = [],
+        string $project = ""
     ) {
         $response = $this->deployConfigToContainer->deploy(
             $hosts,
@@ -29,7 +30,8 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
             $additionalProfiles,
             $cloudConfigId,
             null,
-            $gpus
+            $gpus,
+            $project
         );
         return ["state"=>"success", "message"=>"Begun deploy"];
     }

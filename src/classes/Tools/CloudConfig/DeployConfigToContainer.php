@@ -28,10 +28,17 @@ class DeployConfigToContainer
         array $additionalProfiles = [],
         int $cloudConfigId = null,
         int $cloudConfigRevId = null,
-        array $gpus = []
+        array $gpus = [],
+        string $project = ""
     ) {
         if (!is_numeric($cloudConfigId) && !is_numeric($cloudConfigRevId)) {
             throw new \Exception("Please provide cloud config id or a rev id", 1);
+        }
+
+        if (!empty($project)) {
+            foreach ($hosts as $host) {
+                $host->setProject($project);
+            }
         }
 
         if (!is_numeric($cloudConfigRevId)) {
@@ -66,7 +73,9 @@ class DeployConfigToContainer
             "",
             [$profileName],
             "",
-            $gpus
+            $gpus,
+            [], // No extra config
+            true // start the instance
         );
     }
 }
