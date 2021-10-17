@@ -57,6 +57,7 @@ class GetConfig
                     `CCD_ID` as `revisionId`,
                     `CCD_Cloud_Config_ID` as `cloudConfigId`,
                     `CCD_Data` as `data`,
+                    `CCD_Image_Details` as `imageDetails`,
                     `CCD_Enviroment_Variables` as `envVariables`
                 FROM
                     `Cloud_Config_Data`

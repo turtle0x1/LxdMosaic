@@ -18,15 +18,13 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
         HostsCollection $hosts,
         string $containerName,
         int $cloudConfigId,
-        array $imageDetails,
         $profileName = "",
         $additionalProfiles = [],
         $gpus = []
     ) {
-        $this->deployConfigToContainer->deploy(
+        $response = $this->deployConfigToContainer->deploy(
             $hosts,
             $containerName,
-            $imageDetails,
             $profileName,
             $additionalProfiles,
             $cloudConfigId,

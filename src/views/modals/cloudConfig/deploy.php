@@ -17,18 +17,6 @@
               <input class="form-control" id="deployCloudConfigHosts" />
           </div>
           <div class="mb-2">
-              <label
-                  data-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Currently an image needs to have been imported into atleast
-                  one server on the network to use it here! Images will be downloaded
-                  onto hosts that dont have the selected image.">
-                  Image
-                  <i class="fas fa-question-circle"></i>
-              </label>
-              <input class="form-control" id="deployCloudConfigImage" />
-          </div>
-          <div class="mb-2">
               <label> Profile Name (Optional) </label>
               <input class="form-control" name="profileName" />
           </div>
@@ -118,20 +106,10 @@ $("#deployCloudConfigHosts").tokenInput(globalUrls.hosts.search.search, {
     }
 });
 
-$("#deployCloudConfigImage").tokenInput(globalUrls.images.search.searchAllHosts, {
-    queryParam: "search",
-    tokenLimit: 1,
-    propertyToSearch: "description",
-    theme: "facebook",
-    tokenValue: "details"
-});
-
-
 $("#modal-cloudConfig-deploy").on("hide.bs.modal", function(){
     $("#modal-cloudConfig-deploy input").val("");
     $("#deployCloudConfigProfiles").tokenInput("clear");
     $("#deployCloudConfigHosts").tokenInput("clear");
-    $("#deployCloudConfigImage").tokenInput("clear");
 });
 
 $("#modal-cloudConfig-deploy").on("shown.bs.modal", function(){
@@ -150,7 +128,6 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
     let containerName = containerNameInput.val();
     let profileNameInput = $("#modal-cloudConfig-deploy input[name=profileName]");
     let profileName = profileNameInput.val();
-    let image = $("#deployCloudConfigImage").tokenInput("get");
 
     if(containerName == ""){
         makeToastr(JSON.stringify({state: "error", message: "Please provide instance name"}));
@@ -159,9 +136,6 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
     } else if(hosts.length == 0){
         makeToastr(JSON.stringify({state: "error", message: "Please provide atleast one host"}));
         $("#deployCloudConfigHosts").focus();
-        return false;
-    } else if(image.length == 0 || !image[0].hasOwnProperty("details")){
-        makeToastr(JSON.stringify({state: "error", message: "Please select image"}));
         return false;
     }
 
@@ -177,7 +151,6 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
         cloudConfigId: deployCloudConfigObj.cloudConfigId,
         profileName: profileName,
         additionalProfiles: profileIds,
-        imageDetails: image[0].details,
         gpus: gpus
     };
 
