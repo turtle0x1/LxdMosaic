@@ -3,7 +3,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Deploy Cloud Config</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Deploy <code>cloud-config</code></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -31,7 +31,13 @@ var _deployCloudConfigContents = `<div class="mb-2">
               <select class="form-select" id="deployCloudConfigHosts"></select>
           </div>
           <div class="mb-2">
-              <label> Profile Name (Optional) </label>
+          <label
+              data-toggle="tooltip"
+              data-bs-placement="top"
+              title="When deploying this <code>cloud-config</code> as <code>user.user-data</code>, what profile name should we use?">
+              New Profile Name (Optional)
+              <i class="fas fa-question-circle"></i>
+          </label>
               <input class="form-control" name="profileName" />
           </div>
 
@@ -82,8 +88,9 @@ $("#modal-cloudConfig-deploy").on("hidden.bs.modal", function(){
 $("#modal-cloudConfig-deploy").on("show.bs.modal", function(){
     $("#modal-cloudConfig-deploy .modal-dialog").removeClass("modal-xl")
     $("#modal-cloudConfig-deploy .modal-body").empty().append(_deployCloudConfigContents);
+    $("#modal-cloudConfig-deploy").find('[data-toggle="tooltip"]').tooltip({html: true})
     if(!$.isNumeric(deployCloudConfigObj.cloudConfigId)){
-        makeToastr(JSON.stringify({state: "error", message: "Developer fail - set cloud config id to open this modal"}));
+        makeToastr(JSON.stringify({state: "error", message: "Developer fail - set <code>cloud-config</code> id to open this modal"}));
         return false;
     }
 
