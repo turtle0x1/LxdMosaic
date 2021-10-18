@@ -213,6 +213,89 @@ app.ws('/node/console', (socket, req) => {
     });
 });
 
+app.ws('/node/cloudConfig', (socket, req) => {
+     let host = req.query.hostId,
+         container = req.query.instance,
+         uuid = terminals.getInternalUuid(req.body.host, req.body.container, req.query.cols, req.query.rows),
+         shell = req.query.shell,
+         project = req.query.project;
+
+     let dangerRegexs = [
+         // A command not found in cloud-config `runcmd` array
+         new RegExp('\/var\/lib\/cloud\/instance\/scripts\/runcmd:.* not found'),
+         // Failed to install pacakges found in cloud-config `packages` array
+         new RegExp('.*util.py\\[WARNING\\]: Failed to install packages:'),
+         // Failed to run a generic cloud-config module
+         new RegExp('.*cc_scripts_user.py\\[WARNING\\]: Failed to run module'),
+         // Failed to run `packages` module
+         new RegExp(".*cc_package_update_upgrade_install.py\\[WARNING\\]")
+     ];
+
+     let messageCallbacks = {
+      formatServerResponse: function(data){
+        let x = data.split("\r\n")
+
+        if(x[0].match("exit") || x[0] == "^C"){
+            return ''
+        }else if(data.match(".*until \\[ \\-f")){
+            return '\033[34m' + line + '\033[0m'
+        }
+
+        let finishedLine = false;
+        x.forEach((line, i) => {
+            let isStartLine = line.match(".*until \\[ \\-f") !== null
+            let isEndLine = line.match(/Cloud\-init.*finished/g) !== null
+            if(isStartLine || isEndLine){
+                if(isEndLine){
+                    finishedLine = true;
+                }
+                // Make text blue
+                x[i] = '\033[34m' + line + '\033[0m'
+            }else{
+                dangerRegexs.forEach(regex=>{
+                    if(line.match(regex)){
+                        x[i] = '\033[31m' + line + '\033[0m'
+                    }
+                });
+            }
+        });
+        // If its the last line we want to remove the final "\n"
+        if(finishedLine){
+            x.splice((x.length - 1), 1);
+        }
+        return x.join("\r\n")
+      },
+      afterSeverResponeSent: function(data){
+          // Check for the cloud-init finished message
+          if(data.match(/Cloud\-init.*finished/g) !== null){
+            // `ctrl + c` out the `tail -f` command and exit
+            terminals.sendToTerminal(uuid, `\x03`)
+            terminals.close(uuid);
+          }
+      }
+  }
+
+  terminals
+    .createTerminalIfReq(socket, hosts.getHosts(), host, project, container, uuid, shell, messageCallbacks)
+    .then(() => {
+      // Need to give the socket some time to establish before reading log file
+      setTimeout(()=>{
+          terminals.sendToTerminal(uuid, 'until [ -f /var/log/cloud-init-output.log ];\ do sleep 1;\ done && tail -f /var/log/cloud-init-output.log\r\n')
+      }, 100)
+
+      //NOTE Ignore all user to input anything to this console
+
+      socket.on('close', () => {
+          terminals.close(uuid);
+      });
+    })
+    .catch((err) => {
+        console.log(err);
+      // Prevent the browser re-trying (this maybe can be changed later)
+      socket.disconnect();
+    });
+});
+
 
 
 if(!usingSqllite){
