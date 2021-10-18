@@ -7,7 +7,22 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <div class="mb-2">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="deployCloudConfig">Deploy</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+
+var deployCloudConfigObj = {
+    cloudConfigId : null
+}
+
+var _deployCloudConfigContents = `<div class="mb-2">
               <label> Instance Name </label>
               <input class="form-control" name="containerName" />
           </div>
@@ -38,33 +53,8 @@
               <select class="form-select" id="deployContainerGpu" multiple>
                   <option value="">Please select a host </option>
               </select>
-              <div id="deployContainerGpuWarning" class="alert alert-danger">
-                  We currently only support adding gpu's when creating a contaienr
-                  on one host.
-              </div>
           </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="deployCloudConfig">Deploy</button>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-
-var deployCloudConfigObj = {
-    cloudConfigId : null
-}
-
-$("#deployCloudConfigProfiles").tokenInput(globalUrls.profiles.search.getCommonProfiles, {
-    queryParam: "profile",
-    propertyToSearch: "profile",
-    theme: "facebook",
-    tokenValue: "Profile_ID",
-    limit: 999,
-    preventDuplicates: false
-});
+`
 
 $("#modal-cloudConfig-deploy").on("change", "#deployCloudConfigHosts", function() {
     let hostId = $(this).find(":selected").parents("optgroup").attr("id")
@@ -83,16 +73,15 @@ $("#modal-cloudConfig-deploy").on("change", "#deployCloudConfigHosts", function(
     }
 })
 
-$("#modal-cloudConfig-deploy").on("hide.bs.modal", function(){
-    if($("#deployCloudConfigProfiles").length){
-        $("#modal-cloudConfig-deploy input").val("");
-        $("#deployCloudConfigProfiles").tokenInput("clear");
-        $("#deployCloudConfigHosts").empty()
-    }
+$("#modal-cloudConfig-deploy").on("hidden.bs.modal", function(){
+    $("#modal-cloudConfig-deploy .modal-body").empty().append(_deployCloudConfigContents);
+    $("#modal-cloudConfig-deploy .modal-footer").show()
+    $("#modal-cloudConfig-deploy .modal-dialog").removeClass("modal-xl")
 });
 
-$("#modal-cloudConfig-deploy").on("shown.bs.modal", function(){
-    $("#deployContainerGpuWarning").hide();
+$("#modal-cloudConfig-deploy").on("show.bs.modal", function(){
+    $("#modal-cloudConfig-deploy .modal-dialog").removeClass("modal-xl")
+    $("#modal-cloudConfig-deploy .modal-body").empty().append(_deployCloudConfigContents);
     if(!$.isNumeric(deployCloudConfigObj.cloudConfigId)){
         makeToastr(JSON.stringify({state: "error", message: "Developer fail - set cloud config id to open this modal"}));
         return false;
@@ -127,14 +116,19 @@ $("#modal-cloudConfig-deploy").on("shown.bs.modal", function(){
         });
         $("#deployCloudConfigHosts").empty().append(options);
     });
+
+    $("#deployCloudConfigProfiles").tokenInput(globalUrls.profiles.search.getCommonProfiles, {
+        queryParam: "profile",
+        propertyToSearch: "profile",
+        theme: "facebook",
+        tokenValue: "Profile_ID",
+        limit: 999,
+        preventDuplicates: false
+    });
+
 });
 
 $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
-    let btn = $(this);
-
-    btn.attr("disabled", true);
-    btn.html(`<i class="fas fa-cog fa-spin me-2"></i>Deploying...`)
-
     let profileIds = mapObjToSignleDimension($("#deployCloudConfigProfiles").tokenInput("get"), "profile");
     let hostId = $("#deployCloudConfigHosts").find(":selected").parents("optgroup").attr("id");
     let project = $("#deployCloudConfigHosts").find(":selected").val()
@@ -147,37 +141,17 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
     if(containerName == ""){
         makeToastr(JSON.stringify({state: "error", message: "Please provide instance name"}));
         containerNameInput.focus()
-        btn.attr("disabled", false);
-        btn.html(`Deploy`)
         return false;
     } else if(!$.isNumeric(hostId)){
         makeToastr(JSON.stringify({state: "error", message: "Please choose a destination"}));
         $("#deployCloudConfigHosts").focus();
-        btn.attr("disabled", false);
-        btn.html(`Deploy`)
         return false;
     }
 
-    let gpus = $("#deployContainerGpu").val();
-
-    let x = {
-        hosts: [hostId],
-        containerName: containerName,
-        cloudConfigId: deployCloudConfigObj.cloudConfigId,
-        profileName: profileName,
-        additionalProfiles: profileIds,
-        gpus: gpus,
-        project: project
-    };
-
-    ajaxRequest(globalUrls.cloudConfig.deploy, x, (response)=>{
-        response = makeToastr(response);
-        if(response.state == "error"){
-            btn.attr("disabled", false);
-            btn.html(`Deploy`)
-            return false;
-        }
-        $("#modal-cloudConfig-deploy").modal("toggle");
-    });
+    $("#modal-cloudConfig-confirm").modal("show");
+    return false;
 });
 </script>
+<?php
+    require_once __DIR__ . "/confirmDeploy.php";
+?>
