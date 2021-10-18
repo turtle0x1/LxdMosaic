@@ -5,6 +5,7 @@ Added
     Snapshot scheduling
     Filter events table by user & event name on frontend
     Support new network metric keys (#433)
+    Show instant cloud-init-output.log results when deploying cloud-config
 
 Changed
     Use correct width for terminal on init

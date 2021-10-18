@@ -72,7 +72,7 @@ class CreateInstance
             }
 
             if ($start) {
-                $host->instances->start($name);
+                $host->instances->start($name, 30, true, false, true);
             }
 
             $results[] = $response;

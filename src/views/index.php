@@ -427,6 +427,14 @@ if ($haveServers->haveAny() !== true) {
                  $(this).find(".fa-caret-left").removeClass("fa-caret-left").addClass("fa-caret-down")
              }
           });
+
+          $(document).on('show.bs.modal', '.modal', function (event) {
+              var zIndex = 1055 + (10 * $('.modal:visible').length);
+              $(this).css('z-index', zIndex);
+              setTimeout(function() {
+                  $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+              }, 0);
+          });
       </script>
   </head>
   <form style="display: none;" method="POST" id="downloadContainerFileForm" action="/api/Instances/Files/GetPathController/get">

@@ -58,13 +58,13 @@ module.exports = class Terminals {
     );
   }
 
-  close(internalUuid) {
+  close(internalUuid, exitCommand = "exit\r\n") {
     if (this.activeTerminals[internalUuid] == undefined) {
       return;
     }
 
     this.activeTerminals[internalUuid][0].send(
-      'exit\r\n',
+      exitCommand,
       { binary: true },
       () => {
         this.activeTerminals[internalUuid][0].close();
@@ -91,7 +91,8 @@ module.exports = class Terminals {
     project,
     container,
     internalUuid = null,
-    shell = null
+    shell = null,
+    callbacks = null
   ) {
     return new Promise((resolve, reject) => {
       if (this.activeTerminals[internalUuid] !== undefined) {
@@ -162,8 +163,17 @@ module.exports = class Terminals {
           lxdWs.on('message', data => {
               const buf = Buffer.from(data);
               data = buf.toString();
+              
+              if(typeof callbacks.formatServerResponse === "function"){
+                  data = callbacks.formatServerResponse(data)
+              }
+
               if(socket.readyState == 1){
                 socket.send(data);
+              }
+
+              if(typeof callbacks.afterSeverResponeSent === "function"){
+                  callbacks.afterSeverResponeSent(data)
               }
           });
 
@@ -174,7 +184,8 @@ module.exports = class Terminals {
 
           resolve(true);
         })
-        .catch(() => {
+        .catch((e) => {
+            console.log(e);
           reject();
         });
     });
