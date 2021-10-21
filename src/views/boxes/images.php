@@ -137,11 +137,11 @@
         showRemoteImages()
     });
 
-    $(document).on("click", ".viewImages", function(){
+    function viewImages(){
         $(".sidebar-fixed").addClass("sidebar-lg-show");
         changeActiveNav(".viewImages")
         loadImageOverview();
-    });
+    }
 
     function makeImageName(image){
         let version = "Unknown Version";

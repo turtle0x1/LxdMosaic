@@ -118,6 +118,7 @@ function loadNetworksView()
     $(".boxSlide, #networkInfo").hide();
     $("#networkOverview, #networkBox").show();
     $("#deploymentList").empty();
+    changeActiveNav(".viewNetwork")
     setBreadcrumb("Networks", "viewNetwork active");
     ajaxRequest(globalUrls.networks.getAll, {}, (data)=>{
         data = $.parseJSON(data);

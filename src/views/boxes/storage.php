@@ -266,6 +266,8 @@ function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
 
 function loadStorageView()
 {
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    changeActiveNav(".viewStorage")
     $(".boxSlide, #storageDetails, #volumeDetails").hide();
     $("#storageOverview, #storageBox").show();
     $("#deploymentList").empty();

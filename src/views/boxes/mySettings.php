@@ -47,6 +47,11 @@ var currentProvider;
 
 function loadMySettings()
 {
+    setBreadcrumb("My Settings", "viewMySettings active");
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    changeActiveNav(null)
+    $("#myAccountBtn").addClass("active");
+    
     $(".boxSlide").hide();
     $(".mySettingBox").hide();
     $("#settingsOverview, #mySettingsBox").show();

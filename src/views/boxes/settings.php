@@ -323,6 +323,9 @@ function loadSettingsView()
 {
     $(".boxSlide").hide();
     $(".settingsBox").hide();
+    setBreadcrumb("Admin Settings", "viewSettingsBreadcrumb active");
+    changeActiveNav(null)
+    $(".viewSettings").addClass("active");
     $("#settingsBox").show();
     $("#instanceSettingsBox").show();
     $(".sidebar-fixed").addClass("sidebar-lg-show");

@@ -154,6 +154,9 @@ function loadCloudConfigView(cloudConfigId)
 
 function loadCloudConfigTree()
 {
+    setBreadcrumb("Cloud Config", "viewCloudConfigFiles active");
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    changeActiveNav(".viewCloudConfigFiles")
     ajaxRequest(globalUrls.cloudConfig.getAll, null, function(data){
         loadCloudConfigOverview();
         var data = $.parseJSON(data);

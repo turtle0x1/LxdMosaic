@@ -278,6 +278,9 @@ function makeProjectCard(hostName, projects){
 
 function loadProjectView()
 {
+    setBreadcrumb("Projects", "viewProjects active");
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    changeActiveNav(".viewProjects")
     $(".boxSlide, #projectDetails").hide();
     $("#projectsOverview, #projectsBox").show();
     $("#projectCards").empty().append(`<h4 class='text-center'><i class="fas fa-cog fa-spin"></i></h4>`)

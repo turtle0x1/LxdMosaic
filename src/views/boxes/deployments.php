@@ -150,6 +150,9 @@ var emptyDeploymentBox = function(){
 
 function loadDeploymentsView(deploymentId = null)
 {
+    setBreadcrumb("Deployments", "viewDeployments active");
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    changeActiveNav(".viewDeployments")
     $(".boxSlide, #depoymentDetails").hide();
     $("#deploymentsOverview, #deploymentsBox").show();
     $("#deploymentList").empty();

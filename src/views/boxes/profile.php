@@ -233,13 +233,17 @@ $("#profileOverview").on("click", ".loadProfileFromDash", function(){
 
 function loadProfileView(selectedProfile = null, selectedHost = null, callback = null)
 {
-    changeActiveNav(".viewProfiles")
+    setBreadcrumb("Profiles", "viewProfiles active");
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    changeActiveNav(".viewProfiles");
+    $(".boxSlide, #profileDetails").hide();
+    $("#profileOverview, #profileBox").show();
     ajaxRequest(globalUrls.profiles.getAllProfiles, null, function(data){
         var data = $.parseJSON(data);
 
         let a = selectedProfile == null ? "text-info" : "";
         let hosts = `
-        <li class="mt-2 profile-overview">
+        <li class="mt-2">
             <a class="${a}" href="#">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
@@ -398,7 +402,6 @@ $("#profileBox").on("click", "#deleteProfile", function(){
                     ajaxRequest(globalUrls.profiles.delete, currentProfileDetails, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
-                            $(".profile-overview").trigger("click");
                             loadProfileView();
                         }
                     });
