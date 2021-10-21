@@ -6,6 +6,7 @@ Added
     Filter events table by user & event name on frontend
     Support new network metric keys (#433)
     Show instant cloud-init-output.log results when deploying cloud-config
+    Add setting options to create VM (#419)
 
 Changed
     Use correct width for terminal on init
@@ -27,6 +28,9 @@ Fixed
     Cant override users current project with HTTP header in "Universe"
     Cant create directory storage pool
     Cant use shells other than bash
+
+API Changes
+    Removed `memoryLimit` from CreateVirtualMachineController in favour of config param (#419)
 
 0.13.0 - 18/07/2020
 

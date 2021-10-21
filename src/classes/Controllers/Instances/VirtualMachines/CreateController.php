@@ -18,9 +18,16 @@ class CreateController
         HostsCollection $hostIds,
         array $imageDetails,
         bool $start,
-        string $memoryLimit = "1GB"
+        array $config = []
     ) {
-        $response = $this->createVirutalMachine->create($name, $username, $hostIds, $imageDetails, $start, $memoryLimit);
+        $response = $this->createVirutalMachine->create(
+            $name,
+            $username,
+            $hostIds,
+            $imageDetails,
+            $start,
+            $config
+        );
 
         return ["state"=>"success", "message"=>"Creating VM", "lxdResponse"=>$response];
     }

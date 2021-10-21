@@ -20,9 +20,8 @@ class CreateVirutalMachine
         HostsCollection $hosts,
         array $imageDetails,
         bool $start,
-        string $memoryLimit = "1GB"
+        array $config = []
     ) {
-        $config = [];
         $config["user.vendor-data"] = $this->getVendorData($username);
 
         $profileName = "VM-$username-" . (new \DateTime())->format("Y-m-d_H_i_s");
@@ -53,7 +52,7 @@ class CreateVirutalMachine
             [],
             "",
             null,
-            ["limits.memory"=>$memoryLimit],
+            $config,
             $start
         );
 
