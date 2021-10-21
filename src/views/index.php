@@ -572,6 +572,9 @@ if ($haveServers->haveAny() !== true) {
                                 require __DIR__ . "/boxes/settings.php";
                                 require __DIR__ . "/boxes/mySettings.php";
                             ?>
+                            <div class="boxSlide" id="notFound">
+                                <h4 class="text-center">Not Found</h4>
+                            </div>
                         </div>
                     </div>
                   </div>
@@ -627,6 +630,12 @@ $(function(){
     router.on("/storage", loadStorageView);
     router.on("/mySettings", loadMySettings);
     router.on("/admin", loadSettingsView);
+
+    
+    router.on("*", function(){
+        $(".boxSlide").hide()
+        $("#notFound").show()
+    });
 
     router.resolve();
 });
