@@ -647,7 +647,7 @@ function createDashboardSidebar()
                 }
 
                 hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList dropdown">
-                    <a class="nav-link viewServer ${disabled}" href="#">
+                    <a class="nav-link ${disabled}" href="/host/${host.hostId}/overview" data-navigo>
                         <i class="fas fa-server"></i> ${host.alias}
                         ${expandBtn}
                     </a>
@@ -661,8 +661,6 @@ function createDashboardSidebar()
 
         hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
 
-        let currentId = "a";
-
         $.each(data.standalone.members, function(_, host){
             let disabled = "";
             let expandBtn = `<button class="btn btn-outline-secondary btn-toggle collapsed float-end showServerInstances" ata-bs-toggle="collapse" data-bs-target="#${host.hostId}" aria-expanded="false"><i class="fas fa-caret-left"></i></button>`;
@@ -673,22 +671,22 @@ function createDashboardSidebar()
             }
 
             hosts += `<li class="mb-2" data-hostId="${host.hostId}" data-alias="${host.alias}">
-                <a class="d-inline viewServer ${disabled}" href="#">
+
                     <i class="fas fa-server me-2"></i>${host.alias}
                 </a>
-                <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#${currentId}" aria-expanded="false">
+                <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false">
                     <i class="fas fa-caret-left"></i>
                 </button>
-                <div class="collapse mt-2 bg-dark text-white" id="${currentId}">
+                <div class="collapse mt-2 bg-dark text-white" id="host-${host.hostId}">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 hostInstancesUl" style="display: inline;">
                     </ul>
                 </div>
              </li>`
-             currentId = nextLetter(currentId)
         });
 
 
         $("#sidebar-ul").empty().append(hosts);
+        router.updatePageLinks()
     });
 }
 
@@ -780,7 +778,7 @@ function addHostContainerList(hostId, hostAlias) {
                     data-container="${containerName}"
                     data-alias="${hostAlias}"
                     data-type="${type}">
-                  <a class="nav-link p-0 m-0 ${active}" href="#">
+                  <a class="nav-link p-0 m-0 ${active}" href="/instance/${hostId}/${containerName}" data-navigo>
                     <i class="nav-icon me-2 ${statusCodeIconMap[details.state.status_code]}"></i>
                     <i class="nav-icon me-2 fas fa-${typeFa}"></i>
                     <i class="nav-icon me-2 fab fa-${osIcon}"></i>
@@ -795,6 +793,7 @@ function addHostContainerList(hostId, hostAlias) {
             containers += `<li class="nav-item text-center text-warning">No Instances</li>`;
         }
         $("#sidebar-ul").find("li[data-hostid=" + hostId + "] ul").empty().append(containers).show()
+        router.updatePageLinks()
     });
 }
 
@@ -832,18 +831,6 @@ $(document).on("click", ".showServerInstances", function(e){
     addHostContainerList(hostId, hostAlias);
 
     return false;
-});
-
-$(document).on("click", ".viewServer", function(){
-    let parentLi = $(this).parents("li");
-
-    let hostId = parentLi.data("hostid");
-    let hostAlias = parentLi.data("alias");
-
-
-
-    currentContainerDetails = null;
-    loadServerView(hostId);
 });
 
 function loadDashboard(){
@@ -1262,11 +1249,6 @@ $(document).on("click", ".viewHost", function(){
     }
 
     loadServerView(hostId);
-});
-
-$("#sidebar-ul").on("click", ".view-container", function(){
-    setContDetsByTreeItem($(this));
-    loadContainerView(currentContainerDetails);
 });
 
 function setContDetsByTreeItem(node)

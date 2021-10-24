@@ -176,7 +176,7 @@
 <script>
 
 var currentProject = {
-    host: null,
+    hostId: null,
     project: null
 };
 
@@ -204,11 +204,14 @@ function makeProjectHostSidebarHtml(hosthtml, host, id){
 
     if(host.projects.length > 0){
         $.each(host.projects, function(_, project){
-            hosthtml += `<li class="nav-item view-project"
-                data-host-id="${host.hostId}"
-                data-project="${project}"
-                data-alias="${host.alias}">
-              <a class="nav-link" href="#">
+            let active = "";
+
+            if(host.hostId == currentProject.hostId && project == currentProject.project ){
+                active = "active";
+            }
+
+            hosthtml += `<li class="nav-item">
+              <a class="nav-link ${active}" href="/projects/${host.hostId}/${project}" data-navigo>
                 <i class="nav-icon fa fa-project-diagram"></i>
                 ${project}
               </a>
@@ -276,8 +279,53 @@ function makeProjectCard(hostName, projects){
     </div>`;
 }
 
+function loadProjectsSidebar(){
+    if($("#sidebar-ul").find("[id^=projects]").length == 0){
+        ajaxRequest(globalUrls.projects.getAllFromHosts, {}, function(data){
+
+            data = $.parseJSON(data);
+            let a = currentProject.hostId == null ? "active" : null;
+            let hosts = `
+            <li class="nav-item mt-2">
+                <a class="nav-link p-0 ${a}" href="/projects" data-navigo>
+                    <i class="fas fa-tachometer-alt"></i> Overview
+                </a>
+            </li>`;
+
+            let id = 0;
+
+            $.each(data.clusters, (clusterIndex, cluster)=>{
+                hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+                $.each(cluster.members, (_, host)=>{
+                    hosts = makeProjectHostSidebarHtml(hosts, host, id)
+                    id++
+                })
+            });
+
+            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
+
+            $.each(data.standalone.members, (_, host)=>{
+                hosts = makeProjectHostSidebarHtml(hosts, host, id)
+                id++
+            });
+
+
+            $("#sidebar-ul").empty().append(hosts);
+            router.updatePageLinks();
+        });
+    }else {
+        $("#sidebar-ul").find(".active").removeClass("active");
+        if($.isNumeric(currentProject.hostId)){
+            $("#sidebar-ul").find(`.nav-link[href="/projects/${currentProject.hostId}/${currentProject.project}"]`).addClass("active")
+        }else{
+            $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
+        }
+    }
+}
+
 function loadProjectView()
 {
+    currentProject = {hostId: null, project: null}
     setBreadcrumb("Projects", "viewProjects active");
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewProjects")
@@ -299,53 +347,26 @@ function loadProjectView()
         });
         $("#projectCards").empty().append(cards);
     })
-
-
-    ajaxRequest(globalUrls.projects.getAllFromHosts, {}, function(data){
-
-        data = $.parseJSON(data);
-
-        let hosts = `
-        <li class="mt-2 projects-overview">
-            <a class="text-info" href="#">
-                <i class="fas fa-tachometer-alt"></i> Overview
-            </a>
-        </li>`;
-
-        let id = 0;
-
-        $.each(data.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
-            $.each(cluster.members, (_, host)=>{
-                hosts = makeProjectHostSidebarHtml(hosts, host, id)
-                id++
-            })
-        });
-
-        hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
-
-        $.each(data.standalone.members, (_, host)=>{
-            hosts = makeProjectHostSidebarHtml(hosts, host, id)
-            id++
-        });
-
-
-        $("#sidebar-ul").empty().append(hosts);
-    });
+    loadProjectsSidebar();
 }
 
-$("#sidebar-ul").on("click", ".view-project", function(){
-     viewProject($(this).data("project"), $(this).data("hostId"), $(this).data("alias"));
-})
+function viewProjectReq(req){
+    viewProject(req.data.project, req.data.hostId, '')
+}
 
 function viewProject(project, hostId, hostAlias){
     currentProject.project = project;
     currentProject.hostId = hostId;
     currentProject.hostAlias = hostAlias;
+    changeActiveNav(".viewProjects")
     addBreadcrumbs([hostAlias, project], ["", "active"], true)
+    loadProjectsSidebar()
+    $(".boxSlide, #projectDetails").hide();
+    $("#projectsBox").show();
     ajaxRequest(globalUrls.projects.info, currentProject, (data)=>{
         data = $.parseJSON(data);
         $("#projectsOverview").hide();
+        $("#projectsBox").show();
         $("#projectDetails").show();
         let emptyDescription = data.description == "";
         let description = emptyDescription ? "<b style='color: red;'> No description </b>" : data.description;
@@ -398,6 +419,7 @@ function viewProject(project, hostId, hostAlias){
         $("#restrictionsListTable > tbody").empty().append(restrictionsConfig);
         $("#projectLimitsTable > tbody").empty().append(limitsConfig);
         $("#projectConfigTable > tbody").empty().append(projectConfig);
+        router.updatePageLinks()
     });
 }
 

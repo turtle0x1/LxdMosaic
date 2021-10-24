@@ -72,7 +72,10 @@
 
 <script>
 
-var currentNetwork = {};
+var currentNetwork = {
+    hostId: null,
+    network: null
+};
 
 function makeNetworkHostSidebarHtml(hosthtml, host, id){
     let disabled = "";
@@ -82,27 +85,25 @@ function makeNetworkHostSidebarHtml(hosthtml, host, id){
     }
 
     hosthtml += `<li class="mb-2">
-        <a class="d-inline ${disabled}" href="#">
+        <a class="d-inline ${disabled}">
             <i class="fas fa-server"></i> ${host.alias}
         </a>`;
 
         if(host.hostOnline == true){
-            hosthtml += `<button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#netoworks-host-${id}" aria-expanded="true">
+            hosthtml += `<button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#networks-host-${id}" aria-expanded="true">
                 <i class="fas fa-caret-down"></i>
             </button>`
         }else{
             return hosthtml;
         }
 
-    hosthtml += `<div class=" mt-2 bg-dark text-white show" id="netoworks-host-${id}">
+    hosthtml += `<div class=" mt-2 bg-dark text-white show" id="networks-host-${id}">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
 
     $.each(host.networks, function(_, network){
-        hosthtml += `<li class="nav-item view-network"
-            data-host-id="${host.hostId}"
-            data-network="${network}"
-            data-alias="${host.alias}">
-            <a class="nav-link" href="#">
+        let a  = currentNetwork.hostId == host.hostId && currentNetwork.network == network ? "active" : "";
+        hosthtml += `<li class="nav-item">
+            <a class="nav-link ${a}" href="/networks/${host.hostId}/${network}" data-navigo>
             <i class="fas fa-ethernet"></i>
             ${network}
             </a>
@@ -113,45 +114,61 @@ function makeNetworkHostSidebarHtml(hosthtml, host, id){
     return hosthtml;
 }
 
+function loadNetworkSidebar(){
+    if($("#sidebar-ul").find("[id^=networks]").length == 0){
+        ajaxRequest(globalUrls.networks.getAll, {}, (data)=>{
+            data = $.parseJSON(data);
+
+            let a = currentNetwork.hostId == null ? "active" : "";
+
+            let hosts = `
+            <li class="mt-2 nav-item">
+                <a class="p-0 nav-link ${a}" href="/networks" data-navigo>
+                    <i class="fas fa-tachometer-alt"></i> Overview
+                </a>
+            </li>`;
+
+            let id = 0;
+
+
+            $.each(data.clusters, (clusterIndex, cluster)=>{
+                hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+                $.each(cluster.members, (_, host)=>{
+                    hosts = makeNetworkHostSidebarHtml(hosts, host, id)
+                    id++;
+
+                })
+            });
+
+            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
+
+            $.each(data.standalone.members, (_, host)=>{
+                hosts = makeNetworkHostSidebarHtml(hosts, host, id)
+                id++;
+            });
+
+            $("#sidebar-ul").empty().append(hosts);
+            router.updatePageLinks()
+        });
+    }else{
+        $("#sidebar-ul").find(".active").removeClass("active");
+        if($.isNumeric(currentNetwork.hostId)){
+            $("#sidebar-ul").find(`.nav-link[href="/networks/${currentNetwork.hostId}/${currentNetwork.network}"]`).addClass("active")
+        }else{
+            $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
+        }
+    }
+}
+
 function loadNetworksView()
 {
+    currentNetwork = {hostId: null, network: null}
     $(".boxSlide, #networkInfo").hide();
     $("#networkOverview, #networkBox").show();
     $("#deploymentList").empty();
     changeActiveNav(".viewNetwork")
     setBreadcrumb("Networks", "viewNetwork active");
-    ajaxRequest(globalUrls.networks.getAll, {}, (data)=>{
-        data = $.parseJSON(data);
-
-
-        let hosts = `
-        <li class="mt-2 network-overview">
-            <a class="text-info" href="#">
-                <i class="fas fa-tachometer-alt"></i> Overview
-            </a>
-        </li>`;
-
-        let id = 0;
-
-
-        $.each(data.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
-            $.each(cluster.members, (_, host)=>{
-                hosts = makeNetworkHostSidebarHtml(hosts, host, id)
-                id++;
-
-            })
-        });
-
-        hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
-
-        $.each(data.standalone.members, (_, host)=>{
-            hosts = makeNetworkHostSidebarHtml(hosts, host, id)
-            id++;
-        });
-
-        $("#sidebar-ul").empty().append(hosts);
-    });
+    loadNetworkSidebar()
     // Dont normally like 2 requests to load dashboard but this could be slow
     ajaxRequest(globalUrls.networks.getDashboard, {}, (data)=>{
         data = $.parseJSON(data);
@@ -209,21 +226,21 @@ function loadNetworksView()
     });
 }
 
-$("#sidebar-ul").on("click", ".view-network", function(){
-    viewNetwork($(this).data("hostId"), $(this).data("network"), $(this).data("alias"))
-});
-
-
 $("#networkOverview").on("click", "#createNetwork", function(){
     $("#modal-networks-create").modal("toggle");
 });
 
-function viewNetwork(hostId, network, alias)
+function viewNetwork(req)
 {
+    let hostId = req.data.hostId
+        network = req.data.network
+
     currentNetwork = {hostId: hostId, network: network};
-    $("#networkOverview").hide();
-    $("#networkInfo").show();
-    addBreadcrumbs([alias, network], ["", "active"]);
+    $(".boxSlide, #networkOverview").hide();
+    $("#networkBox, #networkInfo").show();
+    addBreadcrumbs([req.data.hostId, network], ["", "active"]);
+    loadNetworkSidebar()
+    changeActiveNav(".viewNetwork")
     ajaxRequest(globalUrls.networks.get, currentNetwork, function(data){
         data = $.parseJSON(data);
         let configHtml = "",

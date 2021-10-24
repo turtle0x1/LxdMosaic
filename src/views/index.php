@@ -401,25 +401,6 @@ if ($haveServers->haveAny() !== true) {
               this.value = this.value.replace(/[^-a-zA-Z0-9]+/g,'');
           })
 
-          $(document).on("click", ".goToInstance", function(){
-              currentContainerDetails = $(this).data();
-              createDashboardSidebar();
-              loadContainerView($(this).data());
-          });
-
-          $(document).on("click", ".toProfile", function(){
-              let profile = $(this).data("profile");
-
-              if(Object.keys($(this).data()).includes("hostId")){
-                  currentContainerDetails = $(this).data();
-              }
-
-              loadProfileView(profile, currentContainerDetails.hostId, function(){
-                  viewProfile(profile, currentContainerDetails.alias, currentContainerDetails.hostId);
-              });
-          });
-
-
           $(document).on("click", ".toggleDropdown", function(){
              if($(this).find(".fa-caret-down").length){
                  $(this).find(".fa-caret-down").removeClass("fa-caret-down").addClass("fa-caret-left")
@@ -445,7 +426,7 @@ if ($haveServers->haveAny() !== true) {
   </form>
   <body style="overflow: hidden;">
      <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-          <a class="navbar-brand col-lg-2 me-0 px-2" href="/" style="width: 300px;">
+          <a class="navbar-brand col-lg-2 me-0 px-2" href="/" style="width: 300px;" data-navigo>
               <img src="/assets/lxdMosaic/logo.png" class="me-1 ms-1" style="width: 25px; height: 25px;" alt="">
               <?= $siteTitle ?>
           </a>
@@ -590,49 +571,44 @@ $(".boxSlide").hide();
 $("#filterDashProjectAnalyticsProject").val("")
 $("#overviewGraphs").html("<h1 class='text-center'><i class='fas fa-cog fa-spin'></i></h1>");
 
-$("#sidebar-ul").on("click", ".nav-item, .view-container", function(){
-
-    if($(this).hasClass("dropdown")){
-        return;
-    }
-
-    if(dashboardRefreshInterval != null){
-        clearInterval(dashboardRefreshInterval);
-    }
-
-    $("#sidebar-ul").find(".text-info").removeClass("text-info");
-    $(this).find(".nav-link").addClass("text-info");
-});
-
-
-$(".sidebar-nav").on("click", ".nav-item", function(){
-    if(consoleSocket !== undefined && currentTerminalProcessId !== null){
-        consoleSocket.close();
-        currentTerminalProcessId = null;
-    }
-});
+const router = new Navigo('/');
 
 var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
   editor.getSession().setMode("ace/mode/yaml");
 
 $(function(){
-    const router = new Navigo('/');
 
     router.on('/', loadDashboard);
+    router.on('/host/:hostId/overview', loadHostOverview);
+
+    router.on('/instance/:hostId/:instance', loadContainerViewReq);
     router.on("/backups", loadBackupsView);
+    router.on("/backups/:hostId/:instance", routeInstanceBackups);
     router.on("/cloudConfig", loadCloudConfigOverview);
     router.on("/cloudConfig/:id", loadCloudConfigView);
     router.on("/deployments", loadDeploymentsView);
     router.on("/images", viewImages);
+    router.on("/images/:hostId/:fingerprint", viewImage);
     router.on("/networks", loadNetworksView);
+    router.on("/networks/:hostId/:network", viewNetwork);
     router.on("/profiles", loadProfileView);
+    router.on("/profiles/:hostId/:profile", viewProfileReq);
     router.on("/projects", loadProjectView);
+    router.on("/projects/:hostId/:project", viewProjectReq);
     router.on("/storage", loadStorageView);
+    router.on("/storage/:hostId/:pool", loadStoragePoolReq);
+    router.on("/storage/:hostId/:pool/:volume", routeViewPoolVolume);
     router.on("/mySettings", loadMySettings);
     router.on("/admin", loadSettingsView);
+    router.on("/admin/settings", loadSettingsView);
+    router.on("/admin/hosts", loadInstancesHostsView);
+    router.on("/admin/instanceTypes", loadInstanceTypes);
+    router.on("/admin/users", loadUsers);
+    router.on("/admin/userAccessControl", loadProjectAccesOverview);
+    router.on("/admin/history", loadRecordedActions);
+    router.on("/admin/retiredData", loadRetiredData);
 
-    
     router.on("*", function(){
         $(".boxSlide").hide()
         $("#notFound").show()
@@ -640,6 +616,7 @@ $(function(){
 
     router.resolve();
 });
+
 
 $(document).on("click", "#addNewServer", function(){
     $("#modal-hosts-add").modal("show");
@@ -660,13 +637,6 @@ $(document).on("change", ".changeHostProject", function(){
         openHostOperationSocket(x.hostId, selected.val());
     })
 
-});
-
-$(document).on("click", ".overview, .container-overview", function(){
-    $(".sidebar-fixed").addClass("sidebar-lg-show");
-    currentContainerDetails = null;
-    createDashboardSidebar();
-    loadDashboard();
 });
 
 $(document).on("click", ".openProjectAccess", function(){

@@ -494,8 +494,16 @@
 </div>
 <div id="containerEvents"  class="col-md-12 instanceViewBox">
     <div class="card bg-dark text-white">
-        <div class="card-header">
-            <h4> Event Logs </h4>
+        <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+            <h4>Event Logs</h4>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle float-end" type="button" id="filterEventsTableBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-form dropdown-menu-dark  dropdown-menu-end p-3" style="width: 25vw;" aria-labelledby="filterEventsTableBtn" id="filterEventsUl">
+                </ul>
+            </div>
+
         </div>
         <div class="card-body">
             <table class="table table-dark table-bordered" id="containerEventsTable">
@@ -513,34 +521,39 @@
         </div>
     </div>
 </div>
-<div id="containerMetrics"  class="col-md-12 instanceViewBox">
+<div id="containerMetrics"  class="col-md-8 offset-md-2 instanceViewBox">
     <div class="card bg-dark text-white">
         <div class="card-header">
-            Metric Graph
-            <select class="float-end" id="metricRangePicker" disabled>
-                <option value="">Please Select</option>
-                <option value="-15 minutes">Last 15 Minutes</option>
-                <option value="-30 minutes">Last 30 Minutes</option>
-                <option value="-45 minutes">Last 45 Minutes</option>
-                <option value="-60 minutes">Last 60 Minutes</option>
-                <option value="-3 hours">Last 3 Hours</option>
-                <option value="-6 hours">Last 6 Hours</option>
-                <option value="-12 hours">Last 12 Hours</option>
-                <option value="-24 hours">Last 24 Hours</option>
-                <option value="-2 days">Last 2 Days</option>
-                <option value="-3 days">Last 3 Days</option>
-                <option value="-1 weeks">Last 1 Week</option>
-                <option value="-2 weeks">Last 2 Weeks</option>
-                <option value="-3 weeks">Last 3 Weeks</option>
-                <option value="-4 weeks">Last 4 Weeks</option>
-                <option value="-1 months">Last 1 Month</option>
-                <option value="-2 months">Last 2 Months</option>
-            </select>
-            <select class="float-end form-control-sm" id="metricTypeFilterSelect" disabled>
-            </select>
-            <select class="float-end" id="metricTypeSelect">
-            </select>
-
+            <h4>Metric Graph
+            <div class="input-group w-75 float-end">
+                <span class="input-group-text"><i class="fas fa-chart-bar"></i></span>
+                <select class="form-select" id="metricTypeSelect" disabled>
+                </select>
+                <span class="input-group-text"><i class="fas fa-filter"></i></span>
+                <select class="form-select" id="metricTypeFilterSelect" disabled>
+                </select>
+                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                <select class="form-select" id="metricRangePicker" disabled>
+                    <option value="">Please Select</option>
+                    <option value="-15 minutes">Last 15 Minutes</option>
+                    <option value="-30 minutes">Last 30 Minutes</option>
+                    <option value="-45 minutes">Last 45 Minutes</option>
+                    <option value="-60 minutes">Last 60 Minutes</option>
+                    <option value="-3 hours">Last 3 Hours</option>
+                    <option value="-6 hours">Last 6 Hours</option>
+                    <option value="-12 hours">Last 12 Hours</option>
+                    <option value="-24 hours">Last 24 Hours</option>
+                    <option value="-2 days">Last 2 Days</option>
+                    <option value="-3 days">Last 3 Days</option>
+                    <option value="-1 weeks">Last 1 Week</option>
+                    <option value="-2 weeks">Last 2 Weeks</option>
+                    <option value="-3 weeks">Last 3 Weeks</option>
+                    <option value="-4 weeks">Last 4 Weeks</option>
+                    <option value="-1 months">Last 1 Month</option>
+                    <option value="-2 months">Last 2 Months</option>
+                </select>
+                </div>
+            </h4>
 
         </div>
         <div class="card-body bg-dark" id="metricGraphBody">
@@ -927,7 +940,7 @@ function copyContainerConfirm(hostId, container) {
         content: `
             <div class="mb-2">
                 <label> Destination </label>
-                <select class="form-control" name="destination"></select>
+                <select class="form-select" name="destination"></select>
             </div>
             <div class="mb-2">
                 <label> Name </label>
@@ -1094,6 +1107,12 @@ function titleCase(str) {
 }
 
 
+function loadContainerViewReq(req) {
+    createDashboardSidebar()
+    loadContainerView({hostId: req.data.hostId, container: req.data.instance, alias: ''})
+
+}
+
 function loadContainerView(data)
 {
     $(".instanceViewBox").hide();
@@ -1104,7 +1123,7 @@ function loadContainerView(data)
         currentTerminalProcessId = null;
     }
 
-    window.disconnectFromTerminal();
+    // window.disconnectFromTerminal();
 
     $("#goToMetrics").attr("disabled", true).addClass("disabled").data({
         toggle: "tooltip",
@@ -1185,7 +1204,7 @@ function loadContainerView(data)
             version = x.details.config["image.release"];
         }
 
-        $("#container-hostNameDisplay").text(currentContainerDetails.alias);
+        $("#container-hostNameDisplay").text(data.alias);
         $("#container-containerNameDisplay").text(data.container);
         $("#instanceProject").text(x.project);
         $("#container-imageDescription").html(`${os} (${version})`);
@@ -1270,7 +1289,7 @@ function loadContainerView(data)
         }else{
             $.each(x.details.profiles, function(i, item){
                 profileTrHtml += `<tr data-profile="${item}">
-                    <td><a href='#' data-profile=${item} class='toProfile'>${item}</a></td>
+                    <td><a href='/profiles/${data.hostId}/${item}' data-profile=${item} data-navigo>${item}</a></td>
                     <td><button class='btn btn-sm btn-outline-danger removeProfile'><i class="fas fa-trash"></i></button></td>
 
                 </tr>`;
@@ -1390,6 +1409,7 @@ function loadContainerView(data)
         $(".boxSlide").hide();
         $("#containerBox").show();
         $('html, body').animate({scrollTop:0},500);
+        router.updatePageLinks()
     });
 }
 
@@ -1701,12 +1721,16 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
     ajaxRequest(globalUrls.instances.metrics.getGraphData, x, (data)=>{
         let color = randomColor();
         data = $.parseJSON(data);
-        $("#metricGraphBody").empty().append('<canvas id="metricGraph" style="width: 100%;"></canvas>');
+        $("#metricGraphBody").empty().append('<canvas id="metricGraph"></canvas>');
 
         let scales = data.formatBytes ? scalesBytesCallbacks : {yAxes: [{}]}
         let tooltips = data.formatBytes ? toolTipsBytesCallbacks : [];
 
         scales.yAxes[0].gridLines = {drawBorder: false}
+        scales.yAxes[0].gridLines = {
+            color: "rgba(0, 0, 0, 0)",
+        }
+        scales.yAxes[0].ticks.beginAtZero = true;
         let labels = [];
         data.labels.forEach((element) => {
             let d = moment.utc(element).local();
@@ -1735,6 +1759,9 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
             options: {
                 animation: {
                     duration: 0
+                },
+                legend: {
+                    display: false
                 },
                 scales:scales,
                 tooltips: {
@@ -1779,6 +1806,7 @@ $("#containerBox").on("click", "#goToMetrics", function(){
         $.each(data, (_, item)=>{
             html += `<option value='${item.typeId}'>${item.type}</option>`
         });
+        $("#metricTypeSelect").attr("disabled", false)
         $("#metricTypeSelect").empty().append(html);
     });
 
@@ -2351,7 +2379,6 @@ $("#containerBox").on("click", "#goToConsole", function() {
 $("#containerBox").on("click", ".toDeployment", function(){
     let deploymentId = $(this).data("deploymentId");
     loadDeploymentsView(deploymentId);
-    changeActiveNav(".viewDeployments")
 })
 
 $("#containerBox").on("click", ".copyContainer", function(){

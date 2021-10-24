@@ -180,18 +180,14 @@
             hosthtml += `<li><a class="text-warning nav-link"><i class="fas fa-times me-2"></i>No Images</a></li>`
         }else{
             $.each(host.images, function(_, image){
-                let active = "";
+                let active = host.hostId == currentImageDetails.hostId && image.fingerprint == currentImageDetails.fingerprint ? "active" : ""
 
                 let imageName = makeImageName(image);
 
                 let icon = image.hasOwnProperty("type") && image.type == "container" ? "box" : "vr-cardboard";
 
-                hosthtml += `<li class="nav-item view-image ${active}"
-                    data-host-id="${host.hostId}"
-                    data-fingerprint="${image.fingerprint}"
-                    data-host-alias="${host.alias}"
-                    >
-                  <a class="nav-link" href="#">
+                hosthtml += `<li class="nav-item">
+                  <a class="nav-link ${active}" href="/images/${host.hostId}/${image.fingerprint}" data-navigo>
                     <i class="nav-icon fa fa-${icon}"></i>
                     ${imageName}
                   </a>
@@ -361,15 +357,18 @@
         });
     }
 
-    function loadImageOverview()
+    function loadImageOverview(changeView = true)
     {
+        if(changeView){
+            currentImageDetails = {}
+        }
         addBreadcrumbs(["Images"], ["", "active"], false)
         ajaxRequest(globalUrls.images.getAll, null, function(data){
             data = $.parseJSON(data);
-            let a = "text-info";
+            let a = changeView == false ? "" : "active";
             let hosts = `
-            <li class="mt-2 viewImages">
-                <a class="${a}" href="#">
+            <li class="mt-2 p-0">
+                <a class="nav-link p-0 ${a}" href="/images" data-navigo>
                     <i class="fas fa-tachometer-alt"></i> Overview
                 </a>
             </li>`;
@@ -392,10 +391,13 @@
             });
 
             $("#sidebar-ul").empty().append(hosts);
-
-            $(".boxSlide, #imageDetailsView, #remoteImagesTable").hide();
-            $("#imagesBox, #imageSplash").show();
+            if(changeView){
+                $(".boxSlide, #imageDetailsView, #remoteImagesTable").hide();
+                $("#imagesBox, #imageSplash").show();
+            }
+            router.updatePageLinks()
         });
+
     }
 
     $(document).on("click", ".deleteAlias", function(){
@@ -497,7 +499,7 @@
                             }
 
                             if(description == ""){
-                                aliasBox.find(".alias-description").html("<b class='text-info'>No Description</b>");
+                                aliasBox.find(".alias-description").html("<b class=''>No Description</b>");
                             }else{
                                 aliasBox.find(".alias-description").text(description);
                             }
@@ -574,9 +576,25 @@
         });
     });
 
-    $(document).on("click", ".view-image", function(){
-        let d = $(this).data();
+    function viewImage(req){
+
+        let d = {fingerprint: req.data.fingerprint, hostId: req.data.hostId, alias: ''}
         currentImageDetails = d;
+
+        if($("#sidebar-ul").find("[id^=images]").length == 0){
+            loadImageOverview(false)
+        }
+
+        changeActiveNav(".viewImages")
+
+        $(".boxSlide").hide();
+        $("#imagesBox").show();
+
+        $("#sidebar-ul").find(".active").removeClass("active");
+        let i = $("#sidebar-ul").find(`.nav-link[href='/images/${req.data.hostId}/${req.data.fingerprint}']`)
+
+        i.addClass("active")
+        $("#imagesBox").show()
         $("#imageSplash").hide();
         $("#imageDetailsView").show();
 
@@ -661,5 +679,5 @@
 
             $("#imageExtendedDetailsTable > tbody").empty().append(trs);
         });
-    });
+    }
 </script>

@@ -319,6 +319,63 @@ var allInstanceTypes = {};
 
 var currentProvider;
 
+var adminSettingUrls = {
+    settings: '/admin/settings',
+    hosts: '/admin/hosts',
+    instanceTypes: '/admin/instanceTypes',
+    users: '/admin/users',
+    userAccessControl: '/admin/userAccessControl',
+    history: '/admin/history',
+    retiredData: '/admin/retiredData',
+};
+
+function putAdminSidebar(selected) {
+    let sidebar = '';
+    if(!userDetails.isAdmin){
+        $("#saveSettings, #saveLdapSettings, #addUser, #recordedActionsCard, #usersCard").remove();
+    }else{
+        sidebar += `
+        <li class="nav-item instance-settings">
+            <a class="nav-link ${selected === `${adminSettingUrls.settings}` ? "active" : null }" href="${adminSettingUrls.settings}" data-navigo>
+                <i class="fas fa-sliders-h me-2"></i>LXDMosaic Settings
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link ${selected === `${adminSettingUrls.hosts}` ? "active" : null } " href="${adminSettingUrls.hosts}" data-navigo>
+                <i class="fas fa-server me-2"></i>Hosts
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link ${selected === `${adminSettingUrls.instanceTypes}` ? "active" : null }" href="${adminSettingUrls.instanceTypes}" data-navigo>
+                <i class="fas fa-cloud me-2"></i>Instance Types
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link  ${selected === `${adminSettingUrls.users}` ? "active" : null }" href="${adminSettingUrls.users}" data-navigo>
+                <i class="fas fa-users-cog me-2"></i>Users
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link  ${selected === `${adminSettingUrls.userAccessControl}` ? "active" : null }" href="${adminSettingUrls.userAccessControl}" data-navigo>
+                <i class="fas fa-users-cog me-2"></i>User Project Access
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link  ${selected === `${adminSettingUrls.history}` ? "active" : null }" href="${adminSettingUrls.history}" data-navigo>
+                <i class="fas fa-history me-2"></i>Recorded Actions
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link  ${selected === `${adminSettingUrls.retiredData}` ? "active" : null }" href="${adminSettingUrls.retiredData}" data-navigo>
+                <i class="fas fa-eraser me-2"></i>Retired Data
+            </a>
+        </li>`
+    }
+
+    $("#sidebar-ul").empty().append(sidebar);
+    router.updatePageLinks()
+}
+
 function loadSettingsView()
 {
     $(".boxSlide").hide();
@@ -327,57 +384,15 @@ function loadSettingsView()
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#settingsBox").show();
+    putAdminSidebar(adminSettingUrls.settings);
+    changeActiveNav(null)
+    $(".viewSettings").addClass("active");
     $("#instanceSettingsBox").show();
     $(".sidebar-fixed").addClass("sidebar-lg-show");
-
     allInstanceTypes = {};
     currentProvider = null;
 
     let hosts = '';
-
-    if(!userDetails.isAdmin){
-        $("#saveSettings, #saveLdapSettings, #addUser, #recordedActionsCard, #usersCard").remove();
-    }else{
-        hosts += `
-        <li class="nav-item instance-settings">
-            <a class="nav-link text-info" href="#">
-                <i class="fas fa-sliders-h me-2"></i>LXDMosaic Settings
-            </a>
-        </li>
-        <li class="nav-item instance-hosts">
-            <a class="nav-link " href="#">
-                <i class="fas fa-server me-2"></i>Hosts
-            </a>
-        </li>
-        <li class="nav-item instance-types-overview">
-            <a class="nav-link " href="#">
-                <i class="fas fa-cloud me-2"></i>Instance Types
-            </a>
-        </li>
-        <li class="nav-item users-overview">
-            <a class="nav-link " href="#">
-                <i class="fas fa-users-cog me-2"></i>Users
-            </a>
-        </li>
-        <li class="nav-item user-project-overview">
-            <a class="nav-link " href="#">
-                <i class="fas fa-users-cog me-2"></i>User Project Access
-            </a>
-        </li>
-        <li class="nav-item recorded-actions-overview">
-            <a class="nav-link " href="#">
-                <i class="fas fa-history me-2"></i>Recorded Actions
-            </a>
-        </li>
-        <li class="nav-item retired-data-overview">
-            <a class="nav-link " href="#">
-                <i class="fas fa-eraser me-2"></i>Retired Data
-            </a>
-        </li>
-        `
-    }
-
-    $("#sidebar-ul").empty().append(hosts);
 
     loadInstanceSettings();
     $(".settingsBox").hide();
@@ -439,7 +454,14 @@ function makeHostUserOverview(html, host){
     return html;
 }
 
-function loadProjectAccesOverview(){
+function loadProjectAccesOverview(req){
+    $(".settingsBox").hide();
+    $("#settingsBox").show();
+    putAdminSidebar(adminSettingUrls.userAccessControl);
+    changeActiveNav(null)
+    $(".viewSettings").addClass("active");
+    $("#userProjectOverview").show();
+    addBreadcrumbs(["User Projects"], ["active"], true);
     ajaxRequest(globalUrls.projects.getProjectsOverview, {}, (data)=>{
         data = $.parseJSON(data);
         let hosts = "";
@@ -458,7 +480,14 @@ function loadProjectAccesOverview(){
     });
 }
 
-function loadRecordedActions(ammount = 30){
+function loadRecordedActions(req, ammount = 30){
+    $(".settingsBox").hide();
+    $("#settingsBox").show();
+    putAdminSidebar(adminSettingUrls.history);
+    changeActiveNav(null)
+    $(".viewSettings").addClass("active");
+    $("#recordedActionsBox").show();
+    addBreadcrumbs(["Recorded Actions"], ["active"], true);
     $("#actionCount").text(ammount);
     ajaxRequest(globalUrls.settings.recordedActions.getLastResults, {ammount: ammount}, (data)=>{
         data = $.parseJSON(data);
@@ -480,6 +509,13 @@ function loadRecordedActions(ammount = 30){
 }
 
 function loadUsers(){
+    $(".settingsBox").hide();
+    $("#settingsBox").show();
+    putAdminSidebar(adminSettingUrls.users);
+    changeActiveNav(null)
+    $(".viewSettings").addClass("active");
+    $("#usersList").show();
+    addBreadcrumbs(["User Management"], ["active"], true);
     ajaxRequest(globalUrls.settings.users.getAll, {}, (data)=>{
         data = $.parseJSON(data);
         let trs = "";
@@ -535,6 +571,13 @@ function loadUsers(){
 }
 
 function loadInstancesHostsView(){
+    $(".settingsBox").hide();
+    $("#settingsBox").show();
+    putAdminSidebar(adminSettingUrls.hosts);
+    changeActiveNav(null)
+    $(".viewSettings").addClass("active");
+    $("#instanceHostsBox").show();
+    addBreadcrumbs(["Hosts Management"], ["active"], true);
     ajaxRequest(globalUrls.hosts.getAllHosts, {}, (data)=>{
         data = $.parseJSON(data);
         let trs = "";
@@ -559,6 +602,13 @@ function loadInstancesHostsView(){
 }
 
 function loadInstanceTypes(){
+    $(".settingsBox").hide();
+    $("#settingsBox").show();
+    putAdminSidebar(adminSettingUrls.instanceTypes);
+    changeActiveNav(null)
+    $(".viewSettings").addClass("active");
+    $("#instanceTypesOverview").show();
+    addBreadcrumbs(["Instance Types"], ["active"], true);
     $("#instanceTypesOverviewProviderDetailsSplash").show();
     $("#instanceTypesOverviewProviderDetails").hide();
     ajaxRequest(globalUrls.instances.instanceTypes.getInstanceTypes, {}, function(data){
@@ -651,13 +701,6 @@ function loadInstanceSettings(){
         $("#ldapSettingListTable").find('[data-toggle="tooltip"]').tooltip({html: true})
     });
 }
-
-$("#sidebar-ul").on("click", ".instance-hosts", function(e){
-    $(".settingsBox").hide();
-    $("#instanceHostsBox").show();
-    addBreadcrumbs(["Hosts Management"], ["active"], true);
-    loadInstancesHostsView();
-});
 
 $("#hostListTable").on("click", ".deleteHost", function(){
     let tr = $(this).parents("tr");
@@ -787,53 +830,15 @@ $("#usersTable").on("click", ".toggleUserLogin", function(){
     });
 });
 
-$("#sidebar-ul").on("click", ".my-settings", function(e){
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    loadSettingsView();
-});
-
-$("#sidebar-ul").on("click", ".instance-settings", function(){
-    loadInstanceSettings();
+function loadRetiredData() {
     $(".settingsBox").hide();
-    $("#instanceSettingsBox").show();
-    addBreadcrumbs(["LXDMosaic Settings"], ["active"], true);
-});
-
-$("#sidebar-ul").on("click", ".instance-types-overview", function(){
-    loadInstanceTypes();
-    $(".settingsBox").hide();
-    $("#instanceTypesOverview").show();
-    addBreadcrumbs(["Instance Types"], ["active"], true);
-});
-
-$("#sidebar-ul").on("click", ".users-overview", function(){
-    loadUsers();
-    $(".settingsBox").hide();
-    $("#usersList").show();
-    addBreadcrumbs(["User Management"], ["active"], true);
-});
-
-$("#sidebar-ul").on("click", ".recorded-actions-overview", function(){
-    loadRecordedActions();
-    $(".settingsBox").hide();
-    $("#recordedActionsBox").show();
-    addBreadcrumbs(["Recorded Actions"], ["active"], true);
-});
-
-$("#sidebar-ul").on("click", ".retired-data-overview", function(){
-    loadRecordedActions();
-    $(".settingsBox").hide();
+    $("#settingsBox").show();
+    putAdminSidebar(adminSettingUrls.retiredData);
+    changeActiveNav(null)
+    $(".viewSettings").addClass("active");
     $("#retiredData").show();
     addBreadcrumbs(["Retired Data"], ["active"], true);
-});
-
-$("#sidebar-ul").on("click", ".user-project-overview", function(){
-    loadProjectAccesOverview();
-    $(".settingsBox").hide();
-    $("#userProjectOverview").show();
-    addBreadcrumbs(["User Projects"], ["active"], true);
-});
+}
 
 $("#retiredData").on("click", "#downloadOldFleetAnalytics", function(){
     ajaxRequest(globalUrls.analytics.getAllData, {}, (data)=>{
@@ -1080,7 +1085,7 @@ $("#recordedActionsBox").on("click", "#loadMoreRecordedActions", function(){
                     $.alert('provide a valid ammount');
                     return false;
                 }
-                loadRecordedActions(ammount)
+                loadRecordedActions({}, ammount)
             }
         },
         cancel: function () {

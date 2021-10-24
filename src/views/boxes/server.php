@@ -167,6 +167,13 @@ var currentServer = {
     hostId: null
 };
 
+
+function loadHostOverview(req){
+    let hostId = req.data.hostId;
+    currentContainerDetails = null;
+    loadServerView(hostId);
+}
+
 $(document).on("change", ".toggleStatusContainer", function(){
     let checked = $(this).is(":checked");
     let tr = $(this).parents("tr");

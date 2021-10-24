@@ -75,21 +75,22 @@ class StringTools
             $icon = "";
             $class = "";
             $data = " data-project='$project' data-host-id='{$host->getHostId()}' data-alias='{$host->getAlias()}' ";
+            $href = "";
+            $tag = "a";
 
             if (strpos($item, '/snapshots/') !== false) {
                 $container = $explodedPath[count($explodedPath) - 2];
                 $lastItem =  $container . "/" . $lastItem;
-                $data .= "data-container='$container' ";
-                $class = 'goToInstance';
+                $href = "/instance/{$host->getHostId()}/$container";
                 $icon = "camera";
             } elseif (strpos($item, '/instances/') !== false || strpos($item, '/containers/') !== false) {
-                $data .= "data-container='$lastItem' ";
-                $class = 'goToInstance';
+                $data .= "data-navigo";
                 $icon = "box";
+                $href = "/instance/{$host->getHostId()}/$lastItem";
             } elseif (strpos($item, '/profiles/') !== false) {
-                $class = 'toProfile';
-                $data .= "data-profile='$lastItem'";
+                $data .= "data-navigo";
                 $icon = "users";
+                $href = "/profiles/{$host->getHostId()}/$lastItem";
             } elseif (strpos($item, '/images/') !== false) {
                 $host->setProject($project);
                 $imageDetails = $host->images->info($lastItem);
@@ -100,16 +101,20 @@ class StringTools
                     $lastItem = implode(",", array_column($imageDetails["aliases"], "name")) . "({$imageDetails['type']})";
                 }
 
-                $class = 'viewImages';
                 $icon = "images";
+
+                $href = "/images/{$host->getHostId()}/{$imageDetails["fingerprint"]}?project={$project}";
+                $data = "data-navigo";
             } elseif (strpos($item, '/volumes/') !== false) {
+                $tag = "span";
+                $class = "disabled";
                 $icon = "database";
             }
 
-            $item = "<a href='#' class='$class' $data>
+            $item = "<$tag href='$href' class='$class' $data>
                 <i class='fas fa-$icon'></i>
                 $lastItem
-            </a>";
+            </$tag>";
 
             $usedBy[$index] = $item;
         }
