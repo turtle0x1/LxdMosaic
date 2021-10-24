@@ -18,10 +18,10 @@ class RouteView
             require __DIR__ . "/../../views/login.php";
         } elseif ($pathParts[0] == "terminal") {
             require __DIR__ . "/../../views/vmTerminal.php";
-        } elseif ($pathParts[1] == "firstRun") {
+        } elseif (isset($pathParts[1]) && $pathParts[1] == "firstRun") {
             require __DIR__ . "/../../views/firstRun.php";
         } else {
-            throw new \Exception("Page Not Found", 1);
+            require __DIR__ . "/../../views/index.php";
         }
         return true;
     }
