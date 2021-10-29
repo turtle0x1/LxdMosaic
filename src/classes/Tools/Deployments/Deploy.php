@@ -12,6 +12,7 @@ use dhope0000\LXDClient\Tools\Deployments\Containers\StoreDeployedContainerNames
 use dhope0000\LXDClient\Constants\LxdInstanceTypes;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use dhope0000\LXDClient\Tools\Utilities\ValidateInstanceName;
 
 class Deploy
 {
@@ -69,7 +70,7 @@ class Deploy
                 }
 
                 for ($i = 0; $i < $instance["qty"]; $i++) {
-                    $containerName = StringTools::random(12);
+                    $containerName = $this->generateInstanceName();
 
                     $this->createInstance->create(
                         LxdInstanceTypes::CONTAINER,
@@ -125,6 +126,19 @@ class Deploy
             $imageDetails[$revId] = json_decode($details, true)["details"];
         }
         return $imageDetails;
+    }
+
+    private function generateInstanceName()
+    {
+        try {
+            $name = StringTools::random(12);
+            ValidateInstanceName::validate($name);
+            return $name;
+        } catch (\Throwable $e) {
+            //NOTE this could infinetly recurse but its so unlikely and PHP
+            // will stop it at like 30~ calls
+            return $this->generateInstanceName();
+        }
     }
 
     public function validateInstances(array $instances)
