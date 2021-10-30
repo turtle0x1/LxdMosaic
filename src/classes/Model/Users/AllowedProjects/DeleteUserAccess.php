@@ -47,4 +47,17 @@ class DeleteUserAccess
         ]);
         return $do->rowCount() ?  true : false;
     }
+    
+    public function deleteForHost(int $hostId)
+    {
+        $sql = "DELETE FROM `User_Allowed_Projects`
+                WHERE
+                    `UAP_Host_ID` = :hostId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId
+        ]);
+        return $do->rowCount() ?  true : false;
+    }
 }
