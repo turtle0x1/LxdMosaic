@@ -31,6 +31,20 @@ class DeleteMetrics
         return $do->rowCount() ? true : false;
     }
 
+    public function deleteForHost(int $hostId)
+    {
+        $sql = "DELETE FROM
+                    `Instance_Metric_Values`
+                WHERE
+                    `IMV_Host_ID` = :hostId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId
+        ]);
+        return $do->rowCount() ? true : false;
+    }
+
     public function deleteByIds(array $ids)
     {
         $qMarks = join(',', array_fill(0, count($ids), '?'));
