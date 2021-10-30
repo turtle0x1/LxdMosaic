@@ -40,4 +40,18 @@ class DeleteBackup
         ]);
         return $do->rowCount() ? true : false;
     }
+
+    public function deleteForHost(int $hostId)
+    {
+        $sql = "DELETE FROM
+                    `Container_Backups`
+                WHERE
+                    `CB_Host_ID` = :hostId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId
+        ]);
+        return $do->rowCount() ? true : false;
+    }
 }
