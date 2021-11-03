@@ -7,19 +7,23 @@ use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Model\Metrics\FetchMetrics;
+use dhope0000\LXDClient\Tools\Instances\Devices\Proxy\GetAllInstanceProxies;
 
 class GetInstance
 {
     private $hasExtension;
+    private $getAllInstanceProxies;
 
     public function __construct(
         FetchDeployments $fetchDeployments,
         HasExtension $hasExtension,
-        FetchMetrics $fetchMetrics
+        FetchMetrics $fetchMetrics,
+        GetAllInstanceProxies $getAllInstanceProxies
     ) {
         $this->fetchDeployments = $fetchDeployments;
         $this->hasExtension = $hasExtension;
         $this->fetchMetrics = $fetchMetrics;
+        $this->getAllInstanceProxies = $getAllInstanceProxies;
     }
 
     public function get(Host $host, string $instance)
@@ -35,6 +39,8 @@ class GetInstance
 
         $totalMemory = $host->resources->info()["memory"]["total"];
         $memorySource = "Available On Host";
+
+        $proxyDevices = $this->getAllInstanceProxies->get($details["expanded_devices"]);
 
         if (isset($details["config"]["limits.memory"])) {
             $memorySource = "Instance Limit";
@@ -56,6 +62,7 @@ class GetInstance
             "deploymentDetails"=>$deploymentDetails,
             "backupsSupported"=>$hostSupportsBackups,
             "project"=>$host->callClientMethod("getProject"),
+            "proxyDevices"=>$proxyDevices,
             "totalMemory"=>[
                 "source"=>$memorySource,
                 "total"=>$totalMemory
