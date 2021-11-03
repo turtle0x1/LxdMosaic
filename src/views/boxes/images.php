@@ -362,7 +362,7 @@
         if(changeView){
             currentImageDetails = {}
         }
-        addBreadcrumbs(["Images"], ["", "active"], false)
+        addBreadcrumbs(["Images"], ["active"], false, ["/images"])
         ajaxRequest(globalUrls.images.getAll, null, function(data){
             data = $.parseJSON(data);
             let a = changeView == false ? "" : "active";
@@ -606,7 +606,7 @@
 
             let image = data;
             let imageName =  makeImageName(image);
-            addBreadcrumbs([d.hostAlias, imageName], ["", "active"], true)
+            addBreadcrumbs(["Images", d.hostAlias, imageName], ["", "", "active"], false, ["/images"])
 
             $("#imageName").text(imageName);
 
@@ -678,6 +678,7 @@
             });
 
             $("#imageExtendedDetailsTable > tbody").empty().append(trs);
+            router.updatePageLinks()
         });
     }
 </script>

@@ -100,17 +100,23 @@ function mapObjToSignleDimension(obj, keyToMap)
     return output;
 }
 
-function createBreadcrumbItemHtml(name, classes)
+function createBreadcrumbItemHtml(name, classes, link = "")
 {
-    return `<li class="breadcrumb-item ` + classes + `">` + name + `</li>`;
+    if(link !== ""){
+        return `<li href="${link}" style="cursor: pointer;" class="breadcrumb-item text-decoration-underline ${classes}" data-navigo>${name}</li>`;
+    }else{
+        return `<li class="breadcrumb-item ${classes}">${name}</li>`;
+    }
+
 }
 
-function setBreadcrumb(name, classes)
+function setBreadcrumb(name, classes, link)
 {
-    $(".breadcrumb").empty().append(createBreadcrumbItemHtml(name, classes))
+    $(".breadcrumb").empty().append(createBreadcrumbItemHtml(name, classes, link))
+    router.updatePageLinks()
 }
 
-function addBreadcrumbs(names, classes, preserveRoot = true)
+function addBreadcrumbs(names, classes, preserveRoot = true, links = [])
 {
   if(preserveRoot){
       $(".breadcrumb").find(".breadcrumb-item:gt(0)").remove();
@@ -122,7 +128,8 @@ function addBreadcrumbs(names, classes, preserveRoot = true)
   let items = "";
 
   $.each(names, function(i, item){
-      items += createBreadcrumbItemHtml(item, classes[i]);
+      let l = typeof links[i] === "undefined" ? "" : links[i]
+      items += createBreadcrumbItemHtml(item, classes[i], links[i]);
   })
 
   $(".breadcrumb").append(items)

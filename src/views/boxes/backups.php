@@ -436,7 +436,7 @@ $(document).on("click", ".viewContainerBackups", function(){
 });
 
 function loadBackupsView() {
-    setBreadcrumb("Backups", "active");
+    setBreadcrumb("Backups", "active", "/backups");
     changeActiveNav(".viewBackups")
     $(".boxSlide, #backupContents").hide();
     $("#backupsBox, #backupsOverview").show();

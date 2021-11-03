@@ -269,7 +269,7 @@ function loadProfileSidebar(){
 
 function loadProfileView()
 {
-    setBreadcrumb("Profiles", "viewProfiles active");
+    setBreadcrumb("Profiles", " active", "/profiles");
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewProfiles");
     $(".boxSlide, #profileDetails").hide();
@@ -350,7 +350,7 @@ function viewProfile(profileId, hostAlias, hostId){
 
         $("#profileNameTitle").text(profileId);
 
-        addBreadcrumbs(["Profiles", hostAlias, profileId], ["viewProfiles", "", "active"], false);
+        addBreadcrumbs(["Profiles", hostAlias, profileId], ["", "", "active"], false, ["/profiles", "", "", ""]);
 
         let usedBy = ["Couldn't get profiles uesd by (api version probably)"];
 

@@ -126,7 +126,7 @@ function loadCloudConfigView(req)
         id: req.data.id
     };
     changeActiveNav(".viewCloudConfigFiles")
-    
+
     loadCloudConfigTree()
 
     ajaxRequest(globalUrls.cloudConfig.getDetails, data ,function(data){
@@ -217,7 +217,7 @@ function loadCloudConfigOverview(req){
     }
     $(".boxSlide, #cloudConfigContents").hide();
     $("#cloudConfigBox, #cloudConfigOverview").show();
-    setBreadcrumb("Cloud Config", "viewCloudConfigFiles active");
+    setBreadcrumb("Cloud Config", "active", "/cloudConfig");
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewCloudConfigFiles")
     loadCloudConfigTree()

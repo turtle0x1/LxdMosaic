@@ -326,7 +326,7 @@ function loadProjectsSidebar(){
 function loadProjectView()
 {
     currentProject = {hostId: null, project: null}
-    setBreadcrumb("Projects", "viewProjects active");
+    setBreadcrumb("Projects", "active", "/projects");
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewProjects")
     $(".boxSlide, #projectDetails").hide();
@@ -359,7 +359,7 @@ function viewProject(project, hostId, hostAlias){
     currentProject.hostId = hostId;
     currentProject.hostAlias = hostAlias;
     changeActiveNav(".viewProjects")
-    addBreadcrumbs([hostAlias, project], ["", "active"], true)
+    addBreadcrumbs(["Projects", hostAlias, project], ["", "", "active"], false, ["/projects"])
     loadProjectsSidebar()
     $(".boxSlide, #projectDetails").hide();
     $("#projectsBox").show();

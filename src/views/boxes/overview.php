@@ -939,7 +939,7 @@ function loadDashboard(){
     $("#userDashboardGraphs").empty();
     $(".boxSlide, #userDashboard, #projectAnalyticsDashboard").hide();
     $("#overviewBox, #generalDashboard").show();
-    setBreadcrumb("Dashboard", "active overview");
+    setBreadcrumb("Dashboard", "active", "/");
     changeActiveNav(".overview")
 
     ajaxRequest(globalUrls.dashboard.get, {}, (data)=>{
@@ -1256,17 +1256,6 @@ $(document).on("click", ".cluster-title", function(e){
     $("#sidebar-ul").find(".active").removeClass("active");
     $(this).addClass("text-info");
     loadClusterView(x.cluster);
-});
-
-$(document).on("click", ".viewHost", function(){
-    let hostId = null;
-    if($(this).hasClass("lookupId")){
-        hostId = currentContainerDetails.hostId;
-    }else{
-        hostId = $(this).data("id");
-    }
-
-    loadServerView(hostId);
 });
 
 $(document).on("click", "#openSearch", function(){

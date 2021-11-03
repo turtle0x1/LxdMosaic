@@ -380,7 +380,7 @@ function loadSettingsView()
 {
     $(".boxSlide").hide();
     $(".settingsBox").hide();
-    setBreadcrumb("Admin Settings", "viewSettingsBreadcrumb active");
+    setBreadcrumb("Admin Settings", "active", "/admin");
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#settingsBox").show();

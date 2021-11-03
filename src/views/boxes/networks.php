@@ -167,7 +167,7 @@ function loadNetworksView()
     $("#networkOverview, #networkBox").show();
     $("#deploymentList").empty();
     changeActiveNav(".viewNetwork")
-    setBreadcrumb("Networks", "viewNetwork active");
+    setBreadcrumb("Networks", "active", "/networks");
     loadNetworkSidebar()
     // Dont normally like 2 requests to load dashboard but this could be slow
     ajaxRequest(globalUrls.networks.getDashboard, {}, (data)=>{
@@ -238,7 +238,7 @@ function viewNetwork(req)
     currentNetwork = {hostId: hostId, network: network};
     $(".boxSlide, #networkOverview").hide();
     $("#networkBox, #networkInfo").show();
-    addBreadcrumbs([req.data.hostId, network], ["", "active"]);
+    addBreadcrumbs(["Networks", req.data.hostId, network], ["", "", "active"], false, ["/networks"]);
     loadNetworkSidebar()
     changeActiveNav(".viewNetwork")
     ajaxRequest(globalUrls.networks.get, currentNetwork, function(data){

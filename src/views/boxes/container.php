@@ -1141,7 +1141,7 @@ function loadContainerView(data)
             return false;
         }
         changeActiveNav(".overview");
-        addBreadcrumbs(["Dashboard", data.alias, data.container ], ["overview", "viewHost lookupId", "active"], false);
+        addBreadcrumbs(["Dashboard", data.alias, data.container ], ["", "", "active"], false, ["/", `/host/${data.hostId}/overview`]);
 
         let disableActions = x.state.status_code !== 102;
 

@@ -47,7 +47,7 @@ var currentProvider;
 
 function loadMySettings()
 {
-    setBreadcrumb("My Settings", "viewMySettings active");
+    setBreadcrumb("My Settings", "active");
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(null)
     $("#myAccountBtn").addClass("active");
@@ -70,7 +70,7 @@ function loadMySettings()
 
     $("#sidebar-ul").empty().append(hosts);
 
-    addBreadcrumbs(["My Settings", "API Keys"], ["viewMySettings", "active"], false);
+    addBreadcrumbs(["My Settings", "API Keys"], ["", "active"], false);
 
     ajaxRequest(globalUrls.settings.getMyOverview, {}, (data)=>{
         data = makeToastr(data);

@@ -329,7 +329,7 @@ function loadStorageView()
     $(".boxSlide, #storageDetails, #volumeDetails").hide();
     $("#storageOverview, #storageBox").show();
     $("#deploymentList").empty();
-    setBreadcrumb("Storage", "viewStorage active");
+    setBreadcrumb("Storage", "active", "/storage");
     currentPool = {hostId: null, poolName: null}
     loadStorageSidebar()
     ajaxRequest(globalUrls.storage.getAll, {}, (data)=>{
@@ -391,7 +391,7 @@ function viewStoragePool(hostId, hostAlias, poolName)
     changeActiveNav(".viewStorage")
     $("#storageBox, #storageDetails").show();
     loadStorageSidebar()
-    addBreadcrumbs(["Storage", hostAlias, poolName], ["viewStorage", "", "active"], false);
+    addBreadcrumbs(["Storage", hostAlias, poolName], ["", "", "active"], false, ["/storage"]);
 
     ajaxRequest(globalUrls.storage.getPool, currentPool, function(data){
         data = $.parseJSON(data);
@@ -451,7 +451,7 @@ function viewStorageVolume(hostId, hostAlias, poolName, volumeName, path, projec
     $("#storageBox").show();
     loadStorageSidebar()
 
-    addBreadcrumbs(["Storage", hostAlias, poolName, "volumes", volumeName ], ["viewStorage", "", "", "", "active"], false);
+    addBreadcrumbs(["Storage", hostAlias, poolName, "volumes", volumeName ], ["viewStorage", "", "", "", "active"], false, ["/storage", "", `/storage/${hostId}/${poolName}`]);
     $("#storageVolumeName").text(volumeName)
     ajaxRequest(globalUrls.storage.volumes.get, x, (data)=>{
         data = makeToastr(data);
