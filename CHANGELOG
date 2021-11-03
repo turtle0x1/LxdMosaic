@@ -7,6 +7,8 @@ Added
     Support new network metric keys (#433)
     Show instant cloud-init-output.log results when deploying cloud-config
     Add setting options to create VM (#419)
+    View instance proxy device on instance view (#443)
+    Add instance proxy device on instance view (#443)
 
 Changed
     Use correct width for terminal on init
