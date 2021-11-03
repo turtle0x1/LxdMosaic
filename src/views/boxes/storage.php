@@ -484,6 +484,7 @@ function viewStorageVolume(hostId, hostAlias, poolName, volumeName, path, projec
 
         $("#volumeUsedByTable > tbody").empty().append(volumeUsedByTrs)
         $("#volumeConfigTable > tbody").empty().append(volumeConfigTrs)
+        router.updatePageLinks()
     });
 }
 
