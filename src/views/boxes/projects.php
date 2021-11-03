@@ -187,7 +187,7 @@ function makeProjectHostSidebarHtml(hosthtml, host, id){
     }
 
     hosthtml += `<li class="mb-2">
-        <a class="d-inline ${disabled}" href="#">
+        <a class="d-inline ${disabled}">
             <i class="fas fa-server"></i> ${host.alias}
         </a>`;
 
