@@ -328,6 +328,21 @@
         <div class="card mb-2 bg-dark text-white">
             <div class="card-body">
                 <h5 class="text-white">
+                    <i class="fas fa-exchange-alt pe-2 text-primary"></i>
+                    Proxies
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Add proxy device" class="btn btn-sm btn-outline-primary float-end">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </h5>
+                <table class="table table-dark table-bordered"id="instanceProxiesTable">
+                      <tbody>
+                      </tbody>
+                </table>
+          </div>
+        </div>
+        <div class="card mb-2 bg-dark text-white">
+            <div class="card-body">
+                <h5 class="text-white">
                     <i class="fas fa-images text-primary me-2"></i>
                     Snapshots
                     <button data-toggle="tooltip" data-bs-placement="bottom" title="Snapshot" class="btn btn-sm btn-outline-primary float-end takeSnapshot">
@@ -1385,6 +1400,20 @@ function loadContainerView(data)
         $("#storageDataCard").empty().append(storageHtml)
         $("#storageDataCard").find('[data-toggle="tooltip"]').tooltip({html: true})
 
+        let proxyDevices = "";
+
+        if(x.proxyDevices.length == 0){
+            proxyDevices = "<td class='text-center'><i class='fas fa-info-circle text-primary me-2'></i> No Proxies </td>"
+        }else{
+            $.each(x.proxyDevices, (name, details)=>{
+                proxyDevices += `<tr>
+                    <td>${name}</td>
+                    <td>${details.listen.replace("0.0.0.0", '*')}<i class="fas fa-arrow-right ms-2 me-2"></i>${details.connect.replace("0.0.0.0", '*')}</td>
+                </tr>`
+            });
+        }
+
+        $("#instanceProxiesTable > tbody").empty().append(proxyDevices)
 
 
         $(".boxSlide").hide();
