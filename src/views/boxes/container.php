@@ -1108,8 +1108,9 @@ function titleCase(str) {
 
 
 function loadContainerViewReq(req) {
+    currentContainerDetails = {hostId: req.data.hostId, container: req.data.instance, alias: ''};
     createDashboardSidebar()
-    loadContainerView({hostId: req.data.hostId, container: req.data.instance, alias: ''})
+    loadContainerView(currentContainerDetails)
 
 }
 
@@ -1122,6 +1123,7 @@ function loadContainerView(data)
         consoleSocket.close();
         currentTerminalProcessId = null;
     }
+    currentContainerDetails = data
 
     // window.disconnectFromTerminal();
 

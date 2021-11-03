@@ -622,72 +622,81 @@ function nextLetter(s){
 
 function createDashboardSidebar()
 {
-    ajaxRequest(globalUrls.universe.getEntities, {}, (data)=>{
-        data = makeToastr(data);
+    if($("#sidebar-ul").find(".view-container").length == 0){
+        ajaxRequest(globalUrls.universe.getEntities, {}, (data)=>{
+            data = makeToastr(data);
 
-        let hosts = `
-            <li class="mt-2">
-                <a class="" href="/" data-navigo>
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-            </li>`;
+            let hosts = `
+                <li class="mt-2">
+                    <a class="" href="/" data-navigo>
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>`;
 
-        $.each(data.clusters, function(i, item){
-            hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success ps-1 pt-2"><u>Cluster ${i}</u></li>`;
+            $.each(data.clusters, function(i, item){
+                hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success ps-1 pt-2"><u>Cluster ${i}</u></li>`;
 
-            hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
+                hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
 
-            $.each(item.members, function(_, host){
+                $.each(item.members, function(_, host){
+                    let disabled = "";
+                    let expandBtn = '<button class="btn btn-outline-secondary float-end showServerInstances"><i class="fas fa-caret-left"></i></button>';
+
+                    if(!host.hostOnline){
+                        disabled = "disabled text-warning text-strikethrough";
+                        expandBtn = '';
+                    }
+
+                    hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList dropdown">
+                        <a class="nav-link ${disabled}" href="/host/${host.hostId}/overview" data-navigo>
+                            <i class="fas fa-server"></i> ${host.alias}
+                            ${expandBtn}
+                        </a>
+                        <div id="${host.hostId}" class="collapse">
+                            <ul class="dropdown-menu dropdown-menu-dark hostInstancesUl">
+                            </ul>
+                        </div>
+                    </li>`;
+                });
+            });
+
+            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
+
+            $.each(data.standalone.members, function(_, host){
                 let disabled = "";
-                let expandBtn = '<button class="btn btn-outline-secondary float-end showServerInstances"><i class="fas fa-caret-left"></i></button>';
+                let expandBtn = `<button class="btn btn-outline-secondary btn-toggle collapsed float-end showServerInstances" ata-bs-toggle="collapse" data-bs-target="#${host.hostId}" aria-expanded="false"><i class="fas fa-caret-left"></i></button>`;
 
-                if(!host.hostOnline){
+                if(host.hostOnline == false){
                     disabled = "disabled text-warning text-strikethrough";
                     expandBtn = '';
                 }
 
-                hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList dropdown">
-                    <a class="nav-link ${disabled}" href="/host/${host.hostId}/overview" data-navigo>
-                        <i class="fas fa-server"></i> ${host.alias}
-                        ${expandBtn}
+                hosts += `<li class="mb-2" data-hostId="${host.hostId}" data-alias="${host.alias}">
+
+                        <i class="fas fa-server me-2"></i>${host.alias}
                     </a>
-                    <div id="${host.hostId}" class="collapse">
-                        <ul class="dropdown-menu dropdown-menu-dark hostInstancesUl">
+                    <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false">
+                        <i class="fas fa-caret-left"></i>
+                    </button>
+                    <div class="collapse mt-2 bg-dark text-white" id="host-${host.hostId}">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 hostInstancesUl" style="display: inline;">
                         </ul>
                     </div>
-                </li>`;
+                 </li>`
             });
+
+
+            $("#sidebar-ul").empty().append(hosts);
+            router.updatePageLinks()
         });
-
-        hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
-
-        $.each(data.standalone.members, function(_, host){
-            let disabled = "";
-            let expandBtn = `<button class="btn btn-outline-secondary btn-toggle collapsed float-end showServerInstances" ata-bs-toggle="collapse" data-bs-target="#${host.hostId}" aria-expanded="false"><i class="fas fa-caret-left"></i></button>`;
-
-            if(host.hostOnline == false){
-                disabled = "disabled text-warning text-strikethrough";
-                expandBtn = '';
-            }
-
-            hosts += `<li class="mb-2" data-hostId="${host.hostId}" data-alias="${host.alias}">
-
-                    <i class="fas fa-server me-2"></i>${host.alias}
-                </a>
-                <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false">
-                    <i class="fas fa-caret-left"></i>
-                </button>
-                <div class="collapse mt-2 bg-dark text-white" id="host-${host.hostId}">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 hostInstancesUl" style="display: inline;">
-                    </ul>
-                </div>
-             </li>`
-        });
-
-
-        $("#sidebar-ul").empty().append(hosts);
-        router.updatePageLinks()
-    });
+    }else {
+        $("#sidebar-ul").find(".active").removeClass("active");
+        if(currentContainerDetails !== null && $.isNumeric(currentContainerDetails.hostId)){
+            $("#sidebar-ul").find(`.nav-link[href="/instance/${currentContainerDetails.hostId}/${currentContainerDetails.container}"]`).addClass("active")
+        }else{
+            $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
+        }
+    }
 }
 
 $(document).on("click", '.search-panel .dropdown-menu', function(e) {
@@ -1250,16 +1259,6 @@ $(document).on("click", ".viewHost", function(){
 
     loadServerView(hostId);
 });
-
-function setContDetsByTreeItem(node)
-{
-    currentContainerDetails = {
-        container: node.data("container"),
-        alias: node.data("alias"),
-        hostId: node.data("hostId")
-    }
-    return currentContainerDetails;
-}
 
 $(document).on("click", "#openSearch", function(){
     $.confirm({
