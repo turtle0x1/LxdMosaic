@@ -509,8 +509,16 @@
 </div>
 <div id="containerEvents"  class="col-md-12 instanceViewBox">
     <div class="card bg-dark text-white">
-        <div class="card-header">
-            <h4> Event Logs </h4>
+        <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+            <h4>Event Logs</h4>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle float-end" type="button" id="filterEventsTableBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-form dropdown-menu-dark  dropdown-menu-end p-3" style="width: 25vw;" aria-labelledby="filterEventsTableBtn" id="filterEventsUl">
+                </ul>
+            </div>
+
         </div>
         <div class="card-body">
             <table class="table table-dark table-bordered" id="containerEventsTable">
