@@ -266,6 +266,7 @@ function viewNetwork(req)
 
         $("#networkConfigDetails").empty().append(configHtml);
         $("#networkUsedBy > tbody").empty().append(usedByHtml);
+        router.updatePageLinks()
     });
 }
 
