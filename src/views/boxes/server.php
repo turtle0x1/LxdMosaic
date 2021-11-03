@@ -169,8 +169,11 @@ var currentServer = {
 
 
 function loadHostOverview(req){
-    let hostId = req.data.hostId;
     currentContainerDetails = null;
+    let hostId = req.data.hostId;
+    currentServer.hostId = hostId
+    createDashboardSidebar()
+
     loadServerView(hostId);
 }
 
@@ -470,10 +473,6 @@ function loadServerView(hostId)
     $("#serverDetailsBtn").addClass("active");
 
     $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
-
-    $("#sidebar-ul").find(".active").removeClass("active");
-    $("#sidebar-ul").find(".text-info").removeClass("text-info");
-    $("#sidebar-ul").find(`[data-hostId='${hostId}'] > a:eq(0)`).addClass("text-info");
 
     currentServer.hostId = hostId;
 

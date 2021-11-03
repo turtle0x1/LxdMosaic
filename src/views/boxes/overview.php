@@ -626,12 +626,13 @@ function createDashboardSidebar()
         ajaxRequest(globalUrls.universe.getEntities, {}, (data)=>{
             data = makeToastr(data);
 
-            let hosts = `
-                <li class="mt-2">
-                    <a class="" href="/" data-navigo>
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                    </a>
-                </li>`;
+            let currentHostId = currentServer.hostId == null ? null : currentServer.hostId;
+
+            let hosts = `<li class="nav-item mt-2">
+                <a class="nav-link ${currentHostId == null && currentContainerDetails == null ? "active" : ""} p-0" href="/" data-navigo>
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>`;
 
             $.each(data.clusters, function(i, item){
                 hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success ps-1 pt-2"><u>Cluster ${i}</u></li>`;
@@ -641,6 +642,7 @@ function createDashboardSidebar()
                 $.each(item.members, function(_, host){
                     let disabled = "";
                     let expandBtn = '<button class="btn btn-outline-secondary float-end showServerInstances"><i class="fas fa-caret-left"></i></button>';
+                    let active = currentHostId == host.hostId ? "active" : ""
 
                     if(!host.hostOnline){
                         disabled = "disabled text-warning text-strikethrough";
@@ -648,7 +650,7 @@ function createDashboardSidebar()
                     }
 
                     hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList dropdown">
-                        <a class="nav-link ${disabled}" href="/host/${host.hostId}/overview" data-navigo>
+                        <a class="nav-link ${active} ${disabled}" href="/host/${host.hostId}/overview" data-navigo>
                             <i class="fas fa-server"></i> ${host.alias}
                             ${expandBtn}
                         </a>
@@ -665,6 +667,7 @@ function createDashboardSidebar()
             $.each(data.standalone.members, function(_, host){
                 let disabled = "";
                 let expandBtn = `<button class="btn btn-outline-secondary btn-toggle collapsed float-end showServerInstances" ata-bs-toggle="collapse" data-bs-target="#${host.hostId}" aria-expanded="false"><i class="fas fa-caret-left"></i></button>`;
+                let active = currentHostId == host.hostId ? "active" : ""
 
                 if(host.hostOnline == false){
                     disabled = "disabled text-warning text-strikethrough";
@@ -672,12 +675,14 @@ function createDashboardSidebar()
                 }
 
                 hosts += `<li class="mb-2" data-hostId="${host.hostId}" data-alias="${host.alias}">
-
-                        <i class="fas fa-server me-2"></i>${host.alias}
-                    </a>
-                    <button class="btn  btn-outline-secondary btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false">
-                        <i class="fas fa-caret-left"></i>
-                    </button>
+                    <div>
+                        <a class="nav-link ${active} d-inline ps-0 ${disabled}" href="/host/${host.hostId}/overview" data-navigo>
+                            <i class="fas fa-server"></i> ${host.alias}
+                        </a>
+                        <button class="btn  btn-outline-secondary d-inline btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false">
+                            <i class="fas fa-caret-left"></i>
+                        </button>
+                    </div>
                     <div class="collapse mt-2 bg-dark text-white" id="host-${host.hostId}">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 hostInstancesUl" style="display: inline;">
                         </ul>
@@ -693,6 +698,8 @@ function createDashboardSidebar()
         $("#sidebar-ul").find(".active").removeClass("active");
         if(currentContainerDetails !== null && $.isNumeric(currentContainerDetails.hostId)){
             $("#sidebar-ul").find(`.nav-link[href="/instance/${currentContainerDetails.hostId}/${currentContainerDetails.container}"]`).addClass("active")
+        }else if(currentServer !== null && $.isNumeric(currentServer.hostId)){
+            $("#sidebar-ul").find(`.nav-link[href="/host/${currentServer.hostId}/overview"]`).addClass("active")
         }else{
             $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
         }
@@ -843,6 +850,8 @@ $(document).on("click", ".showServerInstances", function(e){
 });
 
 function loadDashboard(){
+    currentContainerDetails = null
+    currentServer = {hostId: null}
     if(recordActionsEnabled == 0){
         $("#goToEvents").hide();
     }
