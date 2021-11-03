@@ -330,7 +330,7 @@
                 <h5 class="text-white">
                     <i class="fas fa-exchange-alt pe-2 text-primary"></i>
                     Proxies
-                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Add proxy device" class="btn btn-sm btn-outline-primary float-end">
+                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Add proxy device" class="btn btn-sm btn-outline-primary float-end" id="addInstanceProxyDevice">
                         <i class="fas fa-plus"></i>
                     </button>
                 </h5>
@@ -1421,6 +1421,12 @@ function loadContainerView(data)
         $('html, body').animate({scrollTop:0},500);
     });
 }
+
+$(document).on("click", "#addInstanceProxyDevice", function(){
+    addProxyDeviceObj.hostId = currentContainerDetails.hostId
+    addProxyDeviceObj.instance = currentContainerDetails.container
+    $("#modal-hosts-instnaces-addProxyDevice").modal("show");
+});
 
 $("#containerBox").on("click", ".removeProfile", function(){
     let tr = $(this).parents("tr");
