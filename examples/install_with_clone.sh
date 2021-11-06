@@ -20,7 +20,7 @@ apt-get install -y curl || exit $?
 
 if [ "$os_distribution" != "bullseye" ]
 then
-    curl -sL https://deb.nodesource.com/setup_10.x | bash -
+    curl -sL https://deb.nodesource.com/setup_14.x | bash -
     if [ $? -ne 0 ]; then exit 1; fi
 fi
 

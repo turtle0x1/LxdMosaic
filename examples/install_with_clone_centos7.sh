@@ -13,7 +13,7 @@ if [[ ! $EUID -eq 0 ]]; then
     exit 1
 fi
 
-curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+curl -sL https://rpm.nodesource.com/setup_14.x | bash -
 
 # Install remi repo
 yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm
