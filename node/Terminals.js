@@ -92,7 +92,7 @@ module.exports = class Terminals {
     container,
     internalUuid = null,
     shell = null,
-    callbacks = null
+    callbacks = {}
   ) {
     return new Promise((resolve, reject) => {
       if (this.activeTerminals[internalUuid] !== undefined) {
