@@ -792,13 +792,11 @@ function addHostContainerList(hostId, hostAlias) {
                     data-container="${containerName}"
                     data-alias="${hostAlias}"
                     data-type="${type}">
-                  <a class="nav-link p-0 m-0 ${active}" href="/instance/${hostIdOrAliasForUrl(hostAlias, hostId)}/${containerName}" data-navigo>
+                  <a class="nav-link text-truncate p-0 m-0 ${active}" href="/instance/${hostIdOrAliasForUrl(hostAlias, hostId)}/${containerName}" data-navigo>
                     <i style="min-width: 20px" class="nav-icon me-1 ${statusCodeIconMap[details.state.status_code]}"></i>
                     <i style="min-width: 20px" class="nav-icon me-1 fas fa-${typeFa}"></i>
                     <i style="min-width: 20px" class="nav-icon me-1 fab fa-${osIcon}"></i>
-                    <span class="text-truncate" style="max-width: 150px;">
-                        ${containerName}
-                    </span>
+                    ${containerName}
                   </a>
                 </li>`;
             });
