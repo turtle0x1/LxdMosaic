@@ -228,7 +228,9 @@ app.ws('/node/cloudConfig', (socket, req) => {
          // Failed to run a generic cloud-config module
          new RegExp('.*cc_scripts_user.py\\[WARNING\\]: Failed to run module'),
          // Failed to run `packages` module
-         new RegExp(".*cc_package_update_upgrade_install.py\\[WARNING\\]")
+         new RegExp(".*cc_package_update_upgrade_install.py\\[WARNING\\]"),
+         // Failed to read cloud-config data properly
+         new RegExp(".*__init__.py\\[WARNING\\]: Unhandled non-multipart \\(text\\/x-not-multipart\\) userdata:.*")
      ];
 
      let messageCallbacks = {
