@@ -28,7 +28,7 @@ gpgcheck=1
 EOF
 
 # Install Dependecies
-yum --enablerepo=remi-safe,remi-php72 install -y httpd php php-cli php-json php-mysqlnd php-dom php-curl unzip zip nodejs git mod_ssl MariaDB-server MariaDB-compat
+yum --enablerepo=remi-safe,remi-php72 install -y httpd php php-cli php-json php-mysqlnd php-dom php-curl php-mbstring php-ldap unzip zip nodejs git mod_ssl MariaDB-server MariaDB-compat
 
 # Enable apache and mariadb, start mariadb
 systemctl enable httpd
