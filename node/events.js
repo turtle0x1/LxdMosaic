@@ -238,7 +238,7 @@ app.ws('/node/cloudConfig', (socket, req) => {
         if(x[0].match("exit") || x[0] == "^C"){
             return ''
         }else if(data.match(".*until \\[ \\-f")){
-            return '\033[34m' + line + '\033[0m'
+            return '\033[34m' + data + '\033[0m'
         }
 
         let finishedLine = false;
