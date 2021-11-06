@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="col-md-6" id="graphCards">
-              <div class="card bg-dark text-white">
+              <div class="card bg-dark text-white mb-2">
                   <div class="card-header">
                       <h4> Disk Usage </h4>
                   </div>
