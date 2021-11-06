@@ -506,9 +506,9 @@ if ($haveServers->haveAny() !== true) {
                   </ul>
               </div>
               <?php if ($isAdmin === 1) : ?>
-                  <a class="btn btn-outline-warning viewSettings" data-toggle="tooltip" data-bs-placement="bottom" title="Admin Settings" href="/admin" data-navigo>
+                  <button class="btn btn-outline-warning viewSettings" data-toggle="tooltip" data-bs-placement="bottom" title="Admin Settings" href="/admin" data-navigo>
                         <i class="fas fa-cogs"></i>
-                  </a>
+                  </button>
               <?php endif; ?>
               <div class="btn-group dropdown">
                   <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="myAccountBtn" data-bs-toggle="dropdown" aria-expanded="false">
