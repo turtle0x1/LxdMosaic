@@ -74,6 +74,7 @@
 
 var currentNetwork = {
     hostId: null,
+    alias: null,
     network: null
 };
 
@@ -103,7 +104,7 @@ function makeNetworkHostSidebarHtml(hosthtml, host, id){
     $.each(host.networks, function(_, network){
         let a  = currentNetwork.hostId == host.hostId && currentNetwork.network == network ? "active" : "";
         hosthtml += `<li class="nav-item">
-            <a class="nav-link ${a}" href="/networks/${host.hostId}/${network}" data-navigo>
+            <a class="nav-link ${a}" href="/networks/${hostIdOrAliasForUrl(host.alias, host.hostId)}/${network}" data-navigo>
             <i class="fas fa-ethernet"></i>
             ${network}
             </a>
@@ -153,7 +154,7 @@ function loadNetworkSidebar(){
     }else{
         $("#sidebar-ul").find(".active").removeClass("active");
         if($.isNumeric(currentNetwork.hostId)){
-            $("#sidebar-ul").find(`.nav-link[href="/networks/${currentNetwork.hostId}/${currentNetwork.network}"]`).addClass("active")
+            $("#sidebar-ul").find(`.nav-link[href="/networks/${hostIdOrAliasForUrl(currentNetwork.alias, currentNetwork.hostId)}/${currentNetwork.network}"]`).addClass("active")
         }else{
             $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
         }
@@ -162,7 +163,7 @@ function loadNetworkSidebar(){
 
 function loadNetworksView()
 {
-    currentNetwork = {hostId: null, network: null}
+    currentNetwork = {hostId: null, network: null, alias: null}
     $(".boxSlide, #networkInfo").hide();
     $("#networkOverview, #networkBox").show();
     $("#deploymentList").empty();
@@ -234,11 +235,11 @@ function viewNetwork(req)
 {
     let hostId = req.data.hostId
         network = req.data.network
-
-    currentNetwork = {hostId: hostId, network: network};
+        alias = hostsAliasesLookupTable[hostId]
+    currentNetwork = {hostId: hostId, network: network, alias: alias};
     $(".boxSlide, #networkOverview").hide();
     $("#networkBox, #networkInfo").show();
-    addBreadcrumbs(["Networks", req.data.hostId, network], ["", "", "active"], false, ["/networks"]);
+    addBreadcrumbs(["Networks", alias, network], ["", "", "active"], false, ["/networks"]);
     loadNetworkSidebar()
     changeActiveNav(".viewNetwork")
     ajaxRequest(globalUrls.networks.get, currentNetwork, function(data){

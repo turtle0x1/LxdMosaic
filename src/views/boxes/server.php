@@ -482,7 +482,7 @@ function loadServerView(hostId)
         let ident = data.header.alias == null ? data.header.urlAndPort : data.header.alias;
         currentServer.hostAlias = data.header.alias;
         currentServer.supportsLoadAvgs = data.header.supportsLoadAvgs;
-        addBreadcrumbs([ident], ["active"]);
+        addBreadcrumbs(["Dashboard", ident], ["", "active"], false, ["/", ""]);
 
         $("#serverHeading").text(ident);
 

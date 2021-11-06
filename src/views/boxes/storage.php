@@ -248,7 +248,7 @@ function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
              active = "active";
          }
          hosthtml += `<li class="nav-item">
-           <a class="nav-link ${active}" href="/storage/${host.hostId}/${pool.name}" data-navigo>
+           <a class="nav-link ${active}" href="/storage/${hostIdOrAliasForUrl(host.alias ,host.hostId)}/${pool.name}" data-navigo>
              <i class="nav-icon fa fa-hdd"></i>
              ${pool.name}
            </a>
@@ -311,7 +311,7 @@ function loadStorageSidebar(data = null){
         }else {
             $("#sidebar-ul").find(".active").removeClass("active");
             if($.isNumeric(currentPool.hostId)){
-                $("#sidebar-ul").find(`.nav-link[href="/storage/${currentPool.hostId}/${currentPool.poolName}"]`).addClass("active")
+                $("#sidebar-ul").find(`.nav-link[href="/storage/${hostIdOrAliasForUrl(currentPool.hostAlias, currentPool.hostId)}/${currentPool.poolName}"]`).addClass("active")
             }else{
                 $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
             }
@@ -375,8 +375,7 @@ function loadStorageView()
 }
 
 function loadStoragePoolReq(req){
-    //TODO Alias
-    viewStoragePool(req.data.hostId, '', req.data.pool)
+    viewStoragePool(req.data.hostId, hostsAliasesLookupTable[req.data.hostId], req.data.pool)
 }
 
 
@@ -422,7 +421,7 @@ function viewStoragePool(hostId, hostAlias, poolName)
         }else{
             $.each(data.volumes, function(key, value){
                 volumesHtml += `<tr>
-                    <td><a class='viewVolume' href="/storage/${hostId}/${poolName}/${value.name}?project=${value.project}&path=${value.path}" data-navigo>${value.name}</a></td>
+                    <td><a class='viewVolume' href="/storage/${hostIdOrAliasForUrl(hostAlias, hostId)}/${poolName}/${value.name}?project=${value.project}&path=${value.path}" data-navigo>${value.name}</a></td>
                     <td>${value.project}</td>
                 </tr>`
             });
@@ -438,8 +437,7 @@ function viewStoragePool(hostId, hostAlias, poolName)
 function routeViewPoolVolume(req){
     $("#storageOverview, #storageDetails").hide();
     $("#volumeDetails").show();
-    //TODO Alias
-    viewStorageVolume(req.data.hostId, '', req.data.pool, req.data.volume, req.params.path, req.params.project);
+    viewStorageVolume(req.data.hostId, hostsAliasesLookupTable[req.data.hostId], req.data.pool, req.data.volume, req.params.path, req.params.project);
 }
 
 function viewStorageVolume(hostId, hostAlias, poolName, volumeName, path, project) {
@@ -451,7 +449,7 @@ function viewStorageVolume(hostId, hostAlias, poolName, volumeName, path, projec
     $("#storageBox").show();
     loadStorageSidebar()
 
-    addBreadcrumbs(["Storage", hostAlias, poolName, "volumes", volumeName ], ["viewStorage", "", "", "", "active"], false, ["/storage", "", `/storage/${hostId}/${poolName}`]);
+    addBreadcrumbs(["Storage", hostAlias, poolName, "volumes", volumeName ], ["viewStorage", "", "", "", "active"], false, ["/storage", "", `/storage/${hostIdOrAliasForUrl(hostAlias, hostId)}/${poolName}`]);
     $("#storageVolumeName").text(volumeName)
     ajaxRequest(globalUrls.storage.volumes.get, x, (data)=>{
         data = makeToastr(data);

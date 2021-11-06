@@ -1108,7 +1108,7 @@ function titleCase(str) {
 
 
 function loadContainerViewReq(req) {
-    currentContainerDetails = {hostId: req.data.hostId, container: req.data.instance, alias: ''};
+    currentContainerDetails = {hostId: req.data.hostId, container: req.data.instance, alias: hostsAliasesLookupTable[req.data.hostId]};
     createDashboardSidebar()
     loadContainerView(currentContainerDetails)
 

@@ -161,7 +161,7 @@ function makeProfileSidbebarHtml(hosthtml, host, id){
         }
 
         hosthtml += `<li class="nav-item">
-          <a class="nav-link ${active}" href="/profiles/${host.hostId}/${profileName}" data-navigo>
+          <a class="nav-link ${active}" href="/profiles/${hostIdOrAliasForUrl(host.alias, host.hostId)}/${profileName}" data-navigo>
             <i class="nav-icon fa fa-user"></i>
             ${profileName}
           </a>
@@ -185,7 +185,7 @@ function makeHostProfileCard(hostId, hostName, profiles)
         let userVDataIcon = profileValues.hasUserData == 1 ? 'check text-success' : 'times';
 
         tbody += `<tr>
-            <td><a href="/profiles/${hostId}/${profileName}" data-navigo>${profileName}</a></td>
+            <td><a href="/profiles/${hostIdOrAliasForUrl(hostName, hostId)}/${profileName}" data-navigo>${profileName}</a></td>
             <td><i class="fas fa-${userVDataIcon}"></i></td>
             <td><i class="fas fa-${vDataIcon}"></i></td>
             <td>${profileValues.proxy}</td>
@@ -260,7 +260,7 @@ function loadProfileSidebar(){
     }else{
         $("#sidebar-ul").find(".active").removeClass("active");
         if($.isNumeric(currentProfileDetails.hostId)){
-            $("#sidebar-ul").find(`.nav-link[href="/profiles/${currentProfileDetails.hostId}/${currentProfileDetails.profile}"]`).addClass("active")
+            $("#sidebar-ul").find(`.nav-link[href="/profiles/${hostIdOrAliasForUrl(currentProfileDetails.hostAlias, currentProfileDetails.hostId)}/${currentProfileDetails.profile}"]`).addClass("active")
         }else{
             $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
         }
@@ -334,7 +334,7 @@ function createTableRowsHtml(data, childPropertyToSearch)
 
 
 function viewProfileReq(req){
-    viewProfile(req.data.profile, '', req.data.hostId)
+    viewProfile(req.data.profile, hostsAliasesLookupTable[req.data.hostId], req.data.hostId)
 }
 function viewProfile(profileId, hostAlias, hostId){
 

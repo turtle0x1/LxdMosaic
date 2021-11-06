@@ -209,9 +209,8 @@ function makeProjectHostSidebarHtml(hosthtml, host, id){
             if(host.hostId == currentProject.hostId && project == currentProject.project ){
                 active = "active";
             }
-
             hosthtml += `<li class="nav-item">
-              <a class="nav-link ${active}" href="/projects/${host.hostId}/${project}" data-navigo>
+              <a class="nav-link ${active}" href="/projects/${hostIdOrAliasForUrl(host.alias, host.hostId)}/${project}" data-navigo>
                 <i class="nav-icon fa fa-project-diagram"></i>
                 ${project}
               </a>
@@ -316,7 +315,7 @@ function loadProjectsSidebar(){
     }else {
         $("#sidebar-ul").find(".active").removeClass("active");
         if($.isNumeric(currentProject.hostId)){
-            $("#sidebar-ul").find(`.nav-link[href="/projects/${currentProject.hostId}/${currentProject.project}"]`).addClass("active")
+            $("#sidebar-ul").find(`.nav-link[href="/projects/${hostIdOrAliasForUrl(currentProject.hostAlias, currentProject.hostId)}/${currentProject.project}"]`).addClass("active")
         }else{
             $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
         }
@@ -351,7 +350,7 @@ function loadProjectView()
 }
 
 function viewProjectReq(req){
-    viewProject(req.data.project, req.data.hostId, '')
+    viewProject(req.data.project, req.data.hostId, hostsAliasesLookupTable[req.data.hostId])
 }
 
 function viewProject(project, hostId, hostAlias){

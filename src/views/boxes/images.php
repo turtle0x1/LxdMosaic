@@ -187,7 +187,7 @@
                 let icon = image.hasOwnProperty("type") && image.type == "container" ? "box" : "vr-cardboard";
 
                 hosthtml += `<li class="nav-item">
-                  <a class="nav-link ${active}" href="/images/${host.hostId}/${image.fingerprint}" data-navigo>
+                  <a class="nav-link ${active}" href="/images/${hostIdOrAliasForUrl(host.alias, host.hostId)}/${image.fingerprint}" data-navigo>
                     <i class="nav-icon fa fa-${icon}"></i>
                     ${imageName}
                   </a>
@@ -577,8 +577,7 @@
     });
 
     function viewImage(req){
-
-        let d = {fingerprint: req.data.fingerprint, hostId: req.data.hostId, alias: ''}
+        let d = {fingerprint: req.data.fingerprint, hostId: req.data.hostId, alias: hostsAliasesLookupTable[req.data.hostId]}
         currentImageDetails = d;
 
         if($("#sidebar-ul").find("[id^=images]").length == 0){
@@ -591,7 +590,7 @@
         $("#imagesBox").show();
 
         $("#sidebar-ul").find(".active").removeClass("active");
-        let i = $("#sidebar-ul").find(`.nav-link[href='/images/${req.data.hostId}/${req.data.fingerprint}']`)
+        let i = $("#sidebar-ul").find(`.nav-link[href='/images/${hostIdOrAliasForUrl(d.alias, d.hostId)}/${req.data.fingerprint}']`)
 
         i.addClass("active")
         $("#imagesBox").show()
@@ -606,7 +605,7 @@
 
             let image = data;
             let imageName =  makeImageName(image);
-            addBreadcrumbs(["Images", d.hostAlias, imageName], ["", "", "active"], false, ["/images"])
+            addBreadcrumbs(["Images", d.alias, imageName], ["", "", "active"], false, ["/images"])
 
             $("#imageName").text(imageName);
 

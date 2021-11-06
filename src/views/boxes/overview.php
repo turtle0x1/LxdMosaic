@@ -697,7 +697,7 @@ function createDashboardSidebar()
     }else {
         $("#sidebar-ul").find(".active").removeClass("active");
         if(currentContainerDetails !== null && $.isNumeric(currentContainerDetails.hostId)){
-            $("#sidebar-ul").find(`.nav-link[href="/instance/${currentContainerDetails.hostId}/${currentContainerDetails.container}"]`).addClass("active")
+            $("#sidebar-ul").find(`.nav-link[href="/instance/${hostIdOrAliasForUrl(currentContainerDetails.alias ,currentContainerDetails.hostId)}/${currentContainerDetails.container}"]`).addClass("active")
         }else if(currentServer !== null && $.isNumeric(currentServer.hostId)){
             $("#sidebar-ul").find(`.nav-link[href="/host/${currentServer.hostId}/overview"]`).addClass("active")
         }else{
@@ -794,7 +794,7 @@ function addHostContainerList(hostId, hostAlias) {
                     data-container="${containerName}"
                     data-alias="${hostAlias}"
                     data-type="${type}">
-                  <a class="nav-link p-0 m-0 ${active}" href="/instance/${hostId}/${containerName}" data-navigo>
+                  <a class="nav-link p-0 m-0 ${active}" href="/instance/${hostIdOrAliasForUrl(hostAlias, hostId)}/${containerName}" data-navigo>
                     <i class="nav-icon me-2 ${statusCodeIconMap[details.state.status_code]}"></i>
                     <i class="nav-icon me-2 fas fa-${typeFa}"></i>
                     <i class="nav-icon me-2 fab fa-${osIcon}"></i>
