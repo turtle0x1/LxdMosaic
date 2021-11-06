@@ -7,6 +7,17 @@ function getQueryVar(name, defvalue) {
         : defvalue;
 }
 
+// Given a hostAlias check if it looks like it contains "https://" because they
+// look like junk if they do, return the id instead as it looks better.
+// Should encourage users to set alises in the release notes and perhaps make
+// it mandatory later.
+function hostIdOrAliasForUrl(hostAlias, hostId){
+    if(hostAlias.startsWith("https://")){
+        return hostId
+    }
+    return encodeURIComponent(hostAlias); // Encode just incase
+}
+
 
 function makeToastr(x) {
     if(!$.isPlainObject(x)){

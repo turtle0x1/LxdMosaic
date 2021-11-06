@@ -577,7 +577,54 @@ var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
   editor.getSession().setMode("ace/mode/yaml");
 
+var hostsAliasesLookupTable = {};
+var hostsIdsLookupTable = {};
+
 $(function(){
+
+    $('[data-toggle="tooltip"]').tooltip({html: true})
+
+    router.hooks({
+        before(done, match){
+            if(Object.keys(hostsAliasesLookupTable).length == 0 && match.data !== null && match.data.hasOwnProperty("hostId")){
+                ajaxRequest(globalUrls.universe.getEntities, {}, function(data){
+                    data = $.parseJSON(data)
+                    //TODO Clusters
+                    let providedHostId = match.data.hostId;
+                    $.each(data.standalone.members, function(_, member){
+                        hostsAliasesLookupTable[member.hostId] = member.alias
+                        hostsIdsLookupTable[member.alias] = member.hostId
+                        if(member.alias == providedHostId){
+                            match.data.hostId = member.hostId
+                        }
+                    });
+
+                    if(!$.isNumeric(match.data.hostId)){
+                         router.navigate("/404")
+                         done(false)
+                    }else{
+                        done()
+                    }
+                });
+            } else if(match.data !== null && match.data.hasOwnProperty("hostId")){
+                if(!$.isNumeric(match.data.hostId)){
+                    let lookupId = hostsIdsLookupTable[match.data.hostId];
+                    if(!$.isNumeric(lookupId)){
+                        router.navigate("/404")
+                        done(false)
+                    }else{
+                        match.data.hostId = hostsIdsLookupTable[match.data.hostId]
+                        done()
+                    }
+                }else{
+                    done()
+                }
+            }else{
+                done()
+            }
+
+        }
+    });
 
     router.on('/', loadDashboard);
     router.on('/host/:hostId/overview', loadHostOverview);
