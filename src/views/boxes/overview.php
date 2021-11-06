@@ -946,16 +946,16 @@ function loadDashboard(){
         data = makeToastr(data);
 
         let lis = `<li class="nav-item">
-          <a class="nav-link active viewDashboard" id="generalDashboardLink" href="#"><i class="fas fa-tachometer-alt me-2"></i>General</a>
+          <div class="nav-link active viewDashboard" id="generalDashboardLink" href="#"><i class="fas fa-tachometer-alt me-2"></i>General</div>
 
         </li>
         <li class="nav-item">
-            <a class="nav-link viewDashboard" id="projectAnalyticsDashboardLink" href="#"><i class="fas fa-chart-bar me-2"></i>Project Analytics</a>
+            <div class="nav-link viewDashboard" id="projectAnalyticsDashboardLink" href="#"><i class="fas fa-chart-bar me-2"></i>Project Analytics</div>
         </li>`;
 
         $.each(data.userDashboards, (_, dashboard)=>{
             lis += `<li class="nav-item">
-              <a class="nav-link viewDashboard" id="${dashboard.id}" href="#"><i class="fas fa-house-user me-2"></i>${dashboard.name}</a>
+              <div class="nav-link viewDashboard" id="${dashboard.id}" href="#"><i class="fas fa-house-user me-2"></i>${dashboard.name}</div>
             </li>`;
         });
 
