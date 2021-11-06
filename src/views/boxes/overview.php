@@ -706,7 +706,7 @@ function createDashboardSidebar()
     }
 }
 
-$(document).on("click", '.search-panel .dropdown-menu', function(e) {
+$(document).on("click", '.dashSidebarFilter', function(e) {
    e.preventDefault();
    var target = $(e.target)
    let targetData = target.data();
@@ -744,9 +744,9 @@ function addHostContainerList(hostId, hostAlias) {
                             <span class="search_concept" data-filter=""><i class="fas fa-filter"></i></span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-dark" role="menu">
-                          <li class='dropdown-item' data-search="all" data-icon="filter"><a href="#"><i class="fas fa-filter me-2"></i>All</a></li>
-                          <li class='dropdown-item' data-search="containers" data-icon="box"><a href="#"><i class="fas fa-box me-2"></i>Containers</a></li>
-                          <li class='dropdown-item' data-search="vms" data-icon="vr-cardboard"><a href="#"><i class="fas fa-vr-cardboard me-2"></i>Virtual Machines</a></li>
+                          <li class='dropdown-item dashSidebarFilter' data-search="all" data-icon="filter"><i class="fas fa-filter me-2"></i>All</li>
+                          <li class='dropdown-item dashSidebarFilter' data-search="containers" data-icon="box"><i class="fas fa-box me-2"></i>Containers</li>
+                          <li class='dropdown-item dashSidebarFilter' data-search="vms" data-icon="vr-cardboard"><i class="fas fa-vr-cardboard me-2"></i>Virtual Machines</li>
                         </ul>
                         <input type="text" class="form-control form-control-sm bg-dark text-white filterHostsInstances" placeholder="Search instances...">
                     </div>
@@ -793,11 +793,10 @@ function addHostContainerList(hostId, hostAlias) {
                     data-alias="${hostAlias}"
                     data-type="${type}">
                   <a class="nav-link p-0 m-0 ${active}" href="/instance/${hostIdOrAliasForUrl(hostAlias, hostId)}/${containerName}" data-navigo>
-                    <i class="nav-icon me-2 ${statusCodeIconMap[details.state.status_code]}"></i>
-                    <i class="nav-icon me-2 fas fa-${typeFa}"></i>
-                    <i class="nav-icon me-2 fab fa-${osIcon}"></i>
-                    <span class="text-truncate"></span>
-                    <span class="d-inline-block text-truncate" style="max-width: 150px;">
+                    <i style="min-width: 20px" class="nav-icon me-1 ${statusCodeIconMap[details.state.status_code]}"></i>
+                    <i style="min-width: 20px" class="nav-icon me-1 fas fa-${typeFa}"></i>
+                    <i style="min-width: 20px" class="nav-icon me-1 fab fa-${osIcon}"></i>
+                    <span class="text-truncate" style="max-width: 150px;">
                         ${containerName}
                     </span>
                   </a>
@@ -812,11 +811,12 @@ function addHostContainerList(hostId, hostAlias) {
 }
 
 $(document).on("keyup", ".filterHostsInstances", function(e){
-    let ul = $(this).parents("ul");
+    let hostUl = $(this).parents("ul");
     let search = $(this).val().toLowerCase();
-    let typeFilter = $(this).parents("ul").find(".search_concept").data("filter");
-    ul.parents("li").find(".hostInstancesUl").css("min-height", "200px");
-    ul.find(".view-container").filter(function(){
+    let typeFilter = hostUl.find(".search_concept").data("filter");
+    let hostInstancesUl = hostUl.parents("li").find(".hostInstancesUl");
+    hostInstancesUl.css("min-height", "200px");
+    hostInstancesUl.find(".view-container").filter(function(){
         $(this).toggle($(this).text().toLowerCase().indexOf(search) > -1 && $(this).data("type").toLowerCase().indexOf(typeFilter) > -1)
     });
 });

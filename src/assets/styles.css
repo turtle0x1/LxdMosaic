@@ -11,6 +11,10 @@ body {
     cursor: pointer;
 }
 
+.dashSidebarFilter {
+    cursor: pointer;
+}
+
 .filterHostsInstances {
     border: 1px solid grey !important;
 }
