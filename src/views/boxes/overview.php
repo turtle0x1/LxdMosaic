@@ -1289,8 +1289,7 @@ $(document).on("click", "#openSearch", function(){
                             makeToastr({state: "error", message: "Couldn't find instance"})
                             return false;
                         }
-                        currentContainerDetails = data.result;
-                        loadContainerView(data.result);
+                        router.navigate(`/instance/${hostIdOrAliasForUrl(data.result.alias, data.result.hostId)}/${data.result.container}`);
                     });
                 }
             }
