@@ -740,17 +740,15 @@ function addHostContainerList(hostId, hostAlias) {
             if(Object.keys(data).length > 5){
                 containers += `<li class="">
                     <div class="input-group pe-3 mb-2" style="padding-left: 5px;">
-                        <div class="input-group-btn search-panel">
-                            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                                <span class="search_concept" data-filter=""><i class="fas fa-filter"></i></span> <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-dark" role="menu">
-                              <li class='dropdown-item' data-search="all" data-icon="filter"><a href="#"><i class="fas fa-filter me-2"></i>All</a></li>
-                              <li class='dropdown-item' data-search="containers" data-icon="box"><a href="#"><i class="fas fa-box me-2"></i>Containers</a></li>
-                              <li class='dropdown-item' data-search="vms" data-icon="vr-cardboard"><a href="#"><i class="fas fa-vr-cardboard me-2"></i>Virtual Machines</a></li>
-                            </ul>
-                        </div>
-                        <input type="text" class="form-control form-control-sm filterHostsInstances" placeholder="Search instances...">
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            <span class="search_concept" data-filter=""><i class="fas fa-filter"></i></span> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark" role="menu">
+                          <li class='dropdown-item' data-search="all" data-icon="filter"><a href="#"><i class="fas fa-filter me-2"></i>All</a></li>
+                          <li class='dropdown-item' data-search="containers" data-icon="box"><a href="#"><i class="fas fa-box me-2"></i>Containers</a></li>
+                          <li class='dropdown-item' data-search="vms" data-icon="vr-cardboard"><a href="#"><i class="fas fa-vr-cardboard me-2"></i>Virtual Machines</a></li>
+                        </ul>
+                        <input type="text" class="form-control form-control-sm bg-dark text-white border-dark filterHostsInstances" placeholder="Search instances...">
                     </div>
                 </li>`
             }
