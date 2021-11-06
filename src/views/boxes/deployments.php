@@ -155,15 +155,15 @@ function loadDeploymentViewReq(req) {
 function loadDeploymentsSidebar(inputData = null){
     function _doResult(data){
         let hosts = `
-        <li class="nav-item deployments-overview">
-            <a class="nav-link ${$.isNumeric(currentDeployment) ? "" : "active"}" href="/deployments" data-navigo>
+        <li class="nav-item mb-2 mt-2 deployments-overview">
+            <a class="nav-link p-0 ${$.isNumeric(currentDeployment) ? "" : "active"}" href="/deployments" data-navigo>
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;
         $.each(data, (_, item)=>{
             let active = item.id == currentDeployment ? "active" : "";
-            hosts += `<li class="nav-item">
-                <a class="nav-link ${active}" href="/deployments/${item.id}" data-navigo>
+            hosts += `<li class="nav-item mb-2">
+                <a class="nav-link p-0 ${active}" href="/deployments/${item.id}" data-navigo>
                     <i class="nav-icon fas fa-space-shuttle"></i> ${item.name}
                 </a>
             </li>`
