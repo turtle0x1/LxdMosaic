@@ -16,7 +16,6 @@ class GetProjectInfo
     public function get(Host $host, string $projectName)
     {
         $project = $host->projects->info($projectName);
-        $host->setProject($projectName);
         $project["used_by"] = StringTools::usedByStringsToLinks(
             $host,
             $project["used_by"]

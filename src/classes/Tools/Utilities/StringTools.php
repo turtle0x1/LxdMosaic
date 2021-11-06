@@ -66,15 +66,14 @@ class StringTools
 
             $lastItem = array_pop($explodedPath);
 
-            $project = "";
+            $itemProject = "default";
 
             if (isset($query["project"])) {
-                $project = $query["project"];
+                $itemProject = $query["project"];
             }
 
             $icon = "";
             $class = "";
-            $data = " data-project='$project' data-host-id='{$host->getHostId()}' data-alias='{$host->getAlias()}' ";
             $href = "";
             $tag = "a";
 
@@ -84,16 +83,16 @@ class StringTools
                 $href = "/instance/{$host->getHostId()}/$container";
                 $icon = "camera";
             } elseif (strpos($item, '/instances/') !== false || strpos($item, '/containers/') !== false) {
-                $data .= "data-navigo";
                 $icon = "box";
                 $href = "/instance/{$host->getHostId()}/$lastItem";
             } elseif (strpos($item, '/profiles/') !== false) {
-                $data .= "data-navigo";
                 $icon = "users";
                 $href = "/profiles/{$host->getHostId()}/$lastItem";
             } elseif (strpos($item, '/images/') !== false) {
-                $host->setProject($project);
+                $origProject = $host->getProject();
+                $host->setProject($itemProject);
                 $imageDetails = $host->images->info($lastItem);
+                $host->setProject($origProject);
 
                 $lastItem = $imageDetails["properties"]["os"] . " " . $imageDetails["properties"]["release"] . "({$imageDetails['type']})";
 
@@ -103,17 +102,24 @@ class StringTools
 
                 $icon = "images";
 
-                $href = "/images/{$host->getHostId()}/{$imageDetails["fingerprint"]}?project={$project}";
-                $data = "data-navigo";
+                $href = "/images/{$host->getHostId()}/{$imageDetails["fingerprint"]}";
             } elseif (strpos($item, '/volumes/') !== false) {
                 $tag = "span";
                 $class = "disabled";
                 $icon = "database";
             }
 
-            $item = "<$tag href='$href' class='$class' $data>
-                <i class='fas fa-$icon'></i>
+            // Currently the frontend can't handle jumping to items in a project
+            // the user isn't currently in so we have to make these non clickable
+            // for the time being
+            if ($itemProject !== $host->getProject()) {
+                $tag = "span";
+            }
+
+            $item = "<$tag href='$href?project={$itemProject}' class='$class' data-navigo>
+                <i class='fas fa-$icon pe-1'></i>
                 $lastItem
+                <i class='fas fa-project-diagram ps-2 pe-1'></i> $itemProject
             </$tag>";
 
             $usedBy[$index] = $item;
