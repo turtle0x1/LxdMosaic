@@ -1185,7 +1185,7 @@ function loadContainerView(data)
         })
 
 
-        if(x.details.type == "container"){
+        if(!x.details.hasOwnProperty("type") || x.details.type == "container"){
             $("#goToTerminal").hide();
         }else{
             $("#goToTerminal").show();
