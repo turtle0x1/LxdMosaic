@@ -634,6 +634,7 @@ $(function(){
     router.on("/cloudConfig", loadCloudConfigOverview);
     router.on("/cloudConfig/:id", loadCloudConfigView);
     router.on("/deployments", loadDeploymentsView);
+    router.on("/deployments/:deploymentId", loadDeploymentViewReq);
     router.on("/images", viewImages);
     router.on("/images/:hostId/:fingerprint", viewImage);
     router.on("/networks", loadNetworksView);

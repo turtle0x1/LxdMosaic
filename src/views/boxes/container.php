@@ -1252,7 +1252,7 @@ function loadContainerView(data)
         let deployment = "Not In Deployment";
 
         if(x.deploymentDetails !== false){
-            deployment = `<a href="#" data-deployment-id="${x.deploymentDetails.id}" class="toDeployment">${x.deploymentDetails.name}</a>`
+            deployment = `<a href="/deployments/${x.deploymentDetails.id}">${x.deploymentDetails.name}</a>`
         }
 
         $("#container-deployment").html(deployment);
@@ -2377,11 +2377,6 @@ $("#containerBox").on("click", "#goToConsole", function() {
     }
 
 });
-
-$("#containerBox").on("click", ".toDeployment", function(){
-    let deploymentId = $(this).data("deploymentId");
-    loadDeploymentsView(deploymentId);
-})
 
 $("#containerBox").on("click", ".copyContainer", function(){
     copyContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);

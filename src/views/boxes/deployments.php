@@ -101,7 +101,7 @@
             <div class="col-md-9">
                 <div class="card bg-dark text-white">
                     <div class="card-header bg-dark">
-                        <h5> <a> Instances In Deployment </a> </h5>
+                        <h5>Instances In Deployment</h5>
                     </div>
                     <div class="card-body bg-dark">
                         <table class="table table-bordered table-dark" id="deploymentContainersList">
@@ -131,32 +131,73 @@ var currentDeployment = null;
 
 var emptyDeploymentBox = function(){
     return $(`
-    <div class="brand-card" id="">
-      <div class="brand-card-header bg-dark">
+    <div class="card bg-dark text-white mb-2">
+      <div class="card-header">
         <h5 class='text-white name'></h5>
       </div>
-      <div class="brand-card-body bg-dark">
-        <div>
-          <div class="text-value">Memory <i class="fas fa-memory"></i></div>
-          <div class="text-uppercase text-muted memory"></div>
+      <div class="card-body row text-white text-center">
+        <div class="col-md-6">
+          <h2>Memory <i class="fas fa-memory"></i></h2>
+          <h4 class="text-uppercase text-muted memory"></h4>
         </div>
-        <div>
-          <div class="text-value">Containers <i class="fas fa-box-open"></i></div>
-          <div class="text-uppercase text-muted containers"></div>
+        <div class="col-md-6">
+          <h2>Containers <i class="fas fa-box-open"></i></h2>
+          <h4 class="text-uppercase text-muted containers"></h4>
         </div>
       </div>
     </div>`);
 }
 
-function loadDeploymentsView(deploymentId = null)
+function loadDeploymentViewReq(req) {
+    viewDeployment(req.data.deploymentId)
+}
+
+function loadDeploymentsSidebar(inputData = null){
+    function _doResult(data){
+        let hosts = `
+        <li class="nav-item deployments-overview">
+            <a class="nav-link ${$.isNumeric(currentDeployment) ? "" : "active"}" href="/deployments" data-navigo>
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </a>
+        </li>`;
+        $.each(data, (_, item)=>{
+            let active = item.id == currentDeployment ? "active" : "";
+            hosts += `<li class="nav-item">
+                <a class="nav-link ${active}" href="/deployments/${item.id}" data-navigo>
+                    <i class="nav-icon fas fa-space-shuttle"></i> ${item.name}
+                </a>
+            </li>`
+        });
+        $("#sidebar-ul").empty().append(hosts)
+        router.updatePageLinks()
+    }
+    if(inputData == null && $("#sidebar-ul").find("[href^='/deployments']").length == 0){
+        ajaxRequest(globalUrls.deployments.getAll, {}, (data)=>{
+            _doResult($.parseJSON(data))
+        });
+    }else if(inputData !== null){
+        _doResult(inputData);
+    }else{
+        $("#sidebar-ul").find(".active").removeClass("active");
+        // console.log(cur);
+        if($.isNumeric(currentDeployment)){
+            $("#sidebar-ul").find(`.nav-link[href="/deployments/${currentDeployment}"]`).addClass("active")
+        }else{
+            $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
+        }
+    }
+
+}
+
+function loadDeploymentsView()
 {
+    currentDeployment = null;
     setBreadcrumb("Deployments", "active", "/deployments");
     $(".sidebar-fixed").addClass("sidebar-lg-show");
     changeActiveNav(".viewDeployments")
     $(".boxSlide, #depoymentDetails").hide();
     $("#deploymentsOverview, #deploymentsBox").show();
     $("#deploymentList").empty();
-    addBreadcrumbs(["Deployments"], ["active"], false);
     ajaxRequest(globalUrls.deployments.getAll, {}, (data)=>{
         data = $.parseJSON(data);
 
@@ -166,51 +207,37 @@ function loadDeploymentsView(deploymentId = null)
             return false;
         }
 
-        let hosts = `
-        <li class="nav-item deployments-overview">
-            <a class="nav-link ${$.isNumeric(deploymentId) ? "" : "text-info"}" href="#">
-                <i class="fas fa-tachometer-alt"></i> Overview
-            </a>
-        </li>`;
+        loadDeploymentsSidebar(data);
 
         $.each(data, function(i, item){
             let box = emptyDeploymentBox();
-            box.find(".name").html(`
-                <a class='viewDeployment' href="#" data-deployment-id="${item.id}"><u>${item.name}</u>
-                </a>`);
+            box.find(".name").html(`<a href="/deployments/${item.id}" data-navigo>${item.name}</a>`);
 
             box.find(".memory").text(formatBytes(item.containerDetails.totalMem));
             box.find(".containers").text(item.containerDetails.totalContainers);
             $("#deploymentList").append(box);
-            let active = item.id == deploymentId ? "active" : "";
-            hosts += `<li class="nav-item view-deployment ${active}" data-id="${item.id}" >
-                <a class="nav-link" href="#">
-                    <i class="nav-icon fas fa-space-shuttle"></i> ${item.name}
-                </a>
-            </li>`
+
         });
-        $("#sidebar-ul").empty().append(hosts);
-        if($.isNumeric(deploymentId)){
-            $(`.view-deployment[data-id=${deploymentId}]`).trigger("click");
-        }
+        router.updatePageLinks()
     });
 }
-
-$("#sidebar-ul").on("click", ".view-deployment", function(){
-    viewDeployment($(this).data("id"))
-});
 
 function viewDeployment(deploymentId)
 {
     currentDeployment = deploymentId;
+    loadDeploymentsSidebar()
+    changeActiveNav(".viewDeployments")
     let x = {deploymentId: deploymentId};
+    $(".boxSlide").hide();
+    $(" #deploymentsBox").show();
     $("#deploymentsOverview").hide();
     $("#depoymentDetails").show();
     ajaxRequest(globalUrls.deployments.getDeployment, x, function(data){
         data = $.parseJSON(data);
 
         $("#deploymentName").text(`Deployment: ${data.details.name}`);
-        addBreadcrumbs(["Deployments", data.details.name ], ["", "active"], false);
+
+        addBreadcrumbs(["Deployments", data.details.name ], ["", "active"], false, ["/deployments"]);
 
         let trs = "";
         $.each(data.cloudConfigs, function(i, item){
@@ -263,6 +290,7 @@ function viewDeployment(deploymentId)
 
         $("#deploymentCloudConfigTable > tbody").empty().append(trs);
         $("#deploymentContainersList > tbody").empty().append(c);
+        router.updatePageLinks();
     });
 }
 
@@ -289,11 +317,6 @@ $("#deploymentsBox").on("click", "#startDeployment", function(){
             }
         }
     });
-});
-
-$("#deploymentsBox").on("click", ".viewDeployment", function(e){
-    e.preventDefault();
-    viewDeployment($(this).data("deploymentId"));
 });
 
 $("#deploymentsBox").on("click", "#deleteDeployment", function(){
