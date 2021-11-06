@@ -661,6 +661,8 @@ $(function(){
     });
 
     router.resolve();
+
+    Chart.defaults.global.defaultFontColor='white';
 });
 
 

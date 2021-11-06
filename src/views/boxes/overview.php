@@ -855,7 +855,6 @@ function loadDashboard(){
     if(recordActionsEnabled == 0){
         $("#goToEvents").hide();
     }
-    Chart.defaults.global.defaultFontColor='white';
     $('[data-toggle="tooltip"]').tooltip({html: true})
     createDashboardSidebar();
     window.setInterval(clearOldOperations, 60 * 1000);
