@@ -748,7 +748,7 @@ function addHostContainerList(hostId, hostAlias) {
                           <li class='dropdown-item' data-search="containers" data-icon="box"><a href="#"><i class="fas fa-box me-2"></i>Containers</a></li>
                           <li class='dropdown-item' data-search="vms" data-icon="vr-cardboard"><a href="#"><i class="fas fa-vr-cardboard me-2"></i>Virtual Machines</a></li>
                         </ul>
-                        <input type="text" class="form-control form-control-sm bg-dark text-white border-dark filterHostsInstances" placeholder="Search instances...">
+                        <input type="text" class="form-control form-control-sm bg-dark text-white filterHostsInstances" placeholder="Search instances...">
                     </div>
                 </li>`
             }
