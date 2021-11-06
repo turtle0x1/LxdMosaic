@@ -7,6 +7,17 @@ function getQueryVar(name, defvalue) {
         : defvalue;
 }
 
+// Given a hostAlias check if it looks like it contains "https://" because they
+// look like junk if they do, return the id instead as it looks better.
+// Should encourage users to set alises in the release notes and perhaps make
+// it mandatory later.
+function hostIdOrAliasForUrl(hostAlias, hostId){
+    if(hostAlias.startsWith("https://")){
+        return hostId
+    }
+    return encodeURIComponent(hostAlias); // Encode just incase
+}
+
 
 function makeToastr(x) {
     if(!$.isPlainObject(x)){
@@ -100,17 +111,23 @@ function mapObjToSignleDimension(obj, keyToMap)
     return output;
 }
 
-function createBreadcrumbItemHtml(name, classes)
+function createBreadcrumbItemHtml(name, classes, link = "")
 {
-    return `<li class="breadcrumb-item ` + classes + `">` + name + `</li>`;
+    if(link !== ""){
+        return `<li href="${link}" style="cursor: pointer;" class="breadcrumb-item text-decoration-underline ${classes}" data-navigo>${name}</li>`;
+    }else{
+        return `<li class="breadcrumb-item ${classes}">${name}</li>`;
+    }
+
 }
 
-function setBreadcrumb(name, classes)
+function setBreadcrumb(name, classes, link)
 {
-    $(".breadcrumb").empty().append(createBreadcrumbItemHtml(name, classes))
+    $(".breadcrumb").empty().append(createBreadcrumbItemHtml(name, classes, link))
+    router.updatePageLinks()
 }
 
-function addBreadcrumbs(names, classes, preserveRoot = true)
+function addBreadcrumbs(names, classes, preserveRoot = true, links = [])
 {
   if(preserveRoot){
       $(".breadcrumb").find(".breadcrumb-item:gt(0)").remove();
@@ -122,7 +139,8 @@ function addBreadcrumbs(names, classes, preserveRoot = true)
   let items = "";
 
   $.each(names, function(i, item){
-      items += createBreadcrumbItemHtml(item, classes[i]);
+      let l = typeof links[i] === "undefined" ? "" : links[i]
+      items += createBreadcrumbItemHtml(item, classes[i], links[i]);
   })
 
   $(".breadcrumb").append(items)

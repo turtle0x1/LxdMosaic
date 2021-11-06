@@ -201,7 +201,11 @@
 
 <script>
 
-var currentPool = {};
+var currentPool = {
+    hostId: null,
+    poolName: null
+};
+
 var currentVolume = {};
 
 function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
@@ -212,7 +216,7 @@ function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
     }
 
     hosthtml += `<li class="mb-2">
-        <a class="d-inline ${disabled}" href="#">
+        <a class="d-inline ${disabled}">
             <i class="fas fa-server"></i> ${host.alias}
         </a>`;
 
@@ -238,12 +242,13 @@ function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
 
 
      $.each(host.pools, function(i, pool){
-         hosthtml += `<li class="nav-item view-storagePool"
-             data-host-id="${host.hostId}"
-             data-host-alias="${host.alias}"
-             data-pool-name="${pool.name}"
-             >
-           <a class="nav-link" href="#">
+         let active = "";
+
+         if(host.hostId == currentPool.hostId && pool.name == currentPool.poolName ){
+             active = "active";
+         }
+         hosthtml += `<li class="nav-item">
+           <a class="nav-link ${active}" href="/storage/${hostIdOrAliasForUrl(host.alias ,host.hostId)}/${pool.name}" data-navigo>
              <i class="nav-icon fa fa-hdd"></i>
              ${pool.name}
            </a>
@@ -264,21 +269,71 @@ function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
 }
 
 
-function loadStorageView()
-{
-    $(".boxSlide, #storageDetails, #volumeDetails").hide();
-    $("#storageOverview, #storageBox").show();
-    $("#deploymentList").empty();
-    setBreadcrumb("Storage", "viewStorage active");
-    ajaxRequest(globalUrls.storage.getAll, {}, (data)=>{
-        data = $.parseJSON(data);
-
-        let hosts = `
-        <li class="mt-2 storage-overview">
-            <a class="text-info" href="#">
+function loadStorageSidebar(data = null){
+    function _doResult(data){
+        let tableList = ""
+        let a = currentPool.hostId == null ? "active" : "";
+        let hosts = `<li class="nav-item mt-2">
+            <a class="nav-link p-0 ${a}" href="/storage" data-navigo>
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;
+        let id = 0;
+        $.each(data.hostDetails.clusters, (clusterIndex, cluster)=>{
+            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            $.each(cluster.members, (_, host)=>{
+                let html = makeStorageHostSidebarHtml(hosts, host, id, tableList)
+                hosts = html.hosthtml;
+                tableList = html.tableListHtml;
+                id++;
+            })
+        });
+
+        hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
+
+        $.each(data.hostDetails.standalone.members, (_, host)=>{
+            let html = makeStorageHostSidebarHtml(hosts, host, id, tableList)
+            hosts = html.hosthtml;
+            tableList = html.tableListHtml;
+            id++;
+        });
+
+        $("#sidebar-ul").empty().append(hosts);
+        router.updatePageLinks();
+        return tableList;
+    }
+    if(data == null){
+        if($("#sidebar-ul").find("[id^=storage]").length == 0){
+            ajaxRequest(globalUrls.storage.getAll, {}, (data)=>{
+                data = $.parseJSON(data);
+                return _doResult(data)
+            });
+        }else {
+            $("#sidebar-ul").find(".active").removeClass("active");
+            if($.isNumeric(currentPool.hostId)){
+                $("#sidebar-ul").find(`.nav-link[href="/storage/${hostIdOrAliasForUrl(currentPool.hostAlias, currentPool.hostId)}/${currentPool.poolName}"]`).addClass("active")
+            }else{
+                $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
+            }
+        }
+    }else{
+        return _doResult(data)
+    }
+}
+
+
+function loadStorageView()
+{
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    changeActiveNav(".viewStorage")
+    $(".boxSlide, #storageDetails, #volumeDetails").hide();
+    $("#storageOverview, #storageBox").show();
+    $("#deploymentList").empty();
+    setBreadcrumb("Storage", "active", "/storage");
+    currentPool = {hostId: null, poolName: null}
+    loadStorageSidebar()
+    ajaxRequest(globalUrls.storage.getAll, {}, (data)=>{
+        data = $.parseJSON(data);
 
         let tableList = "";
 
@@ -313,42 +368,15 @@ function loadStorageView()
               }
         });
 
-        // $("#currentStorageUsageTotal").empty().append(`<div class="mb-2">
-        //     <label>Memory</label>
-        //     <div class="progress">
-        //         <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(data.stats.storage.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.stats.storage.used}" aria-valuemin="0" aria-valuemax="${(data.stats.storage.total - data.stats.storage.used)}"></div>
-        //     </div>
-        // </div>`);
-        //
-        // $("#currentStorageUsageTotal").find('[data-toggle="tooltip"]').tooltip({html: true})
-        let id = 0;
-        $.each(data.hostDetails.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
-            $.each(cluster.members, (_, host)=>{
-                let html = makeStorageHostSidebarHtml(hosts, host, id, tableList)
-                hosts = html.hosthtml;
-                tableList = html.tableListHtml;
-                id++;
-            })
-        });
+        let tr = loadStorageSidebar(data)
+        $("#poolListTable > tbody").empty().append(tr);
 
-        hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
-
-        $.each(data.hostDetails.standalone.members, (_, host)=>{
-            let html = makeStorageHostSidebarHtml(hosts, host, id, tableList)
-            hosts = html.hosthtml;
-            tableList = html.tableListHtml;
-            id++;
-        });
-
-        $("#sidebar-ul").empty().append(hosts);
-        $("#poolListTable > tbody").empty().append(tableList);
     });
 }
 
-$("#sidebar-ul").on("click", ".view-storagePool", function(){
-    viewStoragePool($(this).data("hostId"), $(this).data("hostAlias"), $(this).data("poolName"))
-});
+function loadStoragePoolReq(req){
+    viewStoragePool(req.data.hostId, hostsAliasesLookupTable[req.data.hostId], req.data.pool)
+}
 
 
 $("#storageOverview").on("click", "#createPool", function(){
@@ -358,10 +386,11 @@ $("#storageOverview").on("click", "#createPool", function(){
 function viewStoragePool(hostId, hostAlias, poolName)
 {
     currentPool = {hostId: hostId, poolName: poolName, hostAlias: hostAlias, driver: null};
-    $("#storageOverview, #volumeDetails").hide();
-    $("#storageDetails").show();
-
-    addBreadcrumbs(["Storage", hostAlias, poolName], ["viewStorage", "", "active"], false);
+    $(".boxSlide, #storageDetails, #volumeDetails, #storageOverview, #volumeDetails").hide();
+    changeActiveNav(".viewStorage")
+    $("#storageBox, #storageDetails").show();
+    loadStorageSidebar()
+    addBreadcrumbs(["Storage", hostAlias, poolName], ["", "", "active"], false, ["/storage"]);
 
     ajaxRequest(globalUrls.storage.getPool, currentPool, function(data){
         data = $.parseJSON(data);
@@ -392,7 +421,7 @@ function viewStoragePool(hostId, hostAlias, poolName)
         }else{
             $.each(data.volumes, function(key, value){
                 volumesHtml += `<tr>
-                    <td><a class='viewVolume' href="#" data-project="${value.project}" data-path="${value.path}" data-name="${value.name}">${value.name}</a></td>
+                    <td><a class='viewVolume' href="/storage/${hostIdOrAliasForUrl(hostAlias, hostId)}/${poolName}/${value.name}?project=${value.project}&path=${value.path}" data-navigo>${value.name}</a></td>
                     <td>${value.project}</td>
                 </tr>`
             });
@@ -401,21 +430,26 @@ function viewStoragePool(hostId, hostAlias, poolName)
         $("#storageVolumeTable > tbody").empty().append(volumesHtml);
         $("#storagePoolConfigDetails").empty().append(configHtml);
         $("#storagePoolUsedBy > tbody").empty().append(usedByHtml);
+        router.updatePageLinks()
     });
 }
 
-$("#storageDetails").on("click", ".viewVolume", function(){
-    let d = $(this).data();
+function routeViewPoolVolume(req){
     $("#storageOverview, #storageDetails").hide();
     $("#volumeDetails").show();
-
-    viewStorageVolume(currentPool.hostId, currentPool.hostAlias, currentPool.poolName, d.name, d.path, d.project);
-});
+    viewStorageVolume(req.data.hostId, hostsAliasesLookupTable[req.data.hostId], req.data.pool, req.data.volume, req.params.path, req.params.project);
+}
 
 function viewStorageVolume(hostId, hostAlias, poolName, volumeName, path, project) {
     let x = {hostId: hostId, pool: poolName, path: path, project: project};
     currentVolume = x;
-    addBreadcrumbs(["Storage", hostAlias, poolName, "volumes", volumeName ], ["viewStorage", "", "", "", "active"], false);
+
+    currentPool = {hostId: hostId, poolName: poolName, hostAlias: hostAlias, driver: null};
+    changeActiveNav(".viewStorage")
+    $("#storageBox").show();
+    loadStorageSidebar()
+
+    addBreadcrumbs(["Storage", hostAlias, poolName, "volumes", volumeName ], ["viewStorage", "", "", "", "active"], false, ["/storage", "", `/storage/${hostIdOrAliasForUrl(hostAlias, hostId)}/${poolName}`]);
     $("#storageVolumeName").text(volumeName)
     ajaxRequest(globalUrls.storage.volumes.get, x, (data)=>{
         data = makeToastr(data);
@@ -448,6 +482,7 @@ function viewStorageVolume(hostId, hostAlias, poolName, volumeName, path, projec
 
         $("#volumeUsedByTable > tbody").empty().append(volumeUsedByTrs)
         $("#volumeConfigTable > tbody").empty().append(volumeConfigTrs)
+        router.updatePageLinks()
     });
 }
 

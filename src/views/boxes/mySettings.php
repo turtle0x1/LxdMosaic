@@ -47,6 +47,11 @@ var currentProvider;
 
 function loadMySettings()
 {
+    setBreadcrumb("My Settings", "active");
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    changeActiveNav(null)
+    $("#myAccountBtn").addClass("active");
+
     $(".boxSlide").hide();
     $(".mySettingBox").hide();
     $("#settingsOverview, #mySettingsBox").show();
@@ -56,8 +61,8 @@ function loadMySettings()
     currentProvider = null;
 
     let hosts = `
-    <li class="mt-2 my-settings">
-        <a class="text-info" href="#">
+    <li class="mt-2 nav-item my-settings">
+        <a class="nav-link active p-0" href="/mySettings">
             <i class="fas fa-user me-2"></i>My API Keys
         </a>
     </li>`
@@ -65,7 +70,7 @@ function loadMySettings()
 
     $("#sidebar-ul").empty().append(hosts);
 
-    addBreadcrumbs(["My Settings", "API Keys"], ["viewMySettings", "active"], false);
+    addBreadcrumbs(["My Settings", "API Keys"], ["", "active"], false);
 
     ajaxRequest(globalUrls.settings.getMyOverview, {}, (data)=>{
         data = makeToastr(data);

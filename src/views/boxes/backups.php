@@ -436,6 +436,8 @@ $(document).on("click", ".viewContainerBackups", function(){
 });
 
 function loadBackupsView() {
+    setBreadcrumb("Backups", "active", "/backups");
+    changeActiveNav(".viewBackups")
     $(".boxSlide, #backupContents").hide();
     $("#backupsBox, #backupsOverview").show();
     $("#sidebar-ul").empty();
@@ -486,15 +488,16 @@ function loadBackupsOverview() {
                         trClass = "success";
                     }
 
-                    instanceName = `<a
-                        href="#"
-                        class="viewContainerBackups"
+                    instanceName = `<p
+
+                        class="viewContainerBackups text-primary text-decoration-underline"
+                        style="cursor: pointer;"
                         data-host-alias="${host}"
                         data-host-id="${hostDetails.hostId}"
                         data-container-index="${containerIndex}"
                         data-container="${container.name}">
                         ${container.name} ${!container.containerExists ? ghostIcon : ""}
-                    </a>`;
+                    </p>`;
 
                     if(container.lastBackup.hasOwnProperty("backupDateCreated")){
                         date = moment.utc(container.lastBackup.backupDateCreated).local().fromNow()

@@ -118,13 +118,16 @@ var envVariableTr = `<tr>
 </tr>
 `;
 
-function loadCloudConfigView(cloudConfigId)
+function loadCloudConfigView(req)
 {
-    let data = {
-        id: cloudConfigId
-    };
+    currentCloudConfigId = req.data.id;
 
-    currentCloudConfigId = cloudConfigId;
+    let data = {
+        id: req.data.id
+    };
+    changeActiveNav(".viewCloudConfigFiles")
+
+    loadCloudConfigTree()
 
     ajaxRequest(globalUrls.cloudConfig.getDetails, data ,function(data){
 
@@ -149,60 +152,75 @@ function loadCloudConfigView(cloudConfigId)
         editor.setValue(config.data.data, -1);
         $("#cloudConfigOverview").hide();
         $("#cloudConfigContents").show();
+
+        $("#cloudConfigBox").show();
     });
 }
 
 function loadCloudConfigTree()
 {
-    ajaxRequest(globalUrls.cloudConfig.getAll, null, function(data){
-        loadCloudConfigOverview();
-        var data = $.parseJSON(data);
-        let hosts = `
-        <li class="mb-2 mt-2 cloudConfig-overview">
-            <a class="" style="text-decoration: none;" href="#">
-                <i class="fas fa-tachometer-alt mr-5"></i> Overview
-            </a>
-        </li>`;
-        let id = 0;
-        $.each(data, function(i, item){
-
-            hosts += `<li class="mb-2">
-                <a class="d-inline href="#">
-                    <i class="fas fa-layer-group me-2"></i>${i}
+    if($("#sidebar-ul").find("[id^=cloudConfig]").length == 0){
+        ajaxRequest(globalUrls.cloudConfig.getAll, null, function(data){
+            var data = $.parseJSON(data);
+            let a = currentCloudConfigId == null ? 'active' : '';
+            let hosts = `
+            <li class="mb-2 mt-2 nav-item">
+                <a class="nav-link p-0 ${a}" style="text-decoration: none;" href="/cloudConfig" data-navigo>
+                    <i class="fas fa-tachometer-alt mr-5"></i> Overview
                 </a>
-                <button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#cloudConfig-namespace-${id}" aria-expanded="true">
-                    <i class="fas fa-caret-down"></i>
-                </button>
-                <div class=" mt-2 bg-dark text-white show" id="cloudConfig-namespace-${id}">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
+            </li>`;
+            let id = 0;
+            $.each(data, function(i, item){
 
-            $.each(item, function(o, z){
-                hosts += `<li class="nav-item view-cloudConifg"
-                    data-id="${z.id}"
-                    data-name="${z.name}"
-                    data-namespace="${i}">
-                  <a class="nav-link" href="#">
-                    <i class="nav-icon fa fa-file-alt"></i>
-                    ${z.name}
-                  </a>
-                </li>`;
+                hosts += `<li class="mb-2">
+                    <a class="d-inline>
+                        <i class="fas fa-layer-group me-2"></i>${i}
+                    </a>
+                    <button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#cloudConfig-namespace-${id}" aria-expanded="true">
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class=" mt-2 bg-dark text-white show" id="cloudConfig-namespace-${id}">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
+
+                $.each(item, function(o, z){
+                    let a = z.id == currentCloudConfigId ? "active" : "";
+                    hosts += `<li class="nav-item"
+                        data-id="${z.id}"
+                        data-name="${z.name}"
+                        data-namespace="${i}">
+                      <a class="nav-link ${a}" href="/cloudConfig/${z.id}" data-navigo>
+                        <i class="nav-icon fa fa-file-alt"></i>
+                        ${z.name}
+                      </a>
+                    </li>`;
+                });
+                id++
+                hosts += `</ul></div></li>`
             });
-            id++
-            hosts += `</ul></div></li>`
-        });
 
-        $("#sidebar-ul").empty().append(hosts);
-    });
+            $("#sidebar-ul").empty().append(hosts);
+            router.updatePageLinks()
+        });
+    }else{
+        $("#sidebar-ul").find(".active").removeClass("active");
+        if($.isNumeric(currentCloudConfigId)){
+            $("#sidebar-ul").find("[data-id='" + currentCloudConfigId + "'] > .nav-link").addClass("active")
+        }else{
+            $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
+        }
+    }
 }
 
-$("#sidebar-ul").on("click", ".view-cloudConifg", function(){
-    addBreadcrumbs([$(this).data("namespace"), $(this).data("name")], ["", "active"]);
-    loadCloudConfigView($(this).data("id"));
-});
-
-function loadCloudConfigOverview(){
+function loadCloudConfigOverview(req){
+    if(req.data == null || !req.data.hasOwnProperty("id")){
+        currentCloudConfigId = null
+    }
     $(".boxSlide, #cloudConfigContents").hide();
     $("#cloudConfigBox, #cloudConfigOverview").show();
+    setBreadcrumb("Cloud Config", "active", "/cloudConfig");
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    changeActiveNav(".viewCloudConfigFiles")
+    loadCloudConfigTree()
 }
 
 $("#cloudConfigBox").on("click", ".deleteEnvRow", function(){
@@ -313,7 +331,7 @@ $("#cloudConfigBox").on("click", "#deleteCloudConfig", function(){
                     ajaxRequest(globalUrls.cloudConfig.delete, {cloudConfigId: currentCloudConfigId}, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
-                            loadCloudConfigTree();
+                            loadCloudConfigOverview();
                         }
                     });
                 }

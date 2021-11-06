@@ -128,17 +128,17 @@
 
 var currentProfileDetails = {
     profile: null,
-    host: null
+    hostId: null
 };
 
-function makeProfileSidbebarHtml(hosthtml, host, id, selectedProfile = null, selectedHost = null){
+function makeProfileSidbebarHtml(hosthtml, host, id){
     let disabled = "";
     if(host.hostOnline == false){
         disabled = "disabled text-warning text-strikethrough";
     }
 
     hosthtml += `<li class="mb-2">
-        <a class="d-inline ${disabled}" href="#">
+        <a class="d-inline ${disabled}">
             <i class="fas fa-server"></i> ${host.alias}
         </a>`;
 
@@ -155,16 +155,13 @@ function makeProfileSidbebarHtml(hosthtml, host, id, selectedProfile = null, sel
 
     $.each(host.profiles, function(_, profileName){
         let active = "";
-        if(host.hostId == selectedHost && profileName == selectedProfile ){
-            active = "text-info";
+
+        if(host.hostId == currentProfileDetails.hostId && profileName == currentProfileDetails.profile ){
+            active = "active";
         }
 
-        hosthtml += `<li class="nav-item view-profile ${active}"
-            data-host-id="${host.hostId}"
-            data-profile="${profileName}"
-            data-alias="${host.alias}"
-            >
-          <a class="nav-link" href="#">
+        hosthtml += `<li class="nav-item">
+          <a class="nav-link ${active}" href="/profiles/${hostIdOrAliasForUrl(host.alias, host.hostId)}/${profileName}" data-navigo>
             <i class="nav-icon fa fa-user"></i>
             ${profileName}
           </a>
@@ -188,7 +185,7 @@ function makeHostProfileCard(hostId, hostName, profiles)
         let userVDataIcon = profileValues.hasUserData == 1 ? 'check text-success' : 'times';
 
         tbody += `<tr>
-            <td><a href="#" data-profile="${profileName}" data-host-alias="${hostName}" data-host-id="${hostId}" class='loadProfileFromDash'>${profileName}</a></td>
+            <td><a href="/profiles/${hostIdOrAliasForUrl(hostName, hostId)}/${profileName}" data-navigo>${profileName}</a></td>
             <td><i class="fas fa-${userVDataIcon}"></i></td>
             <td><i class="fas fa-${vDataIcon}"></i></td>
             <td>${profileValues.proxy}</td>
@@ -227,48 +224,62 @@ function makeHostProfileCard(hostId, hostName, profiles)
     </div>`;
 }
 
-$("#profileOverview").on("click", ".loadProfileFromDash", function(){
-    viewProfile($(this).data("profile"), $(this).data("hostAlias"), $(this).data("hostId"));
-});
+function loadProfileSidebar(){
+    if($("#sidebar-ul").find("[id^=profiles]").length == 0){
 
-function loadProfileView(selectedProfile = null, selectedHost = null, callback = null)
-{
-    changeActiveNav(".viewProfiles")
-    ajaxRequest(globalUrls.profiles.getAllProfiles, null, function(data){
-        var data = $.parseJSON(data);
+        ajaxRequest(globalUrls.profiles.getAllProfiles, null, function(data){
+            var data = $.parseJSON(data);
 
-        let a = selectedProfile == null ? "text-info" : "";
-        let hosts = `
-        <li class="mt-2 profile-overview">
-            <a class="${a}" href="#">
-                <i class="fas fa-tachometer-alt"></i> Overview
-            </a>
-        </li>`;
+            let a = currentProfileDetails.hostId == null ? "active" : "";
+            let hosts = `
+            <li class="mt-2">
+                <a class="nav-link p-0 ${a}" href="/profiles" data-navigo>
+                    <i class="fas fa-tachometer-alt"></i> Overview
+                </a>
+            </li>`;
 
-        let id = 0;
+            let id = 0;
+            $.each(data.clusters, (clusterIndex, cluster)=>{
+                hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+                $.each(cluster.members, (_, host)=>{
+                    hosts = makeProfileSidbebarHtml(hosts, host, id)
+                    id++;
+                })
+            });
 
+            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
 
-        $.each(data.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
-            $.each(cluster.members, (_, host)=>{
-                hosts = makeProfileSidbebarHtml(hosts, host, id, selectedProfile, selectedHost)
+            $.each(data.standalone.members, (_, host)=>{
+                hosts = makeProfileSidbebarHtml(hosts, host, id)
                 id++;
-            })
+            });
+
+            $("#sidebar-ul").empty().append(hosts);
+            router.updatePageLinks()
         });
-
-        hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
-
-        $.each(data.standalone.members, (_, host)=>{
-            hosts = makeProfileSidbebarHtml(hosts, host, id, selectedProfile, selectedHost)
-            id++;
-        });
-
-        $("#sidebar-ul").empty().append(hosts);
-
-        if($.isFunction(callback)){
-            callback();
+    }else{
+        $("#sidebar-ul").find(".active").removeClass("active");
+        if($.isNumeric(currentProfileDetails.hostId)){
+            $("#sidebar-ul").find(`.nav-link[href="/profiles/${hostIdOrAliasForUrl(currentProfileDetails.hostAlias, currentProfileDetails.hostId)}/${currentProfileDetails.profile}"]`).addClass("active")
+        }else{
+            $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
         }
-    });
+    }
+}
+
+function loadProfileView()
+{
+    setBreadcrumb("Profiles", " active", "/profiles");
+    $(".sidebar-fixed").addClass("sidebar-lg-show");
+    changeActiveNav(".viewProfiles");
+    $(".boxSlide, #profileDetails").hide();
+    $("#profileOverview, #profileBox").show();
+    currentProfileDetails  = {
+        hostId: null,
+        profile: null
+    }
+
+    loadProfileSidebar();
 
     $("#profileCards").empty().append(`<h4 class='text-center'><i class="fas fa-cog fa-spin"></i></h4>`)
     ajaxRequest(globalUrls.profiles.getDashboard, null, function(data){
@@ -285,6 +296,8 @@ function loadProfileView(selectedProfile = null, selectedHost = null, callback =
             cards += makeHostProfileCard(host.hostId, host.alias, host.profiles);
         });
         $("#profileCards").empty().append(cards);
+        router.updatePageLinks()
+
     });
 }
 
@@ -320,12 +333,16 @@ function createTableRowsHtml(data, childPropertyToSearch)
 }
 
 
+function viewProfileReq(req){
+    viewProfile(req.data.profile, hostsAliasesLookupTable[req.data.hostId], req.data.hostId)
+}
 function viewProfile(profileId, hostAlias, hostId){
 
     currentProfileDetails.profile = profileId;
     currentProfileDetails.hostAlias = hostAlias;
     currentProfileDetails.hostId = hostId;
-
+    changeActiveNav(".viewProfiles");
+    loadProfileSidebar()
     ajaxRequest(globalUrls.profiles.getProfile, {hostId: hostId, profile: profileId}, (data)=>{
         let details = $.parseJSON(data);
 
@@ -333,7 +350,7 @@ function viewProfile(profileId, hostAlias, hostId){
 
         $("#profileNameTitle").text(profileId);
 
-        addBreadcrumbs(["Profiles", hostAlias, profileId], ["viewProfiles", "", "active"], false);
+        addBreadcrumbs(["Profiles", hostAlias, profileId], ["", "", "active"], false, ["/profiles", "", "", ""]);
 
         let usedBy = ["Couldn't get profiles uesd by (api version probably)"];
 
@@ -364,6 +381,7 @@ function viewProfile(profileId, hostAlias, hostId){
         $("#profileOverview").hide();
         $(".boxSlide").hide();
         $("#profileDetails, #profileBox").show();
+        router.updatePageLinks()
     });
 }
 
@@ -398,7 +416,6 @@ $("#profileBox").on("click", "#deleteProfile", function(){
                     ajaxRequest(globalUrls.profiles.delete, currentProfileDetails, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
-                            $(".profile-overview").trigger("click");
                             loadProfileView();
                         }
                     });

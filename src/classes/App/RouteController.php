@@ -104,17 +104,13 @@ class RouteController
             exit;
         }
 
-        $routesForViewRoute = ["index", "login", "views", "terminal"];
-
         $path = "";
         if (isset($explodedPath[0])) {
             $parts = parse_url($explodedPath[0]);
             $path = $parts["path"];
         }
 
-        if ($path == "" || in_array($path, $routesForViewRoute)) {
-            $this->routeView->route($explodedPath);
-        } elseif ($path == "assets") {
+        if ($path == "assets") {
             $this->routeAssets->route($explodedPath);
         } elseif ($path == "terminals") {
             $port = '3000';
@@ -141,7 +137,7 @@ class RouteController
 
             echo $server_output;
         } else {
-            throw new \Exception("Dont understand the path", 1);
+            $this->routeView->route($explodedPath);
         }
 
         return true;

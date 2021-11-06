@@ -167,6 +167,16 @@ var currentServer = {
     hostId: null
 };
 
+
+function loadHostOverview(req){
+    currentContainerDetails = null;
+    let hostId = req.data.hostId;
+    currentServer.hostId = hostId
+    createDashboardSidebar()
+
+    loadServerView(hostId);
+}
+
 $(document).on("change", ".toggleStatusContainer", function(){
     let checked = $(this).is(":checked");
     let tr = $(this).parents("tr");
@@ -464,10 +474,6 @@ function loadServerView(hostId)
 
     $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
 
-    $("#sidebar-ul").find(".active").removeClass("active");
-    $("#sidebar-ul").find(".text-info").removeClass("text-info");
-    $("#sidebar-ul").find(`[data-hostId='${hostId}'] > a:eq(0)`).addClass("text-info");
-
     currentServer.hostId = hostId;
 
     ajaxRequest(globalUrls.hosts.getHostOverview, {hostId: hostId}, (data)=>{
@@ -476,7 +482,7 @@ function loadServerView(hostId)
         let ident = data.header.alias == null ? data.header.urlAndPort : data.header.alias;
         currentServer.hostAlias = data.header.alias;
         currentServer.supportsLoadAvgs = data.header.supportsLoadAvgs;
-        addBreadcrumbs([ident], ["active"]);
+        addBreadcrumbs(["Dashboard", ident], ["", "active"], false, ["/", ""]);
 
         $("#serverHeading").text(ident);
 
