@@ -490,10 +490,10 @@ if ($haveServers->haveAny() !== true) {
                   </button>
                   <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton1">
                       <?php if ($isAdmin === 1) : ?>
-                       <li><a id="addNewServer" class="dropdown-item" href="#"><i class="fas fa-server me-2"></i>Add Server</a></li>
+                       <li><a id="addNewServer" class="dropdown-item"><i class="fas fa-server me-2"></i>Add Server</a></li>
                       <?php endif; ?>
-                    <li><a id="createContainer" class="dropdown-item" href="#"><i class="fas fa-box me-2"></i>Create Container</a></li>
-                    <li><a id="createVm" class="dropdown-item" href="#"><i class="fas fa-vr-cardboard me-2"></i>Create VM</a></li>
+                    <li><a id="createContainer" class="dropdown-item"><i class="fas fa-box me-2"></i>Create Container</a></li>
+                    <li><a id="createVm" class="dropdown-item"><i class="fas fa-vr-cardboard me-2"></i>Create VM</a></li>
 
                   </ul>
               </div>
