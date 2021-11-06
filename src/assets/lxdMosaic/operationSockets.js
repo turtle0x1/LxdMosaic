@@ -23,9 +23,7 @@ function calcRunningOps()
 {
     let total = 0;
     $("#operationsList").find(".op").each(function(){
-        console.log(parseInt($(this).data("status")));
         if(parseInt($(this).data("status")) === 103){
-            console.log($(this));
             total++;
         }
     });

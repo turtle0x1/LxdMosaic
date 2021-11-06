@@ -179,7 +179,6 @@ function loadDeploymentsSidebar(inputData = null){
         _doResult(inputData);
     }else{
         $("#sidebar-ul").find(".active").removeClass("active");
-        // console.log(cur);
         if($.isNumeric(currentDeployment)){
             $("#sidebar-ul").find(`.nav-link[href="/deployments/${currentDeployment}"]`).addClass("active")
         }else{
