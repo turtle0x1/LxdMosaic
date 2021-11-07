@@ -61,7 +61,8 @@ class SearchController
             }
 
             $output[] = [
-                "description"=>$image["properties"]["description"],
+                "description"=> "<i class='fas fa-server me-2'></i>" . $host->getAlias() . " <i class='fas fa-image ms-2 me-2'></i> " . $image["properties"]["description"],
+                "origDescription"=>$image["properties"]["description"],
                 "details"=>array_merge(
                     $image["update_source"],
                     ["fingerprint"=>$image["fingerprint"]]
