@@ -186,10 +186,17 @@
 
                 let icon = image.hasOwnProperty("type") && image.type == "virtual-machine" ? "vr-cardboard" : "box";
 
+                let variantIcon = "";
+                if(image.properties.hasOwnProperty("variant") && image.properties.variant == "cloud"){
+                    variantIcon = `<i class="fas fa-xs fa-cloud"></i>`
+                }else if(image.properties.hasOwnProperty("variant") && image.properties.variant == "desktop"){
+                    variantIcon = `<i class="fas fa-xs fa-desktop"></i>`
+                }
+
                 hosthtml += `<li class="nav-item">
                   <a class="nav-link ${active}" href="/images/${hostIdOrAliasForUrl(host.alias, host.hostId)}/${image.fingerprint}" data-navigo>
                     <i class="nav-icon fa fa-${icon}"></i>
-                    ${imageName}
+                    ${imageName} ${variantIcon}
                   </a>
                 </li>`;
             });
