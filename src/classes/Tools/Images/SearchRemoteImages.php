@@ -71,15 +71,18 @@ class SearchRemoteImages
                 if (isset($lxdFolder[$fingerKey])) {
                     if (!isset($output[$imOs])) {
                         $output[$imOs] = [
-                            "default"=>[],
-                            "cloud-init"=>[]
+
                         ];
                     }
 
                     $variant = "default";
 
-                    if (strpos($lxdFolder["path"], "cloud")) {
-                        $variant = "cloud-init";
+                    if ($imVariation !== null) {
+                        $variant = $imVariation;
+                    }
+
+                    if (!isset($output[$imOs][$variant])) {
+                        $output[$imOs][$variant] = [];
                     }
 
                     $output[$imOs][$variant][$imRelease] = $lxdFolder[$fingerKey];
