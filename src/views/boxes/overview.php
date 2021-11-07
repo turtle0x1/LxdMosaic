@@ -757,7 +757,7 @@ function addHostContainerList(hostId, hostAlias) {
                 let active = "";
                 if(currentContainerDetails !== null && currentContainerDetails.hasOwnProperty("container")){
                     if(hostId == currentContainerDetails.hostId && containerName == currentContainerDetails.container){
-                        active = "text-info"
+                        active = "active"
                     }
                 }
 
@@ -792,7 +792,7 @@ function addHostContainerList(hostId, hostAlias) {
                     data-container="${containerName}"
                     data-alias="${hostAlias}"
                     data-type="${type}">
-                  <a class="nav-link text-truncate p-0 m-0 ${active}" href="/instance/${hostIdOrAliasForUrl(hostAlias, hostId)}/${containerName}" data-navigo>
+                  <a class="nav-link ${active} text-truncate p-0 m-0 ${active}" href="/instance/${hostIdOrAliasForUrl(hostAlias, hostId)}/${containerName}" data-navigo>
                     <i style="min-width: 20px" class="nav-icon me-1 ${statusCodeIconMap[details.state.status_code]}"></i>
                     <i style="min-width: 20px" class="nav-icon me-1 fas fa-${typeFa}"></i>
                     <i style="min-width: 20px" class="nav-icon me-1 fab fa-${osIcon}"></i>
@@ -837,8 +837,6 @@ $(document).on("click", ".showServerInstances", function(e){
 
     let hostId = parentLi.data("hostid");
     let hostAlias = parentLi.data("alias");
-
-    currentContainerDetails = null;
 
     addHostContainerList(hostId, hostAlias);
 
