@@ -273,6 +273,7 @@ app.ws('/node/cloudConfig', (socket, req) => {
             // `ctrl + c` out the `tail -f` command and exit
             terminals.sendToTerminal(uuid, `\x03`)
             terminals.close(uuid);
+            socket.close()
           }
       }
   }
