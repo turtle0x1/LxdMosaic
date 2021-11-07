@@ -184,7 +184,7 @@
 
                 let imageName = makeImageName(image);
 
-                let icon = image.hasOwnProperty("type") && image.type == "container" ? "box" : "vr-cardboard";
+                let icon = image.hasOwnProperty("type") && image.type == "virtual-machine" ? "vr-cardboard" : "box";
 
                 hosthtml += `<li class="nav-item">
                   <a class="nav-link ${active}" href="/images/${hostIdOrAliasForUrl(host.alias, host.hostId)}/${image.fingerprint}" data-navigo>
