@@ -60,8 +60,18 @@ class SearchController
                 continue;
             }
 
+            $variant = "";
+
+            if (isset($image["properties"]["variant"])) {
+                if ($image["properties"]["variant"] == "cloud") {
+                    $variant = "<i class='fas fa-cloud'></i>";
+                } elseif ($image["properties"]["variant"] == "desktop") {
+                    $variant = "<i class='fas fa-desktop'></i>";
+                }
+            }
+
             $output[] = [
-                "description"=> "<i class='fas fa-server me-2'></i>" . $host->getAlias() . " <i class='fas fa-image ms-2 me-2'></i> " . $image["properties"]["description"],
+                "description"=> "<i class='fas fa-server me-2'></i>" . $host->getAlias() . " <i class='fas fa-image ms-2 me-2'></i> " . $image["properties"]["description"] . " " . $variant,
                 "origDescription"=>$image["properties"]["description"],
                 "details"=>array_merge(
                     $image["update_source"],
