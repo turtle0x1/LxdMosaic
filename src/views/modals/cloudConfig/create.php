@@ -64,7 +64,7 @@ $("#modal-cloudConfig-create").on("click", "#createCloudConfig", function(){
         if(response.state == "error"){
             return false;
         }
-        loadCloudConfigTree();
+        loadCloudConfigTree(true);
         $("#modal-cloudConfig-create").modal("toggle");
     });
 });

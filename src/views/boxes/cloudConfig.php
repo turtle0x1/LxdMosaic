@@ -15,7 +15,7 @@
 </div>
 <div  id="cloudConfigContents">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-        <h1></h1>
+        <h1 id="cloudConfigIdName"></h1>
         <div class="btn-toolbar float-end">
           <div class="btn-group me-2">
               <button data-toggle="tooltip" data-bs-placement="bottom" title="Save Cloud Config" class="btn btn-success save">
@@ -138,6 +138,9 @@ function loadCloudConfigView(req)
             $("#cloudConfigImage").tokenInput("add", config.data.imageDetails);
         }
 
+        addBreadcrumbs(["Cloud Config", config.header.namespace, config.header.name], ["", "", "active"], false, ["/cloudConfig"])
+
+        $("#cloudConfigContents #cloudConfigIdName").text(config.header.name)
 
         $("#cloudConfigEnvTable > tbody").empty();
         $.each(config.data.envVariables, (key, val)=>{
@@ -147,19 +150,17 @@ function loadCloudConfigView(req)
             $("#cloudConfigEnvTable > tbody ").append(p);
         });
 
-
-
         editor.setValue(config.data.data, -1);
         $("#cloudConfigOverview").hide();
         $("#cloudConfigContents").show();
-
         $("#cloudConfigBox").show();
+        router.updatePageLinks()
     });
 }
 
-function loadCloudConfigTree()
+function loadCloudConfigTree(force = false)
 {
-    if($("#sidebar-ul").find("[id^=cloudConfig]").length == 0){
+    if(force || $("#sidebar-ul").find("[id^=cloudConfig]").length == 0){
         ajaxRequest(globalUrls.cloudConfig.getAll, null, function(data){
             var data = $.parseJSON(data);
             let a = currentCloudConfigId == null ? 'active' : '';
@@ -173,14 +174,14 @@ function loadCloudConfigTree()
             $.each(data, function(i, item){
 
                 hosts += `<li class="mb-2">
-                    <a class="d-inline>
+                    <a class="d-inline">
                         <i class="fas fa-layer-group me-2"></i>${i}
                     </a>
                     <button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#cloudConfig-namespace-${id}" aria-expanded="true">
                         <i class="fas fa-caret-down"></i>
                     </button>
                     <div class=" mt-2 bg-dark text-white show" id="cloudConfig-namespace-${id}">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
+                        <ul class="btn-toggle-nav list-unstyled cloudConfigNamespaceGroup fw-normal pb-1" style="display: inline;">`
 
                 $.each(item, function(o, z){
                     let a = z.id == currentCloudConfigId ? "active" : "";
@@ -331,7 +332,13 @@ $("#cloudConfigBox").on("click", "#deleteCloudConfig", function(){
                     ajaxRequest(globalUrls.cloudConfig.delete, {cloudConfigId: currentCloudConfigId}, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
-                            loadCloudConfigOverview();
+                            let sidebarItem = $("#sidebar-ul").find(`[href^='/cloudConfig/${currentCloudConfigId}']`).parent()
+                            let parentUl = sidebarItem.parents(".cloudConfigNamespaceGroup");
+                            sidebarItem.remove();
+                            if(parentUl.find("li").length == 0){
+                                parentUl.parents("li").remove()
+                            }
+                            router.navigate("/cloudConfig")
                         }
                     });
                 }

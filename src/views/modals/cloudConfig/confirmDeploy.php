@@ -84,7 +84,7 @@ $("#modal-cloudConfig-confirm").on("click", "#confirm", function(){
         $("#modal-cloudConfig-deploy .modal-body").empty().append('<div id="deploy-terminal-container"></div>')
 
         $("#modal-cloudConfig-deploy").find(".modal-dialog").addClass("modal-xl");
-        $("#modal-cloudConfig-deploy .modal-body").empty().append('<div style="min-height: 80vh;" id="deploy-terminal-container"></div>')
+        $("#modal-cloudConfig-deploy .modal-body").empty().append('<div style="min-height: 70vh;" id="deploy-terminal-container"></div>')
         $("#modal-cloudConfig-deploy .modal-footer").hide();
 
         const terminalContainer = document.getElementById('deploy-terminal-container');
@@ -113,6 +113,10 @@ $("#modal-cloudConfig-confirm").on("click", "#confirm", function(){
             instance: containerName,
             project: project
         }, currentContainerDetails))}`);
+
+        consoleSocket.onclose = function(){
+            // TODO Implement a button to delete instance & profile (depends on better project handeling)
+        }
 
         term.loadAddon(new window.AttachAddon.AttachAddon(consoleSocket));
         fitAddon.fit()

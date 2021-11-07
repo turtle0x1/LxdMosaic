@@ -62,6 +62,13 @@ var _deployCloudConfigContents = `<div class="mb-2">
           </div>
 `
 
+$("#modal-cloudConfig-deploy").on("hidden.bs.modal",  function(){
+    $("#modal-cloudConfig-deploy .modal-footer").empty().append(`
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="deployCloudConfig">Deploy</button>`
+    )
+});
+
 $("#modal-cloudConfig-deploy").on("change", "#deployCloudConfigHosts", function() {
     let hostId = $(this).find(":selected").parents("optgroup").attr("id")
     if($.isNumeric(hostId)){
