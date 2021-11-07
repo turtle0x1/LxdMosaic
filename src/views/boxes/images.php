@@ -51,13 +51,14 @@
 
 
                 <div class="mt-1" id="remoteImagesTable">
-                    <div class="border-top pt-2 text-info" id="imagesInstructions">
-                        <i class="fas fa-info-circle me-2"></i>Select some images then click import!
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2" id="imagesInstructions">
+                        <div><i class="fas fa-info-circle text-info me-2"></i>Select some images then click import!</div>
+                        <div>
+                            <button class="btn btn-outline-secondary float-end" id="importImagesBtn"> Import </button>
+                        </div>
                     </div>
-                    <div>
-                        <button class="btn btn-outline-secondary float-end" id="importImagesBtn"> Import </button>
-                    </div>
-                    <div id="remoteImageList">
+
+                    <div id="remoteImageList" class="row">
                     </div>
                 </div>
             </div>
@@ -340,8 +341,9 @@
             }
 
             let html = "";
+            let cols = Object.keys(x).length == 1 ? 12 : 4;
             $.each(x, (os, variants)=>{
-                html += `<div class="mt-3 osGroup"><h5 class="d-flex pb-1">${os}</h5>`;
+                html += `<div class="col-md-${cols} border p-2 ps-3 osGroup"><h5 class="d-flex pb-1">${os}</h5>`;
                 $.each(variants, (variant, versions)=>{
                     if(Object.values(versions).length > 0){
                         html += `<div class="d-block mb-2 mt-2"><i>${variant}</i></div>`
