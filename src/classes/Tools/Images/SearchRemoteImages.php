@@ -89,6 +89,9 @@ class SearchRemoteImages
                 }
             }
         }
+        foreach ($output as &$os) {
+            ksort($os);
+        }
         return $output;
     }
 
