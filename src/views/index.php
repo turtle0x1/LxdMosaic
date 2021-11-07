@@ -663,6 +663,78 @@ $(function(){
     router.resolve();
 
     Chart.defaults.global.defaultFontColor='white';
+    $.contextMenu({
+        selector: '.view-container',
+        items: {
+            "snapshot": {
+                name: "Snapshot",
+                icon: "fas fa-camera",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    snapshotContainerConfirm(item.data("hostId"), item.data("container"));
+                }
+            },
+            "copy": {
+                name: "Copy",
+                icon: "copy",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    copyContainerConfirm(item.data("hostId"), item.data("container"));
+                }
+            },
+            "edit": {
+                name: "Rename",
+                icon: "edit",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    renameContainerConfirm(item.data("hostId"), item.data("container"), false, item.data("alias"));
+                }
+            },
+            "delete": {
+                name: "Delete",
+                icon: "delete",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    deleteContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"));
+                }
+            },
+            "backup": {
+                name: "backup",
+                icon: "fas fa-save",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    backupContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"), null, false);
+                }
+            },
+        }
+    });
+
+    $.contextMenu({
+        selector: '.filesystemObject',
+        items: {
+            "delete": {
+                name: "Delete",
+                icon: "delete",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    deleteFilesystemObjectConfirm(item.data("path"));
+                }
+            }
+        }
+    });
+    $.contextMenu({
+        selector: '#filesystemTable',
+        items: {
+            "upload": {
+                name: "Upload",
+                icon: "upload",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    $("#modal-container-files-upload").modal("show");
+                }
+            }
+        }
+    });
 });
 
 
