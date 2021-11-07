@@ -19,12 +19,16 @@ Changed
     Only admins can create projects (#429)
     Improve user parameter display on instance events
     Improve create project modal UI / UX
+    Improve create container modal UI / UX
+    Improve create VM modal UI / UX
     Support limits when creating a project (#434)
     Show packets_dropped_outbound & packets_dropped_inbound on networks overview
     Support project limits on projects frontend
     Don't require filling out image when deploying cloud-config
     Support choosing project when deploying cloud-config
     Only allow choosing one host when deploying cloud-config (only on frontend)
+    Add cloud & desktop icons to image lists to indicate different variants
+    Improve search remote image server result layout
 
 Fixed
     First run doesn't toggle passwords properly (#390)
