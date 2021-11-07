@@ -164,7 +164,7 @@
     $("#modal-container-create").on("shown.bs.modal", function(){
         ajaxRequest(globalUrls.instances.settings.getAllAvailableSettings, {}, function(data){
             data = $.parseJSON(data);
-            let selectHtml = "<select name='key' class='form-control containerSetting'><option value=''>Please Select</option>";
+            let selectHtml = "<select name='key' class='form-select containerSetting'><option value=''>Please Select</option>";
             $.each(data, function(i, item){
                 selectHtml += `<option value='${item.key}' data-value="${item.value}">${item.key}</option>`;
             });

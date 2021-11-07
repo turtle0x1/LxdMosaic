@@ -79,7 +79,7 @@ $("#modal-profile-create").on("shown.bs.modal", function(){
         options += `<option value='${item}'>${item}</option>`
     });
     profilesTableRow = `<tr>
-        <td><select class='form-control' name="key">${options}</select></td>
+        <td><select class='form-select' name="key">${options}</select></td>
         <td><input class='form-control' name="value"/></td>
         <td><button class='btn btn-outline-danger deleteProfileSettingRow'><i class="fas fa-trash"></i></button></td>
     </tr>`

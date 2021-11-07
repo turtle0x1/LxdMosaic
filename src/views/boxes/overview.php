@@ -973,7 +973,7 @@ function loadDashboard(){
                 let projects = "<div class='text-center text-info'><i class='fas fa-info-circle me-2'></i>Not Supported</div>";
 
                 if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
-                    projects = "<select class='form-control changeHostProject'>";
+                    projects = "<select class='form-select changeHostProject'>";
                     $.each(host.projects, function(o, project){
                         let selected = project == host.currentProject ? "selected" : "";
                             projects += `<option data-alias="${host.alias}" data-host='${data.hostId}'
@@ -1001,7 +1001,7 @@ function loadDashboard(){
             let projects = "<div class='text-center text-info'><i class='fas fa-info-circle me-2'></i>Not Supported</div>";
 
             if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
-                projects = "<select class='form-control changeHostProject'>";
+                projects = "<select class='form-select changeHostProject'>";
                 $.each(host.projects, function(o, project){
                     let selected = project == host.currentProject ? "selected" : "";
                         projects += `<option data-alias="${host.alias}" data-host='${host.hostId}'
