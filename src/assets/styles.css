@@ -13,6 +13,11 @@ body {
 
 .dashSidebarFilter {
     cursor: pointer;
+    font-size: .8rem;
+}
+
+.showServerInstances, .toggleDropdown {
+    min-width: 27px;
 }
 
 .filterHostsInstances {
