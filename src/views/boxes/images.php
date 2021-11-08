@@ -283,6 +283,7 @@
     });
 
     $(document).on("click", "#deleteImage", function(){
+        let sidebarItem =$("#sidebar-ul").find(`.nav-link[href="/images/${hostIdOrAliasForUrl(currentImageDetails.alias, currentImageDetails.hostId)}/${currentImageDetails.network}"]`);
         let x = {
             imageData: [currentImageDetails]
         };
@@ -292,7 +293,7 @@
             if(data.state == "error"){
                 return false;
             }
-
+            sidebarItem.remove();
             loadImageOverviewAfter();
             currentImageDetails = {
                 hostId: null,

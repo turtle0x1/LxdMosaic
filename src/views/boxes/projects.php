@@ -424,6 +424,7 @@ function viewProject(project, hostId, hostAlias){
 
 
 $("#projectsBox").on("click", "#deleteProject", function(){
+    let sidebarItem =$("#sidebar-ul").find(`.nav-link[href="/projects/${hostIdOrAliasForUrl(currentProject.hostAlias, currentProject.hostId)}/${currentProject.project}"]`);
     $.confirm({
         title: "Delete Project?!",
         content: `<i class="fas fa-info-circle text-info me-2"></i>Users currently using this project will be assigned back to <code>default</code> project`,
@@ -436,8 +437,8 @@ $("#projectsBox").on("click", "#deleteProject", function(){
                     ajaxRequest(globalUrls.projects.delete, currentProject, function(data){
                         data = makeToastr(data);
                         if(data.state == "success"){
+                            sidebarItem.remove();
                             loadProjectView();
-
                         }
                     });
                 }

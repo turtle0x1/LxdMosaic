@@ -405,6 +405,7 @@ $("#profileBox").on("click", "#renameProfile", function(){
 });
 
 $("#profileBox").on("click", "#deleteProfile", function(){
+    let sidebarItem =$("#sidebar-ul").find(`.nav-link[href="/profiles/${hostIdOrAliasForUrl(currentProfileDetails.hostAlias, currentProfileDetails.hostId)}/${currentProfileDetails.profile}"]`);
     $.confirm({
         title: 'Delete profile ' + currentProfileDetails.profile + ' from ' + currentProfileDetails.hostAlias,
         content: 'Are you sure you want to delete this profile ?!',
@@ -416,6 +417,7 @@ $("#profileBox").on("click", "#deleteProfile", function(){
                     ajaxRequest(globalUrls.profiles.delete, currentProfileDetails, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
+                            sidebarItem.remove();
                             loadProfileView();
                         }
                     });

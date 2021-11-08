@@ -272,6 +272,7 @@ function viewNetwork(req)
 }
 
 $("#networkInfo").on("click", "#deleteNetwork", function(){
+    let sidebarItem =$("#sidebar-ul").find(`.nav-link[href="/networks/${hostIdOrAliasForUrl(currentNetwork.alias, currentNetwork.hostId)}/${currentNetwork.network}"]`);
     $.confirm({
         title: 'Delete Network?',
         content: 'This can\'t be undone?!',
@@ -289,6 +290,7 @@ $("#networkInfo").on("click", "#deleteNetwork", function(){
                         modal.close();
                         if(data.state == "success"){
                             currentNetwork = {};
+                            sidebarItem.remove()
                             loadNetworksView();
                         }
                     });
