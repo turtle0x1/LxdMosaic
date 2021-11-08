@@ -19,7 +19,7 @@
                   <div class="createContainerBox" data-step="1">
                     <div class="mb-2">
                           <label> Name </label>
-                          <input type="text" name="name" id="newContainerName" class="form-control"/>
+                          <input type="text" name="name" id="newContainerName" class="form-control" autocomplete="off"/>
                       </div>
                     <div class="mb-2">
                         <label> Hosts </label>
