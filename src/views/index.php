@@ -630,6 +630,7 @@ $(function(){
 
     router.on('/instance/:hostId/:instance', loadContainerViewReq);
     router.on("/backups", loadBackupsView);
+    router.on("/cluster/:clusterId", loadClusterView);
     router.on("/cloudConfig", loadCloudConfigOverview);
     router.on("/cloudConfig/:id", loadCloudConfigView);
     router.on("/deployments", loadDeploymentsView);

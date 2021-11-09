@@ -69,12 +69,8 @@ body {
     cursor: default;
 }
 
-.cluster-title:hover {
-    color: #167495 !important; /* Eugh */
-}
-
-.cluster-title-not-admin:hover {
-	color: #4dbd74 !important;
+.cluster-title {
+    cursor: pointer;
 }
 
 .text-underline {
@@ -83,10 +79,6 @@ body {
 
 .text-strikethrough {
     text-decoration: line-through !important;
-}
-
-.toggleCard, .cluster-title {
-    cursor: pointer;
 }
 
 .sidebar .nav-dropdown-toggle.disabled::before {

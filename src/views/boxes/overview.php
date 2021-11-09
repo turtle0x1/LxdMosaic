@@ -629,16 +629,13 @@ function createDashboardSidebar()
             let currentHostId = currentServer.hostId == null ? null : currentServer.hostId;
 
             let hosts = `<li class="nav-item mt-2">
-                <a class="nav-link ${currentHostId == null && currentContainerDetails == null ? "active" : ""} p-0" href="/" data-navigo>
+                <a class="nav-link ${currentHostId == null && currentContainerDetails == null && currentCluster.clusterId == null ? "active" : ""} p-0" href="/" data-navigo>
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>`;
 
             $.each(data.clusters, function(i, item){
-                hosts += `<li data-cluster="${i}" class="c-sidebar-nav-title cluster-title text-success ps-1 pt-2"><u>Cluster ${i}</u></li>`;
-
-                hostsTrs += `<tr><td colspan="999" class="bg-success text-center text-white">Cluster ${i}</td></tr>`
-
+                hosts += `<li href="/cluster/${i}" class="c-sidebar-nav-title cluster-title text-success pt-2" data-navigo><u>Cluster ${i}</u></li>`
                 $.each(item.members, function(_, host){
                     let disabled = "";
                     let expandBtn = '<button class="btn btn-outline-secondary float-end showServerInstances"><i class="fas fa-caret-left"></i></button>';
@@ -649,16 +646,21 @@ function createDashboardSidebar()
                         expandBtn = '';
                     }
 
-                    hosts += `<li data-hostId="${host.hostId}" data-alias="${host.alias}" class="nav-item containerList dropdown">
-                        <a class="nav-link ${active} ${disabled}" href="/host/${host.hostId}/overview" data-navigo>
-                            <i class="fas fa-server"></i> ${host.alias}
-                            ${expandBtn}
-                        </a>
-                        <div id="${host.hostId}" class="collapse">
-                            <ul class="dropdown-menu dropdown-menu-dark hostInstancesUl">
+
+                    hosts += `<li class="mb-2" data-hostId="${host.hostId}" data-alias="${host.alias}">
+                        <div>
+                            <a class="nav-link ${active} d-inline ps-0 ${disabled}" href="/host/${host.hostId}/overview" data-navigo>
+                                <i class="fas fa-server"></i> ${host.alias}
+                            </a>
+                            <button class="btn  btn-outline-secondary d-inline btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false">
+                                <i class="fas fa-caret-left"></i>
+                            </button>
+                        </div>
+                        <div class="collapse mt-2 bg-dark text-white" id="host-${host.hostId}">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 hostInstancesUl" style="display: inline;">
                             </ul>
                         </div>
-                    </li>`;
+                     </li>`
                 });
             });
 
@@ -885,9 +887,6 @@ function loadDashboard(){
         let projectsDropdown = "";
 
         $.each(data.clustersAndHosts.clusters, function(i, item){
-
-            let cTitleClass = userDetails.isAdmin ? "cluster-title" : "cluster-title-not-admin";
-
             projectsDropdown += `<b>Cluster ${i}</b>`
 
             $.each(item.members, function(_, host){
@@ -1167,17 +1166,6 @@ function loadDashboard(){
         $("#totalsGraphs").append(y)
     });
 }
-
-$(document).on("click", ".cluster-title", function(e){
-    if(!userDetails.isAdmin){
-        return false;
-    }
-    let x = $(this).data();
-    $("#sidebar-ul").find(".text-info").removeClass("text-info");
-    $("#sidebar-ul").find(".active").removeClass("active");
-    $(this).addClass("text-info");
-    loadClusterView(x.cluster);
-});
 
 $(document).on("click", "#openSearch", function(){
     $.confirm({

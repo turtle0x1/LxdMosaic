@@ -47,7 +47,24 @@
     </div>
 </div>
 <script>
-function loadClusterView(clusterId){
+
+var currentCluster = {
+    clusterId: null
+};
+
+function loadClusterView(req){
+    let clusterId = req.data.clusterId;
+    currentCluster.clusterId = clusterId;
+    createDashboardSidebar()
+    if(!userDetails.isAdmin){
+        router.navigate("/404")
+        return false;
+    }
+    let x = $(this).data();
+    $("#sidebar-ul").find(".text-info").removeClass("text-info");
+    $("#sidebar-ul").find(".active").removeClass("active");
+    $(this).addClass("text-info");
+
     $(".boxSlide, #clusterContents").hide();
     $("#clusterBox, #clusterOverview").show();
 
