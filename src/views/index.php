@@ -588,8 +588,17 @@ $(function(){
             if(Object.keys(hostsAliasesLookupTable).length == 0 && match.data !== null && match.data.hasOwnProperty("hostId")){
                 ajaxRequest(globalUrls.universe.getEntities, {}, function(data){
                     data = $.parseJSON(data)
-                    //TODO Clusters
                     let providedHostId = match.data.hostId;
+                    $.each(data.clusters, function(_, cluster){
+                        $.each(cluster.members, (_, member)=>{
+                            hostsAliasesLookupTable[member.hostId] = member.alias
+                            hostsIdsLookupTable[member.alias] = member.hostId
+                            if(member.alias == providedHostId){
+                                match.data.hostId = member.hostId
+                            }
+                        });
+                    });
+
                     $.each(data.standalone.members, function(_, member){
                         hostsAliasesLookupTable[member.hostId] = member.alias
                         hostsIdsLookupTable[member.alias] = member.hostId
