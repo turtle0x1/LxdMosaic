@@ -306,7 +306,8 @@
                 return false;
             }
             $("#modal-container-create").modal("hide");
-            if(typeof io == "undefined"){
+            let currentLocation = router.getCurrentLocation().url;
+            if(currentLocation == "" || currentLocation.includes("/instance/")){
                 createDashboardSidebar();
             }
         });
