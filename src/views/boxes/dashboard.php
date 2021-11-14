@@ -3,6 +3,13 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center border-bottom">
                 <ul class="nav nav-tabs w-100" id="userDashboardsList" style="border: none !important;">
+                    <li class="nav-item">
+                      <div class="nav-link active viewDashboard" id="generalDashboardLink" href="#"><i class="fas fa-tachometer-alt me-2"></i>General</div>
+
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-link viewDashboard" id="projectAnalyticsDashboardLink" href="#"><i class="fas fa-chart-bar me-2"></i>Project Analytics</div>
+                    </li>
                 </ul>
                 <button class="btn btn-outline-primary" id="newDashboardBtn" data-toggle="tooltip" data-bs-placement="bottom" title="Create dashboard">
                     <i class="fas fa-plus"></i>
@@ -300,6 +307,7 @@ function loadDashboard(){
     $("#overviewBox, #generalDashboard").show();
     setBreadcrumb("Dashboard", "active", "/");
     changeActiveNav(".overview")
+    $("#userDashboardsList .userDashboard").remove();
 
     $("#totalsGraphs").empty();
     $("#analyticsHistoryDuration option:eq(0)").prop("selected", true);
@@ -309,21 +317,15 @@ function loadDashboard(){
     ajaxRequest(globalUrls.dashboard.get, {}, (data)=>{
         data = makeToastr(data);
 
-        let dashboardTabs = `<li class="nav-item">
-          <div class="nav-link active viewDashboard" id="generalDashboardLink" href="#"><i class="fas fa-tachometer-alt me-2"></i>General</div>
-
-        </li>
-        <li class="nav-item">
-            <div class="nav-link viewDashboard" id="projectAnalyticsDashboardLink" href="#"><i class="fas fa-chart-bar me-2"></i>Project Analytics</div>
-        </li>`;
+        let dashboardTabs = '';
 
         $.each(data.userDashboards, (_, dashboard)=>{
             dashboardTabs += `<li class="nav-item">
-              <div class="nav-link viewDashboard" id="${dashboard.id}" href="#"><i class="fas fa-house-user me-2"></i>${dashboard.name}</div>
+              <div class="nav-link viewDashboard userDashboard" id="${dashboard.id}" href="#"><i class="fas fa-house-user me-2"></i>${dashboard.name}</div>
             </li>`;
         });
 
-        $("#userDashboardsList").empty().append(dashboardTabs);
+        $("#userDashboardsList").append(dashboardTabs);
 
         let projectsDropdown = "";
 
