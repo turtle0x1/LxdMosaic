@@ -2,7 +2,6 @@
 
 namespace dhope0000\LXDClient\Tools\Dashboard;
 
-use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\Model\Users\Dashboard\FetchUserDashboards;
 use dhope0000\LXDClient\Tools\Universe;
 use dhope0000\LXDClient\Tools\Hosts\GetResources;
@@ -12,14 +11,12 @@ use dhope0000\LXDClient\Tools\ProjectAnalytics\GetGraphableProjectAnalytics;
 class GetDashboard
 {
     public function __construct(
-        FetchUserProject $fetchUserProject,
         FetchUserDashboards $fetchUserDashboards,
         Universe $universe,
         GetResources $getResources,
         GetUserProject $getUserProject,
         GetGraphableProjectAnalytics $getGraphableProjectAnalytics
     ) {
-        $this->fetchUserProject = $fetchUserProject;
         $this->fetchUserDashboards = $fetchUserDashboards;
         $this->universe = $universe;
         $this->getResources = $getResources;
