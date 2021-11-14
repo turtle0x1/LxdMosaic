@@ -122,125 +122,122 @@ $(document).on("click", "#editDashboardGraphs", function(){
 $(document).on("change", "#overviewHistoryDuration", function(e){
     $("#totalsGraphs").empty().append(`<h4 class="text-center"><i class="fas fa-cog fa-spin"></i></h4>`)
     ajaxRequest('/api/ProjectAnalytics/GetGraphableProjectAnalyticsController/get', {history: $(this).val()}, (data)=>{
-        let y = $(`<div class="row mb-2" ></div>`)
-        let displayItems = {
-            "Instances": {
-                formatBytes: false,
-                icon: 'fas fa-box'
-            },
-            "Disk": {
-                formatBytes: true,
-                icon: 'fas fa-hdd'
-            },
-            "Memory": {
-                formatBytes: true,
-                icon: 'fas fa-memory'
-            },
-            "Processes": {
-                formatBytes: false,
-                icon: 'fas fa-microchip'
-            }
-        }
-        data = makeToastr(data)
-        $.each(displayItems, (title, config)=>{
-
-
-            let labels = [];
-            let values = [];
-            let limits = [];
-
-            let cId = title.toLowerCase();
-
-            $.each(data.totals[title], (created, value)=>{
-                labels.push(moment.utc(created).local().format("HH:mm"))
-                values.push(value)
-            });
-
-            var totalUsage = values.reduce(function(a, b){
-                return parseInt(a) + parseInt(b);
-            }, 0);
-
-            let canvas = `<canvas height="200" width="200" id="${cId}"></canvas>`;
-
-            if(totalUsage == 0){
-                canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
-            }
-
-
-            let x = $(`<div class='col-md-3'>
-                  <div class="card bg-dark text-white">
-                      <div class="card-body">
-                        <h4 class="mb-3 text-center"><i class="${config.icon} me-2"></i>${title}</h4>
-                        ${canvas}
-                      </div>
-                  </div>
-              </div>`);
-
-            if(totalUsage > 0){
-                let graphDataSets = [
-                    {
-                        label: "total",
-                        borderColor: 'rgba(46, 204, 113, 1)',
-                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
-                        pointBorderColor: "rgba(46, 204, 113, 1)",
-                        data: values
-                    }
-                ];
-
-                let options = {responsive: true};
-
-                if (config.formatBytes) {
-                      options.scales = scalesBytesCallbacks;
-                      options.tooltips = toolTipsBytesCallbacks
-                }else{
-                    options.scales = {
-                        yAxes: [{
-                          ticks: {
-                            precision: 0
-                          }
-                      }],
-                    }
-                }
-
-                options.legend = {
-                    display: false
-                 },
-
-                 options.elements = {
-                    point:{
-                        radius: 0
-                    }
-                }
-
-                 // scales.yAxes.ticks
-                options.scales.yAxes[0].gridLines = {
-                    color: "rgba(0, 0, 0, 0)",
-                }
-                options.scales.yAxes[0].ticks.beginAtZero = false;
-                options.scales.xAxes = [{
-                    gridLines: {
-                         color: "rgba(0, 0, 0, 0)",
-                     },
-                     ticks: {
-                        callback: function(){
-                            return '';
-                        }
-                      }
-                }]
-                new Chart(x.find("#" + cId), {
-                  type: 'line',
-                  data: {
-                      datasets: graphDataSets,
-                      labels: labels
-                  },
-                  options: options
-                });
-            }
-            y[0].append(x[0]);
-        });
-        $("#totalsGraphs").empty().append(y)
+        makeProjectOverviewGraphs(makeToastr(data).totals)
     });
 });
+
+function makeProjectOverviewGraphs(totals){
+    let displayItems = {
+        "Instances": {
+            formatBytes: false,
+            icon: 'fas fa-box'
+        },
+        "Disk": {
+            formatBytes: true,
+            icon: 'fas fa-hdd'
+        },
+        "Memory": {
+            formatBytes: true,
+            icon: 'fas fa-memory'
+        },
+        "Processes": {
+            formatBytes: false,
+            icon: 'fas fa-microchip'
+        }
+    }
+    $("#totalsGraphs").empty();
+    let y = $(`<div class="row mb-2" ></div>`)
+    $.each(displayItems, (title, config)=>{
+        let labels = [];
+        let values = [];
+        let limits = [];
+
+        let cId = title.toLowerCase();
+
+        $.each(totals[title], (created, value)=>{
+            labels.push(moment.utc(created).local().format("HH:mm"))
+            values.push(value)
+        });
+
+        var totalUsage = values.reduce(function(a, b){
+            return parseInt(a) + parseInt(b);
+        }, 0);
+
+        let canvas = `<canvas height="200" width="200" id="${cId}"></canvas>`;
+
+        if(totalUsage == 0){
+            canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
+        }
+
+
+        let x = $(`<div class='col-md-3'>
+              <div class="card bg-dark text-white">
+                  <div class="card-body">
+                    <h4 class="mb-3 text-center"><i class="${config.icon} me-2"></i>${title}</h4>
+                    ${canvas}
+                  </div>
+              </div>
+          </div>`);
+
+        if(totalUsage > 0){
+            let graphDataSets = [
+                {
+                    label: "total",
+                    borderColor: 'rgba(46, 204, 113, 1)',
+                    pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                    pointBorderColor: "rgba(46, 204, 113, 1)",
+                    data: values
+                }
+            ];
+
+            let options = {responsive: true};
+
+            if (config.formatBytes) {
+                  options.scales = scalesBytesCallbacks;
+                  options.tooltips = toolTipsBytesCallbacks
+            }else{
+                options.scales = {
+                    yAxes: [{
+                      ticks: {
+                        precision: 0
+                      }
+                  }],
+                }
+            }
+
+            options.legend = {
+                display: false
+             },
+
+             // scales.yAxes.ticks
+            options.scales.yAxes[0].gridLines = {
+                color: "rgba(0, 0, 0, 0)",
+            }
+            options.scales.yAxes[0].ticks.beginAtZero = false;
+            options.scales.xAxes = [{
+                gridLines: {
+         color: "rgba(0, 0, 0, 0)",
+     },
+              ticks: {
+                    callback: function(){
+                        return '';
+                    }
+                  }
+              }]
+
+            new Chart(x.find("#" + cId), {
+              type: 'line',
+              data: {
+                  datasets: graphDataSets,
+                  labels: labels
+              },
+              options: options
+            });
+        }
+        y[0].append(x[0]);
+    });
+    $("#totalsGraphs").append(y)
+}
 
 function makeProjectAnalyticsGraphs(projectAnalytics){
     let displayItems = {
@@ -1058,10 +1055,15 @@ function loadDashboard(){
     setBreadcrumb("Dashboard", "active", "/");
     changeActiveNav(".overview")
 
+    $("#totalsGraphs").empty();
+    $("#analyticsHistoryDuration option:eq(0)").prop("selected", true);
+    $("#overviewHistoryDuration option:eq(0)").prop("selected", true);
+    $("#filterDashProjectAnalyticsNoUsage").prop("checked", false);
+
     ajaxRequest(globalUrls.dashboard.get, {}, (data)=>{
         data = makeToastr(data);
 
-        let lis = `<li class="nav-item">
+        let dashboardTabs = `<li class="nav-item">
           <div class="nav-link active viewDashboard" id="generalDashboardLink" href="#"><i class="fas fa-tachometer-alt me-2"></i>General</div>
 
         </li>
@@ -1070,12 +1072,12 @@ function loadDashboard(){
         </li>`;
 
         $.each(data.userDashboards, (_, dashboard)=>{
-            lis += `<li class="nav-item">
+            dashboardTabs += `<li class="nav-item">
               <div class="nav-link viewDashboard" id="${dashboard.id}" href="#"><i class="fas fa-house-user me-2"></i>${dashboard.name}</div>
             </li>`;
         });
 
-        $("#userDashboardsList").empty().append(lis);
+        $("#userDashboardsList").empty().append(dashboardTabs);
 
         let projectsDropdown = "";
 
@@ -1136,124 +1138,8 @@ function loadDashboard(){
         });
         $("#navProjectControlHostList").empty().append(projectsDropdown);
 
-        $("#analyticsHistoryDuration option:eq(0)").prop("selected", true);
-        $("#filterDashProjectAnalyticsNoUsage").prop("checked", false);
         makeProjectAnalyticsGraphs(data.projectGraphData.projectAnalytics)
-        $("#totalsGraphs").empty();
-        let displayItems = {
-            "Instances": {
-                formatBytes: false,
-                icon: 'fas fa-box'
-            },
-            "Disk": {
-                formatBytes: true,
-                icon: 'fas fa-hdd'
-            },
-            "Memory": {
-                formatBytes: true,
-                icon: 'fas fa-memory'
-            },
-            "Processes": {
-                formatBytes: false,
-                icon: 'fas fa-microchip'
-            }
-        }
-
-        let y = $(`<div class="row mb-2" ></div>`)
-        $.each(displayItems, (title, config)=>{
-
-
-            let labels = [];
-            let values = [];
-            let limits = [];
-
-            let cId = title.toLowerCase();
-
-            $.each(data.projectGraphData.totals[title], (created, value)=>{
-                labels.push(moment.utc(created).local().format("HH:mm"))
-                values.push(value)
-            });
-
-            var totalUsage = values.reduce(function(a, b){
-                return parseInt(a) + parseInt(b);
-            }, 0);
-
-            let canvas = `<canvas height="200" width="200" id="${cId}"></canvas>`;
-
-            if(totalUsage == 0){
-                canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
-            }
-
-
-            let x = $(`<div class='col-md-3'>
-                  <div class="card bg-dark text-white">
-                      <div class="card-body">
-                        <h4 class="mb-3 text-center"><i class="${config.icon} me-2"></i>${title}</h4>
-                        ${canvas}
-                      </div>
-                  </div>
-              </div>`);
-
-            if(totalUsage > 0){
-                let graphDataSets = [
-                    {
-                        label: "total",
-                        borderColor: 'rgba(46, 204, 113, 1)',
-                        pointBackgroundColor: "rgba(46, 204, 113, 1)",
-                        pointBorderColor: "rgba(46, 204, 113, 1)",
-                        data: values
-                    }
-                ];
-
-                let options = {responsive: true};
-
-                if (config.formatBytes) {
-                      options.scales = scalesBytesCallbacks;
-                      options.tooltips = toolTipsBytesCallbacks
-                }else{
-                    options.scales = {
-                        yAxes: [{
-                          ticks: {
-                            precision: 0
-                          }
-                      }],
-                    }
-                }
-
-                options.legend = {
-                    display: false
-                 },
-
-                 // scales.yAxes.ticks
-                options.scales.yAxes[0].gridLines = {
-                    color: "rgba(0, 0, 0, 0)",
-                }
-                options.scales.yAxes[0].ticks.beginAtZero = false;
-                options.scales.xAxes = [{
-                    gridLines: {
-             color: "rgba(0, 0, 0, 0)",
-         },
-                  ticks: {
-                        callback: function(){
-                            return '';
-                        }
-                      }
-                  }]
-
-                new Chart(x.find("#" + cId), {
-                  type: 'line',
-                  data: {
-                      datasets: graphDataSets,
-                      labels: labels
-                  },
-                  options: options
-                });
-            }
-            y[0].append(x[0]);
-
-
-        });
-        $("#totalsGraphs").append(y)
+        makeProjectOverviewGraphs(data.projectGraphData.totals)
     });
 }
 
