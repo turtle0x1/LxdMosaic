@@ -52,6 +52,8 @@ $(document).on("click", ".viewDashboard", function(){
         $("#generalDashboard").hide();
         $("#userDashboard").hide();
         $("#userDashboardGraphs").empty();
+        $("#analyticsHistoryDuration option:eq(0)").prop("selected", true)
+        $("#analyticsHistoryDuration").trigger("change")
         currentDashboard = null;
         return false;
     }
@@ -386,8 +388,7 @@ function loadDashboard(){
         });
         $("#navProjectControlHostList").empty().append(projectsDropdown);
 
-        makeProjectAnalyticsGraphs(data.projectGraphData.projectAnalytics)
-        makeProjectOverviewGraphs(data.projectGraphData.totals)
+        makeProjectOverviewGraphs(data.projectsUsageGraphData)
     });
 }
 </script>

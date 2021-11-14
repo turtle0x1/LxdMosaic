@@ -37,7 +37,7 @@ class GetDashboard
         return [
             "userDashboards"=>$dashboards,
             "clustersAndHosts"=>$clustersAndHosts,
-            "projectGraphData"=>$projectGraphData
+            "projectsUsageGraphData"=>$projectGraphData["totals"]
         ];
     }
 
