@@ -1,47 +1,56 @@
     <!-- Modal -->
 <div class="modal fade" id="modal-profile-create" tabindex="-1" aria-labelledby="exampleModalLongTitle" role="dialog" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">
-            Create Profile <b>
-                <span id="hostAlias"></span>
-            </b>
-        </h5>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-user me-2"></i>Create Profile</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-          <div class="mb-2">
-              <b> Hosts </b>
-              <input class="form-control" id="profileCreateTargets"/>
-          </div>
-          <div class="mb-2">
-              <b> Profile Name </b>
-              <input class="form-control" id="createProfileName"/>
-          </div>
-          <div class="mb-2">
-              <b> Description (Optional) </b>
-              <textarea class="form-control" id="profileDescription"></textarea>
-          </div>
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
-              <b>Profile Config (Optional)</b>
-              <button class="btn btn-outline-primary btn-sm" id="addProfileSettingRow">
-                  <i class="fas fa-plus"></i>
-              </button>
-          </div>
-          <div class="mt-2">
-              <table class="table table-bordered" id="profileSettingTable">
-                  <thead>
-                      <tr>
-                          <th>Key</th>
-                          <th>Value</th>
-                          <th></th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-              </table>
-          </div>
+      <div class="modal-body" style="min-height: 60vh; max-height: 60vh;">
+          <div class="row">
+              <div class="col-md-3">
+                  <ul class="list-group" id="createProfileStepList">
+                      <li style="cursor: pointer" class="list-group-item active">1. Basic Details</li>
+                      <li style="cursor: pointer" class="list-group-item">2. Config (Optional)</li>
+                  </ul>
+              </div>
+              <div class="col-md-9" style="max-height: 57vh; min-height: 57vh; overflow-y: scroll; border-left: 1px solid black;">
+                  <div class="createProfileBox" data-step="1">
+                      <div class="mb-2">
+                          <b> Hosts </b>
+                          <input class="form-control" id="profileCreateTargets"/>
+                      </div>
+                      <div class="mb-2">
+                          <b> Profile Name </b>
+                          <input class="form-control" id="createProfileName"/>
+                      </div>
+                      <div class="mb-2">
+                          <b> Description (Optional) </b>
+                          <textarea class="form-control" id="profileDescription"></textarea>
+                      </div>
+                  </div>
+                  <div class="createProfileBox pt-2" data-step="2" style="display: none">
+                      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                          <b>Profile Config (Optional)</b>
+                          <button class="btn btn-outline-primary btn-sm" id="addProfileSettingRow">
+                              <i class="fas fa-plus"></i>
+                          </button>
+                      </div>
+                      <table class="table table-bordered" id="profileSettingTable">
+                          <thead>
+                              <tr>
+                                  <th>Key</th>
+                                  <th>Value</th>
+                                  <th></th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      </table>
+                  </div>
+
+             </div>
+         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -71,7 +80,19 @@ $("#modal-profile-create").on("hide.bs.modal", function(){
     $("#profileCreateTargets").tokenInput("clear");
     $("#createProfileName").val("");
     $("#profileDescription").val("");
+    changeCreateProfileBox(1)
 });
+
+$("#modal-profile-create").on("click", "#createProfileStepList li", function(){
+    changeCreateProfileBox($(this).index() + 1);
+});
+
+function changeCreateProfileBox(newIndex){
+    $(".createProfileBox").hide();
+    $(`.createProfileBox[data-step='${(newIndex)}']`).show();
+    $("#createProfileStepList").find(".active").removeClass("active");
+    $("#createProfileStepList").find(`li:eq(${newIndex - 1})`).addClass("active");
+}
 
 $("#modal-profile-create").on("shown.bs.modal", function(){
     let options = "";
@@ -103,8 +124,10 @@ $("#modal-profile-create").on("click", "#createProfileBtn", function(){
     if (hosts.length == 0) {
         $("#profileCreateTargets").focus();
         makeToastr(JSON.stringify({state: "error", message: "Please hosts to create on"}));
+        changeCreateProfileBox(1)
         return false;
     }else if(name == ""){
+        changeCreateProfileBox(1)
         nameInput.focus();
         makeToastr(JSON.stringify({state: "error", message: "Please provide new profile name"}));
         return false;
@@ -135,6 +158,7 @@ $("#modal-profile-create").on("click", "#createProfileBtn", function(){
 
     if(invalid){
         makeToastr(JSON.stringify({state: "error", message: "Check profile config values"}));
+        changeCreateProfileBox(2)
         return false;
     }
 
