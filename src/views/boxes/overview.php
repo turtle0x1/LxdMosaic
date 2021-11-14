@@ -37,6 +37,20 @@
             <div class="col-lg-12">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
                         <h4><i class="fas fa-chart-bar me-2"></i>Project Analytics</h4>
+                        <div class="input-group mb-3" style="width: 60%">
+                            <span class="input-group-text bg-primary text-white border-primary"><i class="fas fa-history"></i></span>
+                            <select class="form-select" id="analyticsHistoryDuration">
+                                  <option value="-30 mins" selected>30 Minutes</otion>
+                                  <option value="-1 hour">1 Hour</otion>
+                                  <option value="-3 hours">3 Hours</otion>
+                                  <option value="-6 hours">6 Hours</otion>
+                                  <option value="-12 hours">12 Hours</otion>
+                                  <option value="-1 day">1 Day</otion>
+                                  <option value="-3 day">3 Days</otion>
+                                  <option value="-1 week">1 Week</otion>
+                                  <option value="-2 week">2 Weeks</otion>
+                                  <option value="-1 month">1 Month</otion>
+                            </select>
                           <span class="input-group-text bg-primary text-white border-primary"><i class="fas fa-filter"></i></span>
                           <span class="input-group-text"><i class="fas fa-server"></i></span>
                           <select class="form-select" id="filterDashProjectAnalyticsHost"></select>
@@ -225,6 +239,155 @@ $(document).on("change", "#overviewHistoryDuration", function(e){
             y[0].append(x[0]);
         });
         $("#totalsGraphs").empty().append(y)
+    });
+});
+
+function makeProjectAnalyticsGraphs(projectAnalytics){
+    let displayItems = {
+        "Instances": {
+            formatBytes: false,
+            icon: 'fas fa-box'
+        },
+        "Disk": {
+            formatBytes: true,
+            icon: 'fas fa-hdd'
+        },
+        "Memory": {
+            formatBytes: true,
+            icon: 'fas fa-memory'
+        },
+        "Processes": {
+            formatBytes: false,
+            icon: 'fas fa-microchip'
+        }
+    }
+
+    $("#overviewGraphs").empty();
+    $("#filterDashProjectAnalyticsHost").empty().append(`<option value="">All</option>`)
+
+    let displayAnalyticCount = Object.keys(displayItems).length
+
+    $.each(projectAnalytics, (alias, projects)=>{
+        $("#filterDashProjectAnalyticsHost").append(`<option value="${alias}">${alias} (${Object.keys(projects).length} projects)</option>`)
+        $.each(projects, (project, analytics)=>{
+            let projectRow = $(`
+            <div class="row projectRow mt-2 mb-2" data-host-alias="${alias}" data-project="${project}">
+                <div class="col-md-12 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                    <h4 class="mb-2">
+                        <i class="fas fa-server me-2"></i>${alias}
+                        <i class="fas fa-project-diagram me-2"></i>${project}
+                    </h4>
+                </div>
+                <div class="row row-cols-1 row-cols-md-2 projectGraphCards"></div>
+            </div>
+            `);
+
+            let totalWithNoUsage = 0;
+
+            $.each(displayItems, (title, config)=>{
+                let labels = [];
+                let values = [];
+                let limits = [];
+
+                let cId = project.replaceAll(".", "") + "-" + title.toLowerCase();
+
+                $.each(projectAnalytics[alias][project][title], (_, entry)=>{
+                    labels.push(moment.utc(entry.created).local().format("HH:mm"))
+                    values.push(entry.value)
+                    limits.push(entry.limit)
+                });
+
+                var totalUsage = values.reduce(function(a, b){
+                    return parseInt(a) + parseInt(b);
+                }, 0);
+
+                let canvas = `<canvas height="200" width="200" id="${cId}"></canvas>`;
+
+                if(totalUsage == 0){
+                    canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
+                    totalWithNoUsage++;
+                }
+
+
+                let projectMetricGraphCol = $(`<div class='col-md-3'>
+                      <div class="card h-100 bg-dark text-white">
+                          <div class="card-header">
+                              <i class="${config.icon} me-2"></i>${title}
+                          </div>
+                          <div class="card-body">
+                            ${canvas}
+                          </div>
+                      </div>
+                  </div>`);
+
+                if(totalUsage > 0){
+                    let graphDataSets = [
+                        {
+                            label: "total",
+                            borderColor: 'rgba(46, 204, 113, 1)',
+                            pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                            pointBorderColor: "rgba(46, 204, 113, 1)",
+                            data: values
+                        }
+                    ];
+
+                    let filtLimits = limits.filter(onlyUnique)
+
+                    if(filtLimits.length !== 1 || filtLimits[0] !== null){
+                        graphDataSets.push({
+                            label: "limit",
+                            borderColor: '#09F',
+                            pointBackgroundColor: "#09F",
+                            pointBorderColor: "#09F",
+                            data: limits
+                        })
+                    }
+
+                    let options = {responsive: true};
+
+                    if (config.formatBytes) {
+                          options.scales = scalesBytesCallbacks;
+                          options.tooltips = toolTipsBytesCallbacks
+                    }else{
+                        options.scales = {
+                            yAxes: [{
+                              ticks: {
+                                precision: 0,
+                                beginAtZero: true
+                              }
+                            }]
+                        }
+                    }
+
+                    new Chart(projectMetricGraphCol.find("#" + cId), {
+                      type: 'line',
+                      data: {
+                          datasets: graphDataSets,
+                          labels: labels
+                      },
+                      options: options
+                    });
+                }
+                projectRow.find(".projectGraphCards").append(projectMetricGraphCol[0]);
+            });
+
+            if(totalWithNoUsage === displayAnalyticCount){
+                projectRow.css("display", "none")
+                projectRow.addClass("noUsage")
+            }
+
+            $("#overviewGraphs").append(projectRow)
+        });
+    });
+}
+
+$(document).on("change", "#analyticsHistoryDuration", function(e){
+    $("#overviewGraphs").empty().append(`<h4 class="text-center"><i class="fas fa-cog fa-spin"></i></h4>`)
+    $("#filterDashProjectAnalyticsNoUsage").prop("checked", false);
+    $("#filterDashProjectAnalyticsProject").val("");
+    ajaxRequest('/api/ProjectAnalytics/GetGraphableProjectAnalyticsController/get', {history: $(this).val()}, (data)=>{
+        data = $.parseJSON(data)
+        makeProjectAnalyticsGraphs(data.projectAnalytics)
     });
 });
 
@@ -973,7 +1136,10 @@ function loadDashboard(){
         });
         $("#navProjectControlHostList").empty().append(projectsDropdown);
 
-
+        $("#analyticsHistoryDuration option:eq(0)").prop("selected", true);
+        $("#filterDashProjectAnalyticsNoUsage").prop("checked", false);
+        makeProjectAnalyticsGraphs(data.projectGraphData.projectAnalytics)
+        $("#totalsGraphs").empty();
         let displayItems = {
             "Instances": {
                 formatBytes: false,
@@ -992,124 +1158,6 @@ function loadDashboard(){
                 icon: 'fas fa-microchip'
             }
         }
-
-        $("#overviewGraphs, #totalsGraphs").empty();
-        $("#filterDashProjectAnalyticsHost").empty().append(`<option value="">All</option>`)
-
-        let displayAnalyticCount = Object.keys(displayItems).length
-
-        $.each(data.projectGraphData.projectAnalytics, (alias, projects)=>{
-            $("#filterDashProjectAnalyticsHost").append(`<option value="${alias}">${alias} (${Object.keys(projects).length} projects)</option>`)
-            $.each(projects, (project, analytics)=>{
-                let projectRow = $(`
-                <div class="row projectRow mt-2 mb-2" data-host-alias="${alias}" data-project="${project}">
-                    <div class="col-md-12 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                        <h4 class="mb-2">
-                            <i class="fas fa-server me-2"></i>${alias}
-                            <i class="fas fa-project-diagram me-2"></i>${project}
-                        </h4>
-                    </div>
-                    <div class="row row-cols-1 row-cols-md-2 projectGraphCards"></div>
-                </div>
-                `);
-
-                let totalWithNoUsage = 0;
-
-                $.each(displayItems, (title, config)=>{
-                    let labels = [];
-                    let values = [];
-                    let limits = [];
-
-                    let cId = project.replaceAll(".", "") + "-" + title.toLowerCase();
-
-                    $.each(data.projectGraphData.projectAnalytics[alias][project][title], (_, entry)=>{
-                        labels.push(moment.utc(entry.created).local().format("HH:mm"))
-                        values.push(entry.value)
-                        limits.push(entry.limit)
-                    });
-
-                    var totalUsage = values.reduce(function(a, b){
-                        return parseInt(a) + parseInt(b);
-                    }, 0);
-
-                    let canvas = `<canvas height="200" width="200" id="${cId}"></canvas>`;
-
-                    if(totalUsage == 0){
-                        canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
-                        totalWithNoUsage++;
-                    }
-
-
-                    let projectMetricGraphCol = $(`<div class='col-md-3'>
-                          <div class="card h-100 bg-dark text-white">
-                              <div class="card-header">
-                                  <i class="${config.icon} me-2"></i>${title}
-                              </div>
-                              <div class="card-body">
-                                ${canvas}
-                              </div>
-                          </div>
-                      </div>`);
-
-                    if(totalUsage > 0){
-                        let graphDataSets = [
-                            {
-                                label: "total",
-                                borderColor: 'rgba(46, 204, 113, 1)',
-                                pointBackgroundColor: "rgba(46, 204, 113, 1)",
-                                pointBorderColor: "rgba(46, 204, 113, 1)",
-                                data: values
-                            }
-                        ];
-
-                        let filtLimits = limits.filter(onlyUnique)
-
-                        if(filtLimits.length !== 1 || filtLimits[0] !== null){
-                            graphDataSets.push({
-                                label: "limit",
-                                borderColor: '#09F',
-                                pointBackgroundColor: "#09F",
-                                pointBorderColor: "#09F",
-                                data: limits
-                            })
-                        }
-
-                        let options = {responsive: true};
-
-                        if (config.formatBytes) {
-                              options.scales = scalesBytesCallbacks;
-                              options.tooltips = toolTipsBytesCallbacks
-                        }else{
-                            options.scales = {
-                                yAxes: [{
-                                  ticks: {
-                                    precision: 0,
-                                    beginAtZero: true
-                                  }
-                                }]
-                            }
-                        }
-
-                        new Chart(projectMetricGraphCol.find("#" + cId), {
-                          type: 'line',
-                          data: {
-                              datasets: graphDataSets,
-                              labels: labels
-                          },
-                          options: options
-                        });
-                    }
-                    projectRow.find(".projectGraphCards").append(projectMetricGraphCol[0]);
-                });
-
-                if(totalWithNoUsage === displayAnalyticCount){
-                    projectRow.css("display", "none")
-                    projectRow.addClass("noUsage")
-                }
-                
-                $("#overviewGraphs").append(projectRow)
-            });
-        });
 
         let y = $(`<div class="row mb-2" ></div>`)
         $.each(displayItems, (title, config)=>{
