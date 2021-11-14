@@ -36,16 +36,23 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-
                         <h4><i class="fas fa-chart-bar me-2"></i>Project Analytics</h4>
-                        <div class="input-group mb-3 w-25">
-                          <span class="input-group-text"><i class="fas fa-filter"></i></span>
-                          <input type="text" class="form-control" placeholder="Filter Projects..." value="" id="filterDashProjectAnalyticsProject">
+                          <span class="input-group-text bg-primary text-white border-primary"><i class="fas fa-filter"></i></span>
+                          <span class="input-group-text"><i class="fas fa-server"></i></span>
+                          <select class="form-select" id="filterDashProjectAnalyticsHost"></select>
+                          <span class="input-group-text"><i class="fas fa-project-diagram"></i></span>
+                          <input type="text" class="form-control" placeholder="Project Name..." value="" id="filterDashProjectAnalyticsProject">
+                          <span class="input-group-text">Include With No Usage?</span>
+                          <div class="input-group-text">
+                              <input class="form-check-input mt-0" id="filterDashProjectAnalyticsNoUsage" type="checkbox" value="" aria-label="Checkbox for following text input">
+                          </div>
                         </div>
                 </div>
-                <div id="overviewGraphs">
-                </div>
+
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="overviewGraphs"></div>
         </div>
     </div>
     <div class="mb-2" id="generalDashboard">
@@ -221,14 +228,37 @@ $(document).on("change", "#overviewHistoryDuration", function(e){
     });
 });
 
-$("#overviewBox").on("keyup", "#filterDashProjectAnalyticsProject", function(e){
+function filterProjectGraphs(){
     let ul = $("#overviewGraphs");
-    let search = $(this).val().toLowerCase();
-    ul.find(".projectRow").filter(function(){
-        $(this).toggle($(this).data("project").toLowerCase().indexOf(search) > -1)
-    });
-});
+    let hostSearch = $("#filterDashProjectAnalyticsHost").val().toLowerCase();
+    let projectSearch = $("#filterDashProjectAnalyticsProject").val().toLowerCase();
+    let showNoUsage = $("#filterDashProjectAnalyticsNoUsage").is(":checked");
 
+    ul.find(".noResults").remove()
+
+    ul.find(".projectRow").filter(function(){
+        let matchesHostSearch = $(this).data("hostAlias").toLowerCase().indexOf(hostSearch) > -1;
+        let matchesProjectSearch = $(this).data("project").toLowerCase().indexOf(projectSearch) > -1;
+        if(matchesHostSearch && matchesProjectSearch){
+            if($(this).hasClass("noUsage") && !showNoUsage){
+                $(this).hide()
+            }else{
+                $(this).show()
+            }
+
+        }else{
+            $(this).hide()
+        }
+    });
+
+    if(ul.find(".projectRow :visible").length === 0){
+        ul.append(`<div class="noResults text-center col-md-12"><h4><i class="fas fa-info-circle text-warning me-2"></i>No Results</div></h4>`)
+    }
+
+}
+
+$("#overviewBox").on("change", "#filterDashProjectAnalyticsNoUsage, #filterDashProjectAnalyticsHost", filterProjectGraphs);
+$("#overviewBox").on("keyup", "#filterDashProjectAnalyticsProject", filterProjectGraphs);
 
 function loadUserDashboardGraphs()
 {
@@ -963,28 +993,34 @@ function loadDashboard(){
             }
         }
 
-        $("#overviewGraphs").empty();
-        $("#totalsGraphs").empty();
+        $("#overviewGraphs, #totalsGraphs").empty();
+        $("#filterDashProjectAnalyticsHost").empty().append(`<option value="">All</option>`)
+
+        let displayAnalyticCount = Object.keys(displayItems).length
 
         $.each(data.projectGraphData.projectAnalytics, (alias, projects)=>{
+            $("#filterDashProjectAnalyticsHost").append(`<option value="${alias}">${alias} (${Object.keys(projects).length} projects)</option>`)
             $.each(projects, (project, analytics)=>{
-                let y = $(`
-                <div class="row projectRow" data-project="${project}">
+                let projectRow = $(`
+                <div class="row projectRow mt-2 mb-2" data-host-alias="${alias}" data-project="${project}">
                     <div class="col-md-12 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                        <h4 class="mb-2"><i class="fas fa-server text-info me-2"></i>${alias}</h4>
-                        <h4><i class="fas fa-project-diagram text-info me-2"></i>${project}</h4>
+                        <h4 class="mb-2">
+                            <i class="fas fa-server me-2"></i>${alias}
+                            <i class="fas fa-project-diagram me-2"></i>${project}
+                        </h4>
                     </div>
-                    <div class="row graphs">
-                    </div>
+                    <div class="row row-cols-1 row-cols-md-2 projectGraphCards"></div>
                 </div>
                 `);
+
+                let totalWithNoUsage = 0;
 
                 $.each(displayItems, (title, config)=>{
                     let labels = [];
                     let values = [];
                     let limits = [];
 
-                    let cId = project + "-" + title.toLowerCase();
+                    let cId = project.replaceAll(".", "") + "-" + title.toLowerCase();
 
                     $.each(data.projectGraphData.projectAnalytics[alias][project][title], (_, entry)=>{
                         labels.push(moment.utc(entry.created).local().format("HH:mm"))
@@ -1000,11 +1036,12 @@ function loadDashboard(){
 
                     if(totalUsage == 0){
                         canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
+                        totalWithNoUsage++;
                     }
 
 
-                    let x = $(`<div class='col-md-3'>
-                          <div class="card bg-dark text-white">
+                    let projectMetricGraphCol = $(`<div class='col-md-3'>
+                          <div class="card h-100 bg-dark text-white">
                               <div class="card-header">
                                   <i class="${config.icon} me-2"></i>${title}
                               </div>
@@ -1026,7 +1063,7 @@ function loadDashboard(){
                         ];
 
                         let filtLimits = limits.filter(onlyUnique)
-                        //
+
                         if(filtLimits.length !== 1 || filtLimits[0] !== null){
                             graphDataSets.push({
                                 label: "limit",
@@ -1053,7 +1090,7 @@ function loadDashboard(){
                             }
                         }
 
-                        new Chart(x.find("#" + cId), {
+                        new Chart(projectMetricGraphCol.find("#" + cId), {
                           type: 'line',
                           data: {
                               datasets: graphDataSets,
@@ -1062,10 +1099,15 @@ function loadDashboard(){
                           options: options
                         });
                     }
-                    y[0].append(x[0]);
+                    projectRow.find(".projectGraphCards").append(projectMetricGraphCol[0]);
                 });
 
-                $("#overviewGraphs").append(y)
+                if(totalWithNoUsage === displayAnalyticCount){
+                    projectRow.css("display", "none")
+                    projectRow.addClass("noUsage")
+                }
+                
+                $("#overviewGraphs").append(projectRow)
             });
         });
 
