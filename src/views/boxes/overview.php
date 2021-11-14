@@ -154,8 +154,15 @@ function makeProjectOverviewGraphs(totals){
 
         let cId = title.toLowerCase();
 
-        $.each(totals[title], (created, value)=>{
-            labels.push(moment.utc(created).local().format("HH:mm"))
+        let entries = totals[title];
+        let noOfEntries = Object.keys(entries).length;
+
+        // There is a snapshot every 5 minutes and there are 12 5 minute chucks in an hour
+        // so 12 chuncks * 24 hours = 288 entries for 1 day
+        let dateFormat = noOfEntries >= 288 ? "ll HH:mm" : "HH:mm"
+
+        $.each(entries, (created, value)=>{
+            labels.push(moment.utc(created).local().format(dateFormat))
             values.push(value)
         });
 
@@ -190,7 +197,15 @@ function makeProjectOverviewGraphs(totals){
                 }
             ];
 
-            let options = {responsive: true};
+            let options = {
+                responsive: true,
+                elements: {
+                    point:{
+                        // After 6 hours hide the dots on the graph
+                        radius: noOfEntries >= 72 ? 0 : 3
+                    }
+                }
+            };
 
             if (config.formatBytes) {
                   options.scales = scalesBytesCallbacks;
@@ -216,14 +231,18 @@ function makeProjectOverviewGraphs(totals){
             options.scales.yAxes[0].ticks.beginAtZero = false;
             options.scales.xAxes = [{
                 gridLines: {
-         color: "rgba(0, 0, 0, 0)",
-     },
-              ticks: {
-                    callback: function(){
-                        return '';
+                    color: "rgba(0, 0, 0, 0)",
+                },
+                ticks: {
+                    callback: function(label){
+                        if(noOfEntries >= 288){
+                            return label;
+                        }else{
+                            return ''
+                        }
                     }
-                  }
-              }]
+                }
+            }]
 
             new Chart(x.find("#" + cId), {
               type: 'line',
@@ -288,8 +307,15 @@ function makeProjectAnalyticsGraphs(projectAnalytics){
 
                 let cId = project.replaceAll(".", "") + "-" + title.toLowerCase();
 
-                $.each(projectAnalytics[alias][project][title], (_, entry)=>{
-                    labels.push(moment.utc(entry.created).local().format("HH:mm"))
+                let entries = projectAnalytics[alias][project][title];
+                let noOfEntries = Object.keys(entries).length;
+
+                // There is a snapshot every 5 minutes and there are 12 5 minute chucks in an hour
+                // so 12 chuncks * 24 hours = 288 entries for 1 day
+                let dateFormat = noOfEntries >= 288 ? "ll HH:mm" : "HH:mm"
+
+                $.each(entries, (_, entry)=>{
+                    labels.push(moment.utc(entry.created).local().format(dateFormat))
                     values.push(entry.value)
                     limits.push(entry.limit)
                 });
@@ -340,7 +366,15 @@ function makeProjectAnalyticsGraphs(projectAnalytics){
                         })
                     }
 
-                    let options = {responsive: true};
+                    let options = {
+                        responsive: true,
+                        elements: {
+                            point:{
+                                // After 6 hours hide the dots on the graph
+                                radius: noOfEntries >= 72 ? 0 : 3
+                            }
+                        }
+                    };
 
                     if (config.formatBytes) {
                           options.scales = scalesBytesCallbacks;
@@ -355,6 +389,21 @@ function makeProjectAnalyticsGraphs(projectAnalytics){
                             }]
                         }
                     }
+
+                    options.scales.xAxes = [{
+                        gridLines: {
+                            color: "rgba(0, 0, 0, 0)",
+                        },
+                        ticks: {
+                            callback: function(label){
+                                if(noOfEntries >= 288){
+                                    return label;
+                                }else{
+                                    return ''
+                                }
+                            }
+                        }
+                    }]
 
                     new Chart(projectMetricGraphCol.find("#" + cId), {
                       type: 'line',
