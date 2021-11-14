@@ -43,7 +43,7 @@ Fixed
 API Changes
     Removed `memoryLimit` from CreateVirtualMachineController in favour of config param (#419)
     Image description when searching images now contains html, the plain description is now kept in the key origDescription
-
+    Drop alias paramater from all controllers
 
 0.13.0 - 18/07/2020
 

@@ -18,10 +18,9 @@ class RestoreSnapshotController implements \dhope0000\LXDClient\Interfaces\Recor
     public function restoreSnapshot(
         Host $host,
         string $container,
-        string $snapshotName,
-        string $alias = null
+        string $snapshotName
     ) {
         $this->restoreSnapshot->restoreSnapshot($host, $container, $snapshotName);
-        return array("state"=>"success", "message"=>"Restored $snapshotName (snapshot) to $alias - $container");
+        return array("state"=>"success", "message"=>"Restored $snapshotName (snapshot) to {$host->getAlias()} - $container");
     }
 }
