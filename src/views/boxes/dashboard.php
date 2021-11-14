@@ -310,6 +310,8 @@ function loadDashboard(){
     setBreadcrumb("Dashboard", "active", "/");
     changeActiveNav(".overview")
     $("#userDashboardsList .userDashboard").remove();
+    $("#userDashboardsList").find(".active").removeClass("active");
+    $("#generalDashboardLink").addClass("active");
 
     $("#totalsGraphs").empty();
     $("#analyticsHistoryDuration option:eq(0)").prop("selected", true);
