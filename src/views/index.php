@@ -585,7 +585,7 @@ if ($haveServers->haveAny() !== true) {
                     <div class="row">
                         <div class="col-md-12" id="boxHolder">
                             <?php
-                                require __DIR__ . "/boxes/overview.php";
+                                require __DIR__ . "/boxes/dashboard.php";
                                 require __DIR__ . "/boxes/container.php";
                                 require __DIR__ . "/boxes/profile.php";
                                 require __DIR__ . "/boxes/cluster.php";
