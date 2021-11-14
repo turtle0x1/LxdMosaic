@@ -10,6 +10,8 @@ Added
     View instance proxy device on instance view (#443)
     Add instance proxy device on instance view (#443)
     Pretty frontend urls (#179)
+    User can change project analytics duration shown
+    Filtering project analytics by host & those without any usage
 
 Changed
     Use correct width for terminal on init
