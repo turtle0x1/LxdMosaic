@@ -31,14 +31,12 @@ class GetDashboard
     {
         $clustersAndHosts = $this->universe->getEntitiesUserHasAccesTo($userId, "projects");
         $clustersAndHosts = $this->addCurrentProjects($userId, $clustersAndHosts);
-        $stats = $this->getStatsFromClustersAndHosts($clustersAndHosts);
         $dashboards = $this->fetchUserDashboards->fetchAll($userId);
         $projectGraphData = $this->getGraphableProjectAnalytics->getCurrent($userId, $history);
 
         return [
             "userDashboards"=>$dashboards,
             "clustersAndHosts"=>$clustersAndHosts,
-            "stats"=>$stats,
             "projectGraphData"=>$projectGraphData
         ];
     }
@@ -68,35 +66,5 @@ class GetDashboard
         $r = $this->getResources->getHostExtended($member);
         unset($r["projects"]);
         return $r;
-    }
-
-    private function getStatsFromClustersAndHosts(array $clustersAndHosts)
-    {
-        $memory = [
-            "total"=>0,
-            "used"=>0
-        ];
-
-        foreach ($clustersAndHosts["clusters"] as $cluster) {
-            foreach ($cluster["members"] as $host) {
-                if (!$host->hostOnline()) {
-                    continue;
-                }
-                $memory["total"] += $host->getCustomProp("resources")["memory"]["total"];
-                $memory["used"] += $host->getCustomProp("resources")["memory"]["used"];
-            }
-        }
-
-        foreach ($clustersAndHosts["standalone"]["members"] as $host) {
-            if (!$host->hostOnline()) {
-                continue;
-            }
-            $memory["total"] += $host->getCustomProp("resources")["memory"]["total"];
-            $memory["used"] += $host->getCustomProp("resources")["memory"]["used"];
-        }
-
-        return [
-            "memory"=>$memory
-        ];
     }
 }
