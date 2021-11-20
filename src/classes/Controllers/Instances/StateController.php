@@ -15,41 +15,41 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Start Instance")
      */
-    public function start(Host $host, $container, string $alias = null)
+    public function start(Host $host, $container)
     {
         $this->state->change($host, $container, StateCon::START);
-        return ["state"=>"success", "message"=>"Starting $alias/$container", "code"=>101];
+        return ["state"=>"success", "message"=>"Starting {$host->getAlias()}/$container", "code"=>101];
     }
     /**
      * @Route("", name="Stop Instance")
      */
-    public function stop(Host $host, $container, string $alias = null)
+    public function stop(Host $host, $container)
     {
         $this->state->change($host, $container, StateCon::STOP);
-        return ["state"=>"success", "message"=>"Stopping $alias/$container", "code"=>102];
+        return ["state"=>"success", "message"=>"Stoppin{$host->getAlias()}alias/$container", "code"=>102];
     }
     /**
      * @Route("", name="Restart Instance")
      */
-    public function restart(Host $host, $container, string $alias = null)
+    public function restart(Host $host, $container)
     {
         $this->state->change($host, $container, StateCon::RESTART);
-        return ["state"=>"success", "message"=>"Restarting $alias/$container", "code"=>101];
+        return ["state"=>"success", "message"=>"Restarting {$host->getAlias()}/$container", "code"=>101];
     }
     /**
      * @Route("", name="Freeze Instance")
      */
-    public function freeze(Host $host, $container, string $alias = null)
+    public function freeze(Host $host, $container)
     {
         $this->state->change($host, $container, StateCon::FREEZE);
-        return ["state"=>"success", "message"=>"Freezing $alias/$container", "code"=>110];
+        return ["state"=>"success", "message"=>"Freezing {$host->getAlias()}/$container", "code"=>110];
     }
     /**
      * @Route("", name="UnFreeze Instance")
      */
-    public function unfreeze(Host $host, $container, string $alias = null)
+    public function unfreeze(Host $host, $container)
     {
         $this->state->change($host, $container, StateCon::UNFREEZE);
-        return ["state"=>"success", "message"=>"Unfreezing $alias/$container", "code"=>101];
+        return ["state"=>"success", "message"=>"Unfreezing {$host->getAlias()}/$container", "code"=>101];
     }
 }

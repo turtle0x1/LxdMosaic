@@ -18,10 +18,9 @@ class RenameSnapshotController implements \dhope0000\LXDClient\Interfaces\Record
         Host $host,
         string $container,
         string $snapshotName,
-        string $newSnapshotName,
-        string $alias = null
+        string $newSnapshotName
     ) {
         $this->renameSnapshot->rename($host, $container, $snapshotName, $newSnapshotName);
-        return array("state"=>"success", "message"=>"Renamed $snapshotName to $alias/$container/$newSnapshotName");
+        return array("state"=>"success", "message"=>"Renamed $snapshotName to {$host->getAlias()}/$container/$newSnapshotName");
     }
 }

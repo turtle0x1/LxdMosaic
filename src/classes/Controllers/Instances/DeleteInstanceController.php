@@ -17,10 +17,9 @@ class DeleteInstanceController implements \dhope0000\LXDClient\Interfaces\Record
     public function delete(
         int $userId,
         Host $host,
-        string $container,
-        string $alias = null
+        string $container
     ) {
         $this->deleteInstance->delete($userId, $host, $container);
-        return ["state"=>"success", "message"=>"Deleting $alias/$container"];
+        return ["state"=>"success", "message"=>"Deleting {$host->getAlias()}/$container"];
     }
 }
