@@ -24,6 +24,7 @@ Changed
         - create VM
         - create network
         - create profile
+        - create storage pool
     Support limits when creating a project (#434)
     Show packets_dropped_outbound & packets_dropped_inbound on networks overview
     Support project limits on projects frontend
