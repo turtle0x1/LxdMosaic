@@ -2,44 +2,55 @@
 <div class="modal fade" id="modal-networks-create" tabindex="-1" aria-labelledby="exampleModalLongTitle" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Create Network</h5>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-network-wired me-2"></i>Create Network</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-          <div class="mb-2">
-              <b> Name </b>
-              <input class="form-control" name="name" />
+      <div class="modal-body row" style="max-height: 60vh; padding-top: 1px;">
+          <div class="col-md-3 pt-3">
+                <ul class="list-group" id="createNetworkStepList">
+                    <li style="cursor: pointer" class="list-group-item active">1. Basic Details</li>
+                    <li style="cursor: pointer" class="list-group-item">2. Config (Optional)</li>
+                </ul>
           </div>
-          <div class="mb-2">
-              <b> Hosts </b>
-              <input class="form-control" id="newNetworkHosts"/>
-          </div>
-          <hr/>
-          <b> Config Key / Values (Optional) </b>
-          <div class="alert alert-info">
-              You can read more about all the keys <a target="_blank" href="https://github.com/lxc/lxd/blob/master/doc/networks.md">
-                  here </a>
-          </div>
+          <div class="col-md-9 p-3" style="max-height: 57vh; min-height: 57vh; overflow-y: scroll; border-left: 1px solid black;">
+              <div class="createNetworkStep" data-step="1">
+                  <div class="mb-2">
+                      <b> Name </b>
+                      <input class="form-control" name="name" />
+                  </div>
+                  <div class="mb-2">
+                      <b> Hosts </b>
+                      <input class="form-control" id="newNetworkHosts"/>
+                  </div>
+              </div>
+              <div class="createNetworkStep" data-step="2" style="display: none;">
+                  <b> Config Key / Values (Optional) </b>
+                  <div>
+                      <i class="fas fa-info-circle text-info"></i>You can read more about all the keys <a target="_blank" href="https://github.com/lxc/lxd/blob/master/doc/networks.md">
+                          here </a>
+                  </div>
 
-          <table class="table table-bordered" id="networkConfigTable">
-              <thead>
-                  <tr>
-                      <th> Key </th>
-                      <th> Value </th>
-                      <th> Remove </th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr class='addBtnRow'>
-                      <td colspan="3" class="text-center">
-                          <button class="btn btn-primary" id="addNetworkKeyRow">
-                              Add Key/Value
-                          </button>
-                      </td>
-                </tr>
-              </tbody>
-          </table>
+                  <table class="table table-bordered" id="networkConfigTable">
+                      <thead>
+                          <tr>
+                              <th> Key </th>
+                              <th> Value </th>
+                              <th> Remove </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr class='addBtnRow'>
+                              <td colspan="3" class="text-center">
+                                  <button class="btn btn-primary" id="addNetworkKeyRow">
+                                      Add Key/Value
+                                  </button>
+                              </td>
+                        </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -58,10 +69,22 @@
     });
 
     $("#modal-networks-create").on("hide.bs.modal",  function(){
+        changeNetworkStep(1);
         $("#modal-networks-create input").val("");
         $("#newNetworkHosts").tokenInput("clear");
         $("#networkConfigTable > tbody > tr").not(":last").remove();
     });
+
+    $("#modal-networks-create").on("click", "#createNetworkStepList li", function(){
+        changeNetworkStep($(this).index() + 1);
+    });
+
+    function changeNetworkStep(newIndex){
+        $(".createNetworkStep").hide();
+        $(`.createNetworkStep[data-step='${(newIndex)}']`).show();
+        $("#createNetworkStepList").find(".active").removeClass("active");
+        $("#createNetworkStepList").find(`li:eq(${newIndex - 1})`).addClass("active");
+    }
 
     $("#modal-networks-create").on("click", ".removeRow", function(){
         $(this).parents("tr").remove();
@@ -87,12 +110,14 @@
 
 
         if(name == ""){
-            nameInput.focus();
             makeToastr(JSON.stringify({state: "error", message: "Please input name"}));
+            changeNetworkStep(1);
+            nameInput.focus();
             return false;
         } else if(hosts.length == 0){
-            $("#newNetworkHosts").focus();
             makeToastr(JSON.stringify({state: "error", message: "Please select atleast one host"}));
+            changeNetworkStep(1);
+            $("#newNetworkHosts").focus();
             return false;
         }
 
@@ -111,11 +136,11 @@
             let key = keyInput.val();
             let value = valueInput.val();
             if(key == ""){
-                keyInput.focus();
+                invalid = keyInput;
                 makeToastr(JSON.stringify({state: "error", message: "Please input key"}));
                 return false;
             } else if(value == ""){
-                valueInput.focus();
+                invalid = valueInput;
                 makeToastr(JSON.stringify({state: "error", message: "Please input value"}));
                 return false;
             }
@@ -124,6 +149,8 @@
         });
 
         if(invalid){
+            changeNetworkStep(2)
+            invalid.focus()
             return false;
         }
 
