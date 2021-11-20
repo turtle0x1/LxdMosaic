@@ -18,9 +18,12 @@ Changed
     Remove operations from sidebar that are complete / failed older than 5 minutes (#407)
     Only admins can create projects (#429)
     Improve user parameter display on instance events
-    Improve create project modal UI / UX
-    Improve create container modal UI / UX
-    Improve create VM modal UI / UX
+    Improve the following modal UI / UX;
+        - create project
+        - create container
+        - create VM
+        - create network
+        - create profile
     Support limits when creating a project (#434)
     Show packets_dropped_outbound & packets_dropped_inbound on networks overview
     Support project limits on projects frontend
