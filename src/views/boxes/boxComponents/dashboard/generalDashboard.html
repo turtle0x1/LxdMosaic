@@ -3,7 +3,7 @@
         <div class="col-lg-12">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
                 <h4><i class="fas fa-chart-bar me-2"></i>Overview</h4>
-                <div class="input-group mb-3 w-25">
+                <div class="input-group mb-3 w-25" id="overviewHistoryDurationBox" style="display: none;">
                     <span class="input-group-text"><i class="fas fa-history"></i></span>
                     <select class="form-select" id="overviewHistoryDuration">
                         <option value="-30 mins" selected>30 Minutes</option>
@@ -41,6 +41,11 @@
     });
 
     function makeProjectOverviewGraphs(totals) {
+        if (totals.hasOwnProperty("length") && totals.length == 0) {
+            $("#totalsGraphs").empty().append("<h4 class='mt-5 text-center'><i class='fas fa-info-circle text-primary me-1'></i> Not enough data to graph, check back again in a few minutes </h4>")
+            $("#overviewHistoryDurationBox").hide();
+            return false;
+        }
         let displayItems = {
             "Instances": {
                 formatBytes: false,
@@ -60,6 +65,7 @@
             }
         }
         $("#totalsGraphs").empty();
+        $("#overviewHistoryDurationBox").show()
         let y = $(`<div class="row mb-2" ></div>`)
         $.each(displayItems, (title, config) => {
             let labels = [];
