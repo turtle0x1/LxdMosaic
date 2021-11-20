@@ -415,6 +415,54 @@ if ($haveServers->haveAny() !== true) {
                   $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
               }, 0);
           });
+
+          $(document).on("click", "#createVm", function(){
+              $("#modal-vms-create").modal("show");
+          });
+
+          $(document).on("click", "#createContainer", function(){
+              $("#modal-container-create").modal("show");
+          });
+
+          $(document).on("click", "#openSearch", function(){
+              $.confirm({
+                  title: `Search`,
+                  content: `
+                      <div class="mb-2">
+                          <label>IP Address IPV4/IPV6</label>
+                          <input class="form-control" name="ip" />
+                      </div>
+                  `,
+                  buttons: {
+                      cancel: {
+                          btnClass: "btn btn-secondary",
+                          text: "cancel"
+                      },
+                      search: {
+                          btnClass: "btn btn-success",
+                          text: "Search",
+                          action: function(){
+                              let x = {
+                                  ip: this.$content.find("input[name=ip]").val()
+                              }
+
+                              ajaxRequest(globalUrls.networks.tools.findIpAddress, x, (data)=>{
+                                  data = makeToastr(data);
+                                  if(data.state == "error"){
+                                      return false;
+                                  }
+                                  if(data.result == false){
+                                      makeToastr({state: "error", message: "Couldn't find instance"})
+                                      return false;
+                                  }
+                                  router.navigate(`/instance/${hostIdOrAliasForUrl(data.result.alias, data.result.hostId)}/${data.result.container}`);
+                              });
+                          }
+                      }
+                  }
+              });
+          });
+
       </script>
   </head>
   <form style="display: none;" method="POST" id="downloadContainerFileForm" action="/api/Instances/Files/GetPathController/get">
@@ -472,7 +520,7 @@ if ($haveServers->haveAny() !== true) {
               </li>
           </ul>
           <div class="btn-group ms-auto" id="buttonsNavbar">
-              <button class="btn btn-outline-purple pt-2 pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Search" id="openSearch">
+              <button class="btn btn-outline-purple pt-2" data-toggle="tooltip" data-bs-placement="bottom" title="Search" id="openSearch">
                   <i class="fas fa-search"></i>
               </button>
               <div class="btn-group">
@@ -537,7 +585,7 @@ if ($haveServers->haveAny() !== true) {
                     <div class="row">
                         <div class="col-md-12" id="boxHolder">
                             <?php
-                                require __DIR__ . "/boxes/overview.php";
+                                require __DIR__ . "/boxes/dashboard.php";
                                 require __DIR__ . "/boxes/container.php";
                                 require __DIR__ . "/boxes/profile.php";
                                 require __DIR__ . "/boxes/cluster.php";

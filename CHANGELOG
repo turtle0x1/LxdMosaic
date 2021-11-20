@@ -10,6 +10,8 @@ Added
     View instance proxy device on instance view (#443)
     Add instance proxy device on instance view (#443)
     Pretty frontend urls (#179)
+    User can change project analytics duration shown
+    Filtering project analytics by host & those without any usage
 
 Changed
     Use correct width for terminal on init
@@ -47,6 +49,8 @@ Fixed
 API Changes
     Removed `memoryLimit` from CreateVirtualMachineController in favour of config param (#419)
     Image description when searching images now contains html, the plain description is now kept in the key origDescription
+    projectGraphData became projectsUsageGraphData when fetching the general dashboard
+    stats key was removed fetching the general dashboard
     Drop alias paramater from all controllers
 
 0.13.0 - 18/07/2020

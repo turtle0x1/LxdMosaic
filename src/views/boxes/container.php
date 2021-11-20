@@ -1378,7 +1378,6 @@ function loadContainerView(data)
                 Memory Usage
             </h5>
             <div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>`);
-            $(".instanceStateIcon").removeClass("text-primary").addClass("text-danger")
         }
 
         let storageHtml = `
@@ -1409,7 +1408,7 @@ function loadContainerView(data)
             }else{
                 storageHtml += `<div class="mb-2">
                     <b>${titleCase(i.replace(/_/g, ' '))}</b>
-                    <div class="ms-3 mt-2">
+                    <div class="text-center mt-2">
                         <i class="fas fa-info-circle text-primary me-2"></i>No Usage information available.
                     </div>
                 </div>`
