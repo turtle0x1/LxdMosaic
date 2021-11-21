@@ -494,11 +494,43 @@ function loadRecordedActions(req, ammount = 30){
         let trs = "";
         if(data.length > 0 ){
             $.each(data, (_, item)=>{
+
+                let params = "-";
+                let userParams = JSON.parse(item.params)
+
+                let userKeys = Object.keys(item.params);
+
+                if(userKeys.length > 0){
+                    params  = ""
+                    $.each(userParams, (key, value)=>{
+                        if(value == null){
+                            return true;
+                        }
+                        let t = typeof value
+                        if(t !== "array" && t !== "object"){
+                            params += `<div class="mb-1">
+                                ${key}: ${value}
+                            </div>`
+                        // NOTE 1 level recursion not traversing whole tree's
+                        } else if(t === "object"){
+                            let pKeys = Object.keys(value);
+                            params += `<div class="mb-1">
+                                ${key}:
+                            </div>`
+                            $.each(pKeys, (_, k)=>{
+                                params += `<div class="mb-1 ps-2">
+                                    ${k}: ${value[k]}
+                                </div>`
+                            });
+                        }
+                    });
+                }
+
                 trs += `<tr>
                     <td>${item.userName}</td>
                     <td>${moment.utc(item.date).local().fromNow()}</td>
                     <td>${item.controllerName == "" ? item.controller : item.controllerName}</td>
-                    <td class="text-break">${item.params}</td>
+                    <td class="text-break">${params}</td>
                 </tr>`;
             });
         }else{
