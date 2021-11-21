@@ -53,15 +53,9 @@ class DeployConfigToContainer
 
         $imageDetails = json_decode($imageDetails, true)["details"];
 
-        if (empty($profileName)) {
-            $profileName = StringTools::random(12);
-        }
-
-        $this->deployToProfile->deployToHosts(
-            $profileName,
-            $hosts,
+        $config = $this->deployToProfile->getConfig(
             $cloudConfigId,
-            $cloudConfigRevId
+            $cloudConfigRevId,
         );
 
         return $this->createInstance->create(
@@ -71,10 +65,10 @@ class DeployConfigToContainer
             $hosts,
             $imageDetails,
             "",
-            [$profileName],
+            [],
             "",
             $gpus,
-            [], // No extra config
+            $config,
             true // start the instance
         );
     }

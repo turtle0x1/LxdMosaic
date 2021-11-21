@@ -12,9 +12,7 @@ class DeployToProfile
         $this->getConfig = $getConfig;
     }
 
-    public function deployToHosts(
-        string $profileName,
-        HostsCollection $hosts,
+    public function getConfig(
         int $cloudConfigId = null,
         int $cloudConfigRevId = null,
         array $extraConfigParams = null,
@@ -28,7 +26,6 @@ class DeployToProfile
             throw new \Exception("You can't provide vendor data here", 1);
         }
 
-        $deployResults = [];
 
         if (!is_numeric($cloudConfigRevId)) {
             $latestData = $this->getConfig->getLatestConfig($cloudConfigId);
@@ -41,8 +38,29 @@ class DeployToProfile
         $config = array_merge($config, $latestData["envVariables"] == "" ? [] : json_decode($latestData["envVariables"], true));
 
         $config["user.user-data"] = $latestData["data"];
-        $config["user.vendor-data"] = $vendorData;
 
+        if ($vendorData !== null) {
+            $config["user.vendor-data"] = $vendorData;
+        }
+
+        return $config;
+    }
+
+    public function deployToHosts(
+        string $profileName,
+        HostsCollection $hosts,
+        int $cloudConfigId = null,
+        int $cloudConfigRevId = null,
+        array $extraConfigParams = null,
+        string $vendorData = null
+    ) {
+        $config =  $this->getConfig(
+            $cloudConfigId,
+            $cloudConfigRevId,
+            $extraConfigParams,
+            $vendorData
+        );
+        $deployResults = [];
         foreach ($hosts as $host) {
             $serverProfiles = $host->profiles->all();
 
