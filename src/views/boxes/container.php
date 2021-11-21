@@ -1292,7 +1292,7 @@ function loadContainerView(data)
         }else{
             $.each(x.snapshots, function(i, item){
                 snapshotTrHtml += `<tr>
-                    <td><a href='#' id='${item}' class='viewSnapsnot'> ${item} </a></td>
+                    <td>${item}</td>
                 </tr>`;
             });
         }
@@ -1913,9 +1913,9 @@ $("#containerBox").on("click", "#goToSnapshots", function() {
                         <i class="fas fa-ellipsis-v"></i>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item createFromSnapshot" href="#"><i class="fas fa-plus text-success me-2"></i>Create Instance From Snapshot</a></li>
-                            <li><a class="dropdown-item deleteSnap" href="#"><i class="fas fa-trash text-warning me-2"></i>Delete</a></li>
-                            <li><a class="dropdown-item restoreSnapToOrigin" href="#"><i class="fas fa-trash-restore text-danger me-2"></i>Restore To Origin</a></li>
+                            <li><span class="dropdown-item createFromSnapshot"><i class="fas fa-plus text-success me-2"></i>Create Instance From Snapshot</span></li>
+                            <li><span class="dropdown-item deleteSnap"><i class="fas fa-trash text-warning me-2"></i>Delete</span></li>
+                            <li><span class="dropdown-item restoreSnapToOrigin"><i class="fas fa-trash-restore text-danger me-2"></i>Restore To Origin</span></li>
                       </ul>
                     </div>
                 </td>
@@ -2002,7 +2002,7 @@ $("#instanceSnapshotsTable").on("click", ".createFromSnapshot", function(){
                         if(data.state == "error"){
                             return false;
                         }
-                        $("#modal-container-restoreSnapshot").modal("toggle");
+                        modal.close()
                     });
                     return false;
                 }
@@ -2456,15 +2456,9 @@ $("#containerBox").on("click", ".changeInstanceState", function(){
         loadContainerViewAfter();
     });
 });
-
-$("#containerBox").on("click", ".viewSnapsnot", function(){
-    snapshotDetails.snapshotName = $(this).attr("id");
-    $("#modal-container-restoreSnapshot").modal("show");
-});
 </script>
 <?php
     require __DIR__ . "/../modals/containers/migrateContainer.php";
-    require __DIR__ . "/../modals/containers/restoreSnapshot.php";
     require __DIR__ . "/../modals/containers/createContainer.php";
     require __DIR__ . "/../modals/containers/editSettings.php";
     require __DIR__ . "/../modals/containers/files/uploadFile.php";
