@@ -624,6 +624,18 @@ var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
   editor.getSession().setMode("ace/mode/yaml");
 
+function makeProjectDropDown(member){
+    let projects = "<select class='form-select changeHostProject'>";
+    $.each(member.projects, function(o, project){
+       let selected = project == member.currentProject ? "selected" : "";
+           projects += `<option data-alias="${member.alias}" data-host='${member.hostId}'
+               value='${project}' ${selected}>
+               ${project}</option>`;
+    });
+    projects += "</select>";
+    return projects;
+}
+
 var hostsAliasesLookupTable = {};
 var hostsIdsLookupTable = {};
 
@@ -633,29 +645,44 @@ $(function(){
 
     router.hooks({
         before(done, match){
-            if(Object.keys(hostsAliasesLookupTable).length == 0 && match.data !== null && match.data.hasOwnProperty("hostId")){
-                ajaxRequest(globalUrls.universe.getEntities, {}, function(data){
+            if(Object.keys(hostsAliasesLookupTable).length == 0){
+                ajaxRequest(globalUrls.universe.getEntities, {entity: "projects"}, function(data){
                     data = $.parseJSON(data)
-                    let providedHostId = match.data.hostId;
-                    $.each(data.clusters, function(_, cluster){
+                    let providedHostId = match.data !== null && match.data.hasOwnProperty("hostId") ? match.data.hostId : null;
+                    let projectsDropdown = "";
+
+                    $.each(data.clusters, function(clusterIndex, cluster){
+                        projectsDropdown += `<b class="text-success">Cluster ${clusterIndex}</b>`
                         $.each(cluster.members, (_, member)=>{
                             hostsAliasesLookupTable[member.hostId] = member.alias
                             hostsIdsLookupTable[member.alias] = member.hostId
                             if(member.alias == providedHostId){
                                 match.data.hostId = member.hostId
                             }
+                            let projects = makeProjectDropDown(member)
+                            if(member.hostOnline == true){
+                                projectsDropdown += `<div><b>${member.alias}</b>${projects}</div>`
+                            }
                         });
                     });
 
+                    projectsDropdown += `<b class="text-success">Standalone Hosts</b>`
                     $.each(data.standalone.members, function(_, member){
                         hostsAliasesLookupTable[member.hostId] = member.alias
                         hostsIdsLookupTable[member.alias] = member.hostId
                         if(member.alias == providedHostId){
                             match.data.hostId = member.hostId
                         }
+                        let projects = makeProjectDropDown(member)
+                        if(member.hostOnline == true){
+                            projectsDropdown += `<div><i class="fas fa-server me-2"></i><b>${member.alias}</b>${projects}</div>`;
+                            openHostOperationSocket(member.hostId, member.currentProject);
+                        }
                     });
 
-                    if(!$.isNumeric(match.data.hostId)){
+                    $("#navProjectControlHostList").empty().append(projectsDropdown);
+
+                    if( match.data !== null && match.data.hasOwnProperty("hostId") && !$.isNumeric(match.data.hostId)){
                          router.navigate("/404")
                          done(false)
                     }else{
