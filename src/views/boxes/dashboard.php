@@ -67,7 +67,7 @@ $(document).on("click", ".viewDashboard", function(){
 
 function createDashboardSidebar()
 {
-    if($("#sidebar-ul").find(".view-container").length == 0){
+    if($("#sidebar-ul").find("[href^='/host']").length == 0){
         ajaxRequest(globalUrls.universe.getEntities, {}, (data)=>{
             data = makeToastr(data);
 
@@ -330,65 +330,6 @@ function loadDashboard(){
         });
 
         $("#userDashboardsList").append(dashboardTabs);
-
-        let projectsDropdown = "";
-
-        $.each(data.clustersAndHosts.clusters, function(i, item){
-            projectsDropdown += `<b>Cluster ${i}</b>`
-
-            $.each(item.members, function(_, host){
-                let disabled = "";
-                if(!host.hostOnline){
-                    disabled = "disabled text-warning text-strikethrough";
-                }
-
-                let projects = "<div class='text-center text-info'><i class='fas fa-info-circle me-2'></i>Not Supported</div>";
-
-                if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
-                    projects = "<select class='form-select changeHostProject'>";
-                    $.each(host.projects, function(o, project){
-                        let selected = project == host.currentProject ? "selected" : "";
-                            projects += `<option data-alias="${host.alias}" data-host='${data.hostId}'
-                                value='${project}' ${selected}>
-                                ${project}</option>`;
-                    });
-                    projects += "</select>";
-                }
-
-                if(host.hostOnline == true){
-                    projectsDropdown += `<div><b>${host.alias}</b>${projects}</div>`
-                }
-            });
-        });
-
-        projectsDropdown += `<b class="text-success">Standalone Hosts</b>`
-
-        $.each(data.clustersAndHosts.standalone.members, function(_, host){
-            let disabled = "";
-
-            if(host.hostOnline == false){
-                disabled = "disabled text-warning text-strikethrough";
-            }
-
-            let projects = "<div class='text-center text-info'><i class='fas fa-info-circle me-2'></i>Not Supported</div>";
-
-            if(host.resources.hasOwnProperty("extensions") && host.resources.extensions.supportsProjects){
-                projects = "<select class='form-select changeHostProject'>";
-                $.each(host.projects, function(o, project){
-                    let selected = project == host.currentProject ? "selected" : "";
-                        projects += `<option data-alias="${host.alias}" data-host='${host.hostId}'
-                            value='${project}' ${selected}>
-                            ${project}</option>`;
-                });
-                projects += "</select>";
-            }
-
-            if(host.hostOnline == true){
-                projectsDropdown += `<div><i class="fas fa-server me-2"></i><b>${host.alias}</b>${projects}</div>`;
-                openHostOperationSocket(host.hostId, host.currentProject);
-            }
-        });
-        $("#navProjectControlHostList").empty().append(projectsDropdown);
 
         makeProjectOverviewGraphs(data.projectsUsageGraphData)
     });

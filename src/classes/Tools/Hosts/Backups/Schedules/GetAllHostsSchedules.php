@@ -27,7 +27,7 @@ class GetAllHostsSchedules
 
     public function get()
     {
-        $clustersAndHosts = $this->getClustersAndStandaloneHosts->get(true);
+        $clustersAndHosts = $this->getClustersAndStandaloneHosts->get();
 
         foreach ($clustersAndHosts["clusters"] as $clusterIndex => $cluster) {
             foreach ($cluster["members"] as $hostIndex => &$host) {
