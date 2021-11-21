@@ -335,38 +335,38 @@ function putAdminSidebar(selected) {
         $("#saveSettings, #saveLdapSettings, #addUser, #recordedActionsCard, #usersCard").remove();
     }else{
         sidebar += `
-        <li class="nav-item instance-settings">
-            <a class="nav-link ${selected === `${adminSettingUrls.settings}` ? "active" : null }" href="${adminSettingUrls.settings}" data-navigo>
+        <li class="nav-item mt-2 instance-settings">
+            <a class="nav-link p-0 ${selected === `${adminSettingUrls.settings}` ? "active" : null }" href="${adminSettingUrls.settings}" data-navigo>
                 <i class="fas fa-sliders-h me-2"></i>LXDMosaic Settings
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link ${selected === `${adminSettingUrls.hosts}` ? "active" : null } " href="${adminSettingUrls.hosts}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0 ${selected === `${adminSettingUrls.hosts}` ? "active" : null } " href="${adminSettingUrls.hosts}" data-navigo>
                 <i class="fas fa-server me-2"></i>Hosts
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link ${selected === `${adminSettingUrls.instanceTypes}` ? "active" : null }" href="${adminSettingUrls.instanceTypes}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0 ${selected === `${adminSettingUrls.instanceTypes}` ? "active" : null }" href="${adminSettingUrls.instanceTypes}" data-navigo>
                 <i class="fas fa-cloud me-2"></i>Instance Types
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link  ${selected === `${adminSettingUrls.users}` ? "active" : null }" href="${adminSettingUrls.users}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0  ${selected === `${adminSettingUrls.users}` ? "active" : null }" href="${adminSettingUrls.users}" data-navigo>
                 <i class="fas fa-users-cog me-2"></i>Users
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link  ${selected === `${adminSettingUrls.userAccessControl}` ? "active" : null }" href="${adminSettingUrls.userAccessControl}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0  ${selected === `${adminSettingUrls.userAccessControl}` ? "active" : null }" href="${adminSettingUrls.userAccessControl}" data-navigo>
                 <i class="fas fa-users-cog me-2"></i>User Project Access
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link  ${selected === `${adminSettingUrls.history}` ? "active" : null }" href="${adminSettingUrls.history}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0  ${selected === `${adminSettingUrls.history}` ? "active" : null }" href="${adminSettingUrls.history}" data-navigo>
                 <i class="fas fa-history me-2"></i>Recorded Actions
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link  ${selected === `${adminSettingUrls.retiredData}` ? "active" : null }" href="${adminSettingUrls.retiredData}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0  ${selected === `${adminSettingUrls.retiredData}` ? "active" : null }" href="${adminSettingUrls.retiredData}" data-navigo>
                 <i class="fas fa-eraser me-2"></i>Retired Data
             </a>
         </li>`
