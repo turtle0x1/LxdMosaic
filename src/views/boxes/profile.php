@@ -287,11 +287,12 @@ function loadProfileView()
         let cards = "";
 
         $.each(data.clusters, (clusterIndex, cluster)=>{
+            cards += `<h4 class="text-success">Cluster ${clusterIndex}</h4>`
             $.each(cluster.members, (_, host)=>{
-                cards += makeHostProfileCard(host.hostId, `Cluster ${clusterIndex}`, host.profiles);
+                cards += makeHostProfileCard(host.hostId, host.alias, host.profiles);
             })
         });
-
+        cards += `<h4 class="text-success">Standalone Hosts</h4>`
         $.each(data.standalone.members, (_, host)=>{
             cards += makeHostProfileCard(host.hostId, host.alias, host.profiles);
         });

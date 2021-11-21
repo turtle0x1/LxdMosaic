@@ -336,11 +336,12 @@ function loadProjectView()
         let cards = "";
 
         $.each(data.clusters, (clusterIndex, cluster)=>{
+            cards += `<h4 class="text-success">Cluster ${clusterIndex}</h4>`
             $.each(cluster.members, (_, host)=>{
-                cards += makeProjectCard(`Cluster ${clusterIndex}`, host.projects);
+                cards += makeProjectCard(host.alias, host.projects);
             })
         });
-
+        cards += `<h4 class="text-success">Standalone Hosts</h4>`
         $.each(data.standalone.members, (_, host)=>{
             cards += makeProjectCard(host.alias, host.projects);
         });
