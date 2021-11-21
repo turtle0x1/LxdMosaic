@@ -418,9 +418,9 @@ function makeHostUserOverview(html, host){
             <table class="table table-bordered table-dark">
                 <thead>
                     <tr>
-                        <th>Project</th>
-                        <th>Users</th>
-                        <th>Manage</th>
+                        <th style="width: 15%; max-width: 15%">Project</th>
+                        <th style="width: 80%; max-width: 80%">Users</th>
+                        <th style="width: 5%; max-width: 5%">Manage</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -466,12 +466,12 @@ function loadProjectAccesOverview(req){
         data = $.parseJSON(data);
         let hosts = "";
         $.each(data.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            hosts += `<h4 class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></h4>`;
             $.each(cluster.members, (_, host)=>{
                 hosts = makeHostUserOverview(hosts, host)
             })
         });
-
+        hosts += `<h4 class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></h4>`;
         $.each(data.standalone.members, (_, host)=>{
             hosts = makeHostUserOverview(hosts, host)
         });
