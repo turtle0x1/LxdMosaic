@@ -59,7 +59,6 @@ class Universe
             $hosts = $this->hostList->getHostCollection(array_keys($projectsWithAccess));
         }
 
-
         $userCurrentProjects = $this->fetchUserProject->fetchCurrentProjects($userId);
 
         if (!empty($entity)) {
@@ -150,7 +149,7 @@ class Universe
         }
 
 
-        $clusters = $this->getAllClusters->convertHostsToClusters($hosts);
+        $clusters = $this->getAllClusters->convertHostsToClusters($hosts, false);
 
 
         $hostsInClusterGroups = [];

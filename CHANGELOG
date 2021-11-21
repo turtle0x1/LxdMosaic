@@ -9,7 +9,7 @@ Added
     Add setting options to create VM (#419)
     View instance proxy device on instance view (#443)
     Add instance proxy device on instance view (#443)
-    Pretty frontend urls (#179)
+    Pretty frontend URLs (#179)
     User can change project analytics duration shown
     Filtering project analytics by host & those without any usage
 
@@ -53,7 +53,9 @@ API Changes
     Image description when searching images now contains html, the plain description is now kept in the key origDescription
     projectGraphData became projectsUsageGraphData when fetching the general dashboard
     stats key was removed fetching the general dashboard
-    Drop alias paramater from all controllers
+    Drop alias parameter from all controllers
+    Add currentProject key when outputting host as JSON
+    Don't load / return server "resources" key unless loading server overview
 
 0.13.0 - 18/07/2020
 

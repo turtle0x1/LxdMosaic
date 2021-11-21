@@ -21,13 +21,13 @@ class GetAllClusters
         $this->getResources = $getResources;
     }
 
-    public function get(bool $removeResources = true)
+    public function get()
     {
         $clusters = $this->createClusterGroupsWithInfo();
-        return $this->calculateClusterStats($clusters, $removeResources);
+        return $this->calculateClusterStats($clusters);
     }
 
-    public function convertHostsToClusters($hosts)
+    public function convertHostsToClusters($hosts, $addResources = false)
     {
         $hostByUrl = [];
         foreach ($hosts as $host) {
@@ -63,7 +63,9 @@ class GetAllClusters
                 $memberHostObj = $hostByUrl[$member["url"]];
 
                 $memberHostObj->setCustomProp("clusterInfo", $member);
-                $memberHostObj->setCustomProp("resources", $this->getResources->getHostExtended($memberHostObj));
+                if ($addResources) {
+                    $memberHostObj->setCustomProp("resources", $this->getResources->getHostExtended($memberHostObj));
+                }
                 $memberHostObj->setCustomProp("status", $member["status"]);
 
                 $clusters[$clusterId]["members"][] = $memberHostObj;
@@ -78,10 +80,10 @@ class GetAllClusters
     private function createClusterGroupsWithInfo()
     {
         $hosts = $this->hostList->getOnlineHostsWithDetails();
-        return $this->convertHostsToClusters($hosts);
+        return $this->convertHostsToClusters($hosts, true);
     }
 
-    private function calculateClusterStats(array $clusters, bool $removeResources)
+    private function calculateClusterStats(array $clusters)
     {
         foreach ($clusters as $index => $cluster) {
             $totalMemory = 0;
@@ -95,9 +97,7 @@ class GetAllClusters
                 $totalMemory += $resources["memory"]["total"];
                 $usedMemory += $resources["memory"]["used"];
 
-                if ($removeResources) {
-                    $member->removeCustomProp("resources");
-                }
+                $member->removeCustomProp("resources");
 
                 if ($member->getCustomProp("status") == "Online") {
                     $onlineMembers++;
