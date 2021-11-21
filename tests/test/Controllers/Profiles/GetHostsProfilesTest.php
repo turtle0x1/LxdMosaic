@@ -31,6 +31,7 @@ final class GetHostsProfilesTest extends TestCase
             'urlAndPort',
             'hostOnline',
             'supportsLoadAvgs',
+            'currentProject',
             'profiles'
         ], $hostKeys);
 
