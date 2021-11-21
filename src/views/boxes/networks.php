@@ -92,13 +92,13 @@ function makeNetworkHostSidebarHtml(hosthtml, host, id){
 
         if(host.hostOnline == true){
             hosthtml += `<button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#networks-host-${id}" aria-expanded="true">
-                <i class="fas fa-caret-down"></i>
+                <i class="fas fa-caret-left"></i>
             </button>`
         }else{
             return hosthtml;
         }
 
-    hosthtml += `<div class=" mt-2 bg-dark text-white show" id="networks-host-${id}">
+    hosthtml += `<div class=" mt-2 bg-dark text-white collapse" id="networks-host-${id}">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
 
     $.each(host.networks, function(_, network){

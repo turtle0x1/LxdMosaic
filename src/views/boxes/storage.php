@@ -222,7 +222,7 @@ function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
 
     if(host.hostOnline == true){
         hosthtml += `<button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#storage-host-${id}" aria-expanded="true">
-            <i class="fas fa-caret-down"></i>
+            <i class="fas fa-caret-left"></i>
         </button>`
     }else{
         return {
@@ -231,7 +231,7 @@ function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
         };
     }
 
-    hosthtml += `<div class=" mt-2 bg-dark text-white show" id="storage-host-${id}">
+    hosthtml += `<div class=" mt-2 bg-dark text-white collapse" id="storage-host-${id}">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
 
 
