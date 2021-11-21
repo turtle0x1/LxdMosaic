@@ -546,7 +546,7 @@ function loadUsers(){
                 let isDisabledVal = user.isDisabled;
 
                 trs += `<tr data-user-id="${user.id}" data-is-admin="${user.isAdmin}" data-is-disabled=${isDisabledVal}>
-                    <td><a href="#" id="${user.id}" class='viewUser'>${user.username}</a></td>
+                    <td><p id="${user.id}" class='viewUser text-primary text-decoration-underline' style="cursor: pointer;">${user.username}</p></td>
                     <td>${moment.utc(user.created).local().fromNow()}</td>
                     <td><i class="fas fa-${isAdmin} ${isAdminTClass}"></i></td>
                     <td><i class="fas fa-${isDisabled} ${isDisabledTClass}"></i></td>
