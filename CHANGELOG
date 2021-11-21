@@ -56,6 +56,7 @@ API Changes
     Drop alias parameter from all controllers
     Add currentProject key when outputting host as JSON
     Don't load / return server "resources" key unless loading server overview
+    Don't load / return clustersAndHosts when loading dashboard
 
 0.13.0 - 18/07/2020
 
