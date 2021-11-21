@@ -41,29 +41,32 @@ class GetGraphableProjectAnalytics
 
     private function getDateInternval($start, $end)
     {
+        $diff = ($start)->diff($end);
+
+        $numberOfDays = (int) $diff->format("%R%a");
+        $numberOfHours = (int) $diff->h;
+
+        $step = 5;
+        if ($numberOfDays == 0 && $numberOfHours >= 3 && $numberOfHours < 6) {
+            $step = 15;
+        } elseif ($numberOfDays == 0 && $numberOfHours >= 6) {
+            $step = 30;
+        } elseif ($numberOfDays == 1) {
+            $step = 60;
+        }
+
+        $dataByDate = [];
+
         $period = new \DatePeriod(
             $start,
             new \DateInterval('P1D'),
             $end->setTime(23, 59)
         );
 
-        $numberOfDays = (int) ($period->getStartDate())->diff($period->getEndDate())->format("%R%a");
-        $numberOfMinutes = (int) ($period->getStartDate())->diff($period->getEndDate())->i;
-        $numberOfHours = (int) ($period->getStartDate())->diff($period->getEndDate())->h;
-
-        $step = 5;
-        if ($numberOfDays == 0 && $numberOfHours >= 3) {
-            $step = 15;
-        } elseif ($numberOfDays == 0 && $numberOfHours >= 6) {
-            $step = 30;
-        }
-
-        $dataByDate = [];
-
         foreach ($period as $key => $value) {
             $dateString = $value->format("Y-m-d");
 
-            if ($numberOfDays >= 1 && $numberOfHours > 12) {
+            if ($numberOfDays > 1) {
                 if ($numberOfDays <= 7) {
                     $dataByDate[$dateString . " " . "08:00"] = null;
                     $dataByDate[$dateString . " " . "12:00"] = null;
