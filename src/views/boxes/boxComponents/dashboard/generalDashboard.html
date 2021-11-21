@@ -77,9 +77,7 @@
             let entries = totals[title];
             let noOfEntries = Object.keys(entries).length;
 
-            // There is a snapshot every 5 minutes and there are 12 5 minute chucks in an hour
-            // so 12 chuncks * 24 hours = 288 entries for 1 day
-            let dateFormat = noOfEntries >= 288 ? "ll HH:mm" : "HH:mm"
+            let dateFormat = noOfEntries == 13 || noOfEntries == 7 ? "HH:mm" : "ll HH:mm"
 
             $.each(entries, (created, value) => {
                 labels.push(moment.utc(created).local().format(dateFormat))
@@ -87,6 +85,8 @@
             });
 
             var totalUsage = values.reduce(function(a, b) {
+                a = a == null ? 0 : a
+                b = b == null ? 0 : b
                 return parseInt(a) + parseInt(b);
             }, 0);
 
@@ -120,7 +120,7 @@
                     elements: {
                         point: {
                             // After 6 hours hide the dots on the graph
-                            radius: noOfEntries >= 72 ? 0 : 3
+                            radius: 0
                         }
                     }
                 };
@@ -151,15 +151,6 @@
                     gridLines: {
                         color: "rgba(0, 0, 0, 0)",
                     },
-                    ticks: {
-                        callback: function(label) {
-                            if (noOfEntries >= 288) {
-                                return label;
-                            } else {
-                                return ''
-                            }
-                        }
-                    }
                 }]
 
                 new Chart(x.find("#" + cId), {
