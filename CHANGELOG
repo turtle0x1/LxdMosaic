@@ -35,6 +35,7 @@ Changed
     Only allow choosing one host when deploying cloud-config (only on frontend)
     Add cloud & desktop icons to image lists to indicate different variants
     Improve search remote image server result layout
+    Use date ranges instead of created dates for project analytics
 
 Fixed
     First run doesn't toggle passwords properly (#390)
