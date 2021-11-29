@@ -1364,7 +1364,7 @@ function loadContainerView(data)
                 let memoryWidth = ((item / totalMemory) * 100)
                 memoryUsageHtml += `<div class="mb-2">
                     <b>${titleCase(i.replace(/_/g, ' '))}</b>
-                    <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(totalMemory)} (Source: ${x.totalMemory.source})" class="progress ms-3 mt-2">
+                    <div data-toggle="tooltip" data-bs-placement="right" title="${formatBytes(totalMemory)} (Source: ${x.totalMemory.source})" class="progress ms-3 mt-2">
                         <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(item)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${item}" aria-valuemin="0" aria-valuemax="${(totalMemory)}"></div>
                     </div>
                 </div>`
