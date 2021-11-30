@@ -47,6 +47,7 @@ Fixed
     Delete host (#365)
     Node holding onto client sockets that will be closed (#417)
     Image type icon in images sidebar on LXD 3 host
+    Server overview leaks all project names (#453)
 
 API Changes
     Removed `memoryLimit` from CreateVirtualMachineController in favour of config param (#419)
