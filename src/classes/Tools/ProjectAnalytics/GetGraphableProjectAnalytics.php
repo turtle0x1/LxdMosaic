@@ -6,6 +6,7 @@ use dhope0000\LXDClient\Model\ProjectAnalytics\FetchAnalytics;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 use dhope0000\LXDClient\Tools\Utilities\DateTools;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetGraphableProjectAnalytics
 {
@@ -26,7 +27,7 @@ class GetGraphableProjectAnalytics
         $this->dateTools = $dateTools;
     }
 
-    public function getCurrent(int $userId, string $history = "-30 minutes")
+    public function getCurrent(int $userId, string $history = "-30 minutes", ?Host $hostFilter = null)
     {
         $startDate = (new \DateTime())->modify($history);
         $endDate = (new \DateTime());
@@ -36,7 +37,7 @@ class GetGraphableProjectAnalytics
         $startDate = new \DateTimeImmutable(array_keys($rangeTemplate)[0]);
 
         $enteries = $this->fetchAnalytics->fetchBetween($startDate, $endDate);
-        return $this->groupEnteries($userId, $enteries, $rangeTemplate);
+        return $this->groupEnteries($userId, $enteries, $rangeTemplate, $hostFilter);
     }
 
     private function getDateInternval($start, $end)
@@ -100,7 +101,7 @@ class GetGraphableProjectAnalytics
         return $dataByDate;
     }
 
-    private function groupEnteries(int $userId, array $entries, $rangeTemplate)
+    private function groupEnteries(int $userId, array $entries, $rangeTemplate, Host $hostFilter = null)
     {
         $isAdmin = (bool) $this->fetchUserDetails->isAdmin($userId);
         $allowedProjects = $this->fetchAllowedProjects->fetchAll($userId);
@@ -110,6 +111,9 @@ class GetGraphableProjectAnalytics
         $typeTotals = [];
 
         foreach ($entries as $entry) {
+            if ($hostFilter !== null && $entry["hostId"] != $hostFilter->getHostId()) {
+                continue;
+            }
             $alias = $entry["hostAlias"];
             $project = $entry["project"];
 
