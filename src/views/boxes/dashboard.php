@@ -94,7 +94,7 @@ function createDashboardSidebar()
 
                     hosts += `<li class="mb-2" data-hostId="${host.hostId}" data-alias="${host.alias}">
                         <div>
-                            <a class="nav-link ${active} d-inline ps-0 ${disabled}" href="/host/${host.hostId}/overview" data-navigo>
+                            <a class="nav-link ${active} d-inline ps-0 ${disabled}" href="/host/${hostIdOrAliasForUrl(host.alias, host.hostId)}/overview" data-navigo>
                                 <i class="fas fa-server"></i> ${host.alias}
                             </a>
                             <button class="btn  btn-outline-secondary d-inline btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false">
@@ -123,7 +123,7 @@ function createDashboardSidebar()
 
                 hosts += `<li class="mb-2" data-hostId="${host.hostId}" data-alias="${host.alias}">
                     <div>
-                        <a class="nav-link ${active} d-inline ps-0 ${disabled}" href="/host/${host.hostId}/overview" data-navigo>
+                        <a class="nav-link ${active} d-inline ps-0 ${disabled}" href="/host/${hostIdOrAliasForUrl(host.alias, host.hostId)}/overview" data-navigo>
                             <i class="fas fa-server"></i> ${host.alias}
                         </a>
                         <button class="btn  btn-outline-secondary d-inline btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false">
@@ -146,7 +146,7 @@ function createDashboardSidebar()
         if(currentContainerDetails !== null && $.isNumeric(currentContainerDetails.hostId)){
             $("#sidebar-ul").find(`.nav-link[href="/instance/${hostIdOrAliasForUrl(currentContainerDetails.alias ,currentContainerDetails.hostId)}/${currentContainerDetails.container}"]`).addClass("active")
         }else if(currentServer !== null && $.isNumeric(currentServer.hostId)){
-            $("#sidebar-ul").find(`.nav-link[href="/host/${currentServer.hostId}/overview"]`).addClass("active")
+            $("#sidebar-ul").find(`.nav-link[href="/host/${hostIdOrAliasForUrl(currentServer.hostAlias, currentServer.hostId)}/overview"]`).addClass("active")
         }else{
             $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
         }

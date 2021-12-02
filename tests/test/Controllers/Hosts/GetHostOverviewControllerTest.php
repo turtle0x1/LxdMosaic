@@ -36,16 +36,10 @@ final class GetHostOverviewControllerTest extends TestCase
 
         $this->assertEquals([
             'header',
-            'containers',
-            'containerStats',
             'resources',
-            'supportsWarnings'
+            'warnings',
+            'projectAnalytics'
         ], array_keys($result));
-
-        $this->assertEquals([
-            'online',
-            'offline'
-        ], array_keys($result["containerStats"]));
 
         $this->assertInstanceOf('dhope0000\LXDClient\Objects\Host', $result["header"]);
     }
