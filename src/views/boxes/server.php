@@ -1,163 +1,190 @@
 <div id="serverBox" class="boxSlide">
     <div id="serverOverview">
-        <div class="row">
+        <div class="row border-bottom">
             <div class="col-md-12">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-1">
-                    <h1><i class="fas fa-server me-2"></i><span id="serverHeading"></span</h1>
-                    <?php if ($isAdmin === 1) : ?>
-                    <div class="btn-toolbar float-end">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-1">
+                    <h1 class="mb-0"><i class="fas fa-server me-2"></i><span id="serverHeading">latest</span></h1>
+                    <div class="btn-toolbar float-end enableIfAdmin" style="display: none;">
                       <div class="btn-group me-2">
-                        <button class="btn btn-primary" data-toggle="tooltip" data-bs-placement="bottom" title="Edit Host" id="editHost">
-                            <i class="fas fa-cog"></i>
-                        </button>
-                        <button class="btn btn-danger" data-toggle="tooltip" data-bs-placement="bottom" title="Delete Host" id="deleteHost">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-md-6 border-bottom">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                    <h4><i class="fas fa-memory me-2"></i>Server Memory Usage</h4>
-                    <h4 id="serverMemoryUsagePercentage"></h4>
-                </div>
-                <div id="serverMemoryUsageBox"></div>
-            </div>
-            <div class="col-md-6 border-bottom">
-                <div class="mb-3">
-                    <h4><i class="fas fa-boxes me-2"></i>Project Instances Online</h4>
-                    <div id="serverInstancesOnlineBox"></div>
-                </div>
-            </div>
-        </div>
-        <div class="row border-bottom pb-2 mb-2">
-                <div class="col-md-12 text-center justify-content">
-                    <button type="button" class="btn text-white btn-outline-primary active" id="serverDetailsBtn" data-view="serverInfoBox">
-                        <i class="fas fa-info pe-2"></i>Details
-                    </button>
-                    <button type="button" class="btn text-white btn-outline-primary" id="serverWarningsBtn" data-view="serverWarningsBox">
-                        <i class="fas fa-exclamation-triangle pe-2" style="color: white !important;"></i>Warnings
-                    </button>
-                    <button type="button" class="btn text-white btn-outline-primary" id="serverProxyDevicesBtn" data-view="serverProxyBox">
-                        <i class="fas fa-exchange-alt pe-2"></i>Proxy Devices
-                    </button>
-                </div>
-        </div>
-        <div class="row serverViewBox" id="serverInfoBox">
-        <div class="col-md-8">
-            <div class="card bg-dark text-white">
-                <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
-                    <h4><i class="fas fa-box me-2"></i>Instances</h4>
-                    <div class="btn-toolbar float-end">
-                      <div class="btn-group me-2">
-                        <button class="btn btn-success serverContainerActions" data-action="start" data-toggle="tooltip" data-bs-placement="bottom" title="Start Instances" disabled>
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <button class="btn btn-warning serverContainerActions" data-action="stop" data-toggle="tooltip" data-bs-placement="bottom" title="Stop Instances" disabled>
-                            <i class="fas fa-stop"></i>
-                        </button>
-                        <button class="btn btn-danger serverContainerActions" data-action="delete" data-toggle="tooltip" data-bs-placement="bottom" title="Delete Instances" disabled>
-                            <i class="fas fa-trash"></i>
+                        <button class="btn btn-outline-primary" data-toggle="tooltip" data-bs-placement="bottom" title="Edit Host" id="editHost">
+                            <i class="fas fa-wrench"></i>
                         </button>
                       </div>
                     </div>
                 </div>
-                <div class="card-body table-responsive">
-                    <table id="containerTable" class="table table-dark table-bordered">
-                        <thead>
-                            <tr>
-                                <td> <input type="checkbox" id="toggleAllContainers"> </td>
-                                <td> Name </td>
-                                <td> Disk Usage </td>
-                                <td> Memory Usage </td>
-                                <td> <a href="#" data-toggle="tooltip" data-bs-placement="bottom" title="Excluding local interface bytes sent & received"> Network Usage </a> </td>
-                                <td> Gather Metrics</td>
-                            </tr>
-                        </thead>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 pt-2">
+                <div class="mb-2">
+                    <h5><i style="min-width: 20px" class="fas fa-microchip me-2"></i>CPU's</h5>
+                    <div id="serverCpuDisplay">
+                    </div>
+                </div>
+                <div class="mt-2 mb-2">
+                    <h5><i style="min-width: 20px; text-align: center;" class="fas fa-memory me-2"></i>Memory</h5>
+                    <div id="serverMemoryDisplay">
+                    </div>
+                </div>
+                <div class="mt-2 mb-2">
+                    <h5><i style="min-width: 20px; text-align: center;" class="fas fa-bolt me-2"></i>GPU's</h5>
+                    <div id="serverGpuDisplay">
+
+                    </div>
+                </div>
+                <div class="mt-2 mb-2">
+                    <h5><i style="min-width: 20px; text-align: center;" class="fas fa-hdd me-2"></i>Disk's</h5>
+                    <div id="serverDisksDisplay">
+
+                    </div>
+                </div>
+                <div class="mt-2 mb-2">
+                    <h5><i style="min-width: 20px; text-align: center;" class="fas fa-server me-2"></i>Hardware</h5>
+                    <table class="table" id="hostDetailsTable">
                         <tbody>
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card bg-dark text-white">
-                        <div class="card-header">
-                            <h4><i class="fas fa-server me-2"></i>Hardware</h4>
+            <div class="col-md-9 pt-2 border-start">
+                <div class="row pb-2 mb-2">
+                        <div class="col-md-12 text-center justify-content" id="serverBoxNav">
+                            <button type="button" class="btn text-white btn-outline-primary active" id="serverDetailsBtn" data-view="serverInfoBox">
+                                <i class="fas fa-tachometer-alt pe-2"></i>Overview
+                            </button>
+                            <button type="button" class="btn text-white btn-outline-primary" id="server" data-view="serverInstanceBox">
+                                <i class="fas fa-box pe-2"></i>Instances
+                            </button>
+                            <button type="button" class="btn text-white btn-outline-primary" id="serverProxyDevicesBtn" data-view="serverProxyBox">
+                                <i class="fas fa-exchange-alt pe-2"></i>Proxy Devices
+                            </button>
+                            <button type="button" class="btn text-white btn-outline-primary" id="serverWarningsBtn" data-view="serverWarningsBox">
+                                <i class="fas fa-exclamation-triangle pe-2" style="color: white !important;"></i>Warnings
+                            </button>
                         </div>
-                        <div class="card-body">
-                            <div>
-                                <table class="table table-bordered table-dark" id="hostDetailsTable">
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="serverInfoBox" class="serverViewBox">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card bg-dark text-white text-center" id="newWarningCountCard" style="display: none;">
+                                        <h1 id="newWarningsCount"></h1>
+                                        <h4><i style="min-width: 20px; text-align: center; color: yellow !important;" class="fas fa-exclamation-triangle me-2"></i>New Warnings</h4>
+                                    </div>
+                                    <div class="card mt-2 bg-dark text-white text-center" id="memoryUsageCard">
+                                        <div class="p-2 m-2 mb-0 pb-0" id="serverMemoryUsageBox"></div>
+                                        <h4><i class="fas fa-memory me-2"></i>Memory</h4>
+                                    </div>
+                                    <div class="card mt-2 bg-dark text-white text-center" id="projectCountCard">
+                                        <h1 id="projectsCount"></h1>
+                                        <h4><i class="fas fa-project-diagram me-2"></i>Projects</h4>
+                                    </div>
+                                    <div class="card mt-2 bg-dark text-white text-center">
+                                        <h1 id="containerCount"></h1>
+                                        <h4><i class="fas fa-box me-2"></i>Containers</h4>
+                                    </div>
+                                    <div class="card mt-2 bg-dark text-white text-center">
+                                        <h1 id="virtualMachineCount"></h1>
+                                        <h4><i class="fas fa-vr-cardboard me-2"></i>Virutal Machines</h4>
+                                    </div>
+                                    <div class="card mt-2 bg-dark text-white text-center">
+                                        <h1 id="networksCount"></h1>
+                                        <h4><i class="fas fa-ethernet me-2"></i>Networks</h4>
+                                    </div>
+                                </div>
+                                <div class="col-md-8" id="serverOverviewGraphs">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="serverViewBox" id="serverInstanceBox">
+                            <div class="row">
+                                <div class="col-md-12 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-2">
+                                    <h4><i class="fas fa-box me-2"></i>Instances</h4>
+                                    <div class="btn-toolbar float-end">
+                                      <div class="btn-group me-2">
+                                        <button class="btn btn-success serverContainerActions" data-action="start" data-toggle="tooltip" data-bs-placement="bottom" title="Start Instances" disabled>
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                        <button class="btn btn-warning serverContainerActions" data-action="stop" data-toggle="tooltip" data-bs-placement="bottom" title="Stop Instances" disabled>
+                                            <i class="fas fa-stop"></i>
+                                        </button>
+                                        <button class="btn btn-danger serverContainerActions" data-action="delete" data-toggle="tooltip" data-bs-placement="bottom" title="Delete Instances" disabled>
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="serverInstanceTable" class="table table-dark table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <td> <input type="checkbox" id="toggleAllContainers"> </td>
+                                            <td> Instance </td>
+                                            <td> Disk Usage </td>
+                                            <td> Memory Usage </td>
+                                            <td> <a href="#" data-toggle="tooltip" data-bs-placement="bottom" title="Excluding local interface bytes sent & received"> Network Usage </a> </td>
+                                            <td> Gather Metrics</td>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </div>
-        <div class="row serverViewBox" id="serverProxyBox">
-            <div class="col-md-12">
-                <div class="card bg-dark text-white">
-                    <div class="card-header text-white">
-                        <h4>Proxy Devices
-                        <button class="btn btn-sm btn-primary float-end" id="addProxyDevice">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                        </h4>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered table-dark" id="serverProxyTable">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Source</th>
-                                    <th>Destination</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row serverViewBox" id="serverWarningsBox">
-            <div class="col-md-12">
-                <div class="card bg-dark text-white">
-                    <div class="card-header text-white">
-                        <h4>Warnings</h4>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered table-dark" id="serverWarningTable">
-                            <thead>
-                                <tr>
-                                    <th>Severity</th>
-                                    <th>Type</th>
-                                    <th>Last Message</th>
-                                    <th>Status</th>
-                                    <th>Acknowledge</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        <div class="serverViewBox" id="serverProxyBox">
+                            <div class="card bg-dark text-white">
+                                <div class="card-header text-white">
+                                    <h4>Proxy Devices
+                                    <button class="btn btn-sm btn-primary float-end" id="addProxyDevice">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered table-dark" id="serverProxyTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Source</th>
+                                                <th>Destination</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="serverViewBox" id="serverWarningsBox">
+                            <div class="card bg-dark text-white">
+                                <div class="card-header text-white">
+                                    <h4>Warnings</h4>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered table-dark" id="serverWarningTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Severity</th>
+                                                <th>Type</th>
+                                                <th>Last Message</th>
+                                                <th>Status</th>
+                                                <th>Acknowledge</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="serverDetails">
     </div>
 </div>
 
@@ -172,6 +199,7 @@ function loadHostOverview(req){
     currentContainerDetails = null;
     let hostId = req.data.hostId;
     currentServer.hostId = hostId
+    currentServer.hostAlias = hostsAliasesLookupTable[hostId]
     createDashboardSidebar()
 
     loadServerView(hostId);
@@ -190,11 +218,11 @@ $(document).on("change", ".toggleStatusContainer", function(){
         $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
     }
 
-    $("#containerTable").find(`tr:gt(${tr.index() + 1})`).each(function(){
+    $("#serverInstanceTable").find(`tr:gt(${tr.index() + 1})`).each(function(){
         if($(this).hasClass("statusRow")){
             return false;
         }
-        $(this).find("input[name=containerCheckbox]").prop("checked", checked);
+        $(this).find("input[name=instanceCheckbox]").prop("checked", checked);
     });
 });
 
@@ -282,13 +310,79 @@ $(document).on("click", "#addProxyDevice", function(){
     $("#modal-hosts-instnaces-addProxyDevice").modal("show");
 });
 
-$(document).on("click", "#serverDetailsBtn, #serverProxyDevicesBtn, #serverWarningsBtn", function(){
-    $("#serverDetailsBtn, #serverProxyDevicesBtn, #serverWarningsBtn").removeClass("active")
+$(document).on("click", "#serverBoxNav .btn", function(){
+    $("#serverBoxNav .btn").removeClass("active")
     $(this).addClass("active")
     $(".serverViewBox").hide();
     $(`#${$(this).data("view")}`).show();
 
-    if($(this).data("view") == "serverProxyBox"){
+    if($(this).data("view") == "serverInstanceBox"){
+        ajaxRequest(globalUrls.hosts.instances.getHostContainers, {hostId: currentServer.hostId}, (data)=>{
+            let instances = makeToastr(data)
+            let instanceStatusesRows = {};
+
+            if(Object.keys(instances).length > 0){
+                $.each(instances, (name, instance)=>{
+                    if(!instanceStatusesRows[instance.status]){
+                        instanceStatusesRows[instance.status] = `<tr class="statusRow">
+                            <td class="text-center text-primary" colspan="999">
+                                <i class="${instanceStatusesRows[instance.status]}"></i>
+                                ${instance.status}
+                                <input class="toggleStatusContainer" type="checkbox"/>
+                            </td>
+                        </tr>`
+                    }
+
+                    let storageUsage = instance.state.disk == null || instance.state.disk.length == 0 ? "N/A" : formatBytes(instance.state.disk.root.usage);
+
+                    let bytesSent = 0, bytesRecieved = 0;
+
+                    $.each(instance.state.network, (networkName, network)=>{
+                        if(networkName == "lo"){
+                            return true;
+                        }
+
+                        bytesSent += network.counters.bytes_sent;
+                        bytesRecieved += network.counters.bytes_received;
+                    });
+
+                    let metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-primary btn-sm enableMetrics'>
+                        Enable
+                    </button>`;
+
+                    if(instance.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics")){
+                        metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-warning btn-sm disableMetrics'>
+                            Disable
+                        </button>`;
+                    }
+
+                    instanceStatusesRows[instance.status] += `<tr data-name="${name}">
+                        <td><input name="instanceCheckbox" type="checkbox"/></td>
+                        <td>${name}</td>
+                        <td>${storageUsage}</td>
+                        <td>${formatBytes(instance.state.memory.usage)}</td>
+                        <td>R: ${formatBytes(bytesRecieved)} <br/> S: ${formatBytes(bytesSent)}</td>
+                        <td>${metricsButton}</td>
+                    </tr>`
+                });
+            }else{
+                instanceStatusesRows = `<tr><td class="text-center" colspan="999"><i class="fas fa-info-circle text-info me-2"></i>No instances!</td></tr>`
+            }
+
+            $("#serverInstanceTable > tbody").empty()
+
+            if(typeof instanceStatusesRows == "string"){
+                $("#serverInstanceTable > tbody").append(instanceStatusesRows);
+            }else{
+                let keys = Object.keys(instanceStatusesRows).sort();
+                $.each(keys,  (_, key)=>{
+                    $("#serverInstanceTable > tbody").append(instanceStatusesRows[key])
+                })
+            }
+
+
+        });
+    }else if($(this).data("view") == "serverProxyBox"){
         ajaxRequest(globalUrls.hosts.instances.getAllProxyDevices, currentServer, (data)=>{
             data = makeToastr(data);
 
@@ -356,14 +450,14 @@ $(document).on("click", "#serverDetailsBtn, #serverProxyDevicesBtn, #serverWarni
     }
 });
 
-$(document).on("change", "input[name=containerCheckbox]", function(){
-    if($("input[name=containerCheckbox]:checked").length > 0){
+$(document).on("change", "input[name=instanceCheckbox]", function(){
+    if($("input[name=instanceCheckbox]:checked").length > 0){
         $(".serverContainerActions").attr("disabled", false);
-        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("enable")
+        $("#serverInstanceBox").find('[data-toggle="tooltip"]').tooltip("enable")
     }else{
         $(".serverContainerActions").attr("disabled", true);
-        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("hide")
-        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
+        $("#serverInstanceBox").find('[data-toggle="tooltip"]').tooltip("hide")
+        $("#serverInstanceBox").find('[data-toggle="tooltip"]').tooltip("disable")
     }
 });
 
@@ -372,14 +466,14 @@ $(document).on("click", "#toggleAllContainers", function(){
 
     if(checked){
         $(".serverContainerActions").attr("disabled", false);
-        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("enable")
+        $("#serverInstanceBox").find('[data-toggle="tooltip"]').tooltip("enable")
     }else {
         $(".serverContainerActions").attr("disabled", true);
-        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("hide")
-        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
+        $("#serverInstanceBox").find('[data-toggle="tooltip"]').tooltip("hide")
+        $("#serverInstanceBox").find('[data-toggle="tooltip"]').tooltip("disable")
     }
 
-    $("#containerTable").find("input[name=containerCheckbox]").each(function(){
+    $("#serverInstanceTable").find("input[name=instanceCheckbox]").each(function(){
         $(this).prop("checked", checked);
     });
 });
@@ -428,7 +522,7 @@ $(document).on("click", ".serverContainerActions", function(){
 
     btn.html("<i class='fas fa-cog fa-spin'></i>");
 
-    let checkboxes = $("#containerTable").find("input[name=containerCheckbox]");
+    let checkboxes = $("#serverInstanceTable").find("input[name=instanceCheckbox]");
 
     let selectedContainers = checkboxes.filter(":checked").map(function () {
         return $(this).parents("tr").data("name");
@@ -450,10 +544,10 @@ $(document).on("click", ".serverContainerActions", function(){
     ajaxRequest(url, details, (data)=>{
         btn.html(origHtml);
         data = makeToastr(data);
-        loadServerView(details.hostId);
+        $("#serverBoxNav").find("[data-view='serverInstanceBox']").trigger("click")
         $("#serverContainerActions").find("option[value='']").prop("selected", true);
-        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("hide")
-        $("#serverInfoBox").find('[data-toggle="tooltip"]').tooltip("disable")
+        $("#serverInstanceBox").find('[data-toggle="tooltip"]').tooltip("hide")
+        $("#serverInstanceBox").find('[data-toggle="tooltip"]').tooltip("disable")
     });
 });
 
@@ -466,8 +560,20 @@ $(document).on("click", "#editHost", function(){
 
 function loadServerView(hostId)
 {
+    changeActiveNav(".overview")
     $(".boxSlide, .serverViewBox").hide();
     $("#serverOverview, #serverBox, #serverInfoBox").show();
+
+    $("#serverBoxNav").find(".active").removeClass("active")
+    $("#serverBoxNav button:eq(0)").addClass("active")
+
+    if(userDetails.isAdmin){
+        $(".enableIfAdmin").show();
+    }else{
+        $(".enableIfAdmin").hide();
+    }
+
+    addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId]], ["", "active"], false, ["/", ""]);
 
     $("#serverDetailsBtn, #serverProxyDevicesBtn, #serverWarningsBtn").removeClass("active");
     $("#serverDetailsBtn").addClass("active");
@@ -482,41 +588,88 @@ function loadServerView(hostId)
         let ident = data.header.alias == null ? data.header.urlAndPort : data.header.alias;
         currentServer.hostAlias = data.header.alias;
         currentServer.supportsLoadAvgs = data.header.supportsLoadAvgs;
-        addBreadcrumbs(["Dashboard", ident], ["", "active"], false, ["/", ""]);
+
+        router.updatePageLinks()
 
         $("#serverHeading").text(ident);
 
         $(".serverContainerActions").attr("disabled", true)
         $("#toggleAllContainers").prop("checked", false);
 
-        let containerHtml, hostDetailsTrs = "";
+        $("#projectsCount").text(data.resources.projects.length)
+
+        function getLastKey(obj){
+            return Object.keys(obj)[Object.keys(obj).length - 1];
+        }
+
+        if(Object.keys(data.projectAnalytics).length > 0){
+            $("#containerCount").text(data.projectAnalytics.Containers[getLastKey(data.projectAnalytics.Containers)])
+            $("#virtualMachineCount").text(data.projectAnalytics["Virtual Machines"][getLastKey(data.projectAnalytics["Virtual Machines"])])
+            $("#networksCount").text(data.projectAnalytics["Networks"][getLastKey(data.projectAnalytics["Networks"])])
+        }else{
+            $("#containerCount").text("No Analytics / 0 Usage");
+            $("#virtualMachineCount").text("No Analytics / 0 Usage");
+            $("#networksCount").text("No Analytics / 0 Usage");
+        }
+
+        if(userDetails.isAdmin){
+            let newWarnings = 0;
+            $.each(data.warnings, (_, warning)=>{
+                if(warning.status !== "acknowledged"){
+                    newWarnings++;
+                }
+            });
+            if(newWarnings > 0){
+                $("#newWarningsCount").text(newWarnings)
+                $("#newWarningCountCard").show();
+                $("#memoryUsageCard").addClass("mt-2")
+            }else{
+                $("#newWarningCountCard").hide();
+                $("#memoryUsageCard").removeClass("mt-2")
+            }
+
+        }else{
+            $("#newWarningCountCard").hide();
+            $("#memoryUsageCard").removeClass("mt-2")
+        }
+
+        let cpuHtml = "",
+        hostDetailsTrs = "",
+        gpuHtml = "";
 
         let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
 
-        hostDetailsTrs += `<tr><td colspan="999" class="text-center text-info"><i class="fas fa-microchip me-2"></i>CPU'S</td></tr>`
-
         $.each(data.resources.cpu.sockets, (_, item)=>{
-            hostDetailsTrs += `<tr>
-                <td>${item[cpuIndentKey]}</td>
-                <td>${$.isNumeric(item.cores) ? item.cores : item.cores.length} Cores</td>
-            </tr>`
+            cpuHtml += `<div class="ps-2">
+                ${item[cpuIndentKey]} - ${$.isNumeric(item.cores) ? item.cores : item.cores.length} Cores
+            </div>`
         });
 
-        if(data.supportsWarnings){
-            $("#serverWarningsBtn").show()
-        }else{
-            $("#serverWarningsBtn").hide()
-        }
-
-        hostDetailsTrs += `<tr><td colspan="999" class="text-center text-info"><i class="fas fa-bolt me-2"></i>GPU'S</td></tr>`
+        $("#serverCpuDisplay").empty().append(cpuHtml);
+        $("#serverMemoryDisplay").empty().append(`<div class="ps-2">${formatBytes(data.resources.memory.total)}</div>`);
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
             $.each(data.resources.gpu.cards, function(i, gpu){
-                hostDetailsTrs += `<tr><td colspan="999">${gpu.product}</td></tr>`;
+                let name = gpu.hasOwnProperty("nvidia") && gpu.nvidia.hasOwnProperty("model") ? gpu.nvidia.model : gpu.product
+                gpuHtml += `<div class="ps-2">${gpu.nvidia.model}</div>`;
             });
         }else{
-            hostDetailsTrs += `<tr><td colspan="999" class="text-center">No GPU's</td></tr>`;
+            gpuHtml += `<div class="ps-2">No GPU's</div>`;
         }
+
+        $("#serverGpuDisplay").empty().append(gpuHtml);
+
+        let disks = "";
+
+        if(userDetails.isAdmin && data.resources.storage.hasOwnProperty("disks")){
+            $.each(data.resources.storage.disks, (_, disk)=>{
+                disks += `<div class="ps-2">${disk.model} - ${formatBytes(disk.size)}</div>`
+            });
+        }else{
+            disks = `<div class="ps-2">Nothing To Display</div>`;
+        }
+
+        $("#serverDisksDisplay").empty().append(disks);
 
         if(data.resources.hasOwnProperty("system")){
 
@@ -549,9 +702,6 @@ function loadServerView(hostId)
 
             hostDetailsTrs += `
                 <tr>
-                    <td colspan="999" class="text-center text-info"><i class="fas fa-info-circle me-2"></i>System Details</td>
-                </tr>
-                <tr>
                     <td>Motherboard</td>
                     <td>${mbProduct}</td>
                 </tr>
@@ -578,108 +728,154 @@ function loadServerView(hostId)
 
         $("#hostDetailsTable > tbody").empty().append(hostDetailsTrs);
 
-
-
-        if(Object.keys(data.containers).length > 0){
-            $.each(data.containers, function(state, containers){
-                containerHtml += `<tr class="statusRow">
-                    <td class="text-center bg-info" colspan="999">
-                        <i class="${statusCodeIconMap[containers[Object.keys(containers)[0]].state.status_code]}"></i>
-                        ${state}
-                        <input class="toggleStatusContainer" type="checkbox"/>
-                    </td>
-                </tr>`;
-                $.each(containers, function(name, details){
-
-                    let storageUsage = details.state.disk == null || details.state.disk.length == 0 ? "N/A" : formatBytes(details.state.disk.root.usage);
-
-                    let bytesSent = 0, bytesRecieved = 0;
-
-                    $.each(details.state.network, (networkName, network)=>{
-                        if(networkName == "lo"){
-                            return true;
-                        }
-
-                        bytesSent += network.counters.bytes_sent;
-                        bytesRecieved += network.counters.bytes_received;
-                    });
-
-                    let metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-primary btn-sm enableMetrics'>
-                        Enable
-                    </button>`;
-
-                    if(details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics")){
-                        metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-warning btn-sm disableMetrics'>
-                            Disable
-                        </button>`;
-                    }
-
-                    containerHtml += `<tr data-name="${name}">
-                        <td><input name="containerCheckbox" type="checkbox"/></td>
-                        <td>${name}</td>
-                        <td>${storageUsage}</td>
-                        <td>${formatBytes(details.state.memory.usage)}</td>
-                        <td>R: ${formatBytes(bytesRecieved)} <br/> S: ${formatBytes(bytesSent)}</td>
-                        <td>${metricsButton}</td>
-                    </tr>`
-                });
-            });
-
-            let instanceStatsWidth = ((data.containerStats.online / (data.containerStats.online + data.containerStats.offline)) * 100)
-            $("#serverInstancesOnlineBox").empty().append(`<div class="mb-2">
-                <div class="progress">
-                    <div data-toggle="tooltip" data-bs-placement="bottom" title="${data.containerStats.online}" class="progress-bar bg-success" style="width: ${instanceStatsWidth}%" role="progressbar" aria-valuenow="${data.containerStats.online}" aria-valuemin="0" aria-valuemax="${(data.containerStats.online + data.containerStats.offline)}"></div>
-                </div>
-            </div>`);
-        }else{
-            $("#serverInstancesOnlineBox").empty().append(`<div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>No instances!</div>`);
-            containerHtml = `<tr><td class="text-center" colspan="999"><i class="fas fa-info-circle text-info me-2"></i>No instances!</td></tr>`
+        let instanceMemoryUsage  = 0;
+        if(Object.keys(data.projectAnalytics).length > 0){
+            instanceMemoryUsage = data.projectAnalytics["Memory"][getLastKey(data.projectAnalytics["Memory"])]
         }
 
-        $("#containerTable > tbody").empty().append(containerHtml);
+        let memUsagePercent = ((data.resources.memory.used - instanceMemoryUsage) / data.resources.memory.total) * 100
+        let instanceUsagePercent = (instanceMemoryUsage / data.resources.memory.total) * 100
 
-        let memoryWidth = ((data.resources.memory.used / data.resources.memory.total) * 100)
         $("#serverMemoryUsageBox").empty().append(`<div class="mb-2">
             <div class="progress">
-                <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(data.resources.memory.used)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${data.resources.memory.used}" aria-valuemin="0" aria-valuemax="${(data.resources.memory.total - data.resources.memory.used)}"></div>
+                <div data-toggle="tooltip" data-bs-placement="bottom" title="Instances: ${formatBytes(instanceMemoryUsage)} (${instanceUsagePercent.toFixed(2)}%)" class="progress-bar bg-success" style="width: ${instanceUsagePercent}%" role="progressbar" aria-valuenow="${instanceMemoryUsage}" aria-valuemin="0" aria-valuemax="${(data.resources.memory.total - data.resources.memory.used)}"></div>
+                <div data-toggle="tooltip" data-bs-placement="bottom" title="System: ${formatBytes(data.resources.memory.used)} (${memUsagePercent.toFixed(2)}%)" class="progress-bar bg-primary" style="width: ${memUsagePercent}%" role="progressbar" aria-valuenow="${data.resources.memory.used}" aria-valuemin="0" aria-valuemax="${(data.resources.memory.total - data.resources.memory.used)}"></div>
             </div>
         </div>`);
 
-        let memUsagePercent = (data.resources.memory.used / data.resources.memory.total) * 100;
-
-        $("#serverMemoryUsagePercentage").text(`${parseFloat(memUsagePercent).toFixed(2)}%`);
-
         $("#serverBox").find("[data-toggle='tooltip']").tooltip();
-    });
-}
 
-$(document).on("click", "#deleteHost", function(){
-    let hostId = $(this).parents(".brand-card").attr("id");
-    $.confirm({
-        title: 'Delete Host',
-        content: 'Are you sure you want to remove this host!',
-        buttons: {
-            cancel: function () {},
-            yes: {
-                btnClass: 'btn-danger',
-                action: function () {
-                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin"></i>Deleting..'); // let the user know
-                    this.buttons.yes.disable();
-                    this.buttons.cancel.disable();
-                    var modal = this;
-                    ajaxRequest(globalUrls.hosts.delete, {hostId: currentServer.hostId}, (data)=>{
-                        data = makeToastr(data);
-                        if(data.state == "error"){
-                            return false;
-                        }
-                        location.reload();
-                    });
-                    return false;
-                }
+        let displayItems = {
+            "Instances": {
+                formatBytes: false,
+                icon: 'fas fa-box',
+                cardClasses: '',
+            },
+            "Disk": {
+                formatBytes: true,
+                icon: 'fas fa-hdd',
+                cardClasses: '',
+            },
+            "Memory": {
+                formatBytes: true,
+                icon: 'fas fa-memory',
+                cardClasses: "mt-2"
+            },
+            "Processes": {
+                formatBytes: false,
+                icon: 'fas fa-microchip',
+                cardClasses: "mt-2"
             }
         }
+        $("#serverOverviewGraphs").empty();
+        $("#overviewHistoryDurationBox").show()
+        let y = $(`<div class="row mb-2" ></div>`)
+        $.each(displayItems, (title, config) => {
+            let labels = [];
+            let values = [];
+            let limits = [];
+
+            let cId = title.toLowerCase();
+
+            let totalUsage = 0;
+
+            if(Object.keys(data.projectAnalytics).length > 0 ){
+                let entries = data.projectAnalytics[title];
+                let noOfEntries = Object.keys(entries).length;
+
+                let dateFormat = noOfEntries == 13 || noOfEntries == 7 ? "HH:mm" : "ll HH:mm"
+
+                $.each(entries, (created, value) => {
+                    labels.push(moment.utc(created).local().format(dateFormat))
+                    values.push(value)
+                });
+
+                totalUsage = values.reduce(function(a, b) {
+                    a = a == null ? 0 : a
+                    b = b == null ? 0 : b
+                    return parseInt(a) + parseInt(b);
+                }, 0);
+            }else{
+                totalUsage = 0;
+            }
+
+
+            let canvas = `<canvas height="250" id="${cId}"></canvas>`;
+
+            if (totalUsage == 0) {
+                canvas = '<div style="min-height: 250;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
+            }
+
+            let x = $(`<div class='col-md-6 ${config.cardClasses}'>
+                  <div class="card bg-dark text-white">
+                      <div class="card-body">
+                        <h4 class="mb-3 text-center"><i class="${config.icon} me-2"></i>${title}</h4>
+                        ${canvas}
+                      </div>
+                  </div>
+              </div>`);
+
+            if (totalUsage > 0) {
+                let graphDataSets = [{
+                    label: "total",
+                    borderColor: 'rgba(46, 204, 113, 1)',
+                    pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                    pointBorderColor: "rgba(46, 204, 113, 1)",
+                    data: values
+                }];
+
+                let options = {
+                    responsive: true,
+                    elements: {
+                        point: {
+                            // After 6 hours hide the dots on the graph
+                            radius: 0
+                        }
+                    }
+                };
+
+                if (config.formatBytes) {
+                    options.scales = scalesBytesCallbacks;
+                    options.tooltips = toolTipsBytesCallbacks
+                } else {
+                    options.scales = {
+                        yAxes: [{
+                            ticks: {
+                                precision: 0
+                            }
+                        }],
+                    }
+                }
+
+                options.legend = {
+                        display: false
+                    },
+
+                    // scales.yAxes.ticks
+                    options.scales.yAxes[0].gridLines = {
+                        color: "rgba(0, 0, 0, 0)",
+                    }
+                options.scales.yAxes[0].ticks.beginAtZero = false;
+                options.scales.xAxes = [{
+                    gridLines: {
+                        color: "rgba(0, 0, 0, 0)",
+                    },
+                }]
+
+                new Chart(x.find("#" + cId), {
+                    type: 'line',
+                    data: {
+                        datasets: graphDataSets,
+                        labels: labels
+                    },
+                    options: options
+                });
+            }
+            y[0].append(x[0]);
+        });
+        $("#serverOverviewGraphs").append(y)
     });
-});
+}
 </script>
 
 <?php
