@@ -30,7 +30,7 @@ Changed
     Support limits when creating a project (#434)
     Show packets_dropped_outbound & packets_dropped_inbound on networks overview
     Support project limits on projects frontend
-    Don't require filling out image when deploying cloud-config
+    Don't require filling out the image twice when deploying cloud-config
     Support choosing project when deploying cloud-config
     Only allow choosing one host when deploying cloud-config (only on frontend)
     Add cloud & desktop icons to image lists to indicate different variants
@@ -48,6 +48,7 @@ Fixed
     Delete host (#365)
     Node holding onto client sockets that will be closed (#417)
     Image type icon in images sidebar on LXD 3 host
+    Instance memory usage pop-overs overlap
     Server overview leaks all project names (#453)
 
 API Changes
