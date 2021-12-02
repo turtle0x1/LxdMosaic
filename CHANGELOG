@@ -58,6 +58,8 @@ API Changes
     Add currentProject key when outputting host as JSON
     Don't load / return server "resources" key unless loading server overview
     Don't load / return clustersAndHosts when loading dashboard
+    Don't load instances with GetHostOverview
+    Load warnings & projectAnalytics with GetHostOverview
 
 0.13.0 - 18/07/2020
 
