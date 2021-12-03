@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0794a5a9aef9cea2de69788c63a07b37",
+    "content-hash": "c168b0a8bf7f522fd8feaf18cb103ac7",
     "packages": [
         {
             "name": "cakephp/core",
@@ -296,16 +296,16 @@
         },
         {
             "name": "dhope0000/lxd",
-            "version": "v0.20.0",
+            "version": "v0.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/turtle0x1/php-lxd.git",
-                "reference": "d513271f10c472a783a4e362237290bd169e8935"
+                "reference": "db01f16cdd2b80f0fb121b314728488116bab95f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/d513271f10c472a783a4e362237290bd169e8935",
-                "reference": "d513271f10c472a783a4e362237290bd169e8935",
+                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/db01f16cdd2b80f0fb121b314728488116bab95f",
+                "reference": "db01f16cdd2b80f0fb121b314728488116bab95f",
                 "shasum": ""
             },
             "require": {
@@ -362,7 +362,7 @@
                 "lxd",
                 "wrapper"
             ],
-            "time": "2021-08-19T17:41:46+00:00"
+            "time": "2021-12-03T23:24:59+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -1966,6 +1966,7 @@
                 "mail",
                 "mailer"
             ],
+            "abandoned": "symfony/mailer",
             "time": "2019-11-12T09:31:26+00:00"
         },
         {
@@ -3577,6 +3578,20 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-20T17:43:50+00:00"
         },
         {

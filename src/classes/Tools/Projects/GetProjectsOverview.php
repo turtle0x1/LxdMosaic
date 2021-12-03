@@ -51,6 +51,9 @@ class GetProjectsOverview
                 $projectConfig = $member->projects->info($project, 2)["config"];
             }
 
+            $hasSeperateImages = isset($projectConfig["features.images"]) && $projectConfig["features.images"] === "true";
+            $hasSeperateNetworks = isset($projectConfig["features.networks"]) && $projectConfig["features.networks"] === "true";
+
             $limits = $this->getLimitValues($projectConfig);
 
             $member->setProject($project);
@@ -65,7 +68,7 @@ class GetProjectsOverview
                 }
 
                 $limits["limits.instances"]["value"]++;
-                
+
                 if (isset($instance["state"])) {
                     $limits["limits.memory"]["value"] += $instance["state"]["memory"]["usage"];
                     $limits["limits.processes"]["value"] += $instance["state"]["processes"];
@@ -77,9 +80,24 @@ class GetProjectsOverview
                     }
                 }
             }
-            $limits["limits.networks"]["value"] = count($member->networks->all());
-            $images = $member->images->all(2);
-            $limits["limits.disk"]["value"] += array_sum(array_column($images, "size"));
+
+            if ($hasSeperateNetworks || $project === "default") {
+                $networks = $member->networks->all(1);
+                $totalNetworks = 0;
+
+                foreach ($networks as $network) {
+                    if (isset($network["type"]) && !in_array($network["type"], ["loopback", "unknown"])) {
+                        $totalNetworks++;
+                    }
+                }
+                $limits["limits.networks"]["value"] = $totalNetworks;
+            }
+
+            if ($hasSeperateImages || $project === "default") {
+                $images = $member->images->all(2);
+                $limits["limits.disk"]["value"] += array_sum(array_column($images, "size"));
+            }
+
             $hostProjects[$project] = $limits;
         }
         $member->setCustomProp("projects", $hostProjects);

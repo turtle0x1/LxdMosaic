@@ -38,6 +38,8 @@ Changed
     Use date ranges instead of created dates for project analytics
     Apply user.user-data as instance config on 1 off cloud-config deploy
     Improve the server overview UI / UX
+    Account for "features" when calculating project metrics
+    Count networks the same way `lxc network list` would by ignoring "unknown" & "loopback" devices
 
 Fixed
     First run doesn't toggle passwords properly (#390)
