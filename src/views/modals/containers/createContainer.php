@@ -136,8 +136,9 @@
                     data =  $.parseJSON(data);
                     //TODO if len == 0
                     let gpus = "";
-                    $.each(data, function(i, item){
-                        gpus += `<option value="${item.pci_address}">${item.product}</option>`
+                    $.each(data, function(i, gpu){
+                        let name = gpu.hasOwnProperty("nvidia") && gpu.nvidia.hasOwnProperty("model") ? gpu.nvidia.model : gpu.vendor + " - " + gpu.product
+                        gpus += `<option value="${gpu.pci_address}">${name}</option>`
                     });
                     $("#newContainerGpus").empty().append(gpus);
                 });

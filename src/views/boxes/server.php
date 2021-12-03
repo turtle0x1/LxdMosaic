@@ -650,8 +650,8 @@ function loadServerView(hostId)
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
             $.each(data.resources.gpu.cards, function(i, gpu){
-                let name = gpu.hasOwnProperty("nvidia") && gpu.nvidia.hasOwnProperty("model") ? gpu.nvidia.model : gpu.product
-                gpuHtml += `<div class="ps-2">${gpu.nvidia.model}</div>`;
+                let name = gpu.hasOwnProperty("nvidia") && gpu.nvidia.hasOwnProperty("model") ? gpu.nvidia.model : gpu.vendor + " - " + gpu.product
+                gpuHtml += `<div class="ps-2">${name}</div>`;
             });
         }else{
             gpuHtml += `<div class="ps-2">No GPU's</div>`;
