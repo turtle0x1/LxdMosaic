@@ -32,13 +32,13 @@
 
                     </div>
                 </div>
-                <div class="mt-2 mb-2">
+                <div class="mt-2 mb-2 enableIfAdmin" style="display: none;">
                     <h5><i style="min-width: 20px; text-align: center;" class="fas fa-hdd me-2"></i>Disk's</h5>
                     <div id="serverDisksDisplay">
 
                     </div>
                 </div>
-                <div class="mt-2 mb-2">
+                <div class="mt-2 mb-2 enableIfAdmin" style="display: none;">
                     <h5><i style="min-width: 20px; text-align: center;" class="fas fa-server me-2"></i>Hardware</h5>
                     <table class="table" id="hostDetailsTable">
                         <tbody>
