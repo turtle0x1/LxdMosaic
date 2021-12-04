@@ -191,10 +191,13 @@ function loadNetworksView()
                         let percent = (used / hostTotals[key]) * 100
                         let formatedUsed = key.includes("packets") ? parseFloat(used).toLocaleString('en') : formatBytes(used)
                         let formatedTotal = key.includes("packets") ? parseFloat(hostTotals[key]).toLocaleString('en') : formatBytes(hostTotals[key])
-                        let formatedPercent = parseFloat(percent).toFixed(2);
-                        let instanceName = instance.length > 10 ? `<a href="#" class="text-primary" data-toggle="tooltip" data-bs-placement="bottom" title="${instance}">${instance.substring(0,10)}...</a>` : instance;
-                        hostHtml[key] += `<div class="text-truncate">${instanceName} - ${interfaceName} - ${formatedPercent}%</div> <div class="progress mb-2" data-toggle="tooltip" data-bs-placement="right" title="${formatedTotal}">
-                            <div class="progress-bar" role="progressbar" data-toggle="tooltip" title="${formatedUsed} - ${formatedPercent}%" style="width: ${percent}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        let formatedPercent = Math.round(parseFloat(percent).toFixed(2))
+                        let instanceName = instance.length > 10 ? `<a href="#" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="${instance}">${instance.substring(0,10)}...</a>` : instance;
+                        hostHtml[key] += `<div class="text-truncate">${instanceName} - ${interfaceName} - ${$.isNumeric(formatedPercent) ? formatedPercent : 0}%</div>
+                            <div class="progress bg-secondary" data-bs-toggle="tooltip" data-bs-placement="right" title="${formatedTotal}">
+                                <div class="progress-bar bg-primary" role="progressbar" data-bs-toggle="tooltip" data-bs-placement="left" title="${formatedUsed} - ${formatedPercent}%" style="width: ${percent}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-secondary" style="width: ${100 - percent}%">
+                            </div>
                         </div>`
                     });
 
@@ -223,7 +226,7 @@ function loadNetworksView()
             });
             html += `</div>`;
         });
-        $("#networksOverview").empty().append(html).find('[data-toggle="tooltip"]').tooltip();
+        $("#networksOverview").empty().append(html).find('[data-bs-toggle="tooltip"]').tooltip();
     });
 }
 
