@@ -201,19 +201,19 @@ function makeHostProfileCard(hostId, hostName, profiles)
         <div class="card-header">
             <h4><i class='fas fa-server me-2'></i>${hostName}</h4>
         </div>
-        <div class="card-body">
-            <table class="table table-dark table-bordered">
+        <div class="card-body table-responsive">
+            <table class="table table-dark table-bordered ">
                 <thead>
                     <tr>
-                        <td>Profile</td>
-                        <td>User Data</td>
-                        <td>Vendor Data</td>
-                        <td>Proxies</td>
-                        <td>USB's</td>
-                        <td>Disks</td>
-                        <td>TPM's</td>
-                        <td>GPU's</td>
-                        <td>Instances</td>
+                        <td style="max-width: 20%; width: 20%">Profile</td>
+                        <td style="max-width: 10%; width: 10%">User Data</td>
+                        <td style="max-width: 10%; width: 10%">Vendor Data</td>
+                        <td style="max-width: 10%; width: 10%">Proxies</td>
+                        <td style="max-width: 10%; width: 10%">USB's</td>
+                        <td style="max-width: 10%; width: 10%">Disks</td>
+                        <td style="max-width: 10%; width: 10%">TPM's</td>
+                        <td style="max-width: 10%; width: 10%">GPU's</td>
+                        <td style="max-width: 10%; width: 10%">Instances</td>
                     </tr>
                 </thead>
                 <tbody>

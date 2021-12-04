@@ -230,7 +230,7 @@ function makeProjectCard(hostName, projects){
         return "";
     }
 
-    let thead = "<th>project</th>";
+    let thead = "<th style='min-width: 20%; max-width: 20%'>project</th>";
     let tbody = "";
 
     let formatBytesKeys = ["limits.memory", "limits.disk"];
@@ -239,7 +239,7 @@ function makeProjectCard(hostName, projects){
 
     $.each(projects[Object.keys(projects)[0]], (limit, value)=>{
         let lThead = limit.replace("limits.", "");
-        thead += `<th>${lThead}</th>`;
+        thead += `<th style="min-width: 10%; max-width: 10%">${lThead}</th>`;
     });
 
     $.each(projects, (projectName, projectValues)=>{
@@ -263,7 +263,7 @@ function makeProjectCard(hostName, projects){
         <div class="card-header">
             <h4><i class='fas fa-server me-2'></i>${hostName}</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body table-responsive">
             <table class="table table-dark table-bordered">
                 <thead>
                     <tr>

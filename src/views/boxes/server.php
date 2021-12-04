@@ -117,7 +117,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table id="serverInstanceTable" class="table table-dark table-bordered">
+                                <table id="serverInstanceTable" class="table table-dark table-bordered" style="vertical-align: middle">
                                     <thead>
                                         <tr>
                                             <td> <input type="checkbox" id="toggleAllContainers"> </td>
