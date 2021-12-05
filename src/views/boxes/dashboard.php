@@ -65,6 +65,30 @@ $(document).on("click", ".viewDashboard", function(){
     loadUserDashboardGraphs()
 });
 
+function _makeDashboardSidebarHostItem(host, currentHostId) {
+    let disabled = "";
+    let expandBtn = `<button class="btn  btn-outline-secondary d-inline btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false"><i class="fas fa-caret-left"></i></button>`;
+    let active = currentHostId == host.hostId ? "active" : ""
+
+    if(host.hostOnline != 1){
+        disabled = "disabled text-warning text-strikethrough";
+        expandBtn = '';
+    }
+    
+    return `<li class="mb-2" data-hostId="${host.hostId}" data-alias="${host.alias}">
+        <div>
+            <a class="nav-link ${active} d-inline ps-0 ${disabled}" href="/host/${hostIdOrAliasForUrl(host.alias, host.hostId)}/overview" data-navigo>
+                <i class="fas fa-server"></i> ${host.alias}
+            </a>
+            ${expandBtn}
+        </div>
+        <div class="collapse mt-2 bg-dark text-white" id="host-${host.hostId}">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 hostInstancesUl" style="display: inline;">
+            </ul>
+        </div>
+     </li>`
+}
+
 function createDashboardSidebar()
 {
     if($("#sidebar-ul").find("[href^='/host']").length == 0){
@@ -82,59 +106,14 @@ function createDashboardSidebar()
             $.each(data.clusters, function(i, item){
                 hosts += `<li href="/cluster/${i}" class="c-sidebar-nav-title cluster-title text-success pt-2" data-navigo><u>Cluster ${i}</u></li>`
                 $.each(item.members, function(_, host){
-                    let disabled = "";
-                    let expandBtn = '<button class="btn btn-outline-secondary float-end showServerInstances"><i class="fas fa-caret-left"></i></button>';
-                    let active = currentHostId == host.hostId ? "active" : ""
-
-                    if(!host.hostOnline){
-                        disabled = "disabled text-warning text-strikethrough";
-                        expandBtn = '';
-                    }
-
-
-                    hosts += `<li class="mb-2" data-hostId="${host.hostId}" data-alias="${host.alias}">
-                        <div>
-                            <a class="nav-link ${active} d-inline ps-0 ${disabled}" href="/host/${hostIdOrAliasForUrl(host.alias, host.hostId)}/overview" data-navigo>
-                                <i class="fas fa-server"></i> ${host.alias}
-                            </a>
-                            <button class="btn  btn-outline-secondary d-inline btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false">
-                                <i class="fas fa-caret-left"></i>
-                            </button>
-                        </div>
-                        <div class="collapse mt-2 bg-dark text-white" id="host-${host.hostId}">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 hostInstancesUl" style="display: inline;">
-                            </ul>
-                        </div>
-                     </li>`
+                    hosts += _makeDashboardSidebarHostItem(host, currentHostId);
                 });
             });
 
             hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></li>`;
 
-            $.each(data.standalone.members, function(_, host){
-                let disabled = "";
-                let expandBtn = `<button class="btn btn-outline-secondary btn-toggle collapsed float-end showServerInstances" ata-bs-toggle="collapse" data-bs-target="#${host.hostId}" aria-expanded="false"><i class="fas fa-caret-left"></i></button>`;
-                let active = currentHostId == host.hostId ? "active" : ""
-
-                if(host.hostOnline == false){
-                    disabled = "disabled text-warning text-strikethrough";
-                    expandBtn = '';
-                }
-
-                hosts += `<li class="mb-2" data-hostId="${host.hostId}" data-alias="${host.alias}">
-                    <div>
-                        <a class="nav-link ${active} d-inline ps-0 ${disabled}" href="/host/${hostIdOrAliasForUrl(host.alias, host.hostId)}/overview" data-navigo>
-                            <i class="fas fa-server"></i> ${host.alias}
-                        </a>
-                        <button class="btn  btn-outline-secondary d-inline btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false">
-                            <i class="fas fa-caret-left"></i>
-                        </button>
-                    </div>
-                    <div class="collapse mt-2 bg-dark text-white" id="host-${host.hostId}">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 hostInstancesUl" style="display: inline;">
-                        </ul>
-                    </div>
-                 </li>`
+            $.each(data.standalone.members, function(_,host){
+                hosts += _makeDashboardSidebarHostItem(host, currentHostId);
             });
 
 
