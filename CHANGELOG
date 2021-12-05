@@ -41,6 +41,7 @@ Changed
     Account for "features" when calculating project metrics
     Count networks the same way `lxc network list` would by ignoring "unknown" & "loopback" devices
     Hide certain resource details if the user isn't admin (#452)
+    Enable setting nvidia keys when creating a container (#456)
 
 Fixed
     First run doesn't toggle passwords properly (#390)
