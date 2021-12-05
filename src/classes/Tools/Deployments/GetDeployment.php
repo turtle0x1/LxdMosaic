@@ -45,6 +45,9 @@ class GetDeployment
     private function addAdditionalInfoToContainers($hostWithContainers, array $containerInfo)
     {
         foreach ($hostWithContainers as $host) {
+            if (!$host->hostOnline()) {
+                continue;
+            }
             $containers = $host->getCustomProp("containers");
             foreach ($containerInfo as $info) {
                 if ($host->getHostId() == $info["hostId"]) {
