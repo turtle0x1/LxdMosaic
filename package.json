@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/turtle0x1/LxdManager#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@popperjs/core": "^2.10.2",
     "body-parser": "^1.19.0",
     "bootstrap": "^5.1.3",

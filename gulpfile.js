@@ -73,12 +73,21 @@ function fonts(){
         }))
         .pipe(dest('src/assets/dist/font'))
 }
+function fontAwesomeFonts(){
+    return src([
+            "node_modules/@fortawesome/fontawesome-free/webfonts/*"
+        ])
+        .pipe(minify({
+            noSource: true
+        }))
+        .pipe(dest('src/assets/dist/fontawesome'))
+}
 
 function fontAwesomeCss(){
     return src([
-            "src/assets/fontawesome/css/all.min.css",
+            "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
         ])
-        .pipe(replace("../webfonts/", "/assets/fontawesome/webfonts/"))
+        .pipe(replace("../webfonts/", "/assets/dist/fontawesome/"))
         .pipe(minify({
             noSource: true
         }))
@@ -117,4 +126,5 @@ exports.xterm = fonts;
 exports.fontAwesomeCss = fontAwesomeCss;
 exports.preAuthCss = preAuthCss;
 exports.preAuthJs = preAuthJs;
-exports.default = parallel(js, css, xterm, fonts, fontAwesomeCss, preAuthCss, preAuthJs)
+exports.preAuthJs = fontAwesomeFonts;
+exports.default = parallel(js, css, xterm, fonts, fontAwesomeCss, preAuthCss, preAuthJs, fontAwesomeFonts)
