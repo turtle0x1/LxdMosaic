@@ -64,7 +64,7 @@ if ($haveServers->haveAny() !== true) {
       <!-- Main styles for this application-->
       <link href="/assets/dist/external.dist.css" rel="stylesheet">
 
-      <link rel="stylesheet" href="/assets/styles.css">
+      <link rel="stylesheet" href="/assets/lxdMosaic/styles.css">
 
       <base href="./">
       <meta charset="utf-8">
