@@ -24,8 +24,8 @@ _Once LXDMosaic is setup, you can unset the trust password for greater security.
 
 #### 🖥️ Script ✔️ More than 5 users or 5 servers
 
-**[Ubuntu (18.04 & 20.04)](https://lxdmosaic.readthedocs.io/en/latest/#installing-lxdmosaic-ubuntu)**
+**[:card_file_box: Ubuntu (18.04 & 20.04)](https://lxdmosaic.readthedocs.io/en/latest/#installing-lxdmosaic-ubuntu)**
 
-**[Debian (Buster & Bullseye)](https://lxdmosaic.readthedocs.io/en/latest/#installing-lxdmosaic-ubuntu)**
+**[:card_file_box: Debian (Buster & Bullseye)](https://lxdmosaic.readthedocs.io/en/latest/#installing-lxdmosaic-ubuntu)**
 
-**[Centos 7](https://lxdmosaic.readthedocs.io/en/latest/#installing-lxdmosaic-centos-7) ([⚠️ Deprecated +1 this issue if you need](https://github.com/turtle0x1/LxdMosaic/issues/457))**
+**[:card_file_box: Centos 7](https://lxdmosaic.readthedocs.io/en/latest/#installing-lxdmosaic-centos-7) ([⚠️ Deprecated +1 this issue if you need](https://github.com/turtle0x1/LxdMosaic/issues/457))**
