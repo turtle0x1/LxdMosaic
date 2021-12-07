@@ -1,5 +1,5 @@
 # <img src="https://raw.githubusercontent.com/turtle0x1/LxdMosaic/master/src/assets/lxdMosaic/logo.png" height="25" width="25"> LXDMosaic
-<a href="https://github.com/turtle0x1/LxdMosaic/labels/more%20input%20required">📢 Give your input (or a star :angel:) </a>
+<a href="https://github.com/turtle0x1/LxdMosaic/labels/more%20input%20required">📢 Give your input </a> (or a star :angel:)
 <a href="https://github.com/turtle0x1/LxdMosaic/milestones">🎯  Upcoming releases</a>
 <a href="https://lxdmosaic.readthedocs.io/en/latest/">🗃️ Docs</a>
 
