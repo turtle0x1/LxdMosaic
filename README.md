@@ -18,7 +18,7 @@ _Once LXDMosaic is setup, you can unset the trust password for greater security.
 
 ## 🛫 Install LXDMosaic
 
-#### 💻 SNAP ✔️ Less than 5 users or 5 servers
+#### 💻 SNAP ✔️ Less than 5 users or 5 servers :card_file_box: [docs](https://lxdmosaic.readthedocs.io/en/latest/Snap/)
 
 `sudo snap install lxdmosaic`
 
