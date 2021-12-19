@@ -54,6 +54,7 @@ Fixed
     Image type icon in images sidebar on LXD 3 host
     Instance memory usage pop-overs overlap
     Server overview leaks all project names (#453)
+    Offline host/s breaks background cron jobs (#362)
 
 API Changes
     Removed `memoryLimit` from CreateVirtualMachineController in favour of config param (#419)
