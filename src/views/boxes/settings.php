@@ -414,45 +414,48 @@ function makeHostUserOverview(html, host){
                 <i class="fas fa-server"></i> ${host.alias}
             </h4>
         </div>
-        <div class="card-body">
+        `;
+
+    if(host.hostOnline === "1"){
+        html += `<div class="card-body">
             <table class="table table-bordered table-dark">
-                <thead>
-                    <tr>
-                        <th style="width: 10%; max-width: 20%">Project</th>
-                        <th style="width: 5%; max-width: 5%">Manage</th>
-                        <th style="width: 5%; max-width: 5%"># Users</th>
-                        <th style="width: 80%; max-width: 70%">Users</th>
+            <thead>
+                <tr>
+                    <th style="width: 10%; max-width: 20%">Project</th>
+                    <th style="width: 5%; max-width: 5%">Manage</th>
+                    <th style="width: 5%; max-width: 5%"># Users</th>
+                    <th style="width: 80%; max-width: 70%">Users</th>
                     </tr>
-                </thead>
-                <tbody>
-        `;
+            </thead>
+        <tbody>`;
+        $.each(host.projects, function(project, details){
+            let noOfUser = details.users.length;
+            html += `<tr style="vertical-align: middle">
+                <td>${project}</td>
+                <td class="text-center"><button class="btn btn-outline-primary btn-sm openProjectAccess text-center" data-host-id="${host.hostId}" data-project="${project}"><i class="fas fa-users"></i></button></td>
+                <td class="text-center">${noOfUser}</td>
+            `;
 
-    $.each(host.projects, function(project, details){
-        let noOfUser = details.users.length;
-        html += `<tr style="vertical-align: middle">
-            <td>${project}</td>
-            <td class="text-center"><button class="btn btn-outline-primary btn-sm openProjectAccess text-center" data-host-id="${host.hostId}" data-project="${project}"><i class="fas fa-users"></i></button></td>
-            <td class="text-center">${noOfUser}</td>
-        `;
+            if(noOfUser > 0){
+                html += `<td>`
+                $.each(details.users.slice(0, 10), (_, user)=>{
+                    html += `<div class="badge bg-primary text-white m-2"><i class="fas fa-user me-1"></i>${user.userName}</div>`
+                });
 
-        if(noOfUser > 0){
-            html += `<td>`
-            $.each(details.users.slice(0, 10), (_, user)=>{
-                html += `<div class="badge bg-primary text-white m-2"><i class="fas fa-user me-1"></i>${user.userName}</div>`
-            });
-
-            if(noOfUser >= 10){
-                html += `<a href='#'>+ ${noOfUser - 10} more</a>`
+                if(noOfUser >= 10){
+                    html += `<a href='#'>+ ${noOfUser - 10} more</a>`
+                }
+                html += `</td>`
+            }else{
+                html += `<td style="vertical-align: middle"><small><i class="fas fa-info-circle text-secondary me-1"></i>Admins Only</small></td>`
             }
-            html += `</td>`
-        }else{
-            html += `<td style="vertical-align: middle"><small><i class="fas fa-info-circle text-secondary me-1"></i>Admins Only</small></td>`
-        }
 
-        html += `</tr>`;
-    });
+            html += `</tr>`;
+        });
+        html += "</tbody></table></div>"
+    }
 
-    html += "</tbody></table></div></div>";
+    html += "</div>";
     return html;
 }
 

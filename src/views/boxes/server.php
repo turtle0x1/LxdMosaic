@@ -48,8 +48,8 @@
             </div>
             <div class="col-md-9 pt-2 border-start">
                 <div class="row pb-2 mb-2">
-                        <div class="col-md-12 text-center justify-content" id="serverBoxNav">
-                            <button type="button" class="btn text-white btn-outline-primary active" id="serverDetailsBtn" data-view="serverInfoBox">
+                        <div class="col-md-12 text-center justify-content" id="">
+                            <!-- <button type="button" class="btn text-white btn-outline-primary active" id="serverDetailsBtn" data-view="serverInfoBox">
                                 <i class="fas fa-tachometer-alt pe-2"></i>Overview
                             </button>
                             <button type="button" class="btn text-white btn-outline-primary" id="server" data-view="serverInstanceBox">
@@ -60,7 +60,29 @@
                             </button>
                             <button type="button" class="btn text-white btn-outline-primary" id="serverWarningsBtn" data-view="serverWarningsBox">
                                 <i class="fas fa-exclamation-triangle pe-2" style="color: white !important;"></i>Warnings
-                            </button>
+                            </button> -->
+                            <ul class="nav nav-tabs text-center" id="serverBoxNav" style="border: none !important;">
+                                <li class="nav-item" data-view="serverInfoBox">
+                                    <div class="nav-link active" id="serverDetailsBtn">
+                                        <i class="fas fa-tachometer-alt pe-2"></i>Overview
+                                    </div>
+                                </li>
+                                <li class="nav-item" data-view="serverInstanceBox">
+                                    <div class="nav-link " id="server">
+                                        <i class="fas fa-box pe-2"></i>Instances
+                                    </div>
+                                </li>
+                                <li class="nav-item" data-view="serverProxyBox">
+                                    <div class="nav-link " id="serverProxyDevicesBtn">
+                                        <i class="fas fa-exchange-alt pe-2"></i>Proxy Devices
+                                    </div>
+                                </li>
+                                <li class="nav-item" data-view="serverWarningsBox">
+                                    <div class="nav-link " id="serverWarningsBtn">
+                                        <i class="fas fa-exclamation-triangle pe-2" style="color: black !important;"></i>Warnings
+                                    </div>
+                                </li>
+                            <ul>
                         </div>
                 </div>
                 <div class="row">
@@ -310,9 +332,9 @@ $(document).on("click", "#addProxyDevice", function(){
     $("#modal-hosts-instnaces-addProxyDevice").modal("show");
 });
 
-$(document).on("click", "#serverBoxNav .btn", function(){
-    $("#serverBoxNav .btn").removeClass("active")
-    $(this).addClass("active")
+$(document).on("click", "#serverBoxNav > .nav-item", function(){
+    $("#serverBoxNav .active").removeClass("active")
+    $(this).find(".nav-link").addClass("active")
     $(".serverViewBox").hide();
     $(`#${$(this).data("view")}`).show();
 
@@ -565,7 +587,7 @@ function loadServerView(hostId)
     $("#serverOverview, #serverBox, #serverInfoBox").show();
 
     $("#serverBoxNav").find(".active").removeClass("active")
-    $("#serverBoxNav button:eq(0)").addClass("active")
+    $("#serverBoxNav .nav-item:eq(0)").addClass("active")
 
     if(userDetails.isAdmin){
         $(".enableIfAdmin").show();

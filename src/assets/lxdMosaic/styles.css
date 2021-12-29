@@ -29,8 +29,27 @@ body {
 }
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
-    background-color: #697077;
-    border-color: #697077;
+    background-color: transparent;
+    color: black !important;
+    border: 0px;
+        border-bottom-color: currentcolor;
+        border-bottom-style: none;
+        border-bottom-width: 0px;
+    border-bottom: 2px solid green;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link {
+    transition: none !important;
+    border: 0px;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link:hover {
+    border: 0px;
+        border-bottom-color: currentcolor;
+        border-bottom-style: none;
+        border-bottom-width: 0px;
+    border-bottom: 2px solid green;
 }
 
 .sidebar-header {
@@ -218,7 +237,7 @@ a:hover {
     color: white;
 }
 .nav-tabs .nav-link {
-    color: white !important;
+    color: black !important;
 }
 
 .nav-link.active {

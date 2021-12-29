@@ -11,7 +11,7 @@
                         <div class="nav-link viewDashboard" id="projectAnalyticsDashboardLink" href="#"><i class="fas fa-chart-bar me-2"></i>Project Analytics</div>
                     </li>
                 </ul>
-                <button class="btn btn-outline-primary" id="newDashboardBtn" data-toggle="tooltip" data-bs-placement="bottom" title="Create dashboard">
+                <button class="btn btn-sm btn-outline-primary" id="newDashboardBtn" data-toggle="tooltip" data-bs-placement="bottom" title="Create dashboard">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -74,7 +74,7 @@ function _makeDashboardSidebarHostItem(host, currentHostId) {
         disabled = "disabled text-warning text-strikethrough";
         expandBtn = '';
     }
-    
+
     return `<li class="mb-2" data-hostId="${host.hostId}" data-alias="${host.alias}">
         <div>
             <a class="nav-link ${active} d-inline ps-0 ${disabled}" href="/host/${hostIdOrAliasForUrl(host.alias, host.hostId)}/overview" data-navigo>

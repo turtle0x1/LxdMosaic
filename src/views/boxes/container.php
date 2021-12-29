@@ -158,7 +158,7 @@
 </script>
 
 <div id="containerBox" class="boxSlide">
-    <div class="row border-bottom mb-2">
+    <div class="row mb-2">
     <div class="col-md-12 text-center">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
               <div class="btn-toolbar">
@@ -215,32 +215,50 @@
         </div>
     </div>
     </div>
-    <div class="row border-bottom mb-2 pb-2" id="containerViewBtns">
-        <div class="col-md-12 text-center justify-content">
-            <button type="button" class="btn text-white btn-outline-primary active" id="goToDetails">
-                <i class="fas fa-info pe-2"></i>Details
-            </button>
-            <button type="button" class="btn text-white btn-outline-primary" id="goToConsole">
-                <i class="fas fa-terminal pe-2"></i>Console
-            </button>
-            <button type="button" class="btn text-white btn-outline-primary" id="goToTerminal">
-                <i class="fas fa-tv pe-2"></i>Terminal
-            </button>
-            <button type="button" class="btn text-white btn-outline-primary" id="goToSnapshots">
-                <i class="fas fa-images pe-2"></i>Snapshots
-            </button>
-            <button type="button" class="btn text-white btn-outline-primary" id="goToBackups">
-                <i class="fas fa-save pe-2"></i>Backups
-            </button>
-            <button type="button" class="btn text-white btn-outline-primary" id="goToFiles">
-                <i class="fas fa-save pe-2"></i>Files
-            </button>
-            <button type="button" class="btn text-white btn-outline-primary" id="goToMetrics">
-                <i class="fas fa-chart-bar pe-2"></i>Metrics
-            </button>
-            <button type="button" class="btn text-white btn-outline-primary" id="goToEvents">
-                <i class="fas fa-book-open pe-2"></i>Events
-            </button>
+    <div class="row mb-2 pb-2" id="containerViewBtns">
+        <div class="col-md-12 text-centert">
+            <ul class="nav nav-tabs justify-content-center" id="serverBoxNav" style="border: none !important;">
+                <li class="nav-item" id="goToDetails">
+                    <div class="nav-link active">
+                        <i class="fas fa-info-circle pe-2"></i>Details
+                    </div>
+                </li>
+                <li class="nav-item" id="goToConsole">
+                    <div class="nav-link ">
+                        <i class="fas fa-terminal pe-2"></i>Console
+                    </div>
+                </li>
+                <li class="nav-item" id="goToTerminal">
+                    <div class="nav-link ">
+                        <i class="fas fa-tv pe-2"></i>Terminal
+                    </div>
+                </li>
+                <li class="nav-item" id="goToSnapshots">
+                    <div class="nav-link ">
+                        <i class="fas fa-images pe-2"></i>Snapshots
+                    </div>
+                </li>
+                <li class="nav-item" id="goToBackups">
+                    <div class="nav-link ">
+                        <i class="fas fa-save pe-2"></i>Backups
+                    </div>
+                </li>
+                <li class="nav-item" id="goToFiles">
+                    <div class="nav-link ">
+                        <i class="fas fa-save pe-2"></i>Files
+                    </div>
+                </li>
+                <li class="nav-item" id="goToMetrics">
+                    <div class="nav-link ">
+                        <i class="fas fa-chart-bar pe-2"></i>Metrics
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link " id="goToEvents">
+                        <i class="fas fa-book-open pe-2"></i>Events
+                    </div>
+                </li>
+            <ul>
             <div class="btn-toolbar  mb-2 mb-md-0">
 
             </div>
@@ -1423,7 +1441,7 @@ function loadContainerView(data)
         let proxyDevices = "";
 
         if(x.proxyDevices.length == 0){
-            proxyDevices = "<td class='text-center'><i class='fas fa-info-circle text-primary me-2'></i> No Proxies </td>"
+            proxyDevices = "<td class='text-center' colspan='2'><i class='fas fa-info-circle text-primary me-2'></i> No Proxies </td>"
         }else{
             $.each(x.proxyDevices, (name, details)=>{
                 proxyDevices += `<tr>
@@ -1582,13 +1600,13 @@ $("#containerBox").on("click", ".renameContainer", function(){
     renameContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container, true, currentContainerDetails.alias);
 });
 
-$("#containerViewBtns").on("click", ".btn", function(){
+$("#containerViewBtns").on("click", ".nav-item", function(){
     if($(this).attr("id") == "goToBackups" && $(this).hasClass("disabled")){
         return false;
     }
 
     $("#containerViewBtns").find(".active").removeClass("active");
-    $(this).addClass("active");
+    $(this).find(".nav-link").addClass("active");
 });
 
 var currentPath = "/";
