@@ -1441,7 +1441,7 @@ function loadContainerView(data)
         let proxyDevices = "";
 
         if(x.proxyDevices.length == 0){
-            proxyDevices = "<td class='text-center' colspan='2'><i class='fas fa-info-circle text-primary me-2'></i> No Proxies </td>"
+            proxyDevices = "<tr><td class='text-center' colspan='2'><i class='fas fa-info-circle text-primary me-2'></i> No Proxies </td></tr>"
         }else{
             $.each(x.proxyDevices, (name, details)=>{
                 proxyDevices += `<tr>
