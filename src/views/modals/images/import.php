@@ -2,24 +2,22 @@
 <div class="modal fade" id="modal-hosts-addImages" tabindex="-1" aria-labelledby="exampleModalLongTitle" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="">Import Images</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="">Start Image Import</h5>
+        <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
             <div class="mb-2">
-                <label> Hosts To Import Images To </label>
+                <label> Hosts To Import To </label>
                 <input id="hostsToImportImagesTo" class="form-control" />
             </div>
-            <b> <u> Images Being Added </u> </b>
+            <label> Images To Import </label>
             <ul id="imagesToUpload" class="list-group">
-                <li class="list-group-item">Second item</li>
-                <li class="list-group-item">Third item</li>
             </ul>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="addImages">Add</button>
+        <button type="button" class="btn btn-primary" id="addImages">Import</button>
       </div>
     </div>
   </div>
@@ -38,13 +36,21 @@
 
     $("#modal-hosts-addImages").on("hide.bs.modal", function(){
         $("#hostsToImportImagesTo").tokenInput("clear");
+        $("#imagesToUpload").empty()
     });
 
     $("#modal-hosts-addImages").on("shown.bs.modal", function(){
         let imageHtml = "";
-        $.each(imagesToImport, function(i, item){
-            imageHtml += `<li class="list-group-item">${item.os} - ${item.alias}</li>`;
-        });
+        if(imagesToImport.length > 0){
+            $.each(imagesToImport, function(i, item){
+                imageHtml += `<li class="list-group-item">${item.os} - ${item.alias} - ${item.variant}</li>`;
+            });
+            $("#addImages").attr("disabled", false)
+        }else {
+            imageHtml = `<li class="list-group-item"><i class="fa fa-exclamation-triangle me-2"></i>No images selected!</li>`;
+            $("#addImages").attr("disabled", true)
+        }
+
         $("#imagesToUpload").empty().append(imageHtml);
     });
 

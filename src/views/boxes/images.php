@@ -350,7 +350,7 @@
                         html += `<div class="d-block mb-2 mt-2"><i>${variant}</i></div>`
                         $.each(versions, (version, fingerPrint)=>{
                             html += `<div class="d-inline me-4 mb-3 mt-3">
-                                <span class="badge bg-secondary imageForImport" data-fingerprint="${fingerPrint}" data-alias="${version}" data-os="${os}">
+                                <span class="badge bg-secondary imageForImport" data-variant="${variant}" data-fingerprint="${fingerPrint}" data-alias="${version}" data-os="${os}">
                                 <i class="fas fa-image"></i>
                                 ${version}
                                 </span>
