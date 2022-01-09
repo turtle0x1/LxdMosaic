@@ -69,6 +69,7 @@ API Changes
     Don't load / return clustersAndHosts when loading dashboard
     Don't load instances with GetHostOverview
     Load warnings & projectAnalytics with GetHostOverview
+    Remove duplicate profiles key from CreateInstance service (internal)
 
 0.13.0 - 18/07/2020
 

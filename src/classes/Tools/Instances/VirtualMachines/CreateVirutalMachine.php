@@ -49,7 +49,6 @@ class CreateVirutalMachine
             $hosts,
             $imageDetails,
             "",
-            [],
             "",
             null,
             $config,

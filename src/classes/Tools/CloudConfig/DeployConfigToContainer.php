@@ -65,7 +65,6 @@ class DeployConfigToContainer
             $hosts,
             $imageDetails,
             "",
-            [],
             "",
             $gpus,
             $config,

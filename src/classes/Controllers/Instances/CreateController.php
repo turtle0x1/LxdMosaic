@@ -34,7 +34,6 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
             $hosts,
             $imageDetails,
             $server,
-            [],
             $instanceType,
             $gpus,
             $config,
