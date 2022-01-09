@@ -42,6 +42,8 @@ Changed
     Count networks the same way `lxc network list` would by ignoring "unknown" & "loopback" devices
     Hide certain resource details if the user isn't admin (#452)
     Enable setting nvidia keys when creating a container (#456)
+    Show image variant on import images modal
+    Order host's by alias when fetching from the DB (#462)
 
 Fixed
     First run doesn't toggle passwords properly (#390)
