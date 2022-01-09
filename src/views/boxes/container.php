@@ -22,7 +22,7 @@
 </style>
 
 <script type="module" crossorigin="anonymous">
-    import * as SpiceHtml5 from './assets/spiceHtml5/src/main.js';
+    import * as SpiceHtml5 from '/assets/spiceHtml5/src/main.js';
 
     var host = null, port = null;
     var sc;
