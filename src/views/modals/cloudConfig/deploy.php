@@ -31,17 +31,6 @@ var _deployCloudConfigContents = `<div class="mb-2">
               <select class="form-select" id="deployCloudConfigHosts"></select>
           </div>
           <div class="mb-2">
-          <label
-              data-toggle="tooltip"
-              data-bs-placement="top"
-              title="When deploying this <code>cloud-config</code> as <code>user.user-data</code>, what profile name should we use?">
-              New Profile Name (Optional)
-              <i class="fas fa-question-circle"></i>
-          </label>
-              <input class="form-control" name="profileName" />
-          </div>
-
-          <div class="mb-2">
               <label
                   data-toggle="tooltip"
                   data-bs-placement="top"
@@ -149,8 +138,6 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
 
     let containerNameInput = $("#modal-cloudConfig-deploy input[name=containerName]");
     let containerName = containerNameInput.val();
-    let profileNameInput = $("#modal-cloudConfig-deploy input[name=profileName]");
-    let profileName = profileNameInput.val();
 
     if(containerName == ""){
         makeToastr(JSON.stringify({state: "error", message: "Please provide instance name"}));

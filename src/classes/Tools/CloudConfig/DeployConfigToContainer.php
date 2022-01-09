@@ -24,7 +24,6 @@ class DeployConfigToContainer
     public function deploy(
         HostsCollection $hosts,
         string $containerName,
-        string $profileName = "",
         array $additionalProfiles = [],
         int $cloudConfigId = null,
         int $cloudConfigRevId = null,

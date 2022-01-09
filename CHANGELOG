@@ -44,6 +44,7 @@ Changed
     Enable setting nvidia keys when creating a container (#456)
     Show image variant on import images modal
     Order host's by alias when fetching from the DB (#462)
+    Remove profile name from deploy cloud-config as its no longer used
 
 Fixed
     First run doesn't toggle passwords properly (#390)
@@ -70,6 +71,7 @@ API Changes
     Don't load instances with GetHostOverview
     Load warnings & projectAnalytics with GetHostOverview
     Remove duplicate profiles key from CreateInstance service (internal)
+    Remove profile name from deploy cloud-config as its no longer used
 
 0.13.0 - 18/07/2020
 
