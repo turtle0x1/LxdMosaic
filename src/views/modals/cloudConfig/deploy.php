@@ -94,19 +94,20 @@ $("#modal-cloudConfig-deploy").on("show.bs.modal", function(){
         data = $.parseJSON(data);
         let options = "<option value=''>Please select</option>";
         $.each(data.clusters, (clusterIndex, cluster)=>{
-            options += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            options += `<optgroup id="${clusterIndex}" label="Cluster ${clusterIndex}" style="color: red">`
             $.each(cluster.members, (_, host)=>{
                 if(host.hostOnline == 0){
                     return true;
                 }
                 options += `<optgroup id="${host.hostId}" label="${host.alias}">`
-                $.each(host.projects, (project, _)=>{
+                $.each(host.projects, (_, project)=>{
                     options += `<option value="${project}">${project}</option>`
                 });
                 options += `</optgroup>`
             })
+            options += `</optgroup>`
         });
-
+        options += `<optgroup label="Standalone Hosts">`
         $.each(data.standalone.members, (_, host)=>{
             if(host.hostOnline == 0){
                 return true;
@@ -117,6 +118,7 @@ $("#modal-cloudConfig-deploy").on("show.bs.modal", function(){
             });
             options += `</optgroup>`
         });
+        options += `</optgroup>`
         $("#deployCloudConfigHosts").empty().append(options);
     });
 
