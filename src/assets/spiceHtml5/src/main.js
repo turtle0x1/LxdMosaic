@@ -159,7 +159,18 @@ SpiceMainConn.prototype.process_channel_message = function(msg)
                         type : chans.channels[i].type,
                         chan_id : chans.channels[i].id
                     };
-            if (chans.channels[i].type == Constants.SPICE_CHANNEL_DISPLAY)
+            if (chans.channels[i].type == Constants.SPICE_CHANNEL_USBREDIR) {
+                this.log_warn("The spice-html5 client does not handle usbredir.");
+                continue;
+            }else if (chans.channels[i].type == Constants.SPICE_CHANNEL_WEBDAV)
+            {
+                this.log_warn("The spice-html5 client does not handle web dav.");
+                continue;
+            }else if (chans.channels[i].type == Constants.SPICE_CHANNEL_CURSOR)
+            {
+                this.log_warn("Cursor channel has been temporarily disabled (TO BE FIXED).");
+                continue;
+            }else if (chans.channels[i].type == Constants.SPICE_CHANNEL_DISPLAY)
             {
                 if (chans.channels[i].id == 0) {
                     this.display = new SpiceDisplayConn(conn);
