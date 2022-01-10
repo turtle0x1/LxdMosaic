@@ -57,4 +57,18 @@ class DeleteMetrics
         $do->execute($ids);
         return $do->rowCount() ? true : false;
     }
+
+    public function deleteBefore(\DateTimeInterface $before)
+    {
+        $sql = "DELETE FROM
+                    `Instance_Metric_Values`
+                WHERE
+                    `IMV_Date` < :before
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":before"=>$before->format("Y-m-d H:i:s")
+        ]);
+        return $do->rowCount() ? true : false;
+    }
 }
