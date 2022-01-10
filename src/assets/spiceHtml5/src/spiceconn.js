@@ -50,13 +50,21 @@ function SpiceConn(o)
     if (o === undefined || o.uri === undefined || ! o.uri)
         throw new Error("You must specify a uri");
 
+    this.type = o.type !== undefined ? o.type : Constants.SPICE_CHANNEL_MAIN;
+
+    if(o.uri.includes("channel")){
+        o.uri = o.uri.replace(/channel=\d+/gm, `channel=${this.type}`)
+    }else{
+        o.uri += "&channel=" + this.type
+    }
+
     this.ws = new WebSocket(o.uri, 'binary');
 
     if (! this.ws.binaryType)
         throw new Error("WebSocket doesn't support binaryType.  Try a different browser.");
 
     this.connection_id = o.connection_id !== undefined ? o.connection_id : 0;
-    this.type = o.type !== undefined ? o.type : Constants.SPICE_CHANNEL_MAIN;
+
     this.chan_id = o.chan_id !== undefined ? o.chan_id : 0;
     if (o.parent !== undefined)
     {
@@ -284,7 +292,6 @@ SpiceConn.prototype =
             }
             else
             {
-                console.log("password = " + this.password + String.fromCharCode(0));
                 this.send_ticket(rsa_encrypt(this.reply_link.pub_key, this.password + String.fromCharCode(0)));
                 this.state = "ticket";
                 this.wire_reader.request(SpiceLinkAuthReply.prototype.buffer_size());
