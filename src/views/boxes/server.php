@@ -683,7 +683,7 @@ function loadServerView(hostId)
 
         let disks = "";
 
-        if(userDetails.isAdmin && data.resources.storage.hasOwnProperty("disks")){
+        if(userDetails.isAdmin && data.resources.hasOwnProperty("storage") && data.resources.storage.hasOwnProperty("disks")){
             $.each(data.resources.storage.disks, (_, disk)=>{
                 disks += `<div class="ps-2">${disk.model} - ${formatBytes(disk.size)}</div>`
             });
