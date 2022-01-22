@@ -6,7 +6,7 @@
                     <h4> Storage </h4>
                     <div class="btn-toolbar float-end">
                       <div class="btn-group me-2">
-                          <button data-toggle="tooltip" data-bs-placement="bottom" title="Create storage pool" class="btn btn-primary" id="createPool">
+                          <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create storage pool" class="btn btn-primary" id="createPool">
                               <i class="fas fa-plus"></i>
                           </button>
                       </div>
@@ -19,7 +19,7 @@
                   <div class="card bg-dark text-white">
                     <div class="card-header " role="tab" >
                       <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
+                        <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#cloudConfigDescription" aria-expanded="true" aria-controls="cloudConfigDescription">
                             All Pools
                         </a>
                       </h5>
@@ -58,10 +58,10 @@
             <div class="col-md-12">
                 <h4>
                     <span class="text-white" id="storagePoolName"></span>
-                    <button class="btn btn-danger float-end" data-toggle="tooltip" data-bs-placement="bottom" title="Delete pool" id="deletePool">
+                    <button class="btn btn-danger float-end" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete pool" id="deletePool">
                         <i class="fas fa-trash"></i>
                     </button>
-                    <button class="btn btn-primary float-end" data-toggle="tooltip" data-bs-placement="bottom" title="Create volume" id="createVolume">
+                    <button class="btn btn-primary float-end" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create volume" id="createVolume">
                         <i class="fas fa-plus"></i>
                     </button>
                 </h4>
@@ -72,7 +72,7 @@
                 <div class="card mb-2 bg-dark text-white">
                   <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                     <h5>
-                      <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
+                      <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
                       Usage
                       </a>
                     </h5>
@@ -87,7 +87,7 @@
                   <div class="card bg-dark text-white">
                     <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
+                        <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
                         Config
                         </a>
                       </h5>
@@ -149,7 +149,7 @@
                     </h4>
                     <div class="btn-toolbar float-end">
                       <div class="btn-group me-2">
-                          <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete volume" class="btn btn-danger" id="deleteVolume">
+                          <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete volume" class="btn btn-danger" id="deleteVolume">
                               <i class="fas fa-trash"></i>
                           </button>
                       </div>

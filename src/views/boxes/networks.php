@@ -6,7 +6,7 @@
                     <h4> Networks </h4>
                     <div class="btn-toolbar float-end">
                       <div class="btn-group me-2">
-                          <button data-toggle="tooltip" data-bs-placement="bottom" title="Create network" class="btn btn-primary" id="createNetwork">
+                          <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create network" class="btn btn-primary" id="createNetwork">
                               <i class="fas fa-plus"></i>
                           </button>
                       </div>
@@ -35,7 +35,7 @@
                   <div class="card bg-dark text-white">
                     <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
+                        <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
                         Config
                         </a>
                       </h5>

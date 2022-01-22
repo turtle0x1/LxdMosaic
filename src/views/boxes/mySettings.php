@@ -5,7 +5,7 @@
                   <div class="card bg-dark text-white">
                   <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
                       <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+                        <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
                             My Permanent API keys
                         </a>
                         </h5>

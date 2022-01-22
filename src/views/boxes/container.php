@@ -163,20 +163,20 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
               <div class="btn-toolbar">
                 <div class="btn-group me-2">
-                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Start Instance" class="btn btn-sm btn-success changeInstanceState" data-action="start">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Start Instance" class="btn btn-sm btn-success changeInstanceState" data-action="start">
                         <i class="fas fa-play"></i>
                     </button>
-                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Stop Instance" class="btn btn-sm btn-danger changeInstanceState" data-action="stop">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Stop Instance" class="btn btn-sm btn-danger changeInstanceState" data-action="stop">
                         <i class="fas fa-stop"></i>
                     </button>
-                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Restart Instance" class="btn btn-sm btn-warning changeInstanceState" data-action="restart">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Restart Instance" class="btn btn-sm btn-warning changeInstanceState" data-action="restart">
                         <i class="fa fa-sync"></i>
                     </button>
                     <hr/>
-                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Freeze Instance" class="btn btn-sm btn-info changeInstanceState" data-action="freeze">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Freeze Instance" class="btn btn-sm btn-info changeInstanceState" data-action="freeze">
                         <i class="fas fa-snowflake"></i>
                     </button>
-                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Unfreeze Instance" class="btn btn-sm btn-primary changeInstanceState" data-action="unfreeze">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unfreeze Instance" class="btn btn-sm btn-primary changeInstanceState" data-action="unfreeze">
                         <i class="fas fa-mug-hot"></i>
                     </button>
                 </div>
@@ -188,26 +188,26 @@
             </h4>
             <div class="btn-toolbar">
               <div class="btn-group me-2">
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Attach Volume" class="btn btn-sm btn-success" id="attachVolumesBtn">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attach Volume" class="btn btn-sm btn-success" id="attachVolumesBtn">
                       <i class="fas fa-hdd"></i>
                   </button>
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Create Image" class="btn btn-sm btn-secondary" id="craeteImage">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Image" class="btn btn-sm btn-secondary" id="craeteImage">
                       <i class="fas fa-image"></i>
                   </button>
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
                       <i class="fas fa-cog"></i>
                   </button>
                   <hr/>
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Copy Instance" class="btn btn-sm btn-info copyContainer">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy Instance" class="btn btn-sm btn-info copyContainer">
                       <i class="fas fa-copy"></i>
                   </button>
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Migrate Instance" class="btn btn-sm btn-primary migrateContainer">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Migrate Instance" class="btn btn-sm btn-primary migrateContainer">
                       <i class="fas fa-people-carry"></i>
                   </button>
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Rename Instance" class="btn btn-sm btn-warning renameContainer">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Rename Instance" class="btn btn-sm btn-warning renameContainer">
                       <i class="fas fa-edit"></i>
                   </button>
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete" class="btn btn-sm btn-danger deleteContainer">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" class="btn btn-sm btn-danger deleteContainer">
                       <i class="fas fa-trash"></i>
                   </button>
               </div>
@@ -327,7 +327,7 @@
                 <h5 class="text-white">
                     <i class="fas fa-users text-primary me-2"></i>
                     Profiles
-                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Assign Profiles" class="btn btn-sm btn-outline-primary float-end" id="assignProfilesBtn">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Assign Profiles" class="btn btn-sm btn-outline-primary float-end" id="assignProfilesBtn">
                         <i class="fas fa-users"></i>
                     </button>
                 </h5>
@@ -348,7 +348,7 @@
                 <h5 class="text-white">
                     <i class="fas fa-exchange-alt pe-2 text-primary"></i>
                     Proxies
-                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Add proxy device" class="btn btn-sm btn-outline-primary float-end" id="addInstanceProxyDevice">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add proxy device" class="btn btn-sm btn-outline-primary float-end" id="addInstanceProxyDevice">
                         <i class="fas fa-plus"></i>
                     </button>
                 </h5>
@@ -363,7 +363,7 @@
                 <h5 class="text-white">
                     <i class="fas fa-images text-primary me-2"></i>
                     Snapshots
-                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Snapshot" class="btn btn-sm btn-outline-primary float-end takeSnapshot">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Snapshot" class="btn btn-sm btn-outline-primary float-end takeSnapshot">
                         <i class="fas fa-camera"></i>
                     </button>
                 </h5>
@@ -1382,14 +1382,14 @@ function loadContainerView(data)
                 let memoryWidth = ((item / totalMemory) * 100)
                 memoryUsageHtml += `<div class="mb-2">
                     <b>${titleCase(i.replace(/_/g, ' '))}</b>
-                    <div data-toggle="tooltip" data-bs-placement="right" title="${formatBytes(totalMemory)} (Source: ${x.totalMemory.source})" class="progress ms-3 mt-2">
-                        <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(item)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${item}" aria-valuemin="0" aria-valuemax="${(totalMemory)}"></div>
+                    <div data-bs-toggle="tooltip" data-bs-placement="right" title="${formatBytes(totalMemory)} (Source: ${x.totalMemory.source})" class="progress ms-3 mt-2">
+                        <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(item)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${item}" aria-valuemin="0" aria-valuemax="${(totalMemory)}"></div>
                     </div>
                 </div>`
             });
 
             $("#memoryDataCard").empty().append(memoryUsageHtml)
-            $("#memoryDataCard").find('[data-toggle="tooltip"]').tooltip({html: true})
+            $("#memoryDataCard").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
         }else{
             $("#memoryDataCard").empty().append(`<h5 class="text-white">
                 <i class="fas fa-memory me-2 text-danger"></i>
@@ -1419,8 +1419,8 @@ function loadContainerView(data)
 
                 storageHtml += `<div class="mb-2">
                     <b>${titleCase(i.replace(/_/g, ' '))}</b>
-                    <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(totalStorage)}" class="progress ms-3 mt-2">
-                        <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(disk.usage)}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage.total)}"></div>
+                    <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(totalStorage)}" class="progress ms-3 mt-2">
+                        <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(disk.usage)}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage.total)}"></div>
                     </div>
                 </div>`
             }else{
@@ -1436,7 +1436,7 @@ function loadContainerView(data)
         });
 
         $("#storageDataCard").empty().append(storageHtml)
-        $("#storageDataCard").find('[data-toggle="tooltip"]').tooltip({html: true})
+        $("#storageDataCard").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
 
         let proxyDevices = "";
 

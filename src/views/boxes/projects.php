@@ -7,7 +7,7 @@
                 <?php if ($isAdmin === 1) : ?>
                 <div class="btn-toolbar float-end">
                   <div class="btn-group me-2">
-                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Create Project" class="btn btn-primary" id="createProject">
+                      <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Project" class="btn btn-primary" id="createProject">
                           <i class="fas fa-plus"></i>
                       </button>
                   </div>
@@ -29,10 +29,10 @@
                 <small id="projectDescription"></small>
                 <div class="btn-toolbar float-end">
                   <div class="btn-group me-2">
-                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Rename Project"  class="btn btn-success" id="renameProject">
+                      <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Rename Project"  class="btn btn-success" id="renameProject">
                           <i class="fas fa-edit"></i>
                       </button>
-                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete Project"  class="btn btn-danger" id="deleteProject">
+                      <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Project"  class="btn btn-danger" id="deleteProject">
                           <i class="fas fa-trash"></i>
                       </button>
                   </div>
@@ -45,7 +45,7 @@
               <div class="card mb-2 bg-dark text-white">
                 <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
                   <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
+                    <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
                       Config
                       <i class="float-end fas fa-cog"></i>
                     </a>
@@ -71,7 +71,7 @@
               <div class="card bg-dark text-white">
                 <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
                   <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
+                    <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
                       Restrictions
                       <i class="float-end fas fa-lock"></i>
                     </a>
@@ -95,7 +95,7 @@
             <div class="card mt-2 bg-dark text-white">
                     <div class="card-header">
                         <h5>
-                          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
+                          <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#projectConfig" aria-expanded="true" aria-controls="projectConfig">
                             Limits
                             <i class="float-end fas fa-user-secret"></i>
                           </a>
@@ -119,7 +119,7 @@
         <div class="card bg-dark text-white">
           <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
             <h5>
-              <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
+              <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
                 Users
                 <i class="float-end fas fa-users"></i>
               </a>
@@ -146,7 +146,7 @@
         <div class="card bg-dark text-white">
           <div class="card-header bg-dark" role="tab" id="projectsActionHeading">
             <h5>
-              <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
+              <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#projectUsedBy" aria-expanded="true" aria-controls="projectUsedBy">
                 Used By
                 <i class="fas fa-layer-group float-end"></i>
               </a>

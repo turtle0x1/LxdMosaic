@@ -101,11 +101,11 @@ function loadClusterView(req){
             <h4 class='float-left'>Memory</h4>
             <br/>
             <br/>
-            <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(cluster.stats.totalMemory)}" class="progress mt-2">
-                <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(cluster.stats.usedMemory)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${cluster.stats.usedMemory}" aria-valuemin="0" aria-valuemax="${(cluster.stats.totalMemory - cluster.stats.usedMemory)}"></div>
+            <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(cluster.stats.totalMemory)}" class="progress mt-2">
+                <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(cluster.stats.usedMemory)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${cluster.stats.usedMemory}" aria-valuemin="0" aria-valuemax="${(cluster.stats.totalMemory - cluster.stats.usedMemory)}"></div>
             </div>
         `);
-        $("#clusterMemoryGraph").find('[data-toggle="tooltip"]').tooltip({html: true})
+        $("#clusterMemoryGraph").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
     });
 }
 </script>

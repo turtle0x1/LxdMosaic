@@ -15,7 +15,7 @@
               <div class="card bg-dark text-white">
                   <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
                       <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+                        <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
                           General Settings
                         </a>
                         </h5>
@@ -50,7 +50,7 @@
           <div class="card bg-dark text-white">
               <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
                   <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+                    <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
                       LDAP Settings
                     </a>
                     </h5>
@@ -90,7 +90,7 @@
     <div class="card bg-dark text-white" id="recordedActionsCard">
       <div class="card-header bg-dark" role="tab" >
         <h5>
-          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#lastRecordedActions" aria-expanded="true" aria-controls="lastRecordedActions">
+          <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#lastRecordedActions" aria-expanded="true" aria-controls="lastRecordedActions">
             Last <span id="actionCount"></span> Recorded Actions
           </a>
           <button class="btn btn-primary float-end" id="loadMoreRecordedActions">
@@ -120,7 +120,7 @@
     <div class="card bg-dark text-white" id="recordedActionsCard">
       <div class="card-header bg-dark" role="tab" >
         <h5>
-          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#allHostsList" aria-expanded="true" aria-controls="allHostsList">
+          <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#allHostsList" aria-expanded="true" aria-controls="allHostsList">
             Hosts
           </a>
         </h5>
@@ -149,7 +149,7 @@
             <div class="card bg-dark text-white" id="usersCard">
               <div class="card-header" role="tab" >
                 <h5>
-                  <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
+                  <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
                     Users
                   </a>
                   <button class="btn btn-success float-end" id="addUser">
@@ -588,14 +588,14 @@ function loadUsers(){
                     <td><i class="fas fa-${isAdmin} ${isAdminTClass}"></i></td>
                     <td><i class="fas fa-${isDisabled} ${isDisabledTClass}"></i></td>
                     <td>
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <i class="fas fa-wrench"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item setUserProject" href="#">Set Projects Access</a>
+                          <div class="dropdown-item setUserProject" href="#">Set Projects Access</div>
                           ${resetPasswordBtn}
-                          <a class="dropdown-item toggleUserLogin bg-warning" href="#">Toggle User Login</a>
-                          <a class="dropdown-item toggleUserAdmin bg-danger" href="#">Toggle User Admin</a>
+                          <div class="dropdown-item toggleUserLogin text-warning" href="#">Toggle User Login</div>
+                          <div class="dropdown-item toggleUserAdmin text-danger" href="#">Toggle User Admin</div>
                         </div>
                     </td>
                 </tr>`;
@@ -669,11 +669,11 @@ function loadInstanceSettings(){
         let ldapKeys = [4, 5, 6, 7];
         let ldapTrs = "";
         let ldapExtraText = {
-            5: `<i class="fas fa-info-circle text-info ms-2" data-toggle="tooltip"
+            5: `<i class="fas fa-info-circle text-info ms-2" data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="The LDAP user that performs lookups E.G <code>cn=administrator,cn=Users,dc=example,dc=com</code>">
                 </i>`,
-            7: `<i class="fas fa-info-circle text-info ms-2" data-toggle="tooltip"
+            7: `<i class="fas fa-info-circle text-info ms-2" data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="DN To Search Users for E.G <code>ou=user_folder,dc=example,dc=com</code>">
                 </i>`,
@@ -735,7 +735,7 @@ function loadInstanceSettings(){
 
         $("#ldapSettingListTable > tbody").empty().append(ldapTrs);
         $("#settingListTable > tbody").empty().append(trs);
-        $("#ldapSettingListTable").find('[data-toggle="tooltip"]').tooltip({html: true})
+        $("#ldapSettingListTable").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
     });
 }
 

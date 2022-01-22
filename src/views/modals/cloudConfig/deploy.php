@@ -32,7 +32,7 @@ var _deployCloudConfigContents = `<div class="mb-2">
           </div>
           <div class="mb-2">
               <label
-                  data-toggle="tooltip"
+                  data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Only profiles on all hosts will appear!
                       <br/>
@@ -84,7 +84,7 @@ $("#modal-cloudConfig-deploy").on("hidden.bs.modal", function(){
 $("#modal-cloudConfig-deploy").on("show.bs.modal", function(){
     $("#modal-cloudConfig-deploy .modal-dialog").removeClass("modal-xl")
     $("#modal-cloudConfig-deploy .modal-body").empty().append(_deployCloudConfigContents);
-    $("#modal-cloudConfig-deploy").find('[data-toggle="tooltip"]').tooltip({html: true})
+    $("#modal-cloudConfig-deploy").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
     if(!$.isNumeric(deployCloudConfigObj.cloudConfigId)){
         makeToastr(JSON.stringify({state: "error", message: "Developer fail - set <code>cloud-config</code> id to open this modal"}));
         return false;

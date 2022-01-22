@@ -520,7 +520,7 @@ if ($haveServers->haveAny() !== true) {
               </li>
           </ul>
           <div class="btn-group ms-auto" id="buttonsNavbar">
-              <button class="btn btn-outline-purple pt-2" data-toggle="tooltip" data-bs-placement="bottom" title="Search" id="openSearch">
+              <button class="btn btn-outline-purple pt-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Search" id="openSearch">
                   <i class="fas fa-search"></i>
               </button>
               <div class="btn-group">
@@ -554,7 +554,7 @@ if ($haveServers->haveAny() !== true) {
                   </ul>
               </div>
               <?php if ($isAdmin === 1) : ?>
-                  <button class="btn btn-outline-warning viewSettings" data-toggle="tooltip" data-bs-placement="bottom" title="Admin Settings" href="/admin" data-navigo>
+                  <button class="btn btn-outline-warning viewSettings" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Admin Settings" href="/admin" data-navigo>
                         <i class="fas fa-cogs"></i>
                   </button>
               <?php endif; ?>
@@ -641,7 +641,7 @@ var hostsIdsLookupTable = {};
 
 $(function(){
 
-    $('[data-toggle="tooltip"]').tooltip({html: true})
+    $('[data-bs-toggle="tooltip"]').tooltip({html: true})
 
     router.hooks({
         before(done, match){
