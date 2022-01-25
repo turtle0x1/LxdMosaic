@@ -10,8 +10,10 @@ module.exports = class Terminals {
 
   getInternalUuid(host, container, cols, rows) {
     let key = `${host}.${container}`;
-    if (this.internalUuidMap.hasOwnProperty(key)) {
-      return this.internalUuidMap[key];
+    let knownInternalId = this.internalUuidMap.hasOwnProperty(key) ? this.internalUuidMap[key].uuid : false
+
+    if (knownInternalId && this.activeTerminals.hasOwnProperty(knownInternalId) && this.activeTerminals[knownInternalId].closing !== true) {
+      return this.internalUuidMap[key].uuid
     }
     let internalUuid = internalUuidv1();
 
@@ -59,17 +61,27 @@ module.exports = class Terminals {
   }
 
   close(internalUuid, exitCommand = "exit\r\n") {
+      Object.keys(this.internalUuidMap).forEach(key =>{
+          if(this.internalUuidMap[key].uuid == internalUuid){
+              delete this.internalUuidMap[key];
+              return false;
+          }
+      });
     if (this.activeTerminals[internalUuid] == undefined) {
       return;
     }
 
+    this.activeTerminals[internalUuid].closing = true
     this.activeTerminals[internalUuid][0].send(
       exitCommand,
       { binary: true },
       () => {
-        this.activeTerminals[internalUuid][0].close();
-        this.activeTerminals[internalUuid]["control"].close();
-        delete this.activeTerminals[internalUuid];
+          // NOTE This timeout is required to stop LXD panicing (bug reported)
+          setTimeout(()=>{
+              this.activeTerminals[internalUuid][0].close();
+              this.activeTerminals[internalUuid]["control"].close();
+              delete this.activeTerminals[internalUuid];
+          }, 100)
       }
     );
   }
@@ -163,7 +175,7 @@ module.exports = class Terminals {
           lxdWs.on('message', data => {
               const buf = Buffer.from(data);
               data = buf.toString();
-              
+
               if(typeof callbacks.formatServerResponse === "function"){
                   data = callbacks.formatServerResponse(data)
               }
@@ -185,18 +197,26 @@ module.exports = class Terminals {
           resolve(true);
         })
         .catch((e) => {
-            console.log(e);
-          reject();
+            reject(e);
         });
     });
   }
 
-  openLxdOperation(hostDetails, project, container, shell, cols, rows) {
-    let execOptions = this.createExecOptions(hostDetails, project, container);
+  openLxdOperation(hostDetails, project, container, shell, cols, rows, depth = 0) {
+      return new Promise((resolve, reject) => {
+          if(depth >= 5){
+              return reject(new Error("Reached max terminal connect retries"))
+          }
+          let execOptions = this.createExecOptions(hostDetails, project, container);
 
-    execOptions.body = this.getExecBody(shell, cols, rows);
+          execOptions.body = this.getExecBody(shell, cols, rows);
 
-    return this.rp(execOptions);
+          this.rp(execOptions)
+            .then(result => resolve(result))
+            .catch(e => {
+              this.openLxdOperation(hostDetails, project, container, shell, cols, rows, depth + 1)
+            })
+      })
   }
 
   getExecBody(toUseShell = null, cols, rows) {
