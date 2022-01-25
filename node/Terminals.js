@@ -43,15 +43,18 @@ module.exports = class Terminals {
     if (this.activeTerminals[internalUuid] == undefined) {
       return;
     }
+    let key = Object.keys(this.internalUuidMap).filter((key) => {return this.internalUuidMap[key].uuid === internalUuid})[0];
 
-    this.internalUuidMap[internalUuid].cols = cols
-    this.internalUuidMap[internalUuid].rows = rows
+    this.internalUuidMap[key].cols = cols
+    this.internalUuidMap[key].rows = rows
 
     this.activeTerminals[internalUuid]["control"].send(
       JSON.stringify({
           command: "window-resize",
-          height: parseInt(rows),
-          width: parseInt(cols)
+          args: {
+              height: `${parseInt(rows)}`,
+              width: `${parseInt(cols)}`
+          }
       }),
       {
         binary: true,
