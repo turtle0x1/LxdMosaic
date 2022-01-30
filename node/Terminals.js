@@ -128,8 +128,8 @@ module.exports = class Terminals {
 
       let hostDetails = hosts[host];
 
-      let cols = 80;
-      let rows = 24;
+      let cols = this.internalUuidMap[`${host}.${container}`].cols;
+      let rows = this.internalUuidMap[`${host}.${container}`].rows;
 
       if (this.internalUuidMap.hasOwnProperty(`${host}.${container}`)) {
         cols = this.internalUuidMap[`${host}.${container}`].cols
