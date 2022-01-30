@@ -173,6 +173,14 @@ module.exports = class Terminals {
               wsoptions
           );
 
+          controlSocket.on("close", ()=>{
+            //NOTE If you try to connect to a "bash" shell on an alpine instance
+            //     it "slienty" fails only closing the control socket so we need
+            //     to tidy up the remaining sockets
+            lxdWs.close()
+            socket.close()
+          });
+
           lxdWs.on('error', error => console.log(error));
 
           lxdWs.on('message', data => {
