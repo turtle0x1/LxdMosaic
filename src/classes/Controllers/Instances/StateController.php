@@ -26,7 +26,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     public function stop(Host $host, $container)
     {
         $this->state->change($host, $container, StateCon::STOP);
-        return ["state"=>"success", "message"=>"Stoppin{$host->getAlias()}alias/$container", "code"=>102];
+        return ["state"=>"success", "message"=>"Stopping {$host->getAlias()}alias/$container", "code"=>102];
     }
     /**
      * @Route("", name="Restart Instance")
