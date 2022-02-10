@@ -18,7 +18,26 @@
     height: 100%;
     margin: 10px;
     padding: 0;
+    margin: 0;
 }
+
+#terminalControls {
+    position: absolute;z-index: 2;width: 20%;right: 0px;min-height: 5%;
+}
+
+#terminal-container {
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+}
+
+#terminalDiv {
+    position: relative;
+    background-color: black;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
 </style>
 
 <script type="module" crossorigin="anonymous">
@@ -158,7 +177,7 @@
 </script>
 
 <div id="containerBox" class="boxSlide">
-    <div class="row mb-2">
+    <div class="row">
     <div class="col-md-12 text-center">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
               <div class="btn-toolbar">
@@ -188,14 +207,8 @@
             </h4>
             <div class="btn-toolbar">
               <div class="btn-group me-2">
-                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attach Volume" class="btn btn-sm btn-success" id="attachVolumesBtn">
-                      <i class="fas fa-hdd"></i>
-                  </button>
                   <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Image" class="btn btn-sm btn-secondary" id="craeteImage">
                       <i class="fas fa-image"></i>
-                  </button>
-                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Settings" class="btn btn-sm btn-primary editContainerSettings">
-                      <i class="fas fa-cog"></i>
                   </button>
                   <hr/>
                   <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy Instance" class="btn btn-sm btn-info copyContainer">
@@ -215,17 +228,12 @@
         </div>
     </div>
     </div>
-    <div class="row mb-2 pb-2" id="containerViewBtns">
+    <div class="row" id="containerViewBtns">
         <div class="col-md-12 text-centert">
             <ul class="nav nav-tabs justify-content-center" id="serverBoxNav" style="border: none !important;">
                 <li class="nav-item" id="goToDetails">
                     <div class="nav-link active">
                         <i class="fas fa-info-circle pe-2"></i>Details
-                    </div>
-                </li>
-                <li class="nav-item" id="goToConsole">
-                    <div class="nav-link ">
-                        <i class="fas fa-terminal pe-2"></i>Console
                     </div>
                 </li>
                 <li class="nav-item" id="goToTerminal">
@@ -264,7 +272,7 @@
             </div>
         </div>
     </div>
-<div id="containerDetails" class="instanceViewBox">
+<div id="containerDetails" class="instanceViewBox mt-2">
 <div class="row">
     <div class="col-md-3">
         <div class="card mb-2 text-white bg-dark">
@@ -273,6 +281,7 @@
                   <i class="fas fa-info-circle text-info me-2"></i>
                   Instance Details
               </h5>
+              <div class="">
               Host: <span id="container-hostNameDisplay"></span>
               <br/>
               Project: <span id="instanceProject"></span>
@@ -288,40 +297,52 @@
               Up Time: <span id="container-upTime"></span>
               <br/>
               Deployment: <span id="container-deployment"></span>
-              <br/>
+              <div class="text-white mt-2">
+                  <h5 class="w-100">
+                      <i class="fas fa-comment text-info"></i>
+                      Comment
+                      <button class="btn btn-sm btn-outline-info float-end ms-1 me-1" id="editInstanceComment"><i class="fas fa-edit"></i></button>
+                  </h5>
+                  <span id="container-comment"></span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="card mb-2 bg-dark text-white">
-            <div class="card-body table-responsive">
-                <h5 class="text-white w-100">
-                    <i class="fas fa-comment text-info"></i>
-                    Comment
-                    <button class="btn btn-sm btn-outline-info float-end ms-1 me-1" id="editInstanceComment"><i class="fas fa-edit"></i></button>
-                </h5>
-                <span id="container-comment"></span>
+
+        <div class="card mb-2 text-white bg-dark">
+          <div class="card-body">
+              <div class="border-bottom pb-2 mb-2" id="memoryDataCard">
+
+              </div>
+              <div class="col-md-12" id="networkDetailsCard">
+              </div>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-6 text-center" id="terminalDiv">
+        <div id="terminal-container"></div>
+        <div id="terminalControls">
+            <div class="btn-toolbar float-end" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group" role="group" aria-label="First group">
+                <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Change Shell" class="btn btn-primary" id="changeInstanceShell">
+                    <i class="fas fa-terminal"></i>
+                </button>
+                <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Fullscreen Shell (Breaks Esc)" class="btn btn-primary" id="fullScreenInstanceTerminalContainer">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy All Shell Contents" class="btn btn-primary" id="copyInstanceTerminalContents">
+                    <i class="fas fa-clipboard"></i>
+                </button>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card mb-2 text-white bg-dark">
-          <div class="card-body">
-                <div class="col-md-12" id="networkDetailsCard">
-                </div>
-          </div>
-        </div>
-        <div class="card mb-2 bg-dark text-white">
-            <div class="card-body" id="memoryDataCard">
-
-            </div>
-        </div>
         <div class="card mb-2 bg-dark text-white">
             <div class="card-body" id="storageDataCard">
 
             </div>
         </div>
-
-    </div>
-    <div class="col-md-3">
         <div class="card mb-2 bg-dark text-white">
             <div class="card-body table-responsive">
                 <h5 class="text-white">
@@ -331,16 +352,8 @@
                         <i class="fas fa-users"></i>
                     </button>
                 </h5>
-                <table class="table table-dark table-bordered"id="profileData">
-                      <thead class="thead-inverse">
-                          <tr>
-                              <th> Name </th>
-                              <th></th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                </table>
+                <div id="profileData">
+                </div>
             </div>
         </div>
         <div class="card mb-2 bg-dark text-white">
@@ -348,8 +361,8 @@
                 <h5 class="text-white">
                     <i class="fas fa-exchange-alt pe-2 text-primary"></i>
                     Proxies
-                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add proxy device" class="btn btn-sm btn-outline-primary float-end" id="addInstanceProxyDevice">
-                        <i class="fas fa-plus"></i>
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add Proxy" class="btn btn-sm btn-outline-primary float-end" id="addInstanceProxyDevice">
+                        <i class="fas fa-exchange-alt"></i>
                     </button>
                 </h5>
                 <table class="table table-dark table-bordered"id="instanceProxiesTable">
@@ -363,7 +376,7 @@
                 <h5 class="text-white">
                     <i class="fas fa-images text-primary me-2"></i>
                     Snapshots
-                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Snapshot" class="btn btn-sm btn-outline-primary float-end takeSnapshot">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Take Snapshot" class="btn btn-sm btn-outline-primary float-end takeSnapshot">
                         <i class="fas fa-camera"></i>
                     </button>
                 </h5>
@@ -373,16 +386,16 @@
                 </table>
           </div>
         </div>
-    </div>
-    <div class="col-md-3">
         <div class="card mb-2 bg-dark text-white">
-            <div class="card-body table-responsive">
+            <div class="card-body">
                 <h5 class="text-white">
-                    <i class="fas fa-user-secret me-2 text-warning"></i>
-                    Limits
-
+                    <i class="fas fa-cog me-2 text-primary"></i>
+                    Settings
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Alter Settings" class="btn btn-sm btn-outline-primary float-end editContainerSettings">
+                        <i class="fas fa-cog"></i>
+                    </button>
                 </h5>
-                <table class="table table-dark table-bordered" id="limitsTable">
+                <table class="table table-dark table-bordered" id="viewInstanceSettingsTable">
                       <thead class="thead-inverse">
                           <tr>
                               <th> Key </th>
@@ -397,12 +410,9 @@
     </div>
 </div>
 </div>
-<div id="containerConsole" class="instanceViewBox" style="height: 100%; width: 100%;">
-    <div id="terminal-container"></div>
-</div>
 <div id="containerTerminal" class="instanceViewBox">
     <div class="row">
-        <div class="col-md-12 text-center">
+        <div class="col-md-12 text-center bg-dark">
             <div id="spice-area">
                 <div id="spice-screen" class="spice-screen">
                 </div>
@@ -410,7 +420,7 @@
         </div>
     </div>
 </div>
-<div id="containerSnapshots" class="instanceViewBox">
+<div id="containerSnapshots" class="instanceViewBox mt-2">
     <div class="row">
         <div class="col-md-3">
             <div class="card mb-2 text-white bg-dark">
@@ -461,7 +471,7 @@
         </div>
     </div>
 </div>
-<div id="containerBackups" class="instanceViewBox">
+<div id="containerBackups" class="instanceViewBox mt-2">
     <div class="row" id="backupErrorRow">
         <div class="col-md-12 alert alert-danger" id="backupErrorMessage">
         </div>
@@ -516,7 +526,7 @@
         </div>
     </div>
 </div>
-<div id="containerFiles"  class="col-md-12 instanceViewBox">
+<div id="containerFiles"  class="col-md-12 instanceViewBox mt-2">
     <div class="alert alert-info">
         <i class="fas fa-info-circle text-info me-2"></i>You can right click to delete a file / folder
         <br/>
@@ -525,7 +535,7 @@
     <div class="row" data-masonry='{"percentPosition": true }' id="filesystemTable" style="padding-bottom: 50px;">
     </div>
 </div>
-<div id="containerEvents"  class="col-md-12 instanceViewBox">
+<div id="containerEvents"  class="col-md-12 instanceViewBox mt-2">
     <div class="card bg-dark text-white">
         <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
             <h4>Event Logs</h4>
@@ -554,7 +564,7 @@
         </div>
     </div>
 </div>
-<div id="containerMetrics"  class="col-md-8 offset-md-2 instanceViewBox">
+<div id="containerMetrics"  class="col-md-8 offset-md-2 instanceViewBox mt-2">
     <div class="card bg-dark text-white">
         <div class="card-header">
             <h4>Metric Graph
@@ -1153,6 +1163,8 @@ function loadContainerView(data)
     $("#containerDetails").show();
     $("#goToDetails").trigger("click");
     if(consoleSocket !== undefined && currentTerminalProcessId !== null){
+        // Dont output "shell closed" message because the close is expected
+        consoleSocket.onclose = function(){}
         consoleSocket.close();
         currentTerminalProcessId = null;
     }
@@ -1246,23 +1258,28 @@ function loadContainerView(data)
         $("#container-cpuTime").text(containerCpuTime);
         $("#container-createdAt").text(moment(x.details.created_at).format("MMM DD YYYY h:mm A"));
 
-        let limitsTrs = "";
+        let settingsTr = "";
 
         $.each(x.details.config, (key, value)=>{
-            if(key.startsWith("limit")){
-                limitsTrs += `<tr>
+            if(!key.startsWith("image") && !key.startsWith("volatile") && !key.startsWith("snapshots") && !["user.comment", "user.vendor-data", "user.user-data"].includes(key)){
+                settingsTr += `<tr>
                     <td>${key}</td>
                     <td>${value}</td>
                 </tr>`
             }
         });
 
-        if(limitsTrs == ""){
-            limitsTrs = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-warning me-2'></i>No Limits</td></tr>";
+        if(settingsTr == ""){
+            $("#viewInstanceSettingsTable > thead").hide()
+            $("#viewInstanceSettingsTable > tbody").css({"border-top": "inherit"})
+            settingsTr = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-primary me-2'></i>No Settings</td></tr>";
+        }else{
+            $("#viewInstanceSettingsTable > thead").show()
+            $("#viewInstanceSettingsTable > tbody").css({"border-top": "2px solid currentColor"})
         }
 
 
-        $("#limitsTable > tbody").empty().append(limitsTrs);
+        $("#viewInstanceSettingsTable > tbody").empty().append(settingsTr);
 
         if(x.details.hasOwnProperty("last_used_at")){
             let last_used_at = moment(x.details.last_used_at);
@@ -1295,7 +1312,7 @@ function loadContainerView(data)
         if(x.details.config.hasOwnProperty("user.comment") !== false){
             userComment = nl2br(x.details.config["user.comment"]);
         }else{
-            userComment = `<div class="d-block text-center"><i class="fas fa-info-circle text-info me-2"></i> No Comment</div>`
+            userComment = `<div class="d-block text-center"><i class="fas fa-info-circle text-info me-2"></i>No Comment</div>`
         }
 
         $("#container-comment").html(userComment);
@@ -1304,7 +1321,7 @@ function loadContainerView(data)
 
         if(x.snapshots.length == 0){
             snapshotTrHtml += `<tr>
-                <td class='text-center' colspan='2'><i class='fas fa-info-circle text-primary me-2'></i> No snapshots </td>
+                <td class='text-center' colspan='2'><i class='fas fa-info-circle text-primary me-2'></i>No Snapshots</td>
 
             </tr>`
         }else{
@@ -1320,28 +1337,28 @@ function loadContainerView(data)
         let profileTrHtml = "";
 
         if(x.details.profiles.length == 0){
-            profileTrHtml = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-primary me-2'></i>  No Profiles </td></tr>"
+            profileTrHtml = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-primary me-2'></i>No Profiles</td></tr>"
         }else{
             $.each(x.details.profiles, function(i, item){
-                profileTrHtml += `<tr data-profile="${item}">
-                    <td><a href='/profiles/${data.hostId}/${item}' data-profile=${item} data-navigo>${item}</a></td>
-                    <td><button class='btn btn-sm btn-outline-danger removeProfile'><i class="fas fa-trash"></i></button></td>
-
-                </tr>`;
+                profileTrHtml += `<span class="badge bg-secondary m-1" data-profile="${item}">
+                <a style="color: white; text-decoration: underline" href='/profiles/${data.hostId}/${item}' data-profile=${item} data-navigo>${item}</a>
+                <span class='text-danger removeProfile ms-1' style="cursor: pointer;">x</span>
+                </span>
+                `;
             });
         }
 
-        $("#profileData >  tbody").empty().append(profileTrHtml);
+        $("#profileData").empty().append(profileTrHtml);
 
         let networkData = "";
 
         if(x.state.network !== null){
-            networkData += '<h5> <i class="fas fa-network-wired me-2 text-success"></i> Network Information </h5>'
+            networkData += ''
             $.each(x.state.network,  function(i, item){
                 if(i == "lo"){
                     return;
                 }
-                networkData += `<div><b>${i}</b><br/>`;
+                networkData += `<div><b><i class="fas fa-ethernet me-2"></i>${i}</b> <small class="float-end">${item.hwaddr}</small><br/>`;
                 let lastKey = item.addresses.length - 1;
                 $.each(item.addresses, function(i, item){
                     networkData += `<span class="mt-3 ms-2">${item.address}<br/></span>`;
@@ -1352,8 +1369,10 @@ function loadContainerView(data)
             if(networkData == ""){
                 networkData = '<div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Only local interface present!</div>';
             }
+
+            networkData = '<h5 class="mt-2"> <i class="fas fa-network-wired me-2 text-success"></i> Network Information </h5>' + networkData
         }else{
-            networkData = '<h5> <i class="fas fa-network-wired me-2 text-danger"></i> Network Information </h5><div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>';
+            networkData = '<h5 class="mt-2"> <i class="fas fa-network-wired me-2 text-danger"></i> Network Information </h5><div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>';
         }
 
         $("#networkDetailsCard").empty().append(networkData);
@@ -1380,10 +1399,14 @@ function loadContainerView(data)
             </h5>`;
             $.each(x.state.memory, function(i, item){
                 let memoryWidth = ((item / totalMemory) * 100)
+                if(i.includes("peak")){
+                    return true;
+                }
                 memoryUsageHtml += `<div class="mb-2">
                     <b>${titleCase(i.replace(/_/g, ' '))}</b>
-                    <div data-bs-toggle="tooltip" data-bs-placement="right" title="${formatBytes(totalMemory)} (Source: ${x.totalMemory.source})" class="progress ms-3 mt-2">
+                    <div class="progress ms-3 mt-2">
                         <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(item)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${item}" aria-valuemin="0" aria-valuemax="${(totalMemory)}"></div>
+                        <div data-bs-toggle="tooltip" data-bs-placement="right" title="${formatBytes(totalMemory)} (Source: ${x.totalMemory.source})" class="progress-bar bg-secondary" style="width: ${100 - memoryWidth}%" role="progressbar" aria-valuenow="${item}" aria-valuemin="0" aria-valuemax="${(totalMemory)}"></div>
                     </div>
                 </div>`
             });
@@ -1400,8 +1423,11 @@ function loadContainerView(data)
 
         let storageHtml = `
             <h5 class="text-white">
-                <i class="fas fa-hdd me-2 text-success"></i>
-                Disk Usage
+                <i class="fas fa-hdd me-2 text-primary"></i>
+                Disks
+                <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attach Volume" class="btn btn-sm btn-outline-primary float-end" id="attachVolumesBtn">
+                    <i class="fas fa-hdd"></i>
+                </button>
             </h5>
             <div style="width: 100%;">`;
 
@@ -1419,8 +1445,9 @@ function loadContainerView(data)
 
                 storageHtml += `<div class="mb-2">
                     <b>${titleCase(i.replace(/_/g, ' '))}</b>
-                    <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(totalStorage)}" class="progress ms-3 mt-2">
-                        <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(disk.usage)}" class="progress-bar bg-success" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage.total)}"></div>
+                    <div class="progress ms-3 mt-2">
+                        <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(disk.usage)}" class="progress-bar bg-primary" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage.total)}"></div>
+                        <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(totalStorage)}"  class="progress-bar bg-secondary" style="width: ${100 - storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage.total)}"></div>
                     </div>
                 </div>`
             }else{
@@ -1458,8 +1485,189 @@ function loadContainerView(data)
         $("#containerBox").show();
         $('html, body').animate({scrollTop:0},500);
         router.updatePageLinks()
+
+        if(currentTerminalProcessId === null){
+            if(x.state.status_code === 103){
+                $("#terminalControls").find(".btn").removeClass("disabled")
+                openShell(null, x.details.config.hasOwnProperty("image.os") ? x.details.config.hasOwnProperty("image.os") : null)
+            }else{
+                $("#terminalControls").find(".btn").addClass("disabled")
+                const terminalContainer = document.getElementById('terminal-container');
+                // Clean terminal
+                while (terminalContainer.children.length) {
+                    terminalContainer.removeChild(terminalContainer.children[0]);
+                }
+
+                term = new Terminal({});
+                term.loadAddon(fitAddon)
+                term.open(terminalContainer);
+                fitAddon.fit()
+                $("#terminalDiv").height($("#terminal-container").height())
+                // fit is called within a setTimeout, cols and rows need this.
+                setTimeout(() => {
+                    term.writeln("Instance not in a running state, shell not opened.")
+                }, 0)
+            }
+
+
+        }
     });
 }
+
+function openShell(shell = null, imageOsString = null){
+    if(consoleSocket !== undefined && currentTerminalProcessId !== null){
+        // Dont output "shell closed" message because the close is expected
+        consoleSocket.onclose = function(){}
+        consoleSocket.close();
+        currentTerminalProcessId = null;
+    }
+
+    const terminalContainer = document.getElementById('terminal-container');
+    // Clean terminal
+    while (terminalContainer.children.length) {
+        terminalContainer.removeChild(terminalContainer.children[0]);
+    }
+
+    term = new Terminal({});
+    term.loadAddon(fitAddon)
+    term.open(terminalContainer);
+    fitAddon.fit()
+    $("#terminalDiv").height($("#terminal-container").height())
+
+    let project = $("#instanceProject").text();
+
+    var defaultOsShells = {
+        "alpine": "ash",
+        "openwrt": "ash"
+    };
+
+    if(shell == null){
+        // "bash" is probably the best guess
+        shell = "bash";
+        let myDefaultShells = JSON.parse(localStorage.getItem('myDefaultShells'));
+
+        if(myDefaultShells == null || !myDefaultShells.hasOwnProperty(currentContainerDetails.hostId)){
+            if(defaultOsShells.hasOwnProperty(imageOsString.toLowerCase())){
+                shell = defaultOsShells[imageOsString.toLowerCase()]
+            }else{
+                term.writeln("")
+                term.writeln("LXDMosaic: Couldn't guess which shell to use.")
+                term.writeln("Please report the OS and the expected default shell on Github.")
+                term.writeln("You can change the shell above to gain access in the mean time.")
+                return false;
+            }
+
+        }else{
+            if(myDefaultShells[currentContainerDetails.hostId].hasOwnProperty(project)){
+                if(myDefaultShells[currentContainerDetails.hostId][project].hasOwnProperty(currentContainerDetails.container)){
+                    shell = myDefaultShells[currentContainerDetails.hostId][project][currentContainerDetails.container]
+                }
+            }
+        }
+    }
+
+    // fit is called within a setTimeout, cols and rows need this.
+    setTimeout(() => {
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/json',
+            url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
+            data: JSON.stringify({
+                host: currentContainerDetails.hostId,
+                container: currentContainerDetails.container
+            }),
+            success: function(data) {
+                currentTerminalProcessId = data.processId;
+
+                // Theoretically no need to inject credentials
+                // here as auth is only called when a socket
+                // is first connected (in this case when the
+                // operations socket is setup - which will
+                // always come before this) but to be safe ...
+                consoleSocket = new WebSocket(`wss://${getQueryVar("host", window.location.hostname)}:${getQueryVar("port", 443)}/node/console?${$.param($.extend({
+                    ws_token: userDetails.apiToken,
+                    user_id: userDetails.userId,
+                    pid: data.processId,
+                    shell: shell,
+                    userId: userDetails.userId,
+                    host: currentContainerDetails.hostId,
+                    instance: currentContainerDetails.container,
+                    project: project
+                }, currentContainerDetails))}`);
+
+                consoleSocket.onclose = function(){
+                    term.writeln("")
+                    term.writeln("LXDMosaic: Shell closed, if this is un-expected it could be:")
+                    term.writeln("")
+                    term.writeln("  - A network error")
+                    term.writeln("  - The instance was turned off")
+                    term.writeln("  - LXDMosaic is missbehaving")
+                    term.writeln("  - You're trying to use a shell not installed (I.E bash instead of ash)")
+                };
+                $("#terminalDiv").height($("#terminal-container").height())
+                term.loadAddon(new window.AttachAddon.AttachAddon(consoleSocket));
+                $("#terminalControls").find(".btn-toolbar").fadeOut(2000)
+            },
+            error: function(){
+                term.writeln("LXDMosaic: Node server cant be reached.")
+                term.writeln("Please report this to your admin.")
+                $("#terminalControls").find(".btn-toolbar").fadeOut(2000)
+                return false;
+            },
+            dataType: "json"
+        });
+    }, 0);
+}
+
+function resizeShell(){
+    let x = fitAddon.proposeDimensions()
+    // This fixes a silly bug caused by going from fullscreen to not full screen
+    // seems related to https://github.com/xtermjs/xterm.js/issues/3584
+    let maxRows = document.fullscreenElement == null ? 24 : x.rows
+    if(x.rows > maxRows){
+        x.rows = maxRows
+    }
+    consoleSocket.send(`resize-window:cols=${x.cols}&rows=${x.rows}`)
+    // fitAddon.fit() just didn't work
+    term._core._renderService.clear();
+    term.resize(x.cols, x.rows)
+}
+
+document.onfullscreenchange = function ( event ) {
+    if(document.fullscreenElement == null){
+        resizeShell()
+    }
+};
+
+$(window).resize(function(e) {
+  if(term){
+      resizeShell()
+  }
+});
+
+
+$(document).on("click", "#fullScreenInstanceTerminalContainer", function(){
+    var el = document.getElementById("terminal-container"),
+      rfs = el.requestFullscreen
+        || el.webkitRequestFullScreen
+        || el.mozRequestFullScreen
+        || el.msRequestFullscreen
+    ;
+
+    rfs.call(el);
+});
+
+$(document).on("click", "#copyInstanceTerminalContents", function(){
+    term.selectAll()
+    let text = term.getSelection()
+    term.select(0, 0, 0)
+    navigator.clipboard.writeText(text.trim());
+    makeToastr({state: "success", message: "Copied terminal contents to clipboard"})
+});
+
+$(document).on("mouseenter", "#terminalControls", function(){$("#terminalControls").find(".btn-toolbar").fadeIn()})
+$(document).on("mouseleave", "#terminalControls", function(){$("#terminalControls").find(".btn-toolbar").fadeOut()})
 
 $(document).on("click", "#addInstanceProxyDevice", function(){
     addProxyDeviceObj.hostId = currentContainerDetails.hostId
@@ -1467,15 +1675,75 @@ $(document).on("click", "#addInstanceProxyDevice", function(){
     $("#modal-hosts-instnaces-addProxyDevice").modal("show");
 });
 
+$(document).on("click", "#changeInstanceShell", function(){
+    $.confirm({
+      title: 'Change Shell?',
+      content: `
+          <div class="mb-2">
+              <label> New Shell </label>
+              <input class="form-control" value="" maxlength="63" name="shell"/>
+          </div>
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="setAsDefaultShell" checked>
+              <label class="form-check-label" for="setAsDefaultShell">
+                Set as your default shell for this instance?
+              </label>
+            </div>
+          `,
+      buttons: {
+          cancel: function(){},
+          go: {
+              text: "Go!",
+              btnClass: "btn-primary",
+              action: function(){
+                  this.buttons.go.disable();
+                  this.buttons.cancel.disable();
+
+                  let shell = this.$content.find("input[name=shell]").val();
+
+                  if(shell == ""){
+                      this.buttons.go.enable();
+                      this.buttons.cancel.enable();
+                      $.alert("Please input a shell");
+                      return false;
+                  }
+
+                  if(this.$content.find("#setAsDefaultShell").is(":checked")){
+                      let defaultShells = JSON.parse(localStorage.getItem('myDefaultShells'));
+                      if(defaultShells == null){
+                          defaultShells = {};
+                      }
+
+                      if(!defaultShells.hasOwnProperty(currentContainerDetails.hostId)){
+                          defaultShells[currentContainerDetails.hostId] = {}
+                      }
+
+                      let project = $("#instanceProject").text();
+
+                      if(!defaultShells[currentContainerDetails.hostId].hasOwnProperty(project)){
+                          defaultShells[currentContainerDetails.hostId][project] = {}
+                      }
+                      defaultShells[currentContainerDetails.hostId][project][currentContainerDetails.container] = shell;
+                      localStorage.setItem('myDefaultShells', JSON.stringify(defaultShells));
+                  }
+
+                  openShell(shell)
+              }
+          }
+      }
+  });
+})
+
+
 $("#containerBox").on("click", ".removeProfile", function(){
-    let tr = $(this).parents("tr");
-    let profile = tr.data("profile");
+    let badge = $(this).parents(".badge")
+    let profile = badge.data("profile");
     ajaxRequest(globalUrls.instances.profiles.remove, {...{profile: profile}, ...currentContainerDetails}, (data)=>{
         data = makeToastr(data);
         if(data.state == "error"){
             return false;
         }
-        tr.remove();
+        badge.remove();
     });
 });
 
@@ -2327,107 +2595,6 @@ $("#containerBox").on("click", "#goToTerminal", function() {
             }
         }
     });
-});
-
-$(window).resize(function() {
-  if(term){
-      let x = fitAddon.proposeDimensions();
-      consoleSocket.send(`resize-window:cols=${x.cols}&rows=${x.rows}`)
-      fitAddon.fit()
-  }
-});
-
-$("#containerBox").on("click", "#goToConsole", function() {
-    $(".instanceViewBox").hide();
-    $("#containerConsole").show();
-
-
-    if(currentTerminalProcessId === null){
-        const terminalContainer = document.getElementById('terminal-container');
-        // Clean terminal
-        while (terminalContainer.children.length) {
-            terminalContainer.removeChild(terminalContainer.children[0]);
-        }
-
-        $.confirm({
-            title: 'Instance Shell!',
-            content: `
-                <div class="mb-2">
-                    <label> Shell </label>
-                    <input class="form-control" value="bash" maxlength="63" name="shell"/>
-                </div>
-                `,
-            buttons: {
-                cancel: function(){
-                    $("#goToDetails").trigger("click");
-                },
-                go: {
-                    text: "Go!",
-                    btnClass: "btn-primary",
-                    action: function(){
-
-
-                        let shell = this.$content.find("input[name=shell]").val();
-
-                        if(shell == ""){
-                            $.alert("Please input a shell");
-                            return false;
-                        }
-
-                        term = new Terminal({});
-                        term.loadAddon(fitAddon)
-
-
-                        let project = $("#instanceProject").text();
-
-                        term.open(terminalContainer);
-                        fitAddon.fit()
-
-                        // fit is called within a setTimeout, cols and rows need this.
-                        setTimeout(() => {
-                            $.ajax({
-                                type: "POST",
-                                dataType: 'json',
-                                contentType: 'application/json',
-                                url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
-                                data: JSON.stringify({
-                                    host: currentContainerDetails.hostId,
-                                    container: currentContainerDetails.container
-                                }),
-                                success: function(data) {
-                                    currentTerminalProcessId = data.processId;
-
-                                    // Theoretically no need to inject credentials
-                                    // here as auth is only called when a socket
-                                    // is first connected (in this case when the
-                                    // operations socket is setup - which will
-                                    // always come before this) but to be safe ...
-                                    consoleSocket = new WebSocket(`wss://${getQueryVar("host", window.location.hostname)}:${getQueryVar("port", 443)}/node/console?${$.param($.extend({
-                                        ws_token: userDetails.apiToken,
-                                        user_id: userDetails.userId,
-                                        pid: data.processId,
-                                        shell: shell,
-                                        userId: userDetails.userId,
-                                        host: currentContainerDetails.hostId,
-                                        instance: currentContainerDetails.container,
-                                        project: project
-                                    }, currentContainerDetails))}`);
-
-                                    term.loadAddon(new window.AttachAddon.AttachAddon(consoleSocket));
-                                    fitAddon.fit()
-                                },
-                                error: function(){
-                                    makeNodeMissingPopup();
-                                },
-                                dataType: "json"
-                            });
-                        }, 0);
-                    }
-                }
-            }
-        });
-    }
-
 });
 
 $("#containerBox").on("click", ".copyContainer", function(){

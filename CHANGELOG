@@ -46,6 +46,7 @@ Changed
     Order host's by alias when fetching from the DB (#462)
     Remove profile name from deploy cloud-config as its no longer used
     Disable some spice channels to improve VM Terminal experience (#463)
+    Open terminal when opening an instance view
 
 Fixed
     First run doesn't toggle passwords properly (#390)
