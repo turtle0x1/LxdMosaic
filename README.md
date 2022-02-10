@@ -1,6 +1,6 @@
 # <img src="https://raw.githubusercontent.com/turtle0x1/LxdMosaic/master/src/assets/lxdMosaic/logo.png" height="25" width="25"> LXDMosaic
 <p align="center">
-    <img src="https://i.imgur.com/vnhrSDW.png" width="50%"> <img src="https://i.imgur.com/xHSjw3J.png" width="49%">
+    <img src="examples/README/1_Home_View.png" width="49%"> <img src="examples/README/2_Instance_View.png" width="49%">
 </p>
 
 <p align="center">
