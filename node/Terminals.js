@@ -118,7 +118,10 @@ module.exports = class Terminals {
         this.activeTerminals[internalUuid][0].on("message", (data) => {
           const buf = Buffer.from(data);
           data = buf.toString();
-          socket.send(data);
+          if(socket.readyState == 1){
+            socket.send(data);
+          }
+
         });
 
         this.sendToTerminal(internalUuid, '\n');
