@@ -576,7 +576,7 @@ if ($haveServers->haveAny() !== true) {
                 <ul class="flex-column scrollarea" id="sidebar-ul" style="list-style: none; padding-left: 0px;">
                 </ul>
               </div>
-              <div class="col ps-0 pe-0" style="max-height: 100vh; padding-bottom: 50px; overflow-y: auto;">
+              <div class="col ps-0 pe-0" style="max-height: 100vh; padding-bottom: 30px; overflow-y: auto;">
                 <ol class="breadcrumb ps-3 pt-1 pb-1" id="mainBreadcrumb">
                     <li class="breadcrumb-item active">Dashboard</li>
                 </ol>
