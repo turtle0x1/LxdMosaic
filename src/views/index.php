@@ -473,7 +473,7 @@ if ($haveServers->haveAny() !== true) {
   </form>
   <body style="overflow: hidden;">
      <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-          <a class="navbar-brand col-lg-2 me-0 px-2" href="/" style="width: 300px;" data-navigo>
+          <a class="navbar-brand col-lg-2 me-0 px-2" href="/" style="width: 20vw;" data-navigo>
               <img src="/assets/lxdMosaic/logo.png" class="me-1 ms-1" style="width: 25px; height: 25px;" alt="">
               <?= $siteTitle ?>
           </a>
@@ -572,13 +572,13 @@ if ($haveServers->haveAny() !== true) {
       </header>
       <div class="container-fluid" id="content">
           <div class="row p-0">
-              <div class="d-flex flex-column flex-shrink-0 pt-1 text-white bg-dark" style="width: 300px;  padding-right: 0px;  height: 100vh; overflow-y: auto; padding-bottom: 25px;">
+              <div class="d-flex flex-column flex-shrink-0 pt-1 text-white bg-dark" style="width: 20vw;  padding-right: 0px;  height: 100vh; overflow-y: auto; padding-bottom: 25px;">
                 <ul class="flex-column scrollarea" id="sidebar-ul" style="list-style: none; padding-left: 0px;">
                 </ul>
               </div>
               <div class="col ps-0 pe-0" style="max-height: 100vh; padding-bottom: 30px; overflow-y: auto;">
-                <ol class="breadcrumb ps-3 pt-1 pb-1" id="mainBreadcrumb">
-                    <li class="breadcrumb-item active">Dashboard</li>
+                <ol style="min-height: 30px;" class="breadcrumb ps-3 pt-1 pb-1" id="mainBreadcrumb">
+
                 </ol>
                 <div class="container-fluid">
                   <div id="dashboard" class="animated fadeIn">
