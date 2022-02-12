@@ -1489,7 +1489,7 @@ function loadContainerView(data)
         if(currentTerminalProcessId === null){
             if(x.state.status_code === 103){
                 $("#terminalControls").find(".btn").removeClass("disabled")
-                openShell(null, x.details.config.hasOwnProperty("image.os") ? x.details.config.hasOwnProperty("image.os") : null)
+                openShell(null, x.details.config.hasOwnProperty("image.os") ? x.details.config["image.os"] : "")
             }else{
                 $("#terminalControls").find(".btn").addClass("disabled")
                 const terminalContainer = document.getElementById('terminal-container');
@@ -1514,7 +1514,7 @@ function loadContainerView(data)
     });
 }
 
-function openShell(shell = null, imageOsString = null){
+function openShell(shell = null, imageOsString = ""){
     if(consoleSocket !== undefined && currentTerminalProcessId !== null){
         // Dont output "shell closed" message because the close is expected
         consoleSocket.onclose = function(){}
@@ -1537,13 +1537,12 @@ function openShell(shell = null, imageOsString = null){
     let project = $("#instanceProject").text();
 
     var defaultOsShells = {
+        "ubuntu": "bash",
         "alpine": "ash",
         "openwrt": "ash"
     };
 
     if(shell == null){
-        // "bash" is probably the best guess
-        shell = "bash";
         let myDefaultShells = JSON.parse(localStorage.getItem('myDefaultShells'));
 
         if(myDefaultShells == null || !myDefaultShells.hasOwnProperty(currentContainerDetails.hostId)){
