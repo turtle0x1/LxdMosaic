@@ -466,7 +466,7 @@ function loadProjectAccesOverview(req){
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#userProjectOverview").show();
-    addBreadcrumbs(["User Projects"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "Users Projects Access"], ["", "active"], false, ["/admin"]);
     ajaxRequest(globalUrls.projects.getProjectsOverview, {}, (data)=>{
         data = $.parseJSON(data);
         let hosts = "";
@@ -492,7 +492,7 @@ function loadRecordedActions(req, ammount = 30){
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#recordedActionsBox").show();
-    addBreadcrumbs(["Recorded Actions"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "Recorded Actions"], ["", "active"], false, ["/admin"]);
     $("#actionCount").text(ammount);
     ajaxRequest(globalUrls.settings.recordedActions.getLastResults, {ammount: ammount}, (data)=>{
         data = $.parseJSON(data);
@@ -552,7 +552,7 @@ function loadUsers(){
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#usersList").show();
-    addBreadcrumbs(["User Management"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "User Management"], ["", "active"], false, ["/admin"]);
     ajaxRequest(globalUrls.settings.users.getAll, {}, (data)=>{
         data = $.parseJSON(data);
         let trs = "";
@@ -614,7 +614,7 @@ function loadInstancesHostsView(){
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#instanceHostsBox").show();
-    addBreadcrumbs(["Hosts Management"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "Hosts Management"], ["", "active"], false, ["/admin"]);
     ajaxRequest(globalUrls.hosts.getAllHosts, {}, (data)=>{
         data = $.parseJSON(data);
         let trs = "";
@@ -645,7 +645,7 @@ function loadInstanceTypes(){
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#instanceTypesOverview").show();
-    addBreadcrumbs(["Instance Types"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "Instance Types"], ["", "active"], false, ["/admin"]);
     $("#instanceTypesOverviewProviderDetailsSplash").show();
     $("#instanceTypesOverviewProviderDetails").hide();
     ajaxRequest(globalUrls.instances.instanceTypes.getInstanceTypes, {}, function(data){
@@ -874,7 +874,7 @@ function loadRetiredData() {
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#retiredData").show();
-    addBreadcrumbs(["Retired Data"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "Retired Data"], ["", "active"], false, ["/admin"]);
 }
 
 $("#retiredData").on("click", "#downloadOldFleetAnalytics", function(){
@@ -1049,7 +1049,7 @@ $("#usersList").on("click", ".viewUser", function(){
     let userName = $(this).text();
 
     $("#userDetails").show();
-    addBreadcrumbs(["Users", userName], ["", "active"]);
+    addBreadcrumbs(["Users", userName], ["", "active"], true, ["/admin/users", ""]);
     ajaxRequest(globalUrls.user.getUserOverview, x, (data)=>{
         data = makeToastr(data);
         let x = `<div class="mb-3 text-center">
