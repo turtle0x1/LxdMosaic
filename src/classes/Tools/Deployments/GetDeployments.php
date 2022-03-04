@@ -4,20 +4,30 @@ namespace dhope0000\LXDClient\Tools\Deployments;
 
 use dhope0000\LXDClient\Model\Deployments\FetchDeployments;
 use dhope0000\LXDClient\Tools\Deployments\GetDeployment;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetDeployments
 {
     public function __construct(
         FetchDeployments $fetchDeployments,
-        GetDeployment $getDeployment
+        GetDeployment $getDeployment,
+        FetchUserDetails $fetchUserDetails
     ) {
         $this->fetchDeployments = $fetchDeployments;
         $this->getDeployment = $getDeployment;
+        $this->fetchUserDetails = $fetchUserDetails;
     }
 
-    public function getAll()
+    public function getAll(int $userId)
     {
-        $deploymentList = $this->fetchDeployments->fetchAll();
+        $deploymentList = [];
+
+        if ($this->fetchUserDetails->isAdmin($userId) !== "1") {
+            $deploymentList = $this->fetchDeployments->fetchUserHasAccessTo($userId);
+        } else {
+            $deploymentList = $this->fetchDeployments->fetchAll();
+        }
+
         return $this->addDetails($deploymentList);
     }
 

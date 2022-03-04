@@ -11,8 +11,8 @@ class GetController
         $this->getDeployments = $getDeployments;
     }
 
-    public function getAll()
+    public function getAll(int $userId)
     {
-        return $this->getDeployments->getAll();
+        return $this->getDeployments->getAll($userId);
     }
 }
