@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Tools\Deployments\Projects;
 
 use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
-
+use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 use dhope0000\LXDClient\Model\Deployments\Projects\FetchDeploymentProjects;
 use dhope0000\LXDClient\Model\Deployments\Projects\InsertDeploymentProject;
 use dhope0000\LXDClient\Model\Deployments\Projects\DeleteDeploymentProject;
@@ -11,17 +11,20 @@ use dhope0000\LXDClient\Model\Deployments\Projects\DeleteDeploymentProject;
 class SetDeploymentProjects
 {
     private $authoriseDeploymentAccess;
+    private $validatePermissions;
     private $fetchDeploymentProjects;
     private $insertDeploymentProject;
     private $deleteDeploymentProject;
 
     public function __construct(
         AuthoriseDeploymentAccess $authoriseDeploymentAccess,
+        ValidatePermissions $validatePermissions,
         FetchDeploymentProjects $fetchDeploymentProjects,
         InsertDeploymentProject $insertDeploymentProject,
         DeleteDeploymentProject $deleteDeploymentProject
     ) {
         $this->authoriseDeploymentAccess = $authoriseDeploymentAccess;
+        $this->validatePermissions = $validatePermissions;
         $this->fetchDeploymentProjects = $fetchDeploymentProjects;
         $this->insertDeploymentProject = $insertDeploymentProject;
         $this->deleteDeploymentProject = $deleteDeploymentProject;
@@ -35,7 +38,15 @@ class SetDeploymentProjects
         $currentProjects = $this->groupProjects($currentProjects);
 
         foreach ($newProjectsLayout as $project) {
-            // TODO VALIDATE USER HAS ACCESS TO PROJECT
+            // Make sure the user cant add the deployments to projects they
+            // can access
+            if ($this->validatePermissions->canAccessHostProject(
+                $userId,
+                $project["hostId"],
+                $project["project"]
+            ) == false) {
+                continue;
+            }
 
             if (isset($currentProjects[$project["hostId"]])) {
                 if (isset($currentProjects[$project["hostId"]][$project["project"]])) {
@@ -55,7 +66,15 @@ class SetDeploymentProjects
         // Any projects left over should be removed
         foreach ($currentProjects as $hostId => $projects) {
             foreach ($projects as $project) {
-                //TODO Dont remove project if the user cant see it
+                // If the user has no access to the project dont remove it
+                // as it isn't within their control
+                if ($this->validatePermissions->canAccessHostProject(
+                    $userId,
+                    $project["hostId"],
+                    $project["project"]
+                ) == false) {
+                    continue;
+                }
                 $this->deleteDeploymentProject->delete($project["id"]);
             }
         }
