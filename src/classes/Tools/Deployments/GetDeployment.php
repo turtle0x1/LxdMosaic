@@ -7,6 +7,7 @@ use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInDeployment;
 use dhope0000\LXDClient\Model\Deployments\FetchDeployments;
 use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInformation;
+use dhope0000\LXDClient\Model\Deployments\Projects\FetchDeploymentProjects;
 
 class GetDeployment
 {
@@ -15,13 +16,15 @@ class GetDeployment
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
         GetContainersInDeployment $getContainersInDeployment,
         FetchDeployments $fetchDeployments,
-        GetContainersInformation $getContainersInformation
+        GetContainersInformation $getContainersInformation,
+        FetchDeploymentProjects $fetchDeploymentProjects
     ) {
         $this->fetchCloudConfigs = $fetchCloudConfigs;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
         $this->getContainersInDeployment = $getContainersInDeployment;
         $this->fetchDeployments = $fetchDeployments;
         $this->getContainersInformation = $getContainersInformation;
+        $this->fetchDeploymentProjects = $fetchDeploymentProjects;
     }
 
     public function get(int $deploymentId)
@@ -39,6 +42,7 @@ class GetDeployment
         $output["cloudConfigs"] = $this->fetchCloudConfigs->getAll($deploymentId);
         $output["profiles"] = $profiles;
         $output["containers"] = $hostWithContainers;
+        $output["projects"] = $this->fetchDeploymentProjects->fetchAll($deploymentId);
         return $output;
     }
 

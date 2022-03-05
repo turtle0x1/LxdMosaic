@@ -75,7 +75,7 @@
         </div> -->
         <div class="row">
             <div class="col-md-3">
-                  <div class="card bg-dark text-white">
+                  <div class="card bg-dark text-white mb-2">
                     <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
                         <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
@@ -89,6 +89,29 @@
                               <thead>
                                   <tr>
                                       <th> Cloud Config </th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                          </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card bg-dark text-white">
+                    <div class="card-header" role="tab" id="deploymentProjectHeading">
+                      <h5>
+                        <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#deploymentProjects" aria-expanded="true" aria-controls="deploymentProjects">
+                        Projects
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="deploymentProjects" class="collapse show" role="tabpanel" aria-labelledby="deploymentProjectHeading">
+                      <div class="card-block bg-dark table-responsive">
+                          <table class="table table-bordered table-dark" id="deploymentProjectTable">
+                              <thead>
+                                  <tr>
+                                      <th> Host </th>
+                                      <th> Project </th>
                                   </tr>
                               </thead>
                               <tbody>
@@ -286,7 +309,17 @@ function viewDeployment(deploymentId)
             });
         }
 
+        let projectTrs = "";
 
+        $.each(data.projects, (_, project)=>{
+            projectTrs += `<tr>
+                <td>${project.hostAlias}</td>
+                <td>${project.project}</td>
+            </tr>`
+        });
+
+
+        $("#deploymentProjectTable > tbody").empty().append(projectTrs);
         $("#deploymentCloudConfigTable > tbody").empty().append(trs);
         $("#deploymentContainersList > tbody").empty().append(c);
         router.updatePageLinks();
