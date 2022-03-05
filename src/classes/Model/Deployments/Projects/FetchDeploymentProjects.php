@@ -18,6 +18,7 @@ class FetchDeploymentProjects
         $sql = "SELECT
                     `DP_ID` as `id`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `hostAlias`,
+                    `Host_ID` as `hostId`,
                     `DP_Project` as `project`
                 FROM
                     `Deployment_Projects`

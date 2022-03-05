@@ -223,6 +223,10 @@ if ($haveServers->haveAny() !== true) {
                   createPool: "/api/Storage/CreatePoolController/create"
               },
               deployments: {
+                  projects: {
+                    getAll: '/api/Deployments/Projects/GetDeploymentProjectsController/get',
+                    set: '/api/Deployments/Projects/SetDeploymentProjectsController/set'
+                  },
                   create: "/api/Deployments/CreateController/create",
                   getAll: "/api/Deployments/GetController/getAll",
                   getDeployment: "/api/Deployments/GetDeploymentController/get",

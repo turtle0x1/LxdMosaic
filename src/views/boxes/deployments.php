@@ -98,15 +98,16 @@
                     </div>
                   </div>
                   <div class="card bg-dark text-white">
-                    <div class="card-header" role="tab" id="deploymentProjectHeading">
+                    <div class="card-header">
                       <h5>
-                        <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#deploymentProjects" aria-expanded="true" aria-controls="deploymentProjects">
                         Projects
-                        </a>
+                        <button class="btn btn-outline-primary btn-sm float-end" id="editDeploymentProjects">
+                            <i class="fas fa-wrench"></i>
+                        </button>
                       </h5>
                     </div>
-                    <div id="deploymentProjects" class="collapse show" role="tabpanel" aria-labelledby="deploymentProjectHeading">
-                      <div class="card-block bg-dark table-responsive">
+                    <div class="card-body table-responsive">
+
                           <table class="table table-bordered table-dark" id="deploymentProjectTable">
                               <thead>
                                   <tr>
@@ -117,7 +118,6 @@
                               <tbody>
                               </tbody>
                           </table>
-                      </div>
                     </div>
                   </div>
             </div>
@@ -326,6 +326,27 @@ function viewDeployment(deploymentId)
     });
 }
 
+$("#deploymentsBox").on("click", "#editDeploymentProjects", function(){
+    deploymentProjectsObj.deploymentId = currentDeployment
+    deploymentProjectsObj.callback = function(){
+        ajaxRequest(globalUrls.deployments.projects.getAll, {deploymentId: deploymentProjectsObj.deploymentId}, (data)=>{
+            data = makeToastr(data)
+            let projectTrs = "";
+
+            $.each(data, (_, project)=>{
+                projectTrs += `<tr>
+                    <td>${project.hostAlias}</td>
+                    <td>${project.project}</td>
+                </tr>`
+            });
+
+
+            $("#deploymentProjectTable > tbody").empty().append(projectTrs);
+        });
+    }
+    $("#modal-deployments-projects").modal("show")
+});
+
 $("#deploymentsBox").on("click", "#startDeployment", function(){
     $.confirm({
         title: 'Start Deployment',
@@ -424,4 +445,5 @@ $("#deploymentsBox").on("click", "#deploy", function(){
 <?php
     require __DIR__ . "/../modals/deployments/createDeployment.php";
     require __DIR__ . "/../modals/deployments/deploy.php";
+    require __DIR__ . "/../modals/deployments/projects.php";
 ?>
