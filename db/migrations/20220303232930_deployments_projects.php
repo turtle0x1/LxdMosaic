@@ -35,19 +35,25 @@ final class DeploymentsProjects extends AbstractMigration
             ->create();
 
         if ($this->isMigratingUp()) {
-            $this->execute("INSERT INTO `Deployment_Projects`(
-                `DP_User_ID`,
-                `DP_Deployment_ID`,
-                `DP_Host_ID`,
-                `DP_Project`
-            ) SELECT
-                (SELECT `User_ID` FROM `Users` WHERE `User_Admin` = 1 ORDER BY `User_Date_Created` ASC LIMIT 1),
-                `Deployment_ID`,
-                (SELECT `Host_ID` FROM `Hosts` ORDER BY `Host_ID` ASC LIMIT 1),
-                'default'
-            FROM
-                `Deployments`
-            ");
+            $builder = $this->getQueryBuilder();
+            $hosts = $builder->select('*')->from('Hosts')->execute()->fetchAll();
+            $builder = $this->getQueryBuilder();
+            $users = $builder->select('*')->from('Users')->execute()->fetchAll();
+            if (count($hosts) > 0 && count($users) > 0) {
+                $this->execute("INSERT INTO `Deployment_Projects`(
+                    `DP_User_ID`,
+                    `DP_Deployment_ID`,
+                    `DP_Host_ID`,
+                    `DP_Project`
+                ) SELECT
+                    (SELECT `User_ID` FROM `Users` WHERE `User_Admin` = 1 ORDER BY `User_Date_Created` ASC LIMIT 1),
+                    `Deployment_ID`,
+                    (SELECT `Host_ID` FROM `Hosts` ORDER BY `Host_ID` ASC LIMIT 1),
+                    'default'
+                FROM
+                    `Deployments`
+                ");
+            }
         }
     }
 }
