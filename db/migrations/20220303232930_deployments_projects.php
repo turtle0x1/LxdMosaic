@@ -27,6 +27,11 @@ final class DeploymentsProjects extends AbstractMigration
             ->addForeignKey('DP_User_ID', 'Users', 'User_ID', ['delete'=> 'RESTRICT', 'update'=> 'RESTRICT'])
             ->addForeignKey('DP_Deployment_ID', 'Deployments', 'Deployment_ID', ['delete'=> 'CASCADE', 'update'=> 'RESTRICT'])
             ->addForeignKey('DP_Host_ID', 'Hosts', 'Host_ID', ['delete'=> 'CASCADE', 'update'=> 'RESTRICT'])
+            ->addIndex([
+                'DP_Deployment_ID',
+                'DP_Host_ID',
+                'DP_Project'
+            ], ['unique' => true,  'name' => 'unique_deployment_project'])
             ->create();
 
         if ($this->isMigratingUp()) {
