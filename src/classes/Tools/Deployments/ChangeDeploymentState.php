@@ -2,6 +2,7 @@
 
 namespace dhope0000\LXDClient\Tools\Deployments;
 
+use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
 use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInDeployment;
 use dhope0000\LXDClient\Constants\StateConstants;
@@ -10,17 +11,20 @@ use dhope0000\LXDClient\Tools\Deployments\Containers\SetStartTimes;
 class ChangeDeploymentState
 {
     public function __construct(
+        AuthoriseDeploymentAccess $authoriseDeploymentAccess,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
         GetContainersInDeployment $getContainersInDeployment,
         SetStartTimes $setStartTimes
     ) {
+        $this->authoriseDeploymentAccess = $authoriseDeploymentAccess;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
         $this->getContainersInDeployment = $getContainersInDeployment;
         $this->setStartTimes = $setStartTimes;
     }
 
-    public function change(int $deploymentId, string $state)
+    public function change(int $userId, int $deploymentId, string $state)
     {
+        $this->authoriseDeploymentAccess->authorise($userId, $deploymentId);
         $profiles = $this->hostHaveDeploymentProfiles->getAllProfilesInDeployment($deploymentId);
 
         $containers = $this->getContainersInDeployment->getFromProfile($profiles);
