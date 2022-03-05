@@ -40,6 +40,26 @@ class ValidatePermissions
         return true;
     }
 
+    public function canAccessHostProject(int $userId, int $hostId, string $project) :bool
+    {
+        $isAdmin = $this->isAdmin($userId);
+        if ($isAdmin) {
+            return true;
+        }
+
+        $allowedProjects = $this->fetchAllowedProjects->fetchForHost($userId, $hostId);
+
+        if (empty($allowedProjects)) {
+            return false;
+        }
+
+        if (!in_array($project, $allowedProjects)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function isAdminOrThrow(int $userId) :bool
     {
         if (!$this->isAdmin($userId)) {
