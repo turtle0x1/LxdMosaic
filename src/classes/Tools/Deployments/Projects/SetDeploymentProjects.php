@@ -2,21 +2,26 @@
 
 namespace dhope0000\LXDClient\Tools\Deployments\Projects;
 
+use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
+
 use dhope0000\LXDClient\Model\Deployments\Projects\FetchDeploymentProjects;
 use dhope0000\LXDClient\Model\Deployments\Projects\InsertDeploymentProject;
 use dhope0000\LXDClient\Model\Deployments\Projects\DeleteDeploymentProject;
 
 class SetDeploymentProjects
 {
+    private $authoriseDeploymentAccess;
     private $fetchDeploymentProjects;
     private $insertDeploymentProject;
     private $deleteDeploymentProject;
 
     public function __construct(
+        AuthoriseDeploymentAccess $authoriseDeploymentAccess,
         FetchDeploymentProjects $fetchDeploymentProjects,
         InsertDeploymentProject $insertDeploymentProject,
         DeleteDeploymentProject $deleteDeploymentProject
     ) {
+        $this->authoriseDeploymentAccess = $authoriseDeploymentAccess;
         $this->fetchDeploymentProjects = $fetchDeploymentProjects;
         $this->insertDeploymentProject = $insertDeploymentProject;
         $this->deleteDeploymentProject = $deleteDeploymentProject;
@@ -24,7 +29,8 @@ class SetDeploymentProjects
 
     public function set(int $userId, int $deploymentId, array $newProjectsLayout)
     {
-        // TODO VALIDATE THE USER HAS ACCESS TO THE DEPLOYMENT
+        $this->authoriseDeploymentAccess->authorise($userId, $deploymentId);
+
         $currentProjects = $this->fetchDeploymentProjects->fetchAll($deploymentId);
         $currentProjects = $this->groupProjects($currentProjects);
 
@@ -49,6 +55,7 @@ class SetDeploymentProjects
         // Any projects left over should be removed
         foreach ($currentProjects as $hostId => $projects) {
             foreach ($projects as $project) {
+                //TODO Dont remove project if the user cant see it
                 $this->deleteDeploymentProject->delete($project["id"]);
             }
         }
