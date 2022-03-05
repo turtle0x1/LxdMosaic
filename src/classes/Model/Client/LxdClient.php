@@ -67,12 +67,6 @@ class LxdClient
             ]
         ];
 
-        if (file_exists("/etc/centos-release")) {
-            $config["headers"] = [
-                'Connection' => 'close'
-            ];
-        }
-
         return $config;
     }
 
