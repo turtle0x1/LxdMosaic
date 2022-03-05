@@ -2,6 +2,7 @@
 
 namespace dhope0000\LXDClient\Tools\Deployments;
 
+use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
 use dhope0000\LXDClient\Model\Deployments\CloudConfig\FetchCloudConfigs;
 use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInDeployment;
@@ -12,6 +13,7 @@ use dhope0000\LXDClient\Model\Deployments\Projects\FetchDeploymentProjects;
 class GetDeployment
 {
     public function __construct(
+        AuthoriseDeploymentAccess $authoriseDeploymentAccess,
         FetchCloudConfigs $fetchCloudConfigs,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
         GetContainersInDeployment $getContainersInDeployment,
@@ -19,6 +21,7 @@ class GetDeployment
         GetContainersInformation $getContainersInformation,
         FetchDeploymentProjects $fetchDeploymentProjects
     ) {
+        $this->authoriseDeploymentAccess = $authoriseDeploymentAccess;
         $this->fetchCloudConfigs = $fetchCloudConfigs;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
         $this->getContainersInDeployment = $getContainersInDeployment;
@@ -27,8 +30,9 @@ class GetDeployment
         $this->fetchDeploymentProjects = $fetchDeploymentProjects;
     }
 
-    public function get(int $deploymentId)
+    public function get(int $userId, int $deploymentId)
     {
+        $this->authoriseDeploymentAccess->authorise($userId, $deploymentId);
         $output = [];
 
         $profiles = $this->hostHaveDeploymentProfiles->getAllProfilesInDeployment($deploymentId);

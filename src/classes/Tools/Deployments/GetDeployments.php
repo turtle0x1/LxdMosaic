@@ -28,13 +28,13 @@ class GetDeployments
             $deploymentList = $this->fetchDeployments->fetchAll();
         }
 
-        return $this->addDetails($deploymentList);
+        return $this->addDetails($userId, $deploymentList);
     }
 
-    private function addDetails($deploymentList)
+    private function addDetails($userId, $deploymentList)
     {
         foreach ($deploymentList as $index =>$deployment) {
-            $details = $this->getDeployment->get($deployment["id"]);
+            $details = $this->getDeployment->get($userId, $deployment["id"]);
             $containerDetails = $this->getContainerDetails($details["containers"]);
             $deploymentList[$index]["containerDetails"] = $containerDetails;
         }
