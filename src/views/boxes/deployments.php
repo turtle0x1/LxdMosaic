@@ -75,7 +75,7 @@
         </div> -->
         <div class="row">
             <div class="col-md-3">
-                  <div class="card bg-dark text-white">
+                  <div class="card bg-dark text-white mb-2">
                     <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
                         <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
@@ -95,6 +95,29 @@
                               </tbody>
                           </table>
                       </div>
+                    </div>
+                  </div>
+                  <div class="card bg-dark text-white">
+                    <div class="card-header">
+                      <h5>
+                        Projects
+                        <button class="btn btn-outline-primary btn-sm float-end" id="editDeploymentProjects">
+                            <i class="fas fa-wrench"></i>
+                        </button>
+                      </h5>
+                    </div>
+                    <div class="card-body table-responsive">
+
+                          <table class="table table-bordered table-dark" id="deploymentProjectTable">
+                              <thead>
+                                  <tr>
+                                      <th> Host </th>
+                                      <th> Project </th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                          </table>
                     </div>
                   </div>
             </div>
@@ -286,12 +309,43 @@ function viewDeployment(deploymentId)
             });
         }
 
+        let projectTrs = "";
 
+        $.each(data.projects, (_, project)=>{
+            projectTrs += `<tr>
+                <td>${project.hostAlias}</td>
+                <td>${project.project}</td>
+            </tr>`
+        });
+
+
+        $("#deploymentProjectTable > tbody").empty().append(projectTrs);
         $("#deploymentCloudConfigTable > tbody").empty().append(trs);
         $("#deploymentContainersList > tbody").empty().append(c);
         router.updatePageLinks();
     });
 }
+
+$("#deploymentsBox").on("click", "#editDeploymentProjects", function(){
+    deploymentProjectsObj.deploymentId = currentDeployment
+    deploymentProjectsObj.callback = function(){
+        ajaxRequest(globalUrls.deployments.projects.getAll, {deploymentId: deploymentProjectsObj.deploymentId}, (data)=>{
+            data = makeToastr(data)
+            let projectTrs = "";
+
+            $.each(data, (_, project)=>{
+                projectTrs += `<tr>
+                    <td>${project.hostAlias}</td>
+                    <td>${project.project}</td>
+                </tr>`
+            });
+
+
+            $("#deploymentProjectTable > tbody").empty().append(projectTrs);
+        });
+    }
+    $("#modal-deployments-projects").modal("show")
+});
 
 $("#deploymentsBox").on("click", "#startDeployment", function(){
     $.confirm({
@@ -391,4 +445,5 @@ $("#deploymentsBox").on("click", "#deploy", function(){
 <?php
     require __DIR__ . "/../modals/deployments/createDeployment.php";
     require __DIR__ . "/../modals/deployments/deploy.php";
+    require __DIR__ . "/../modals/deployments/projects.php";
 ?>

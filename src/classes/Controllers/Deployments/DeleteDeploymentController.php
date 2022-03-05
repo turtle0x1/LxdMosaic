@@ -14,9 +14,9 @@ class DeleteDeploymentController implements \dhope0000\LXDClient\Interfaces\Reco
     /**
      * @Route("", name="Delete Deployment")
      */
-    public function delete(int $deploymentId)
+    public function delete(int $userId, int $deploymentId)
     {
-        $this->deleteDeployment->delete($deploymentId);
+        $this->deleteDeployment->delete($userId, $deploymentId);
         return ["state"=>"success", "message"=>"Deleted deployment"];
     }
 }

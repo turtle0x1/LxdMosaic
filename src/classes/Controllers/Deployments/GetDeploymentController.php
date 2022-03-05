@@ -11,8 +11,8 @@ class GetDeploymentController
         $this->getDeployment = $getDeployment;
     }
 
-    public function get(int $deploymentId)
+    public function get(int $userId, int $deploymentId)
     {
-        return $this->getDeployment->get($deploymentId);
+        return $this->getDeployment->get($userId, $deploymentId);
     }
 }

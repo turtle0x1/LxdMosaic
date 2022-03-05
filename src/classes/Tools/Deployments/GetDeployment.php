@@ -2,30 +2,37 @@
 
 namespace dhope0000\LXDClient\Tools\Deployments;
 
+use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
 use dhope0000\LXDClient\Model\Deployments\CloudConfig\FetchCloudConfigs;
 use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInDeployment;
 use dhope0000\LXDClient\Model\Deployments\FetchDeployments;
 use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInformation;
+use dhope0000\LXDClient\Model\Deployments\Projects\FetchDeploymentProjects;
 
 class GetDeployment
 {
     public function __construct(
+        AuthoriseDeploymentAccess $authoriseDeploymentAccess,
         FetchCloudConfigs $fetchCloudConfigs,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
         GetContainersInDeployment $getContainersInDeployment,
         FetchDeployments $fetchDeployments,
-        GetContainersInformation $getContainersInformation
+        GetContainersInformation $getContainersInformation,
+        FetchDeploymentProjects $fetchDeploymentProjects
     ) {
+        $this->authoriseDeploymentAccess = $authoriseDeploymentAccess;
         $this->fetchCloudConfigs = $fetchCloudConfigs;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
         $this->getContainersInDeployment = $getContainersInDeployment;
         $this->fetchDeployments = $fetchDeployments;
         $this->getContainersInformation = $getContainersInformation;
+        $this->fetchDeploymentProjects = $fetchDeploymentProjects;
     }
 
-    public function get(int $deploymentId)
+    public function get(int $userId, int $deploymentId)
     {
+        $this->authoriseDeploymentAccess->authorise($userId, $deploymentId);
         $output = [];
 
         $profiles = $this->hostHaveDeploymentProfiles->getAllProfilesInDeployment($deploymentId);
@@ -39,6 +46,7 @@ class GetDeployment
         $output["cloudConfigs"] = $this->fetchCloudConfigs->getAll($deploymentId);
         $output["profiles"] = $profiles;
         $output["containers"] = $hostWithContainers;
+        $output["projects"] = $this->fetchDeploymentProjects->fetchAll($deploymentId);
         return $output;
     }
 
