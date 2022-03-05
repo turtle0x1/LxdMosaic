@@ -47,6 +47,7 @@ Changed
     Remove profile name from deploy cloud-config as its no longer used
     Disable some spice channels to improve VM Terminal experience (#463)
     Open terminal when opening an instance view
+    Restrict deployments by user project access (Admin can access all) (#466)
 
 Fixed
     First run doesn't toggle passwords properly (#390)
