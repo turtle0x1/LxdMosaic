@@ -24,7 +24,7 @@ apps:
     command: start-php-fpm
     daemon: simple
     restart-condition: always
-    plugs: [network, network-bind, removable-media]
+    plugs: [network, network-bind, removable-media, lxd]
 
   enable-https:
     command: enable-https
@@ -37,12 +37,12 @@ apps:
   lxdmosaic-node:
     command: bin/node $SNAP/lxdmosaicNode/node/events.js
     daemon: simple
-    plugs: [network, network-bind]
+    plugs: [network, network-bind, lxd]
 
   lxdmosaic-cron:
     command: bin/bash $SNAP/htdocs/runCrunz.sh
     daemon: oneshot
-    plugs: [network, network-bind]
+    plugs: [network, network-bind, lxd]
     timer: 00:00-24:00/1440
 
 hooks:
