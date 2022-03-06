@@ -12,6 +12,7 @@ Added
     Pretty frontend URLs (#179)
     User can change project analytics duration shown
     Filtering project analytics by host & those without any usage
+    Support for connecting to host over unix socket (#391)
 
 Changed
     Use correct width for terminal on init
