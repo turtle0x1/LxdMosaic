@@ -1,8 +1,11 @@
 var WebSocket = require('ws');
 
 module.exports = class VgaTerminals {
-  constructor(rp, hosts) {
-    this.rp = rp;
+
+
+  constructor(http, https, hosts) {
+    this.http = http;
+    this.https = https;
     this.hosts = hosts;
     this.instanceSockets = {};
   }
@@ -124,23 +127,58 @@ module.exports = class VgaTerminals {
   }
 
   getOpUrl(hostDetails, operation, secret){
-      return `wss://${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}${operation}/websocket?secret=${secret}`;
+      let proto = 'wss://';
+      let path = `${operation}/websocket?secret=${secret}`
+      let target = `${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}`
+      if(hostDetails.socketPath !== null){
+          proto = 'ws+unix://'
+          target = hostDetails.socketPath
+          path = ":" + path; // Unix sockets need ":" between file path and http path
+      }
+      return `${proto}${target}${path}`;
   }
 
   openLxdTerminal(hostDetails, project, instances) {
-      let execOptions = {
-        method: 'POST',
-        uri: `https://${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}/1.0/instances/${instances}/console?project=${project}`,
-        cert: hostDetails.cert,
-        key: hostDetails.key,
-        rejectUnauthorized: false,
-        json: true,
-        body: {
-            "width": 0,
-            "height": 0,
-            "type": "vga"
-        }
-      }
-      return this.rp(execOptions);
+      return new Promise((resolve, reject)=>{
+          let execOptions = {
+            method: 'POST',
+            path: `/1.0/instances/${instances}/console?project=${project}`,
+            cert: hostDetails.cert,
+            key: hostDetails.key,
+            rejectUnauthorized: false,
+            json: true
+          }
+          const callback = res => {
+            res.setEncoding('utf8');
+            let chunks = [];
+            res.on('data', function(data) {
+              chunks.push(data);
+            }).on('end', function() {
+              resolve(JSON.parse(chunks.join()))
+            }).on('error', function(data){
+                this.openLxdOperation(hostDetails, project, container, shell, cols, rows, depth + 1)
+            });
+          };
+
+          let data  = JSON.stringify({
+              "width": 0,
+              "height": 0,
+              "type": "vga"
+          })
+          console.log(data);
+
+          if(hostDetails.socketPath == null){
+              execOptions.host = hostDetails.hostWithOutProtoOrPort
+              execOptions.port = hostDetails.port
+              const clientRequest = this.https.request(execOptions, callback);
+              clientRequest.write(data)
+              clientRequest.end();
+          }else{
+              execOptions.socketPath = hostDetails.socketPath
+              const clientRequest = this.http.request(execOptions, callback);
+              clientRequest.write(data)
+              clientRequest.end();
+          }
+      })
     }
 };

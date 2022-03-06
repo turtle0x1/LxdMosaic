@@ -2,8 +2,9 @@ var WebSocket = require('ws');
 var internalUuidv1 = require('uuid/v1');
 
 module.exports = class Terminals {
-  constructor(rp) {
-    this.rp = rp;
+  constructor(http, https) {
+    this.http = http;
+    this.https = https;
     this.activeTerminals = {};
     this.internalUuidMap = {};
   }
@@ -141,8 +142,6 @@ module.exports = class Terminals {
 
       this.openLxdOperation(hostDetails, project, container, shell, cols, rows)
         .then(openResult => {
-          let url = `wss://${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}`;
-
           // If the server dies but there are active clients they will re-connect
           // with their process-id but it wont be in the internalUuidMap
           // so we need to re add it
@@ -160,21 +159,23 @@ module.exports = class Terminals {
             rejectUnauthorized: false,
           };
 
-          let lxdWs = new WebSocket(
-            url +
-              openResult.operation +
-              '/websocket?secret=' +
-              openResult.metadata.metadata.fds['0'],
-              wsoptions
-          );
+        let proto = 'wss://';
+        let target = `${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}`
 
-          let controlSocket = new WebSocket(
-            url +
-              openResult.operation +
-              '/websocket?secret=' +
-              openResult.metadata.metadata.fds['control'],
-              wsoptions
-          );
+        let path =  openResult.operation + '/websocket?secret=';
+        let termSocketPath =  path + openResult.metadata.metadata.fds['0'];
+        let controlSocketPath =  path + openResult.metadata.metadata.fds['control'];
+
+        if(hostDetails.socketPath !== null){
+            proto = 'ws+unix://'
+            target = hostDetails.socketPath
+            termSocketPath = ":" + termSocketPath; // Unix sockets need ":" between file path and http path
+            controlSocketPath = ":" + controlSocketPath; // Unix sockets need ":" between file path and http path
+        }
+
+        let url = `${proto}${target}`;
+        let lxdWs = new WebSocket(`${url}${termSocketPath}`, wsoptions);
+        let controlSocket = new WebSocket(`${url}${controlSocketPath}`, wsoptions);
 
           controlSocket.on("close", ()=>{
             //NOTE If you try to connect to a "bash" shell on an alpine instance
@@ -223,13 +224,29 @@ module.exports = class Terminals {
           }
           let execOptions = this.createExecOptions(hostDetails, project, container);
 
-          execOptions.body = this.getExecBody(shell, cols, rows);
+          let data = JSON.stringify(this.getExecBody(shell, cols, rows))
 
-          this.rp(execOptions)
-            .then(result => resolve(result))
-            .catch(e => {
-              this.openLxdOperation(hostDetails, project, container, shell, cols, rows, depth + 1)
-            })
+          const callback = res => {
+            res.setEncoding('utf8');
+            let chunks = [];
+            res.on('data', function(data) {
+              chunks.push(data);
+            }).on('end', function() {
+              resolve(JSON.parse(chunks.join()))
+            }).on('error', function(data){
+                this.openLxdOperation(hostDetails, project, container, shell, cols, rows, depth + 1)
+            });
+          };
+
+          if(hostDetails.socketPath == null){
+              const clientRequest = this.https.request(execOptions, callback);
+              clientRequest.write(data)
+              clientRequest.end();
+          }else{
+              const clientRequest = this.http.request(execOptions, callback);
+              clientRequest.write(data)
+              clientRequest.end();
+          }
       })
   }
 
@@ -256,13 +273,24 @@ module.exports = class Terminals {
 
   createExecOptions(hostDetails, project, container) {
     let url = hostDetails.supportsVms ? 'instances' : 'containers';
-    return {
-      method: 'POST',
-      uri: `https://${hostDetails.hostWithOutProtoOrPort}:${hostDetails.port}/1.0/${url}/${container}/exec?project=${project}`,
-      cert: hostDetails.cert,
-      key: hostDetails.key,
-      rejectUnauthorized: false,
-      json: true,
+
+    const options = {
+        method: 'POST',
+        path: `/1.0/${url}/${container}/exec?project=${project}`,
+        cert: hostDetails.cert,
+        key: hostDetails.key,
+        rejectUnauthorized: false,
+        json: true
     };
+
+    if(hostDetails.socketPath == null){
+        options.host = hostDetails.hostWithOutProtoOrPort
+        options.port = hostDetails.port
+    }else{
+        options.socketPath = hostDetails.socketPath
+    }
+
+    return options;
+
   }
 };

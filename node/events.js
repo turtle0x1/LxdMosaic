@@ -189,7 +189,6 @@ app.ws('/node/console', (socket, req) => {
          uuid = req.query.pid,
          shell = req.query.shell,
          project = req.query.project;
-
   terminals
     .createTerminalIfReq(socket, hosts.getHosts(), host, project, container, uuid, shell)
     .then(() => {
@@ -326,12 +325,12 @@ if(!usingSqllite){
     var con = new sqlite3.Database(process.env.DB_SQLITE);
 }
 
-hosts = new Hosts(con, fs, rp);
+hosts = new Hosts(con, fs, http, https);
 allowedProjects = new AllowedProjects(con);
 wsTokens = new WsTokens(con);
 hostOperations = new HostOperations(hosts);
-terminals = new Terminals(rp);
-vgaTerminals = new VgaTerminals(rp, hosts);
+terminals = new Terminals(http, https);
+vgaTerminals = new VgaTerminals(http, https, hosts);
 
 // Prevent races, just loads on init
 hosts.loadHosts()

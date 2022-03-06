@@ -90,8 +90,17 @@ module.exports = class HostOperations {
                     this.operationSockets[hostDetails.hostId] = {};
                }
 
+               let proto = 'wss://';
+               let path = `/1.0/events?type=operation&project=${project}`
+               let target = hostDetails.hostWithOutProto
+               if(hostDetails.socketPath !== null){
+                   proto = 'ws+unix://'
+                   target = hostDetails.socketPath
+                   path = ":" + path; // Unix sockets need ":" between file path and http path
+               }
+
                this.operationSockets[hostDetails.hostId][project] = new WebSocket(
-                 'wss://' + hostDetails.hostWithOutProto + `/1.0/events?type=operation&project=${project}`,
+                 proto + target + path,
                  wsoptions
                );
 
