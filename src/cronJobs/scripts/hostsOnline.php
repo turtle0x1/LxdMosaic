@@ -31,7 +31,8 @@ foreach ($allHosts as $host) {
     try {
         $pathToCert = $details->getCertificate($host["Host_ID"]);
         $pathToCert = $_ENV["LXD_CERTS_DIR"] . "$pathToCert";
-        $config = $clients->createConfigArray($pathToCert);
+        $socketPath = $details->getSocketPath($host["Host_ID"]);
+        $config = $clients->createConfigArray($pathToCert, $socketPath);
         $config["timeout"] = 2;
         $lxd = $clients->createNewClient($host["Host_Url_And_Port"], $config);
         $lxd->host->info();

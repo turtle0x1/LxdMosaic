@@ -32,19 +32,29 @@ class AddHosts
             throw new \Exception("Not allowed to add hosts", 1);
         }
 
+
+
         foreach ($hostsDetails as $hostsDetail) {
             $this->validateDetails($hostsDetail);
 
-            $hostName = $this->addSchemeAndDefaultPort($hostsDetail["name"]);
 
-            if (!empty($this->getDetails->fetchHostByUrl($hostName))) {
-                continue;
+            $socketPath = null;
+            if (isset($hostsDetail["socketPath"]) && !empty($hostsDetail["socketPath"])) {
+                $hostName = $hostsDetail["alias"];
+                $socketPath = $hostsDetail["socketPath"];
+            } else {
+                $hostName = $this->addSchemeAndDefaultPort($hostsDetail["name"]);
+
+                if (!empty($this->getDetails->fetchHostByUrl($hostName))) {
+                    continue;
+                }
             }
 
             try {
                 $result = $this->generateCert->createCertAndPushToServer(
                     $hostName,
-                    $hostsDetail["trustPassword"]
+                    $hostsDetail["trustPassword"],
+                    $socketPath
                 );
 
                 $alias = null;
@@ -53,7 +63,10 @@ class AddHosts
                     $alias = $hostsDetail["alias"];
                 }
 
-                $config = $this->lxdClient->createConfigArray(realpath($_ENV["LXD_CERTS_DIR"] . "/" . $result["shortPaths"]["combined"]));
+                $config = $this->lxdClient->createConfigArray(
+                    realpath($_ENV["LXD_CERTS_DIR"] . "/" . $result["shortPaths"]["combined"]),
+                    $socketPath
+                );
 
                 $client = $this->lxdClient->createNewClient($hostName, $config);
 
@@ -69,7 +82,8 @@ class AddHosts
                     $result["shortPaths"]["key"],
                     $result["shortPaths"]["cert"],
                     $result["shortPaths"]["combined"],
-                    $alias
+                    $alias,
+                    $socketPath
                 );
 
                 if ($inCluster) {
@@ -118,6 +132,13 @@ class AddHosts
 
     private function validateDetails($host)
     {
+        if (isset($host["socketPath"]) && !empty($host["socketPath"])) {
+            if (!isset($host["alias"]) || empty($host["alias"])) {
+                throw new \Exception("Missing Alias", 1);
+            }
+            return true;
+        }
+
         if (!isset($host["name"]) || empty($host["name"])) {
             throw new \Exception("Please provide name", 1);
         } elseif (!isset($host["trustPassword"]) || empty($host["trustPassword"])) {

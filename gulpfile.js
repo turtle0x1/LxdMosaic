@@ -98,7 +98,8 @@ function fontAwesomeCss(){
 function preAuthCss(){
     return src([
         "node_modules/bootstrap/dist/css/bootstrap.min.css",
-        "node_modules/toastr/build/toastr.min.css"
+        "node_modules/toastr/build/toastr.min.css",
+        "node_modules/jquery-confirm/dist/jquery-confirm.min.css"
     ])
     .pipe(cleanCSS({}))
     .pipe(concat("login.dist.css"))
@@ -110,7 +111,8 @@ function preAuthJs(){
             "node_modules/jquery/dist/jquery.min.js",
             "node_modules/@popperjs/core/dist/umd/popper.min.js",
             "node_modules/bootstrap/dist/js/bootstrap.min.js",
-            "node_modules/toastr/build/toastr.min.js"
+            "node_modules/toastr/build/toastr.min.js",
+            "node_modules/jquery-confirm/dist/jquery-confirm.min.js"
         ])
         .pipe(minify({
             noSource: true

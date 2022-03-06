@@ -119,10 +119,10 @@
 <div id="instanceHostsBox" class="settingsBox">
     <div class="card bg-dark text-white" id="recordedActionsCard">
       <div class="card-header bg-dark" role="tab" >
-        <h5>
-          <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#allHostsList" aria-expanded="true" aria-controls="allHostsList">
-            Hosts
-          </a>
+        <h5>Hosts
+            <button class="btn btn-outline-primary float-end" id="addHostBtn">
+                <i class="fas fa-plus"></i>
+            </button>
         </h5>
       </div>
       <div id="allHostsList" class="collapse in show" role="tabpanel">
@@ -738,6 +738,98 @@ function loadInstanceSettings(){
         $("#ldapSettingListTable").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
     });
 }
+
+$("#instanceHostsBox").on("click", "#addHostBtn", function(){
+    $.confirm({
+        icon: "fa fa-server",
+        title: "Add Host",
+        content: `<div class="mb-2">
+            <label>Alias</label>
+            <input class="form-control" name="alias" placeholder="PC, Laptop, Server-1"/>
+        </div>
+        <label class="mb-2">How Do You Want To Access The Host?</label>
+        <nav class="text-dark">
+          <div class="nav nav-pills mb-3" id="host-nav" role="tablist">
+            <button class="nav-link w-50 text-dark active" id="nav-network-tab" data-bs-toggle="tab" data-bs-target="#nav-network" type="button" role="tab" aria-controls="nav-network" aria-selected="true">Trust Password</button>
+            <button class="nav-link w-50 text-dark" id="nav-socket-tab" data-bs-toggle="tab" data-bs-target="#nav-socket" type="button" role="tab" aria-controls="nav-socket" aria-selected="false">Socket</button>
+          </div>
+        </nav>
+        <div class="tab-content" id="host-navContent">
+          <div class="tab-pane fade show active" id="nav-network" role="tabpanel" aria-labelledby="nav-network-tab">
+              <div class="mb-2">
+                  <label>IP Address / Hostname</label>
+                  <input class="form-control" name="name" placeholder=""/>
+              </div>
+              <div class="mb-2">
+                  <label>Trust Password</label>
+                  <input class="form-control" type="password" name="trustPassword" placeholder=""/>
+              </div>
+          </div>
+          <div class="tab-pane fade" id="nav-socket" role="tabpanel" aria-labelledby="nav-socket-tab">
+              <div class="mb-2">
+                  <label>Socket Path</label>
+                  <input class="form-control" name="socketPath" placeholder="/var/snap/lxd/common/lxd/unix.socket"/>
+              </div>
+          </div>
+        </div>
+        `,
+        buttons: {
+            cancel: {},
+            add: {
+                btnClass: "btn-primary",
+                action: function(){
+                    let alias = this.$content.find('input[name=alias]').val().trim();
+
+                    if(alias === ""){
+                        $.alert("Please enter an alias")
+                        return false;
+                    }
+
+                    let name = ""
+                    let trustPassword = ""
+                    let socketPath = ""
+
+                    let activeNav = this.$content.find("#host-nav .active").data().bsTarget
+
+                    if(activeNav === "#nav-socket"){
+                        socketPath = this.$content.find('input[name=socketPath]').val().trim();
+
+                        if(socketPath === ""){
+                            $.alert("Please enter socket path")
+                            return false;
+                        }
+                    }else{
+                        name = this.$content.find('input[name=name]').val().trim();
+                        trustPassword = this.$content.find('input[name=trustPassword]').val().trim();
+                        if(name === ""){
+                            $.alert("Please enter ip address / hostname")
+                            return false;
+                        }else if(trustPassword === ""){
+                            $.alert("Please enter trust password")
+                            return false;
+                        }
+                    }
+                    let x = {hostsDetails: [
+                        {
+                            name: name,
+                            trustPassword: trustPassword,
+                            socketPath: socketPath,
+                            alias: alias
+                        }
+                    ]}
+
+                    ajaxRequest("/api/Hosts/AddHostsController/add", x, function(data){
+                        let x = makeToastr(data);
+                        if(x.state == "error"){
+                            return false;
+                        }
+                        location.reload();
+                    });
+                }
+            }
+        }
+    });
+});
 
 $("#hostListTable").on("click", ".deleteHost", function(){
     let tr = $(this).parents("tr");

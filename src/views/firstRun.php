@@ -114,15 +114,6 @@ body {
 </html>
 <script>
 
-let hostTemplate = `<div class="input-group mb-3 serverGroup">
-    <span class="input-group-text serverLabel"></span>
-    <input placeholder="ip / hostname" name="connectDetails" class="form-control" autocomplete="new-password"/>
-    <input placeholder="trust password" name="trustPassword" type="password" class="form-control trustPasswordInput" autocomplete="new-password"/>
-    <input placeholder="Alias (Optional)" name="alias" type="text" class="form-control"/>
-    <button class="btn btn-sm btn-outline-secondary removeRow" type="button">
-        <i class="fas fa-trash"></i>
-    </button>
-</div>`;
 let userTemplate = `<div class="input-group mb-3 userGroup">
     <span class="input-group-text"><i class="fas fa-user"></i></span>
     <input placeholder="username" name="username" class="form-control" autocomplete="new-password"/>
@@ -131,10 +122,6 @@ let userTemplate = `<div class="input-group mb-3 userGroup">
         <i class="fas fa-trash"></i>
     </button>
 </div>`;
-
-$(function(){
-    $("#addServer").trigger("click");
-});
 
 function reLabelServers(){
     let i = 1;
@@ -167,7 +154,83 @@ $(document).on("click", ".removeRow", function(){
 });
 
 $(document).on("click", "#addServer", function(){
-    $("#serverGroups").append(hostTemplate);
+    $.confirm({
+        icon: "fa fa-server",
+        title: "Add Host",
+        content: `<div class="mb-2">
+            <label>Alias</label>
+            <input class="form-control" name="alias" placeholder="PC, Laptop, Server-1"/>
+        </div>
+        <label class="mb-2">How Do You Want To Access The Host?</label>
+        <nav>
+          <div class="nav nav-pills mb-3" id="host-nav" role="tablist">
+            <button class="nav-link w-50 active" id="nav-network-tab" data-bs-toggle="tab" data-bs-target="#nav-network" type="button" role="tab" aria-controls="nav-network" aria-selected="true">Trust Password</button>
+            <button class="nav-link w-50" id="nav-socket-tab" data-bs-toggle="tab" data-bs-target="#nav-socket" type="button" role="tab" aria-controls="nav-socket" aria-selected="false">Socket</button>
+          </div>
+        </nav>
+        <div class="tab-content" id="host-navContent">
+          <div class="tab-pane fade show active" id="nav-network" role="tabpanel" aria-labelledby="nav-network-tab">
+              <div class="mb-2">
+                  <label>IP Address / Hostname</label>
+                  <input class="form-control" name="name" placeholder=""/>
+              </div>
+              <div class="mb-2">
+                  <label>Trust Password</label>
+                  <input class="form-control" type="password" name="trustPassword" placeholder=""/>
+              </div>
+          </div>
+          <div class="tab-pane fade" id="nav-socket" role="tabpanel" aria-labelledby="nav-socket-tab">
+              <div class="mb-2">
+                  <label>Socket Path</label>
+                  <input class="form-control" name="socketPath" placeholder="/var/snap/lxd/common/lxd/unix.socket"/>
+              </div>
+          </div>
+        </div>
+        `,
+        buttons: {
+            cancel: {},
+            add: {
+                btnClass: "btn-primary",
+                action: function(){
+                    let alias = this.$content.find('input[name=alias]').val().trim();
+
+                    if(alias === ""){
+                        $.alert("Please enter an alias")
+                        return false;
+                    }
+
+                    let name = ""
+                    let trustPassword = ""
+                    let socketPath = ""
+
+                    let activeNav = this.$content.find("#host-nav .active").data().bsTarget
+
+                    if(activeNav === "#nav-socket"){
+                        socketPath = this.$content.find('input[name=socketPath]').val().trim();
+
+                        if(socketPath === ""){
+                            $.alert("Please enter socket path")
+                            return false;
+                        }
+                    }else{
+                        name = this.$content.find('input[name=name]').val().trim();
+                        trustPassword = this.$content.find('input[name=trustPassword]').val().trim();
+                        if(name === ""){
+                            $.alert("Please enter ip address / hostname")
+                            return false;
+                        }else if(trustPassword === ""){
+                            $.alert("Please enter trust password")
+                            return false;
+                        }
+                    }
+
+                    $("#serverGroups").append(`<div class="newHost" data-alias="${alias}" data-name="${name}" data-trust-password="${trustPassword}" data-socket-path="${socketPath}">
+                        <h4>${alias}</h4>
+                    </div>`)
+                }
+            }
+        }
+    });
     reLabelServers();
 });
 $(document).on("click", "#addUser", function(){
@@ -231,7 +294,7 @@ $(document).on("click", "#launchLxdMosaic", function(){
         return false;
     }
 
-    if($(".serverGroup").length == 0){
+    if($(".newHost").length == 0){
         $("#addServer").trigger("click");
         toastr["error"]("Please provide atleast one host");
         return false;
@@ -245,32 +308,8 @@ $(document).on("click", "#launchLxdMosaic", function(){
 
     failed = false;
 
-    $(".serverGroup").each(function(){
-
-        let connectDetailsInput = $(this).find("input[name=connectDetails]");
-        let trustPasswordInput = $(this).find("input[name=trustPassword]");
-        let connectDetailsInputVal = connectDetailsInput.val();
-        let trustPasswordInputVal = trustPasswordInput.val();
-        if(connectDetailsInputVal == ""){
-            failed = true;
-            connectDetailsInput.focus();
-            toastr["error"]("Please provide host details");
-            return false;
-        } else if(trustPasswordInputVal == ""){
-            failed = true;
-            trustPasswordInput.focus();
-            toastr["error"]("Please provide trust password");
-            return false;
-        }
-
-        let alias = $(this).find("input[name=alias]").val();
-        alias = alias == "" ? null : alias;
-
-        details.hosts.push({
-            name: connectDetailsInputVal,
-            trustPassword: trustPasswordInputVal,
-            alias: alias
-        });
+    $(".newHost").each(function(){
+        details.hosts.push($(this).data());
     });
 
     if(failed){
