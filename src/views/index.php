@@ -541,9 +541,6 @@ if ($haveServers->haveAny() !== true) {
                      <i class="fas fa-plus"></i>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton1">
-                      <?php if ($isAdmin === 1) : ?>
-                       <li><a id="addNewServer" class="dropdown-item"><i class="fas fa-server me-2"></i>Add Server</a></li>
-                      <?php endif; ?>
                     <li><a id="createContainer" class="dropdown-item"><i class="fas fa-box me-2"></i>Create Container</a></li>
                     <li><a id="createVm" class="dropdown-item"><i class="fas fa-vr-cardboard me-2"></i>Create VM</a></li>
 
@@ -826,11 +823,6 @@ $(function(){
     });
 });
 
-
-$(document).on("click", "#addNewServer", function(){
-    $("#modal-hosts-add").modal("show");
-});
-
 $(document).on("change", ".changeHostProject", function(){
     let selected = $(this).find(":selected");
 
@@ -854,7 +846,6 @@ $(document).on("click", ".openProjectAccess", function(){
 });
 </script>
 <?php
-    require_once __DIR__ . "/modals/hosts/addHosts.php";
     require_once __DIR__ . "/modals/images/import.php";
     require_once __DIR__ . "/modals/projects/projectAccess.php";
 ?>
