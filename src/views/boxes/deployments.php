@@ -8,7 +8,7 @@
                             <h4> Deployments </h4>
                             <div class="btn-toolbar float-end">
                               <div class="btn-group me-2">
-                                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Create Deployment" class="btn btn-primary" id="createDeployment">
+                                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Deployment" class="btn btn-primary" id="createDeployment">
                                       <i class="fas fa-plus"></i>
                                   </button>
                               </div>
@@ -32,16 +32,16 @@
                             <h4 id="deploymentName"></h4>
                             <div class="btn-toolbar float-end">
                               <div class="btn-group me-2">
-                                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Deploy Instances" class="btn btn-primary" id="deploy">
+                                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Deploy Instances" class="btn btn-primary" id="deploy">
                                       <i class="fas fa-plus"></i>
                                   </button>
-                                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Start Deployment" class="btn btn-success" id="startDeployment">
+                                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Start Deployment" class="btn btn-success" id="startDeployment">
                                       <i class="fas fa-play" style="color: white !important;"></i>
                                   </button>
-                                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Stop Deployment" class="btn btn-warning" id="stopDeployment">
+                                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Stop Deployment" class="btn btn-warning" id="stopDeployment">
                                       <i class="fas fa-stop"></i>
                                   </button>
-                                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete Deployment" class="btn btn-danger" id="deleteDeployment">
+                                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Deployment" class="btn btn-danger" id="deleteDeployment">
                                       <i class="fas fa-trash"></i>
                                   </button>
                               </div>
@@ -75,10 +75,10 @@
         </div> -->
         <div class="row">
             <div class="col-md-3">
-                  <div class="card bg-dark text-white">
+                  <div class="card bg-dark text-white mb-2">
                     <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
+                        <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
                         Cloud Configs
                         </a>
                       </h5>
@@ -95,6 +95,29 @@
                               </tbody>
                           </table>
                       </div>
+                    </div>
+                  </div>
+                  <div class="card bg-dark text-white">
+                    <div class="card-header">
+                      <h5>
+                        Projects
+                        <button class="btn btn-outline-primary btn-sm float-end" id="editDeploymentProjects">
+                            <i class="fas fa-wrench"></i>
+                        </button>
+                      </h5>
+                    </div>
+                    <div class="card-body table-responsive">
+
+                          <table class="table table-bordered table-dark" id="deploymentProjectTable">
+                              <thead>
+                                  <tr>
+                                      <th> Host </th>
+                                      <th> Project </th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                          </table>
                     </div>
                   </div>
             </div>
@@ -155,15 +178,15 @@ function loadDeploymentViewReq(req) {
 function loadDeploymentsSidebar(inputData = null){
     function _doResult(data){
         let hosts = `
-        <li class="nav-item deployments-overview">
-            <a class="nav-link ${$.isNumeric(currentDeployment) ? "" : "active"}" href="/deployments" data-navigo>
+        <li class="nav-item mb-2 mt-2 deployments-overview">
+            <a class="nav-link p-0 ${$.isNumeric(currentDeployment) ? "" : "active"}" href="/deployments" data-navigo>
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;
         $.each(data, (_, item)=>{
             let active = item.id == currentDeployment ? "active" : "";
-            hosts += `<li class="nav-item">
-                <a class="nav-link ${active}" href="/deployments/${item.id}" data-navigo>
+            hosts += `<li class="nav-item mb-2">
+                <a class="nav-link p-0 ${active}" href="/deployments/${item.id}" data-navigo>
                     <i class="nav-icon fas fa-space-shuttle"></i> ${item.name}
                 </a>
             </li>`
@@ -179,7 +202,6 @@ function loadDeploymentsSidebar(inputData = null){
         _doResult(inputData);
     }else{
         $("#sidebar-ul").find(".active").removeClass("active");
-        // console.log(cur);
         if($.isNumeric(currentDeployment)){
             $("#sidebar-ul").find(`.nav-link[href="/deployments/${currentDeployment}"]`).addClass("active")
         }else{
@@ -287,12 +309,43 @@ function viewDeployment(deploymentId)
             });
         }
 
+        let projectTrs = "";
 
+        $.each(data.projects, (_, project)=>{
+            projectTrs += `<tr>
+                <td>${project.hostAlias}</td>
+                <td>${project.project}</td>
+            </tr>`
+        });
+
+
+        $("#deploymentProjectTable > tbody").empty().append(projectTrs);
         $("#deploymentCloudConfigTable > tbody").empty().append(trs);
         $("#deploymentContainersList > tbody").empty().append(c);
         router.updatePageLinks();
     });
 }
+
+$("#deploymentsBox").on("click", "#editDeploymentProjects", function(){
+    deploymentProjectsObj.deploymentId = currentDeployment
+    deploymentProjectsObj.callback = function(){
+        ajaxRequest(globalUrls.deployments.projects.getAll, {deploymentId: deploymentProjectsObj.deploymentId}, (data)=>{
+            data = makeToastr(data)
+            let projectTrs = "";
+
+            $.each(data, (_, project)=>{
+                projectTrs += `<tr>
+                    <td>${project.hostAlias}</td>
+                    <td>${project.project}</td>
+                </tr>`
+            });
+
+
+            $("#deploymentProjectTable > tbody").empty().append(projectTrs);
+        });
+    }
+    $("#modal-deployments-projects").modal("show")
+});
 
 $("#deploymentsBox").on("click", "#startDeployment", function(){
     $.confirm({
@@ -392,4 +445,5 @@ $("#deploymentsBox").on("click", "#deploy", function(){
 <?php
     require __DIR__ . "/../modals/deployments/createDeployment.php";
     require __DIR__ . "/../modals/deployments/deploy.php";
+    require __DIR__ . "/../modals/deployments/projects.php";
 ?>

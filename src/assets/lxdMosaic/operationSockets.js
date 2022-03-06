@@ -2,7 +2,7 @@ var currentSockets = {};
 
 function makeOperationHtmlItem(id, icon, description, statusCode, timestamp)
 {
-    return `<div class="op" id='${id}' data-timestamp="${timestamp}" data-status='${statusCode}' ><span class='${icon} me-2'></span>${description}</div>`;
+    return `<div class="op row pt-2 pb-2" style="border-bottom: 1px dashed grey" id='${id}' data-timestamp="${timestamp}" data-status='${statusCode}' ><div class="col-md-1"><span style='display: flex; align-items: center; height: 100%' class='${icon} me-2'></span></div><div class="col-md-11">${description}</div></div>`;
 }
 
 // Called in a internval in the index.php page
@@ -23,9 +23,7 @@ function calcRunningOps()
 {
     let total = 0;
     $("#operationsList").find(".op").each(function(){
-        console.log(parseInt($(this).data("status")));
         if(parseInt($(this).data("status")) === 103){
-            console.log($(this));
             total++;
         }
     });
@@ -94,10 +92,8 @@ function openHostOperationSocket(hostId, project)
 
             if(hostList.length == 0){
                 $("#operationsList").append(`<div data-host='${host}' class="mt-2">
-                <div class='text-center'>
-                <h5><u>
-                ${msg.hostAlias}
-                </u></h5>
+                <div class=''>
+                <i class="fas fa-server me-2"></i><b>${msg.hostAlias}</b>
                 </div>
                 <div class='opList'></div></div>`
             );
@@ -111,6 +107,38 @@ function openHostOperationSocket(hostId, project)
                 hostOpList.find("div").last().remove();
             }
 
+            if(msg.metadata !== null &&  msg.metadata.hasOwnProperty("resources") && msg.metadata.resources !== null){
+                if(msg.metadata.resources.hasOwnProperty("instances")){
+                    if(msg.metadata.resources.hasOwnProperty("instances")){
+                        description += " on " + msg.metadata.resources.instances.map(instance => {
+                            return instance.replace("/1.0/instances/", "")
+                        }).join(",")
+                    }
+                }
+            }
+
+            if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("download_progress")){
+                description += " " + msg.metadata.metadata["download_progress"].replace("rootfs: ", "");
+            }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("fs_progress")){
+                description += " " + msg.metadata.metadata["fs_progress"];
+            }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("create_image_from_container_pack_progress")){
+                description += " " + msg.metadata.metadata["create_image_from_container_pack_progress"].replace("Image pack:", "")
+            }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("create_backup_progress")){
+                description += " " + msg.metadata.metadata["create_backup_progress"]
+            }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("command")){
+                description += ` <div><code class="text-info"><i class='fas fa-terminal me-2'></i>${msg.metadata.metadata.command.join(",")}</code></div>`;
+            }
+
+            if(msg.metadata !== null){
+                if(msg.metadata.hasOwnProperty("err") && msg.metadata.err != ""){
+                    description += ` <div><code class="text-danger"><i class='fas fa-exclamation me-2'></i>${msg.metadata.err}</code></div>`;
+                }
+                if(msg.metadata.hasOwnProperty("created_at")){
+                    description += ` <div><code style="color: #d63384"><i class='fas fa-calendar-alt me-2'></i>${moment(msg.metadata.created_at).format("llll")}</code></div>`;
+                }
+            }
+
+
             if(liItem.length > 0){
                 // Some sort of race condition exists with the closing of a terminal
                 // that emits a 103 / 105 status code after the 200 code so it causes
@@ -121,13 +149,6 @@ function openHostOperationSocket(hostId, project)
                     return;
                 }
 
-                if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("download_progress")){
-                    description += msg.metadata.metadata["download_progress"].replace("rootfs: ", "");
-                }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("fs_progress")){
-                    description += msg.metadata.metadata["fs_progress"];
-                }else if(msg.metadata !== null && msg.metadata.hasOwnProperty("metadata") && msg.metadata.metadata !== null && msg.metadata.metadata.hasOwnProperty("create_image_from_container_pack_progress")){
-                    description += msg.metadata.metadata["create_image_from_container_pack_progress"].replace("Image pack:", "")
-                }
                 liItem.replaceWith(makeOperationHtmlItem(id, icon, description, msg.metadata.status_code, timestamp))
 
                 if(msg.metadata.err !== ""){

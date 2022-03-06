@@ -6,7 +6,7 @@
                     <h4> Networks </h4>
                     <div class="btn-toolbar float-end">
                       <div class="btn-group me-2">
-                          <button data-toggle="tooltip" data-bs-placement="bottom" title="Create network" class="btn btn-primary" id="createNetwork">
+                          <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create network" class="btn btn-primary" id="createNetwork">
                               <i class="fas fa-plus"></i>
                           </button>
                       </div>
@@ -35,7 +35,7 @@
                   <div class="card bg-dark text-white">
                     <div class="card-header" role="tab" id="deploymentCloudConfigHeading">
                       <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
+                        <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#deploymentCloudConfig" aria-expanded="true" aria-controls="deploymentCloudConfig">
                         Config
                         </a>
                       </h5>
@@ -92,13 +92,13 @@ function makeNetworkHostSidebarHtml(hosthtml, host, id){
 
         if(host.hostOnline == true){
             hosthtml += `<button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#networks-host-${id}" aria-expanded="true">
-                <i class="fas fa-caret-down"></i>
+                <i class="fas fa-caret-left"></i>
             </button>`
         }else{
             return hosthtml;
         }
 
-    hosthtml += `<div class=" mt-2 bg-dark text-white show" id="networks-host-${id}">
+    hosthtml += `<div class=" mt-2 bg-dark text-white collapse" id="networks-host-${id}">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
 
     $.each(host.networks, function(_, network){
@@ -191,10 +191,13 @@ function loadNetworksView()
                         let percent = (used / hostTotals[key]) * 100
                         let formatedUsed = key.includes("packets") ? parseFloat(used).toLocaleString('en') : formatBytes(used)
                         let formatedTotal = key.includes("packets") ? parseFloat(hostTotals[key]).toLocaleString('en') : formatBytes(hostTotals[key])
-                        let formatedPercent = parseFloat(percent).toFixed(2);
-                        let instanceName = instance.length > 10 ? `<a href="#" class="text-primary" data-toggle="tooltip" data-bs-placement="bottom" title="${instance}">${instance.substring(0,10)}...</a>` : instance;
-                        hostHtml[key] += `<div class="text-truncate">${instanceName} - ${interfaceName} - ${formatedPercent}%</div> <div class="progress mb-2" data-toggle="tooltip" data-bs-placement="right" title="${formatedTotal}">
-                            <div class="progress-bar" role="progressbar" data-toggle="tooltip" title="${formatedUsed} - ${formatedPercent}%" style="width: ${percent}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        let formatedPercent = Math.round(parseFloat(percent).toFixed(2))
+                        let instanceName = instance.length > 10 ? `<a href="#" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="${instance}">${instance.substring(0,10)}...</a>` : instance;
+                        hostHtml[key] += `<div class="text-truncate">${instanceName} - ${interfaceName} - ${$.isNumeric(formatedPercent) ? formatedPercent : 0}%</div>
+                            <div class="progress bg-secondary" data-bs-toggle="tooltip" data-bs-placement="right" title="${formatedTotal}">
+                                <div class="progress-bar bg-primary" role="progressbar" data-bs-toggle="tooltip" data-bs-placement="left" title="${formatedUsed} - ${formatedPercent}%" style="width: ${percent}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-secondary" style="width: ${100 - percent}%">
+                            </div>
                         </div>`
                     });
 
@@ -223,7 +226,7 @@ function loadNetworksView()
             });
             html += `</div>`;
         });
-        $("#networksOverview").empty().append(html).find('[data-toggle="tooltip"]').tooltip();
+        $("#networksOverview").empty().append(html).find('[data-bs-toggle="tooltip"]').tooltip();
     });
 }
 
@@ -272,6 +275,7 @@ function viewNetwork(req)
 }
 
 $("#networkInfo").on("click", "#deleteNetwork", function(){
+    let sidebarItem =$("#sidebar-ul").find(`.nav-link[href="/networks/${hostIdOrAliasForUrl(currentNetwork.alias, currentNetwork.hostId)}/${currentNetwork.network}"]`);
     $.confirm({
         title: 'Delete Network?',
         content: 'This can\'t be undone?!',
@@ -289,6 +293,7 @@ $("#networkInfo").on("click", "#deleteNetwork", function(){
                         modal.close();
                         if(data.state == "success"){
                             currentNetwork = {};
+                            sidebarItem.remove()
                             loadNetworksView();
                         }
                     });

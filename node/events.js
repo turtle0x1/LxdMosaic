@@ -109,7 +109,7 @@ app.get('/', function(req, res) {
 app.post('/terminals', function(req, res) {
   // Create a identifier for the console, this should allow multiple consolses
   // per user
-  uuid = terminals.getInternalUuid(req.body.host, req.body.container, req.query.cols, req.query.rows);
+  let uuid = terminals.getInternalUuid(req.body.host, req.body.container, req.query.cols, req.query.rows);
   res.json({ processId: uuid });
   res.send();
 });
@@ -202,15 +202,15 @@ app.ws('/node/console', (socket, req) => {
             terminals.sendToTerminal(uuid, msg);
         }
       });
-
+      socket.on('error', () => {
+          console.log("socket error");
+      });
       socket.on('close', () => {
           terminals.close(uuid);
       });
-    })
-    .catch(() => {
-      // Prevent the browser re-trying (this maybe can be changed later)
-      socket.disconnect();
-    });
+  }).catch(e => {
+      socket.close();
+  });
 });
 
 app.ws('/node/cloudConfig', (socket, req) => {
@@ -228,7 +228,9 @@ app.ws('/node/cloudConfig', (socket, req) => {
          // Failed to run a generic cloud-config module
          new RegExp('.*cc_scripts_user.py\\[WARNING\\]: Failed to run module'),
          // Failed to run `packages` module
-         new RegExp(".*cc_package_update_upgrade_install.py\\[WARNING\\]")
+         new RegExp(".*cc_package_update_upgrade_install.py\\[WARNING\\]"),
+         // Failed to read cloud-config data properly
+         new RegExp(".*__init__.py\\[WARNING\\]: Unhandled non-multipart \\(text\\/x-not-multipart\\) userdata:.*")
      ];
 
      let messageCallbacks = {
@@ -238,7 +240,7 @@ app.ws('/node/cloudConfig', (socket, req) => {
         if(x[0].match("exit") || x[0] == "^C"){
             return ''
         }else if(data.match(".*until \\[ \\-f")){
-            return '\033[34m' + line + '\033[0m'
+            return '\033[34m' + data + '\033[0m'
         }
 
         let finishedLine = false;
@@ -271,6 +273,7 @@ app.ws('/node/cloudConfig', (socket, req) => {
             // `ctrl + c` out the `tail -f` command and exit
             terminals.sendToTerminal(uuid, `\x03`)
             terminals.close(uuid);
+            socket.close()
           }
       }
   }
@@ -290,9 +293,7 @@ app.ws('/node/cloudConfig', (socket, req) => {
       });
     })
     .catch((err) => {
-        console.log(err);
-      // Prevent the browser re-trying (this maybe can be changed later)
-      socket.disconnect();
+        socket.close();
     });
 });
 

@@ -20,13 +20,13 @@ apt-get install -y curl || exit $?
 
 if [ "$os_distribution" != "bullseye" ]
 then
-    curl -sL https://deb.nodesource.com/setup_10.x | bash -
+    curl -sL https://deb.nodesource.com/setup_14.x | bash -
     if [ $? -ne 0 ]; then exit 1; fi
 fi
 
 
 # Install Dependecies
-apt-get install -y apache2 php php-cli php-json php-mysql php-xml php-curl unzip zip git nodejs openssl || exit $?
+apt-get install -y apache2 php php-cli php-json php-mysql php-xml php-curl php-ldap php-mbstring unzip zip git nodejs openssl ssl-cert || exit $?
 apt-get install -y mysql-server || apt-get install -y default-mysql-server || exit $?
 apt-get install -y --no-install-recommends cron || exit $?
 

@@ -31,19 +31,8 @@ var _deployCloudConfigContents = `<div class="mb-2">
               <select class="form-select" id="deployCloudConfigHosts"></select>
           </div>
           <div class="mb-2">
-          <label
-              data-toggle="tooltip"
-              data-bs-placement="top"
-              title="When deploying this <code>cloud-config</code> as <code>user.user-data</code>, what profile name should we use?">
-              New Profile Name (Optional)
-              <i class="fas fa-question-circle"></i>
-          </label>
-              <input class="form-control" name="profileName" />
-          </div>
-
-          <div class="mb-2">
               <label
-                  data-toggle="tooltip"
+                  data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Only profiles on all hosts will appear!
                       <br/>
@@ -61,6 +50,13 @@ var _deployCloudConfigContents = `<div class="mb-2">
               </select>
           </div>
 `
+
+$("#modal-cloudConfig-deploy").on("hidden.bs.modal",  function(){
+    $("#modal-cloudConfig-deploy .modal-footer").empty().append(`
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="deployCloudConfig">Deploy</button>`
+    )
+});
 
 $("#modal-cloudConfig-deploy").on("change", "#deployCloudConfigHosts", function() {
     let hostId = $(this).find(":selected").parents("optgroup").attr("id")
@@ -88,7 +84,7 @@ $("#modal-cloudConfig-deploy").on("hidden.bs.modal", function(){
 $("#modal-cloudConfig-deploy").on("show.bs.modal", function(){
     $("#modal-cloudConfig-deploy .modal-dialog").removeClass("modal-xl")
     $("#modal-cloudConfig-deploy .modal-body").empty().append(_deployCloudConfigContents);
-    $("#modal-cloudConfig-deploy").find('[data-toggle="tooltip"]').tooltip({html: true})
+    $("#modal-cloudConfig-deploy").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
     if(!$.isNumeric(deployCloudConfigObj.cloudConfigId)){
         makeToastr(JSON.stringify({state: "error", message: "Developer fail - set <code>cloud-config</code> id to open this modal"}));
         return false;
@@ -98,19 +94,20 @@ $("#modal-cloudConfig-deploy").on("show.bs.modal", function(){
         data = $.parseJSON(data);
         let options = "<option value=''>Please select</option>";
         $.each(data.clusters, (clusterIndex, cluster)=>{
-            options += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            options += `<optgroup id="${clusterIndex}" label="Cluster ${clusterIndex}" style="color: red">`
             $.each(cluster.members, (_, host)=>{
                 if(host.hostOnline == 0){
                     return true;
                 }
                 options += `<optgroup id="${host.hostId}" label="${host.alias}">`
-                $.each(host.projects, (project, _)=>{
+                $.each(host.projects, (_, project)=>{
                     options += `<option value="${project}">${project}</option>`
                 });
                 options += `</optgroup>`
             })
+            options += `</optgroup>`
         });
-
+        options += `<optgroup label="Standalone Hosts">`
         $.each(data.standalone.members, (_, host)=>{
             if(host.hostOnline == 0){
                 return true;
@@ -121,6 +118,7 @@ $("#modal-cloudConfig-deploy").on("show.bs.modal", function(){
             });
             options += `</optgroup>`
         });
+        options += `</optgroup>`
         $("#deployCloudConfigHosts").empty().append(options);
     });
 
@@ -142,8 +140,6 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
 
     let containerNameInput = $("#modal-cloudConfig-deploy input[name=containerName]");
     let containerName = containerNameInput.val();
-    let profileNameInput = $("#modal-cloudConfig-deploy input[name=profileName]");
-    let profileName = profileNameInput.val();
 
     if(containerName == ""){
         makeToastr(JSON.stringify({state: "error", message: "Please provide instance name"}));

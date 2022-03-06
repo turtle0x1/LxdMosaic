@@ -2,6 +2,7 @@
 
 namespace dhope0000\LXDClient\Tools\Deployments;
 
+use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
 use dhope0000\LXDClient\Tools\CloudConfig\DeployToProfile;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
 use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
@@ -17,6 +18,7 @@ use dhope0000\LXDClient\Tools\Utilities\ValidateInstanceName;
 class Deploy
 {
     public function __construct(
+        AuthoriseDeploymentAccess $authoriseDeploymentAccess,
         DeployToProfile $deployToProfile,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
         CreateInstance $createInstance,
@@ -25,6 +27,7 @@ class Deploy
         StoreDeployedContainerNames $storeDeployedContainerNames,
         GetDetails $getDetails
     ) {
+        $this->authoriseDeploymentAccess = $authoriseDeploymentAccess;
         $this->deployToProfile = $deployToProfile;
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
         $this->createInstance = $createInstance;
@@ -34,8 +37,9 @@ class Deploy
         $this->getDetails = $getDetails;
     }
 
-    public function deploy(int $deploymentId, array $instances)
+    public function deploy(int $userId, int $deploymentId, array $instances)
     {
+        $this->authoriseDeploymentAccess->authorise($userId, $deploymentId);
         $this->validateInstances($instances);
 
         $revIds = array_column($instances, "revId");

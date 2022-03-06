@@ -6,83 +6,78 @@
         <h5 class="modal-title">Create Container</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <div class="row">
-            <div class="col-md-6">
-              <div class="mb-2">
-                  <label> Name </label>
-                  <input type="text" name="name" id="newContainerName" class="form-control"/>
+      <div class="modal-body" style="min-height: 60vh; max-height: 60vh;">
+          <div class="row">
+              <div class="col-md-3">
+                  <ul class="list-group" id="createContainerStepList">
+                      <li style="cursor: pointer" class="list-group-item active">1. Basic Details</li>
+                      <li style="cursor: pointer" class="list-group-item">2. GPU's (Optional)</li>
+                      <li style="cursor: pointer" class="list-group-item">3. Config (Optional)</li>
+                  </ul>
               </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-2">
-                    <label
-                        data-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Used to impose resource limits akin to different cloud provider limits!">Instance Type (Optional)
-                        <i class="fas fa-question-circle text-info"></i></label>
-                    <select id="newContainerInstanceType" class="form-select"></select>
+              <div class="col-md-9" style="max-height: 57vh; min-height: 57vh; overflow-y: scroll; border-left: 1px solid black;">
+                  <div class="createContainerBox" data-step="1">
+                    <div class="mb-2">
+                          <label> Name </label>
+                          <input type="text" name="name" id="newContainerName" class="form-control" autocomplete="off"/>
+                      </div>
+                    <div class="mb-2">
+                        <label> Hosts </label>
+                        <input id="newContainerHosts" type="text" class="form-control"/>
+                    </div>
+                    <div class="mb-2">
+                        <label>Profiles</label>
+                        <input id="newContainerProfiles" type="text" class="form-control"/>
+                        <div class="text-muted text-sm">
+                            <i class="fas fa-info-circle text-info me-2"></i>Only profiles on all hosts will appear! Dont forget one with a root disk.
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label>Image</label>
+                        <input id="newContainerImage" type="text" class="form-control"/>
+                        <div class="text-muted text-sm">
+                            <i class="fas fa-info-circle text-info me-2"></i>Only searchs your LXD servers, you may need to import an image from a remote first!
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label>Instance Type (Optional)</label>
+                        <select id="newContainerInstanceType" class="form-select"></select>
+                        <div class="text-muted text-sm">
+                            <i class="fas fa-info-circle text-info me-2"></i>Used to impose resource limits!
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-2">
-                    <label
-                        data-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Only profiles on all hosts will appear!
-                            <br/>
-                            <br/>
-                            Remember the default profile usually contains storage information & network details!">Profiles
-                        <i class="fas fa-question-circle text-info"></i>
+                <div class="createContainerBox" data-step="2" style="display: none;">
+                    <div class="mb-2">
+                        <label> GPU's (Optional) </label>
+                        <select class="form-select" id="newContainerGpus" multiple>
+                            <option value="">Please select a host </option>
+                        </select>
+                        <div id="gpuWarning" class="alert alert-danger">
+                            We currently only support adding gpu's when creating a contaienr
+                            on one host.
+                        </div>
+                    </div>
+                </div>
+                <div class="createContainerBox" data-step="3" style="display: none;">
+                    <label for="newContainerSettings">
+                        Settings(Optional)
+                        <button id="addNewContainerSetting" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
                     </label>
-                    <input id="newContainerProfiles" type="text" class="form-control"/>
+                    <table class="table table-borered" id="newContainerSettings">
+                        <thead>
+                            <tr>
+                                <th> Setting </th>
+                                <th> Value </th>
+                                <th> Remove </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-2">
-                    <label> Hosts To Create On </label>
-                    <input id="newContainerHosts" type="text" class="form-control"/>
-                </div>
-            </div>
-        </div>
-        <div class="mb-2">
-            <label>  </label>
-            <label data-toggle="tooltip"
-                data-bs-placement="top"
-                title="Currently an image needs to have been imported into atleast
-                one server on the network to use it here! Images will be downloaded
-                onto hosts that dont have the selected image.">Image
-                <i class="fas fa-question-circle text-info"></i>
-            </label>
-            <input id="newContainerImage" type="text" class="form-control"/>
-        </div>
-        <div class="mb-2">
-            <label> GPU's (Optional) </label>
-            <select class="form-select" id="newContainerGpus" multiple>
-                <option value="">Please select a host </option>
-            </select>
-            <div id="gpuWarning" class="alert alert-danger">
-                We currently only support adding gpu's when creating a contaienr
-                on one host.
-            </div>
-        </div>
-        <label for="newContainerSettings">
-            Settings(Optional)
-            <button id="addNewContainerSetting" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
-        </label>
-        <table class="table table-borered" id="newContainerSettings">
-            <thead>
-                <tr>
-                    <th> Setting </th>
-                    <th> Value </th>
-                    <th> Remove </th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+              </div>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -112,11 +107,23 @@
         }
     });
 
+    function changeCreateContainerBox(newIndex){
+        $(".createContainerBox").hide();
+        $(`.createContainerBox[data-step='${(newIndex)}']`).show();
+        $("#createContainerStepList").find(".active").removeClass("active");
+        $("#createContainerStepList").find(`li:eq(${newIndex - 1})`).addClass("active");
+    }
+
+    $("#modal-container-create").on("click", "#createContainerStepList li", function(){
+        changeCreateContainerBox($(this).index() + 1);
+    });
+
+
     $("#newContainerHosts").tokenInput(globalUrls.hosts.search.search, {
         queryParam: "hostSearch",
         propertyToSearch: "host",
         tokenValue: "hostId",
-        preventDuplicates: false,
+        preventDuplicates: true,
         theme: "facebook",
         onAdd: function(token){
             let h = $("#newContainerHosts").tokenInput("get")
@@ -129,8 +136,9 @@
                     data =  $.parseJSON(data);
                     //TODO if len == 0
                     let gpus = "";
-                    $.each(data, function(i, item){
-                        gpus += `<option value="${item.pci_address}">${item.product}</option>`
+                    $.each(data, function(i, gpu){
+                        let name = gpu.hasOwnProperty("nvidia") && gpu.nvidia.hasOwnProperty("model") ? gpu.nvidia.model : gpu.vendor + " - " + gpu.product
+                        gpus += `<option value="${gpu.pci_address}">${name}</option>`
                     });
                     $("#newContainerGpus").empty().append(gpus);
                 });
@@ -154,6 +162,7 @@
     var containerSettingRow = "";
 
     $("#modal-container-create").on("hide.bs.modal", function(){
+        changeCreateContainerBox(1)
         $("#newContainerName").val("");
         $("#newContainerGpus, #newContainerSettings > tbody").empty()
         $("#newContainerProfiles").tokenInput("clear");
@@ -162,9 +171,10 @@
     });
 
     $("#modal-container-create").on("shown.bs.modal", function(){
+        changeCreateContainerBox(1)
         ajaxRequest(globalUrls.instances.settings.getAllAvailableSettings, {}, function(data){
             data = $.parseJSON(data);
-            let selectHtml = "<select name='key' class='form-control containerSetting'><option value=''>Please Select</option>";
+            let selectHtml = "<select name='key' class='form-select containerSetting'><option value=''>Please Select</option>";
             $.each(data, function(i, item){
                 selectHtml += `<option value='${item.key}' data-value="${item.value}">${item.key}</option>`;
             });
@@ -227,6 +237,7 @@
         }
 
         if(image.length == 0 || !image[0].hasOwnProperty("details")){
+            changeCreateContainerBox(1)
             btn.html(defaultBtnText);
             $("#modal-container-create").find(".btn").attr("disabled", false);
             makeToastr(JSON.stringify({state: "error", message: "Please select image"}));
@@ -234,6 +245,7 @@
         }
 
         if(hosts.length == 0 || !image[0].hasOwnProperty("details")){
+            changeCreateContainerBox(1)
             btn.html(defaultBtnText);
             $("#modal-container-create").find(".btn").attr("disabled", false);
             makeToastr(JSON.stringify({state: "error", message: "Please select host/s"}));
@@ -255,13 +267,13 @@
             let key = keyInput.val();
             let value = valueInput.val();
             if(key == ""){
-                keyInput.focus();
-                invalid = true;
+                invalid = keyInput
                 message = "Please select setting";
+                return false;
             }else if(value == ""){
-                valueInput.focus();
-                invalid = true;
+                invalid = valueInput
                 message = "Please select value";
+                return false;
             }
 
             config[key] = value;
@@ -269,6 +281,8 @@
 
         if(invalid){
             btn.html(defaultBtnText);
+            changeCreateContainerBox(3)
+            invalid.focus()
             $("#modal-container-create").find(".btn").attr("disabled", false);
             makeToastr(JSON.stringify({state: "error", message: message}));
             return false;
@@ -293,7 +307,8 @@
                 return false;
             }
             $("#modal-container-create").modal("hide");
-            if(typeof io == "undefined"){
+            let currentLocation = router.getCurrentLocation().url;
+            if(currentLocation == "" || currentLocation.includes("/instance/")){
                 createDashboardSidebar();
             }
         });

@@ -19,7 +19,6 @@ class CreateInstance
         $this->fetchInstanceType = $fetchInstanceType;
     }
     /**
-     * TODO Combine the two profiles array
      * TODO Find out the $server param and send it to space
      */
     public function create(
@@ -29,15 +28,12 @@ class CreateInstance
         HostsCollection $hosts,
         array $imageDetails,
         $server = "",
-        array $profileNames = [],
         string $instanceType = "",
         array $gpus = null,
         array $config = [],
         bool $start = false
     ) {
         $this->hostsHaveInstance->ifHostInListHasContainerNameThrow($hosts, $name);
-
-        $profiles = $this->createProfileNameArray($profiles, $profileNames);
 
         $options = $this->createOptionsArray(
             $type,
@@ -136,10 +132,5 @@ class CreateInstance
         }
 
         return $x;
-    }
-
-    private function createProfileNameArray($profiles, $additionalProfiles)
-    {
-        return array_merge($profiles, $additionalProfiles);
     }
 }

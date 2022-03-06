@@ -62,7 +62,7 @@ var userDetails = {
       <!-- Main styles for this application-->
       <link href="/assets/dist/external.dist.css" rel="stylesheet">
 
-      <link rel="stylesheet" href="/assets/styles.css">
+      <link rel="stylesheet" href="/assets/lxdMosaic/styles.css">
 
       <base href="./">
       <meta charset="utf-8">
@@ -237,8 +237,8 @@ var userDetails = {
       </script>
 
       <div id="containerTerminal" class="instanceViewBox">
-          <div class="row">
-              <div class="col-md-12 text-center">
+          <div class="row m-0 p-0 h-100">
+              <div class="col-md-12 text-center h-100 bg-secondary m-0 p-0">
                   <div id="spice-area">
                       <div id="spice-screen" class="spice-screen">
                       </div>
@@ -246,6 +246,11 @@ var userDetails = {
               </div>
           </div>
       </div>
+      <style>
+        #spice-screen {
+            margin: 0px !important;
+        }
+      </style>
 
       <script>
       $(function(){

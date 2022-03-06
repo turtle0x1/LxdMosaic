@@ -15,9 +15,9 @@ class StartDeploymentController implements \dhope0000\LXDClient\Interfaces\Recor
     /**
      * @Route("", name="Start Deployment")
      */
-    public function start(int $deploymentId)
+    public function start(int $userId, int $deploymentId)
     {
-        $this->changeDeploymentState->change($deploymentId, StateConstants::START);
+        $this->changeDeploymentState->change($userId, $deploymentId, StateConstants::START);
         return ["state"=>"success", "message"=>"Deployment started"];
     }
 }

@@ -35,7 +35,7 @@ class GetInstance
         $hostId = $host->getHostId();
         $deploymentDetails = $this->fetchDeployments->byHostContainer($hostId, $instance);
         $hostSupportsBackups = $this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP);
-        $haveMetrics = (bool) count($this->fetchMetrics->fetchAllTypes($host->getHostId(), $instance));
+        $haveMetrics = $this->fetchMetrics->instanceHasMetrics($host->getHostId(), $host->getProject(), $instance);
 
         $totalMemory = $host->resources->info()["memory"]["total"];
         $memorySource = "Available On Host";

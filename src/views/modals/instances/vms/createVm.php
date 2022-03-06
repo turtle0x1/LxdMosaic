@@ -25,16 +25,11 @@
                       <input class="form-control" name="username" />
                   </div>
                   <div class="mb-2">
-                      <label
-                          data-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Currently an image needs to have been imported into atleast
-                          one server on the network to use it here! Images will be downloaded
-                          onto hosts that dont have the selected image.">
-                          <b>Image</b>
-                          <i class="fas fa-question-circle"></i>
-                      </label>
+                      <b>Image</b>
                       <input id="newVirtualMachineImage" type="text" class="form-control"/>
+                      <div class="text-muted text-sm">
+                          <i class="fas fa-info-circle text-info me-2"></i>Only searchs your LXD servers, you may need to import an image from a remote first!
+                      </div>
                   </div>
                   <div class="mb-2">
                       <b> Hosts </b>
@@ -110,7 +105,7 @@ $("#newVmHosts").tokenInput(globalUrls.hosts.search.search, {
 $("#modal-vms-create").on("show.bs.modal", function(){
     ajaxRequest(globalUrls.instances.settings.getAllAvailableSettings, {}, function(data){
         data = $.parseJSON(data);
-        let selectHtml = "<select name='key' class='form-control containerSetting'><option value=''>Please Select</option>";
+        let selectHtml = "<select name='key' class='form-select containerSetting'><option value=''>Please Select</option>";
         $.each(data, function(i, item){
             selectHtml += `<option value='${item.key}' data-value="${item.value}">${item.key}</option>`;
         });
@@ -119,8 +114,7 @@ $("#modal-vms-create").on("show.bs.modal", function(){
             <td>${selectHtml}</td>
             <td><input name="value" class='form-control'/></td>
             <td><button class="removeSetting btn btn-danger"><i class='fas fa-trash'></i></button></td>
-            </tr>`
-
+        </tr>`
     });
 });
 

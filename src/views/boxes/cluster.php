@@ -47,7 +47,24 @@
     </div>
 </div>
 <script>
-function loadClusterView(clusterId){
+
+var currentCluster = {
+    clusterId: null
+};
+
+function loadClusterView(req){
+    let clusterId = req.data.clusterId;
+    currentCluster.clusterId = clusterId;
+    createDashboardSidebar()
+    if(!userDetails.isAdmin){
+        router.navigate("/404")
+        return false;
+    }
+    let x = $(this).data();
+    $("#sidebar-ul").find(".text-info").removeClass("text-info");
+    $("#sidebar-ul").find(".active").removeClass("active");
+    $(this).addClass("text-info");
+
     $(".boxSlide, #clusterContents").hide();
     $("#clusterBox, #clusterOverview").show();
 
@@ -84,11 +101,11 @@ function loadClusterView(clusterId){
             <h4 class='float-left'>Memory</h4>
             <br/>
             <br/>
-            <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(cluster.stats.totalMemory)}" class="progress mt-2">
-                <div data-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(cluster.stats.usedMemory)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${cluster.stats.usedMemory}" aria-valuemin="0" aria-valuemax="${(cluster.stats.totalMemory - cluster.stats.usedMemory)}"></div>
+            <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(cluster.stats.totalMemory)}" class="progress mt-2">
+                <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(cluster.stats.usedMemory)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${cluster.stats.usedMemory}" aria-valuemin="0" aria-valuemax="${(cluster.stats.totalMemory - cluster.stats.usedMemory)}"></div>
             </div>
         `);
-        $("#clusterMemoryGraph").find('[data-toggle="tooltip"]').tooltip({html: true})
+        $("#clusterMemoryGraph").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
     });
 }
 </script>

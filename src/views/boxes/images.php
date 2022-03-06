@@ -51,13 +51,14 @@
 
 
                 <div class="mt-1" id="remoteImagesTable">
-                    <div class="border-top pt-2 text-info" id="imagesInstructions">
-                        <i class="fas fa-info-circle me-2"></i>Select some images then click import!
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2" id="imagesInstructions">
+                        <div><i class="fas fa-info-circle text-info me-2"></i>Select some images then click import!</div>
+                        <div>
+                            <button class="btn btn-outline-secondary float-end" id="importImagesBtn"> Import </button>
+                        </div>
                     </div>
-                    <div>
-                        <button class="btn btn-outline-secondary float-end" id="importImagesBtn"> Import </button>
-                    </div>
-                    <div id="remoteImageList">
+
+                    <div id="remoteImageList" class="row">
                     </div>
                 </div>
             </div>
@@ -71,10 +72,10 @@
             </u></h4>
             <div class="btn-toolbar float-end">
               <div class="btn-group me-2">
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Update Image" class="btn btn-sm btn-info" id="updateImageProperties">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Update Image" class="btn btn-sm btn-info" id="updateImageProperties">
                       <i class="fas fa-pencil-alt"></i>
                   </button>
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete Image" class="btn btn-sm btn-danger" id="deleteImage">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Image" class="btn btn-sm btn-danger" id="deleteImage">
                       <i class="fas fa-trash"></i>
                   </button>
               </div>
@@ -167,13 +168,13 @@
 
         if(host.hostOnline == true){
             hosthtml += `<button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#images-host-${id}" aria-expanded="true">
-                <i class="fas fa-caret-down"></i>
+                <i class="fas fa-caret-left"></i>
             </button>`
         }else{
             return hosthtml;
         }
 
-        hosthtml += `<div class="mt-2 bg-dark text-white show" id="images-host-${id}">
+        hosthtml += `<div class="mt-2 bg-dark text-white collapse" id="images-host-${id}">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 " style="display: inline;">`
 
         if(host.images.length == 0){
@@ -184,12 +185,19 @@
 
                 let imageName = makeImageName(image);
 
-                let icon = image.hasOwnProperty("type") && image.type == "container" ? "box" : "vr-cardboard";
+                let icon = image.hasOwnProperty("type") && image.type == "virtual-machine" ? "vr-cardboard" : "box";
+
+                let variantIcon = "";
+                if(image.properties.hasOwnProperty("variant") && image.properties.variant == "cloud"){
+                    variantIcon = `<i class="fas fa-xs fa-cloud"></i>`
+                }else if(image.properties.hasOwnProperty("variant") && image.properties.variant == "desktop"){
+                    variantIcon = `<i class="fas fa-xs fa-desktop"></i>`
+                }
 
                 hosthtml += `<li class="nav-item">
                   <a class="nav-link ${active}" href="/images/${hostIdOrAliasForUrl(host.alias, host.hostId)}/${image.fingerprint}" data-navigo>
                     <i class="nav-icon fa fa-${icon}"></i>
-                    ${imageName}
+                    ${imageName} ${variantIcon}
                   </a>
                 </li>`;
             });
@@ -275,6 +283,7 @@
     });
 
     $(document).on("click", "#deleteImage", function(){
+        let sidebarItem =$("#sidebar-ul").find(`.nav-link[href="/images/${hostIdOrAliasForUrl(currentImageDetails.alias, currentImageDetails.hostId)}/${currentImageDetails.network}"]`);
         let x = {
             imageData: [currentImageDetails]
         };
@@ -284,7 +293,7 @@
             if(data.state == "error"){
                 return false;
             }
-
+            sidebarItem.remove();
             loadImageOverviewAfter();
             currentImageDetails = {
                 hostId: null,
@@ -333,14 +342,15 @@
             }
 
             let html = "";
+            let cols = Object.keys(x).length == 1 ? 12 : 4;
             $.each(x, (os, variants)=>{
-                html += `<div class="mt-3 osGroup"><h5 class="d-flex pb-1">${os}</h5>`;
+                html += `<div class="col-md-${cols} border p-2 ps-3 osGroup"><h5 class="d-flex pb-1">${os}</h5>`;
                 $.each(variants, (variant, versions)=>{
                     if(Object.values(versions).length > 0){
                         html += `<div class="d-block mb-2 mt-2"><i>${variant}</i></div>`
                         $.each(versions, (version, fingerPrint)=>{
                             html += `<div class="d-inline me-4 mb-3 mt-3">
-                                <span class="badge bg-secondary imageForImport" data-fingerprint="${fingerPrint}" data-alias="${version}" data-os="${os}">
+                                <span class="badge bg-secondary imageForImport" data-variant="${variant}" data-fingerprint="${fingerPrint}" data-alias="${version}" data-os="${os}">
                                 <i class="fas fa-image"></i>
                                 ${version}
                                 </span>
@@ -557,9 +567,9 @@
                                         <b><u class='alias-name'>${name}</u></b>
                                         <div class="btn-toolbar">
                                           <div class="btn-group me-2">
-                                              <button data-toggle="tooltip" data-bs-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
-                                              <button data-toggle="tooltip" data-bs-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
-                                              <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>
+                                              <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
+                                              <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
+                                              <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>
                                           </div>
                                         </div>
                                     </div>
@@ -628,9 +638,9 @@
                                 <b><u class='alias-name'>${alias.name}</u></b>
                                 <div class="btn-toolbar">
                                   <div class="btn-group me-2">
-                                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
-                                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
-                                      <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>
+                                      <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Rename alias" class='renameAlias btn btn-outline-primary btn-sm'><i class='fas fa-pencil-alt'></i></button>
+                                      <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Update description" class='updateAliasDescription btn btn-outline-info btn-sm'><i class='fas fa-edit'></i></button>
+                                      <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete alias" class='deleteAlias btn btn-outline-danger btn-sm'><i class='fas fa-trash'></i></button>
                                   </div>
                                 </div>
                             </div>
@@ -645,7 +655,7 @@
             }
 
             $("#imageAliasesCardBody").empty().append(trs);
-            $("#imageAliasesCardBody").find('[data-toggle="tooltip"]').tooltip({html: true});
+            $("#imageAliasesCardBody").find('[data-bs-toggle="tooltip"]').tooltip({html: true});
 
             trs = "";
 

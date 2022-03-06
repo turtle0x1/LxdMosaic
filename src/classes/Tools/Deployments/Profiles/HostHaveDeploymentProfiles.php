@@ -28,6 +28,9 @@ class HostHaveDeploymentProfiles
         $allProfiles = $this->getAllProfiles->getAllProfiles(true);
         $output = [];
         foreach ($allProfiles["standalone"]["members"] as $host) {
+            if (!$host->hostOnline()) {
+                continue;
+            }
             $deployProfiles = [];
             foreach ($host->getCustomProp("profiles") as $profile) {
                 if ($profile["name"] == "default") {

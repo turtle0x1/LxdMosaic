@@ -20,25 +20,8 @@ final class GetDashboardTest extends TestCase
             true
         );
         // Assert the top level of the response hasnt changed
-        $exepctedTopKeys = ["userDashboards", "clustersAndHosts", "stats", "projectGraphData"];
+        $exepctedTopKeys = ["userDashboards", "projectsUsageGraphData"];
 
         $this->assertEquals($exepctedTopKeys, array_keys($result));
-        // Assert hosts are being output with the expected keys from LXDMosaic
-        // (if we wanted to check LXD we would need to check array keys for
-        //  the resources array in the host)
-        $hostKeys = array_keys(json_decode(json_encode($result["clustersAndHosts"]["standalone"]["members"][0]), true));
-
-        $expectedKeys = [
-            "hostId",
-            "alias",
-            "urlAndPort",
-            "hostOnline",
-            "supportsLoadAvgs",
-            "projects",
-            "currentProject",
-            "resources"
-        ];
-
-        $this->assertEquals($expectedKeys, $hostKeys);
     }
 }

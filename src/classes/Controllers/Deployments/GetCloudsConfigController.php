@@ -11,8 +11,8 @@ class GetCloudsConfigController
         $this->getCloudConfigs = $getCloudConfigs;
     }
 
-    public function get(int $deploymentId)
+    public function get(int $userId, int $deploymentId)
     {
-        return $this->getCloudConfigs->getAll($deploymentId);
+        return $this->getCloudConfigs->getAll($userId, $deploymentId);
     }
 }

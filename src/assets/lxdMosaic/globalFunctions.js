@@ -155,24 +155,6 @@ function changeActiveNav(newActiveSelector)
     $("#mainNav").find(newActiveSelector).addClass("active");
 }
 
-function makeNodeMissingPopup()
-{
-    $.confirm({
-        title: "Node server isn't reachable!",
-        content: `You can try <code> restarting the container</code> or <code>pm2 restart all</code>
-            <br/>
-            <br/>
-            Without the node server you won't be able to get operation updates or
-            connect to container consoles`,
-        theme: 'dark',
-        buttons: {
-            ok: {
-                btnClass: "btn btn-danger"
-            }
-        }
-    });
-}
-
 var hostStatusChangeConfirm = null;
 
 function makeServerChangePopup(status, host)

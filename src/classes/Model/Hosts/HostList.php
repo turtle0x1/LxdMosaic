@@ -30,7 +30,7 @@ class HostList
                 WHERE
                     `Host_ID` IN ($qMarks)
                 ORDER BY
-                    `Host_ID` DESC
+                    `Host_Alias`, `Host_Url_And_Port` ASC
                 ";
         $do = $this->database->prepare($sql);
         $do->execute($hostIds);
@@ -52,7 +52,7 @@ class HostList
                 FROM
                     `Hosts`
                 ORDER BY
-                    `Host_ID` DESC
+                    `Host_Alias`, `Host_Url_And_Port` ASC
                 ";
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
@@ -74,7 +74,7 @@ class HostList
                 WHERE
                     `Host_Online` = 1
                 ORDER BY
-                    `Host_ID` ASC
+                    `Host_Alias`, `Host_Url_And_Port` ASC
                 ";
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_CLASS, "dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]);
@@ -101,7 +101,7 @@ class HostList
                 WHERE
                     `Host_ID` NOT IN ($qMarks)
                 ORDER BY
-                    `Host_ID` DESC
+                    `Host_Alias`, `Host_Url_And_Port` ASC
                 ";
         $do = $this->database->prepare($sql);
         $do->execute($hostIds);
@@ -122,7 +122,7 @@ class HostList
                 FROM
                     `Hosts`
                 ORDER BY
-                    `Host_ID` DESC
+                    `Host_Alias`, `Host_Url_And_Port` ASC
                 ";
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_CLASS, "dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]);

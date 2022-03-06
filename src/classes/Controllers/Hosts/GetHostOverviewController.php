@@ -11,8 +11,8 @@ class GetHostOverviewController
         $this->getHostOverview = $getHostOverview;
     }
 
-    public function get(Host $host)
+    public function get(int $userId, Host $host)
     {
-        return $this->getHostOverview->get($host);
+        return $this->getHostOverview->get($userId, $host);
     }
 }

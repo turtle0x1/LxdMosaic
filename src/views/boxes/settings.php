@@ -15,7 +15,7 @@
               <div class="card bg-dark text-white">
                   <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
                       <h5>
-                        <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+                        <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
                           General Settings
                         </a>
                         </h5>
@@ -50,7 +50,7 @@
           <div class="card bg-dark text-white">
               <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center" role="tab" >
                   <h5>
-                    <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
+                    <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#currentSettingsTable" aria-expanded="true" aria-controls="currentSettingsTable">
                       LDAP Settings
                     </a>
                     </h5>
@@ -90,7 +90,7 @@
     <div class="card bg-dark text-white" id="recordedActionsCard">
       <div class="card-header bg-dark" role="tab" >
         <h5>
-          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#lastRecordedActions" aria-expanded="true" aria-controls="lastRecordedActions">
+          <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#lastRecordedActions" aria-expanded="true" aria-controls="lastRecordedActions">
             Last <span id="actionCount"></span> Recorded Actions
           </a>
           <button class="btn btn-primary float-end" id="loadMoreRecordedActions">
@@ -120,7 +120,7 @@
     <div class="card bg-dark text-white" id="recordedActionsCard">
       <div class="card-header bg-dark" role="tab" >
         <h5>
-          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#allHostsList" aria-expanded="true" aria-controls="allHostsList">
+          <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#allHostsList" aria-expanded="true" aria-controls="allHostsList">
             Hosts
           </a>
         </h5>
@@ -149,7 +149,7 @@
             <div class="card bg-dark text-white" id="usersCard">
               <div class="card-header" role="tab" >
                 <h5>
-                  <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
+                  <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
                     Users
                   </a>
                   <button class="btn btn-success float-end" id="addUser">
@@ -335,38 +335,38 @@ function putAdminSidebar(selected) {
         $("#saveSettings, #saveLdapSettings, #addUser, #recordedActionsCard, #usersCard").remove();
     }else{
         sidebar += `
-        <li class="nav-item instance-settings">
-            <a class="nav-link ${selected === `${adminSettingUrls.settings}` ? "active" : null }" href="${adminSettingUrls.settings}" data-navigo>
+        <li class="nav-item mt-2 instance-settings">
+            <a class="nav-link p-0 ${selected === `${adminSettingUrls.settings}` ? "active" : null }" href="${adminSettingUrls.settings}" data-navigo>
                 <i class="fas fa-sliders-h me-2"></i>LXDMosaic Settings
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link ${selected === `${adminSettingUrls.hosts}` ? "active" : null } " href="${adminSettingUrls.hosts}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0 ${selected === `${adminSettingUrls.hosts}` ? "active" : null } " href="${adminSettingUrls.hosts}" data-navigo>
                 <i class="fas fa-server me-2"></i>Hosts
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link ${selected === `${adminSettingUrls.instanceTypes}` ? "active" : null }" href="${adminSettingUrls.instanceTypes}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0 ${selected === `${adminSettingUrls.instanceTypes}` ? "active" : null }" href="${adminSettingUrls.instanceTypes}" data-navigo>
                 <i class="fas fa-cloud me-2"></i>Instance Types
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link  ${selected === `${adminSettingUrls.users}` ? "active" : null }" href="${adminSettingUrls.users}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0  ${selected === `${adminSettingUrls.users}` ? "active" : null }" href="${adminSettingUrls.users}" data-navigo>
                 <i class="fas fa-users-cog me-2"></i>Users
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link  ${selected === `${adminSettingUrls.userAccessControl}` ? "active" : null }" href="${adminSettingUrls.userAccessControl}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0  ${selected === `${adminSettingUrls.userAccessControl}` ? "active" : null }" href="${adminSettingUrls.userAccessControl}" data-navigo>
                 <i class="fas fa-users-cog me-2"></i>User Project Access
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link  ${selected === `${adminSettingUrls.history}` ? "active" : null }" href="${adminSettingUrls.history}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0  ${selected === `${adminSettingUrls.history}` ? "active" : null }" href="${adminSettingUrls.history}" data-navigo>
                 <i class="fas fa-history me-2"></i>Recorded Actions
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link  ${selected === `${adminSettingUrls.retiredData}` ? "active" : null }" href="${adminSettingUrls.retiredData}" data-navigo>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0  ${selected === `${adminSettingUrls.retiredData}` ? "active" : null }" href="${adminSettingUrls.retiredData}" data-navigo>
                 <i class="fas fa-eraser me-2"></i>Retired Data
             </a>
         </li>`
@@ -414,43 +414,48 @@ function makeHostUserOverview(html, host){
                 <i class="fas fa-server"></i> ${host.alias}
             </h4>
         </div>
-        <div class="card-body">
+        `;
+
+    if(host.hostOnline === "1"){
+        html += `<div class="card-body">
             <table class="table table-bordered table-dark">
-                <thead>
-                    <tr>
-                        <th>Project</th>
-                        <th>Users</th>
-                        <th>Manage</th>
+            <thead>
+                <tr>
+                    <th style="width: 10%; max-width: 20%">Project</th>
+                    <th style="width: 5%; max-width: 5%">Manage</th>
+                    <th style="width: 5%; max-width: 5%"># Users</th>
+                    <th style="width: 80%; max-width: 70%">Users</th>
                     </tr>
-                </thead>
-                <tbody>
-        `;
+            </thead>
+        <tbody>`;
+        $.each(host.projects, function(project, details){
+            let noOfUser = details.users.length;
+            html += `<tr style="vertical-align: middle">
+                <td>${project}</td>
+                <td class="text-center"><button class="btn btn-outline-primary btn-sm openProjectAccess text-center" data-host-id="${host.hostId}" data-project="${project}"><i class="fas fa-users"></i></button></td>
+                <td class="text-center">${noOfUser}</td>
+            `;
 
-    $.each(host.projects, function(project, details){
-        html += `<tr>
-            <td>${project}</td>
-        `;
-        let noOfUser = details.users.length;
-        if(noOfUser > 0){
-            html += `<td>`
-            $.each(details.users.slice(0, 10), (_, user)=>{
-                html += `<div class="badge bg-primary m-2">${user.userName}</div>`
-            });
+            if(noOfUser > 0){
+                html += `<td>`
+                $.each(details.users.slice(0, 10), (_, user)=>{
+                    html += `<div class="badge bg-primary text-white m-2"><i class="fas fa-user me-1"></i>${user.userName}</div>`
+                });
 
-            if(noOfUser >= 10){
-                html += `<a href='#'>+ ${noOfUser - 10} more</a>`
+                if(noOfUser >= 10){
+                    html += `<a href='#'>+ ${noOfUser - 10} more</a>`
+                }
+                html += `</td>`
+            }else{
+                html += `<td style="vertical-align: middle"><small><i class="fas fa-info-circle text-secondary me-1"></i>Admins Only</small></td>`
             }
-            html += `</td>`
-        }else{
-            html += `<td><small><i class="fas fa-info-circle text-info me-2"></i>No Users Have Access</small></td>`
-        }
 
-        html += `<td><button class="btn btn-primary openProjectAccess" data-host-id="${host.hostId}" data-project="${project}"><i class="fas fa-users"></i></button></td>`
+            html += `</tr>`;
+        });
+        html += "</tbody></table></div>"
+    }
 
-        html += `</tr>`;
-    });
-
-    html += "</tbody></table></div></div>";
+    html += "</div>";
     return html;
 }
 
@@ -461,17 +466,17 @@ function loadProjectAccesOverview(req){
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#userProjectOverview").show();
-    addBreadcrumbs(["User Projects"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "Users Projects Access"], ["", "active"], false, ["/admin"]);
     ajaxRequest(globalUrls.projects.getProjectsOverview, {}, (data)=>{
         data = $.parseJSON(data);
         let hosts = "";
         $.each(data.clusters, (clusterIndex, cluster)=>{
-            hosts += `<li class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></li>`;
+            hosts += `<h4 class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></h4>`;
             $.each(cluster.members, (_, host)=>{
                 hosts = makeHostUserOverview(hosts, host)
             })
         });
-
+        hosts += `<h4 class="c-sidebar-nav-title text-success pt-2"><u>Standalone Hosts</u></h4>`;
         $.each(data.standalone.members, (_, host)=>{
             hosts = makeHostUserOverview(hosts, host)
         });
@@ -487,18 +492,50 @@ function loadRecordedActions(req, ammount = 30){
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#recordedActionsBox").show();
-    addBreadcrumbs(["Recorded Actions"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "Recorded Actions"], ["", "active"], false, ["/admin"]);
     $("#actionCount").text(ammount);
     ajaxRequest(globalUrls.settings.recordedActions.getLastResults, {ammount: ammount}, (data)=>{
         data = $.parseJSON(data);
         let trs = "";
         if(data.length > 0 ){
             $.each(data, (_, item)=>{
+
+                let params = "-";
+                let userParams = JSON.parse(item.params)
+
+                let userKeys = Object.keys(item.params);
+
+                if(userKeys.length > 0){
+                    params  = ""
+                    $.each(userParams, (key, value)=>{
+                        if(value == null){
+                            return true;
+                        }
+                        let t = typeof value
+                        if(t !== "array" && t !== "object"){
+                            params += `<div class="mb-1">
+                                ${key}: ${value}
+                            </div>`
+                        // NOTE 1 level recursion not traversing whole tree's
+                        } else if(t === "object"){
+                            let pKeys = Object.keys(value);
+                            params += `<div class="mb-1">
+                                ${key}:
+                            </div>`
+                            $.each(pKeys, (_, k)=>{
+                                params += `<div class="mb-1 ps-2">
+                                    ${k}: ${value[k]}
+                                </div>`
+                            });
+                        }
+                    });
+                }
+
                 trs += `<tr>
                     <td>${item.userName}</td>
                     <td>${moment.utc(item.date).local().fromNow()}</td>
                     <td>${item.controllerName == "" ? item.controller : item.controllerName}</td>
-                    <td class="text-break">${item.params}</td>
+                    <td class="text-break">${params}</td>
                 </tr>`;
             });
         }else{
@@ -515,7 +552,7 @@ function loadUsers(){
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#usersList").show();
-    addBreadcrumbs(["User Management"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "User Management"], ["", "active"], false, ["/admin"]);
     ajaxRequest(globalUrls.settings.users.getAll, {}, (data)=>{
         data = $.parseJSON(data);
         let trs = "";
@@ -546,19 +583,19 @@ function loadUsers(){
                 let isDisabledVal = user.isDisabled;
 
                 trs += `<tr data-user-id="${user.id}" data-is-admin="${user.isAdmin}" data-is-disabled=${isDisabledVal}>
-                    <td><a href="#" id="${user.id}" class='viewUser'>${user.username}</a></td>
+                    <td><p id="${user.id}" class='viewUser text-primary text-decoration-underline' style="cursor: pointer;">${user.username}</p></td>
                     <td>${moment.utc(user.created).local().fromNow()}</td>
                     <td><i class="fas fa-${isAdmin} ${isAdminTClass}"></i></td>
                     <td><i class="fas fa-${isDisabled} ${isDisabledTClass}"></i></td>
                     <td>
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <i class="fas fa-wrench"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item setUserProject" href="#">Set Projects Access</a>
+                          <div class="dropdown-item setUserProject" href="#">Set Projects Access</div>
                           ${resetPasswordBtn}
-                          <a class="dropdown-item toggleUserLogin bg-warning" href="#">Toggle User Login</a>
-                          <a class="dropdown-item toggleUserAdmin bg-danger" href="#">Toggle User Admin</a>
+                          <div class="dropdown-item toggleUserLogin text-warning" href="#">Toggle User Login</div>
+                          <div class="dropdown-item toggleUserAdmin text-danger" href="#">Toggle User Admin</div>
                         </div>
                     </td>
                 </tr>`;
@@ -577,7 +614,7 @@ function loadInstancesHostsView(){
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#instanceHostsBox").show();
-    addBreadcrumbs(["Hosts Management"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "Hosts Management"], ["", "active"], false, ["/admin"]);
     ajaxRequest(globalUrls.hosts.getAllHosts, {}, (data)=>{
         data = $.parseJSON(data);
         let trs = "";
@@ -608,7 +645,7 @@ function loadInstanceTypes(){
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#instanceTypesOverview").show();
-    addBreadcrumbs(["Instance Types"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "Instance Types"], ["", "active"], false, ["/admin"]);
     $("#instanceTypesOverviewProviderDetailsSplash").show();
     $("#instanceTypesOverviewProviderDetails").hide();
     ajaxRequest(globalUrls.instances.instanceTypes.getInstanceTypes, {}, function(data){
@@ -632,11 +669,11 @@ function loadInstanceSettings(){
         let ldapKeys = [4, 5, 6, 7];
         let ldapTrs = "";
         let ldapExtraText = {
-            5: `<i class="fas fa-info-circle text-info ms-2" data-toggle="tooltip"
+            5: `<i class="fas fa-info-circle text-info ms-2" data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="The LDAP user that performs lookups E.G <code>cn=administrator,cn=Users,dc=example,dc=com</code>">
                 </i>`,
-            7: `<i class="fas fa-info-circle text-info ms-2" data-toggle="tooltip"
+            7: `<i class="fas fa-info-circle text-info ms-2" data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="DN To Search Users for E.G <code>ou=user_folder,dc=example,dc=com</code>">
                 </i>`,
@@ -698,7 +735,7 @@ function loadInstanceSettings(){
 
         $("#ldapSettingListTable > tbody").empty().append(ldapTrs);
         $("#settingListTable > tbody").empty().append(trs);
-        $("#ldapSettingListTable").find('[data-toggle="tooltip"]').tooltip({html: true})
+        $("#ldapSettingListTable").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
     });
 }
 
@@ -837,7 +874,7 @@ function loadRetiredData() {
     changeActiveNav(null)
     $(".viewSettings").addClass("active");
     $("#retiredData").show();
-    addBreadcrumbs(["Retired Data"], ["active"], true);
+    addBreadcrumbs(["Admin Settings", "Retired Data"], ["", "active"], false, ["/admin"]);
 }
 
 $("#retiredData").on("click", "#downloadOldFleetAnalytics", function(){
@@ -1012,7 +1049,7 @@ $("#usersList").on("click", ".viewUser", function(){
     let userName = $(this).text();
 
     $("#userDetails").show();
-    addBreadcrumbs(["Users", userName], ["", "active"]);
+    addBreadcrumbs(["Users", userName], ["", "active"], true, ["/admin/users", ""]);
     ajaxRequest(globalUrls.user.getUserOverview, x, (data)=>{
         data = makeToastr(data);
         let x = `<div class="mb-3 text-center">

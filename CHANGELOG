@@ -9,7 +9,9 @@ Added
     Add setting options to create VM (#419)
     View instance proxy device on instance view (#443)
     Add instance proxy device on instance view (#443)
-    Pretty frontend urls (#179)
+    Pretty frontend URLs (#179)
+    User can change project analytics duration shown
+    Filtering project analytics by host & those without any usage
 
 Changed
     Use correct width for terminal on init
@@ -18,13 +20,34 @@ Changed
     Remove operations from sidebar that are complete / failed older than 5 minutes (#407)
     Only admins can create projects (#429)
     Improve user parameter display on instance events
-    Improve create project modal UI / UX
+    Improve the following modal UI / UX;
+        - create project
+        - create container
+        - create VM
+        - create network
+        - create profile
+        - create storage pool
     Support limits when creating a project (#434)
     Show packets_dropped_outbound & packets_dropped_inbound on networks overview
     Support project limits on projects frontend
-    Don't require filling out image when deploying cloud-config
+    Don't require filling out the image twice when deploying cloud-config
     Support choosing project when deploying cloud-config
     Only allow choosing one host when deploying cloud-config (only on frontend)
+    Add cloud & desktop icons to image lists to indicate different variants
+    Improve search remote image server result layout
+    Use date ranges instead of created dates for project analytics
+    Apply user.user-data as instance config on 1 off cloud-config deploy
+    Improve the server overview UI / UX
+    Account for "features" when calculating project metrics
+    Count networks the same way `lxc network list` would by ignoring "unknown" & "loopback" devices
+    Hide certain resource details if the user isn't admin (#452)
+    Enable setting nvidia keys when creating a container (#456)
+    Show image variant on import images modal
+    Order host's by alias when fetching from the DB (#462)
+    Remove profile name from deploy cloud-config as its no longer used
+    Disable some spice channels to improve VM Terminal experience (#463)
+    Open terminal when opening an instance view
+    Restrict deployments by user project access (Admin can access all) (#466)
 
 Fixed
     First run doesn't toggle passwords properly (#390)
@@ -33,9 +56,28 @@ Fixed
     Cant use shells other than bash
     Instance names are sometimes invalid when deploying deployment (#379)
     Delete host (#365)
+    Node holding onto client sockets that will be closed (#417)
+    Image type icon in images sidebar on LXD 3 host
+    Instance memory usage pop-overs overlap
+    Server overview leaks all project names (#453)
+    Offline host/s breaks background cron jobs (#362)
+
+Removed
+    Native centos support, could still use SNAP (#457)
 
 API Changes
     Removed `memoryLimit` from CreateVirtualMachineController in favour of config param (#419)
+    Image description when searching images now contains html, the plain description is now kept in the key origDescription
+    projectGraphData became projectsUsageGraphData when fetching the general dashboard
+    stats key was removed fetching the general dashboard
+    Drop alias parameter from all controllers
+    Add currentProject key when outputting host as JSON
+    Don't load / return server "resources" key unless loading server overview
+    Don't load / return clustersAndHosts when loading dashboard
+    Don't load instances with GetHostOverview
+    Load warnings & projectAnalytics with GetHostOverview
+    Remove duplicate profiles key from CreateInstance service (internal)
+    Remove profile name from deploy cloud-config as its no longer used
 
 0.13.0 - 18/07/2020
 

@@ -17,13 +17,12 @@ class RenameInstanceController implements \dhope0000\LXDClient\Interfaces\Record
     public function rename(
         Host $host,
         string $container,
-        string $newContainer,
-        string $alias = null
+        string $newContainer
     ) {
         $result = $this->renameInstance->rename($host, $container, $newContainer);
         return [
             "state"=>"success",
-            "message"=>"Renaming $alias/$container to $alias/$newContainer",
+            "message"=>"Renaming {$host->getAlias()}/$container to {$host->getAlias()}/$newContainer",
             "lxdResponse"=>$result
         ];
     }

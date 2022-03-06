@@ -18,7 +18,6 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
         HostsCollection $hosts,
         string $containerName,
         int $cloudConfigId,
-        $profileName = "",
         $additionalProfiles = [],
         $gpus = [],
         string $project = ""
@@ -26,7 +25,6 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $response = $this->deployConfigToContainer->deploy(
             $hosts,
             $containerName,
-            $profileName,
             $additionalProfiles,
             $cloudConfigId,
             null,

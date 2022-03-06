@@ -15,4 +15,5 @@ class InstanceSettingsKeys
     const SITE_TITLE = 10;
     const TIMEZONE = 11;
     const BACKUP_HISTORY = 12;
+    const INSTANCE_METRIC_HISTORY = 13;
 }

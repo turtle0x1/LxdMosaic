@@ -1,0 +1,317 @@
+body {
+    background-color: #a8a8a8;
+    font-size: .85rem !important;
+}
+
+#sidebar-ul .nav-link:hover {
+    color: #0dcaf0 !important;
+}
+
+.provider {
+    cursor: pointer;
+}
+
+.dashSidebarFilter {
+    cursor: pointer;
+    font-size: .8rem;
+}
+
+.showServerInstances, .toggleDropdown {
+    min-width: 27px;
+}
+
+.filterHostsInstances {
+    border: 1px solid grey !important;
+}
+
+.filterHostsInstances::placeholder {
+    font-style: italic;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    background-color: transparent;
+    color: black !important;
+    border: 0px;
+        border-bottom-color: currentcolor;
+        border-bottom-style: none;
+        border-bottom-width: 0px;
+    border-bottom: 2px solid green;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link {
+    transition: none !important;
+    border: 0px;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link:hover {
+    border: 0px;
+        border-bottom-color: currentcolor;
+        border-bottom-style: none;
+        border-bottom-width: 0px;
+    border-bottom: 2px solid green;
+}
+
+.sidebar-header {
+    height: 55px;
+    text-align: left !important;
+    padding-left: 0px !important;
+    background-color: #2f353a !important;
+    border-bottom: 1px solid grey;
+}
+
+.btn-purple {
+    background-color: #563d7c;
+    color: white;
+}
+
+.btn-outline-purple {
+    background-color: transparent;
+    border-color: #563d7c;
+    color: #563d7c;
+}
+
+.btn-outline-purple:hover {
+    background-color: #563d7c;
+    color: white;
+}
+
+.btn-purple:hover {
+    color: white;
+}
+
+.ui-timepicker-container{
+    z-index: 999999999 !important;
+}
+
+.c-sidebar-nav-title {
+    cursor: default;
+}
+
+.cluster-title {
+    cursor: pointer;
+}
+
+.text-underline {
+    text-decoration: underline;
+}
+
+.text-strikethrough {
+    text-decoration: line-through !important;
+}
+
+.sidebar .nav-dropdown-toggle.disabled::before {
+    display: none !important;
+}
+
+.disabled {
+    cursor: not-allowed;
+}
+
+.token-input-dropdown-facebook {
+    z-index: 999999999 !important;
+}
+
+.filesystemObject {
+    cursor: pointer;
+}
+
+.goUpDirectory {
+    cursor: pointer;
+}
+
+.hideNavText {
+    display: none;
+}
+
+@media (min-width: 1700px) {
+    .hideNavText {
+        display: inline;
+    }
+}
+
+li.breadcrumb-item:nth-child(1) {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.card {
+    border: none;
+}
+
+#cloudConfig-editorCollapse {
+    height: 550px;
+}
+
+.sidebar .nav-dropdown.open > .nav-dropdown-items {
+    max-height: 200000px;
+}
+
+#deploymentList a {
+    color: white;
+}
+
+.actionCard {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#editor {
+    position: absolute;
+    width: 95%;
+    height: 500px;
+}
+
+.app-header .nav-item {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.app-header .nav-item .nav-link {
+    color: white;
+}
+
+.sidebar .nav-link {
+    outline: 0;
+}
+.sidebar .nav-link:hover {
+    color: #167495;
+    background-color: rgba(0,0,0,0);
+}
+
+.sidebar .nav-item.active {
+    background-color: #20a8d8;
+}
+
+.breadcrumb-item {
+    color: white;
+}
+
+.breadcrumb-item.active {
+    color: #20a8d8;
+}
+
+.card-hover-primary:hover{
+    background-color: #20a8d8;
+    color: white;
+}
+
+.breadcrumb {
+    background-color: #3a4149;
+    border-bottom: none;
+}
+
+.nav-link:hover {
+    cursor: pointer;
+}
+
+h1 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+#content a {
+    color: #0dcaf0;
+}
+
+#sidebar-ul a {
+    color: white;
+}
+
+
+
+a:hover {
+  color: #167495;
+  color: #20a8d8;
+}
+
+.nav-link {
+    color: white;
+}
+.nav-tabs .nav-link {
+    color: black !important;
+}
+
+.nav-link.active {
+    color: #0dcaf0 !important;
+}
+
+.nav-icon {
+    padding-right: 5px;
+}
+
+.view-container {
+    padding-left: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.view-container > a{
+    text-decoration: none;
+}
+
+.app-header .nav-item {
+    margin-right: 2px;
+}
+
+/* Adapated from https://bootsnipp.com/snippets/featured/multi-select-tiled-layout */
+#profileHostsBox{margin:20px 0 0 0}
+#profileHostsBox label.btn-default.active{background-color:#007ba7;color:#FFF}
+#profileHostsBox label.btn-default{width:90%;border:1px solid #efefef;margin:5px; box-shadow:5px 8px 8px 0 #ccc;}
+#profileHostsBox label .bizcontent{width:100%;}
+#profileHostsBox .btn-group{width:90%}
+#profileHostsBox .btn span.fa{
+    opacity: 0;
+}
+#profileHostsBox .btn.active span.fa {
+    opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .modal-xl {
+    width: 90%;
+   max-width: 80vw;
+  }
+}
+
+.navbar .navbar-brand:hover{
+    color: #20a8d8;
+}
+
+.fa-play, .fa-check {
+    color: green !important;
+}
+
+.fa-snowflake {
+    color: blue !important;
+}
+
+.fa-stop-circle, .fa-exclamation-triangle {
+    color: red !important;
+}
+
+.card-block {
+    padding: 20px;
+}
+
+.brand-card {
+    border: none;
+}
+
+.brand-card-header .host {
+    color: white;
+}
+
+.brand-card-body > div > .projectFormGroup {
+    margin-left: 10px;
+    margin-right: 10px;
+}

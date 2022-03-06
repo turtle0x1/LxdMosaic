@@ -51,7 +51,6 @@ if ($haveServers->haveAny() !== true) {
       <link rel="icon" type="image/png" sizes="192x192"  href="/assets/lxdMosaic/favicons/android-icon-192x192.png">
       <link rel="icon" type="image/png" sizes="32x32" href="/assets/lxdMosaic/favicons/favicon-32x32.png">
       <link rel="icon" type="image/png" sizes="96x96" href="/assets/lxdMosaic/favicons/favicon-96x96.png">
-      <link rel="icon" type="image/png" sizes="16x16" href="/assets/lxdMosaic/favicons/favicon-16x16.png">
       <link rel="manifest" href="/assets/lxdMosaic/favicons/manifest.json">
       <meta name="msapplication-TileColor" content="#ffffff">
       <meta name="msapplication-TileImage" content="/assets/lxdMosaic/favicons/ms-icon-144x144.png">
@@ -65,7 +64,7 @@ if ($haveServers->haveAny() !== true) {
       <!-- Main styles for this application-->
       <link href="/assets/dist/external.dist.css" rel="stylesheet">
 
-      <link rel="stylesheet" href="/assets/styles.css">
+      <link rel="stylesheet" href="/assets/lxdMosaic/styles.css">
 
       <base href="./">
       <meta charset="utf-8">
@@ -224,6 +223,10 @@ if ($haveServers->haveAny() !== true) {
                   createPool: "/api/Storage/CreatePoolController/create"
               },
               deployments: {
+                  projects: {
+                    getAll: '/api/Deployments/Projects/GetDeploymentProjectsController/get',
+                    set: '/api/Deployments/Projects/SetDeploymentProjectsController/set'
+                  },
                   create: "/api/Deployments/CreateController/create",
                   getAll: "/api/Deployments/GetController/getAll",
                   getDeployment: "/api/Deployments/GetDeploymentController/get",
@@ -416,6 +419,54 @@ if ($haveServers->haveAny() !== true) {
                   $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
               }, 0);
           });
+
+          $(document).on("click", "#createVm", function(){
+              $("#modal-vms-create").modal("show");
+          });
+
+          $(document).on("click", "#createContainer", function(){
+              $("#modal-container-create").modal("show");
+          });
+
+          $(document).on("click", "#openSearch", function(){
+              $.confirm({
+                  title: `Search`,
+                  content: `
+                      <div class="mb-2">
+                          <label>IP Address IPV4/IPV6</label>
+                          <input class="form-control" name="ip" />
+                      </div>
+                  `,
+                  buttons: {
+                      cancel: {
+                          btnClass: "btn btn-secondary",
+                          text: "cancel"
+                      },
+                      search: {
+                          btnClass: "btn btn-success",
+                          text: "Search",
+                          action: function(){
+                              let x = {
+                                  ip: this.$content.find("input[name=ip]").val()
+                              }
+
+                              ajaxRequest(globalUrls.networks.tools.findIpAddress, x, (data)=>{
+                                  data = makeToastr(data);
+                                  if(data.state == "error"){
+                                      return false;
+                                  }
+                                  if(data.result == false){
+                                      makeToastr({state: "error", message: "Couldn't find instance"})
+                                      return false;
+                                  }
+                                  router.navigate(`/instance/${hostIdOrAliasForUrl(data.result.alias, data.result.hostId)}/${data.result.container}`);
+                              });
+                          }
+                      }
+                  }
+              });
+          });
+
       </script>
   </head>
   <form style="display: none;" method="POST" id="downloadContainerFileForm" action="/api/Instances/Files/GetPathController/get">
@@ -426,7 +477,7 @@ if ($haveServers->haveAny() !== true) {
   </form>
   <body style="overflow: hidden;">
      <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-          <a class="navbar-brand col-lg-2 me-0 px-2" href="/" style="width: 300px;" data-navigo>
+          <a class="navbar-brand col-lg-2 me-0 px-2" href="/" style="width: 20vw;" data-navigo>
               <img src="/assets/lxdMosaic/logo.png" class="me-1 ms-1" style="width: 25px; height: 25px;" alt="">
               <?= $siteTitle ?>
           </a>
@@ -473,7 +524,7 @@ if ($haveServers->haveAny() !== true) {
               </li>
           </ul>
           <div class="btn-group ms-auto" id="buttonsNavbar">
-              <button class="btn btn-outline-purple pt-2 pull-right" data-toggle="tooltip" data-bs-placement="bottom" title="Search" id="openSearch">
+              <button class="btn btn-outline-purple pt-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Search" id="openSearch">
                   <i class="fas fa-search"></i>
               </button>
               <div class="btn-group">
@@ -491,10 +542,10 @@ if ($haveServers->haveAny() !== true) {
                   </button>
                   <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton1">
                       <?php if ($isAdmin === 1) : ?>
-                       <li><a id="addNewServer" class="dropdown-item" href="#"><i class="fas fa-server me-2"></i>Add Server</a></li>
+                       <li><a id="addNewServer" class="dropdown-item"><i class="fas fa-server me-2"></i>Add Server</a></li>
                       <?php endif; ?>
-                    <li><a id="createContainer" class="dropdown-item" href="#"><i class="fas fa-box me-2"></i>Create Container</a></li>
-                    <li><a id="createVm" class="dropdown-item" href="#"><i class="fas fa-vr-cardboard me-2"></i>Create VM</a></li>
+                    <li><a id="createContainer" class="dropdown-item"><i class="fas fa-box me-2"></i>Create Container</a></li>
+                    <li><a id="createVm" class="dropdown-item"><i class="fas fa-vr-cardboard me-2"></i>Create VM</a></li>
 
                   </ul>
               </div>
@@ -507,9 +558,9 @@ if ($haveServers->haveAny() !== true) {
                   </ul>
               </div>
               <?php if ($isAdmin === 1) : ?>
-                  <a class="btn btn-outline-warning viewSettings" data-toggle="tooltip" data-bs-placement="bottom" title="Admin Settings" href="/admin" data-navigo>
+                  <button class="btn btn-outline-warning viewSettings" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Admin Settings" href="/admin" data-navigo>
                         <i class="fas fa-cogs"></i>
-                  </a>
+                  </button>
               <?php endif; ?>
               <div class="btn-group dropdown">
                   <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="myAccountBtn" data-bs-toggle="dropdown" aria-expanded="false">
@@ -525,20 +576,20 @@ if ($haveServers->haveAny() !== true) {
       </header>
       <div class="container-fluid" id="content">
           <div class="row p-0">
-              <div class="d-flex flex-column flex-shrink-0 pt-1 text-white bg-dark" style="width: 300px;  padding-right: 0px;  height: 100vh; overflow-y: auto; padding-bottom: 25px;">
+              <div class="d-flex flex-column flex-shrink-0 pt-1 text-white bg-dark" style="width: 20vw;  padding-right: 0px;  height: 100vh; overflow-y: auto; padding-bottom: 25px;">
                 <ul class="flex-column scrollarea" id="sidebar-ul" style="list-style: none; padding-left: 0px;">
                 </ul>
               </div>
-              <div class="col ps-0 pe-0" style="max-height: 100vh; padding-bottom: 50px; overflow-y: auto;">
-                <ol class="breadcrumb ps-3 pt-1 pb-1" id="mainBreadcrumb">
-                    <li class="breadcrumb-item active">Dashboard</li>
+              <div class="col ps-0 pe-0" style="max-height: 100vh; padding-bottom: 30px; overflow-y: auto;">
+                <ol style="min-height: 30px;" class="breadcrumb ps-3 pt-1 pb-1" id="mainBreadcrumb">
+
                 </ol>
                 <div class="container-fluid">
                   <div id="dashboard" class="animated fadeIn">
                     <div class="row">
                         <div class="col-md-12" id="boxHolder">
                             <?php
-                                require __DIR__ . "/boxes/overview.php";
+                                require __DIR__ . "/boxes/dashboard.php";
                                 require __DIR__ . "/boxes/container.php";
                                 require __DIR__ . "/boxes/profile.php";
                                 require __DIR__ . "/boxes/cluster.php";
@@ -577,29 +628,65 @@ var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
   editor.getSession().setMode("ace/mode/yaml");
 
+function makeProjectDropDown(member){
+    let projects = "<select class='form-select changeHostProject'>";
+    $.each(member.projects, function(o, project){
+       let selected = project == member.currentProject ? "selected" : "";
+           projects += `<option data-alias="${member.alias}" data-host='${member.hostId}'
+               value='${project}' ${selected}>
+               ${project}</option>`;
+    });
+    projects += "</select>";
+    return projects;
+}
+
 var hostsAliasesLookupTable = {};
 var hostsIdsLookupTable = {};
 
 $(function(){
 
-    $('[data-toggle="tooltip"]').tooltip({html: true})
+    $('[data-bs-toggle="tooltip"]').tooltip({html: true})
 
     router.hooks({
         before(done, match){
-            if(Object.keys(hostsAliasesLookupTable).length == 0 && match.data !== null && match.data.hasOwnProperty("hostId")){
-                ajaxRequest(globalUrls.universe.getEntities, {}, function(data){
+            if(Object.keys(hostsAliasesLookupTable).length == 0){
+                ajaxRequest(globalUrls.universe.getEntities, {entity: "projects"}, function(data){
                     data = $.parseJSON(data)
-                    //TODO Clusters
-                    let providedHostId = match.data.hostId;
+                    let providedHostId = match.data !== null && match.data.hasOwnProperty("hostId") ? match.data.hostId : null;
+                    let projectsDropdown = "";
+
+                    $.each(data.clusters, function(clusterIndex, cluster){
+                        projectsDropdown += `<b class="text-success">Cluster ${clusterIndex}</b>`
+                        $.each(cluster.members, (_, member)=>{
+                            hostsAliasesLookupTable[member.hostId] = member.alias
+                            hostsIdsLookupTable[member.alias] = member.hostId
+                            if(member.alias == providedHostId){
+                                match.data.hostId = member.hostId
+                            }
+                            let projects = makeProjectDropDown(member)
+                            if(member.hostOnline == true){
+                                projectsDropdown += `<div><b>${member.alias}</b>${projects}</div>`
+                            }
+                        });
+                    });
+
+                    projectsDropdown += `<b class="text-success">Standalone Hosts</b>`
                     $.each(data.standalone.members, function(_, member){
                         hostsAliasesLookupTable[member.hostId] = member.alias
                         hostsIdsLookupTable[member.alias] = member.hostId
                         if(member.alias == providedHostId){
                             match.data.hostId = member.hostId
                         }
+                        let projects = makeProjectDropDown(member)
+                        if(member.hostOnline == true){
+                            projectsDropdown += `<div><i class="fas fa-server me-2"></i><b>${member.alias}</b>${projects}</div>`;
+                            openHostOperationSocket(member.hostId, member.currentProject);
+                        }
                     });
 
-                    if(!$.isNumeric(match.data.hostId)){
+                    $("#navProjectControlHostList").empty().append(projectsDropdown);
+
+                    if( match.data !== null && match.data.hasOwnProperty("hostId") && !$.isNumeric(match.data.hostId)){
                          router.navigate("/404")
                          done(false)
                     }else{
@@ -631,6 +718,7 @@ $(function(){
 
     router.on('/instance/:hostId/:instance', loadContainerViewReq);
     router.on("/backups", loadBackupsView);
+    router.on("/cluster/:clusterId", loadClusterView);
     router.on("/cloudConfig", loadCloudConfigOverview);
     router.on("/cloudConfig/:id", loadCloudConfigView);
     router.on("/deployments", loadDeploymentsView);
@@ -662,6 +750,80 @@ $(function(){
     });
 
     router.resolve();
+
+    Chart.defaults.global.defaultFontColor='white';
+    $.contextMenu({
+        selector: '.view-container',
+        items: {
+            "snapshot": {
+                name: "Snapshot",
+                icon: "fas fa-camera",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    snapshotContainerConfirm(item.data("hostId"), item.data("container"));
+                }
+            },
+            "copy": {
+                name: "Copy",
+                icon: "copy",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    copyContainerConfirm(item.data("hostId"), item.data("container"));
+                }
+            },
+            "edit": {
+                name: "Rename",
+                icon: "edit",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    renameContainerConfirm(item.data("hostId"), item.data("container"), false, item.data("alias"));
+                }
+            },
+            "delete": {
+                name: "Delete",
+                icon: "delete",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    deleteContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"));
+                }
+            },
+            "backup": {
+                name: "backup",
+                icon: "fas fa-save",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    backupContainerConfirm(item.data("hostId"), item.data("alias"), item.data("container"), null, false);
+                }
+            },
+        }
+    });
+
+    $.contextMenu({
+        selector: '.filesystemObject',
+        items: {
+            "delete": {
+                name: "Delete",
+                icon: "delete",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    deleteFilesystemObjectConfirm(item.data("path"));
+                }
+            }
+        }
+    });
+    $.contextMenu({
+        selector: '#filesystemTable',
+        items: {
+            "upload": {
+                name: "Upload",
+                icon: "upload",
+                callback: function(key, opt, e){
+                    let item = opt["$trigger"];
+                    $("#modal-container-files-upload").modal("show");
+                }
+            }
+        }
+    });
 });
 
 

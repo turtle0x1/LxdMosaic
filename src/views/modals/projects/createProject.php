@@ -6,7 +6,7 @@
         <h5 class="modal-title"><i class="fas fa-project-diagram me-2"></i>Create Project</h5>
         <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body" style="max-height: 80vh; padding-top: 1px;">
+      <div class="modal-body" style="max-height: 60vh; padding-top: 1px;">
           <div class="row">
               <div class="col-md-3 pt-3">
                     <ul class="list-group" id="createProjectStepList">
@@ -15,7 +15,7 @@
                         <li style="cursor: pointer" class="list-group-item">3. Restrictions (Optional)</li>
                     </ul>
               </div>
-              <div class="col-md-9 p-3" style="max-height: 80vh; overflow-y: scroll; border-left: 1px solid black;">
+              <div class="col-md-9 p-3" style="max-height: 57vh; min-height: 57vh; overflow-y: scroll; border-left: 1px solid black;">
                   <div class="createProjectStep" data-step="1">
                       <div class="row">
                           <div class="col-md-6">

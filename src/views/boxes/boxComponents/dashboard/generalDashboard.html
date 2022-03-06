@@ -1,0 +1,169 @@
+<div class="mb-2" id="generalDashboard">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                <h4><i class="fas fa-chart-bar me-2"></i>Overview</h4>
+                <div class="input-group mb-3 w-25" id="overviewHistoryDurationBox" style="display: none;">
+                    <span class="input-group-text"><i class="fas fa-history"></i></span>
+                    <select class="form-select" id="overviewHistoryDuration">
+                        <option value="-30 mins" selected>30 Minutes</option>
+                        <option value="-1 hour">1 Hour</option>
+                        <option value="-3 hours">3 Hours</option>
+                        <option value="-6 hours">6 Hours</option>
+                        <option value="-12 hours">12 Hours</option>
+                        <option value="-1 day">1 Day</option>
+                        <option value="-3 day">3 Days</option>
+                        <option value="-1 week">1 Week</option>
+                        <option value="-2 week">2 Weeks</option>
+                        <option value="-1 month">1 Month</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="totalsGraphs">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).on("change", "#overviewHistoryDuration", function(e) {
+        $("#totalsGraphs").empty().append(`<h4 class="text-center"><i class="fas fa-cog fa-spin"></i></h4>`)
+        ajaxRequest('/api/ProjectAnalytics/GetGraphableProjectAnalyticsController/get', {
+            history: $(this).val()
+        }, (data) => {
+            makeProjectOverviewGraphs(makeToastr(data).totals)
+        });
+    });
+
+    function makeProjectOverviewGraphs(totals) {
+        if (totals.hasOwnProperty("length") && totals.length == 0) {
+            $("#totalsGraphs").empty().append("<h4 class='mt-5 text-center'><i class='fas fa-info-circle text-primary me-1'></i> Not enough data to graph, check back again in a few minutes </h4>")
+            $("#overviewHistoryDurationBox").hide();
+            return false;
+        }
+        let displayItems = {
+            "Instances": {
+                formatBytes: false,
+                icon: 'fas fa-box'
+            },
+            "Disk": {
+                formatBytes: true,
+                icon: 'fas fa-hdd'
+            },
+            "Memory": {
+                formatBytes: true,
+                icon: 'fas fa-memory'
+            },
+            "Processes": {
+                formatBytes: false,
+                icon: 'fas fa-microchip'
+            }
+        }
+        $("#totalsGraphs").empty();
+        $("#overviewHistoryDurationBox").show()
+        let y = $(`<div class="row mb-2" ></div>`)
+        $.each(displayItems, (title, config) => {
+            let labels = [];
+            let values = [];
+            let limits = [];
+
+            let cId = title.toLowerCase();
+
+            let entries = totals[title];
+            let noOfEntries = Object.keys(entries).length;
+
+            let dateFormat = noOfEntries == 13 || noOfEntries == 7 ? "HH:mm" : "ll HH:mm"
+
+            $.each(entries, (created, value) => {
+                labels.push(moment.utc(created).local().format(dateFormat))
+                values.push(value)
+            });
+
+            var totalUsage = values.reduce(function(a, b) {
+                a = a == null ? 0 : a
+                b = b == null ? 0 : b
+                return parseInt(a) + parseInt(b);
+            }, 0);
+
+            let canvas = `<canvas height="200" width="200" id="${cId}"></canvas>`;
+
+            if (totalUsage == 0) {
+                canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
+            }
+
+
+            let x = $(`<div class='col-md-3'>
+                  <div class="card bg-dark text-white">
+                      <div class="card-body">
+                        <h4 class="mb-3 text-center"><i class="${config.icon} me-2"></i>${title}</h4>
+                        ${canvas}
+                      </div>
+                  </div>
+              </div>`);
+
+            if (totalUsage > 0) {
+                let graphDataSets = [{
+                    label: "total",
+                    borderColor: 'rgba(46, 204, 113, 1)',
+                    pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                    pointBorderColor: "rgba(46, 204, 113, 1)",
+                    data: values
+                }];
+
+                let options = {
+                    responsive: true,
+                    elements: {
+                        point: {
+                            // After 6 hours hide the dots on the graph
+                            radius: 0
+                        }
+                    }
+                };
+
+                if (config.formatBytes) {
+                    options.scales = scalesBytesCallbacks;
+                    options.tooltips = toolTipsBytesCallbacks
+                } else {
+                    options.scales = {
+                        yAxes: [{
+                            ticks: {
+                                precision: 0
+                            }
+                        }],
+                    }
+                }
+
+                options.legend = {
+                        display: false
+                    },
+
+                    // scales.yAxes.ticks
+                    options.scales.yAxes[0].gridLines = {
+                        color: "rgba(0, 0, 0, 0)",
+                    }
+                options.scales.yAxes[0].ticks.beginAtZero = false;
+                options.scales.xAxes = [{
+                    gridLines: {
+                        color: "rgba(0, 0, 0, 0)",
+                    },
+                }]
+
+                new Chart(x.find("#" + cId), {
+                    type: 'line',
+                    data: {
+                        datasets: graphDataSets,
+                        labels: labels
+                    },
+                    options: options
+                });
+            }
+            y[0].append(x[0]);
+        });
+        $("#totalsGraphs").append(y)
+    }
+</script>

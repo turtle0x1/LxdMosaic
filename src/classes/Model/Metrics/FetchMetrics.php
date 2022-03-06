@@ -28,6 +28,32 @@ class FetchMetrics
         return $do->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_ASSOC);
     }
 
+    public function instanceHasMetrics(int $hostId, string $project, string $instance) :bool
+    {
+        $sql = "SELECT
+                    1
+                FROM
+                    `Instance_Metric_Values`
+                WHERE
+                    `IMV_Host_ID` = :hostId
+                AND
+                    `IMV_Project_Name` = :project
+                AND
+                    `IMV_Instance_Name` = :instance
+                LIMIT 1;
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId,
+            ":project"=>$project,
+            ":instance"=>$instance
+        ]);
+        return $do->fetchColumn() ?  true : false;
+    }
+
+    /**
+     * @TODO Bugged doesn't have a project type
+     */
     public function fetchByHostContainerType(int $hostId, string $container, int $typeId, \DateTimeInterface $after)
     {
         $sql = "SELECT

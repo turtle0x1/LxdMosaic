@@ -1,6 +1,7 @@
 <?php
 
 use Crunz\Schedule;
+use dhope0000\LXDClient\Tools\Utilities\StringTools;
 use dhope0000\LXDClient\Objects\Backups\BackupSchedule;
 
 $schedule = new Schedule();
@@ -11,9 +12,45 @@ $container = $builder->build();
 $env = new Dotenv\Dotenv(__DIR__ . "/../../");
 $env->load();
 
-$o = $container->make("dhope0000\LXDClient\Tools\Hosts\Backups\Schedules\GetAllHostsSchedules");
 $createBackupSchedule = $container->make("dhope0000\LXDClient\Tools\Backups\Schedule\BackupStringToObject");
-$clustersAndStandalone = $o->get();
+
+// If this task is called before checking for offline hosts we need to make sure
+// that it doesn't get caught up when hosts have gone offline.
+//
+// Because this blocks other scripts from running we have to check all the hosts,
+// which means calling this recursively. I've set a max depth of 10 to prevent
+// resource consumption causing more errors.
+
+// If more than 10 hosts are offline when this script runs 1 minute later it
+// will take of the next 10 (if no admin starts getting there first)
+function getHostsAndClusters($container, $depth = 0)
+{
+    // If more than 10 hosts have gone offline just bail
+    if ($depth >= 10) {
+        throw new \Exception("Lots of hosts offline", 1);
+    }
+
+    try {
+        return $container->make("dhope0000\LXDClient\Tools\Hosts\Backups\Schedules\GetAllHostsSchedules")->get();
+    } catch (\Throwable $e) {
+        $getDetails = $container->make("dhope0000\LXDClient\Model\Hosts\GetDetails");
+        $changeStatus = $container->make("dhope0000\LXDClient\Model\Hosts\ChangeStatus");
+        $offlineHostMessage = "cURL error 7: Failed to connect to";
+        if (StringTools::stringStartsWith($e->getMessage(), $offlineHostMessage)) {
+            $host = trim(StringTools::getStringBetween($e->getMessage(), $offlineHostMessage, "port"));
+            $port = trim(StringTools::getStringBetween($e->getMessage(), "port", ":"));
+            $url = "https://$host:$port";
+            $hostId = $getDetails->getIdByUrlMatch($url);
+            if (is_numeric($hostId)) {
+                $changeStatus->setOffline($hostId);
+            }
+        }
+        $depth++;
+        return getHostsAndClusters($container, $depth);
+    }
+}
+
+$clustersAndStandalone = getHostsAndClusters($container);
 
 $getInstanceSetting = $container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting");
 $timezone = $getInstanceSetting->getSettingLatestValue(dhope0000\LXDClient\Constants\InstanceSettingsKeys::TIMEZONE);

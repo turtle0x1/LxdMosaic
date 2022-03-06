@@ -42,6 +42,10 @@ class GetAllImages
             $details[] = $host->images->info($fingerprint);
         }
 
+        usort($details, function ($a, $b) {
+            return $a["properties"]["description"] > $b["properties"]["description"];
+        });
+
         return $details;
     }
 }

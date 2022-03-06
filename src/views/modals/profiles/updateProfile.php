@@ -112,7 +112,7 @@
                     '    <div class="square-box pull-left">' +
                     '        <span class="fa fa-tags"></span>' +
                     '    </div>' +
-                    '    <div data-toggle="buttons" class="btn-group bizmoduleselect">' +
+                    '    <div data-bs-toggle="buttons" class="btn-group bizmoduleselect">' +
                     '        <label class="btn btn-default">' +
                     '            <div class="bizcontent">' +
                     '                <input type="checkbox" name="hosts[]" autocomplete="off" value="' + host + '">' +

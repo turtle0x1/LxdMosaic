@@ -56,7 +56,7 @@
                 $.each(data.existingSettings, function(i, item){
                     existingSettingsHtml += `<div style='margin-bottom: 5px; border-bottom: 1px solid black; padding: 10px;' class='input-group'>
                     <div class='col-md-4'>
-                        <select name='key' class='form-control settingSelect' disabled='disabled' style='width: 100%'>
+                        <select name='key' class='form-select settingSelect' disabled='disabled' style='width: 100%'>
                             <option value='${item.key}' selected>${item.key}</option>
                          </select>
                     </div>
@@ -152,7 +152,7 @@
         $("#editSettings-list").append(
             `<div style='margin-bottom: 5px; border-bottom: 1px solid #D3D3D3; padding: 10px;' class='input-group'>
             <div class='col-md-4'>
-                <select name='key' class='form-control settingSelect' style='width: 100%'> ${reamingSettingSelectOptions}</select>
+                <select name='key' class='form-select settingSelect' style='width: 100%'> ${reamingSettingSelectOptions}</select>
             </div>
             <div class='col-md-4'>
                 <div class='description'></div>

@@ -1,10 +1,11 @@
 var WebSocket = require('ws');
+var internalUuidv1 = require('uuid/v1');
 
 module.exports = class HostOperations {
   constructor(hosts) {
     this.hosts = hosts;
     this.operationSockets = {};
-    this.clientSockets = [];
+    this.clientSockets = {};
   }
 
   sendToOpsClients(hostId, project, type, msg)
@@ -15,9 +16,15 @@ module.exports = class HostOperations {
       }
       msg.mosaicType = type;
       msg = JSON.stringify(msg);
-      this.clientSockets[hostId][project].forEach(socket=>{
+      Object.keys(this.clientSockets[hostId][project]).forEach((uuid)=>{
+          let socket = this.clientSockets[hostId][project][uuid]
           if(socket.readyState == 1){
               socket.send(msg);
+          }else if(socket.readyState == 3){
+              // This is an extra gaurd incase some sockets are missed
+              // for some reason
+              this.clientSockets[hostId][project][uuid].close()
+              delete this.clientSockets[hostId][project][uuid]
           }
       })
   }
@@ -36,10 +43,16 @@ module.exports = class HostOperations {
         }
 
         if(!this.clientSockets[hostDetails.hostId].hasOwnProperty(project)){
-            this.clientSockets[hostDetails.hostId][project] = [];
+            this.clientSockets[hostDetails.hostId][project] = {}
         }
 
-        this.clientSockets[hostDetails.hostId][project].push(socket)
+        let socketId = internalUuidv1();
+        this.clientSockets[hostDetails.hostId][project][socketId] = socket
+
+        socket.on('close', () => {
+            this.clientSockets[hostDetails.hostId][project][socketId].close()
+            delete this.clientSockets[hostDetails.hostId][project][socketId]
+        });
       });
 
   }
@@ -53,8 +66,9 @@ module.exports = class HostOperations {
 
     Object.keys(this.clientSockets).forEach((host)=>{
         Object.keys(this.clientSockets[host]).forEach((project)=>{
-            this.clientSockets[host][project].forEach((_, i)=>{
-                this.clientSockets[host][project][i].close();
+            Object.keys(this.clientSockets[host][project]).forEach(uuid=>{
+                this.clientSockets[host][project][uuid].close();
+                delete this.clientSockets[host][project][uuid]
             });
         });
     });

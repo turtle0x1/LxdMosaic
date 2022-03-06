@@ -5,7 +5,7 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <h4> Profiles </h4>
                 <div class="btn-group me-2">
-                    <button data-toggle="tooltip" data-bs-placement="bottom" title="Create Profile" class="btn btn-primary" id="createProfile">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Profile" class="btn btn-primary" id="createProfile">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -25,13 +25,13 @@
             </u></h4>
             <div class="btn-toolbar float-end">
               <div class="btn-group me-2">
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Copy Profile" class="btn btn-primary" id="copyProfile">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy Profile" class="btn btn-primary" id="copyProfile">
                       <i class="fas fa-copy"></i>
                   </button>
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Rename Profile" class="btn btn-warning" id="renameProfile">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Rename Profile" class="btn btn-warning" id="renameProfile">
                       <i class="fa fa-edit"></i>
                   </button>
-                  <button data-toggle="tooltip" data-bs-placement="bottom" title="Delete Profile" class="btn btn-danger" id="deleteProfile">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Profile" class="btn btn-danger" id="deleteProfile">
                       <i class="fas fa-trash"></i>
                   </button>
               </div>
@@ -44,7 +44,7 @@
       <div class="card bg-dark text-white">
         <div class="card-header bg-dark" role="tab" id="profileDevicesHeading">
           <h5>
-            <a id="devicesAriaToggle" class="text-white" data-toggle="collapse" data-parent="#profileDevicesHeading" href="#profileDevicesCard" aria-expanded="true" aria-controls="profileDevicesCard">
+            <a id="devicesAriaToggle" class="text-white" data-bs-toggle="collapse" data-parent="#profileDevicesHeading" href="#profileDevicesCard" aria-expanded="true" aria-controls="profileDevicesCard">
               Devices
               <i class="nav-icon fa fa-cog float-end"></i>
             </a>
@@ -71,7 +71,7 @@
     <div class="card bg-dark text-white">
       <div class="card-header bg-dark" role="tab" id="configDeviceCardHeading">
         <h5>
-          <a class="text-white" data-toggle="collapse" data-parent="#accordion" href="#configDeviceCard" aria-expanded="true" aria-controls="configDeviceCard">
+          <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#configDeviceCard" aria-expanded="true" aria-controls="configDeviceCard">
             Configuration
             <i class="fas fa-cogs float-end"></i>
           </a>
@@ -98,7 +98,7 @@
       <div class="card bg-dark text-white">
         <div class="card-header bg-dark" role="tab" id="usedByCard">
           <h5>
-            <a data-toggle="collapse" class="text-white" data-parent="#accordion" href="#usedByCollapse" aria-expanded="true" aria-controls="usedByCollapse">
+            <a data-bs-toggle="collapse" class="text-white" data-parent="#accordion" href="#usedByCollapse" aria-expanded="true" aria-controls="usedByCollapse">
               Used By
               <i class="fas fa-layer-group float-end"></i>
             </a>
@@ -144,13 +144,13 @@ function makeProfileSidbebarHtml(hosthtml, host, id){
 
     if(host.hostOnline == true){
         hosthtml += `<button class="btn btn-outline-secondary btn-sm btn-toggle align-items-center rounded d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#profiles-host-${id}" aria-expanded="true">
-            <i class="fas fa-caret-down"></i>
+            <i class="fas fa-caret-left"></i>
         </button>`
     }else{
         return hosthtml;
     }
 
-    hosthtml += `<div class=" mt-2 bg-dark text-white show" id="profiles-host-${id}">
+    hosthtml += `<div class=" mt-2 bg-dark text-white collapse" id="profiles-host-${id}">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
 
     $.each(host.profiles, function(_, profileName){
@@ -201,19 +201,19 @@ function makeHostProfileCard(hostId, hostName, profiles)
         <div class="card-header">
             <h4><i class='fas fa-server me-2'></i>${hostName}</h4>
         </div>
-        <div class="card-body">
-            <table class="table table-dark table-bordered">
+        <div class="card-body table-responsive">
+            <table class="table table-dark table-bordered ">
                 <thead>
                     <tr>
-                        <td>Profile</td>
-                        <td>User Data</td>
-                        <td>Vendor Data</td>
-                        <td>Proxies</td>
-                        <td>USB's</td>
-                        <td>Disks</td>
-                        <td>TPM's</td>
-                        <td>GPU's</td>
-                        <td>Instances</td>
+                        <td style="max-width: 20%; width: 20%">Profile</td>
+                        <td style="max-width: 10%; width: 10%">User Data</td>
+                        <td style="max-width: 10%; width: 10%">Vendor Data</td>
+                        <td style="max-width: 10%; width: 10%">Proxies</td>
+                        <td style="max-width: 10%; width: 10%">USB's</td>
+                        <td style="max-width: 10%; width: 10%">Disks</td>
+                        <td style="max-width: 10%; width: 10%">TPM's</td>
+                        <td style="max-width: 10%; width: 10%">GPU's</td>
+                        <td style="max-width: 10%; width: 10%">Instances</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -287,11 +287,12 @@ function loadProfileView()
         let cards = "";
 
         $.each(data.clusters, (clusterIndex, cluster)=>{
+            cards += `<h4 class="text-success">Cluster ${clusterIndex}</h4>`
             $.each(cluster.members, (_, host)=>{
-                cards += makeHostProfileCard(host.hostId, `Cluster ${clusterIndex}`, host.profiles);
+                cards += makeHostProfileCard(host.hostId, host.alias, host.profiles);
             })
         });
-
+        cards += `<h4 class="text-success">Standalone Hosts</h4>`
         $.each(data.standalone.members, (_, host)=>{
             cards += makeHostProfileCard(host.hostId, host.alias, host.profiles);
         });
@@ -405,6 +406,7 @@ $("#profileBox").on("click", "#renameProfile", function(){
 });
 
 $("#profileBox").on("click", "#deleteProfile", function(){
+    let sidebarItem =$("#sidebar-ul").find(`.nav-link[href="/profiles/${hostIdOrAliasForUrl(currentProfileDetails.hostAlias, currentProfileDetails.hostId)}/${currentProfileDetails.profile}"]`);
     $.confirm({
         title: 'Delete profile ' + currentProfileDetails.profile + ' from ' + currentProfileDetails.hostAlias,
         content: 'Are you sure you want to delete this profile ?!',
@@ -416,6 +418,7 @@ $("#profileBox").on("click", "#deleteProfile", function(){
                     ajaxRequest(globalUrls.profiles.delete, currentProfileDetails, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
+                            sidebarItem.remove();
                             loadProfileView();
                         }
                     });

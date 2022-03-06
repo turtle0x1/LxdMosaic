@@ -92,7 +92,8 @@ class Host implements \JsonSerializable
             "alias"=>$this->alias,
             "urlAndPort"=>$this->urlAndPort,
             "hostOnline"=>$this->hostOnline,
-            "supportsLoadAvgs"=>$this->supportsLoadAvgs
+            "supportsLoadAvgs"=>$this->supportsLoadAvgs,
+            "currentProject"=>$this->getProject()
         ], $this->customProps);
     }
     /**
