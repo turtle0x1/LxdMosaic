@@ -7,6 +7,7 @@ use \Opensaucesystems\Lxd\Client;
 use dhope0000\LXDClient\App\RouteApi;
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\User\GetUserProject;
+use dhope0000\LXDClient\Model\Hosts\GetDetails;
 
 class LxdClient
 {
@@ -14,10 +15,12 @@ class LxdClient
 
     public function __construct(
         RouteApi $routeApi,
-        GetUserProject $getUserProject
+        GetUserProject $getUserProject,
+        GetDetails $getDetails
     ) {
         $this->routeApi = $routeApi;
         $this->getUserProject = $getUserProject;
+        $this->getDetails = $getDetails;
     }
 
     public function getClientWithHost(Host $host, $checkCache = true, $setProject = true)
@@ -26,8 +29,10 @@ class LxdClient
             return $this->clientBag[$host->getUrl()];
         }
 
+
+        $socketPath = $this->getDetails->getSocketPath($host->getHostId());
         $certPath = $this->createFullcertPath($host->getCertPath());
-        $config = $this->createConfigArray($certPath);
+        $config = $this->createConfigArray($certPath, $socketPath);
         $client = $this->createNewClient($host->getUrl(), $config);
 
         if ($setProject) {
@@ -51,7 +56,7 @@ class LxdClient
         return $_ENV["LXD_CERTS_DIR"] . $certName;
     }
 
-    public function createConfigArray($certLocation)
+    public function createConfigArray($certLocation, $socketPath)
     {
         $certPath = realpath($certLocation);
 
@@ -64,20 +69,27 @@ class LxdClient
             'cert' => [
                 $certPath,
                 ''
-            ],
-            'curl' => [
-                CURLOPT_UNIX_SOCKET_PATH => '/var/snap/lxd/common/lxd/unix.socket'
             ]
         ];
+
+        if ($socketPath !== null) {
+            $config["curl"] = [
+                CURLOPT_UNIX_SOCKET_PATH => $socketPath
+            ];
+        }
 
         return $config;
     }
 
     public function createNewClient($urlAndPort, $config)
     {
+        $s = $urlAndPort;
+        if (isset($config["curl"]) && isset($config["curl"][CURLOPT_UNIX_SOCKET_PATH])) {
+            $s = 'http://unix.socket/';
+        }
         $guzzle = new GuzzleClient($config);
         $adapter = new GuzzleAdapter($guzzle);
-        $client = new Client($adapter, null, 'http://unix.socket/');
+        $client = new Client($adapter, null, $s);
         $this->clientBag[$urlAndPort] = $client;
         return $client;
     }

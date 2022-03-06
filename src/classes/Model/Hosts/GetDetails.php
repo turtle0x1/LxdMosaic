@@ -111,4 +111,22 @@ class GetDetails
         ]);
         return $do->fetchColumn();
     }
+
+    public function getSocketPath($hostId)
+    {
+        $sql = "SELECT
+                    `Host_Socket_Path`
+                FROM
+                    `Hosts`
+                WHERE
+                    `Host_ID` = :hostId
+                ORDER BY
+                    `Host_ID` DESC
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":hostId"=>$hostId
+        ]);
+        return $do->fetchColumn();
+    }
 }
