@@ -62,6 +62,9 @@ Fixed
     Server overview leaks all project names (#453)
     Offline host/s breaks background cron jobs (#362)
 
+Removed
+    Native centos support, could still use SNAP (#457)
+
 API Changes
     Removed `memoryLimit` from CreateVirtualMachineController in favour of config param (#419)
     Image description when searching images now contains html, the plain description is now kept in the key origDescription
