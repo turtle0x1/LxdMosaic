@@ -25,13 +25,14 @@ class GenerateCert
 
     public function createCertAndPushToServer(
         $urlAndPort,
-        $trustPassword
+        $trustPassword,
+        $socketPath
     ) {
-        $paths = $this->createCertKeyAndCombinedPaths($urlAndPort);
+        $paths = $this->createCertKeyAndCombinedPaths($urlAndPort, $socketPath);
 
         $this->generateCert($paths);
 
-        $lxdResponse = $this->addToServer($urlAndPort, $trustPassword, $paths["combined"]);
+        $lxdResponse = $this->addToServer($urlAndPort, $trustPassword, $paths["combined"], $socketPath);
 
         $shortPaths = $this->createShortPaths($paths);
 
@@ -41,9 +42,14 @@ class GenerateCert
         ];
     }
 
-    private function createCertKeyAndCombinedPaths($urlAndPort)
+    private function createCertKeyAndCombinedPaths($urlAndPort, $socketPath)
     {
-        $host = parse_url($urlAndPort)["host"];
+        if (!empty($socketPath)) {
+            $host = $urlAndPort;
+        } else {
+            $host = parse_url($urlAndPort)["host"];
+        }
+
 
         return [
             "key"=>$_ENV["LXD_CERTS_DIR"] . $host . ".key",
@@ -60,9 +66,9 @@ class GenerateCert
         return $pathsArray;
     }
 
-    private function addToServer($urlAndPort, $trustPassword, $pathToCert)
+    private function addToServer($urlAndPort, $trustPassword, $pathToCert, $socketPath)
     {
-        $config = $this->lxdClient->createConfigArray($pathToCert);
+        $config = $this->lxdClient->createConfigArray($pathToCert, $socketPath);
         $config["timeout"] = 2;
         $lxd = $this->lxdClient->createNewClient($urlAndPort, $config);
         return $lxd->certificates->add(file_get_contents($pathToCert), $trustPassword);
