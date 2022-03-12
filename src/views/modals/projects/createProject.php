@@ -114,7 +114,7 @@
                                   <tbody>
                                       <tr>
                                           <td> Instance Limit </td>
-                                          <td> Maximum value of aggregate disk space used by all instances volumes, custom volumes and images of the project </td>
+                                          <td> Maximum number of total instances that can be created in the project </td>
                                           <td>
                                               <input name="limits.instances" class="form-control" />
                                           </td>
