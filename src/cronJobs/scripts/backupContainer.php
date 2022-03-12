@@ -35,13 +35,17 @@ $timezone = $getInstanceSetting->getSettingLatestValue(dhope0000\LXDClient\Const
 
 $host = $getHost->fetchHost($hostId);
 
-$importAndDelete = $strategy == BackupStrategies::IMPORT_AND_DELETE;
+try {
+    $importAndDelete = $strategy == BackupStrategies::IMPORT_AND_DELETE;
 
-$backupInstance->create(
-    $host,
-    $instance,
-    $project,
-    (new \DateTime())->setTimezone(new \DateTimeZone($timezone))->format("Y-m-d H:i:s"),
-    true,
-    $importAndDelete
-);
+    $backupInstance->create(
+        $host,
+        $instance,
+        $project,
+        (new \DateTime())->setTimezone(new \DateTimeZone($timezone))->format("Y-m-d H:i:s"),
+        true,
+        $importAndDelete
+    );
+} catch (\Throwable $e) {
+    //TODO Log this properly https://github.com/turtle0x1/LxdMosaic/issues/481
+}

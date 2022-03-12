@@ -50,6 +50,7 @@ Changed
     Open terminal when opening an instance view
     Restrict deployments by user project access (Admin can access all) (#466)
     Set host to offline if our client certificate has expired (#479)
+    Build backup tasks without unnecessary calls to the LXD API (#480)
 
 Fixed
     First run doesn't toggle passwords properly (#390)
