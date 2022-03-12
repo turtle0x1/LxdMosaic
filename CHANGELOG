@@ -82,6 +82,7 @@ API Changes
     Load warnings & projectAnalytics with GetHostOverview
     Remove duplicate profiles key from CreateInstance service (internal)
     Remove profile name from deploy cloud-config as its no longer used
+    Removed GetAllHostsSchedules class as its no longer needed
 
 0.13.0 - 18/07/2020
 
