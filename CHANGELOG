@@ -64,6 +64,7 @@ Fixed
     Instance memory usage pop-overs overlap
     Server overview leaks all project names (#453)
     Offline host/s breaks background cron jobs (#362)
+    Fix encforcing backup retention rules deletes deleted backups
 
 Removed
     Native centos support, could still use SNAP (#457)
