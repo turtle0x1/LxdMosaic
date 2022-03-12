@@ -32,6 +32,16 @@ foreach ($allHosts as $host) {
         $pathToCert = $details->getCertificate($host["Host_ID"]);
         $pathToCert = $_ENV["LXD_CERTS_DIR"] . "$pathToCert";
         $socketPath = $details->getSocketPath($host["Host_ID"]);
+
+        if ($socketPath == null) {
+            $certinfo = openssl_x509_parse(file_get_contents($pathToCert));
+
+            if ($certinfo['validFrom_time_t'] > time() || $certinfo['validTo_time_t'] < time()) {
+                disableHost($host["Host_ID"], $host["Host_Url_And_Port"], $host["Host_Online"] == true, $changeStatus, $reloadNode);
+                continue;
+            }
+        }
+
         $config = $clients->createConfigArray($pathToCert, $socketPath);
         $config["timeout"] = 2;
         $lxd = $clients->createNewClient($host["Host_Url_And_Port"], $config);
