@@ -1223,10 +1223,11 @@ function loadContainerView(data)
 
 
         if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.haveMetrics){
-            $("#goToMetrics").tooltip("disable");
-            $("#goToMetrics").attr("disabled", false).removeClass("disabled").data({});
+            $("#goToMetrics").removeClass("disabled")
+            $("#goToMetrics").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
         }else{
-            $("#goToMetrics").tooltip("enable");
+            $("#goToMetrics").addClass("disabled")
+            $("#goToMetrics").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
         }
 
         $(".renameContainer").attr("disabled", disableActions);
@@ -1235,9 +1236,11 @@ function loadContainerView(data)
         $("#container-currentState").html(`<i class="` + statusCodeIconMap[x.state.status_code] +`"></i>`);
 
         if(x.backupsSupported){
-            $("#goToBackups").removeClass("bg-dark disabled").css("cursor", "pointer");
+            $("#goToBackups").removeClass("disabled")
+            $("#goToBackups").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
         }else{
-            $("#goToBackups").addClass("bg-dark disabled").css("cursor", "not-allowed");
+            $("#goToBackups").addClass("disabled")
+            $("#goToBackups").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
         }
 
         //NOTE Read more here https://github.com/lxc/pylxd/issues/242
@@ -1868,7 +1871,7 @@ $("#containerBox").on("click", ".renameContainer", function(){
 });
 
 $("#containerViewBtns").on("click", ".nav-item", function(){
-    if($(this).attr("id") == "goToBackups" && $(this).hasClass("disabled")){
+    if($(this).hasClass("disabled")){
         return false;
     }
 
