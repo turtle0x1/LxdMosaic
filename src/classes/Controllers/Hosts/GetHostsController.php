@@ -1,14 +1,14 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Hosts;
 
-use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Hosts\GetHostsOverview;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetHostsController
 {
-    public function __construct(HostList $hostList, FetchUserDetails $fetchUserDetails)
+    public function __construct(GetHostsOverview $getHostsOverview, FetchUserDetails $fetchUserDetails)
     {
-        $this->hostList = $hostList;
+        $this->getHostsOverview = $getHostsOverview;
         $this->fetchUserDetails = $fetchUserDetails;
     }
 
@@ -18,6 +18,6 @@ class GetHostsController
         if (!$isAdmin) {
             throw new \Exception("No access", 1);
         }
-        return $this->hostList->getHostListWithDetails();
+        return $this->getHostsOverview->get();
     }
 }

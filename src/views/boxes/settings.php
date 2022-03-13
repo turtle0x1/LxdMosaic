@@ -133,6 +133,7 @@
                       <th>Alias</th>
                       <th>IP</th>
                       <th>Online</th>
+                      <th>Certificate Expires</th>
                       <th>Delete</th>
                   </tr>
               </thead>
@@ -619,15 +620,27 @@ function loadInstancesHostsView(){
         data = $.parseJSON(data);
         let trs = "";
         if(data.length > 0 ){
+            let now = moment();
             $.each(data, (_, host)=>{
                 let o = "<i class='fas fa-check text-success'></i>";
-                if(host.Host_Online == 0){
+                if(host.hostOnline == 0){
                     o = "<i class='fas fa-times text-danger'></i>";
                 }
-                trs += `<tr id="${host.Host_ID}">
-                    <td>${host.Host_Alias}</td>
-                    <td>${host.Host_Url_And_Port}</td>
+                let certExpiresIcon = "";
+                let certExpires = moment(host.certExpires);
+                let threeMonthsPrior = moment(host.certExpires).subtract(3, 'months')
+
+                if(certExpires < now){
+                    certExpiresIcon = "<i class='fas fa-exclamation-triangle text-danger me-2'></i>"
+                }else if(now > threeMonthsPrior){
+                    certExpiresIcon = "<i class='fas fa-exclamation-triangle me-2' style='color: yellow !important;'></i>"
+                }
+
+                trs += `<tr id="${host.hostId}">
+                    <td>${host.alias}</td>
+                    <td>${host.urlAndPort}</td>
                     <td>${o}</td>
+                    <td>${certExpiresIcon} ${certExpires.format("ll")}</td>
                     <td><button class='btn btn-danger deleteHost'><i class="fas fa-trash"></i></button></td>
                 </tr>`
             });

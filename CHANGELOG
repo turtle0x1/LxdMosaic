@@ -13,6 +13,7 @@ Added
     User can change project analytics duration shown
     Filtering project analytics by host & those without any usage
     Support for connecting to host over unix socket (#391)
+    Show certificate expires date on admin hosts overview (#482)
 
 Changed
     Use correct width for terminal on init
@@ -83,6 +84,7 @@ API Changes
     Remove duplicate profiles key from CreateInstance service (internal)
     Remove profile name from deploy cloud-config as its no longer used
     Removed GetAllHostsSchedules class as its no longer needed
+    Fetch array of HostObjects changing response keys for GetHostsController
 
 0.13.0 - 18/07/2020
 
