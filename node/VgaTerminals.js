@@ -154,7 +154,7 @@ module.exports = class VgaTerminals {
             res.on('data', function(data) {
               chunks.push(data);
             }).on('end', function() {
-              resolve(JSON.parse(chunks.join()))
+              resolve(JSON.parse(chunks.join('')))
             }).on('error', function(data){
                 this.openLxdOperation(hostDetails, project, container, shell, cols, rows, depth + 1)
             });

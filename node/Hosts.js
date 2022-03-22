@@ -124,7 +124,7 @@ module.exports = class Hosts {
               res.on('data', function(data) {
                 chunks.push(data);
               }).on('end', function() {
-                resolve(JSON.parse(chunks.join()))
+                resolve(JSON.parse(chunks.join('')))
               }).on('error', function(data){
                   reject(data)
               });
