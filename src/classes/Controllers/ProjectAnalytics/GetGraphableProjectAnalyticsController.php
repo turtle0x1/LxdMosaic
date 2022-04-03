@@ -13,7 +13,7 @@ class GetGraphableProjectAnalyticsController implements \dhope0000\LXDClient\Int
         $this->getGraphableProjectAnalytics = $getGraphableProjectAnalytics;
     }
     /**
-     * @Route("", name="Get graphable analytics")
+     * @Route("/api/ProjectAnalytics/GetGraphableProjectAnalyticsController/get", methods={"POST"}, name="Get graphable analytics")
      */
     public function get(int $userId, string $history = "-30 minutes")
     {

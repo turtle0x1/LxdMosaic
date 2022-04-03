@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts\Warnings;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Hosts\Warnings\DeleteWarning;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteWarningController
 {
@@ -12,7 +13,9 @@ class DeleteWarningController
     {
         $this->deleteWarning = $deleteWarning;
     }
-
+    /**
+     * @Route("/api/Hosts/Warnings/DeleteWarningController/delete", methods={"POST"}, name="Delete warning")
+     */
     public function delete(int $userId, Host $host, string $id)
     {
         $this->deleteWarning->delete($userId, $host, $id);

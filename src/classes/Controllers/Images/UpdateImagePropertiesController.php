@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Controllers\Images;
 
 use dhope0000\LXDClient\Tools\Images\UpdateImageProperties;
 use dhope0000\LXDClient\Objects\Host;
+use Symfony\Component\Routing\Annotation\Route;
 
 class UpdateImagePropertiesController
 {
@@ -10,9 +11,8 @@ class UpdateImagePropertiesController
     {
         $this->updateImageProperties = $updateImageProperties;
     }
-
     /**
-     * This is the list of proprties we support updating for an image
+     * @Route("/api/Images/UpdateImagePropertiesController/update", methods={"POST"}, name="Update an images properties")
      */
     public function update(Host $host, string $fingerprint, array $settings)
     {

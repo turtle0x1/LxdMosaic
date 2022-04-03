@@ -13,7 +13,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->createAlias = $createAlias;
     }
     /**
-     * @Route("", name="Create Image Alias")
+     * @Route("/api/Images/Aliases/CreateController/create", methods={"POST"}, name="Create Image Alias")
      */
     public function create(Host $host, string $fingerprint, string $name, string $description = "")
     {

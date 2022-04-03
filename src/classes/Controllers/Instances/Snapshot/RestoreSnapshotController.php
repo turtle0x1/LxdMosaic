@@ -13,7 +13,7 @@ class RestoreSnapshotController implements \dhope0000\LXDClient\Interfaces\Recor
         $this->restoreSnapshot = $restoreSnapshot;
     }
     /**
-     * @Route("", name="Restore Instance Snapshot")
+     * @Route("/api/Instances/Snapshot/RestoreSnapshotController/restoreSnapshot", methods={"POST"}, name="Restore Instance Snapshot")
      */
     public function restoreSnapshot(
         Host $host,

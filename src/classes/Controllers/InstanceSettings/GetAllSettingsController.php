@@ -6,6 +6,7 @@ use dhope0000\LXDClient\Model\InstanceSettings\GetSettings;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 use dhope0000\LXDClient\Tools\Utilities\IsUpToDate;
 use dhope0000\LXDClient\Tools\Utilities\DateTools;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GetAllSettingsController
 {
@@ -18,7 +19,9 @@ class GetAllSettingsController
         $this->validatePermissions = $validatePermissions;
         $this->dateTools = $dateTools;
     }
-
+    /**
+     * @Route("/api/InstanceSettings/GetAllSettingsController/getAll", methods={"POST"}, name="Get all settings for LXDMosaic")
+     */
     public function getAll(int $userId)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

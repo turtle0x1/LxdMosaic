@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
 use dhope0000\LXDClient\Tools\Instances\Backups\GetInstanceBackups;
 use dhope0000\LXDClient\Objects\Host;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GetInstanceBackupsController
 {
@@ -13,7 +14,9 @@ class GetInstanceBackupsController
     {
         $this->getInstanceBackups = $getInstanceBackups;
     }
-
+    /**
+     * @Route("/api/Instances/Backups/GetInstanceBackupsController/get", methods={"POST"}, name="Get all backups for an instance")
+     */
     public function get(Host $host, string $container)
     {
         return $this->getInstanceBackups->get($host, $container);

@@ -14,7 +14,7 @@ class GetMySettingsOverviewController implements \dhope0000\LXDClient\Interfaces
         $this->getSettingsOverview = $getSettingsOverview;
     }
     /**
-     * @Route("", name="Get My LXDMosaic Settings Overview")
+     * @Route("/api/InstanceSettings/GetMySettingsOverviewController/get", methods={"POST"}, name="Get My LXDMosaic Settings Overview")
      */
     public function get(string $userId)
     {

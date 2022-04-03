@@ -12,7 +12,7 @@ class SetSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAct
         $this->setInstanceSettings = $setInstanceSettings;
     }
     /**
-     * @Route("", name="Set Instance Settings")
+     * @Route("/api/Instances/SetSettingsController/set", methods={"POST"}, name="Set Instance Settings")
      */
     public function set(Host $host, string $container, array $settings)
     {

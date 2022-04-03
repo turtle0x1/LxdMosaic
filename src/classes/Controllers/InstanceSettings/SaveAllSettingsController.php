@@ -14,7 +14,7 @@ class SaveAllSettingsController implements \dhope0000\LXDClient\Interfaces\Recor
         $this->saveSettings = $saveSettings;
     }
     /**
-     * @Route("", name="Save LXDMosaic Settings")
+     * @Route("/api/InstanceSettings/SaveAllSettingsController/saveAll", methods={"POST"}, name="Save LXDMosaic Settings")
      */
     public function saveAll($userId, $settings)
     {

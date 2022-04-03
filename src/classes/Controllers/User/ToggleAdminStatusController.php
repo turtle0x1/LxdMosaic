@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\User;
 
 use dhope0000\LXDClient\Tools\User\ToggleAdminStatus;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ToggleAdminStatusController
 {
@@ -14,7 +15,9 @@ class ToggleAdminStatusController
         $this->toggleAdminStatus = $toggleAdminStatus;
         $this->validatePermissions = $validatePermissions;
     }
-
+    /**
+     * @Route("/api/User/ToggleAdminStatusController/toggle", methods={"POST"}, name="Toggle LXDMosaic user admin status")
+     */
     public function toggle(int $userId, int $targetUser, int $status)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

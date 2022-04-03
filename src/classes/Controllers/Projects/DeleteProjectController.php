@@ -13,7 +13,7 @@ class DeleteProjectController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->deleteProject = $deleteProject;
     }
     /**
-     * @Route("", name="Delete Project")
+     * @Route("/api/Projects/DeleteProjectController/delete", methods={"POST"}, name="Delete Project")
      */
     public function delete(Host $host, string $project)
     {

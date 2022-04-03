@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Networks;
 
 use dhope0000\LXDClient\Tools\Networks\GetHostsNetworks;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GetHostsNetworksController
 {
@@ -10,7 +11,9 @@ class GetHostsNetworksController
     {
         $this->getHostsNetworks = $getHostsNetworks;
     }
-
+    /**
+     * @Route("/api/Networks/GetHostsNetworksController/get", methods={"POST"}, name="Get all networks on hosts")
+     */
     public function get(int $userId)
     {
         return $this->getHostsNetworks->getAll($userId);

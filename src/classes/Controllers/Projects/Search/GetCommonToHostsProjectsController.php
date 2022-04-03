@@ -12,7 +12,9 @@ class GetCommonToHostsProjectsController
     {
         $this->getCommonToHostsProjects = $getCommonToHostsProjects;
     }
-
+    /**
+     * @Route("/api/Projects/Search/GetCommonToHostsProjectsController/get", methods={"POST"}, name="Get list of projects on all selected hosts")
+     */
     public function get(int $userId, HostsCollection $hosts)
     {
         return $this->getCommonToHostsProjects->get($userId, $hosts);

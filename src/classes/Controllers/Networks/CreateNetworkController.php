@@ -13,7 +13,7 @@ class CreateNetworkController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->createNetwork = $createNetwork;
     }
     /**
-     * @Route("", name="Create Network")
+     * @Route("/api/Networks/CreateNetworkController/create", methods={"POST"}, name="Create Network")
      */
     public function create(HostsCollection $hosts, string $name, string $description = "", array $config = [])
     {

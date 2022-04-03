@@ -11,7 +11,7 @@ class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->deleteCloudConfig = $deleteCloudConfig;
     }
     /**
-     * @Route("", name="Delete Cloud Config")
+     * @Route("/api/CloudConfig/DeleteController/delete", methods={"POST"}, name="Delete Cloud Config")
      */
     public function delete(int $cloudConfigId)
     {

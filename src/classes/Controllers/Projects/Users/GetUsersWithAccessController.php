@@ -13,7 +13,7 @@ class GetUsersWithAccessController implements \dhope0000\LXDClient\Interfaces\Re
         $this->getUsersAccessToProject = $getUsersAccessToProject;
     }
     /**
-     * @Route("", name="Get users with access to a host project")
+     * @Route("/api/Projects/Users/GetUsersWithAccessController/get", methods={"POST"}, name="Get users with access to a host project")
      */
     public function get(
         int $userId,

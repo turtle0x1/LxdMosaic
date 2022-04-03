@@ -12,7 +12,7 @@ class DeleteSnapshotController implements \dhope0000\LXDClient\Interfaces\Record
         $this->deleteSnapshot = $deleteSnapshot;
     }
     /**
-     * @Route("", name="Delete Instance Snapshot")
+     * @Route("/api/Instances/Snapshot/DeleteSnapshotController/deleteSnapshot", methods={"POST"}, name="Delete Instance Snapshot")
      */
     public function deleteSnapshot(Host $host, string $container, string $snapshotName)
     {

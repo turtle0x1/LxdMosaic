@@ -12,7 +12,7 @@ class RenameProfileController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->rename = $rename;
     }
     /**
-     * @Route("", name="Rename Profile")
+     * @Route("/api/Profiles/RenameProfileController/rename", methods={"POST"}, name="Rename Profile")
      */
     public function rename(
         Host $host,

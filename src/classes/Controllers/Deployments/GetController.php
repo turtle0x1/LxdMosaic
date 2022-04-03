@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Deployments;
 
 use dhope0000\LXDClient\Tools\Deployments\GetDeployments;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GetController
 {
@@ -10,7 +11,9 @@ class GetController
     {
         $this->getDeployments = $getDeployments;
     }
-
+    /**
+     * @Route("/api/Deployments/GetController/getAll", methods={"POST"}, name="Get all deployments")
+     */
     public function getAll(int $userId)
     {
         return $this->getDeployments->getAll($userId);

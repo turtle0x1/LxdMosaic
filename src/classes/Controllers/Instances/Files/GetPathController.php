@@ -15,7 +15,7 @@ class GetPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->getPath = $getPath;
     }
     /**
-     * @Route("", name="Get Instance Path Contents")
+     * @Route("/api/Instances/Files/GetPathController/get", methods={"POST"}, name="Get Instance Path Contents")
      */
     public function get(
         Host $host,

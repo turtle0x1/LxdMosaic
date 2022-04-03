@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\InstanceSettings\Users;
 
 use dhope0000\LXDClient\Tools\User\GetUsers;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GetUsersController
 {
@@ -12,7 +13,9 @@ class GetUsersController
     {
         $this->getUsers = $getUsers;
     }
-
+    /**
+     * @Route("/api/InstanceSettings/Users/GetUsersController/getAll", methods={"POST"}, name="Get LXDMosaic users")
+     */
     public function getAll(int $userId)
     {
         return $this->getUsers->getAll($userId);

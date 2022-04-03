@@ -14,7 +14,7 @@ class SaveLdapSettingsController implements \dhope0000\LXDClient\Interfaces\Reco
         $this->saveLdapSettings = $saveLdapSettings;
     }
     /**
-     * @Route("", name="Save LXDMosaic Ldap Settings")
+     * @Route("/api/InstanceSettings/Ldap/SaveLdapSettingsController/save", methods={"POST"}, name="Save LXDMosaic Ldap Settings")
      */
     public function save($userId, $settings)
     {

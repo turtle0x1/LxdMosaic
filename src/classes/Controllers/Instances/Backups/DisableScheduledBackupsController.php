@@ -15,7 +15,7 @@ class DisableScheduledBackupsController implements \dhope0000\LXDClient\Interfac
         $this->updateBackupSchedules = $updateBackupSchedules;
     }
     /**
-     * @Route("", name="Disable Instance Backup Schedule")
+     * @Route("/api/Instances/Backups/DisableScheduledBackupsController/disable", methods={"POST"}, name="Disable Instance Backup Schedule")
      */
     public function disable(
         int $userId,

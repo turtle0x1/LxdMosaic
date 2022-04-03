@@ -12,7 +12,7 @@ class CopyInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAc
         $this->copy = $copy;
     }
     /**
-     * @Route("", name="Copy instance")
+     * @Route("/api/Instances/CopyInstanceController/copy", methods={"POST"}, name="Copy instance")
      */
     public function copy(
         Host $host,

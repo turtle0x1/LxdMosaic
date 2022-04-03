@@ -14,7 +14,7 @@ class GetSnapshotsOverviewController implements \dhope0000\LXDClient\Interfaces\
         $this->getSnapshotsOverview = $getSnapshotsOverview;
     }
     /**
-     * @Route("", name="Get an overview of existing snapshots & configuration")
+     * @Route("/api/Instances/Snapshot/GetSnapshotsOverviewController/get", methods={"POST"}, name="Get an overview of existing snapshots & configuration")
      */
     public function get(Host $host, string $container)
     {

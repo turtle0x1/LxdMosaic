@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\User\Dashboard;
 
 use dhope0000\LXDClient\Tools\Instances\Metrics\GetUserDashboard;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GetDashboardController
 {
@@ -10,7 +11,9 @@ class GetDashboardController
     {
         $this->getUserDashboard = $getUserDashboard;
     }
-
+    /**
+     * @Route("/api/User/Dashboard/GetDashboardController/get", methods={"POST"}, name="Get user dashboard")
+     */
     public function get(int $userId, int $dashboardId)
     {
         return $this->getUserDashboard->get($userId, $dashboardId);

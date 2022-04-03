@@ -12,7 +12,7 @@ class FindIpAddressController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->findIpAddress = $findIpAddress;
     }
     /**
-     * @Route("", name="Find instance ip address")
+     * @Route("/api/Networks/Tools/FindIpAddressController/find", methods={"POST"}, name="Find instance ip address")
      */
     public function find(string $ip)
     {

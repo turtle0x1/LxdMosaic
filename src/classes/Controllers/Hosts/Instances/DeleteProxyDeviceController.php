@@ -12,7 +12,7 @@ class DeleteProxyDeviceController implements \dhope0000\LXDClient\Interfaces\Rec
         $this->deleteProxyDevice = $deleteProxyDevice;
     }
     /**
-     * @Route("", name="Delete proxy device")
+     * @Route("/api/Hosts/Instances/DeleteProxyDeviceController/delete", methods={"POST"}, name="Delete proxy device")
      */
     public function delete(Host $host, string $instance, string $device)
     {

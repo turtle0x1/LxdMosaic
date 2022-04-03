@@ -17,7 +17,7 @@ class SetDeploymentProjectsController
         $this->container = $container;
     }
     /**
-     * @Route("", name="Set Deployment Projects")
+     * @Route("/api/Deployments/Projects/SetDeploymentProjectsController/set", methods={"POST"}, name="Set Deployment Projects")
      */
     public function set(int $userId, int $deploymentId, array $newProjectsLayout)
     {

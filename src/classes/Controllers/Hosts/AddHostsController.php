@@ -11,7 +11,7 @@ class AddHostsController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->addHosts = $addHosts;
     }
     /**
-     * @Route("", name="Add Hosts")
+     * @Route("/api/Hosts/AddHostsController/add", methods={"POST"}, name="Add Hosts")
      */
     public function add($userId, array $hostsDetails)
     {

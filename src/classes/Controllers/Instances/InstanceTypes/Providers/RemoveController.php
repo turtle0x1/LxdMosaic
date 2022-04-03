@@ -5,6 +5,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\InstanceTypes\Providers;
 use \DI\Container;
 use dhope0000\LXDClient\Tools\Instances\InstanceTypes\Providers\RemoveProvider;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
+use Symfony\Component\Routing\Annotation\Route;
 
 class RemoveController
 {
@@ -21,7 +22,9 @@ class RemoveController
         $this->validatePermissions = $validatePermissions;
         $this->removeProvider = $removeProvider;
     }
-
+    /**
+     * @Route("/api/Instances/InstanceTypes/Providers/RemoveController/remove", methods={"POST"}, name="Remove instance type provider")
+     */
     public function remove(int $userId, int $providerId)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

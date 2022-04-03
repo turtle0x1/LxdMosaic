@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\InstanceSettings\Users;
 
 use dhope0000\LXDClient\Tools\User\AddUser;
+use Symfony\Component\Routing\Annotation\Route;
 
 class AddUserController
 {
@@ -12,7 +13,9 @@ class AddUserController
     {
         $this->addUser = $addUser;
     }
-
+    /**
+     * @Route("/api/InstanceSettings/Users/AddUserController/add", methods={"POST"}, name="Add user to LXDMosaic")
+     */
     public function add(int $userId, string $username, string $password)
     {
         $this->addUser->add($userId, $username, $password);

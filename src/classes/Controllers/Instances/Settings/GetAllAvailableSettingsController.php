@@ -2,6 +2,7 @@
 namespace dhope0000\LXDClient\Controllers\Instances\Settings;
 
 use dhope0000\LXDClient\Model\Instances\Settings\GetSettings;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GetAllAvailableSettingsController
 {
@@ -9,7 +10,9 @@ class GetAllAvailableSettingsController
     {
         $this->getSettings = $getSettings;
     }
-
+    /**
+     * @Route("/api/Instances/Settings/GetAllAvailableSettingsController/getAll", methods={"POST"}, name="Get a list of settings we support setting on an instance")
+     */
     public function getAll()
     {
         return $this->getSettings->getAllEnabledNamesAndDefaults();

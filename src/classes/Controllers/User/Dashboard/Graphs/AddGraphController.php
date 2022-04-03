@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\User\Dashboard\Graphs;
 
 use dhope0000\LXDClient\Tools\User\Dashboard\Graphs\AddGraph;
+use Symfony\Component\Routing\Annotation\Route;
 
 class AddGraphController
 {
@@ -12,7 +13,9 @@ class AddGraphController
     {
         $this->addGraph = $addGraph;
     }
-
+    /**
+     * @Route("/api/User/Dashboard/Graphs/AddGraphController/add", methods={"POST"}, name="Add graph to user dashboard")
+     */
     public function add(
         int $userId,
         int $dashboardId,

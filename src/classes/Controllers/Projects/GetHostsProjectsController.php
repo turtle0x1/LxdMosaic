@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Projects;
 
 use dhope0000\LXDClient\Tools\Projects\CreateProject;
 use dhope0000\LXDClient\Tools\Projects\GetHostsProjects;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GetHostsProjectsController
 {
@@ -11,7 +12,9 @@ class GetHostsProjectsController
     {
         $this->getHostsProjects = $getHostsProjects;
     }
-
+    /**
+     * @Route("/api/Projects/GetHostsProjectsController/get", methods={"POST"}, name="Get all projects on all hosts")
+     */
     public function get(int $userId)
     {
         return $this->getHostsProjects->getAll($userId);

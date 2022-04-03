@@ -12,7 +12,7 @@ class AssignProfilesController implements \dhope0000\LXDClient\Interfaces\Record
         $this->assignProfiles = $assignProfiles;
     }
     /**
-     * @Route("", name="Assign profiles to instance")
+     * @Route("/api/Instances/Profiles/AssignProfilesController/assign", methods={"POST"}, name="Assign profiles to instance")
      */
     public function assign(Host $host, string $container, array $profiles)
     {

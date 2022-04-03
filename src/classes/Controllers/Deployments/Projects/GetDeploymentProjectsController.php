@@ -17,7 +17,7 @@ class GetDeploymentProjectsController
         $this->fetchDeploymentProjects = $fetchDeploymentProjects;
     }
     /**
-     * @Route("", name="Get Deployment Projects")
+     * @Route("/api/Deployments/Projects/GetDeploymentProjectsController/get", methods={"POST"}, name="Get Deployment Projects")
      */
     public function get(int $userId, int $deploymentId)
     {

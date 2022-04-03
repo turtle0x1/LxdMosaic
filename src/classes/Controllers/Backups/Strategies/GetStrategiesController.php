@@ -2,6 +2,7 @@
 
 namespace dhope0000\LXDClient\Controllers\Backups\Strategies;
 
+use Symfony\Component\Routing\Annotation\Route;
 use dhope0000\LXDClient\Model\Hosts\Backups\Strategies\FetchStrategies;
 
 class GetStrategiesController
@@ -12,7 +13,9 @@ class GetStrategiesController
     {
         $this->fetchStrategies = $fetchStrategies;
     }
-
+    /**
+     * @Route("/api/Backups/Strategies/GetStrategiesController/get", methods={"POST"}, name="Get a list of backup strategies")
+     */
     public function get()
     {
         return $this->fetchStrategies->fetchAll();

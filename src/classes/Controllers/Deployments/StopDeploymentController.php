@@ -13,7 +13,7 @@ class StopDeploymentController implements \dhope0000\LXDClient\Interfaces\Record
         $this->changeDeploymentState = $changeDeploymentState;
     }
     /**
-     * @Route("", name="Stop Deployment")
+     * @Route("/api/Deployments/StopDeploymentController/stop", methods={"POST"}, name="Stop Deployment")
      */
     public function stop(int $userId, int $deploymentId)
     {

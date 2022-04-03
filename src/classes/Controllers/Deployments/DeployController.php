@@ -12,7 +12,7 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->deploy = $deploy;
     }
     /**
-     * @Route("", name="Deploy Deployment")
+     * @Route("/api/Deployments/DeployController/deploy", methods={"POST"}, name="Deploy Deployment")
      */
     public function deploy(int $userId, int $deploymentId, array $instances)
     {

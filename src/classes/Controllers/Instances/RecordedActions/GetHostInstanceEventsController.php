@@ -13,7 +13,7 @@ class GetHostInstanceEventsController
         $this->getAllInstanceRecordedActions = $getAllInstanceRecordedActions;
     }
     /**
-     * @Route("", name="Get Instance Recorded Actions")
+     * @Route("/api/Instances/RecordedActions/GetHostInstanceEventsController/get", methods={"POST"}, name="Get Instance Recorded Actions")
      */
     public function get(Host $host, string $container)
     {

@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\CloudConfig\Search;
 
 use dhope0000\LXDClient\Model\CloudConfig\Search\SearchCloudConfig;
+use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController
 {
@@ -10,7 +11,9 @@ class SearchController
     {
         $this->searchCloudConfig = $searchCloudConfig;
     }
-
+    /**
+     * @Route("/api/CloudConfig/Search/SearchController/searchAll", methods={"POST"}, name="Search cloud config files by name")
+     */
     public function searchAll(string $criteria)
     {
         return $this->searchCloudConfig->searchAll($criteria);

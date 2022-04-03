@@ -3,6 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\InstanceSettings\RecordedActions;
 
 use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\GetActions;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GetLastController
 {
@@ -12,7 +13,9 @@ class GetLastController
     {
         $this->getActions = $getActions;
     }
-
+    /**
+     * @Route("/api/InstanceSettings/RecordedActions/GetLastController/get", methods={"POST"}, name="Get N last number of actions recorded on LXDMosaic")
+     */
     public function get(int $userId, int $ammount)
     {
         return $this->getActions->get($userId, $ammount);
