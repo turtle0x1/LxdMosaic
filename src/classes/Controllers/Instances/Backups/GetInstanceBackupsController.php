@@ -15,7 +15,7 @@ class GetInstanceBackupsController
         $this->getInstanceBackups = $getInstanceBackups;
     }
     /**
-     * @Route("/api/Instances/Backups/GetInstanceBackupsController/get", methods={"POST"}, name="Get all backups for an instance")
+     * @Route("/api/Instances/Backups/GetInstanceBackupsController/get", methods={"POST"}, name="Get all backups for an instance", options={"rbac" = "lxdmosaic.instaces.backups.read"})
      */
     public function get(Host $host, string $container)
     {

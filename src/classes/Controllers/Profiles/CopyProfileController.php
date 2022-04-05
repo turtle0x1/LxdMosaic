@@ -13,7 +13,7 @@ class CopyProfileController implements \dhope0000\LXDClient\Interfaces\RecordAct
         $this->copy = $copy;
     }
     /**
-     * @Route("/api/Profiles/CopyProfileController/copyProfile", methods={"POST"}, name="Copy profile")
+     * @Route("/api/Profiles/CopyProfileController/copyProfile", methods={"POST"}, name="Copy profile", options={"rbac" = "profiles.copy"})
      */
     public function copyProfile(
         Host $host,

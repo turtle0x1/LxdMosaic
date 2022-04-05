@@ -12,7 +12,7 @@ class GetCloudsConfigController
         $this->getCloudConfigs = $getCloudConfigs;
     }
     /**
-     * @Route("/api/Deployments/GetCloudsConfigController/get", methods={"POST"}, name="Get cloud configs in a deployment")
+     * @Route("/api/Deployments/GetCloudsConfigController/get", methods={"POST"}, name="Get cloud configs in a deployment", options={"rbac" = "deployments.read"})
      */
     public function get(int $userId, int $deploymentId)
     {

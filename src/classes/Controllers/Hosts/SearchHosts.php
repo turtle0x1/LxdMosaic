@@ -21,7 +21,7 @@ class SearchHosts
         $this->fetchAllowedProjects = $fetchAllowedProjects;
     }
     /**
-     * @Route("/api/Hosts/SearchHosts/search", methods={"POST"}, name="Search for hosts")
+     * @Route("/api/Hosts/SearchHosts/search", methods={"POST"}, name="Search for hosts", options={"rbac" = "hosts.read"})
      */
     public function search(int $userId, string $hostSearch, array $extensionRequirements = [])
     {

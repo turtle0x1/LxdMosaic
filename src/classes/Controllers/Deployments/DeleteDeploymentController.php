@@ -12,7 +12,7 @@ class DeleteDeploymentController implements \dhope0000\LXDClient\Interfaces\Reco
         $this->deleteDeployment = $deleteDeployment;
     }
     /**
-     * @Route("/api/Deployments/DeleteDeploymentController/delete", methods={"POST"}, name="Delete Deployment")
+     * @Route("/api/Deployments/DeleteDeploymentController/delete", methods={"POST"}, name="Delete Deployment", options={"rbac" = "deployments.delete"})
      */
     public function delete(int $userId, int $deploymentId)
     {

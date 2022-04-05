@@ -14,7 +14,7 @@ class DeleteWarningController
         $this->deleteWarning = $deleteWarning;
     }
     /**
-     * @Route("/api/Hosts/Warnings/DeleteWarningController/delete", methods={"POST"}, name="Delete warning")
+     * @Route("/api/Hosts/Warnings/DeleteWarningController/delete", methods={"POST"}, name="Delete warning", options={"rbac" = "hosts.warnings.delete"})
      */
     public function delete(int $userId, Host $host, string $id)
     {

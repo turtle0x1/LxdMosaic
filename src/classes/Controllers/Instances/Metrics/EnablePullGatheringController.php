@@ -13,7 +13,7 @@ class EnablePullGatheringController
         $this->enablePullGathering = $enablePullGathering;
     }
     /**
-     * @Route("/api/Instances/Metrics/EnablePullGatheringController/enable", methods={"POST"}, name="Enable gathering metrics for instance")
+     * @Route("/api/Instances/Metrics/EnablePullGatheringController/enable", methods={"POST"}, name="Enable gathering metrics for instance", options={"rbac" = "instances.metrics.enable"})
      */
     public function enable(Host $host, string $instance)
     {

@@ -13,7 +13,7 @@ class DeleteStoragePoolController implements \dhope0000\LXDClient\Interfaces\Rec
         $this->deleteStoragePool = $deleteStoragePool;
     }
     /**
-     * @Route("/api/Storage/DeleteStoragePoolController/delete", methods={"POST"}, name="Delete Storage")
+     * @Route("/api/Storage/DeleteStoragePoolController/delete", methods={"POST"}, name="Delete Storage", options={"rbac" = "storage.pools.delete"})
      */
     public function delete(Host $host, string $poolName)
     {

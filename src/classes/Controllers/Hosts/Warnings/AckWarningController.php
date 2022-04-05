@@ -14,7 +14,7 @@ class AckWarningController
         $this->ackWarning = $ackWarning;
     }
     /**
-     * @Route("/api/Hosts/Warnings/AckWarningController/ack", methods={"POST"}, name="Acknowledge warning")
+     * @Route("/api/Hosts/Warnings/AckWarningController/ack", methods={"POST"}, name="Acknowledge warning", options={"rbac" = "hosts.warnings.acknowledge"})
      */
     public function ack(int $userId, Host $host, string $id)
     {

@@ -14,7 +14,7 @@ class AddUserController
         $this->addUser = $addUser;
     }
     /**
-     * @Route("/api/InstanceSettings/Users/AddUserController/add", methods={"POST"}, name="Add user to LXDMosaic")
+     * @Route("/api/InstanceSettings/Users/AddUserController/add", methods={"POST"}, name="Add user to LXDMosaic", options={"rbac" = "lxdmosaic.user.create"})
      */
     public function add(int $userId, string $username, string $password)
     {

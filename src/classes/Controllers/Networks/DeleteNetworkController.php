@@ -13,7 +13,7 @@ class DeleteNetworkController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->deleteNetwork = $deleteNetwork;
     }
     /**
-     * @Route("/api/Networks/DeleteNetworkController/delete", methods={"POST"}, name="Delete Network")
+     * @Route("/api/Networks/DeleteNetworkController/delete", methods={"POST"}, name="Delete Network", options={"rbac" = "networks.delete"})
      */
     public function delete(Host $host, $network)
     {

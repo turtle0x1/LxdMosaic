@@ -13,7 +13,7 @@ class CreatePoolController implements \dhope0000\LXDClient\Interfaces\RecordActi
         $this->createStoragePool = $createStoragePool;
     }
     /**
-     * @Route("/api/Storage/CreatePoolController/create", methods={"POST"}, name="Create Storage")
+     * @Route("/api/Storage/CreatePoolController/create", methods={"POST"}, name="Create Storage", options={"rbac" = "storage.pools.create"})
      */
     public function create(HostsCollection $hosts, string $name, string $driver, array $config)
     {

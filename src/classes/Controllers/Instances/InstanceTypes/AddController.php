@@ -16,7 +16,7 @@ class AddController
         $this->addInstanceType = $addInstanceType;
     }
     /**
-     * @Route("/api/Instances/InstanceTypes/AddController/add", methods={"POST"}, name="Add instance type to provider")
+     * @Route("/api/Instances/InstanceTypes/AddController/add", methods={"POST"}, name="Add instance type to provider", options={"rbac" = "lxdmosaic.instaceTypes.providers.type.create"})
      */
     public function add(int $userId, int $providerId, string $name, float $cpu, float $mem)
     {

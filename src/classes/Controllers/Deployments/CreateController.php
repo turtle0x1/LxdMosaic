@@ -12,7 +12,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->createDeployment = $createDeployment;
     }
     /**
-     * @Route("/api/Deployments/CreateController/create", methods={"POST"}, name="Create Deployment")
+     * @Route("/api/Deployments/CreateController/create", methods={"POST"}, name="Create Deployment", options={"rbac" = "deployments.create"})
      */
     public function create(string $name, array $cloudConfigs)
     {

@@ -12,7 +12,7 @@ class GetAllController
         $this->getInstanceTypes = $getInstanceTypes;
     }
     /**
-     * @Route("/api/Instances/InstanceTypes/GetAllController/getAll", methods={"POST"}, name="Get all instance types grouped by provider")
+     * @Route("/api/Instances/InstanceTypes/GetAllController/getAll", methods={"POST"}, name="Get all instance types grouped by provider", options={"rbac" = "lxdmosaic.instaceTypes.providers.type.read"})
      */
     public function getAll()
     {

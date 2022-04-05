@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class GetHostWarningsController
 {
     /**
-     * @Route("/api/Hosts/Warnings/GetHostWarningsController/getOnHost", methods={"POST"}, name="Get all warnings on a host")
+     * @Route("/api/Hosts/Warnings/GetHostWarningsController/getOnHost", methods={"POST"}, name="Get all warnings on a host", options={"rbac" = "hosts.warnings.read"})
      */
     public function getOnHost(Host $host)
     {

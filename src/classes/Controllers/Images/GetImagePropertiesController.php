@@ -12,7 +12,7 @@ class GetImagePropertiesController
         $this->getImageProperties = $getImageProperties;
     }
     /**
-     * @Route("/api/Images/GetImagePropertiesController/getAll", methods={"POST"}, name="Get all properties of an image")
+     * @Route("/api/Images/GetImagePropertiesController/getAll", methods={"POST"}, name="Get all properties of an image", options={"rbac" = "images.read"})
      */
     public function getAll(Host $host, string $fingerprint)
     {
@@ -20,7 +20,7 @@ class GetImagePropertiesController
     }
 
     /**
-     * @Route("/api/Images/GetImagePropertiesController/getFiltertedList", methods={"POST"}, name="Get list of properties we support updating for an image")
+     * @Route("/api/Images/GetImagePropertiesController/getFiltertedList", methods={"POST"}, name="Get list of properties we support updating for an image", options={"rbac" = "images.read"})
      */
     public function getFiltertedList(Host $host, string $fingerprint)
     {

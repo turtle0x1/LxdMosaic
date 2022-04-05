@@ -12,21 +12,21 @@ class GetGraphDataController
         $this->getMetricsForContainer = $getMetricsForContainer;
     }
     /**
-     * @Route("/api/Instances/Metrics/GetGraphDataController/getAllTypes", methods={"POST"}, name="Get all types of metrics for an instance")
+     * @Route("/api/Instances/Metrics/GetGraphDataController/getAllTypes", methods={"POST"}, name="Get all types of metrics for an instance", options={"rbac" = "instances.metrics.read"})
      */
     public function getAllTypes(int $hostId, string $container)
     {
         return $this->getMetricsForContainer->getAllTypes($hostId, $container);
     }
     /**
-     * @Route("/api/Instances/Metrics/GetGraphDataController/getTypeFilters", methods={"POST"}, name="Get all types filters for instance metrics")
+     * @Route("/api/Instances/Metrics/GetGraphDataController/getTypeFilters", methods={"POST"}, name="Get all types filters for instance metrics", options={"rbac" = "instances.metrics.read"})
      */
     public function getTypeFilters(int $hostId, string $container, int $type)
     {
         return $this->getMetricsForContainer->getTypeFilters($hostId, $container, $type);
     }
     /**
-     * @Route("/api/Instances/Metrics/GetGraphDataController/get", methods={"POST"}, name="Get all filtered type metrics for an instance")
+     * @Route("/api/Instances/Metrics/GetGraphDataController/get", methods={"POST"}, name="Get all filtered type metrics for an instance", options={"rbac" = "instances.metrics.read"})
      */
     public function get(int $hostId, string $container, int $type, string $filter, string $range)
     {

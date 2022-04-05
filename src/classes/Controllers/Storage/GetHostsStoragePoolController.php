@@ -13,7 +13,7 @@ class GetHostsStoragePoolController
         $this->getStoragePool = $getStoragePool;
     }
     /**
-     * @Route("/api/Storage/GetHostsStoragePoolController/get", methods={"POST"}, name="Get stroage pool properties")
+     * @Route("/api/Storage/GetHostsStoragePoolController/get", methods={"POST"}, name="Get stroage pool properties", options={"rbac" = "storage.pools.read"})
      */
     public function get(int $userId, Host $host, string $poolName)
     {

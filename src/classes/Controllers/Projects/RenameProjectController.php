@@ -13,7 +13,7 @@ class RenameProjectController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->renameProject = $renameProject;
     }
     /**
-     * @Route("/api/Projects/RenameProjectController/rename", methods={"POST"}, name="Rename Project")
+     * @Route("/api/Projects/RenameProjectController/rename", methods={"POST"}, name="Rename Project", options={"rbac" = "projects.update"})
      */
     public function rename(Host $host, string $project, string $newName)
     {

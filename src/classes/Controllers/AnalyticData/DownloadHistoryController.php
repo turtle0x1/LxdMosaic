@@ -12,7 +12,7 @@ class DownloadHistoryController
         $this->downloadHistory = $downloadHistory;
     }
     /**
-     * @Route("/api/AnalyticData/DownloadHistoryController/download", methods={"POST"}, name="Download old analytics data")
+     * @Route("/api/AnalyticData/DownloadHistoryController/download", methods={"POST"}, name="Download old analytics data", options={"rbac" = "lxdmosaic.data.oldAnalytics"})
      */
     public function download(int $userId)
     {

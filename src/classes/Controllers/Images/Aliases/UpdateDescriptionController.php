@@ -13,7 +13,7 @@ class UpdateDescriptionController implements \dhope0000\LXDClient\Interfaces\Rec
         $this->updateDescription = $updateDescription;
     }
     /**
-     * @Route("/api/Images/Aliases/UpdateDescriptionController/update", methods={"POST"}, name="Update Image Alias Description")
+     * @Route("/api/Images/Aliases/UpdateDescriptionController/update", methods={"POST"}, name="Update Image Alias Description", options={"rbac" = "images.alias.update"})
      */
     public function update(Host $host, string $fingerprint, string $name, string $description = "")
     {

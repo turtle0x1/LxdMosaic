@@ -14,7 +14,7 @@ class SeachUsersController
         $this->searchUsers = $searchUsers;
     }
     /**
-     * @Route("/api/InstanceSettings/Users/SeachUsersController/search", methods={"POST"}, name="Search all users on LXDMosaic")
+     * @Route("/api/InstanceSettings/Users/SeachUsersController/search", methods={"POST"}, name="Search all users on LXDMosaic", options={"rbac" = "lxdmosaic.users.read"})
      */
     public function search(int $userId, string $search)
     {

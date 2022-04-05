@@ -12,7 +12,7 @@ class GetAllAvailableMetricsController
         $this->getAvailableHostsMetrics = $getAvailableHostsMetrics;
     }
     /**
-     * @Route("/api/Instances/Metrics/GetAllAvailableMetricsController/get", methods={"POST"}, name="Get all available metrics")
+     * @Route("/api/Instances/Metrics/GetAllAvailableMetricsController/get", methods={"POST"}, name="Get all available metrics", options={"rbac" = "instances.metrics.read"})
      */
     public function get()
     {

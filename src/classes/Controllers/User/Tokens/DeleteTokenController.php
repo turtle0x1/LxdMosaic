@@ -12,7 +12,7 @@ class DeleteTokenController
         $this->deleteToken = $deleteToken;
     }
     /**
-     * @Route("/api/User/Tokens/DeleteTokenController/delete", methods={"POST"}, name="Delete LXDMosaic permanent access token")
+     * @Route("/api/User/Tokens/DeleteTokenController/delete", methods={"POST"}, name="Delete LXDMosaic permanent access token", options={"rbac" = "user.tokens.delete"})
      */
     public function delete(int $userId, int $tokenId)
     {

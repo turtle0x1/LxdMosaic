@@ -15,7 +15,7 @@ class DeletePathController implements \dhope0000\LXDClient\Interfaces\RecordActi
         $this->deletePath = $deletePath;
     }
     /**
-     * @Route("/api/Instances/Files/DeletePathController/delete", methods={"POST"}, name="Delete Instance File")
+     * @Route("/api/Instances/Files/DeletePathController/delete", methods={"POST"}, name="Delete Instance File", options={"rbac" = "instances.files.delete"})
      */
     public function delete(
         Host $host,

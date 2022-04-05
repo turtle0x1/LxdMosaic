@@ -12,7 +12,7 @@ class GetHostsProjectsOverviewController
         $this->getHostProjectsOverview = $getHostProjectsOverview;
     }
     /**
-     * @Route("/api/Projects/GetHostsProjectsOverviewController/get", methods={"POST"}, name="Get projects admin dashboard data")
+     * @Route("/api/Projects/GetHostsProjectsOverviewController/get", methods={"POST"}, name="Get projects admin dashboard data", options={"rbac" = "projects.read"})
      */
     public function get(int $userId)
     {

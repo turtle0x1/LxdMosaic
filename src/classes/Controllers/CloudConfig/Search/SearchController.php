@@ -12,7 +12,7 @@ class SearchController
         $this->searchCloudConfig = $searchCloudConfig;
     }
     /**
-     * @Route("/api/CloudConfig/Search/SearchController/searchAll", methods={"POST"}, name="Search cloud config files by name")
+     * @Route("/api/CloudConfig/Search/SearchController/searchAll", methods={"POST"}, name="Search cloud config files by name", options={"rbac" = "cloudConfig.read"})
      */
     public function searchAll(string $criteria)
     {

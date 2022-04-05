@@ -14,7 +14,7 @@ class GetProfilesDashboardController
         $this->getProfilesDashboard = $getProfilesDashboard;
     }
     /**
-     * @Route("/api/Profiles/GetProfilesDashboardController/get", methods={"POST"},  name="Get Profile Dashboard")
+     * @Route("/api/Profiles/GetProfilesDashboardController/get", methods={"POST"},  name="Get Profile Dashboard", options={"rbac" = "profiles.read"})
      */
     public function get(int $userId)
     {

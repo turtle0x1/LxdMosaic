@@ -11,7 +11,7 @@ class GetAllCloudConfigController
         $this->getConfigFiles = $getConfigFiles;
     }
     /**
-     * @Route("/api/CloudConfig/GetAllCloudConfigController/getAllConfigs", methods={"POST"}, name="Get all cloud configs (deprecated)", options={"deprecated" = "true"})
+     * @Route("/api/CloudConfig/GetAllCloudConfigController/getAllConfigs", methods={"POST"}, name="Get all cloud configs (deprecated)", options={"deprecated" = "true", "rbac" = "cloudConfig.read"})
      */
     public function getAllConfigs()
     {

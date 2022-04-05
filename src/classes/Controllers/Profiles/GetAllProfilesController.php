@@ -11,7 +11,7 @@ class GetAllProfilesController
         $this->universe = $universe;
     }
     /**
-     * @Route("/api/Profiles/GetAllProfilesController/getAllProfiles", methods={"POST"}, name="Get all profiles on all hosts (deprecated)", options={ "deprecated" = "true"})
+     * @Route("/api/Profiles/GetAllProfilesController/getAllProfiles", methods={"POST"}, name="Get all profiles on all hosts (deprecated)", options={ "deprecated" = "true", "rbac" = "profiles.read"})
      */
     public function getAllProfiles(int $userId)
     {

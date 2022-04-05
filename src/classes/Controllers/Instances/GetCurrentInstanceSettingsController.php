@@ -12,7 +12,7 @@ class GetCurrentInstanceSettingsController
         $this->getInstanceSettings = $getInstanceSettings;
     }
     /**
-     * @Route("/api/Instances/GetCurrentInstanceSettingsController/get", methods={"POST"}, name="Get all instance settings")
+     * @Route("/api/Instances/GetCurrentInstanceSettingsController/get", methods={"POST"}, name="Get all instance settings", options={"rbac" = "instances.delete"})
      */
     public function get(Host $host, string $container)
     {

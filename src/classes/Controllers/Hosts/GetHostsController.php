@@ -13,7 +13,7 @@ class GetHostsController
         $this->fetchUserDetails = $fetchUserDetails;
     }
     /**
-     * @Route("/api/Hosts/GetHostsController/getAllHosts", methods={"POST"}, name="Get all hosts (admin only)")
+     * @Route("/api/Hosts/GetHostsController/getAllHosts", methods={"POST"}, name="Get all hosts (admin only)", options={"rbac" = "lxdmosaic.hosts.read"})
      */
     public function getAllHosts(int $userId)
     {

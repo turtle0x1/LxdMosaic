@@ -16,7 +16,7 @@ class DeleteController
         $this->deleteInstanceType = $deleteInstanceType;
     }
     /**
-     * @Route("/api/Instances/InstanceTypes/DeleteController/delete", methods={"POST"}, name="Delete instance type")
+     * @Route("/api/Instances/InstanceTypes/DeleteController/delete", methods={"POST"}, name="Delete instance type", options={"rbac" = "lxdmosaic.instaceTypes.providers.type.delete"})
      */
     public function delete(int $userId, int $typeId)
     {

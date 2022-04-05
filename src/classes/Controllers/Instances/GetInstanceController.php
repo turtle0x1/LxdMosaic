@@ -12,7 +12,7 @@ class GetInstanceController
         $this->getInstance = $getInstance;
     }
     /**
-     * @Route("/api/Instances/GetInstanceController/get", methods={"POST"}, name="Get instance overview")
+     * @Route("/api/Instances/GetInstanceController/get", methods={"POST"}, name="Get instance overview", options={"rbac" = "instances.read"})
      */
     public function get(Host $host, string $container)
     {

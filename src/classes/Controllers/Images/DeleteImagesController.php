@@ -12,7 +12,7 @@ class DeleteImagesController implements \dhope0000\LXDClient\Interfaces\RecordAc
         $this->deleteImages = $deleteImages;
     }
     /**
-     * @Route("/api/Images/DeleteImagesController/delete", methods={"POST"}, name="Delete Images From Hosts")
+     * @Route("/api/Images/DeleteImagesController/delete", methods={"POST"}, name="Delete Images From Hosts", options={"rbac" = "images.delete"})
      */
     public function delete(int $userId, $imageData)
     {

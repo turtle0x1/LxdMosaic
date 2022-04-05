@@ -14,7 +14,7 @@ class AttachVolumesController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->attachVolumes = $attachVolumes;
     }
     /**
-     * @Route("/api/Instances/Volumes/AttachVolumesController/attach", methods={"POST"}, name="Attach volume to instance")
+     * @Route("/api/Instances/Volumes/AttachVolumesController/attach", methods={"POST"}, name="Attach volume to instance", options={"rbac" = "instances.volumes.attach"})
      */
     public function attach(
         int $userId,

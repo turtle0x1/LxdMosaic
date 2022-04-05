@@ -12,7 +12,7 @@ class ImportRemoteImagesController implements \dhope0000\LXDClient\Interfaces\Re
         $this->importRemoteImagesByFingerprint = $importRemoteImagesByFingerprint;
     }
     /**
-     * @Route("/api/Images/ImportRemoteImagesController/import", methods={"POST"}, name="Import image from simplestream server")
+     * @Route("/api/Images/ImportRemoteImagesController/import", methods={"POST"}, name="Import image from simplestream server", options={"rbac" = "images.import"})
      */
     public function import(HostsCollection $hosts, array $aliases, $urlKey)
     {

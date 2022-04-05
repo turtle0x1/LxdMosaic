@@ -13,7 +13,7 @@ class GetProjectsOverviewController
         $this->getProjectsOverview = $getProjectsOverview;
     }
     /**
-     * @Route("/api/Projects/GetProjectsOverviewController/get", methods={"POST"}, name="Get projects dashboard data")
+     * @Route("/api/Projects/GetProjectsOverviewController/get", methods={"POST"}, name="Get projects dashboard data", options={"rbac" = "projects.read"})
      */
     public function get(int $userId)
     {

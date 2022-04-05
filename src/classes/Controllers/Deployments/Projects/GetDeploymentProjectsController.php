@@ -17,7 +17,7 @@ class GetDeploymentProjectsController
         $this->fetchDeploymentProjects = $fetchDeploymentProjects;
     }
     /**
-     * @Route("/api/Deployments/Projects/GetDeploymentProjectsController/get", methods={"POST"}, name="Get Deployment Projects")
+     * @Route("/api/Deployments/Projects/GetDeploymentProjectsController/get", methods={"POST"}, name="Get Deployment Projects", options={"rbac" = "deployments.read"})
      */
     public function get(int $userId, int $deploymentId)
     {

@@ -12,7 +12,7 @@ class UpdateImagePropertiesController
         $this->updateImageProperties = $updateImageProperties;
     }
     /**
-     * @Route("/api/Images/UpdateImagePropertiesController/update", methods={"POST"}, name="Update an images properties")
+     * @Route("/api/Images/UpdateImagePropertiesController/update", methods={"POST"}, name="Update an images properties", options={"rbac" = "images.update"})
      */
     public function update(Host $host, string $fingerprint, array $settings)
     {

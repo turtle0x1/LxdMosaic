@@ -14,7 +14,7 @@ class DeleteGraphController
         $this->deleteGraph = $deleteGraph;
     }
     /**
-     * @Route("/api/User/Dashboard/Graphs/DeleteGraphController/delete", methods={"POST"}, name="Delete dashbaord from user dashboard")
+     * @Route("/api/User/Dashboard/Graphs/DeleteGraphController/delete", methods={"POST"}, name="Delete dashbaord from user dashboard", options={"rbac" = "user.dashboards.delete"})
      */
     public function delete(int $userId, int $graphId)
     {

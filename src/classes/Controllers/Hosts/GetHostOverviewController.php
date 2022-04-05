@@ -12,7 +12,7 @@ class GetHostOverviewController
         $this->getHostOverview = $getHostOverview;
     }
     /**
-     * @Route("/api/Hosts/GetHostOverviewController/get", methods={"POST"}, name="Get overview data for a host")
+     * @Route("/api/Hosts/GetHostOverviewController/get", methods={"POST"}, name="Get overview data for a host", options={"rbac" = "hosts.read"})
      */
     public function get(int $userId, Host $host)
     {

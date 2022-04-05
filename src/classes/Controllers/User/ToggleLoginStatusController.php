@@ -16,7 +16,7 @@ class ToggleLoginStatusController
         $this->validatePermissions = $validatePermissions;
     }
     /**
-     * @Route("/api/User/ToggleLoginStatusController/toggle", methods={"POST"}, name="Toggle LXDMosaic user login status")
+     * @Route("/api/User/ToggleLoginStatusController/toggle", methods={"POST"}, name="Toggle LXDMosaic user login status", options={"rbac" = "lxdmosaic.user.login.status"})
      */
     public function toggle(int $userId, int $targetUser, int $status)
     {

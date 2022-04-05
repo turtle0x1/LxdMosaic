@@ -11,7 +11,7 @@ class GetDetailsController
         $this->getDetails = $getDetails;
     }
     /**
-     * @Route("/api/CloudConfig/GetDetailsController/get", methods={"POST"}, name="Get cloud config file")
+     * @Route("/api/CloudConfig/GetDetailsController/get", methods={"POST"}, name="Get cloud config file", options={"rbac" = "cloudConfig.delete"})
      */
     public function get(int $id)
     {

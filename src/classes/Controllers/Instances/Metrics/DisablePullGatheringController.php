@@ -13,7 +13,7 @@ class DisablePullGatheringController
         $this->disablePullGathering = $disablePullGathering;
     }
     /**
-     * @Route("/api/Instances/Metrics/DisablePullGatheringController/disable", methods={"POST"}, name="Disable gathering metrics for instance")
+     * @Route("/api/Instances/Metrics/DisablePullGatheringController/disable", methods={"POST"}, name="Disable gathering metrics for instance", options={"rbac" = "instances.metrics.disable"})
      */
     public function disable(Host $host, string $instance, int $clearData = 0)
     {

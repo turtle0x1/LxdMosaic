@@ -14,7 +14,7 @@ class GetUsersController
         $this->getUsers = $getUsers;
     }
     /**
-     * @Route("/api/InstanceSettings/Users/GetUsersController/getAll", methods={"POST"}, name="Get LXDMosaic users")
+     * @Route("/api/InstanceSettings/Users/GetUsersController/getAll", methods={"POST"}, name="Get LXDMosaic users", options={"rbac" = "lxdmosaic.user.read"})
      */
     public function getAll(int $userId)
     {

@@ -12,7 +12,7 @@ class GetHostsInstancesController
         $this->getHostsInstances = $getHostsInstances;
     }
     /**
-     * @Route("/api/Hosts/Instances/GetHostsInstancesController/get", methods={"POST"}, name="Get all instances on a host")
+     * @Route("/api/Hosts/Instances/GetHostsInstancesController/get", methods={"POST"}, name="Get all instances on a host", options={"rbac" = "hosts.instances.read"})
      */
     public function get(Host $host)
     {

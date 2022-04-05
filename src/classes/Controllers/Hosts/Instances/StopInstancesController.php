@@ -12,7 +12,7 @@ class StopInstancesController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->stopInstances = $stopInstances;
     }
     /**
-     * @Route("/api/Hosts/Instances/StopInstancesController/stop", methods={"POST"}, name="Stop Instances")
+     * @Route("/api/Hosts/Instances/StopInstancesController/stop", methods={"POST"}, name="Stop Instances", options={"rbac" = "hosts.instances.state"})
      */
     public function stop(Host $host, array $containers)
     {

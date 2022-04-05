@@ -12,7 +12,7 @@ class SearchRemoteImagesController
         $this->getImages = $searchRemoteImages;
     }
     /**
-     * @Route("/api/Images/SearchRemoteImagesController/get", methods={"POST"}, name="Search images on simplestream servers")
+     * @Route("/api/Images/SearchRemoteImagesController/get", methods={"POST"}, name="Search images on simplestream servers", options={"rbac" = "images.import"})
      */
     public function get($urlKey, $searchType, $searchArch)
     {

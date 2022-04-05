@@ -13,7 +13,7 @@ class CreateController
         $this->createVirutalMachine = $createVirutalMachine;
     }
     /**
-     * @Route("/api/Instances/VirtualMachines/CreateController/create", methods={"POST"}, name="Create a virtual machine")
+     * @Route("/api/Instances/VirtualMachines/CreateController/create", methods={"POST"}, name="Create a virtual machine", options={"rbac" = "instances.virtualMachines.create"})
      */
     public function create(
         string $name,

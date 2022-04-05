@@ -14,7 +14,7 @@ class RevokeAccessController implements \dhope0000\LXDClient\Interfaces\RecordAc
         $this->revokeAccess = $revokeAccess;
     }
     /**
-     * @Route("/api/User/AllowedProjects/RevokeAccessController/revoke", methods={"POST"}, name="Revoke a users access from a hosts project")
+     * @Route("/api/User/AllowedProjects/RevokeAccessController/revoke", methods={"POST"}, name="Revoke a users access from a hosts project", options={"rbac" = "lxdmosaic.user.access.revoke"})
      */
     public function revoke(int $userId, int $targetUser, int $hostId, string $project)
     {

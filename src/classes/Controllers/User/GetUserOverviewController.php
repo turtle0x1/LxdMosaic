@@ -16,7 +16,7 @@ class GetUserOverviewController
         $this->validatePermissions = $validatePermissions;
     }
     /**
-     * @Route("/api/User/GetUserOverviewController/get", methods={"POST"}, name="Get overview of LXDMosaic users")
+     * @Route("/api/User/GetUserOverviewController/get", methods={"POST"}, name="Get overview of LXDMosaic users", options={"rbac" = "lxdmosaic.user.access.read"})
      */
     public function get(int $userId, int $targetUser)
     {

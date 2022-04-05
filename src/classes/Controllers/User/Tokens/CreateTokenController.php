@@ -12,7 +12,7 @@ class CreateTokenController
         $this->insertToken = $insertToken;
     }
     /**
-     * @Route("/api/User/Tokens/CreateTokenController/create", methods={"POST"}, name="Create LXDMosaic permanent access token")
+     * @Route("/api/User/Tokens/CreateTokenController/create", methods={"POST"}, name="Create LXDMosaic permanent access token", options={"rbac" = "user.tokens.create"})
      */
     public function create(int $userId, string $token)
     {

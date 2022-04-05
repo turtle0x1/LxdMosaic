@@ -14,7 +14,7 @@ class AddGraphController
         $this->addGraph = $addGraph;
     }
     /**
-     * @Route("/api/User/Dashboard/Graphs/AddGraphController/add", methods={"POST"}, name="Add graph to user dashboard")
+     * @Route("/api/User/Dashboard/Graphs/AddGraphController/add", methods={"POST"}, name="Add graph to user dashboard", options={"rbac" = "user.dashboard.graphs.create"})
      */
     public function add(
         int $userId,

@@ -13,7 +13,7 @@ class GetProjectInfoController
         $this->getProjectInfo = $getProjectInfo;
     }
     /**
-     * @Route("/api/Projects/GetProjectInfoController/get", methods={"POST"}, name="Get project for host")
+     * @Route("/api/Projects/GetProjectInfoController/get", methods={"POST"}, name="Get project for host", options={"rbac" = "projects.read"})
      */
     public function get(Host $host, string $project)
     {

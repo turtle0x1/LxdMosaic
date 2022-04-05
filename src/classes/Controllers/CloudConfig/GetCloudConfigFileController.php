@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class GetCloudConfigFileController
 {
     /**
-     * @Route("/api/CloudConfig/GetCloudConfigFileController/getFile", methods={"POST"}, name="Get cloud config file (deprecated)", options={"deprecated" = "true"})
+     * @Route("/api/CloudConfig/GetCloudConfigFileController/getFile", methods={"POST"}, name="Get cloud config file (deprecated)", options={"deprecated" = "true", "rbac" = "cloudConfig.read"})
      */
     public function getFile($folder, $file)
     {

@@ -12,7 +12,7 @@ class GetDashboardController
         $this->getUserDashboard = $getUserDashboard;
     }
     /**
-     * @Route("/api/User/Dashboard/GetDashboardController/get", methods={"POST"}, name="Get user dashboard")
+     * @Route("/api/User/Dashboard/GetDashboardController/get", methods={"POST"}, name="Get user dashboard", options={"rbac" = "user.dashboard.read"})
      */
     public function get(int $userId, int $dashboardId)
     {

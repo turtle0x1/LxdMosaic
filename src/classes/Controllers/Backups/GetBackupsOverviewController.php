@@ -14,7 +14,7 @@ class GetBackupsOverviewController
         $this->getBackupsOverview = $getBackupsOverview;
     }
     /**
-     * @Route("/api/Backups/GetBackupsOverviewController/get", methods={"POST"}, name="Get an overview of instance backups")
+     * @Route("/api/Backups/GetBackupsOverviewController/get", methods={"POST"}, name="Get an overview of instance backups", options={"rbac" = "backups.read"})
      */
     public function get($userId)
     {

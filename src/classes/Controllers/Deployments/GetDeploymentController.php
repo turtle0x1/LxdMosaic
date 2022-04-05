@@ -12,7 +12,7 @@ class GetDeploymentController
         $this->getDeployment = $getDeployment;
     }
     /**
-     * @Route("/api/Deployments/GetDeploymentController/get", methods={"POST"}, name="Get deployment details")
+     * @Route("/api/Deployments/GetDeploymentController/get", methods={"POST"}, name="Get deployment details", options={"rbac" = "deployments.read"})
      */
     public function get(int $userId, int $deploymentId)
     {

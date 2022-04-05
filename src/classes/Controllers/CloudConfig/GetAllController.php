@@ -11,7 +11,7 @@ class GetAllController
         $this->getConfigs = $getConfigs;
     }
     /**
-     * @Route("/api/CloudConfig/GetAllController/getAll", methods={"POST"}, name="Get all cloud configs")
+     * @Route("/api/CloudConfig/GetAllController/getAll", methods={"POST"}, name="Get all cloud configs", options={"rbac" = "cloudConfig.read"})
      */
     public function getAll()
     {

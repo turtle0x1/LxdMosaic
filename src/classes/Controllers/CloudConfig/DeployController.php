@@ -12,7 +12,7 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->deployConfigToContainer = $deploy;
     }
     /**
-     * @Route("/api/CloudConfig/DeployController/deploy", methods={"POST"}, name="Deploy Cloud Config")
+     * @Route("/api/CloudConfig/DeployController/deploy", methods={"POST"}, name="Deploy Cloud Config", options={"rbac" = "cloudConfig.deploy"})
      */
     public function deploy(
         HostsCollection $hosts,

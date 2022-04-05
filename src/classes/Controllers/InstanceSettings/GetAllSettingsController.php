@@ -20,7 +20,7 @@ class GetAllSettingsController
         $this->dateTools = $dateTools;
     }
     /**
-     * @Route("/api/InstanceSettings/GetAllSettingsController/getAll", methods={"POST"}, name="Get all settings for LXDMosaic")
+     * @Route("/api/InstanceSettings/GetAllSettingsController/getAll", methods={"POST"}, name="Get all settings for LXDMosaic", options={"rbac" = "lxdmosaic.settings.read"})
      */
     public function getAll(int $userId)
     {

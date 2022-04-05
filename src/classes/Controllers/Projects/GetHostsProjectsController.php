@@ -13,7 +13,7 @@ class GetHostsProjectsController
         $this->getHostsProjects = $getHostsProjects;
     }
     /**
-     * @Route("/api/Projects/GetHostsProjectsController/get", methods={"POST"}, name="Get all projects on all hosts")
+     * @Route("/api/Projects/GetHostsProjectsController/get", methods={"POST"}, name="Get all projects on all hosts", options={"rbac" = "projects.read"})
      */
     public function get(int $userId)
     {

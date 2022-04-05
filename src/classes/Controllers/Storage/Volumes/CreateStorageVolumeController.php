@@ -13,7 +13,7 @@ class CreateStorageVolumeController implements \dhope0000\LXDClient\Interfaces\R
         $this->createVolume = $createVolume;
     }
     /**
-     * @Route("/api/Storage/Volumes/CreateStorageVolumeController/create", methods={"POST"}, name="Create storage volume")
+     * @Route("/api/Storage/Volumes/CreateStorageVolumeController/create", methods={"POST"}, name="Create storage volume", options={"rbac" = "storage.volumes.create"})
      */
     public function create(Host $hostId, string $pool, string $name, array $config)
     {

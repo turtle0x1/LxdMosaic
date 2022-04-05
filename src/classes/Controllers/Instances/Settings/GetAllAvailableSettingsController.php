@@ -11,7 +11,7 @@ class GetAllAvailableSettingsController
         $this->getSettings = $getSettings;
     }
     /**
-     * @Route("/api/Instances/Settings/GetAllAvailableSettingsController/getAll", methods={"POST"}, name="Get a list of settings we support setting on an instance")
+     * @Route("/api/Instances/Settings/GetAllAvailableSettingsController/getAll", methods={"POST"}, name="Get a list of settings we support setting on an instance", options={"rbac" = "instances.settings.upadate"})
      */
     public function getAll()
     {

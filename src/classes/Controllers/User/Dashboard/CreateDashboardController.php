@@ -12,7 +12,7 @@ class CreateDashboardController
         $this->insertUserDashboard = $insertUserDashboard;
     }
     /**
-     * @Route("/api/User/Dashboard/CreateDashboardController/create", methods={"POST"}, name="Create user dashboard")
+     * @Route("/api/User/Dashboard/CreateDashboardController/create", methods={"POST"}, name="Create user dashboard", options={"rbac" = "user.dashboard.create"})
      */
     public function create(int $userId, string $name)
     {

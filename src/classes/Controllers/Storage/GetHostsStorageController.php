@@ -12,7 +12,7 @@ class GetHostsStorageController
         $this->getUserStorage = $getUserStorage;
     }
     /**
-     * @Route("/api/Storage/GetHostsStorageController/get", methods={"POST"}, name="Get all stroage volumes available on all hosts")
+     * @Route("/api/Storage/GetHostsStorageController/get", methods={"POST"}, name="Get all stroage volumes available on all hosts", options={"rbac" = "storage.pools.read"})
      */
     public function get($userId)
     {

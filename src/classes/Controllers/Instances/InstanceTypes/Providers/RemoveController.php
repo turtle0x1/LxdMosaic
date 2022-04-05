@@ -23,7 +23,7 @@ class RemoveController
         $this->removeProvider = $removeProvider;
     }
     /**
-     * @Route("/api/Instances/InstanceTypes/Providers/RemoveController/remove", methods={"POST"}, name="Remove instance type provider")
+     * @Route("/api/Instances/InstanceTypes/Providers/RemoveController/remove", methods={"POST"}, name="Remove instance type provider", options={"rbac" = "lxdmosaic.instaceTypes.providers.delete"})
      */
     public function remove(int $userId, int $providerId)
     {

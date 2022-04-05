@@ -12,7 +12,7 @@ class SearchController
         $this->getAllImages = $getAllImages;
     }
     /**
-     * @Route("/api/Images/Search/SearchController/getAllAvailableImages", methods={"POST"}, name="Search images on all hosts")
+     * @Route("/api/Images/Search/SearchController/getAllAvailableImages", methods={"POST"}, name="Search images on all hosts", options={"rbac" = "images.read"})
      */
     public function getAllAvailableImages(int $userId, string $search, string $type = "")
     {

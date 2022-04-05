@@ -14,7 +14,7 @@ class GetStrategiesController
         $this->fetchStrategies = $fetchStrategies;
     }
     /**
-     * @Route("/api/Backups/Strategies/GetStrategiesController/get", methods={"POST"}, name="Get a list of backup strategies")
+     * @Route("/api/Backups/Strategies/GetStrategiesController/get", methods={"POST"}, name="Get a list of backup strategies", options={"rbac" = "backups.schedule"})
      */
     public function get()
     {

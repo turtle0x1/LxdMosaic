@@ -12,7 +12,7 @@ class GetHostsNetworksController
         $this->getHostsNetworks = $getHostsNetworks;
     }
     /**
-     * @Route("/api/Networks/GetHostsNetworksController/get", methods={"POST"}, name="Get all networks on hosts")
+     * @Route("/api/Networks/GetHostsNetworksController/get", methods={"POST"}, name="Get all networks on hosts", options={"rbac" = "networks.read"})
      */
     public function get(int $userId)
     {

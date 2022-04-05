@@ -12,7 +12,7 @@ class GetNetworksDashboardController
         $this->getNetworksDashboard = $getNetworksDashboard;
     }
     /**
-     * @Route("/api/Networks/GetNetworksDashboardController/get", methods={"POST"}, name="Get dashboard data for networks")
+     * @Route("/api/Networks/GetNetworksDashboardController/get", methods={"POST"}, name="Get dashboard data for networks", options={"rbac" = "networks.read"})
      */
     public function get(int $userId)
     {

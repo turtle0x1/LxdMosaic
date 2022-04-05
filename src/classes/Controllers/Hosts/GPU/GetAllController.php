@@ -13,7 +13,7 @@ class GetAllController
         $this->getAll = $getAll;
     }
     /**
-     * @Route("/api/Hosts/GPU/GetAllController/getAll", methods={"POST"}, name="Get all GPU's on a host")
+     * @Route("/api/Hosts/GPU/GetAllController/getAll", methods={"POST"}, name="Get all GPU's on a host", options={"rbac" = "hosts.read"})
      */
     public function getAll(Host $host)
     {

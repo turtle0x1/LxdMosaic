@@ -14,7 +14,7 @@ class GetUserAllowedProjectsController implements \dhope0000\LXDClient\Interface
         $this->getUserAllowedProjects = $getUserAllowedProjects;
     }
     /**
-     * @Route("/api/User/AllowedProjects/GetUserAllowedProjectsController/get", methods={"POST"}, name="Get a users allowed projects")
+     * @Route("/api/User/AllowedProjects/GetUserAllowedProjectsController/get", methods={"POST"}, name="Get a users allowed projects", options={"rbac" = "lxdmosaic.user.access.read"})
      */
     public function get(int $userId, int $targetUser)
     {

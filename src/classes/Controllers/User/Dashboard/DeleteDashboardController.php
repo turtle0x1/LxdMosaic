@@ -14,7 +14,7 @@ class DeleteDashboardController
         $this->deleteDashboard = $deleteDashboard;
     }
     /**
-     * @Route("/api/User/Dashboard/DeleteDashboardController/delete", methods={"POST"}, name="Delete user dashboard")
+     * @Route("/api/User/Dashboard/DeleteDashboardController/delete", methods={"POST"}, name="Delete user dashboard", options={"rbac" = "user.dashboard.delete"})
      */
     public function delete(int $userId, int $dashboardId)
     {

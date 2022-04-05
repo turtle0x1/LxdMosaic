@@ -14,7 +14,7 @@ class ResetPasswordController
         $this->resetPassword = $resetPassword;
     }
     /**
-     * @Route("/api/InstanceSettings/Users/ResetPasswordController/reset", methods={"POST"}, name="Reset user password for LXDMosaic")
+     * @Route("/api/InstanceSettings/Users/ResetPasswordController/reset", methods={"POST"}, name="Reset user password for LXDMosaic", options={"rbac" = "lxdmosaic.user.resetPassword"})
      */
     public function reset(int $userId, int $targetUser, string $newPassword)
     {

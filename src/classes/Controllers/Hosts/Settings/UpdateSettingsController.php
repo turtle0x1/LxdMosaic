@@ -11,7 +11,7 @@ class UpdateSettingsController implements \dhope0000\LXDClient\Interfaces\Record
         $this->updateHostSettings = $updateHostSettings;
     }
     /**
-     * @Route("/api/Hosts/Settings/UpdateSettingsController/update", methods={"POST"}, name="Update hosts settings")
+     * @Route("/api/Hosts/Settings/UpdateSettingsController/update", methods={"POST"}, name="Update hosts settings", options={"rbac" = "lxdmosaic.hosts.update"})
      */
     public function update(int $userId, int $hostId, string $alias, int $supportsLoadAverages)
     {

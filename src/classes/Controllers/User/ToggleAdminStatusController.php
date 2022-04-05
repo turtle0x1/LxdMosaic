@@ -16,7 +16,7 @@ class ToggleAdminStatusController
         $this->validatePermissions = $validatePermissions;
     }
     /**
-     * @Route("/api/User/ToggleAdminStatusController/toggle", methods={"POST"}, name="Toggle LXDMosaic user admin status")
+     * @Route("/api/User/ToggleAdminStatusController/toggle", methods={"POST"}, name="Toggle LXDMosaic user admin status", options={"rbac" = "lxdmosaic.user.admin.status", "deprecated" = "true"})
      */
     public function toggle(int $userId, int $targetUser, int $status)
     {

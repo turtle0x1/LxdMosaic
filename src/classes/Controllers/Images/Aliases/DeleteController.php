@@ -13,7 +13,7 @@ class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->deleteAlias = $deleteAlias;
     }
     /**
-     * @Route("/api/Images/Aliases/DeleteController/delete", methods={"POST"}, name="Delete Image Alias")
+     * @Route("/api/Images/Aliases/DeleteController/delete", methods={"POST"}, name="Delete Image Alias", options={"rbac" = "images.alias.delete"})
      */
     public function delete(Host $host, string $name)
     {

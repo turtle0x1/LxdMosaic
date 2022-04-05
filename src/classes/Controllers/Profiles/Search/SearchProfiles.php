@@ -12,14 +12,14 @@ class SearchProfiles
         $this->getProfilesOnAllHosts = $getProfilesOnAllHosts;
     }
     /**
-     * @Route("/api/Profiles/Search/SearchProfiles/getAllCommonProfiles", methods={"POST"}, name="Search for profiles with matching name on all hosts")
+     * @Route("/api/Profiles/Search/SearchProfiles/getAllCommonProfiles", methods={"POST"}, name="Search for profiles with matching name on all hosts", options={"rbac" = "profiles.read"})
      */
     public function getAllCommonProfiles(int $userId, string $profile)
     {
         return $this->getProfilesOnAllHosts->getProfilesOnAllHosts($userId, $profile);
     }
     /**
-     * @Route("/api/Profiles/Search/SearchProfiles/searchHostProfiles", methods={"POST"}, name="Search for profiles with matching name on one host")
+     * @Route("/api/Profiles/Search/SearchProfiles/searchHostProfiles", methods={"POST"}, name="Search for profiles with matching name on one host", options={"rbac" = "profiles.read"})
      */
     public function searchHostProfiles(Host $host, string $search)
     {

@@ -14,7 +14,7 @@ class SetInstanceCommentController implements \dhope0000\LXDClient\Interfaces\Re
         $this->setInstanceComment = $setInstanceComment;
     }
     /**
-     * @Route("/api/Instances/Comments/SetInstanceCommentController/set", methods={"POST"}, name="Set instance comment")
+     * @Route("/api/Instances/Comments/SetInstanceCommentController/set", methods={"POST"}, name="Set instance comment", options={"rbac" = "instances.comment.set"})
      */
     public function set(
         Host $host,

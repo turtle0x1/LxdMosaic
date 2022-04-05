@@ -14,7 +14,7 @@ class GetLastController
         $this->getActions = $getActions;
     }
     /**
-     * @Route("/api/InstanceSettings/RecordedActions/GetLastController/get", methods={"POST"}, name="Get N last number of actions recorded on LXDMosaic")
+     * @Route("/api/InstanceSettings/RecordedActions/GetLastController/get", methods={"POST"}, name="Get N last number of actions recorded on LXDMosaic", options={"rbac" = "lxdmosaic.audit.read"})
      */
     public function get(int $userId, int $ammount)
     {
