@@ -106,7 +106,7 @@ parts:
 
   lxdmosaic-node:
     plugin: nodejs
-    nodejs-version: "14.5.0"
+    nodejs-version: "14.19.1"
     source: .
     organize:
       'LICENSE': 'madLadGoAway'
