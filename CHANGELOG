@@ -66,6 +66,7 @@ Fixed
     Server overview leaks all project names (#453)
     Offline host/s breaks background cron jobs (#362)
     Fix encforcing backup retention rules deletes deleted backups
+    Storage total for instance incorrect if size key overrides pool store (#494)
 
 Removed
     Native centos support, could still use SNAP (#457)

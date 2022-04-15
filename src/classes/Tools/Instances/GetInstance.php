@@ -49,7 +49,12 @@ class GetInstance
 
         foreach ($details["expanded_devices"] as $name => &$device) {
             if ($device["type"] == "disk" && isset($device["pool"])) {
-                $results = $host->storage->resources->info($device["pool"]);
+                if (isset($device["size"])) {
+                    $results = ["space"=>["total"=>$device["size"]]];
+                } else {
+                    $results = $host->storage->resources->info($device["pool"]);
+                }
+
                 $state["disk"][$name]["poolSize"] = $results["space"]["total"];
             }
         }
