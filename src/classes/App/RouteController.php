@@ -35,15 +35,15 @@ class RouteController
         $this->fetchUserDetails = $fetchUserDetails;
     }
 
-    public function routeRequest($explodedPath)
+    public function routeRequest($request, $context)
     {
-        $canSkipAuth = in_array(implode("/", $explodedPath), [
-            "assets/lxdMosaic/logo.png",
-            "assets/dist/login.dist.css",
-            "assets/dist/login.dist.js",
-            "assets/dist/external.fontawesome.css",
-            "assets/fontawesome/webfonts/fa-solid-900.ttf",
-            "api/InstanceSettings/FirstRunController/run"
+        $canSkipAuth = in_array($request->getRequestUri(), [
+            "/assets/lxdMosaic/logo.png",
+            "/assets/dist/login.dist.css",
+            "/assets/dist/login.dist.js",
+            "/assets/dist/external.fontawesome.css",
+            "/assets/fontawesome/webfonts/fa-solid-900.ttf",
+            "/api/InstanceSettings/FirstRunController/run"
         ]);
 
         $adminPassBlank = $this->fetchUserDetails->adminPasswordBlank();
@@ -53,29 +53,29 @@ class RouteController
             exit;
         }
 
-        if (isset($explodedPath[0]) && $explodedPath[0] == "api") {
+        if (strpos($request->getRequestUri(), "/api") === 0) {
             $headers = ["userid"=>1];
 
             if (!$canSkipAuth) {
-                $headers = getallheaders();
+                $headers = $request->headers->all();
 
-                // PHP-FPM strikes again
-                $headers = array_change_key_case($headers);
+                $userId = $request->headers->get("userid");
+                $apiToken = $request->headers->get("apitoken");
 
-                if (!isset($headers["userid"]) || !isset($headers["apitoken"])) {
+                if ($userId == null || $apiToken == null) {
                     http_response_code(403);
                     echo json_encode(["error"=>"Missing either user id or token"]);
                     exit;
                 }
 
-                if (!$this->validateToken->validate($headers["userid"], $headers["apitoken"])) {
+                if (!$this->validateToken->validate($userId, $apiToken)) {
                     http_response_code(403);
                     echo json_encode(["error"=>"Not valid token"]);
                     exit;
                 }
             }
 
-            $this->routeApi->route($explodedPath, $headers);
+            $this->routeApi->route($request, $context);
             exit;
         }
 
@@ -98,21 +98,15 @@ class RouteController
                 require __DIR__ . "/../../views/login.php";
                 return false;
             }
-        } elseif (isset($explodedPath[0]) && $explodedPath[0] == "logout") {
+        } elseif (strpos($request->getRequestUri(), "/logout") === 0) {
             $this->userSession->logout();
             header("Location: /");
             exit;
         }
 
-        $path = "";
-        if (isset($explodedPath[0])) {
-            $parts = parse_url($explodedPath[0]);
-            $path = $parts["path"];
-        }
-
-        if ($path == "assets") {
-            $this->routeAssets->route($explodedPath);
-        } elseif ($path == "terminals") {
+        if (strpos($request->getRequestUri(), "/assets") === 0) {
+            $this->routeAssets->route($request);
+        } elseif (strpos($request->getRequestUri(), "/terminals") === 0) {
             $port = '3000';
 
             $url = $_SERVER['REQUEST_SCHEME']
@@ -137,7 +131,7 @@ class RouteController
 
             echo $server_output;
         } else {
-            $this->routeView->route($explodedPath);
+            $this->routeView->route($request);
         }
 
         return true;

@@ -10,15 +10,15 @@ class RouteView
         $this->container = $container;
     }
 
-    public function route($pathParts)
+    public function route($request)
     {
-        if (empty($pathParts)) {
+        if (empty($request->getRequestUri())) {
             require __DIR__ . "/../../views/index.php";
-        } elseif ($pathParts[0] == "login") {
+        } elseif (strpos($request->getRequestUri(), "/login") === 0) {
             require __DIR__ . "/../../views/login.php";
-        } elseif ($pathParts[0] == "terminal") {
+        } elseif (strpos($request->getRequestUri(), "/terminal") === 0) {
             require __DIR__ . "/../../views/vmTerminal.php";
-        } elseif (isset($pathParts[1]) && $pathParts[1] == "firstRun") {
+        } elseif (strpos($request->getRequestUri(), "/firstRun") === 0) {
             require __DIR__ . "/../../views/firstRun.php";
         } else {
             require __DIR__ . "/../../views/index.php";

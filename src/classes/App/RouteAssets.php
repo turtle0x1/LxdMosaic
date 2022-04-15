@@ -17,13 +17,14 @@ class RouteAssets
         $this->outputFile($path);
     }
 
-    public function outputFile($path)
+    public function outputFile($request)
     {
-        $path = __DIR__ . "/../../" . implode($path, "/");
+        $path = __DIR__ . "/../../" . $request->getRequestUri();
+
         if (strpos($path, "?") !== false) {
             $path = substr($path, 0, strpos($path, "?"));
         }
-
+        
         //get the last-modified-date of this very file
         $lastModified=filemtime($path);
         //get a unique hash of this file (etag)

@@ -9,6 +9,9 @@ use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\Model\Users\InvalidateToken;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Matcher\CompiledUrlMatcher;
 
 class RouteApi
 {
@@ -47,34 +50,22 @@ class RouteApi
         return $this->userId;
     }
 
-    public function route($pathParts, $headers, $returnResult = false)
+    public function route($request, $context, $returnResult = false)
     {
-        $userId = $headers["userid"];
-
-        $this->project = isset($headers["project"]) && !empty($headers["project"]) ? $headers["project"] : null;
+        $userId = $request->headers->get("userid");
+        $this->project = $request->headers->get("project");
         $this->userId = $userId;
 
-        if (count($pathParts) < 3) {
-            throw new \Exception("Api String Not Long Enough", 1);
-        }
+        $routes = unserialize(file_get_contents(__DIR__ . "/../../sensitiveData/application/routes.cache"));
 
-        unset($pathParts[0]);
+        $matcher = new CompiledUrlMatcher($routes, $context);
 
-        end($pathParts);
+        $result = $matcher->matchRequest($request);
 
-        $methodkey = key($pathParts);
-        $method = $pathParts[$methodkey];
+        $controllerStr = $result["_controller"];
+        $method = $result["_method"];
 
-        unset($pathParts[$methodkey]);
-
-        $controllerStr = "dhope0000\\LXDClient\\Controllers\\" . implode($pathParts, "\\");
-        if (!class_exists($controllerStr)) {
-            throw new \Exception("End point not found", 1);
-        } elseif (method_exists($controllerStr, $method) !== true) {
-            throw new \Exception("Method point not found");
-        }
-
-        $params = $this->orderParams($_POST, $controllerStr, $method, $userId, $headers);
+        $params = $this->orderParams($request->request->all(), $controllerStr, $method, $userId, $request);
 
         $controller = $this->container->make($controllerStr);
 
@@ -93,7 +84,7 @@ class RouteApi
         echo json_encode($data);
     }
 
-    public function orderParams($passedArguments, $class, $method, int $userId, $headers)
+    public function orderParams($passedArguments, $class, $method, int $userId, $request)
     {
         $reflectedMethod = new \ReflectionMethod($class, $method);
         $paramaters = $reflectedMethod->getParameters();
@@ -104,7 +95,7 @@ class RouteApi
         $userIsAdmin = $this->fetchUserDetails->isAdmin($userId) === '1';
 
         if (empty($allowedProjects) && !$userIsAdmin) {
-            $this->invalidateToken->invalidate($userId, $headers["apitoken"]);
+            $this->invalidateToken->invalidate($userId, $request->headers->get("apitoken"));
             http_response_code(403);
             throw new \Exception("No Access To Any Projects", 1);
         }
