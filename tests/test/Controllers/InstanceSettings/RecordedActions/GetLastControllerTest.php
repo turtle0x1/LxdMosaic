@@ -2,6 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class GetLastControllerTest extends TestCase
 {
@@ -27,23 +29,40 @@ final class GetLastControllerTest extends TestCase
     public function test_nonAdminCantGetAllSettings() :void
     {
         $this->expectException(\Exception::class);
-
-        $_POST = ["ammount"=>5];
-
-        $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/RecordedActions/GetLastController/get')),
-            ["userid"=>2],
+        $request =  new Request();
+        $request = $request->create(
+            "api/InstanceSettings/RecordedActions/GetLastController/get",
+            "POST",
+            ["ammount"=>5],
+            [],
+            [],
+            ["HTTP_USERID"=>2],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
+        $this->routeApi->route(
+            $request,
+            $context,
             true
         );
     }
 
     public function test_adminCanGetSettings() :void
     {
-        $_POST = ["ammount"=>5];
-
+        $request =  new Request();
+        $request = $request->create(
+            "api/InstanceSettings/RecordedActions/GetLastController/get",
+            "POST",
+            ["ammount"=>5],
+            [],
+            [],
+            ["HTTP_USERID"=>1],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/RecordedActions/GetLastController/get')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
         $this->assertTrue(count($result) > 0);

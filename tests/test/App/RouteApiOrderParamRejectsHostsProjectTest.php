@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class RouteApiOrderParamRejectsHostsProjectTest extends TestCase
 {
@@ -15,30 +17,63 @@ final class RouteApiOrderParamRejectsHostsProjectTest extends TestCase
     public function test_orderParamRejectsOnOneHost() :void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hostId"=>1];
+        $request =  new Request();
+        $request = $request->create(
+            "api/Hosts/GetHostOverviewController/get",
+            "POST",
+            ["hostId"=>1],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_APITOKEN"=>"FAKE", "HTTP_PROJECT"=>"default"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
         $this->routeApi->route(
-            array_filter(explode('/', "/Hosts/GetHostOverviewController/get")),
-            ["userid"=>2, "project"=>"default"]
+            $request,
+            $context,
+            true
         );
     }
 
     public function test_orderParamRejectsOnOneHostObject() :void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hostId"=>1];
+        $request =  new Request();
+        $request = $request->create(
+            "api/Instances/MigrateInstanceController/migrate",
+            "POST",
+            ["hostId"=>1],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_APITOKEN"=>"FAKE", "HTTP_PROJECT"=>"default"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
         $this->routeApi->route(
-            array_filter(explode('/', "/Instances/MigrateInstanceController/migrate")),
-            ["userid"=>2, "project"=>"default"]
+            $request,
+            $context,
+            true
         );
     }
 
     public function test_orderParamRejectsManyHosts() :void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hosts"=>[1]];
+        $request =  new Request();
+        $request = $request->create(
+            "api/CloudConfig/DeployController/deploy",
+            "POST",
+            ["hosts"=>[1]],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_APITOKEN"=>"FAKE", "HTTP_PROJECT"=>"default"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
         $this->routeApi->route(
-            array_filter(explode('/', "/CloudConfig/DeployController/deploy")),
-            ["userid"=>2, "project"=>"default"]
+            $request,
+            $context,
+            true
         );
     }
 }

@@ -2,6 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class GetMySettingsOverviewControllerTest extends TestCase
 {
@@ -15,12 +17,24 @@ final class GetMySettingsOverviewControllerTest extends TestCase
 
     public function test_userCanGetTheirSettings() :void
     {
+        $request =  new Request();
+        $request = $request->create(
+            "api/InstanceSettings/GetMySettingsOverviewController/get",
+            "POST",
+            [],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_APITOKEN"=>"fakeToken"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
+
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/GetMySettingsOverviewController/get')),
-            ["userid"=>2],
+            $request,
+            $context,
             true
         );
-
+        
         $this->assertEquals(["permanentTokens"], array_keys($result));
     }
 }

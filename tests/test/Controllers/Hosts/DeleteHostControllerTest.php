@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class DeleteHostControllerTest extends TestCase
 {
@@ -15,15 +17,21 @@ final class DeleteHostControllerTest extends TestCase
     public function test_nonAdminUserCantDeleteHost() :void
     {
         $this->expectException(\Exception::class);
-
-        $_POST = ["hostId"=>1];
-
-        $result = $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/DeleteHostController/delete')),
-            ["userid"=>2],
+        $request =  new Request();
+        $request = $request->create(
+            "api/Hosts/DeleteHostController/delete",
+            "POST",
+            ["hostId"=>1],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_APITOKEN"=>"FAKE", "HTTP_PROJECT"=>"default"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
+        $this->routeApi->route(
+            $request,
+            $context,
             true
         );
-
-        $this->assertEquals($expected, $result);
     }
 }

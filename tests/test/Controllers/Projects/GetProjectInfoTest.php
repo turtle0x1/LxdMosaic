@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class GetProjectInfoTest extends TestCase
 {
@@ -16,11 +18,20 @@ final class GetProjectInfoTest extends TestCase
      */
     public function test_get_project_info($data, $expected) :void
     {
-        $_POST = $data;
-
+        $request =  new Request();
+        $request = $request->create(
+            "api/Projects/GetProjectInfoController/get",
+            "POST",
+            $data,
+            [],
+            [],
+            ["HTTP_USERID"=>1],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Projects/GetProjectInfoController/get')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
 

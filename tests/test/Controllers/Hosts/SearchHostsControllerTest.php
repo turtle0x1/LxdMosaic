@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class SearchHostsControllerTest extends TestCase
 {
@@ -24,24 +26,41 @@ final class SearchHostsControllerTest extends TestCase
 
     public function test_accessToSearchLimitedHosts() :void
     {
-        $_POST = ["hostSearch"=>"localhost"];
-
+        $request =  new Request();
+        $request = $request->create(
+            "api/Hosts/SearchHosts/search",
+            "POST",
+            ["hostSearch"=>"localhost"],
+            [],
+            [],
+            ["HTTP_USERID"=>2],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/SearchHosts/search')),
-            ["userid"=>2],
+            $request,
+            $context,
             true
         );
-
         $this->assertTrue(count($result) === 1);
     }
 
     public function test_accessToSearchAllHosts() :void
     {
-        $_POST = ["hostSearch"=>"localhost"];
-
+        $request =  new Request();
+        $request = $request->create(
+            "api/Hosts/SearchHosts/search",
+            "POST",
+            ["hostSearch"=>"localhost"],
+            [],
+            [],
+            ["HTTP_USERID"=>1],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/SearchHosts/search')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
 

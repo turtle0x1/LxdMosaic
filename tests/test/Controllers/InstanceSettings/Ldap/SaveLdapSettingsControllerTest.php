@@ -2,6 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class SaveLdapSettingsControllerTest extends TestCase
 {
@@ -16,12 +18,20 @@ final class SaveLdapSettingsControllerTest extends TestCase
     public function test_nonAdminCantSaveSettings() :void
     {
         $this->expectException(\Exception::class);
-
-        $_POST = ["settings"=>[]];
-
+        $request =  new Request();
+        $request = $request->create(
+            "api/InstanceSettings/Ldap/SaveLdapSettingsController/save",
+            "POST",
+            ["settings"=>[]],
+            [],
+            [],
+            ["HTTP_USERID"=>2],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
         $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/Ldap/SaveLdapSettingsController/save')),
-            ["userid"=>2],
+            $request,
+            $context,
             true
         );
     }

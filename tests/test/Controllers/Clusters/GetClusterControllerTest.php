@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class GetClusterControllerTest extends TestCase
 {
@@ -15,11 +17,23 @@ final class GetClusterControllerTest extends TestCase
     public function test_non_admin_cant_access_cluster_overview() :void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["cluster"=>1];
+
+
+        $request =  new Request();
+        $request = $request->create(
+            "api/Clusters/GetClusterController/get",
+            "POST",
+            ["cluster"=>1],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_APITOKEN"=>"FAKE"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Clusters/GetClusterController/get')),
-            ["userid"=>2],
+            $request,
+            $context,
             true
         );
     }

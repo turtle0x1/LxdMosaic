@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class SetHostProjectControllerTest extends TestCase
 {
@@ -27,12 +29,21 @@ final class SetHostProjectControllerTest extends TestCase
     public function test_userTryingToSetProjectOnAHostWithNoAccess() :void
     {
         $this->expectException(\Exception::class);
+        $request =  new Request();
+        $request = $request->create(
+            "api/User/SetHostProjectController/set",
+            "POST",
+            ["hostId"=>$this->newHostId, "project"=>"default"],
+            [],
+            [],
+            ["HTTP_USERID"=>2],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
-        $_POST = ["hostId"=>$this->newHostId, "project"=>"default"];
-
-        $this->routeApi->route(
-            array_filter(explode('/', '/User/SetHostProjectController/set')),
-            ["userid"=>2],
+        $result = $this->routeApi->route(
+            $request,
+            $context,
             true
         );
     }
@@ -40,23 +51,42 @@ final class SetHostProjectControllerTest extends TestCase
     public function test_userTryingToSetToProjectWithNoAcess() :void
     {
         $this->expectException(\Exception::class);
+        $request =  new Request();
+        $request = $request->create(
+            "api/User/SetHostProjectController/set",
+            "POST",
+            ["hostId"=>1, "project"=>"default"],
+            [],
+            [],
+            ["HTTP_USERID"=>2],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
-        $_POST = ["hostId"=>1, "project"=>"default"];
-
-        $this->routeApi->route(
-            array_filter(explode('/', '/User/SetHostProjectController/set')),
-            ["userid"=>2],
+        $result = $this->routeApi->route(
+            $request,
+            $context,
             true
         );
     }
 
     public function test_userChangesProject() :void
     {
-        $_POST = ["hostId"=>1, "project"=>"testProject"];
+        $request =  new Request();
+        $request = $request->create(
+            "api/User/SetHostProjectController/set",
+            "POST",
+            ["hostId"=>1, "project"=>"testProject"],
+            [],
+            [],
+            ["HTTP_USERID"=>1],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/User/SetHostProjectController/set')),
-            ["userid"=>2],
+            $request,
+            $context,
             true
         );
 

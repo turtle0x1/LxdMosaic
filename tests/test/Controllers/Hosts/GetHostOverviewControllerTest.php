@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class GetHostOverviewControllerTest extends TestCase
 {
@@ -15,22 +17,40 @@ final class GetHostOverviewControllerTest extends TestCase
     public function test_noAccesToGetHostOverview() :void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hostId"=>2];
-
-        $result = $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/GetHostOverviewController/get')),
-            ["userid"=>2],
+        $request =  new Request();
+        $request = $request->create(
+            "api/Hosts/GetHostOverviewController/get",
+            "POST",
+            ["hostId"=>2],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_APITOKEN"=>"FAKE", "HTTP_PROJECT"=>"default"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
+        $this->routeApi->route(
+            $request,
+            $context,
             true
         );
     }
 
     public function test_hasAccessToHost() :void
     {
-        $_POST = ["hostId"=>1];
-
+        $request =  new Request();
+        $request = $request->create(
+            "api/Hosts/GetHostOverviewController/get",
+            "POST",
+            ["hostId"=>1],
+            [],
+            [],
+            ["HTTP_USERID"=>1, "HTTP_APITOKEN"=>"FAKE", "HTTP_PROJECT"=>"default"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/GetHostOverviewController/get')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
 

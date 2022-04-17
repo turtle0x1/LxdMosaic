@@ -2,6 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class FirstRunControllerTest extends TestCase
 {
@@ -16,12 +18,21 @@ final class FirstRunControllerTest extends TestCase
     public function test_firstRunCantRunIfAdminPassSet() :void
     {
         $this->expectException(\Exception::class);
-
-        $_POST = ["adminPassword"=>"test123", "hosts"=>[]];
+        $request =  new Request();
+        $request = $request->create(
+            "api/InstanceSettings/FirstRunController/run",
+            "POST",
+            ["adminPassword"=>"test123", "hosts"=>[]],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_APITOKEN"=>"fakeToken", "HTTP_PROJECT"=>"testProject"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/FirstRunController/run')),
-            ["userid"=>2],
+            $request,
+            $context,
             true
         );
     }

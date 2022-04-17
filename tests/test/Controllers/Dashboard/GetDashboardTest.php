@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class GetDashboardTest extends TestCase
 {
@@ -14,11 +16,24 @@ final class GetDashboardTest extends TestCase
 
     public function test_dashboard_key_are_the_same() :void
     {
+        $request =  new Request();
+        $request = $request->create(
+            "api/Dashboard/GetController/get",
+            "POST",
+            ["cluster"=>1],
+            [],
+            [],
+            ["HTTP_USERID"=>1],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
+
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Dashboard/GetController/get')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
+        
         // Assert the top level of the response hasnt changed
         $exepctedTopKeys = ["userDashboards", "projectsUsageGraphData"];
 

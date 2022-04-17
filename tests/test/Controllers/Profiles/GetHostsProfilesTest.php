@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class GetHostsProfilesTest extends TestCase
 {
@@ -14,9 +16,21 @@ final class GetHostsProfilesTest extends TestCase
 
     public function test_getHostsProjects() :void
     {
+        $request =  new Request();
+        $request = $request->create(
+            "api/Profiles/GetAllProfilesController/getAllProfiles",
+            "POST",
+            [],
+            [],
+            [],
+            ["HTTP_USERID"=>1, "HTTP_APITOKEN"=>"fakeToken"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
+
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Profiles/GetAllProfilesController/getAllProfiles')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
 

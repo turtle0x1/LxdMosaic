@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class DeleteImagesControllerTest extends TestCase
 {
@@ -15,16 +17,24 @@ final class DeleteImagesControllerTest extends TestCase
     public function test_no_access_doesnt_allow_deleting_images() :void
     {
         $this->expectException(\Exception::class);
-        $_POST = [
-            "imageData"=>[
-                ["hostId"=>2, "fingerprint"=>"fakeFingerPrint"]
-            ]
-        ];
-
-
-        $result = $this->routeApi->route(
-            array_filter(explode('/', '/Images/DeleteImagesController/delete')),
-            ["userid"=>2, "project"=>"testProject"],
+        $request =  new Request();
+        $request = $request->create(
+            "api/Images/DeleteImagesController/delete",
+            "POST",
+            [
+                "imageData"=>[
+                    ["hostId"=>2, "fingerprint"=>"fakeFingerPrint"]
+                ]
+            ],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_PROJECT"=>"testProject"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
+        $this->routeApi->route(
+            $request,
+            $context,
             true
         );
     }

@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class GetUserAllowedProjectsControllerTest extends TestCase
 {
@@ -15,23 +17,42 @@ final class GetUserAllowedProjectsControllerTest extends TestCase
     public function test_nonAdminTryingToGetUserAllowedProjects() :void
     {
         $this->expectException(\Exception::class);
-
-        $_POST = ["targetUser"=>1];
+        $request =  new Request();
+        $request = $request->create(
+            "api/User/AllowedProjects/GetUserAllowedProjectsController/get",
+            "POST",
+            ["targetUser"=>1],
+            [],
+            [],
+            ["HTTP_USERID"=>2],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/GetUserAllowedProjectsController/get')),
-            ["userid"=>2],
+            $request,
+            $context,
             true
         );
     }
 
     public function test_adminGettingAdminAllowedProjects() :void
     {
-        $_POST = ["targetUser"=>1];
+        $request =  new Request();
+        $request = $request->create(
+            "api/User/AllowedProjects/GetUserAllowedProjectsController/get",
+            "POST",
+            ["targetUser"=>1],
+            [],
+            [],
+            ["HTTP_USERID"=>1],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/GetUserAllowedProjectsController/get')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
 
@@ -40,11 +61,21 @@ final class GetUserAllowedProjectsControllerTest extends TestCase
 
     public function test_adminGettingNonAdminAllowedProjects() :void
     {
-        $_POST = ["targetUser"=>2];
+        $request =  new Request();
+        $request = $request->create(
+            "api/User/AllowedProjects/GetUserAllowedProjectsController/get",
+            "POST",
+            ["targetUser"=>2],
+            [],
+            [],
+            ["HTTP_USERID"=>1],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/GetUserAllowedProjectsController/get')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
 

@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class ResetPasswordControllerTest extends TestCase
 {
@@ -28,12 +30,21 @@ final class ResetPasswordControllerTest extends TestCase
     public function test_nonAdminTryingToResetPassword() :void
     {
         $this->expectException(\Exception::class);
-
-        $_POST = ["targetUser"=>2, "newPassword"=>"testlongpassword123"];
+        $request =  new Request();
+        $request = $request->create(
+            "api/InstanceSettings/Users/ResetPasswordController/reset",
+            "POST",
+            ["targetUser"=>2, "newPassword"=>"testlongpassword123"],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_APITOKEN"=>"fakeToken"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/Users/ResetPasswordController/reset')),
-            ["userid"=>2],
+            $request,
+            $context,
             true
         );
     }
@@ -41,23 +52,42 @@ final class ResetPasswordControllerTest extends TestCase
     public function test_tryingToResetLdapUserFails() :void
     {
         $this->expectException(\Exception::class);
-
-        $_POST = ["targetUser"=>$this->ldapUserId, "newPassword"=>"testlongpassword123"];
+        $request =  new Request();
+        $request = $request->create(
+            "api/InstanceSettings/Users/ResetPasswordController/reset",
+            "POST",
+            ["targetUser"=>$this->ldapUserId, "newPassword"=>"testlongpassword123"],
+            [],
+            [],
+            ["HTTP_USERID"=>1, "HTTP_APITOKEN"=>"fakeToken"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/Users/ResetPasswordController/reset')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
     }
 
     public function test_adminResetsPassword() :void
     {
-        $_POST = ["targetUser"=>2, "newPassword"=>"testlongpassword123"];
+        $request =  new Request();
+        $request = $request->create(
+            "api/InstanceSettings/Users/ResetPasswordController/reset",
+            "POST",
+            ["targetUser"=>2, "newPassword"=>"testlongpassword123"],
+            [],
+            [],
+            ["HTTP_USERID"=>1, "HTTP_APITOKEN"=>"fakeToken"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/Users/ResetPasswordController/reset')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
 

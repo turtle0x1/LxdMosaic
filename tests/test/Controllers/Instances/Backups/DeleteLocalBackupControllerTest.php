@@ -2,6 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class DeleteLocalBackupControllerTest extends TestCase
 {
@@ -34,12 +36,21 @@ final class DeleteLocalBackupControllerTest extends TestCase
     public function test_no_acces_to_project_doesnt_allow_delete() :void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["backupId"=>$this->backupId];
-
+        $request =  new Request();
+        $request = $request->create(
+            "api/Instances/Backups/DeleteLocalBackupController/delete",
+            "POST",
+            ["backupId"=>$this->backupId],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_APITOKEN"=>"fakeToken", "HTTP_PROJECT"=>"testProject"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Instances/Backups/DeleteLocalBackupController/delete')),
-            ["userid"=>2, "project"=>"testProject"],
+            $request,
+            $context,
             true
         );
     }

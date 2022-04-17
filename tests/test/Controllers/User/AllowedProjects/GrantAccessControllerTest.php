@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class GrantAccessControllerTest extends TestCase
 {
@@ -23,23 +25,42 @@ final class GrantAccessControllerTest extends TestCase
     public function test_nonAdminUserTryingToGrantAccess() :void
     {
         $this->expectException(\Exception::class);
-
-        $_POST = ["targetUser"=>1, "hosts"=>[1], "projects"=>["default"]];
+        $request =  new Request();
+        $request = $request->create(
+            "api/User/AllowedProjects/GrantAccessController/grant",
+            "POST",
+            ["targetUser"=>1, "hosts"=>[1], "projects"=>["default"]],
+            [],
+            [],
+            ["HTTP_USERID"=>2],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/GrantAccessController/grant')),
-            ["userid"=>2],
+            $request,
+            $context,
             true
         );
     }
 
     public function test_grantUserAccess() :void
     {
-        $_POST = ["targetUser"=>2, "hosts"=>[1], "projects"=>["default"]];
+        $request =  new Request();
+        $request = $request->create(
+            "api/User/AllowedProjects/GrantAccessController/grant",
+            "POST",
+            ["targetUser"=>2, "hosts"=>[1], "projects"=>["default"]],
+            [],
+            [],
+            ["HTTP_USERID"=>1],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/GrantAccessController/grant')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
 

@@ -2,6 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class GetAllSettingsControllerTest extends TestCase
 {
@@ -16,19 +18,40 @@ final class GetAllSettingsControllerTest extends TestCase
     public function test_nonAdminCantGetAllSettings() :void
     {
         $this->expectException(\Exception::class);
-
+        $request =  new Request();
+        $request = $request->create(
+            "api/InstanceSettings/GetAllSettingsController/getAll",
+            "POST",
+            [],
+            [],
+            [],
+            ["HTTP_USERID"=>2, "HTTP_APITOKEN"=>"fakeToken"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/GetAllSettingsController/getAll')),
-            ["userid"=>2],
+            $request,
+            $context,
             true
         );
     }
 
     public function test_adminCanGetSettings() :void
     {
+        $request =  new Request();
+        $request = $request->create(
+            "api/InstanceSettings/GetAllSettingsController/getAll",
+            "POST",
+            [],
+            [],
+            [],
+            ["HTTP_USERID"=>1, "HTTP_APITOKEN"=>"fakeToken"],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/GetAllSettingsController/getAll')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
         $this->assertTrue(count($result) > 0);

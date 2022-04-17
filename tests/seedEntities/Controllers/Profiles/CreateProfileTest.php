@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 final class CreateProfileTest extends TestCase
 {
@@ -16,11 +18,21 @@ final class CreateProfileTest extends TestCase
      */
     public function test_createProfile($data, $expected) :void
     {
-        $_POST = $data;
+        $request =  new Request();
+        $request = $request->create(
+            "api/Profiles/CreateProfileController/create",
+            "POST",
+            $data,
+            [],
+            [],
+            ["HTTP_USERID"=>1],
+        );
+        $context = new RequestContext();
+        $context->fromRequest($request);
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Profiles/CreateProfileController/create')),
-            ["userid"=>1],
+            $request,
+            $context,
             true
         );
 
