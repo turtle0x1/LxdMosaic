@@ -42,6 +42,7 @@
                             <option value="ppc64el">ppc64el</option>
                             <option value="powerpc">powerpc</option>
                             <option value="s390x">s390x</option>
+                            <option value="riscv64">riscv64</option>
                         </select>
                     </div>
                     <button id="filterImages" class="btn btn-primary mb-2">
