@@ -18,10 +18,10 @@ class FirstRunController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Run LXDMosaic First Run")
      */
-    public function run(array $hosts, string $adminPassword, array $users = [])
+    public function run(array $hosts, string $adminPassword, array $settings = [])
     {
         $this->container->call(["dhope0000\LXDClient\Model\Database\Database", "beginTransaction"]);
-        $this->firstRun->run($hosts, $adminPassword, $users);
+        $this->firstRun->run($hosts, $adminPassword, $settings);
         $this->container->call(["dhope0000\LXDClient\Model\Database\Database", "commitTransaction"]);
         return ["state"=>"success", "message"=>"Setup LXD Mosaic"];
     }

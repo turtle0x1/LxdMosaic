@@ -52,6 +52,7 @@ Changed
     Restrict deployments by user project access (Admin can access all) (#466)
     Set host to offline if our client certificate has expired (#479)
     Build backup tasks without unnecessary calls to the LXD API (#480)
+    Improve first run UI / UX (including auto detecting a socket to use)
 
 Fixed
     First run doesn't toggle passwords properly (#390)
@@ -86,6 +87,7 @@ API Changes
     Remove profile name from deploy cloud-config as its no longer used
     Removed GetAllHostsSchedules class as its no longer needed
     Fetch array of HostObjects changing response keys for GetHostsController
+    First run no longer accepts `$users` parameter instead it takes `$settings`
 
 0.13.0 - 18/07/2020
 

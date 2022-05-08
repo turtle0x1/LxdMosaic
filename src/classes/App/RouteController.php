@@ -42,7 +42,9 @@ class RouteController
             "assets/dist/login.dist.css",
             "assets/dist/login.dist.js",
             "assets/dist/external.fontawesome.css",
-            "assets/fontawesome/webfonts/fa-solid-900.ttf",
+            "assets/dist/fontawesome/fa-solid-900.ttf",
+            "assets/dist/fontawesome/fa-solid-900.woff",
+            "assets/dist/fontawesome/fa-solid-900.woff2",
             "api/InstanceSettings/FirstRunController/run"
         ]);
 

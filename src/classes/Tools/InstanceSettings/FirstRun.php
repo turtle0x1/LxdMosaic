@@ -5,27 +5,30 @@ namespace dhope0000\LXDClient\Tools\InstanceSettings;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Tools\Hosts\AddHosts;
 use dhope0000\LXDClient\Tools\User\ResetPassword;
-use dhope0000\LXDClient\Tools\User\AddUser;
+use dhope0000\LXDClient\Model\InstanceSettings\InsertSetting;
 
 class FirstRun
 {
     private $fetchUserDetails;
     private $addHosts;
+    private $resetPassword;
+    private $insertSetting;
+
     private $adminUserId = 1;
 
     public function __construct(
         FetchUserDetails $fetchUserDetails,
         AddHosts $addHosts,
         ResetPassword $resetPassword,
-        AddUser $addUser
+        InsertSetting $insertSetting
     ) {
         $this->fetchUserDetails = $fetchUserDetails;
         $this->addHosts = $addHosts;
         $this->resetPassword = $resetPassword;
-        $this->addUser = $addUser;
+        $this->insertSetting = $insertSetting;
     }
 
-    public function run(array $hosts, string $adminPassword, array $users = [])
+    public function run(array $hosts, string $adminPassword, array $settings = [])
     {
         if ($this->fetchUserDetails->adminPasswordBlank() !== true) {
             throw new \Exception("Cant run first run", 1);
@@ -33,20 +36,20 @@ class FirstRun
 
         $this->resetPassword->reset($this->adminUserId, $this->adminUserId, $adminPassword);
 
-        foreach ($users as $user) {
-            $this->validateUser($user);
-            $this->addUser->add($this->adminUserId, $user["username"], $user["password"]);
+        foreach ($settings as $setting) {
+            $this->validateSetting($setting);
+            $this->insertSetting->insert($setting["settingId"], $setting["value"]);
         }
 
         $this->addHosts->add($this->adminUserId, $hosts);
     }
 
-    private function validateUser($user)
+    private function validateSetting(array $setting)
     {
-        if (!isset($user["username"]) || $user["username"] == "") {
-            throw new \Exception("Username missing", 1);
-        } elseif (!isset($user["password"]) || $user["password"] == "") {
-            throw new \Exception("{$user["username"]} password is empty", 1);
+        if (!isset($setting["settingId"]) || !is_numeric($setting["settingId"])) {
+            throw new \Exception("Setting id missing", 1);
+        } elseif (!isset($setting["value"]) || $setting["value"] === "") {
+            throw new \Exception("A setting is empty that shouldn't be", 1);
         }
     }
 }
