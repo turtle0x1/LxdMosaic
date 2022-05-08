@@ -43,7 +43,7 @@
     "popper.js": "^1.16.1",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
-    "sqlite3": "^5.0.2",
+    "sqlite3": "^5.0.3",
     "utf-8-validate": "^5.0.7",
     "uuid": "^3.4.0",
     "ws": "^6.2.2",
