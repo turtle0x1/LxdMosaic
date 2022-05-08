@@ -30,6 +30,37 @@ systemctl restart httpd
 
 ```
 
+## 0.13.X -> 0.14.0
+```
+# We need to upgrade to node 14 if not done already, the easiest way is using "n"
+
+# Install "n" a node version manager
+npm i -g n
+# Install v14 of node
+n 14
+# Restart node
+pm2 restart 0
+
+# Now the usual steps to upgrade LXDMosaic
+# Make sure to read release notes on github for this release.
+cd /var/www/LxdMosaic
+
+git fetch
+
+git checkout v0.14.0
+
+npm i
+
+composer install --no-dev
+
+vendor/bin/phinx migrate -e mysql
+
+# Restart node server - be careful may interupt console sessions
+pm2 restart all
+
+#Ubuntu
+systemctl restart apache2
+```
 ## 0.12.X -> 0.13.0
 ```
 # Make sure to read release notes on github for this release.
