@@ -1,4 +1,5 @@
 var WebSocket = require('ws');
+var internalUuidv1 = require('uuid/v1');
 
 module.exports = class VgaTerminals {
 
@@ -46,21 +47,41 @@ module.exports = class VgaTerminals {
 
          if(!this.instanceSockets[hostId][project][instance].hasOwnProperty(userId)){
              this.instanceSockets[hostId][project][instance][userId] = {
-                 clientSockets: [],
-                 lxdSockets: [],
+                 clientSockets: {},
+                 lxdSockets: {},
                  controlSocket: null,
                  operationDetails: {}
              };
          }
 
           this.getSocket(userId, hostDetails, project, instance).then((lxdWebSocket)=>{
-              this.instanceSockets[hostId][project][instance][userId].clientSockets.push(clientSocket);
-              this.instanceSockets[hostId][project][instance][userId].lxdSockets.push(lxdWebSocket);
+              let lxdSocketId = internalUuidv1();
+              let clientSocketId = internalUuidv1();
+              this.instanceSockets[hostId][project][instance][userId].clientSockets[clientSocketId] = clientSocket
+              this.instanceSockets[hostId][project][instance][userId].lxdSockets[lxdSocketId] = lxdWebSocket
 
               clientSocket.on("close", ()=>{
-                  // Client is disconnecting / re-connecting - this will restart
-                  // the control socket
-                  this.instanceSockets[hostId][project][instance][userId].controlSocket.close()
+                  // Close and delete the socket with LXD
+                  if(this.instanceSockets[hostId][project][instance][userId].lxdSockets[lxdSocketId] != undefined){
+                      this.instanceSockets[hostId][project][instance][userId].lxdSockets[lxdSocketId].close()
+                      delete this.instanceSockets[hostId][project][instance][userId].lxdSockets[lxdSocketId];
+                  }
+                  // Delete our copy of the client socket and close the lxd
+                  // control socket if the user doesnt re-connect within 2
+                  // seconds
+                  if(this.instanceSockets[hostId][project][instance][userId].clientSockets[clientSocketId] != undefined){
+                      delete this.instanceSockets[hostId][project][instance][userId].clientSockets[clientSocketId];
+
+                      if(Object.keys(this.instanceSockets[hostId][project][instance][userId].clientSockets).length == 0){
+                          setTimeout(()=>{
+                              if(Object.keys(this.instanceSockets[hostId][project][instance][userId].clientSockets).length == 0){
+                                  if(this.instanceSockets[hostId][project][instance][userId].controlSocket != null){
+                                      this.instanceSockets[hostId][project][instance][userId].controlSocket.close()
+                                  }
+                              }
+                          }, 2000)
+                      }
+                  }
               });
 
               clientSocket.on("message", (data)=>{
@@ -111,11 +132,11 @@ module.exports = class VgaTerminals {
                    var lxdWs = new WebSocket(url, wsoptions);
                    var controlWs = new WebSocket(controlUrl, wsoptions);
 
-                   // Once the control socket is closed (when a client disconects)
-                   // we know the user is no longer using the terminal so we
-                   // delete the key so someone else can connect
                    controlWs.on("close", ()=>{
-                       delete this.instanceSockets[hostDetails.hostId][project][instance][userId];
+                       this.instanceSockets[hostDetails.hostId][project][instance][userId].controlSocket = null;
+                       if(Object.keys(this.instanceSockets[hostDetails.hostId][project][instance][userId].clientSockets).length == 0 && Object.keys(this.instanceSockets[hostDetails.hostId][project][instance][userId].lxdSockets).length == 0){
+                           delete this.instanceSockets[hostDetails.hostId][project][instance][userId]
+                       }
                    })
 
                    this.instanceSockets[hostDetails.hostId][project][instance][userId].controlSocket = controlWs
@@ -165,7 +186,6 @@ module.exports = class VgaTerminals {
               "height": 0,
               "type": "vga"
           })
-          console.log(data);
 
           if(hostDetails.socketPath == null){
               execOptions.host = hostDetails.hostWithOutProtoOrPort
