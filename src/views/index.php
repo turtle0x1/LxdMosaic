@@ -677,7 +677,12 @@ $(function(){
                         let projects = makeProjectDropDown(member)
                         if(member.hostOnline == true){
                             projectsDropdown += `<div><i class="fas fa-server me-2"></i><b>${member.alias}</b>${projects}</div>`;
-                            openHostOperationSocket(member.hostId, member.currentProject);
+                            // Delay the opening of operations sockets up to 5
+                            // seconds to avoid causing browsers to act weirdly,
+                            // ideally we would replace 1 socket per host with
+                            // 1 socket and push messages with which host project
+                            // stream to join
+                            setTimeout(()=>{openHostOperationSocket(member.hostId, member.currentProject)}, Math.random() * 5000)
                         }
                     });
 

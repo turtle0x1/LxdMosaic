@@ -1,5 +1,7 @@
 Unreleased
 
+Changed
+    Add up to 5 second delay opening operation sockets to prevent browser weirdness
 Fixed
     Disconnecting from VGA terminal could cause node crash (#498)
     Cant move instance from host we have as a socket connection to another host
