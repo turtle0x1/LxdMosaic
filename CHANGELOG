@@ -2,6 +2,7 @@ Unreleased
 
 Fixed
     Disconnecting from VGA terminal could cause node crash (#498)
+    Cant move instance from host we have as a socket connection to another host
 
 0.14.0 - 08/05/2022
 
