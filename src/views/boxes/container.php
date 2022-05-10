@@ -2603,11 +2603,8 @@ $("#containerBox").on("click", ".copyContainer", function(){
     copyContainerConfirm(currentContainerDetails.hostId, currentContainerDetails.container);
 });
 
-$("#containerBox").on("click", ".migrateContainer", function(){
-    $("#modal-container-migrate").modal({
-        backdrop: 'static',
-        keyboard: false
-    });
+$(document).on("click", ".migrateContainer", function(){
+    $("#modal-container-migrate").modal('show')
 });
 
 $("#containerBox").on("click", ".takeSnapshot", function(){
