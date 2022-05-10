@@ -1551,14 +1551,7 @@ function openShell(shell = null, imageOsString = ""){
         if(myDefaultShells == null || !myDefaultShells.hasOwnProperty(currentContainerDetails.hostId)){
             if(defaultOsShells.hasOwnProperty(imageOsString.toLowerCase())){
                 shell = defaultOsShells[imageOsString.toLowerCase()]
-            }else{
-                term.writeln("")
-                term.writeln("LXDMosaic: Couldn't guess which shell to use.")
-                term.writeln("Please report the OS and the expected default shell on Github.")
-                term.writeln("You can change the shell above to gain access in the mean time.")
-                return false;
             }
-
         }else{
             if(myDefaultShells[currentContainerDetails.hostId].hasOwnProperty(project)){
                 if(myDefaultShells[currentContainerDetails.hostId][project].hasOwnProperty(currentContainerDetails.container)){
@@ -1566,6 +1559,14 @@ function openShell(shell = null, imageOsString = ""){
                 }
             }
         }
+    }
+
+    if(shell == null){
+        term.writeln("")
+        term.writeln("LXDMosaic: Couldn't guess which shell to use.")
+        term.writeln("Please report the OS and the expected default shell on Github.")
+        term.writeln("You can change the shell above to gain access in the meantime.")
+        return false;
     }
 
     // fit is called within a setTimeout, cols and rows need this.
