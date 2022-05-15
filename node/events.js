@@ -58,6 +58,12 @@ app.use(authenticateExpressRoute.authenticateReq);
 // REGISTER HTTP ENDPOINTS
 app.post('/terminals', textTerminalController.getNewTerminalProcess);
 
+app.post('/terminals/checkStatus', function(req, res) {
+  let status = terminals.checkStatus(req.body.user_id, req.body.terminalId);
+  res.json(status);
+  res.send();
+});
+
 // REGISTER WEBSOCKET ENDPOINTS
 app.ws('/node/terminal/', vgaTerminalsController.openTerminal)
 app.ws('/node/operations', hostEventsController.addClientSocket)
