@@ -51,6 +51,11 @@
                 formatBytes: false,
                 icon: 'fas fa-box'
             },
+
+            "Processes": {
+                formatBytes: false,
+                icon: 'fas fa-microchip'
+            },
             "Disk": {
                 formatBytes: true,
                 icon: 'fas fa-hdd'
@@ -58,10 +63,6 @@
             "Memory": {
                 formatBytes: true,
                 icon: 'fas fa-memory'
-            },
-            "Processes": {
-                formatBytes: false,
-                icon: 'fas fa-microchip'
             }
         }
         $("#totalsGraphs").empty();
@@ -77,10 +78,21 @@
             let entries = totals[title];
             let noOfEntries = Object.keys(entries).length;
 
-            let dateFormat = noOfEntries == 13 || noOfEntries == 7 ? "HH:mm" : "ll HH:mm"
+
+            let currentDate = moment.utc().local()
+            let currentYear = currentDate.format("Y")
+            let firstNotNull = null;
 
             $.each(entries, (created, value) => {
-                labels.push(moment.utc(created).local().format(dateFormat))
+                let d = moment.utc(created).local();
+                let dateFormat = d.format("Y") === currentYear ? "MMMM D, HH:mm" : "ll HH:mm"
+                if (d.format("DD/MM/YYYY") === currentDate.format("DD/MM/YYYY")) {
+                    dateFormat = "HH:mm"
+                }
+                if (firstNotNull === null && value !== null && value !== "") {
+                    firstNotNull = value
+                }
+                labels.push(d.format(dateFormat))
                 values.push(value)
             });
 
@@ -90,18 +102,39 @@
                 return parseInt(a) + parseInt(b);
             }, 0);
 
-            let canvas = `<canvas height="200" width="200" id="${cId}"></canvas>`;
+            let canvas = `<canvas id="${cId}"></canvas>`;
 
             if (totalUsage == 0) {
-                canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
+                canvas = '<div class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
+            }
+
+            let change = ((values[values.length - 1] - firstNotNull) / firstNotNull) * 100
+            let changeIcon = "down"
+            let changeIconTxtClass = "danger"
+
+            if (change.toFixed(2) > 0) {
+                changeIcon = "up"
+                changeIconTxtClass = "success"
+            } else if (parseInt(change) == 0) {
+                changeIconTxtClass = "white"
+                changeIcon = ""
             }
 
 
-            let x = $(`<div class='col-md-3'>
+            let x = $(`<div class='col-md-6 mb-2'>
                   <div class="card bg-dark text-white">
-                      <div class="card-body">
-                        <h4 class="mb-3 text-center"><i class="${config.icon} me-2"></i>${title}</h4>
-                        ${canvas}
+                      <div class="card-body row">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                            <h4 class="mb-3"><i class="${config.icon} me-2"></i>${title}</h4>
+                            <h4>
+                                <i class="fas fa-chevron-${changeIcon} text-${changeIconTxtClass} me-2"></i> ${change.toFixed(2)}%
+                            </h4>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="chart-container" style="position: relative; height:30vh; width:100%">
+                                ${canvas}
+                            </div>
+                        </div>
                       </div>
                   </div>
               </div>`);
@@ -117,6 +150,7 @@
 
                 let options = {
                     responsive: true,
+                    maintainAspectRatio: false,
                     elements: {
                         point: {
                             // After 6 hours hide the dots on the graph
