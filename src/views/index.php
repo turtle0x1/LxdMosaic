@@ -58,6 +58,7 @@ if ($haveServers->haveAny() !== true) {
       <meta name="viewport" content="width=device-width, initial-scale=1">
 
       <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
+      <script src="/assets/dist/floatingTerminal.js" type="text/javascript" charset="utf-8"></script>
       <script src="/assets/lxdMosaic/lxdDevicesProperties.js" type="text/javascript" charset="utf-8"></script>
       <script src="/assets/lxdMosaic/lxdLifecycleCallbacks.js" type="text/javascript" charset="utf-8"></script>
 
@@ -574,13 +575,22 @@ if ($haveServers->haveAny() !== true) {
       </header>
       <div class="container-fluid" id="content">
           <div class="row p-0">
-              <div class="d-flex flex-column flex-shrink-0 pt-1 text-white bg-dark" style="width: 20vw;  padding-right: 0px;  height: 100vh; overflow-y: auto; padding-bottom: 25px;">
+              <div class="d-flex flex-column flex-shrink-0 pt-1 ps-0 text-white bg-dark" style="width: 20vw;  padding-right: 0px;  height: 100vh; overflow-y: auto; padding-bottom: 25px;">
                 <ul class="flex-column scrollarea" id="sidebar-ul" style="list-style: none; padding-left: 0px;">
                 </ul>
+                <div id="sidebarFooter" class="container-fluid">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                        <div class="text-white">
+                            Powered By LXDMosaic
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary" id="openFloatingTerminal">
+                            <i class="fas fa-terminal me-2"></i>Terminals
+                        </button>
+                    </div>
+                </div>
               </div>
-              <div class="col ps-0 pe-0" style="max-height: 100vh; padding-bottom: 30px; overflow-y: auto;">
+              <div class="col ps-0 pe-0" style="max-height: 100vh; padding-bottom: 30px; overflow-y: auto;" id="mainContainerDiv">
                 <ol style="min-height: 30px;" class="breadcrumb ps-3 pt-1 pb-1" id="mainBreadcrumb">
-
                 </ol>
                 <div class="container-fluid">
                   <div id="dashboard" class="animated fadeIn">
@@ -609,7 +619,43 @@ if ($haveServers->haveAny() !== true) {
                     </div>
                   </div>
                 </div>
+                <div id="floatingWindowConsole" class="container-fluid ps-0 pe-0" style="display: none">
+                    <!-- <div id="floatingConsoleTabsDiv" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center"> -->
+                    <div id="floatingConsoleTabsDiv" class="row">
+                        <div class="col-md-9  pe-0 ">
+                            <ul class="nav nav-tabs w-100 border-none" id="floatingConsoleInstanceTabs">
+
+                            </ul>
+                        </div>
+                        <div class="col-md-3 ps-0 pe-0 border-start">
+                            <ul class="nav nav-tabs border-none w-100 ms-0 pe-0" id="floatingConsoleActionTabs" style="width: 10vw">
+                              <!-- <li class="nav-item text-center" style="width:33%">
+                                <div id="openTabFloatingTerminal" style="line-height: 2" class="nav-link" href="#"><i style="min-width: 24px; line-height: 4;" class="fas fa-plus"></i></div>
+                              </li> -->
+                              <li class="nav-item text-center" style="width:50%">
+                                <div id="expandFloatingTerminal" style="line-height: 2" class="nav-link" href="#"><i style="min-width: 24px; line-height: 4;" class="fas fa-arrows-alt"></i></div>
+                              </li>
+                              <li class="nav-item text-center" style="width:50%">
+                                <div id="hideFloatingTerminal" style="line-height: 2" class="nav-link" href="#"><i style="min-width: 24px; line-height: 4;" class="fas fa-eye-slash"></i></div>
+                              </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row" id="floatingConsoleMainDisplay">
+                        <div class="col-md-9 pt-2 h-100 border-right" id="floatConsoleTermsDiv">
+                        </div>
+                        <div class="col-md-3 pt-2 text-white border-start" style="height: inherit">
+                            <h4>Host</h4>
+                            <h4>Project</h4>
+                            <h4>Instance</h4>
+                            <h4>Memory</h4>
+                            <h4>Storage</h4>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
         </div>
     </div>
 </body>
@@ -644,6 +690,13 @@ var hostsIdsLookupTable = {};
 $(function(){
 
     $('[data-bs-toggle="tooltip"]').tooltip({html: true})
+    $("#sidebarFooter").on("click", "#openFloatingTerminal", function(){
+        if($("#floatingWindowConsole").is(":visible")){
+            $("#floatingConsoleActionTabs").find("#hideFloatingTerminal").trigger("click")
+        }else{
+            setupFloatingTerminal();
+        }
+    })
     openEventSocket()
 
     router.hooks({

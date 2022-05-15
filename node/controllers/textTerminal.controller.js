@@ -15,7 +15,7 @@ module.exports = class TextTerminalController {
         this._terminals.proxyTerminal(
             req.query.terminalId,
             socket
-        ).err(function(e){
+        ).catch(function(e){
             console.log(e);
         })
     }

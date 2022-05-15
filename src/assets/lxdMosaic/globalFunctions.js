@@ -208,7 +208,7 @@ var toolTipsBytesCallbacks = {
 
 var monthsNameArray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-https://stackoverflow.com/questions/1484506/random-color-generator/32124533
+//https://stackoverflow.com/questions/1484506/random-color-generator/32124533
 function randomColor(format = 'hex') {
     return '#2ecc71'
     const rnd = Math.random().toString(16).slice(-6);
@@ -219,4 +219,16 @@ function randomColor(format = 'hex') {
         const [r, g, b] = rnd.match(/.{2}/g).map(c=>parseInt(c, 16));
         return `rgb(${r}, ${g}, ${b})`;
     }
+}
+
+//https://stackoverflow.com/a/1349426/4008082
+function makeRandomString(length = 10) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() *
+ charactersLength));
+   }
+   return result;
 }

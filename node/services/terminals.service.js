@@ -1,4 +1,6 @@
 var WebSocket = require('ws');
+var http = require('http');
+var https = require('https');
 var internalUuidv1 = require('uuid/v1');
 
 module.exports = class Terminals {
@@ -35,12 +37,13 @@ module.exports = class Terminals {
         return response
     }
 
-    proxyTerminal(
+    proxyTerminal = async (
         terminalId,
+        clientSocket,
         allowUserInput = true,
         callbacks = {}
-    ) {
-        return new Promise((resolve, reject) => {
+    ) => {
+        return new Promise(async (resolve, reject) => {
             console.log(this._terminalDetails);
             if (!this._terminalDetails.hasOwnProperty(terminalId)) {
                 console.error("trying to access terminal terminalId that doesn't exist");
@@ -66,7 +69,7 @@ module.exports = class Terminals {
                 return;
             }
 
-            let host = this.hosts.getHosts()[this._terminalDetails[terminalId].hostId];
+            let host = await this.hosts.getHost(this._terminalDetails[terminalId].hostId);
             let project = this._terminalDetails[terminalId].project
             let instance = this._terminalDetails[terminalId].instance
             let shell = this._terminalDetails[terminalId].shell
@@ -217,11 +220,11 @@ module.exports = class Terminals {
             };
 
             if (host.socketPath == null) {
-                const clientRequest = this.https.request(execOptions, callback);
+                const clientRequest = https.request(execOptions, callback);
                 clientRequest.write(data)
                 clientRequest.end();
             } else {
-                const clientRequest = this.http.request(execOptions, callback);
+                const clientRequest = http.request(execOptions, callback);
                 clientRequest.write(data)
                 clientRequest.end();
             }
