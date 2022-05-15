@@ -1,4 +1,4 @@
-Unreleased
+0.14.1 - 15/05/2022
 
 Changed
     Add up to 5 second delay opening operation sockets to prevent browser weirdness
