@@ -13,16 +13,20 @@ class Migrate
         bool $delete = false
     ) {
         $this->checkIfMigratingToSameHost($sourceHost, $destinationHost);
-        
+
         $this->checkIfHostUrlIsLocalhost($sourceHost, "source");
         $this->checkIfHostUrlIsLocalhost($destinationHost, "destination");
 
-        $sourceHost->instances->migrate(
+        $response = $sourceHost->instances->migrate(
             $destinationHost->getClient(),
             $instance,
             $newContainerName,
             true
         );
+
+        if ($response["err"] !== "") {
+            throw new \Exception($response["err"], 1);
+        }
 
         if ($delete) {
             $sourceHost->instances->remove($instance);

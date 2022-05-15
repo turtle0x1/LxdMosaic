@@ -2,6 +2,7 @@ Unreleased
 
 Changed
     Add up to 5 second delay opening operation sockets to prevent browser weirdness
+    Add more error checking to migrate instance to prevent accidental deletions
 
 Fixed
     Disconnecting from VGA terminal could cause node crash (#498)
