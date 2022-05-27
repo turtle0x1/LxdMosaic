@@ -33,7 +33,7 @@ class InsertUserProject
 
     public function insert(int $userId, int $hostId, string $project)
     {
-        $mod = isset($_ENV["DB_SQLITE"]) & !empty($_ENV["DB_SQLITE"]) ? "CONFLICT(UHP_User_ID, UHP_Host_ID) DO UPDATE SET UHP_Project = :project;" : "DUPLICATE KEY UPDATE `UHP_Project` = :project";
+        $mod = isset($_ENV["DB_SQLITE"]) && !empty($_ENV["DB_SQLITE"]) ? "CONFLICT(UHP_User_ID, UHP_Host_ID) DO UPDATE SET UHP_Project = :project;" : "DUPLICATE KEY UPDATE `UHP_Project` = :project";
         $sql = "INSERT INTO `User_Host_Projects`(
                     `UHP_User_ID`,
                     `UHP_Host_ID`,

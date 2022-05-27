@@ -13,7 +13,7 @@ class FetchUsers
 
     public function fetchAll()
     {
-        $mod = isset($_ENV["DB_SQLITE"]) & !empty($_ENV["DB_SQLITE"]) ? "CASE WHEN `User_Ldap_ID` IS NOT NULL THEN 1 ELSE 0 END as `fromLdap`" : "IF(`User_Ldap_ID` IS NULL, 0, 1) as `fromLdap`";
+        $mod = isset($_ENV["DB_SQLITE"]) && !empty($_ENV["DB_SQLITE"]) ? "CASE WHEN `User_Ldap_ID` IS NOT NULL THEN 1 ELSE 0 END as `fromLdap`" : "IF(`User_Ldap_ID` IS NULL, 0, 1) as `fromLdap`";
 
         $sql = "SELECT
                     `User_ID` as `id`,

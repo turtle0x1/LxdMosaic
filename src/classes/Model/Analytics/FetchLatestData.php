@@ -13,7 +13,7 @@ class FetchLatestData
 
     public function lastHour()
     {
-        $mod = isset($_ENV["DB_SQLITE"]) & !empty($_ENV["DB_SQLITE"]) ? "datetime('now', '-3600 seconds')" : "DATE_SUB(NOW(), INTERVAL 1 HOUR)";
+        $mod = isset($_ENV["DB_SQLITE"]) && !empty($_ENV["DB_SQLITE"]) ? "datetime('now', '-3600 seconds')" : "DATE_SUB(NOW(), INTERVAL 1 HOUR)";
         $sql = "SELECT
                     `FA_Date_Created` as `dateTime`,
                     `FA_Total_Memory_Usage` as `memoryUsage`,
