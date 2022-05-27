@@ -94,7 +94,7 @@ SpiceMainConn.prototype.process_channel_message = function(msg)
 
     if (msg.type == Constants.SPICE_MSG_MAIN_INIT)
     {
-        this.log_info("Connected to " + this.ws.url);
+        DEBUG > 0 && this.log_info("Connected to " + this.ws.url);
         this.report_success("Connected")
         this.main_init = new Messages.SpiceMsgMainInit(msg.data);
         this.connection_id = this.main_init.session_id;
@@ -160,15 +160,15 @@ SpiceMainConn.prototype.process_channel_message = function(msg)
                         chan_id : chans.channels[i].id
                     };
             if (chans.channels[i].type == Constants.SPICE_CHANNEL_USBREDIR) {
-                this.log_warn("The spice-html5 client does not handle usbredir.");
+                DEBUG > 0 && this.log_warn("The spice-html5 client does not handle usbredir.");
                 continue;
             }else if (chans.channels[i].type == Constants.SPICE_CHANNEL_WEBDAV)
             {
-                this.log_warn("The spice-html5 client does not handle web dav.");
+                DEBUG > 0 && this.log_warn("The spice-html5 client does not handle web dav.");
                 continue;
             }else if (chans.channels[i].type == Constants.SPICE_CHANNEL_CURSOR)
             {
-                this.log_warn("Cursor channel has been temporarily disabled (TO BE FIXED).");
+                DEBUG > 0 && this.log_warn("Cursor channel has been temporarily disabled (TO BE FIXED).");
                 continue;
             }else if (chans.channels[i].type == Constants.SPICE_CHANNEL_DISPLAY)
             {
