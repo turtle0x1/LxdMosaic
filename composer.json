@@ -9,7 +9,7 @@
         "symfony/filesystem": "^4.3",
         "symfony/cache": "^4.3",
         "doctrine/annotations": "^1.10",
-        "lavary/crunz": "^2.2",
+        "crunzphp/crunz": "^2.2",
         "symfony/routing": "^5.1",
         "robmorgan/phinx": "^0.12.4"
     },
