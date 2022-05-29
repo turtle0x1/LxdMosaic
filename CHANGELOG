@@ -2,6 +2,7 @@ Unreleased
 
 Changed
     SNAP: Update to PHP 7.4
+    Use cron method instead of every* methods in cronjob definitions (#503)
 
 0.14.1 - 15/05/2022
 
