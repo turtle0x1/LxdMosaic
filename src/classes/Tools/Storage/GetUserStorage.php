@@ -15,7 +15,7 @@ class GetUserStorage
 
     public function getAll($userId)
     {
-        $clusters = $this->universe->getEntitiesUserHasAccesTo($userId, "volumes");
+        $clusters = $this->universe->getEntitiesUserHasAccesTo($userId, "pools");
 
         $stats = [
             "storage"=>[

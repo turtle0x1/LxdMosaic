@@ -20,7 +20,7 @@ class Universe
         "profiles"=>"/1.0/profiles/",
         "networks"=>"/1.0/networks/",
         "projects"=>"", // Special case because projecs are "global"
-        "volumes"=>"/1.0/storage-pools/"
+        "pools"=>"/1.0/storage-pools/"
     ];
 
     public function __construct(
