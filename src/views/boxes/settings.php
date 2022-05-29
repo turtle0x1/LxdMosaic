@@ -134,7 +134,7 @@
                       <th>IP</th>
                       <th>Online</th>
                       <th>Certificate Expires</th>
-                      <th>Delete</th>
+                      <th>Actions</th>
                   </tr>
               </thead>
               <tbody>
@@ -641,7 +641,15 @@ function loadInstancesHostsView(){
                     <td>${host.urlAndPort}</td>
                     <td>${o}</td>
                     <td>${certExpiresIcon} ${certExpires.format("ll")}</td>
-                    <td><button class='btn btn-danger deleteHost'><i class="fas fa-trash"></i></button></td>
+                        <td>
+                            <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <div class='dropdown-item renewCertificate'><i class="fas fa-sync"></i> Renew Certificate</div>
+                              <div class='dropdown-item deleteHost'><i class="fas fa-trash"></i> Delete Host</div>
+                            </div>
+                        </td>
                 </tr>`
             });
         }else{
@@ -838,6 +846,39 @@ $("#instanceHostsBox").on("click", "#addHostBtn", function(){
                         }
                         location.reload();
                     });
+                }
+            }
+        }
+    });
+});
+
+$("#hostListTable").on("click", ".renewCertificate", function(){
+    let tr = $(this).parents("tr");
+    let hostId = tr.attr("id");
+    $.confirm({
+        title: 'Renew Certificate',
+        content: 'Renew LXDMosaic certificate with LXD!',
+        buttons: {
+            cancel: function () {},
+            renew: {
+                btnClass: 'btn-success',
+                action: function () {
+                    this.buttons.renew.setText('<i class="fa fa-cog fa-spin"></i>Renewing..'); // let the user know
+                    this.buttons.renew.disable();
+                    this.buttons.cancel.disable();
+                    var modal = this;
+                    ajaxRequest('/api/Hosts/Certificates/RenewHostCertificateController/renew', {hostId: hostId}, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            this.buttons.renew.enable();
+                            this.buttons.renew.setText('renew'); // let the user know
+                            this.buttons.cancel.enable();
+                            return false;
+                        }
+                        window.location.reload()
+                        modal.close();
+                    });
+                    return false;
                 }
             }
         }
