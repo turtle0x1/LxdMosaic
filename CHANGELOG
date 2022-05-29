@@ -1,5 +1,9 @@
 Unreleased
 
+Added
+    Index to Project Analytics Date Created column to improve load times (#501)
+        This migration might be slow to run, be patient
+
 Changed
     SNAP: Update to PHP 7.4
     Use cron method instead of every* methods in cronjob definitions (#503)
