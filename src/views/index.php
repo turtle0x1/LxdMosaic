@@ -58,6 +58,7 @@ if ($haveServers->haveAny() !== true) {
       <meta name="viewport" content="width=device-width, initial-scale=1">
 
       <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
+      <script src="/assets/lxdMosaic/lxdDevicesProperties.js" type="text/javascript" charset="utf-8"></script>
 
       <!-- <link rel="stylesheet" href="/assets/xterm/xterm.css" /> -->
 
@@ -853,5 +854,7 @@ $(document).on("click", ".openProjectAccess", function(){
 <?php
     require_once __DIR__ . "/modals/images/import.php";
     require_once __DIR__ . "/modals/projects/projectAccess.php";
+    require_once __DIR__ . "/modals/helpers/newDeviceObj.php";
+
 ?>
 </html>
