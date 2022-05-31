@@ -5,6 +5,7 @@ Added
         This migration might be slow to run, be patient
     Renew LXDMosaic certificate for LXD (#483)
     Docs: Start "Production" page with some settings operators may want to consider (#465)
+    Add different devices to profile on creation (part of #442)
 
 Changed
     SNAP: Update to PHP 7.4
