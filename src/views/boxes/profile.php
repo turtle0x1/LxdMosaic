@@ -28,8 +28,11 @@
                   <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy Profile" class="btn btn-primary" id="copyProfile">
                       <i class="fas fa-copy"></i>
                   </button>
-                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Rename Profile" class="btn btn-warning" id="renameProfile">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit Profile" class="btn btn-info" id="editProfile">
                       <i class="fa fa-edit"></i>
+                  </button>
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Rename Profile" class="btn btn-warning" id="renameProfile">
+                      <i class="fas fa-heading"></i>
                   </button>
                   <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Profile" class="btn btn-danger" id="deleteProfile">
                       <i class="fas fa-trash"></i>
@@ -405,6 +408,13 @@ $("#profileBox").on("click", "#renameProfile", function(){
     $("#modal-profile-rename").modal("show");
 });
 
+$("#profileBox").on("click", "#editProfile", function(){
+    editProfileData.hostAlias = currentProfileDetails.hostAlias;
+    editProfileData.hostId = currentProfileDetails.hostId;
+    editProfileData.currentName = currentProfileDetails.profile;
+    $("#modal-profile-edit").modal("show");
+});
+
 $("#profileBox").on("click", "#deleteProfile", function(){
     let sidebarItem =$("#sidebar-ul").find(`.nav-link[href="/profiles/${hostIdOrAliasForUrl(currentProfileDetails.hostAlias, currentProfileDetails.hostId)}/${currentProfileDetails.profile}"]`);
     $.confirm({
@@ -430,6 +440,7 @@ $("#profileBox").on("click", "#deleteProfile", function(){
 </script>
 
 <?php
+require __DIR__ . "/../modals/profiles/replace.php";
 require __DIR__ . "/../modals/profiles/rename.php";
 require __DIR__ . "/../modals/profiles/copy.php";
 require __DIR__ . "/../modals/profiles/create.php";

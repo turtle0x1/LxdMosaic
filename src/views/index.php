@@ -855,6 +855,7 @@ $(document).on("click", ".openProjectAccess", function(){
     require_once __DIR__ . "/modals/images/import.php";
     require_once __DIR__ . "/modals/projects/projectAccess.php";
     require_once __DIR__ . "/modals/helpers/newDeviceObj.php";
+    require_once __DIR__ . "/modals/helpers/editDeviceObj.php";
 
 ?>
 </html>
