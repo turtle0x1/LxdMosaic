@@ -83,8 +83,18 @@ var lifecycleCallbacks = {
             hostUl.find(".hostContentList").find(`[href="/profiles/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${profileName}"]`).parent().remove()
             router.updatePageLinks()
         }
+    },
+    "profile-renamed": function(message){
+        if(router.getCurrentLocation().url.substr(0, 8) == "profiles"){
+            let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
+            let oldName = message.metadata.context.old_name.replace("/1.0/profiles/", "");
+            let newName = message.metadata.source.replace("/1.0/profiles/", "");
+            let x = hostUl.find(".hostContentList").find(`[href="/profiles/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${oldName}"]`)
+            x.attr("href", `/profiles/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${newName}`)
+            x.html(`<i class="fas fa-user me-2"></i>${newName}`)
+            router.updatePageLinks()
+        }
     }
-    // "profile-renamed": function(){//TODO}
     // "profile-updated": function(){//TODO}
     // "project-created": function(){//TODO}
     // "project-deleted": function(){//TODO}
