@@ -54,7 +54,7 @@ var lifecycleCallbacks = {
     // "instance-renamed": function(){//TODO}
     // "instance-restarted": function(){//TODO}
     // "instance-restored": function(){//TODO}
-    // "instance-resumed": function(){//TODO}
+    "instance-resumed":  (message) => lifecycleCallbackTemplates.instanceStateChange(message, 103),
     "instance-shutdown": (message) => lifecycleCallbackTemplates.instanceStateChange(message, 102),
     "instance-started": (message) => lifecycleCallbackTemplates.instanceStateChange(message, 103),
     "instance-stopped": (message) => lifecycleCallbackTemplates.instanceStateChange(message, 102),
