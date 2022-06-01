@@ -63,8 +63,20 @@ var lifecycleCallbacks = {
     // "network-renamed": function(){//TODO}
     // "network-updated": function(){//TODO}
     // "operation-cancelled": function(){//TODO}
-    // "profile-created": function(){//TODO}
     // "profile-deleted": function(){//TODO}
+    "profile-created": function(message){
+        if(router.getCurrentLocation().url.substr(0, 8) == "profiles"){
+            let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
+            let profileName = message.metadata.source.replace("/1.0/profiles/", "");
+            hostUl.find(".hostContentList").append(`<li class="nav-item">
+              <a class="nav-link" href="/profiles/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${profileName}" data-navigo>
+                <i class="nav-icon fa fa-user"></i>
+                ${profileName}
+              </a>
+            </li>`)
+            router.updatePageLinks()
+        }
+    },
     // "profile-renamed": function(){//TODO}
     // "profile-updated": function(){//TODO}
     // "project-created": function(){//TODO}
