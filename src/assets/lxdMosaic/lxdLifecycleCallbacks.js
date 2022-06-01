@@ -58,7 +58,19 @@ var lifecycleCallbacks = {
     // "network-acl-deleted": function(){//TODO}
     // "network-acl-renamed": function(){//TODO}
     // "network-acl-updated": function(){//TODO}
-    // "network-created": function(){//TODO}
+    "network-created": function(message){
+        if(router.getCurrentLocation().url.substr(0, 8) == "networks"){
+            let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
+            let networkName = message.metadata.source.replace("/1.0/networks/", "");
+            hostUl.find(".hostContentList").append(`<li class="nav-item">
+              <a class="nav-link" href="/networks/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${networkName}" data-navigo>
+                <i class="fas fa-ethernet"></i>
+                ${networkName}
+              </a>
+            </li>`)
+            router.updatePageLinks()
+        }
+    },
     // "network-deleted": function(){//TODO}
     // "network-renamed": function(){//TODO}
     // "network-updated": function(){//TODO}

@@ -85,7 +85,7 @@ function makeNetworkHostSidebarHtml(hosthtml, host, id){
         disabled = "disabled text-warning text-strikethrough";
     }
 
-    hosthtml += `<li class="mb-2">
+    hosthtml += `<li class="mb-2" data-host-id="${host.hostId}">
         <a class="d-inline ${disabled}">
             <i class="fas fa-server"></i> ${host.alias}
         </a>`;
@@ -99,7 +99,7 @@ function makeNetworkHostSidebarHtml(hosthtml, host, id){
         }
 
     hosthtml += `<div class=" mt-2 bg-dark text-white collapse" id="networks-host-${id}">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
+            <ul class="btn-toggle-nav hostContentList list-unstyled fw-normal pb-1" style="display: inline;">`
 
     $.each(host.networks, function(_, network){
         let a  = currentNetwork.hostId == host.hostId && currentNetwork.network == network ? "active" : "";

@@ -158,7 +158,6 @@
             data = makeToastr(data);
             if(data.state == "success"){
                 $("#modal-networks-create").modal("toggle");
-                loadNetworksView();
             }
         });
     });
