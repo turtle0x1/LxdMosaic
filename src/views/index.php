@@ -1,9 +1,9 @@
 <?php
-$haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
+$haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList"); /** @phpstan-ignore-line */
 
-$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
-$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions");
-$getSetting = $this->container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting");
+$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession"); /** @phpstan-ignore-line */
+$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions"); /** @phpstan-ignore-line */
+$getSetting = $this->container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting"); /** @phpstan-ignore-line */
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 $recordActionsEnabled = $getSetting->getSettingLatestValue(InstanceSettingsKeys::RECORD_ACTIONS);

@@ -13,7 +13,7 @@ class ImportRemoteImagesByFingerprint
             "ubuntu-release"=>'https://cloud-images.ubuntu.com/releases',
             "ubuntu-daily"=>'https://cloud-images.ubuntu.com/daily'
         ];
-
+        $output = [];
         foreach ($hosts as $host) {
             foreach ($images as $image) {
                 $output[] = $host->images->createFromRemote(
