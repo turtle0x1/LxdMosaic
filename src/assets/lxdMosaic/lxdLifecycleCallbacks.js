@@ -71,7 +71,14 @@ var lifecycleCallbacks = {
             router.updatePageLinks()
         }
     },
-    // "network-deleted": function(){//TODO}
+    "network-deleted": function(message){
+        if(router.getCurrentLocation().url.substr(0, 8) == "networks"){
+            let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
+            let networkName = message.metadata.source.replace("/1.0/networks/", "");
+            hostUl.find(".hostContentList").find(`[href="/networks/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${networkName}"]`).parent().remove()
+            router.updatePageLinks()
+        }
+    },
     // "network-renamed": function(){//TODO}
     // "network-updated": function(){//TODO}
     // "operation-cancelled": function(){//TODO}
