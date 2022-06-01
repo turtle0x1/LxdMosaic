@@ -308,8 +308,7 @@ if ($haveServers->haveAny() !== true) {
                   delete: '/api/CloudConfig/DeleteController/delete',
                   deploy: '/api/CloudConfig/DeployController/deploy',
                   getAll: '/api/CloudConfig/GetAllController/getAll',
-                  getDetails: '/api/CloudConfig/GetDetailsController/get',
-                  getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
+                  getDetails: '/api/CloudConfig/GetDetailsController/get'
               },
               user: {
                   tokens: {
