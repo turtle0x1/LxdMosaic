@@ -34,7 +34,10 @@ class DownloadFile
         } catch (\Throwable $e) {
             // Remove any file because it will be filled with the LXD response /
             // junk
-            unlink($backupFilePath);
+            if (is_file($backupFilePath)) {
+                unlink($backupFilePath);
+            }
+
             throw $e;
         }
         return true;
