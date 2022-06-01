@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Model\Users\FetchUsers;
 
 class SearchUsers
 {
+    private $validatePermissions;
+    private $fetchUsers;
+    
     public function __construct(ValidatePermissions $validatePermissions, FetchUsers $fetchUsers)
     {
         $this->validatePermissions = $validatePermissions;

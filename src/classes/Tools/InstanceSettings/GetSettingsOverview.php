@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Users\FetchTokens;
 
 class GetSettingsOverview
 {
+    private $fetchTokens;
+    
     public function __construct(FetchTokens $fetchTokens)
     {
         $this->fetchTokens = $fetchTokens;

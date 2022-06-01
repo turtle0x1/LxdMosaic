@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StopInstancesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $stopInstances;
+    
     public function __construct(StopInstances $stopInstances)
     {
         $this->stopInstances = $stopInstances;

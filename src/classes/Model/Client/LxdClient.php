@@ -11,6 +11,10 @@ use dhope0000\LXDClient\Model\Hosts\GetDetails;
 
 class LxdClient
 {
+    private $routeApi;
+    private $getUserProject;
+    private $getDetails;
+    
     private $clientBag = [];
 
     public function __construct(

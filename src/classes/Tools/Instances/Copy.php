@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Instances\Migrate;
 
 class Copy
 {
+    private $migrate;
+    
     public function __construct(Migrate $migrate)
     {
         $this->migrate = $migrate;

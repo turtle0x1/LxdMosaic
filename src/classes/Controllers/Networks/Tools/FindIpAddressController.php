@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FindIpAddressController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $findIpAddress;
+    
     public function __construct(FindIpAddress $findIpAddress)
     {
         $this->findIpAddress = $findIpAddress;

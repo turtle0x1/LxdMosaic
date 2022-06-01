@@ -11,6 +11,11 @@ use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 class ImportLdapUsers
 {
+    private $ldap;
+    private $fetchUsers;
+    private $insertUser;
+    private $getSetting;
+    
     public function __construct(Ldap $ldap, FetchUsers $fetchUsers, InsertUser $insertUser, GetSetting $getSetting)
     {
         $this->ldap = $ldap;

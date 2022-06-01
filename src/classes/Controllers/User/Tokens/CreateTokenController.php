@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Users\InsertToken;
 
 class CreateTokenController
 {
+    private $insertToken;
+    
     public function __construct(InsertToken $insertToken)
     {
         $this->insertToken = $insertToken;

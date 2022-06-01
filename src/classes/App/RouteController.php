@@ -14,6 +14,15 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class RouteController
 {
+    private $validateToken;
+    private $userSession;
+    private $logUserIn;
+    private $routeApi;
+    private $routeView;
+    private $routeAssets;
+    private $session;
+    private $fetchUserDetails;
+    
     public $loginError = null;
 
     public function __construct(

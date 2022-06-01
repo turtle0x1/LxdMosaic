@@ -5,6 +5,8 @@ use dhope0000\LXDClient\Model\CloudConfig\GetConfigFiles;
 
 class GetAllCloudConfigController
 {
+    private $getConfigFiles;
+    
     public function __construct(GetConfigFiles $getConfigFiles)
     {
         $this->getConfigFiles = $getConfigFiles;

@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertMetric
 {
+    private $database;
+    
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -13,7 +15,6 @@ class InsertMetric
 
     public function insert(string $date, int $hostId, string $containerName, int $typeId, string $data)
     {
-
         $sql = "INSERT INTO `Instance_Metric_Values`
                 (
                     `IMV_Date`,

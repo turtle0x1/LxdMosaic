@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class GetUserOverviewController
 {
+    private $getUserOverview;
+    private $validatePermissions;
+    
     public function __construct(
         GetUserOverview $getUserOverview,
         ValidatePermissions $validatePermissions

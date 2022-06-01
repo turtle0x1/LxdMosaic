@@ -9,8 +9,9 @@ use dhope0000\LXDClient\Tools\Ldap\Ldap;
 
 class SaveLdapSettings
 {
-    private $insertSetting;
     private $validatePermissions;
+    private $insertSetting;
+    private $ldap;
 
     public function __construct(ValidatePermissions $validatePermissions, InsertSetting $insertSetting, Ldap $ldap)
     {

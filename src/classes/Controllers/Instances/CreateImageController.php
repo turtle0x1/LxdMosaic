@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateImageController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $createImage;
+    
     public function __construct(CreateImage $createImage)
     {
         $this->createImage = $createImage;

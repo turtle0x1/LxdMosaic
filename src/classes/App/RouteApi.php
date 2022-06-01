@@ -12,10 +12,18 @@ use dhope0000\LXDClient\Model\Users\InvalidateToken;
 
 class RouteApi
 {
+    private $container;
     private $recordAction;
+    private $getDetails;
+    private $hostList;
+    private $fetchAllowedProjects;
+    private $fetchUserDetails;
+    private $fetchUserProject;
+    private $invalidateToken;
+
     private $project;
     private $userId;
-    private $fetchAllowedProjects;
+
 
     public function __construct(
         Container $container,

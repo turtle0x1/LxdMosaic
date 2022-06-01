@@ -8,6 +8,9 @@ use dhope0000\LXDClient\Tools\Utilities\DateTools;
 
 class GetMetricsForContainer
 {
+    private $fetchMetrics;
+    private $fetchType;
+    
     public function __construct(FetchMetrics $fetchMetrics, FetchType $fetchType)
     {
         $this->fetchMetrics = $fetchMetrics;

@@ -8,6 +8,9 @@ use dhope0000\LXDClient\Objects\Host;
 
 class EnablePullGathering
 {
+    private $deployGenericPullProfile;
+    private $assignProfiles;
+    
     public function __construct(
         DeployGenericPullProfile $deployGenericPullProfile,
         AssignProfiles $assignProfiles

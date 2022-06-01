@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class DeleteWarning
 {
+    private $validatePermissions;
+    
     public function __construct(ValidatePermissions $validatePermissions)
     {
         $this->validatePermissions = $validatePermissions;

@@ -12,6 +12,14 @@ use dhope0000\LXDClient\Model\Deployments\Projects\FetchDeploymentProjects;
 
 class GetDeployment
 {
+    private $authoriseDeploymentAccess;
+    private $fetchCloudConfigs;
+    private $hostHaveDeploymentProfiles;
+    private $getContainersInDeployment;
+    private $fetchDeployments;
+    private $getContainersInformation;
+    private $fetchDeploymentProjects;
+    
     public function __construct(
         AuthoriseDeploymentAccess $authoriseDeploymentAccess,
         FetchCloudConfigs $fetchCloudConfigs,

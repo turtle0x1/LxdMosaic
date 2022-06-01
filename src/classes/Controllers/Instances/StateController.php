@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $state;
+    
     public function __construct(State $state)
     {
         $this->state = $state;

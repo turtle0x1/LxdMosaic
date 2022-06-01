@@ -10,6 +10,12 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class AddHosts
 {
+    private $generateCert;
+    private $addHost;
+    private $getDetails;
+    private $lxdClient;
+    private $fetchUserDetails;
+    
     public function __construct(
         AddHostModel $addHost,
         GenerateCert $generateCert,

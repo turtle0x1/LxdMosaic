@@ -9,6 +9,7 @@ use \DI\Container;
 class FirstRunController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
     private $firstRun;
+    private $container;
 
     public function __construct(FirstRun $firstRun, Container $container)
     {

@@ -8,7 +8,9 @@ use \DI\Container;
 
 class GetUserOverview
 {
-    private $getActions;
+    private $knownControllerConversions;
+    private $fetchRecordedActions;
+    private $container;
 
     public function __construct(
         KnownControllerConversions $knownControllerConversions,

@@ -13,6 +13,13 @@ use dhope0000\LXDClient\Tools\ProjectAnalytics\GetGraphableProjectAnalytics;
 
 class GetHostOverview
 {
+    private $getHostsInstances;
+    private $getResources;
+    private $hasExtension;
+    private $fetchUserDetails;
+    private $fetchAllowedProjects;
+    private $getGraphableProjectAnalytics;
+    
     public function __construct(
         GetHostsInstances $getHostsInstances,
         GetResources $getResources,

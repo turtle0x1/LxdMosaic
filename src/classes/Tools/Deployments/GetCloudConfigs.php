@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Model\Deployments\CloudConfig\FetchCloudConfigs;
 
 class GetCloudConfigs
 {
+    private $authoriseDeploymentAccess;
+    private $fetchCloudConfigs;
+    
     public function __construct(
         AuthoriseDeploymentAccess $authoriseDeploymentAccess,
         FetchCloudConfigs $fetchCloudConfigs

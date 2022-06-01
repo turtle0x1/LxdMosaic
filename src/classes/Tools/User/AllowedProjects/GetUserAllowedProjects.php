@@ -9,6 +9,11 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetUserAllowedProjects
 {
+    private $validatePermissions;
+    private $fetchAllowedProjects;
+    private $getDetails;
+    private $fetchUserDetails;
+    
     public function __construct(
         ValidatePermissions $validatePermissions,
         FetchAllowedProjects $fetchAllowedProjects,

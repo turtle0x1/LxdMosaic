@@ -8,6 +8,10 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetDeployments
 {
+    private $fetchDeployments;
+    private $getDeployment;
+    private $fetchUserDetails;
+    
     public function __construct(
         FetchDeployments $fetchDeployments,
         GetDeployment $getDeployment,

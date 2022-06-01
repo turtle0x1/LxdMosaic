@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AssignProfilesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $assignProfiles;
+    
     public function __construct(AssignProfiles $assignProfiles)
     {
         $this->assignProfiles = $assignProfiles;

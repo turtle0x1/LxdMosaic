@@ -11,6 +11,11 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GrantAccessToProject
 {
+    private $validatePermissions;
+    private $fetchUserDetails;
+    private $insertUserAccess;
+    private $fetchAllowedProjects;
+    
     public function __construct(
         ValidatePermissions $validatePermissions,
         FetchUserDetails $fetchUserDetails,
@@ -41,7 +46,7 @@ class GrantAccessToProject
             if (isset($existingAccess[$hostId]) && in_array($project, $existingAccess[$hostId])) {
                 continue;
             }
-            
+
             $this->insertUserAccess->insert($userId, $targetUserId, $hostId, $project);
         }
 

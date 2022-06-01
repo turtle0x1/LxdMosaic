@@ -8,6 +8,8 @@ use dhope0000\LXDClient\Tools\Utilities\StringTools;
 
 class GetVolumes
 {
+    private $usedByFilter;
+    
     public function __construct(UsedByFilter $usedByFilter)
     {
         $this->usedByFilter = $usedByFilter;

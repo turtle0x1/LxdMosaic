@@ -14,6 +14,15 @@ use dhope0000\LXDClient\App\RouteApi;
 
 class Universe
 {
+    private $fetchAllowedProjects;
+    private $hostList;
+    private $getAllClusters;
+    private $fetchUserProject;
+    private $fetchUserDetails;
+    private $getUserProject;
+    private $hasExtension;
+    private $routeApi;
+    
     private $entityConversion = [
         "instances"=>"/1.0/instances/",
         "images"=>"/1.0/images/",

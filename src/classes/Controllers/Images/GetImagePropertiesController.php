@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetImagePropertiesController
 {
+    private $getImageProperties;
+    
     public function __construct(GetImageProperties $getImageProperties)
     {
         $this->getImageProperties = $getImageProperties;

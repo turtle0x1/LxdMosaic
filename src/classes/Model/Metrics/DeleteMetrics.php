@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteMetrics
 {
+    private $database;
+    
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;

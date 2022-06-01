@@ -8,6 +8,8 @@ use dhope0000\LXDClient\Model\Client\LxdClient;
 
 class GenerateCert
 {
+    private $lxdClient;
+    
     private $certSettings = [
         "countryName"            => "UK",
         "stateOrProvinceName"    => "Isle Of Wight",

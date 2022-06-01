@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StartDeploymentController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $changeDeploymentState;
+    
     public function __construct(ChangeDeploymentState $changeDeploymentState)
     {
         $this->changeDeploymentState = $changeDeploymentState;

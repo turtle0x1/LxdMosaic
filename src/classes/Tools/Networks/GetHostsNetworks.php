@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Universe;
 
 class GetHostsNetworks
 {
+    private $universe;
+    
     public function __construct(Universe $universe)
     {
         $this->universe = $universe;

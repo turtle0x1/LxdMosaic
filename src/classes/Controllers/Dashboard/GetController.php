@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Dashboard\GetDashboard;
 
 class GetController
 {
+    private $getDashboard;
+    
     public function __construct(GetDashboard $getDashboard)
     {
         $this->getDashboard = $getDashboard;

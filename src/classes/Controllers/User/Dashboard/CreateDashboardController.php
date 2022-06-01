@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Users\Dashboard\InsertUserDashboard;
 
 class CreateDashboardController
 {
+    private $insertUserDashboard;
+    
     public function __construct(InsertUserDashboard $insertUserDashboard)
     {
         $this->insertUserDashboard = $insertUserDashboard;

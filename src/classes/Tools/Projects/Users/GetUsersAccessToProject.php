@@ -8,7 +8,7 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetUsersAccessToProject
 {
-    private $insertSetting;
+    private $validatePermissions;
     private $fetchAllowedProjects;
 
     public function __construct(ValidatePermissions $validatePermissions, FetchAllowedProjects $fetchAllowedProjects)

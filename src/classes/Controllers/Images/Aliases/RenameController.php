@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RenameController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $renameAlias;
+    
     public function __construct(RenameAlias $renameAlias)
     {
         $this->renameAlias = $renameAlias;

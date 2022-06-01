@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class GetNetworksDashboard
 {
+    private $universe;
+    
     public function __construct(Universe $universe)
     {
         $this->universe = $universe;

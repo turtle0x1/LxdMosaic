@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RenameInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $renameInstance;
+
     public function __construct(RenameInstance $renameInstance)
     {
         $this->renameInstance = $renameInstance;

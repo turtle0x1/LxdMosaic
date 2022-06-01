@@ -10,6 +10,11 @@ use dhope0000\LXDClient\Tools\Deployments\Containers\SetStartTimes;
 
 class ChangeDeploymentState
 {
+    private $authoriseDeploymentAccess;
+    private $hostHaveDeploymentProfiles;
+    private $getContainersInDeployment;
+    private $setStartTimes;
+    
     public function __construct(
         AuthoriseDeploymentAccess $authoriseDeploymentAccess,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,

@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportRemoteImagesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $importRemoteImagesByFingerprint;
+    
     public function __construct(ImportRemoteImagesByFingerprint $importRemoteImagesByFingerprint)
     {
         $this->importRemoteImagesByFingerprint = $importRemoteImagesByFingerprint;

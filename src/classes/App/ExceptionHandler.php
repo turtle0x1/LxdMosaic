@@ -8,6 +8,7 @@ use dhope0000\LXDClient\Model\Hosts\ChangeStatus;
 class ExceptionHandler
 {
     private $getDetails;
+    private $changeStatus;
 
     /**
      * @Inject
