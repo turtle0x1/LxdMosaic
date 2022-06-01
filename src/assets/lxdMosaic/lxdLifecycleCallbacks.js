@@ -142,7 +142,14 @@ var lifecycleCallbacks = {
             router.updatePageLinks()
         }
     },
-    // "storage-pool-deleted": function(){//TODO}
+    "storage-pool-deleted": function(message){
+        if(router.getCurrentLocation().url.substr(0, 7) == "storage"){
+            let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
+            let profileName = message.metadata.source.replace("/1.0/storage-pools/", "");
+            hostUl.find(".hostContentList").find(`[href="/storage/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${profileName}"]`).parent().remove()
+            router.updatePageLinks()
+        }
+    },
     // "storage-pool-updated": function(){//TODO}
     // "storage-volume-backup-created": function(){//TODO}
     // "storage-volume-backup-deleted": function(){//TODO}
