@@ -428,7 +428,6 @@ $("#profileBox").on("click", "#deleteProfile", function(){
                     ajaxRequest(globalUrls.profiles.delete, currentProfileDetails, function(data){
                         let r = makeToastr(data);
                         if(r.state == "success"){
-                            sidebarItem.remove();
                             loadProfileView();
                         }
                     });
