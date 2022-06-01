@@ -38,7 +38,13 @@ var lifecycleCallbacks = {
     // "instance-console-reset": function(){//TODO}
     // "instance-console-retrieved": function(){//TODO}
     // "instance-created": function(){//TODO}
-    // "instance-deleted": function(){//TODO}
+    "instance-deleted": function(message){
+        let currentLocation = router.getCurrentLocation().url
+        if(currentLocation.substr(0, 8) == "instance" || currentLocation == ""){
+            let instanceName = message.metadata.source.replace("/1.0/instances/", "");
+            let hostUl = $("#sidebar-ul").find("#host-" + message.hostId).find(`[data-container=${instanceName}]`).remove()
+        }
+    },
     // "instance-exec": function(){//TODO}
     // "instance-file-deleted": function(){//TODO}
     // "instance-file-pushed": function(){//TODO}
