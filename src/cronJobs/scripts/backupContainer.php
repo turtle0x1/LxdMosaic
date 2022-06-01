@@ -31,6 +31,7 @@ if (!is_numeric($strategy)) {
 $getHost = $container->make("dhope0000\LXDClient\Model\Hosts\GetDetails");
 $backupInstance = $container->make("dhope0000\LXDClient\Tools\Instances\Backups\BackupInstance");
 $getInstanceSetting = $container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting");
+$insertInstanceBackup = $container->make("dhope0000\LXDClient\Model\Hosts\Backups\Instances\InsertInstanceBackup");
 $timezone = $getInstanceSetting->getSettingLatestValue(dhope0000\LXDClient\Constants\InstanceSettingsKeys::TIMEZONE);
 
 $host = $getHost->fetchHost($hostId);
@@ -47,5 +48,15 @@ try {
         $importAndDelete
     );
 } catch (\Throwable $e) {
-    //TODO Log this properly https://github.com/turtle0x1/LxdMosaic/issues/481
+    $insertInstanceBackup->insert(
+        (new \DateTime())->setTimezone(new \DateTimeZone($timezone)),
+        $hostId,
+        $project,
+        $instance,
+        (new \DateTime())->setTimezone(new \DateTimeZone($timezone))->format("Y-m-d H:i:s"),
+        "",
+        0,
+        1,
+        $e->getMessage()
+    );
 }
