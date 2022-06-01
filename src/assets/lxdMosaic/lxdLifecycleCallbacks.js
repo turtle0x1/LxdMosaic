@@ -1,3 +1,12 @@
+var lifecycleCallbackTemplates = {
+    instanceStateChange:  function(message, newState){
+        let currentLocation = router.getCurrentLocation().url
+        if(currentLocation.substr(0, 8) == "instance" || currentLocation == ""){
+            let instanceName = message.metadata.source.replace("/1.0/instances/", "");
+            let hostUl = $("#sidebar-ul").find("#host-" + message.hostId).find(`[data-container=${instanceName}]`).find("i:eq(0)").replaceWith(`<i class="nav-icon me-1 ${statusCodeIconMap[newState]}" style="min-width: 20px;"></i>`)
+        }
+    }
+}
 var lifecycleCallbacks = {
     // "certificate-created": function(){//TODO}
     // "certificate-deleted": function(){//TODO}
@@ -48,7 +57,7 @@ var lifecycleCallbacks = {
     // "instance-resumed": function(){//TODO}
     // "instance-shutdown": function(){//TODO}
     // "instance-started": function(){//TODO}
-    // "instance-stopped": function(){//TODO}
+    "instance-stopped": (message) => lifecycleCallbackTemplates.instanceStateChange(message, 102),
     // "instance-updated": function(){//TODO}
     // "instance-snapshot-created": function(){//TODO}
     // "instance-snapshot-deleted": function(){//TODO}
