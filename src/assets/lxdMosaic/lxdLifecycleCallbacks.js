@@ -50,7 +50,7 @@ var lifecycleCallbacks = {
     // "instance-metadata-template-created": function(){//TODO}
     // "instance-metadata-template-deleted": function(){//TODO}
     // "instance-metadata-template-retrieved": function(){//TODO}
-    // "instance-paused": function(){//TODO}
+    "instance-paused":  (message) => lifecycleCallbackTemplates.instanceStateChange(message, 110),
     // "instance-renamed": function(){//TODO}
     // "instance-restarted": function(){//TODO}
     // "instance-restored": function(){//TODO}
