@@ -147,34 +147,40 @@
 <div id="usersList" class="settingsBox">
     <div class="row">
         <div class="col-md-5">
-            <div class="card bg-dark text-white" id="usersCard">
-              <div class="card-header" role="tab" >
-                <h5>
-                  <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#users" aria-expanded="true" aria-controls="users">
-                    Users
-                  </a>
-                  <button class="btn btn-success float-end" id="addUser">
-                      <i class="fas fa-plus"></i>
-                  </button>
-                </h5>
-              </div>
-              <div id="users" class="collapse in show" role="tabpanel">
-                <div class="card-body">
-                  <table class="table table-dark table-bordered" id="usersTable">
-                      <thead>
-                          <tr>
-                              <th>User</th>
-                              <th>Added</th>
-                              <th>Admin</th>
-                              <th>Disabled</th>
-                              <th>Settings</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                  </table>
+            <div class="card bg-dark text-white" id="usersCard" style="max-height: 90vh; overflow: hidden">
+                <div class="card-header" role="tab">
+                    <h5>
+                        Users
+                        <button class="btn btn-success float-end" id="addUser">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </h5>
                 </div>
-              </div>
+                <div class="card-body" style="max-height: 90vh; overflow-y: scroll">
+                    <div class="input-group mb-3">
+                        <div class="input-group-text">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Filter Users" id="filterUsersTable">
+                        <div class="input-group-text">
+                            <input class="form-check-input mt-0" type="checkbox" value="" id="showDeletedUserFilter">
+                            <label for="showDeletedUserFilter" class="form-check-label ms-2">Show Deleted?</label>
+                        </div>
+                    </div>
+                    <table class="table table-dark table-bordered" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Added</th>
+                                <th>Admin</th>
+                                <th>Disabled</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="col-md-7">
@@ -554,6 +560,7 @@ function loadUsers(){
     $(".viewSettings").addClass("active");
     $("#usersList").show();
     addBreadcrumbs(["Admin Settings", "User Management"], ["", "active"], false, ["/admin"]);
+    $("#showDeletedUserFilter").prop("checked", false)
     ajaxRequest(globalUrls.settings.users.getAll, {}, (data)=>{
         data = $.parseJSON(data);
         let trs = "";
@@ -575,28 +582,32 @@ function loadUsers(){
                     isDisabledTClass = "text-warning";
                 }
 
-                let resetPasswordBtn = '<a class="dropdown-item resetPassword" href="#">Reset Password</a>';
+                let resetPasswordBtn = '<div class="dropdown-item resetPassword" href="#">Reset Password</div>';
 
                 if(parseInt(user.fromLdap) == 1){
                     resetPasswordBtn = '';
                 }
 
                 let isDisabledVal = user.isDisabled;
+                let isDeleted = user.isDeleted
+                let trStyle = isDeleted == 1 ? "display: none;" : ""
+                let userIcon = isDeleted == 1 ? '<i class="fas fa-ghost me-2"></i>' : '';
 
-                trs += `<tr data-user-id="${user.id}" data-is-admin="${user.isAdmin}" data-is-disabled=${isDisabledVal}>
-                    <td><p id="${user.id}" class='viewUser text-primary text-decoration-underline' style="cursor: pointer;">${user.username}</p></td>
+                trs += `<tr data-user-id="${user.id}" data-is-admin="${user.isAdmin}" data-user-name="${user.username}" data-is-disabled=${isDisabledVal} data-is-deleted="${user.isDeleted}" style="${trStyle}">
+                    <td><p id="${user.id}" class='viewUser text-primary text-decoration-underline' style="cursor: pointer;">${userIcon}${user.username}</p></td>
                     <td>${moment.utc(user.created).local().fromNow()}</td>
                     <td><i class="fas fa-${isAdmin} ${isAdminTClass}"></i></td>
                     <td><i class="fas fa-${isDisabled} ${isDisabledTClass}"></i></td>
                     <td>
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fas fa-wrench"></i>
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <div class="dropdown-item setUserProject" href="#">Set Projects Access</div>
                           ${resetPasswordBtn}
-                          <div class="dropdown-item toggleUserLogin text-warning" href="#">Toggle User Login</div>
-                          <div class="dropdown-item toggleUserAdmin text-danger" href="#">Toggle User Admin</div>
+                          <div class="dropdown-item toggleUserLogin" href="#">Toggle User Login</div>
+                          <div class="dropdown-item toggleUserAdmin" href="#">Toggle User Admin</div>
+                          <div class="dropdown-item deleteUser text-danger" href="#">Delete User</div>
                         </div>
                     </td>
                 </tr>`;
@@ -917,6 +928,75 @@ $("#hostListTable").on("click", ".deleteHost", function(){
         }
     });
 });
+
+$("#usersTable").on("click", ".deleteUser", function(){
+    let tr = $(this).parents("tr");
+    let targetUserId = tr.data("userId");
+    $.confirm({
+        title: "Deleting User: " + $(this).parents("tr").data("userName"),
+        content: `<div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="changeUserName" checked>
+          <label class="form-check-label" for="changeUserName">Change username to "Deleted User"</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="removeProjectAccess" checked>
+          <label class="form-check-label" for="removeProjectAccess">Remove all project access</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="removeApiKeys" checked>
+          <label class="form-check-label" for="removeApiKeys">Remove all API keys</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="deleteAuditLogs">
+          <label class="form-check-label" for="deleteAuditLogs">Delete user audit logs</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="deleteBackupSchedules">
+          <label class="form-check-label" for="deleteBackupSchedules">Delete user backup schedules</label>
+        </div>`,
+        type: "red",
+        buttons: {
+            cancel: function () {},
+            yes: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin me-2"></i>Deleting User'); // let the user know
+                    this.buttons.yes.disable();
+                    this.buttons.cancel.disable();
+                    var modal = this;
+                    var changeUserName = this.$content.find('#changeUserName').is(":checked") ? 1 : 0
+                    var removeProjectAccess = this.$content.find('#removeProjectAccess').is(":checked") ? 1 : 0
+                    var removeApiKeys = this.$content.find('#removeApiKeys').is(":checked") ? 1 : 0
+                    var deleteAuditLogs = this.$content.find('#deleteAuditLogs').is(":checked") ? 1 : 0
+                    var deleteBackupSchedules = this.$content.find('#deleteBackupSchedules').is(":checked") ? 1 : 0
+
+                    let x = {
+                        targetUserId,
+                        changeUserName,
+                        removeProjectAccess,
+                        removeApiKeys,
+                        deleteAuditLogs,
+                        deleteBackupSchedules
+                    }
+
+                    ajaxRequest('/api/User/DeleteUserController/delete', x, (data)=>{
+                        data = makeToastr(data);
+                        if(data.state == "error"){
+                            this.buttons.yes.enable();
+                            this.buttons.yes.setText('Yes'); // let the user know
+                            this.buttons.cancel.enable();
+                            return false;
+                        }
+                        tr.remove()
+                        modal.close();
+                    });
+                    return false;
+                }
+            }
+        }
+    });
+});
+
 $("#usersTable").on("click", ".toggleUserAdmin", function(){
     let tr = $(this).parents("tr");
     let isAdmin = tr.data("isAdmin");
@@ -1333,6 +1413,32 @@ $("#usersList").on("click", "#addUser", function(){
             },
         }
     });
+});
+
+$("#usersCard").on("keyup", "#filterUsersTable", function(){
+    let search = $(this).val().trim().toLowerCase()
+    if(search == ""){
+        $("#usersTable > tbody > tr").show()
+        return false;
+    }
+    let showDeleted = $("#showDeletedUserFilter").is(":checked")
+    $("#usersTable > tbody > tr").each(function(){
+        let name = $(this).data("userName")
+        let deleted = $(this).data("isDeleted")
+        if(name.includes(search) && (!isDeleted || showDeleted)){
+            $(this).show();
+        }else{
+            $(this).hide();
+        }
+    });
+});
+
+$("#usersCard").on("change", "#showDeletedUserFilter", function(){
+    if($(this).is(":checked")){
+        $("#usersList").find("[data-is-deleted=1]").show()
+    }else{
+        $("#usersList").find("[data-is-deleted=1]").hide()
+    }
 });
 
 $("#usersList").on("click", ".setUserProject", function(){

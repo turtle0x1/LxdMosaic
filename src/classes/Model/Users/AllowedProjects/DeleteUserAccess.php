@@ -47,7 +47,7 @@ class DeleteUserAccess
         ]);
         return $do->rowCount() ?  true : false;
     }
-    
+
     public function deleteForHost(int $hostId)
     {
         $sql = "DELETE FROM `User_Allowed_Projects`
@@ -57,6 +57,18 @@ class DeleteUserAccess
         $do = $this->database->prepare($sql);
         $do->execute([
             ":hostId"=>$hostId
+        ]);
+        return $do->rowCount() ?  true : false;
+    }
+    public function deleteForUser(int $targetUserId)
+    {
+        $sql = "DELETE FROM `User_Allowed_Projects`
+                WHERE
+                    `UAP_User_ID` = :targetUserId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":targetUserId"=>$targetUserId
         ]);
         return $do->rowCount() ?  true : false;
     }

@@ -21,7 +21,8 @@ class FetchUsers
                     `User_Name` as `username`,
                     `User_Admin` as `isAdmin`,
                     $mod,
-                    `User_Login_Disabled` as `isDisabled`
+                    `User_Login_Disabled` as `isDisabled`,
+                    `User_Deleted` as `isDeleted`
                 FROM
                     `Users`
                 ORDER BY

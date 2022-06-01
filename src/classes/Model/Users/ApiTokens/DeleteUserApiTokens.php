@@ -1,36 +1,38 @@
 <?php
 
-namespace dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules;
+namespace dhope0000\LXDClient\Model\Users\ApiTokens;
 
 use dhope0000\LXDClient\Model\Database\Database;
 
-class DeleteBackupSchedules
+class DeleteUserApiTokens
 {
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function deleteforHost(int $hostId)
+    public function deleteAllNonPermanent(int $userId)
     {
-        $sql = "DELETE FROM
-                    `Instance_Backup_Schedule`
+        $sql = "DELETE FROM `User_Api_Tokens`
                 WHERE
-                    `IBS_Host_ID` = :hostId
+                    `UAT_User_ID` = :userId
+                AND
+                    `UAT_Permanent` = 0
                 ";
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId
+            ":userId"=>$userId
         ]);
         return $do->rowCount() ? true : false;
     }
 
-    public function deleteforUser(int $userId)
+    public function deleteAllPermanent(int $userId)
     {
-        $sql = "DELETE FROM
-                    `Instance_Backup_Schedule`
+        $sql = "DELETE FROM `User_Api_Tokens`
                 WHERE
-                    `IBS_User_ID` = :userId
+                    `UAT_User_ID` = :userId
+                AND
+                    `UAT_Permanent` = 1
                 ";
         $do = $this->database->prepare($sql);
         $do->execute([
