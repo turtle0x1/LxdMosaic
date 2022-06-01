@@ -71,6 +71,14 @@ function openEventSocket()
 
     currentEventSocket.onmessage = (msg) => {
         msg = JSON.parse(msg.data);
+
+        if(msg.type == "lifecycle"){
+            if(lifecycleCallbacks.hasOwnProperty(msg.metadata.action)){
+                lifecycleCallbacks[msg.metadata.action](msg)
+            }
+            return false;
+        }
+
         $("#noOps").remove();
 
         if(msg.mosaicType == "hostChange"){
