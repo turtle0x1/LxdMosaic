@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class SearchProfiles
 {
+    private $getProfilesOnAllHosts;
+    
     public function __construct(GetProfilesOnAllHosts $getProfilesOnAllHosts)
     {
         $this->getProfilesOnAllHosts = $getProfilesOnAllHosts;

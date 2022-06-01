@@ -10,6 +10,8 @@ use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 class GetAllClusters
 {
     private $hostList;
+    private $getDetails;
+    private $getResources;
 
     public function __construct(
         HostList $hostList,

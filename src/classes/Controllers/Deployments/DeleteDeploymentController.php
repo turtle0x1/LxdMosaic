@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteDeploymentController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $deleteDeployment;
+    
     public function __construct(DeleteDeployment $deleteDeployment)
     {
         $this->deleteDeployment = $deleteDeployment;

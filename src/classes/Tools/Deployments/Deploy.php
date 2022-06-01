@@ -17,6 +17,15 @@ use dhope0000\LXDClient\Tools\Utilities\ValidateInstanceName;
 
 class Deploy
 {
+    private $authoriseDeploymentAccess;
+    private $deployToProfile;
+    private $hostHaveDeploymentProfiles;
+    private $createInstance;
+    private $getConfig;
+    private $createPhoneHomeVendorString;
+    private $storeDeployedContainerNames;
+    private $getDetails;
+    
     public function __construct(
         AuthoriseDeploymentAccess $authoriseDeploymentAccess,
         DeployToProfile $deployToProfile,

@@ -6,6 +6,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UpdateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $update;
+    
     public function __construct(Update $update)
     {
         $this->update = $update;

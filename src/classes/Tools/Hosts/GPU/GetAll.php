@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetAll
 {
+    private $getResources;
+    
     public function __construct(GetResources $getResources)
     {
         $this->getResources = $getResources;

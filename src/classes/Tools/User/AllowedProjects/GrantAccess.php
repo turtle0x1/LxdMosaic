@@ -10,6 +10,11 @@ use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 
 class GrantAccess
 {
+    private $validatePermissions;
+    private $fetchUserDetails;
+    private $insertUserAccess;
+    private $fetchAllowedProjects;
+    
     public function __construct(
         ValidatePermissions $validatePermissions,
         FetchUserDetails $fetchUserDetails,

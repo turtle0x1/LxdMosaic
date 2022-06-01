@@ -5,6 +5,8 @@ use dhope0000\LXDClient\Model\Instances\Settings\GetSettings;
 
 class GetAllAvailableSettingsController
 {
+    private $getSettings;
+    
     public function __construct(GetSettings $getSettings)
     {
         $this->getSettings = $getSettings;

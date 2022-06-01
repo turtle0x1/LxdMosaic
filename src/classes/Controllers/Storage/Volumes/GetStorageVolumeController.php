@@ -8,6 +8,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetStorageVolumeController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $getVolume;
+    
     public function __construct(GetVolume $getVolume)
     {
         $this->getVolume = $getVolume;

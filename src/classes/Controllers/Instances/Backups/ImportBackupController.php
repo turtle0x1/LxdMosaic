@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $storeBackupLocally;
+    
     public function __construct(StoreBackupLocally $storeBackupLocally)
     {
         $this->storeBackupLocally = $storeBackupLocally;

@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Users\FetchTokens;
 
 class ValidateToken
 {
+    private $fetchTokens;
+    
     public function __construct(FetchTokens $fetchTokens)
     {
         $this->fetchTokens = $fetchTokens;

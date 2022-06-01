@@ -9,6 +9,10 @@ use dhope0000\LXDClient\Tools\Utilities\DateTools;
 
 class GetAllSettingsController
 {
+    private $getSettings;
+    private $validatePermissions;
+    private $dateTools;
+    
     public function __construct(
         GetSettings $getSettings,
         ValidatePermissions $validatePermissions,

@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class DeleteController
 {
+    private $validatePermissions;
+    private $deleteInstanceType;
+    
     public function __construct(
         ValidatePermissions $validatePermissions,
         DeleteInstanceType $deleteInstanceType

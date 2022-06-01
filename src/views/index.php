@@ -1,9 +1,9 @@
 <?php
-$haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
+$haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList"); /** @phpstan-ignore-line */
 
-$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
-$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions");
-$getSetting = $this->container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting");
+$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession"); /** @phpstan-ignore-line */
+$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions"); /** @phpstan-ignore-line */
+$getSetting = $this->container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting"); /** @phpstan-ignore-line */
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 $recordActionsEnabled = $getSetting->getSettingLatestValue(InstanceSettingsKeys::RECORD_ACTIONS);
@@ -308,8 +308,7 @@ if ($haveServers->haveAny() !== true) {
                   delete: '/api/CloudConfig/DeleteController/delete',
                   deploy: '/api/CloudConfig/DeployController/deploy',
                   getAll: '/api/CloudConfig/GetAllController/getAll',
-                  getDetails: '/api/CloudConfig/GetDetailsController/get',
-                  getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
+                  getDetails: '/api/CloudConfig/GetDetailsController/get'
               },
               user: {
                   tokens: {

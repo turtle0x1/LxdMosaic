@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 
 class GetLatest
 {
+    private $getConfig;
+    
     public function __construct(GetConfig $getConfig)
     {
         $this->getConfig = $getConfig;

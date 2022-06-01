@@ -9,6 +9,7 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 class GetCommonToHostsProjects
 {
     private $validatePermissions;
+    private $hasExtension;
 
     public function __construct(ValidatePermissions $validatePermissions, HasExtension $hasExtension)
     {

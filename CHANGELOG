@@ -16,6 +16,10 @@ Changed
     Use cron method instead of every* methods in cronjob definitions (#503)
     Rename "volumes" to "pools" on universe object (#487)
 
+API Changes
+    Removed GetAllCloudConfigController (was broken)
+    Removed GetCloudConfigFileController (was broken)
+
 0.14.1 - 15/05/2022
 
 Changed

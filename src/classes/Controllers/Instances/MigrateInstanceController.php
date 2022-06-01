@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MigrateInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $migrate;
+    
     public function __construct(Migrate $migrate)
     {
         $this->migrate = $migrate;

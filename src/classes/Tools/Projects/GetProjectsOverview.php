@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 
 class GetProjectsOverview
 {
+    private $universe;
+    private $hasExtension;
+    
     public function __construct(Universe $universe, HasExtension $hasExtension)
     {
         $this->universe = $universe;

@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetProjectInfoController
 {
+    private $getProjectInfo;
+    
     public function __construct(GetProjectInfo $getProjectInfo)
     {
         $this->getProjectInfo = $getProjectInfo;

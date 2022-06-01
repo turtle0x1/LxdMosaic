@@ -8,6 +8,9 @@ use dhope0000\LXDClient\Objects\RouteToNameMapping;
 
 class GetAllInstanceRecordedActions
 {
+    private $fetchRecordedActions;
+    private $routeToNameMapping;
+    
     public function __construct(FetchRecordedActions $fetchRecordedActions, RouteToNameMapping $routeToNameMapping)
     {
         $this->fetchRecordedActions = $fetchRecordedActions;

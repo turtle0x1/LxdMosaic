@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RenameSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $renameSnapshot;
+    
     public function __construct(RenameSnapshot $renameSnapshot)
     {
         $this->renameSnapshot = $renameSnapshot;

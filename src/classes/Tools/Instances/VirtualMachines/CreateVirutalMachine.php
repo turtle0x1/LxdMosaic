@@ -8,6 +8,8 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateVirutalMachine
 {
+    private $createInstance;
+    
     public function __construct(
         CreateInstance $createInstance
     ) {

@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetHostOverviewController
 {
+    private $getHostOverview;
+    
     public function __construct(GetHostOverview $getHostOverview)
     {
         $this->getHostOverview = $getHostOverview;

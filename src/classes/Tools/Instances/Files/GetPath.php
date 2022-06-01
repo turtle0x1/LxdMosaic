@@ -8,6 +8,8 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 class GetPath
 {
     private $cache;
+    private $instanceUrlKey;
+    
 
     public function __construct(ArrayAdapter $cache)
     {

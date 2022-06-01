@@ -8,6 +8,9 @@ use \DI\Container;
 
 class GetDetails
 {
+    private $database;
+    private $container;
+
     public function __construct(Database $database, Container $container)
     {
         $this->database = $database->dbObject;

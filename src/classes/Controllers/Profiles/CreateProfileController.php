@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $createProfile;
+
     public function __construct(CreateProfile $createProfile)
     {
         $this->createProfile = $createProfile;

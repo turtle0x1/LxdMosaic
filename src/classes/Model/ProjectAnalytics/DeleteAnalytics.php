@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteAnalytics
 {
+    private $database;
+    
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -24,7 +26,7 @@ class DeleteAnalytics
         ]);
         return $do->rowCount() ? true : false;
     }
-    
+
     public function deleteForHost(int $hostId)
     {
         $sql = "DELETE FROM

@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Deployments\GetCloudConfigs;
 
 class GetCloudsConfigController
 {
+    private $getCloudConfigs;
+    
     public function __construct(GetCloudConfigs $getCloudConfigs)
     {
         $this->getCloudConfigs = $getCloudConfigs;

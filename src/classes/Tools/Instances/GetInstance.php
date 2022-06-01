@@ -11,7 +11,9 @@ use dhope0000\LXDClient\Tools\Instances\Devices\Proxy\GetAllInstanceProxies;
 
 class GetInstance
 {
+    private $fetchDeployments;
     private $hasExtension;
+    private $fetchMetrics;
     private $getAllInstanceProxies;
 
     public function __construct(

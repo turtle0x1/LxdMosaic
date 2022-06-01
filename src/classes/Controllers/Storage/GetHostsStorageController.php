@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Storage\GetUserStorage;
 
 class GetHostsStorageController
 {
+    private $getUserStorage;
+    
     public function __construct(GetUserStorage $getUserStorage)
     {
         $this->getUserStorage = $getUserStorage;

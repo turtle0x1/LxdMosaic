@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Analytics\DownloadHistory;
 
 class DownloadHistoryController
 {
+    private $downloadHistory;
+    
     public function __construct(DownloadHistory $downloadHistory)
     {
         $this->downloadHistory = $downloadHistory;

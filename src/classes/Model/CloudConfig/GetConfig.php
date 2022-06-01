@@ -5,6 +5,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class GetConfig
 {
+    private $database;
+    
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;

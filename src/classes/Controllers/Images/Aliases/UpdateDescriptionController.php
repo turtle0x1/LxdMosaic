@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UpdateDescriptionController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $updateDescription;
+    
     public function __construct(UpdateDescription $updateDescription)
     {
         $this->updateDescription = $updateDescription;

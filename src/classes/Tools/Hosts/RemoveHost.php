@@ -15,13 +15,16 @@ use dhope0000\LXDClient\Model\Users\Projects\DeleteUserProject;
 
 class RemoveHost
 {
-    private $deleteBackup;
+    private $deleteHost;
+    private $fetchUserDetails;
     private $deleteDeploymentInstances;
+    private $deleteBackup;
     private $deleteBackupSchedules;
+    private $deleteMetrics;
     private $deleteAnalytics;
     private $deleteUserAccess;
     private $deleteUserProject;
-
+    
     public function __construct(
         DeleteHost $deleteHost,
         FetchUserDetails $fetchUserDetails,

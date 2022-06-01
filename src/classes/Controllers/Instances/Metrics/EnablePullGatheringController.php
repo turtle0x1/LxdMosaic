@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class EnablePullGatheringController
 {
+    private $enablePullGathering;
+    
     public function __construct(EnablePullGathering $enablePullGathering)
     {
         $this->enablePullGathering = $enablePullGathering;

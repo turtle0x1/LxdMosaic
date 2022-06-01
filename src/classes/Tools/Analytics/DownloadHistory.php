@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Model\Analytics\FetchLatestData;
 
 class DownloadHistory
 {
+    private $validatePermissions;
+    private $fetchLatestData;
+    
     public function __construct(
         ValidatePermissions $validatePermissions,
         FetchLatestData $fetchLatestData

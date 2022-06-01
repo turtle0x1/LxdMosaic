@@ -5,6 +5,8 @@ use \DI\Container;
 
 class RouteView
 {
+    private $container;
+    
     public function __construct(Container $container)
     {
         $this->container = $container;

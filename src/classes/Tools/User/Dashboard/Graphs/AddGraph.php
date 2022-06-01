@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Users\Dashboard\Graphs\InsertDashboardGraph;
 
 class AddGraph
 {
+    private $insertDashboardGraph;
+    
     public function __construct(InsertDashboardGraph $insertDashboardGraph)
     {
         $this->insertDashboardGraph = $insertDashboardGraph;

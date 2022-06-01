@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Networks\GetHostsNetworks;
 
 class GetHostsNetworksController
 {
+    private $getHostsNetworks;
+    
     public function __construct(GetHostsNetworks $getHostsNetworks)
     {
         $this->getHostsNetworks = $getHostsNetworks;

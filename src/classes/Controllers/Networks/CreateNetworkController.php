@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateNetworkController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $createNetwork;
+
     public function __construct(CreateNetwork $createNetwork)
     {
         $this->createNetwork = $createNetwork;

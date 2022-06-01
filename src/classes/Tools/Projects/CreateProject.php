@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 
 class CreateProject
 {
+    private $hasExtension;
+    
     public function __construct(HasExtension $hasExtension)
     {
         $this->hasExtension = $hasExtension;

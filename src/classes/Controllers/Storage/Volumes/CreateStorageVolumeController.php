@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateStorageVolumeController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $createVolume;
+    
     public function __construct(CreateVolume $createVolume)
     {
         $this->createVolume = $createVolume;

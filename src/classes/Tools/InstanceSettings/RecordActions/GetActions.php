@@ -10,6 +10,7 @@ class GetActions
 {
     private $validatePermissions;
     private $fetchRecordedActions;
+    private $routeToNameMapping;
 
     public function __construct(
         ValidatePermissions $validatePermissions,

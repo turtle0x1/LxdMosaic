@@ -9,6 +9,11 @@ use dhope0000\LXDClient\Tools\User\Password\CheckPasswordPolicy;
 
 class ResetPassword
 {
+    private $validatePermissions;
+    private $updatePasswordHash;
+    private $fetchUserDetails;
+    private $checkPasswordPolicy;
+    
     public function __construct(
         ValidatePermissions $validatePermissions,
         UpdatePasswordHash $updatePasswordHash,

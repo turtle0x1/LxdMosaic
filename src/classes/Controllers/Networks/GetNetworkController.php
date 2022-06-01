@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetNetworkController
 {
+    private $getNetwork;
+    
     public function __construct(GetNetwork $getNetwork)
     {
         $this->getNetwork = $getNetwork;

@@ -8,6 +8,11 @@ use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 
 class SearchHosts
 {
+    private $hostList;
+    private $hasExtension;
+    private $fetchUserDetails;
+    private $fetchAllowedProjects;
+    
     public function __construct(
         HostList $hostList,
         HasExtension $hasExtension,

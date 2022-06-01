@@ -9,6 +9,11 @@ use dhope0000\LXDClient\Tools\User\Password\CheckPasswordPolicy;
 
 class AddUser
 {
+    private $validatePermissions;
+    private $insertUser;
+    private $fetchUserDetails;
+    private $checkPasswordPolicy;
+    
     public function __construct(
         ValidatePermissions $validatePermissions,
         InsertUser $insertUser,

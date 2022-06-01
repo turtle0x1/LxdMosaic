@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Instances\GetInstanceSettings;
 
 class GetCurrentInstanceSettingsController
 {
+    private $getInstanceSettings;
+    
     public function __construct(GetInstanceSettings $getInstanceSettings)
     {
         $this->getInstanceSettings = $getInstanceSettings;

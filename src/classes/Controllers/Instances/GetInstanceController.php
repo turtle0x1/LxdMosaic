@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetInstanceController
 {
+    private $getInstance;
+    
     public function __construct(GetInstance $getInstance)
     {
         $this->getInstance = $getInstance;

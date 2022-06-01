@@ -8,6 +8,10 @@ use dhope0000\LXDClient\Tools\User\ValidateToken;
 
 class UserSession
 {
+    private $invalidateToken;
+    private $session;
+    private $validateToken;
+    
     public function __construct(
         InvalidateToken $invalidateToken,
         Session $session,

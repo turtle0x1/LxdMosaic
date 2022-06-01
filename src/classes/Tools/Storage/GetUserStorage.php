@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetUserStorage
 {
+    private $universe;
+    
     public function __construct(
         Universe $universe
     ) {
