@@ -24,4 +24,18 @@ class DeleteBackupSchedules
         ]);
         return $do->rowCount() ? true : false;
     }
+
+    public function deleteforUser(int $userId)
+    {
+        $sql = "DELETE FROM
+                    `Instance_Backup_Schedule`
+                WHERE
+                    `IBS_User_ID` = :userId
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute([
+            ":userId"=>$userId
+        ]);
+        return $do->rowCount() ? true : false;
+    }
 }
