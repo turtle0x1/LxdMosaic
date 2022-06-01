@@ -2,11 +2,11 @@
 <div id="backupsOverview">
     <div class="row">
         <div class="col-md-6 border-end">
-            <div class="card bg-dark text-white">
+            <div class="card bg-dark text-white" style="max-height: 90vh; overflow: hidden;">
                 <div class="card-header">
                     <h4>Instance Backups</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="overflow-y: scroll">
                     <table class="table table-bordered table-dark" id="containerBackupTable">
                         <thead>
                             <tr>
@@ -42,7 +42,7 @@
               </div>
         </div>
         <div class="col-md-6" id="containerBackupDetails">
-              <div class="card bg-dark text-white">
+              <div class="card bg-dark text-white"style="max-height: 90vh; overflow: hidden;" >
                   <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
                       <h4>
                           <span id="backupContainerName"></span>
@@ -63,7 +63,7 @@
                       </div>
 
                   </div>
-                  <div class="card-body">
+                  <div class="card-body" style="overflow-y: scroll">
                       <div class="d-none text-center font-weight-bold mb-2" id="ghostInstanceText">
                           <i class="fas fa-ghost text-success me-2"></i>This instance has been deleted, this backup is all that remains!
                       </div>
