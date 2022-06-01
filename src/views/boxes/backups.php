@@ -72,6 +72,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Date Created</th>
+                                <th>Succeeded?</th>
                                 <th>Size On Disk</th>
                                 <th>Restore</th>
                                 <th>Delete</th>
@@ -385,6 +386,17 @@ $(document).on("keyup", "#scheduleBackupTime", function(){
     });
 })
 
+$(document).on("click", ".viewBackupErrorInfo", function(){
+    $.confirm({
+        title: "<i class='fas fa-exclamation-triangle me-2'></i>Backup error",
+        content: decodeURI($(this).data().error),
+        type: "red",
+        buttons: {
+            ok: {}
+        }
+    });
+});
+
 $(document).on("click", "#backToBackupGraphs", function(){
     $("#graphCards").show();
     $("#containerBackupDetails").hide();
@@ -410,14 +422,26 @@ $(document).on("click", ".viewContainerBackups", function(){
 
     if(currentContainerBackups.allBackups.length > 0){
         $.each(currentContainerBackups.allBackups, (_, backup)=>{
+
+            let restoreButton = `<button class="btn btn-sm btn-outline-warning restoreBackup"><i class="fas fa-trash-restore"></i></button>`
+            let icon = "check"
+            let iconClass = "success"
+            let succeededText = ""
+
+            if(backup.failed == 1){
+                icon = "exclamation-triangle"
+                iconClass = "danger"
+                succeededText = `<small data-error="${encodeURI(backup.failedReason)}" class='viewBackupErrorInfo text-underline text-primary' style="cursor: pointer;">info</small>`
+                restoreButton = ""
+            }
+
             trs += `<tr data-backup-id="${backup.id}">
                 <td>${backup.name}</td>
                 <td>${moment.utc(backup.backupDateCreated).local().fromNow()}</td>
+                <td><i class="fas fa-${icon} text-${iconClass} me-2"></i>${succeededText}</td>
                 <td>${formatBytes(backup.filesize)}</td>
                 <td>
-                    <button class="btn btn-sm btn-outline-warning restoreBackup">
-                        <i class="fas fa-trash-restore"></i>
-                    </button>
+                    ${restoreButton}
                 </td>
                 <td>
                     <button class="btn btn-sm btn-outline-danger deleteBackup">
@@ -428,7 +452,7 @@ $(document).on("click", ".viewContainerBackups", function(){
         });
     }else{
         trs += `<tr>
-            <td class="text-warning text-center" colspan="999"><i class="fas fa-info-circle me-2"></i>No Backups - Consider Scheduling Backups Above</td>
+            <td class="text-center" colspan="999"><i class="fas fa-info-circle text-warning me-2"></i>No Backups - Consider Scheduling Backups Above</td>
         </tr>`
     }
 
@@ -473,7 +497,7 @@ function loadBackupsOverview() {
 
                 $.each(hostDetails.containers, (containerIndex, container)=>{
 
-                    let trClass = container.lastBackup.neverBackedUp ? "danger" : "success";
+                    let trClass = container.lastBackup.neverBackedUp ? "warning" : "success";
 
                     let date = "Never";
                     let viewButton = "Host Doesn't support backups";
@@ -484,9 +508,11 @@ function loadBackupsOverview() {
 
                     if(container.containerExists){
                         instanceName += ghostIcon;
-                    }else{
-                        trClass = "success";
                     }
+                    if(!container.lastBackup.neverBackedUp){
+                        trClass = container.lastBackup.failed == 0 ? "success" : "danger";
+                    }
+
 
                     instanceName = `<p
 

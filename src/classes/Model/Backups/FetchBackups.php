@@ -23,7 +23,9 @@ class FetchBackups
                     `CB_Local_Path` as `localPath`,
                     `CB_Project` as `project`,
                     `CB_Deleted` as `deletedDate`,
-                    `CB_Filesize` as `filesize`
+                    `CB_Filesize` as `filesize`,
+                    `CB_Failed` as `failed`,
+                    `CB_Failed_Reason` as `failedReason`
                 FROM
                     `Container_Backups`
                 ORDER BY
@@ -45,7 +47,9 @@ class FetchBackups
                     `CB_Local_Path` as `localPath`,
                     `CB_Project` as `project`,
                     `CB_Deleted` as `deletedDate`,
-                    `CB_Filesize` as `filesize`
+                    `CB_Filesize` as `filesize`,
+                    `CB_Failed` as `failed`,
+                    `CB_Failed_Reason` as `failedReason`
                 FROM
                     `Container_Backups`
                 WHERE

@@ -19,7 +19,9 @@ class FetchInstanceBackups
                     `CB_Backup` as `backupName`,
                     `CB_Local_Path` as `localFilePath`,
                     `CB_Filesize` as `fileszie`,
-                    `CB_Deleted` as `dateDeleted`
+                    `CB_Deleted` as `dateDeleted`,
+                    `CB_Failed` as `failed`,
+                    `CB_Failed_Reason` as `failedReason`
                 FROM
                     `Container_Backups`
                 WHERE
