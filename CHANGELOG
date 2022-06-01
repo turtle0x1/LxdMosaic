@@ -12,8 +12,8 @@ Added
 
 Changed
     SNAP: Update to PHP 7.4
+    SNAP: Use fbirlik/sqlite3 PPA in build for newer version of sqlite3 (#507)
     Use cron method instead of every* methods in cronjob definitions (#503)
-    Use fbirlik/sqlite3 PPA in snap build for newer version of sqlite3 (#507)
     Rename "volumes" to "pools" on universe object (#487)
 
 0.14.1 - 15/05/2022
