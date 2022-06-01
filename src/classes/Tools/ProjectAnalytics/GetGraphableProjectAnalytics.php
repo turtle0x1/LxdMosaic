@@ -92,7 +92,7 @@ class GetGraphableProjectAnalytics
                 $startMinute = floor($startMinute / $step) * $step;
             }
 
-            $points = DateTools::hoursRange($startHour, 24, $step, "", $stopAtNow, $startMinute);
+            $points = $this->dateTools->hoursRange($startHour, 24, $step, "", $stopAtNow, $startMinute);
 
             foreach ($points as $time=>$value) {
                 $dataByDate[$dateString . " " . $time] = $value;
