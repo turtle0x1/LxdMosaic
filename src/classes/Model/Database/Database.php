@@ -4,8 +4,8 @@ namespace dhope0000\LXDClient\Model\Database;
 
 class Database
 {
-    private $dbObject;
-    
+    public $dbObject;
+
     public function __construct()
     {
         if (isset($_ENV["DB_SQLITE"]) && !empty($_ENV["DB_SQLITE"])) {
