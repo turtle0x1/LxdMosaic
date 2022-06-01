@@ -8,6 +8,7 @@ Added
     Add different devices to profile on creation (part of #442)
     Edit profiles (#442)
     Support for failed backups (#481)
+    Delete user (#399)
 
 Changed
     SNAP: Update to PHP 7.4
