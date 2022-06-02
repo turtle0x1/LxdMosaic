@@ -158,9 +158,21 @@ var lifecycleCallbacks = {
         }
     },
     // "profile-updated": function(){//TODO}
-    // "project-created": function(){//TODO}
     // "project-deleted": function(){//TODO}
     // "project-renamed": function(){//TODO}
+    "project-created": function(message){
+        if(router.getCurrentLocation().url.substr(0, 8) == "projects"){
+            let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
+            let projectName = message.metadata.source.replace("/1.0/projects/", "");
+            hostUl.find(".hostContentList").append(`<li class="nav-item">
+              <a class="nav-link" href="/projects/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${projectName}" data-navigo>
+                <i class="fas fa-project-diagram me-2"></i>
+                ${projectName}
+              </a>
+            </li>`)
+            router.updatePageLinks()
+        }
+    },
     // "project-updated": function(){//TODO}
     "storage-pool-created": function(message){
         if(router.getCurrentLocation().url.substr(0, 7) == "storage"){
