@@ -158,7 +158,6 @@ var lifecycleCallbacks = {
         }
     },
     // "profile-updated": function(){//TODO}
-    // "project-renamed": function(){//TODO}
     "project-created": function(message){
         if(router.getCurrentLocation().url.substr(0, 8) == "projects"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
@@ -177,6 +176,17 @@ var lifecycleCallbacks = {
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
             let projectName = message.metadata.source.replace("/1.0/projects/", "");
             hostUl.find(".hostContentList").find(`[href="/projects/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${projectName}"]`).parent().remove()
+            router.updatePageLinks()
+        }
+    },
+    "project-renamed": function(message){
+        if(router.getCurrentLocation().url.substr(0, 8) == "projects"){
+            let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
+            let oldName = message.metadata.context.old_name.replace("/1.0/projects/", "");
+            let newName = message.metadata.source.replace("/1.0/projects/", "");
+            let x = hostUl.find(".hostContentList").find(`[href="/projects/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${oldName}"]`)
+            x.attr("href", `/projects/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${newName}`)
+            x.html(`<i class="fas fa-project-diagram me-2"></i>${newName}`)
             router.updatePageLinks()
         }
     },
