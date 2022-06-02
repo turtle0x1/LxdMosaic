@@ -13,12 +13,12 @@ const fs = require('fs'),
   sqlite3 = require('sqlite3').verbose(),
   Hosts = require('./Hosts'),
   WsTokens = require('./WsTokens'),
-  HostOperations = require('./HostOperations'),
+  HostEvents = require('./classes/HostEvents'),
   Terminals = require('./Terminals'),
   VgaTerminals = require("./VgaTerminals"),
   AllowedProjects = require("./classes/AllowedProjects"),
   hosts = null,
-  hostOperations = null,
+  hostEvents = null,
   terminals = null,
   wsTokens = null,
   vgaTerminals = null,
@@ -114,41 +114,15 @@ app.post('/terminals', function(req, res) {
   res.send();
 });
 
-//NOT authenticated because its called by php
+// DEPRECATED
 app.post('/hosts/message/', function(req, res) {
-  hostOperations.sendToOpsClients(req.body.type, req.body.data);
   res.send({
     success: 'delivered',
   });
 });
 
-//NOT authenticated because its called by php
+// DEPRECATED
 app.post('/deploymentProgress/:deploymentId', function(req, res) {
-  let body = req.body;
-
-  body.deploymentId = req.params.deploymentId;
-
-  if (body.hasOwnProperty('hostname') !== true) {
-    // https://stackoverflow.com/questions/3050518/what-http-status-response-code-should-i-use-if-the-request-is-missing-a-required
-    res.statusMessage = 'Please provide host name in req body';
-    res.status(422).end();
-  } else {
-    let d = {
-      uri: 'https://lxd.local/api/Deployments/UpdatePhoneHomeController/update',
-      form: {
-        deploymentId: parseInt(body.deploymentId),
-        hostname: body.hostname,
-      },
-      rejectUnauthorized: false,
-    };
-
-    // send to LXDMosaic the phone-home event, error checking ?
-    rp(d)
-      .then(() => {})
-      .cactch(() => {});
-
-    hostOperations.sendToOpsClients('deploymentProgress', body);
-  }
   // Send an empty response
   res.send();
 });
@@ -177,10 +151,7 @@ app.ws('/node/terminal/', (socket, req) => {
 })
 
 app.ws('/node/operations', (socket, req) => {
-    let host = req.query.hostId,
-        userId = req.query.userId,
-        project = req.query.project;
-    hostOperations.addClientSocket(socket, userId, host, project)
+    hostEvents.addClientSocket(req.query.user_id, socket)
 })
 
 app.ws('/node/console', (socket, req) => {
@@ -328,7 +299,7 @@ if(!usingSqllite){
 hosts = new Hosts(con, fs, http, https);
 allowedProjects = new AllowedProjects(con);
 wsTokens = new WsTokens(con);
-hostOperations = new HostOperations(hosts);
+hostEvents = new HostEvents(hosts, allowedProjects);
 terminals = new Terminals(http, https);
 vgaTerminals = new VgaTerminals(http, https, hosts);
 
@@ -338,7 +309,7 @@ hosts.loadHosts()
 httpsServer.listen(3000, function() {});
 
 process.on('SIGINT', function() {
-  hostOperations.closeSockets();
+  hostEvents.closeAllSockets();
   terminals.closeAll();
   process.exit();
 });
