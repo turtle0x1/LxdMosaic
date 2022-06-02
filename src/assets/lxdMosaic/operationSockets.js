@@ -1,4 +1,4 @@
-var currentSockets = {};
+var currentEventSocket = null;
 
 function makeOperationHtmlItem(id, icon, description, statusCode, timestamp)
 {
@@ -44,21 +44,32 @@ function calcRunningOps()
 
 function openHostOperationSocket(hostId, project)
 {
-    if(currentSockets.hasOwnProperty(hostId) && currentSockets[hostId].hasOwnProperty(project)){
+    let f = ()=>{
+        if(currentEventSocket !== null && currentEventSocket.readyState === 1) {
+            currentEventSocket.send(JSON.stringify({
+                hostId: hostId,
+                project: project,
+            }))
+        }else{
+            setTimeout(f, 50);
+        }
+    }
+    setTimeout(f, 50);
+}
+
+function openEventSocket()
+{
+    if(currentEventSocket !== null){
         return true;
-    }else if(currentSockets.hasOwnProperty(hostId) && !currentSockets[hostId].hasOwnProperty(project) && Object.keys(currentSockets[hostId]).length > 0){
-        Object.keys(currentSockets[hostId]).forEach((project)=>{
-            currentSockets[hostId][project].close()
-        });
     }
 
-    let operationSocket = new WebSocket(`wss://${getQueryVar("host", window.location.hostname)}:${getQueryVar("port", 443)}/node/operations?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}&hostId=${hostId}&project=${project}`);
+    currentEventSocket = new WebSocket(`wss://${getQueryVar("host", window.location.hostname)}:${getQueryVar("port", 443)}/node/operations?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}`);
 
-    operationSocket.onclose = (msg) => {
-        delete currentSockets[hostId][project]
+    currentEventSocket.onclose = (msg) => {
+        currentEventSocket = null;
     }
 
-    operationSocket.onmessage = (msg) => {
+    currentEventSocket.onmessage = (msg) => {
         msg = JSON.parse(msg.data);
         $("#noOps").remove();
 
@@ -166,10 +177,4 @@ function openHostOperationSocket(hostId, project)
             calcRunningOps()
         }
     }
-
-    if(!currentSockets.hasOwnProperty(hostId)){
-        currentSockets[hostId] = {};
-    }
-
-    currentSockets[hostId][project] = operationSocket;
 }

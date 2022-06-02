@@ -15,6 +15,8 @@ Changed
     SNAP: Use fbirlik/sqlite3 PPA in build for newer version of sqlite3 (#507)
     Use cron method instead of every* methods in cronjob definitions (#503)
     Rename "volumes" to "pools" on universe object (#487)
+    Use one socket for all operation events across hosts user has access to (#403)
+        Drastically reducing the number of open sockets and should prevent weirdness
 
 API Changes
     Removed GetAllCloudConfigController (was broken)
