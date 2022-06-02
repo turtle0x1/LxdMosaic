@@ -139,6 +139,11 @@ app.use(async (req, res, next)=>{
     let tokenIsValid = await wsTokens.isValid(token, userId);
     let canAccessProject = await allowedProjects.canAccessHostProject(userId, req.query.hostId, req.query.project)
 
+    if(req.path === "/node/operations/.websocket"){
+        // We dont use the project provided by the user in this route
+        canAccessProject = true;
+    }
+
     if (!tokenIsValid || !canAccessProject) {
         return next(new Error('authentication error'));
     }else{
