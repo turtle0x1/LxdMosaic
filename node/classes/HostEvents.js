@@ -6,12 +6,18 @@ module.exports = class HostEvents {
     _allowedProjects;
     _hostSockets = {}
     _clientSockets = {}
+    _allowedAdminLifecycleMessages = [];
+    _allowedAnyoneLifecycleMessages = [];
 
     constructor(hosts, allowedProjects) {
         this.hosts = hosts;
         this._hostSockets = {};
         this._allowedProjects = allowedProjects
         this.clientSockets = {};
+        // A select list of lifecycle events to let through to avoid leaking
+        // info we shouldn't
+        this._allowedAdminLifecycleMessages = ["project-created", "project-deleted", "project-renamed"]
+        this._allowedAnyoneLifecycleMessages = ["image-created", "image-deleted", "instance-deleted", "instance-paused", "instance-resumed", "instance-shutdown", "instance-started", "instance-stopped", "network-created", "network-deleted", "network-renamed", "profile-created", "profile-deleted", "profile-renamed", "storage-pool-created", "storage-pool-deleted"]
 
         // On application start open a socket to all hosts on all projects
         hosts.loadHosts().then(xyz => {
@@ -25,7 +31,8 @@ module.exports = class HostEvents {
         let uuid = internalUuidv1();
         this._clientSockets[uuid] = {
             socket: clientSocket,
-            listeningTo: {}
+            listeningTo: {},
+            listeningToAdmin: false
         }
         this._clientSockets[uuid].socket.on("message", (data) => {
             data = JSON.parse(data)
@@ -34,6 +41,11 @@ module.exports = class HostEvents {
             this._allowedProjects.canAccessHostProject(userId, hostId, project).then(allowed => {
                 if (allowed === true) {
                     this._clientSockets[uuid].listeningTo[hostId] = project
+                }
+            })
+            this._allowedProjects.isAdmin(userId).then(isAdmin => {
+                if (isAdmin === true) {
+                    this._clientSockets[uuid].listeningToAdmin = true
                 }
             })
         })
@@ -61,6 +73,14 @@ module.exports = class HostEvents {
         });
     }
 
+    _sendToAdminClients(message) {
+        Object.keys(this._clientSockets).forEach((key, _) => {
+            if (this._clientSockets[key].listeningToAdmin === true) {
+                this._clientSockets[key].socket.send(JSON.stringify(message))
+            }
+        });
+    }
+
     _processLxdEvent(data, hostDetails) {
         var buf = Buffer.from(data);
         let message = JSON.parse(data.toString());
@@ -72,6 +92,18 @@ module.exports = class HostEvents {
         message.hostId = hostDetails.hostId;
         message.host = hostDetails.hostWithOutProtoOrPort;
         message.mosaicType = "operationUpdate";
+
+        if (message.type == "lifecycle") {
+            message.mosaicType = "lifecycle"
+            if (this._allowedAdminLifecycleMessages.includes(message.metadata.action)) {
+                this._sendToAdminClients(message)
+                return false;
+            }
+
+            if (!this._allowedAnyoneLifecycleMessages.includes(message.metadata.action)) {
+                return false;
+            }
+        }
 
         // If the message if from another node in a cluster
         if (message.hasOwnProperty("location") && message.location !== "" && message.location !== "none" && message.location !== details.alias) {
@@ -97,7 +129,7 @@ module.exports = class HostEvents {
                 }
 
                 let proto = 'wss://';
-                let path = `/1.0/events?type=operation&all-projects=true`
+                let path = `/1.0/events?type=operation,lifecycle&all-projects=true`
                 let target = hostDetails.hostWithOutProto
                 if (hostDetails.socketPath !== null) {
                     proto = 'ws+unix://'

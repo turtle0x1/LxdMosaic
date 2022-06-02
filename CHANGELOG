@@ -9,6 +9,7 @@ Added
     Edit profiles (#442)
     Support for failed backups (#481)
     Delete user (#399)
+    Emit some lifecycle events on the "operations" socket
 
 Changed
     SNAP: Update to PHP 7.4
