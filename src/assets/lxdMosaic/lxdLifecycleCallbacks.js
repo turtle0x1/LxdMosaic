@@ -2,11 +2,19 @@ var lifecycleCallbackTemplates = {
     instanceStateChange:  function(message, newState){
         let currentLocation = router.getCurrentLocation().url
         if(currentLocation.substr(0, 8) == "instance" || currentLocation == ""){
-            let instanceName = message.metadata.source.replace("/1.0/instances/", "");
+            let instanceName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/instances/")
             let hostUl = $("#sidebar-ul").find("#host-" + message.hostId).find(`[data-container=${instanceName}]`).find("i:eq(0)").replaceWith(`<i class="nav-icon me-1 ${statusCodeIconMap[newState]}" style="min-width: 20px;"></i>`)
         }
     }
 }
+
+var lifecycleCallbacksHelpers = {
+    extractEntityName: function(entity, toReplace){
+        entity = entity.replace(toReplace, "")
+        return new URL(entity, 'https://lxd.lxd/').pathname.replaceAll("/", "")
+    }
+}
+
 var lifecycleCallbacks = {
     // "certificate-created": function(){//TODO}
     // "certificate-deleted": function(){//TODO}
@@ -27,7 +35,7 @@ var lifecycleCallbacks = {
     "image-created": function(message){
         if(router.getCurrentLocation().url.substr(0, 6) == "images"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let imageName = message.metadata.source.replace("/1.0/images/", "");
+            let imageName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/images/")
             let icon = message.metadata.context.type == "container" ? "box" : "vr-cardboard"
             hostUl.find(".hostContentList").append(`<li class="nav-item">
               <a class="nav-link" href="/images/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${imageName}" data-navigo>
@@ -40,7 +48,7 @@ var lifecycleCallbacks = {
     "image-deleted": function(message){
         if(router.getCurrentLocation().url.substr(0, 6) == "images"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let imageName = message.metadata.source.replace("/1.0/images/", "");
+            let imageName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/images/")
             hostUl.find(".hostContentList").find(`[data-fingerprint=${imageName}]`).parent().remove()
         }
     },
@@ -59,7 +67,7 @@ var lifecycleCallbacks = {
     "instance-deleted": function(message){
         let currentLocation = router.getCurrentLocation().url
         if(currentLocation.substr(0, 8) == "instance" || currentLocation == ""){
-            let instanceName = message.metadata.source.replace("/1.0/instances/", "");
+            let instanceName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/instances/")
             let hostUl = $("#sidebar-ul").find("#host-" + message.hostId).find(`[data-container=${instanceName}]`).remove()
         }
     },
@@ -94,7 +102,7 @@ var lifecycleCallbacks = {
     "network-created": function(message){
         if(router.getCurrentLocation().url.substr(0, 8) == "networks"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let networkName = message.metadata.source.replace("/1.0/networks/", "");
+            let networkName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/networks/")
             hostUl.find(".hostContentList").append(`<li class="nav-item">
               <a class="nav-link" href="/networks/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${networkName}" data-navigo>
                 <i class="fas fa-ethernet"></i>
@@ -107,7 +115,7 @@ var lifecycleCallbacks = {
     "network-deleted": function(message){
         if(router.getCurrentLocation().url.substr(0, 8) == "networks"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let networkName = message.metadata.source.replace("/1.0/networks/", "");
+            let networkName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/networks/")
             hostUl.find(".hostContentList").find(`[href="/networks/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${networkName}"]`).parent().remove()
             router.updatePageLinks()
         }
@@ -115,8 +123,8 @@ var lifecycleCallbacks = {
     "network-renamed": function(message){
         if(router.getCurrentLocation().url.substr(0, 8) == "networks"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let oldName = message.metadata.context.old_name.replace("/1.0/networks/", "");
-            let newName = message.metadata.source.replace("/1.0/networks/", "");
+            let oldName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.context.old_name, "/1.0/networks/")
+            let newName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/networks/")
             let x = hostUl.find(".hostContentList").find(`[href="/networks/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${oldName}"]`)
             x.attr("href", `/networks/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${newName}`)
             x.html(`<i class="fas fa-ethernet me-2"></i>${newName}`)
@@ -128,7 +136,7 @@ var lifecycleCallbacks = {
     "profile-created": function(message){
         if(router.getCurrentLocation().url.substr(0, 8) == "profiles"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let profileName = message.metadata.source.replace("/1.0/profiles/", "");
+            let profileName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/profiles/")
             hostUl.find(".hostContentList").append(`<li class="nav-item">
               <a class="nav-link" href="/profiles/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${profileName}" data-navigo>
                 <i class="nav-icon fa fa-user"></i>
@@ -141,7 +149,7 @@ var lifecycleCallbacks = {
     "profile-deleted": function(message){
         if(router.getCurrentLocation().url.substr(0, 8) == "profiles"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let profileName = message.metadata.source.replace("/1.0/profiles/", "");
+            let profileName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/profiles/")
             hostUl.find(".hostContentList").find(`[href="/profiles/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${profileName}"]`).parent().remove()
             router.updatePageLinks()
         }
@@ -149,8 +157,8 @@ var lifecycleCallbacks = {
     "profile-renamed": function(message){
         if(router.getCurrentLocation().url.substr(0, 8) == "profiles"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let oldName = message.metadata.context.old_name.replace("/1.0/profiles/", "");
-            let newName = message.metadata.source.replace("/1.0/profiles/", "");
+            let oldName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.context.old_name, "/1.0/profiles/")
+            let newName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/profiles/")
             let x = hostUl.find(".hostContentList").find(`[href="/profiles/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${oldName}"]`)
             x.attr("href", `/profiles/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${newName}`)
             x.html(`<i class="fas fa-user me-2"></i>${newName}`)
@@ -161,7 +169,7 @@ var lifecycleCallbacks = {
     "project-created": function(message){
         if(router.getCurrentLocation().url.substr(0, 8) == "projects"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let projectName = message.metadata.source.replace("/1.0/projects/", "");
+            let projectName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/projects/")
             hostUl.find(".hostContentList").append(`<li class="nav-item">
               <a class="nav-link" href="/projects/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${projectName}" data-navigo>
                 <i class="fas fa-project-diagram me-2"></i>
@@ -174,7 +182,7 @@ var lifecycleCallbacks = {
     "project-deleted": function(message){
         if(router.getCurrentLocation().url.substr(0, 8) == "projects"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let projectName = message.metadata.source.replace("/1.0/projects/", "");
+            let projectName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/projects/")
             hostUl.find(".hostContentList").find(`[href="/projects/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${projectName}"]`).parent().remove()
             router.updatePageLinks()
         }
@@ -182,8 +190,8 @@ var lifecycleCallbacks = {
     "project-renamed": function(message){
         if(router.getCurrentLocation().url.substr(0, 8) == "projects"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let oldName = message.metadata.context.old_name.replace("/1.0/projects/", "");
-            let newName = message.metadata.source.replace("/1.0/projects/", "");
+            let oldName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.context.old_name, "/1.0/projects/")
+            let newName = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/projects/")
             let x = hostUl.find(".hostContentList").find(`[href="/projects/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${oldName}"]`)
             x.attr("href", `/projects/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${newName}`)
             x.html(`<i class="fas fa-project-diagram me-2"></i>${newName}`)
@@ -194,11 +202,11 @@ var lifecycleCallbacks = {
     "storage-pool-created": function(message){
         if(router.getCurrentLocation().url.substr(0, 7) == "storage"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let profileName = message.metadata.source.replace("/1.0/storage-pools/", "");
+            let storagePool = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/stroage-pools/")
             hostUl.find(".hostContentList").append(`<li class="nav-item">
-              <a class="nav-link" href="/storage/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${profileName}" data-navigo>
+              <a class="nav-link" href="/storage/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${storagePool}" data-navigo>
                 <i class="nav-icon fa fa-hdd"></i>
-                ${profileName}
+                ${storagePool}
               </a>
             </li>`)
             router.updatePageLinks()
@@ -207,8 +215,8 @@ var lifecycleCallbacks = {
     "storage-pool-deleted": function(message){
         if(router.getCurrentLocation().url.substr(0, 7) == "storage"){
             let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
-            let profileName = message.metadata.source.replace("/1.0/storage-pools/", "");
-            hostUl.find(".hostContentList").find(`[href="/storage/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${profileName}"]`).parent().remove()
+            let storagePool = lifecycleCallbacksHelpers.extractEntityName(message.metadata.source, "/1.0/stroage-pools/")
+            hostUl.find(".hostContentList").find(`[href="/storage/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${storagePool}"]`).parent().remove()
             router.updatePageLinks()
         }
     },
