@@ -504,7 +504,6 @@
             data = makeToastr(data);
             if(data.state == "success"){
                 $("#modal-projects-create").modal("toggle");
-                loadProjectView();
             }
         });
     });

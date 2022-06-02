@@ -831,7 +831,6 @@ function deleteContainerConfirm(hostId, hostAlias, container)
                             if(currentContainerDetails != null){
                                 loadServerView(hostId);
                             }
-                            loadContainerTreeAfter(1000, hostId, hostAlias);
                             currentContainerDetails = null;
                         }
                     });
@@ -2637,7 +2636,6 @@ $("#containerBox").on("click", ".changeInstanceState", function(){
     $(".changeInstanceState").tooltip("hide");
     ajaxRequest(url, currentContainerDetails, function(data){
         let result = makeToastr(data);
-        loadContainerTreeAfter();
         loadContainerViewAfter();
     });
 });

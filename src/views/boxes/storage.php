@@ -215,7 +215,7 @@ function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
         disabled = "disabled text-warning text-strikethrough";
     }
 
-    hosthtml += `<li class="mb-2">
+    hosthtml += `<li class="mb-2" data-host-id="${host.hostId}">
         <a class="d-inline ${disabled}">
             <i class="fas fa-server"></i> ${host.alias}
         </a>`;
@@ -232,7 +232,7 @@ function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
     }
 
     hosthtml += `<div class=" mt-2 bg-dark text-white collapse" id="storage-host-${id}">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" style="display: inline;">`
+            <ul class="btn-toggle-nav hostContentList list-unstyled fw-normal pb-1" style="display: inline;">`
 
 
     if(host.hostOnline == true) {

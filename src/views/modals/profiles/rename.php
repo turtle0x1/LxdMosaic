@@ -61,7 +61,7 @@
             data = makeToastr(data);
             if(data.state == "success"){
                 $("#modal-profile-rename").modal("toggle");
-                loadProfileView();
+                router.navigate(`/profiles/${hostIdOrAliasForUrl(renameProfileData.hostId, renameProfileData.hostAlias)}/${newProfileNameVal}`)
             }
         });
     });

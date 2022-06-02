@@ -215,7 +215,6 @@ $("#modal-profile-create").on("click", "#createProfileBtn", function(){
         data = makeToastr(data);
         if(data.state == "success"){
             $("#modal-profile-create").modal("toggle");
-            loadProfileView();
         }
     });
 });
