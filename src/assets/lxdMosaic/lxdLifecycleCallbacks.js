@@ -37,7 +37,13 @@ var lifecycleCallbacks = {
             router.updatePageLinks()
         }
     },
-    // "image-deleted": function(){//TODO}
+    "image-deleted": function(message){
+        if(router.getCurrentLocation().url.substr(0, 6) == "images"){
+            let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
+            let imageName = message.metadata.source.replace("/1.0/images/", "");
+            hostUl.find(".hostContentList").find(`[data-fingerprint=${imageName}]`).parent().remove()
+        }
+    },
     // "image-refreshed": function(){//TODO}
     // "image-retrieved": function(){//TODO}
     // "image-secret-created": function(){//TODO}
