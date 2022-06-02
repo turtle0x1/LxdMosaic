@@ -158,7 +158,6 @@ var lifecycleCallbacks = {
         }
     },
     // "profile-updated": function(){//TODO}
-    // "project-deleted": function(){//TODO}
     // "project-renamed": function(){//TODO}
     "project-created": function(message){
         if(router.getCurrentLocation().url.substr(0, 8) == "projects"){
@@ -170,6 +169,14 @@ var lifecycleCallbacks = {
                 ${projectName}
               </a>
             </li>`)
+            router.updatePageLinks()
+        }
+    },
+    "project-deleted": function(message){
+        if(router.getCurrentLocation().url.substr(0, 8) == "projects"){
+            let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
+            let projectName = message.metadata.source.replace("/1.0/projects/", "");
+            hostUl.find(".hostContentList").find(`[href="/projects/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${projectName}"]`).parent().remove()
             router.updatePageLinks()
         }
     },
