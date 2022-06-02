@@ -162,7 +162,7 @@
             disabled = "disabled text-warning text-strikethrough";
         }
 
-        hosthtml += `<li class="mb-2">
+        hosthtml += `<li class="mb-2" data-host-id="${host.hostId}">
             <a class="d-inline ${disabled}">
                 <i class="fas fa-server"></i> ${host.alias}
             </a>`;
@@ -176,7 +176,7 @@
         }
 
         hosthtml += `<div class="mt-2 bg-dark text-white collapse" id="images-host-${id}">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 " style="display: inline;">`
+                <ul class="btn-toggle-nav hostContentList list-unstyled fw-normal pb-1 " style="display: inline;">`
 
         if(host.images.length == 0){
             hosthtml += `<li><a class="text-warning nav-link"><i class="fas fa-times me-2"></i>No Images</a></li>`
@@ -196,7 +196,7 @@
                 }
 
                 hosthtml += `<li class="nav-item">
-                  <a class="nav-link ${active}" href="/images/${hostIdOrAliasForUrl(host.alias, host.hostId)}/${image.fingerprint}" data-navigo>
+                  <a class="nav-link ${active}" data-fingerprint="${image.fingerprint}" href="/images/${hostIdOrAliasForUrl(host.alias, host.hostId)}/${image.fingerprint}" data-navigo>
                     <i class="nav-icon fa fa-${icon}"></i>
                     ${imageName} ${variantIcon}
                   </a>

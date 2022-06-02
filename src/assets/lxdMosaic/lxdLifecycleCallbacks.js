@@ -24,7 +24,19 @@ var lifecycleCallbacks = {
     // "image-alias-deleted": function(){//TODO}
     // "image-alias-renamed": function(){//TODO}
     // "image-alias-updated": function(){//TODO}
-    // "image-created": function(){//TODO}
+    "image-created": function(message){
+        if(router.getCurrentLocation().url.substr(0, 6) == "images"){
+            let hostUl = $("#sidebar-ul").find("[data-host-id='" + message.hostId + "']")
+            let imageName = message.metadata.source.replace("/1.0/images/", "");
+            let icon = message.metadata.context.type == "container" ? "box" : "vr-cardboard"
+            hostUl.find(".hostContentList").append(`<li class="nav-item">
+              <a class="nav-link" href="/images/${hostIdOrAliasForUrl(message.hostAlias, message.hostId)}/${imageName}" data-navigo>
+                <div class="text-truncate"><i class="fas fa-${icon} me-2"></i>${imageName}</div>
+              </a>
+            </li>`)
+            router.updatePageLinks()
+        }
+    },
     // "image-deleted": function(){//TODO}
     // "image-refreshed": function(){//TODO}
     // "image-retrieved": function(){//TODO}
