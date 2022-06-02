@@ -10,6 +10,9 @@ Added
     Support for failed backups (#481)
     Delete user (#399)
     Emit some lifecycle events on the "operations" socket
+    Call callbacks on lifecycle events so pages update dynamically (#246, #469)
+        This prevents races and should reduce overall load as there should be less requests
+        Also makes the program work alot better in a multi user environment
 
 Changed
     SNAP: Update to PHP 7.4
