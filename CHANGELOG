@@ -1,7 +1,30 @@
 Unreleased
 
+Added
+    Index to Project Analytics Date Created column to improve load times (#501)
+        This migration might be slow to run, be patient
+    Renew LXDMosaic certificate for LXD (#483)
+    Docs: Start "Production" page with some settings operators may want to consider (#465)
+    Add different devices to profile on creation (part of #442)
+    Edit profiles (#442)
+    Support for failed backups (#481)
+    Delete user (#399)
+    Emit some lifecycle events on the "operations" socket
+    Call callbacks on lifecycle events so pages update dynamically (#246, #469)
+        This prevents races and should reduce overall load as there should be less requests
+        Also makes the program work alot better in a multi user environment
+
 Changed
     SNAP: Update to PHP 7.4
+    SNAP: Use fbirlik/sqlite3 PPA in build for newer version of sqlite3 (#507)
+    Use cron method instead of every* methods in cronjob definitions (#503)
+    Rename "volumes" to "pools" on universe object (#487)
+    Use one socket for all operation events across hosts user has access to (#403)
+        Drastically reducing the number of open sockets and should prevent weirdness
+
+API Changes
+    Removed GetAllCloudConfigController (was broken)
+    Removed GetCloudConfigFileController (was broken)
 
 0.14.1 - 15/05/2022
 

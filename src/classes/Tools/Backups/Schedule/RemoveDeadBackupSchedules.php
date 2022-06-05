@@ -9,6 +9,8 @@ use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\UpdateBackupSche
 class RemoveDeadBackupSchedules
 {
     private $fetchBackupSchedules;
+    private $getDetails;
+    private $updateBackupSchedules;
 
     public function __construct(
         FetchBackupSchedules $fetchBackupSchedules,

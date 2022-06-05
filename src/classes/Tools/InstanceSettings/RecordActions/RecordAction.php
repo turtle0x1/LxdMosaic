@@ -9,6 +9,7 @@ use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 class RecordAction
 {
     private $insertActionLog;
+    private $getSetting;
 
     public function __construct(InsertActionLog $insertActionLog, GetSetting $getSetting)
     {

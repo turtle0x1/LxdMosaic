@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class SetUserProject
 {
+    private $insertUserProject;
+    private $validatePermissions;
+    
     public function __construct(
         InsertUserProject $insertUserProject,
         ValidatePermissions $validatePermissions

@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class ToggleLoginStatusController
 {
+    private $toggleLoginStatus;
+    private $validatePermissions;
+    
     public function __construct(
         ToggleLoginStatus $toggleLoginStatus,
         ValidatePermissions $validatePermissions

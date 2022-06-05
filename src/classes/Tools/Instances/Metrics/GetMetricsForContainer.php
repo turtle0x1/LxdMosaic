@@ -8,10 +8,15 @@ use dhope0000\LXDClient\Tools\Utilities\DateTools;
 
 class GetMetricsForContainer
 {
-    public function __construct(FetchMetrics $fetchMetrics, FetchType $fetchType)
+    private $fetchMetrics;
+    private $fetchType;
+    private $dateTools;
+
+    public function __construct(FetchMetrics $fetchMetrics, FetchType $fetchType, DateTools $dateTools)
     {
         $this->fetchMetrics = $fetchMetrics;
         $this->fetchType = $fetchType;
+        $this->dateTools = $dateTools;
     }
 
     public function getAllTypes($hostId, $container)
@@ -79,7 +84,7 @@ class GetMetricsForContainer
                 $startMinute = $period->getStartDate()->format("i");
             }
 
-            $dataByDate[$dateString] = DateTools::hoursRange($startHour, 24, $step, "", $stopAtNow, $startMinute);
+            $dataByDate[$dateString] = $this->dateTools->hoursRange($startHour, 24, $step, "", $stopAtNow, $startMinute);
         }
 
         foreach ($allMetrics as $metricsIndex => $metricEntry) {

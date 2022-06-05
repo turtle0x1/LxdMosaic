@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\User\Tokens\DeleteToken;
 
 class DeleteTokenController
 {
+    private $deleteToken;
+
     public function __construct(DeleteToken $deleteToken)
     {
         $this->deleteToken = $deleteToken;

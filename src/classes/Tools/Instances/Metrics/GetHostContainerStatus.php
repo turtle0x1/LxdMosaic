@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class GetHostContainerStatus
 {
+    private $getAllProfiles;
+    
     public function __construct(GetAllProfiles $getAllProfiles)
     {
         $this->getAllProfiles = $getAllProfiles;

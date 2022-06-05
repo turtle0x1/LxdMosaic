@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class ChangeStatus
 {
+    private $db;
+
     public function __construct(Database $database)
     {
         $this->db = $database->dbObject;

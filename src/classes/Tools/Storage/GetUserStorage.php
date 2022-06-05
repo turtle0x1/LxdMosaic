@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetUserStorage
 {
+    private $universe;
+    
     public function __construct(
         Universe $universe
     ) {
@@ -15,7 +17,7 @@ class GetUserStorage
 
     public function getAll($userId)
     {
-        $clusters = $this->universe->getEntitiesUserHasAccesTo($userId, "volumes");
+        $clusters = $this->universe->getEntitiesUserHasAccesTo($userId, "pools");
 
         $stats = [
             "storage"=>[

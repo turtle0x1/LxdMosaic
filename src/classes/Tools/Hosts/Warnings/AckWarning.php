@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class AckWarning
 {
+    private $validatePermissions;
+    
     public function __construct(ValidatePermissions $validatePermissions)
     {
         $this->validatePermissions = $validatePermissions;

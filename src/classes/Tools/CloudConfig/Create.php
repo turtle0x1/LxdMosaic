@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Model\CloudConfig\CreateConfig;
 
 class Create
 {
+    private $getCloudConfigs;
+    private $createConfig;
+
     public function __construct(
         GetCloudConfigs $getCloudConfigs,
         CreateConfig $createConfig

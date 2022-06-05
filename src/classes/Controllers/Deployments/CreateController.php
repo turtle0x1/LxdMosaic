@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $createDeployment;
+    
     public function __construct(CreateDeployment $createDeployment)
     {
         $this->createDeployment = $createDeployment;

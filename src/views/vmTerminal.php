@@ -1,5 +1,5 @@
 <?php
-$haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
+$haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList"); /** @phpstan-ignore-line */
 
 if ($haveServers->haveAny() !== true) {
     header("Location: /views/firstRun");
@@ -18,8 +18,8 @@ $hostId = $_GET["hostId"];
 $project = $_GET["project"];
 $instance = $_GET["instance"];
 
-$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
-$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions");
+$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession"); /** @phpstan-ignore-line */
+$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions"); /** @phpstan-ignore-line */
 
 $userId = $userSession->getUserId();
 $apiToken = $userSession->getToken();

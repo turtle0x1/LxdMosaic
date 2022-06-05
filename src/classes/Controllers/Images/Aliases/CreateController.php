@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $createAlias;
+    
     public function __construct(CreateAlias $createAlias)
     {
         $this->createAlias = $createAlias;

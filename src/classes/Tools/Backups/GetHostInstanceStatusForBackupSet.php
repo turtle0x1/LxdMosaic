@@ -14,6 +14,8 @@ class GetHostInstanceStatusForBackupSet
     private $getHostsInstances;
     private $lxdClient;
     private $fetchBackupSchedules;
+    private $universe;
+    private $hasExtension;
 
     public function __construct(
         GetHostsInstances $getHostsInstances,

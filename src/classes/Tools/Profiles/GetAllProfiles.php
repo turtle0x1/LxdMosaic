@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetAllProfiles
 {
+    private $getClustersAndStandaloneHosts;
+    
     public function __construct(GetClustersAndStandaloneHosts $getClustersAndStandaloneHosts)
     {
         $this->getClustersAndStandaloneHosts = $getClustersAndStandaloneHosts;

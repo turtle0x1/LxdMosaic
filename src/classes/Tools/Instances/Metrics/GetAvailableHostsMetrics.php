@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Metrics\FetchMetrics;
 
 class GetAvailableHostsMetrics
 {
+    private $fetchMetrics;
+    
     public function __construct(FetchMetrics $fetchMetrics)
     {
         $this->fetchMetrics = $fetchMetrics;

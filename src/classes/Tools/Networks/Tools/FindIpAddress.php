@@ -5,6 +5,8 @@ use dhope0000\LXDClient\Tools\Instances\GetHostsInstances;
 
 class FindIpAddress
 {
+    private $getHostsInstances;
+    
     public function __construct(
         GetHostsInstances $getHostsInstances
     ) {

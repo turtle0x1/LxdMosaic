@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Instances\InstanceTypes\GetInstanceTypes;
 
 class GetAllController
 {
+    private $getInstanceTypes;
+    
     public function __construct(GetInstanceTypes $getInstanceTypes)
     {
         $this->getInstanceTypes = $getInstanceTypes;

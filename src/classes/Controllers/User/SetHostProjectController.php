@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\User\SetUserProject;
 
 class SetHostProjectController
 {
+    private $setUserProject;
+    
     public function __construct(SetUserProject $setUserProject)
     {
         $this->setUserProject = $setUserProject;

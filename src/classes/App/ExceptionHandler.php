@@ -8,14 +8,17 @@ use dhope0000\LXDClient\Model\Hosts\ChangeStatus;
 class ExceptionHandler
 {
     private $getDetails;
+    private $changeStatus;
+    private $stringTools;
 
     /**
      * @Inject
      */
-    public function inject(GetDetails $getDetails, ChangeStatus $changeStatus)
+    public function inject(GetDetails $getDetails, ChangeStatus $changeStatus, StringTools $stringTools)
     {
         $this->getDetails = $getDetails;
         $this->changeStatus = $changeStatus;
+        $this->stringTools = $stringTools;
     }
 
     public function register()
@@ -29,7 +32,7 @@ class ExceptionHandler
 
         $offlineHostMessage = "cURL error 7: Failed to connect to";
 
-        if (StringTools::stringStartsWith($message, $offlineHostMessage)) {
+        if ($this->stringTools->stringStartsWith($message, $offlineHostMessage)) {
             $host = trim(StringTools::getStringBetween($message, $offlineHostMessage, "port"));
             $port = trim(StringTools::getStringBetween($message, "port", ":"));
             $url = "https://$host:$port";

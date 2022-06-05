@@ -6,6 +6,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $create;
+
     public function __construct(Create $create)
     {
         $this->create = $create;

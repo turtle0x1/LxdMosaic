@@ -7,6 +7,10 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class DeleteImages
 {
+    private $getDetails;
+    private $fetchAllowedProjects;
+    private $fetchUserDetails;
+    
     public function __construct(
         GetDetails $getDetails,
         FetchAllowedProjects $fetchAllowedProjects,

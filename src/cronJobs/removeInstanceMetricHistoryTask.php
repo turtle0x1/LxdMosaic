@@ -13,7 +13,7 @@ $timezone = $getInstanceSetting->getSettingLatestValue(dhope0000\LXDClient\Const
 $schedule = new Schedule();
 $task = $schedule->run(PHP_BINARY . '  ' . __DIR__ . '/scripts/removeInstanceMetrics.php');
 $task
-    ->everyHour()
+    ->hourly()
     ->description('Removing instance metric history')
     ->timezone($timezone);
 

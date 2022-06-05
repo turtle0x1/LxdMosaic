@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetResources
 {
+    private $hasExtension;
+    
     public function __construct(HasExtension $hasExtension)
     {
         $this->hasExtension = $hasExtension;

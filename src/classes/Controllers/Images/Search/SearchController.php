@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Images\GetAllImages;
 
 class SearchController
 {
+    private $getAllImages;
+    
     public function __construct(GetAllImages $getAllImages)
     {
         $this->getAllImages = $getAllImages;

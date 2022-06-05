@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class HostList
 {
+    private $database;
+    private $container;
+    
     public function __construct(Database $database, Container $container)
     {
         $this->database = $database->dbObject;

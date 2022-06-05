@@ -12,6 +12,7 @@
                   <ul class="list-group" id="createProfileStepList">
                       <li style="cursor: pointer" class="list-group-item active">1. Basic Details</li>
                       <li style="cursor: pointer" class="list-group-item">2. Config (Optional)</li>
+                      <li style="cursor: pointer" class="list-group-item">3. Devices (Optional)</li>
                   </ul>
               </div>
               <div class="col-md-9" style="max-height: 57vh; min-height: 57vh; overflow-y: scroll; border-left: 1px solid black;">
@@ -48,6 +49,16 @@
                           </tbody>
                       </table>
                   </div>
+                  <div class="createProfileBox pt-2" data-step="3" style="display: none">
+                      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+                          <b>Profile Devices (Optional)</b>
+                          <button class="btn btn-outline-primary btn-sm" id="addProfileDevice">
+                              <i class="fas fa-plus"></i>
+                          </button>
+                      </div>
+                      <div class="list-group" id="newProfileDeviceObjects">
+                      </div>
+                  </div>
 
              </div>
          </div>
@@ -73,6 +84,7 @@ var profilesTableRow = "";
 $("#modal-profile-create").on("hide.bs.modal",  function(){
     $("#modal-profile-create input").val("");
     $("#profileCopyTargets").tokenInput("clear");
+    $("#newProfileDeviceObjects").empty()
 });
 
 $("#modal-profile-create").on("hide.bs.modal", function(){
@@ -82,6 +94,30 @@ $("#modal-profile-create").on("hide.bs.modal", function(){
     $("#profileDescription").val("");
     changeCreateProfileBox(1)
 });
+
+$("#modal-profile-create").on("click", ".removeNewDevice", function(){
+    $(this).parents(".list-group-item").remove()
+});
+$("#modal-profile-create").on("click", "#addProfileDevice", function(){
+    newDeviceHelperObj.callback = function(device){
+        let html = `<div href="#" class="list-group-item list-group-item-action text-dark" aria-current="true" data-device='${JSON.stringify(device)}'>
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">${device.name}</h5>
+          <button class="btn btn-sm btn-outline-danger removeNewDevice">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+        <p class="mb-1">${device.type}</p>`
+
+        $.each(device.properties, (key, value)=>{
+            html += `<div><small><b>${key}:</b> ${value}</small></div>`
+        })
+
+        html += `</div>`
+        $("#newProfileDeviceObjects").append(html)
+    }
+    $("#modal-helpers-newDeviceObj").modal("show")
+})
 
 $("#modal-profile-create").on("click", "#createProfileStepList li", function(){
     changeCreateProfileBox($(this).index() + 1);
@@ -162,13 +198,23 @@ $("#modal-profile-create").on("click", "#createProfileBtn", function(){
         return false;
     }
 
-    let x = {hosts: hosts, name: name, description: description, config: config};
+    let devices = {}
+
+    $("#newProfileDeviceObjects .list-group-item").each(function(){
+        let device = $(this).data().device
+
+        devices[device.name] = {
+            type: device.type,
+            ...device.properties
+        }
+    });
+
+    let x = {hosts: hosts, name: name, description: description, config: config, devices: devices};
 
     ajaxRequest(globalUrls.profiles.create, x, (data)=>{
         data = makeToastr(data);
         if(data.state == "success"){
             $("#modal-profile-create").modal("toggle");
-            loadProfileView();
         }
     });
 });

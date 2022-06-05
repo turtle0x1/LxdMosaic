@@ -6,6 +6,9 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetHostsController
 {
+    private $getHostsOverview;
+    private $fetchUserDetails;
+    
     public function __construct(GetHostsOverview $getHostsOverview, FetchUserDetails $fetchUserDetails)
     {
         $this->getHostsOverview = $getHostsOverview;

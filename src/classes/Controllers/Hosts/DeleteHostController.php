@@ -7,6 +7,9 @@ use \DI\Container;
 
 class DeleteHostController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $removeHost;
+    private $container;
+
     public function __construct(RemoveHost $removeHost, Container $container)
     {
         $this->removeHost = $removeHost;

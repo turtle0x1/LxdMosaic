@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteProjectController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $deleteProject;
+    
     public function __construct(DeleteProject $deleteProject)
     {
         $this->deleteProject = $deleteProject;

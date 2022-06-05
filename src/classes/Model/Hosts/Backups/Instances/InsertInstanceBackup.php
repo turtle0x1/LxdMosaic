@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertInstanceBackup
 {
+    private $database;
+    
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -18,7 +20,9 @@ class InsertInstanceBackup
         string $instance,
         string $backup,
         string $localPath,
-        int $filesize
+        int $filesize,
+        int $failed = 0,
+        string $failedReason = ""
     ) {
         $sql = "INSERT INTO `Container_Backups`
                 (
@@ -28,7 +32,9 @@ class InsertInstanceBackup
                     `CB_Container`,
                     `CB_Backup`,
                     `CB_Local_Path`,
-                    `CB_Filesize`
+                    `CB_Filesize`,
+                    `CB_Failed`,
+                    `CB_Failed_Reason`
                 ) VALUES (
                     :backupDateCreated,
                     :hostId,
@@ -36,7 +42,9 @@ class InsertInstanceBackup
                     :instance,
                     :backup,
                     :localPath,
-                    :filesize
+                    :filesize,
+                    :failed,
+                    :failedReason
                 );";
         $do = $this->database->prepare($sql);
         $do->execute([
@@ -46,7 +54,9 @@ class InsertInstanceBackup
             ":instance"=>$instance,
             ":backup"=>$backup,
             ":localPath"=>$localPath,
-            ":filesize"=>$filesize
+            ":filesize"=>$filesize,
+            ":failed"=>$failed,
+            ":failedReason"=>$failedReason
         ]);
         return $this->database->lastInsertId();
     }

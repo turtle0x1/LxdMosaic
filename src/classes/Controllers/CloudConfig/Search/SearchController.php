@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\CloudConfig\Search\SearchCloudConfig;
 
 class SearchController
 {
+    private $searchCloudConfig;
+    
     public function __construct(SearchCloudConfig $searchCloudConfig)
     {
         $this->searchCloudConfig = $searchCloudConfig;

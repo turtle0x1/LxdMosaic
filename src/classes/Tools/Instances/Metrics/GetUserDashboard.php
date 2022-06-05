@@ -8,6 +8,10 @@ use dhope0000\LXDClient\Tools\Instances\Metrics\GetMetricsForContainer;
 
 class GetUserDashboard
 {
+    private $fetchUserDashboards;
+    private $fetchDashboardGraphs;
+    private $getMetricsForContainer;
+    
     public function __construct(
         FetchUserDashboards $fetchUserDashboards,
         FetchDashboardGraphs $fetchDashboardGraphs,

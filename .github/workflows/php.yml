@@ -50,6 +50,9 @@ jobs:
 
     - name: run tests
       run: /usr/bin/php7.4 -dxdebug.mode=coverage vendor/bin/phpunit --coverage-html=./coverage
+      
+    - name: run phpstan
+      run: /usr/bin/php7.4 vendor/bin/phpstan analyse src --level 1
 
     - uses: actions/upload-artifact@v2
       with:

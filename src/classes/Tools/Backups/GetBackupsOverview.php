@@ -9,6 +9,8 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 class GetBackupsOverview
 {
     private $fetchBackups;
+    private $getHostInstanceStatusForBackupSet;
+    private $fetchUserDetails;
 
     public function __construct(
         FetchBackups $fetchBackups,

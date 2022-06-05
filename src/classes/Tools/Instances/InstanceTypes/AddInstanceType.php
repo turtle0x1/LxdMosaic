@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Model\Instances\InstanceTypes\InsertInstanceType;
 
 class AddInstanceType
 {
+    private $fetchInstanceType;
+    private $insertInstanceType;
+    
     public function __construct(
         FetchInstanceType $fetchInstanceType,
         InsertInstanceType $insertInstanceType

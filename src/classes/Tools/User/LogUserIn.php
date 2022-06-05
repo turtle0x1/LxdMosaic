@@ -16,6 +16,13 @@ use dhope0000\LXDClient\Exceptions\Users\DisabledUserAttemptedLogin;
 
 class LogUserIn
 {
+    private $fetchUserDetails;
+    private $insertToken;
+    private $session;
+    private $fetchAllowedProjects;
+    private $getSetting;
+    private $ldap;
+    
     public function __construct(
         FetchUserDetails $fetchUserDetails,
         InsertToken $insertToken,

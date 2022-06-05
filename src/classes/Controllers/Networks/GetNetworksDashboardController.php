@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Networks\GetNetworksDashboard;
 
 class GetNetworksDashboardController
 {
+    private $getNetworksDashboard;
+    
     public function __construct(GetNetworksDashboard $getNetworksDashboard)
     {
         $this->getNetworksDashboard = $getNetworksDashboard;

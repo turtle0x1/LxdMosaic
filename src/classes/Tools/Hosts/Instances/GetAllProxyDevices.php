@@ -8,6 +8,8 @@ use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class GetAllProxyDevices
 {
+    private $getAllInstanceProxies;
+
     public function __construct(GetAllInstanceProxies $getAllInstanceProxies)
     {
         $this->getAllInstanceProxies = $getAllInstanceProxies;

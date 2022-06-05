@@ -9,6 +9,11 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetUserProject
 {
+    private $fetchAllowedProjects;
+    private $fetchUserProject;
+    private $setUserProject;
+    private $fetchUserDetails;
+    
     public function __construct(
         FetchAllowedProjects $fetchAllowedProjects,
         FetchUserProject $fetchUserProject,
@@ -28,7 +33,7 @@ class GetUserProject
         if (!empty($project)) {
             return $project;
         }
-        
+
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);
 
         if ($isAdmin) {

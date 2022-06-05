@@ -9,6 +9,8 @@ use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 class GetHostProjectsOverview
 {
     private $validatePermissions;
+    private $universe;
+    private $fetchAllowedProjects;
 
     public function __construct(ValidatePermissions $validatePermissions, Universe $universe, FetchAllowedProjects $fetchAllowedProjects)
     {

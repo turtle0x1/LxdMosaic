@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Instances\InstanceTypes\FetchInstanceTypes;
 
 class GetInstanceTypes
 {
+    private $fetchInstanceTypes;
+    
     public function __construct(FetchInstanceTypes $fetchInstanceTypes)
     {
         $this->fetchInstanceTypes = $fetchInstanceTypes;

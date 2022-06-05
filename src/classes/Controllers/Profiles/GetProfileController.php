@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $getProfile;
+    
     public function __construct(GetProfile $getProfile)
     {
         $this->getProfile = $getProfile;

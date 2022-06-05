@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class FetchUsers
 {
+    private $database;
+    
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -21,7 +23,8 @@ class FetchUsers
                     `User_Name` as `username`,
                     `User_Admin` as `isAdmin`,
                     $mod,
-                    `User_Login_Disabled` as `isDisabled`
+                    `User_Login_Disabled` as `isDisabled`,
+                    `User_Deleted` as `isDeleted`
                 FROM
                     `Users`
                 ORDER BY

@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SetSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $setInstanceSettings;
+
     public function __construct(SetInstanceSettings $setInstanceSettings)
     {
         $this->setInstanceSettings = $setInstanceSettings;

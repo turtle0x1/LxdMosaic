@@ -20,7 +20,7 @@ if (empty($ldapServer)) {
 $schedule = new Schedule();
 $task = $schedule->run(PHP_BINARY . '  ' . __DIR__ . '/scripts/importLdapUsers.php');
 $task
-    ->everyHour()
+    ->hourly()
     ->description('Check for users in ldap to be imported');
 
 return $schedule;

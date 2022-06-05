@@ -10,6 +10,14 @@ base: core18
 architectures:
   - build-on: amd64
 
+# Use a PPA to install a later version of sqlite3 than the default repo's provide
+# See https://github.com/turtle0x1/LxdMosaic/issues/507 for details
+# TODO Either compile sqlite3 ourselves or move to core20
+package-repositories:
+ - type: apt
+   ppa: fbirlik/sqlite3
+
+
 apps:
   # Apache daemon
   apache:

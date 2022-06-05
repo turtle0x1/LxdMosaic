@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetUsersWithAccessController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $getUsersAccessToProject;
+    
     public function __construct(GetUsersAccessToProject $getUsersAccessToProject)
     {
         $this->getUsersAccessToProject = $getUsersAccessToProject;

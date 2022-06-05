@@ -14,13 +14,22 @@ use dhope0000\LXDClient\App\RouteApi;
 
 class Universe
 {
+    private $fetchAllowedProjects;
+    private $hostList;
+    private $getAllClusters;
+    private $fetchUserProject;
+    private $fetchUserDetails;
+    private $getUserProject;
+    private $hasExtension;
+    private $routeApi;
+    
     private $entityConversion = [
         "instances"=>"/1.0/instances/",
         "images"=>"/1.0/images/",
         "profiles"=>"/1.0/profiles/",
         "networks"=>"/1.0/networks/",
         "projects"=>"", // Special case because projecs are "global"
-        "volumes"=>"/1.0/storage-pools/"
+        "pools"=>"/1.0/storage-pools/"
     ];
 
     public function __construct(

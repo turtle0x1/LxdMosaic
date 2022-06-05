@@ -1,9 +1,9 @@
 <?php
-$haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
+$haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList"); /** @phpstan-ignore-line */
 
-$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession");
-$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions");
-$getSetting = $this->container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting");
+$userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession"); /** @phpstan-ignore-line */
+$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions"); /** @phpstan-ignore-line */
+$getSetting = $this->container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting"); /** @phpstan-ignore-line */
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 $recordActionsEnabled = $getSetting->getSettingLatestValue(InstanceSettingsKeys::RECORD_ACTIONS);
@@ -58,6 +58,8 @@ if ($haveServers->haveAny() !== true) {
       <meta name="viewport" content="width=device-width, initial-scale=1">
 
       <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
+      <script src="/assets/lxdMosaic/lxdDevicesProperties.js" type="text/javascript" charset="utf-8"></script>
+      <script src="/assets/lxdMosaic/lxdLifecycleCallbacks.js" type="text/javascript" charset="utf-8"></script>
 
       <!-- <link rel="stylesheet" href="/assets/xterm/xterm.css" /> -->
 
@@ -307,8 +309,7 @@ if ($haveServers->haveAny() !== true) {
                   delete: '/api/CloudConfig/DeleteController/delete',
                   deploy: '/api/CloudConfig/DeployController/deploy',
                   getAll: '/api/CloudConfig/GetAllController/getAll',
-                  getDetails: '/api/CloudConfig/GetDetailsController/get',
-                  getAllFiles: '/api/CloudConfig/GetAllCloudConfigController/getAllConfigs'
+                  getDetails: '/api/CloudConfig/GetDetailsController/get'
               },
               user: {
                   tokens: {
@@ -643,6 +644,7 @@ var hostsIdsLookupTable = {};
 $(function(){
 
     $('[data-bs-toggle="tooltip"]').tooltip({html: true})
+    openEventSocket()
 
     router.hooks({
         before(done, match){
@@ -677,12 +679,7 @@ $(function(){
                         let projects = makeProjectDropDown(member)
                         if(member.hostOnline == true){
                             projectsDropdown += `<div><i class="fas fa-server me-2"></i><b>${member.alias}</b>${projects}</div>`;
-                            // Delay the opening of operations sockets up to 5
-                            // seconds to avoid causing browsers to act weirdly,
-                            // ideally we would replace 1 socket per host with
-                            // 1 socket and push messages with which host project
-                            // stream to join
-                            setTimeout(()=>{openHostOperationSocket(member.hostId, member.currentProject)}, Math.random() * 5000)
+                            openHostOperationSocket(member.hostId, member.currentProject)
                         }
                     });
 
@@ -853,5 +850,8 @@ $(document).on("click", ".openProjectAccess", function(){
 <?php
     require_once __DIR__ . "/modals/images/import.php";
     require_once __DIR__ . "/modals/projects/projectAccess.php";
+    require_once __DIR__ . "/modals/helpers/newDeviceObj.php";
+    require_once __DIR__ . "/modals/helpers/editDeviceObj.php";
+
 ?>
 </html>

@@ -23,6 +23,7 @@ class StoreBackupLocally
     private $insertInstanceBackup;
     private $deleteRemoteBackup;
     private $hasExtension;
+    private $downloadFile;
 
     public function __construct(
         GetSetting $getSetting,

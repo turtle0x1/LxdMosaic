@@ -60,7 +60,7 @@ $("#modal-projects-rename").on("click", "#renameProject", function(){
             return false;
         }
         $("#modal-projects-rename").modal("toggle");
-        loadProjectView();
+        router.navigate(`/projects/${hostIdOrAliasForUrl(renameProjectObj.hostId, hostsAliasesLookupTable[renameProjectObj.hostId])}/${newName}`)
     });
 });
 </script>

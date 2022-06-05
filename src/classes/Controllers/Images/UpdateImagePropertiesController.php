@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class UpdateImagePropertiesController
 {
+    private $updateImageProperties;
+    
     public function __construct(UpdateImageProperties $updateImageProperties)
     {
         $this->updateImageProperties = $updateImageProperties;

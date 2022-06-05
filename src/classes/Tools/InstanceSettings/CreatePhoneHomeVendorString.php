@@ -7,6 +7,8 @@ use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 class CreatePhoneHomeVendorString
 {
+    private $getSetting;
+    
     public function __construct(GetSetting $getSetting)
     {
         $this->getSetting = $getSetting;

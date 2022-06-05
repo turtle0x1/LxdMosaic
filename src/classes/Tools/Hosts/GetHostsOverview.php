@@ -8,6 +8,7 @@ use dhope0000\LXDClient\Model\Hosts\GetDetails;
 class GetHostsOverview
 {
     private $hostList;
+    private $getDetails;
 
     public function __construct(
         HostList $hostList,

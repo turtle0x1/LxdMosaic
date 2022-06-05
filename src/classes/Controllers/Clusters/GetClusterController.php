@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class GetClusterController
 {
+    private $getCluster;
+    private $validatePermissions;
+    
     public function __construct(GetCluster $getCluster, ValidatePermissions $validatePermissions)
     {
         $this->getCluster = $getCluster;

@@ -9,6 +9,9 @@ use dhope0000\LXDClient\Model\Hosts\GetDetails;
 
 class DownloadFile
 {
+    private $lxdClient;
+    private $getDetails;
+    
     public function __construct(LxdClient $lxdClient, GetDetails $getDetails)
     {
         $this->lxdClient = $lxdClient;
@@ -34,7 +37,10 @@ class DownloadFile
         } catch (\Throwable $e) {
             // Remove any file because it will be filled with the LXD response /
             // junk
-            unlink($backupFilePath);
+            if (is_file($backupFilePath)) {
+                unlink($backupFilePath);
+            }
+
             throw $e;
         }
         return true;

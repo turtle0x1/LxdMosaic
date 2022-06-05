@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $deleteInstance;
+    
     public function __construct(DeleteInstance $deleteInstance)
     {
         $this->deleteInstance =  $deleteInstance;

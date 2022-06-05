@@ -6,6 +6,8 @@ use dhope0000\LXDClient\Tools\Instances\Metrics\GetUserDashboard;
 
 class GetDashboardController
 {
+    private $getUserDashboard;
+    
     public function __construct(GetUserDashboard $getUserDashboard)
     {
         $this->getUserDashboard = $getUserDashboard;

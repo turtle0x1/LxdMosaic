@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $deleteAlias;
+    
     public function __construct(DeleteAlias $deleteAlias)
     {
         $this->deleteAlias = $deleteAlias;

@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TakeSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $takeSnapshot;
+    
     public function __construct(TakeSnapshot $takeSnapshot)
     {
         $this->takeSnapshot = $takeSnapshot;

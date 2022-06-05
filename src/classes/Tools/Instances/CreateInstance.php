@@ -9,6 +9,10 @@ use dhope0000\LXDClient\Model\Instances\InstanceTypes\FetchInstanceType;
 
 class CreateInstance
 {
+    private $hostsHaveInstance;
+    private $importImageIfNotHave;
+    private $fetchInstanceType;
+
     public function __construct(
         HostsHaveInstance $hostsHaveInstance,
         ImportImageIfNotHave $importImageIfNotHave,

@@ -11,6 +11,10 @@ use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 
 class DeployConfigToContainer
 {
+    private $deployToProfile;
+    private $createInstance;
+    private $getConfig;
+    
     public function __construct(
         DeployToProfile $deployToProfile,
         CreateInstance $createInstance,

@@ -7,6 +7,9 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class ToggleAdminStatusController
 {
+    private $toggleAdminStatus;
+    private $validatePermissions;
+    
     public function __construct(
         ToggleAdminStatus $toggleAdminStatus,
         ValidatePermissions $validatePermissions

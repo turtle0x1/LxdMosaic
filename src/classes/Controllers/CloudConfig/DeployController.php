@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
+    private $deployConfigToContainer;
+    
     public function __construct(DeployConfigToContainer $deploy)
     {
         $this->deployConfigToContainer = $deploy;
