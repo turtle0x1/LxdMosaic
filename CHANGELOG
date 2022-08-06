@@ -21,6 +21,7 @@ Changed
     Rename "volumes" to "pools" on universe object (#487)
     Use one socket for all operation events across hosts user has access to (#403)
         Drastically reducing the number of open sockets and should prevent weirdness
+    Improve formatting off errors returned from LXD so they are actually readable
 
 API Changes
     Removed GetAllCloudConfigController (was broken)
