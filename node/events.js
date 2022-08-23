@@ -100,11 +100,6 @@ var httpsServer = https.createServer(
 
 expressWs(app, httpsServer)
 
-//NOT authenticated because its not interesting but access may be required
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/index.html'));
-});
-
 //NOT authenticated because its proxied by PHP which does auth
 app.post('/terminals', function(req, res) {
   // Create a identifier for the console, this should allow multiple consolses
