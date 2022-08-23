@@ -8,7 +8,6 @@ const fs = require('fs'),
   bodyParser = require('body-parser');
   path = require('path'),
   cors = require('cors'),
-  rp = require('request-promise'),
   mysql = require('mysql'),
   sqlite3 = require('sqlite3').verbose(),
   Hosts = require('./classes/Hosts'),
