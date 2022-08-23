@@ -15,13 +15,7 @@ const fs = require('fs'),
   HostEvents = require('./classes/HostEvents'),
   Terminals = require('./classes/Terminals'),
   VgaTerminals = require("./classes/VgaTerminals"),
-  AllowedProjects = require("./classes/AllowedProjects"),
-  hosts = null,
-  hostEvents = null,
-  terminals = null,
-  wsTokens = null,
-  vgaTerminals = null,
-  allowedProjects = null;
+  AllowedProjects = require("./classes/AllowedProjects");
 
 
 var dotenv = require('dotenv')
@@ -295,12 +289,12 @@ if(!usingSqllite){
     var con = new sqlite3.Database(process.env.DB_SQLITE);
 }
 
-hosts = new Hosts(con, fs, http, https);
-allowedProjects = new AllowedProjects(con);
-wsTokens = new WsTokens(con);
-hostEvents = new HostEvents(hosts, allowedProjects);
-terminals = new Terminals(http, https);
-vgaTerminals = new VgaTerminals(http, https, hosts);
+var hosts = new Hosts(con, fs, http, https);
+var allowedProjects = new AllowedProjects(con);
+var wsTokens = new WsTokens(con);
+var hostEvents = new HostEvents(hosts, allowedProjects);
+var terminals = new Terminals(http, https);
+var vgaTerminals = new VgaTerminals(http, https, hosts);
 
 // Prevent races, just loads on init
 hosts.loadHosts()
