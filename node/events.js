@@ -38,7 +38,7 @@ var usingSqllite = process.env.hasOwnProperty("DB_SQLITE") && process.env.DB_SQL
 
 if(usingSqllite && !fs.existsSync(process.env.DB_SQLITE)){
     if(process.env.hasOwnProperty("SNAP")){
-        if(!filesystem.checkAndAwaitFileExists(process.env.CERT_PATH)){
+        if(!filesystem.checkAndAwaitFileExists(process.env.DB_SQLITE)){
             console.log("Waited for sqlite file to be created but it didn't happen in time");
             process.exit(1);
         }
