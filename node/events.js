@@ -63,7 +63,6 @@ app.use(
   })
 );
 
-var httpServer = http.createServer(app).listen(8001);
 var httpsServer = https.createServer(
   {
     key: privateKey,
@@ -73,13 +72,6 @@ var httpsServer = https.createServer(
 );
 
 expressWs(app, httpsServer)
-
-// DEPRECATED
-app.post('/deploymentProgress/:deploymentId', function(req, res) {
-  // Send an empty response
-  res.send();
-});
-
 
 // Authenticate all access to node websockets
 app.use(async (req, res, next)=>{
