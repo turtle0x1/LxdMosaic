@@ -70,10 +70,6 @@ expressWs(app, httpsServer)
 
 // Authenticate all routes
 app.use(async (req, res, next)=>{
-    if(req.path === "/" || req.path === ""){
-        next()
-    }
-
     let token = req.query.ws_token;
     let userId = req.query.user_id;
     let tokenIsValid = await wsTokens.isValid(token, userId);
