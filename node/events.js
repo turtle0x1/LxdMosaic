@@ -10,6 +10,8 @@ const fs = require('fs'),
   cors = require('cors'),
   mysql = require('mysql'),
   sqlite3 = require('sqlite3').verbose(),
+  dotenv = require('dotenv'),
+  dotenvExpand = require('dotenv-expand'),
   Hosts = require('./classes/Hosts'),
   WsTokens = require('./classes/WsTokens'),
   HostEvents = require('./classes/HostEvents'),
@@ -18,14 +20,9 @@ const fs = require('fs'),
   AllowedProjects = require("./classes/AllowedProjects");
 
 
-var dotenv = require('dotenv')
-var dotenvExpand = require('dotenv-expand')
-
-var envImportResult = dotenv.config({
+var envImportResult = dotenvExpand(dotenv.config({
   path: __dirname + '/../.env',
-});
-
-dotenvExpand(envImportResult)
+}))
 
 if (envImportResult.error) {
   throw envImportResult.error;
