@@ -74,15 +74,6 @@ var httpsServer = https.createServer(
 
 expressWs(app, httpsServer)
 
-//NOT authenticated because its proxied by PHP which does auth
-app.post('/terminals', function(req, res) {
-  // Create a identifier for the console, this should allow multiple consolses
-  // per user
-  let uuid = terminals.getInternalUuid(req.body.host, req.body.container, req.query.cols, req.query.rows);
-  res.json({ processId: uuid });
-  res.send();
-});
-
 // DEPRECATED
 app.post('/hosts/message/', function(req, res) {
   res.send({
@@ -118,6 +109,14 @@ app.use(async (req, res, next)=>{
     }else{
         next();
     }
+});
+
+app.post('/terminals', function(req, res) {
+  // Create a identifier for the console, this should allow multiple consolses
+  // per user
+  let uuid = terminals.getInternalUuid(req.body.host, req.body.container, req.query.cols, req.query.rows);
+  res.json({ processId: uuid });
+  res.send();
 });
 
 app.ws('/node/terminal/', (socket, req) => {

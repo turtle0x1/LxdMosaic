@@ -30,6 +30,15 @@ systemctl restart httpd
 
 ```
 
+## 0.15.X -> 0.16.0 (Unreleased)
+
+```
+# New apache config required (dont forget to update any domain names etc)
+
+## Ubuntu
+cp examples/lxd_manager.conf /etc/apache2/sites-available/
+```
+
 ## 0.14.X -> 0.15.0
 ```
 # Make sure to read release notes on github for this release.

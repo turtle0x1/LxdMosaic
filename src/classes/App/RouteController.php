@@ -22,7 +22,7 @@ class RouteController
     private $routeAssets;
     private $session;
     private $fetchUserDetails;
-    
+
     public $loginError = null;
 
     public function __construct(
@@ -123,30 +123,6 @@ class RouteController
 
         if ($path == "assets") {
             $this->routeAssets->route($explodedPath);
-        } elseif ($path == "terminals") {
-            $port = '3000';
-
-            $url = $_SERVER['REQUEST_SCHEME']
-            . '://localhost:' . $port
-            . $_SERVER['REQUEST_URI'];
-
-            $ch = curl_init();
-
-            //set the url, number of POST vars, POST data
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents('php://input'));
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json'
-            ));
-
-            $server_output = curl_exec($ch);
-            curl_close($ch);
-
-            echo $server_output;
         } else {
             $this->routeView->route($explodedPath);
         }

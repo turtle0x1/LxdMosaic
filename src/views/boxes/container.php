@@ -1574,7 +1574,16 @@ function openShell(shell = null, imageOsString = ""){
             type: "POST",
             dataType: 'json',
             contentType: 'application/json',
-            url: '/terminals?cols=' + term.cols + '&rows=' + term.rows,
+            url: `/terminals?${$.param($.extend({
+                ws_token: userDetails.apiToken,
+                user_id: userDetails.userId,
+                cols: term.col,
+                rows: term.rows,
+                userId: userDetails.userId,
+                host: currentContainerDetails.hostId,
+                instance: currentContainerDetails.container,
+                project: project
+            }, currentContainerDetails))}`,
             data: JSON.stringify({
                 host: currentContainerDetails.hostId,
                 container: currentContainerDetails.container
