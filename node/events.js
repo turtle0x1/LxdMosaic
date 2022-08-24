@@ -16,7 +16,8 @@ const fs = require('fs'),
   Terminals = require('./classes/Terminals'),
   VgaTerminals = require("./classes/VgaTerminals"),
   AllowedProjects = require("./classes/AllowedProjects"),
-  DbConnection = require("./services/db.service.js");
+  DbConnection = require("./services/db.service.js"),
+  Filesystem = require("./services/filesystem.service.js");
 
 var envImportResult = dotenvExpand(dotenv.config({
   path: __dirname + '/../.env',
@@ -26,40 +27,25 @@ if (envImportResult.error) {
   throw envImportResult.error;
 }
 
+var filesystem = new Filesystem();
 
-if(!fs.existsSync(process.env.CERT_PATH)){
-    console.log("waiting 10 seconds to see if a certificate gets created");
-}
-
-var startDate = new Date();
-
-while (!fs.existsSync(process.env.CERT_PATH)) {
-    var seconds = (new Date().getTime() - startDate.getTime()) / 1000;
-    if(seconds > 10){
-        break;
-    }
-}
-
-if(!fs.existsSync(process.env.CERT_PATH)){
-    console.log("couldn't read certificate file");
+if(!filesystem.checkAndAwaitFileExists(process.env.CERT_PATH)){
+    console.log("Couldn't read HTTPS certificate file");
     process.exit(1);
 }
 
 var usingSqllite = process.env.hasOwnProperty("DB_SQLITE") && process.env.DB_SQLITE !== "";
 
 if(usingSqllite && !fs.existsSync(process.env.DB_SQLITE)){
-    console.log("couldnt find db file file the response was {" + fs.existsSync(process.env.DB_SQLITE) + "} {" + process.env.DB_SQLITE + " }");
     if(process.env.hasOwnProperty("SNAP")){
-        console.log("delaying restart 10 seconds to because we are in a snap");
-        var startDate = new Date();
-        while (true) {
-            var seconds = (new Date().getTime() - startDate.getTime()) / 1000;
-            if(seconds > 10){
-                break;
-            }
+        if(!filesystem.checkAndAwaitFileExists(process.env.CERT_PATH)){
+            console.log("Waited for sqlite file to be created but it didn't happen in time");
+            process.exit(1);
         }
+    }else{
+        console.log("Sqlite file missing");
+        process.exit(1);
     }
-    process.exit(1);
 }
 
 
