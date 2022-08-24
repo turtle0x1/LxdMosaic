@@ -75,13 +75,6 @@ var httpsServer = https.createServer(
 expressWs(app, httpsServer)
 
 // DEPRECATED
-app.post('/hosts/message/', function(req, res) {
-  res.send({
-    success: 'delivered',
-  });
-});
-
-// DEPRECATED
 app.post('/deploymentProgress/:deploymentId', function(req, res) {
   // Send an empty response
   res.send();
