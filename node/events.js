@@ -8,8 +8,6 @@ const fs = require('fs'),
   bodyParser = require('body-parser'),
   path = require('path'),
   cors = require('cors'),
-  mysql = require('mysql'),
-  sqlite3 = require('sqlite3').verbose(),
   dotenv = require('dotenv'),
   dotenvExpand = require('dotenv-expand'),
   Hosts = require('./classes/Hosts'),
@@ -17,8 +15,8 @@ const fs = require('fs'),
   HostEvents = require('./classes/HostEvents'),
   Terminals = require('./classes/Terminals'),
   VgaTerminals = require("./classes/VgaTerminals"),
-  AllowedProjects = require("./classes/AllowedProjects");
-
+  AllowedProjects = require("./classes/AllowedProjects"),
+  DbConnection = require("./services/db.service.js");
 
 var envImportResult = dotenvExpand(dotenv.config({
   path: __dirname + '/../.env',
@@ -257,35 +255,7 @@ app.ws('/node/cloudConfig', (socket, req) => {
     });
 });
 
-
-
-if(!usingSqllite){
-    var con = mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
-    });
-
-    con.connect(function(err) {
-      if (err) {
-          if(process.env.hasOwnProperty("SNAP")){
-              console.log("delaying restart 10 seconds to because we are in a snap");
-              var startDate = new Date();
-              while (true) {
-                  var seconds = (new Date().getTime() - startDate.getTime()) / 1000;
-                  if(seconds > 10){
-                      break;
-                  }
-              }
-          }
-          throw err;
-      }
-    });
-}else{
-    var con = new sqlite3.Database(process.env.DB_SQLITE);
-}
-
+var con = (new DbConnection).getDbConnection(usingSqllite);
 var hosts = new Hosts(con, fs, http, https);
 var allowedProjects = new AllowedProjects(con);
 var wsTokens = new WsTokens(con);
