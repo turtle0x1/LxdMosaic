@@ -15,7 +15,7 @@ const fs = require('fs'),
   HostEvents = require('./classes/HostEvents'),
   Terminals = require('./classes/Terminals'),
   VgaTerminals = require("./classes/VgaTerminals"),
-  AllowedProjects = require("./classes/AllowedProjects"),
+  AllowedProjects = require("./models/allowedProjects.model"),
   DbConnection = require("./services/db.service.js"),
   Filesystem = require("./services/filesystem.service.js");
 
