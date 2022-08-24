@@ -51,29 +51,24 @@ if(usingSqllite && !fs.existsSync(process.env.DB_SQLITE)){
 
 // Https certificate and key file location for secure websockets + https server
 var privateKey = fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
-  certificate = fs.readFileSync(process.env.CERT_PATH, 'utf8');
-app = express();
+    certificate = fs.readFileSync(process.env.CERT_PATH, 'utf8');
 
+app = express();
 app.use(cors());
 app.use(bodyParser.json()); // to support JSON-encoded bodies
-app.use(
-  bodyParser.urlencoded({
+app.use(bodyParser.urlencoded({
     // to support URL-encoded bodies
     extended: true,
-  })
-);
+}));
 
-var httpsServer = https.createServer(
-  {
+var httpsServer = https.createServer({
     key: privateKey,
     cert: certificate,
-  },
-  app
-);
+}, app);
 
 expressWs(app, httpsServer)
 
-// Authenticate all access to node websockets
+// Authenticate all routes
 app.use(async (req, res, next)=>{
     if(req.path === "/" || req.path === ""){
         next()
