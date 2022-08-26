@@ -49,18 +49,6 @@
             <div class="col-md-9 pt-2 border-start">
                 <div class="row pb-2 mb-2">
                         <div class="col-md-12 text-center justify-content" id="">
-                            <!-- <button type="button" class="btn text-white btn-outline-primary active" id="serverDetailsBtn" data-view="serverInfoBox">
-                                <i class="fas fa-tachometer-alt pe-2"></i>Overview
-                            </button>
-                            <button type="button" class="btn text-white btn-outline-primary" id="server" data-view="serverInstanceBox">
-                                <i class="fas fa-box pe-2"></i>Instances
-                            </button>
-                            <button type="button" class="btn text-white btn-outline-primary" id="serverProxyDevicesBtn" data-view="serverProxyBox">
-                                <i class="fas fa-exchange-alt pe-2"></i>Proxy Devices
-                            </button>
-                            <button type="button" class="btn text-white btn-outline-primary" id="serverWarningsBtn" data-view="serverWarningsBox">
-                                <i class="fas fa-exclamation-triangle pe-2" style="color: white !important;"></i>Warnings
-                            </button> -->
                             <ul class="nav nav-tabs text-center" id="serverBoxNav" style="border: none !important;">
                                 <li class="nav-item" data-view="serverInfoBox">
                                     <div class="nav-link active" id="serverDetailsBtn">
@@ -228,6 +216,305 @@ function loadHostOverview(req){
     loadServerView(hostId);
 }
 
+function _loadServerDetailsIfReq(hostId){
+    if($("#serverCpuDisplay").text().trim() !== ""){
+        return true;
+    }
+    ajaxRequest(globalUrls.hosts.getHostOverview, {hostId: hostId}, (data)=>{
+        data = $.parseJSON(data);
+        //TODO This is duplicate code, clear this up
+        let ident = data.header.alias == null ? data.header.urlAndPort : data.header.alias;
+        currentServer.hostAlias = data.header.alias;
+        currentServer.supportsLoadAvgs = data.header.supportsLoadAvgs;
+
+        router.updatePageLinks()
+
+        $("#serverHeading").text(ident);
+
+        let cpuHtml = "",
+        hostDetailsTrs = "",
+        gpuHtml = "";
+
+        if(userDetails.isAdmin){
+            $(".enableIfAdmin").show();
+        }else{
+            $(".enableIfAdmin").hide();
+        }
+
+        let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
+
+        $.each(data.resources.cpu.sockets, (_, item)=>{
+            cpuHtml += `<div class="ps-2">
+                ${item[cpuIndentKey]} - ${$.isNumeric(item.cores) ? item.cores : item.cores.length} Cores
+            </div>`
+        });
+
+        $("#serverCpuDisplay").empty().append(cpuHtml);
+        $("#serverMemoryDisplay").empty().append(`<div class="ps-2">${formatBytes(data.resources.memory.total)}</div>`);
+
+        if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
+            $.each(data.resources.gpu.cards, function(i, gpu){
+                let name = gpu.hasOwnProperty("nvidia") && gpu.nvidia.hasOwnProperty("model") ? gpu.nvidia.model : gpu.vendor + " - " + gpu.product
+                gpuHtml += `<div class="ps-2">${name}</div>`;
+            });
+        }else{
+            gpuHtml += `<div class="ps-2">No GPU's</div>`;
+        }
+
+        $("#serverGpuDisplay").empty().append(gpuHtml);
+
+        let disks = "";
+
+        if(userDetails.isAdmin && data.resources.hasOwnProperty("storage") && data.resources.storage.hasOwnProperty("disks")){
+            $.each(data.resources.storage.disks, (_, disk)=>{
+                disks += `<div class="ps-2">${disk.model} - ${formatBytes(disk.size)}</div>`
+            });
+        }else{
+            disks = `<div class="ps-2">Nothing To Display</div>`;
+        }
+
+        $("#serverDisksDisplay").empty().append(disks);
+        if(data.resources.hasOwnProperty("system")){
+
+            let mbProduct = "Not Set";
+            let chasisType = "Not Set";
+            let firmwareDetails = "Not Set";
+            let uuid = "Not Set";
+            let type = "Not Set";
+
+            if(data.resources.system != null){
+                type = data.resources.system.type;
+                uuid = data.resources.system.uuid;
+
+                if(data.resources.system.motherboard != null){
+                    mbProduct = data.resources.system.motherboard.product;
+                }
+
+                if(data.resources.system.chassis != null){
+                    chasisType = data.resources.system.chassis.type
+                }
+
+                if(data.resources.system.firmware  != null){
+                    firmwareDetails = `${data.resources.system.firmware.vendor}
+                    -
+                    ${data.resources.system.firmware.version}
+                    (${data.resources.system.firmware.date})`;
+                }
+            }
+
+
+            hostDetailsTrs += `
+                <tr>
+                    <td>Motherboard</td>
+                    <td>${mbProduct}</td>
+                </tr>
+                <tr>
+                    <td>Type</td>
+                    <td>${type}</td>
+                </tr>
+                <tr>
+                    <td>Chasis Type</td>
+                    <td>${chasisType}</td>
+                </tr>
+                <tr>
+                    <td>System Firmware</td>
+                    <td>
+                        ${firmwareDetails}
+                    </td>
+                </tr>
+                <tr>
+                    <td>UUID</td>
+                    <td>${uuid}</td>
+                </tr>
+            `;
+        }
+        $("#hostDetailsTable > tbody").empty().append(hostDetailsTrs);
+    });
+}
+
+function loadHostProxies(req){
+    currentContainerDetails = null;
+    let hostId = req.data.hostId;
+    currentServer.hostId = hostId
+    currentServer.hostAlias = hostsAliasesLookupTable[hostId]
+    createDashboardSidebar()
+    _loadServerDetailsIfReq(hostId);
+    changeActiveNav(".overview")
+    $(".boxSlide, .serverViewBox").hide();
+    $("#serverProxyBox, #serverBox").show();
+
+    addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Proxy Devices"], ["", "", "active"], false, ["/", "", ""]);
+
+    $("#serverBoxNav").find(".active").removeClass("active")
+    $("#serverBoxNav .nav-item:eq(2) > .nav-link").addClass("active")
+
+    ajaxRequest(globalUrls.hosts.instances.getAllProxyDevices, currentServer, (data)=>{
+        data = makeToastr(data);
+
+        let x = "";
+        if(Object.keys(data).length){
+            $.each(data, (container, proxies)=>{
+                x += `<tr><td colspan="999" class="bg-primary text-white text-center">${container}</td></tr>`
+                $.each(proxies, (name, device)=>{
+                    x += `<tr>
+                        <td>${name}</td>
+                        <td>${device.listen}</td>
+                        <td>${device.connect}</td>
+                        <td>
+                            <button
+                                class="btn btn-danger deleteProxy"
+                                data-instance="${container}"
+                                data-device="${name}"
+                            >
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>`
+                });
+            });
+        }else{
+            x += `<tr><td colspan="999" class="text-center text-info">No Proxy Devices</td></tr>`
+        }
+
+        $("#serverProxyTable > tbody").empty().append(x);
+    });
+}
+
+function loadHostWarnings(req){
+    currentContainerDetails = null;
+    let hostId = req.data.hostId;
+    currentServer.hostId = hostId
+    currentServer.hostAlias = hostsAliasesLookupTable[hostId]
+    createDashboardSidebar()
+    _loadServerDetailsIfReq(hostId);
+    changeActiveNav(".overview")
+    $(".boxSlide, .serverViewBox").hide();
+    $("#serverWarningsBox, #serverBox").show();
+
+    addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Warnings"], ["", "", "active"], false, ["/", "", ""]);
+
+    $("#serverBoxNav").find(".active").removeClass("active")
+    $("#serverBoxNav .nav-item:eq(3) > .nav-link").addClass("active")
+
+    ajaxRequest(globalUrls.hosts.warnings.getOnHost, currentServer, (data)=>{
+        data = makeToastr(data);
+
+        let x = "";
+        if(Object.keys(data).length){
+            $.each(data, (_, warning)=>{
+                let ackButton = '-';
+                if(warning.status != "acknowledged"){
+                    ackButton = `<button class="btn btn-success ackWarning">
+                        <i class="fas fa-check" style="color: white !important;"></i>
+                    </button>`
+                }
+                x += `<tr id="${warning.uuid}">
+                    <td>${warning.severity}</td>
+                    <td>${warning.type}</td>
+                    <td>${warning.last_message}</td>
+                    <td>${warning.status}</td>
+                    <td>
+                        ${ackButton}
+                    </td>
+                    <td>
+                        <button class="btn btn-danger deleteWarning">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>`
+            });
+        }else{
+            x += `<tr><td colspan="999" class="text-center text-info">No Warnings</td></tr>`
+        }
+
+        $("#serverWarningTable > tbody").empty().append(x);
+    });
+}
+
+function loadHostInstances(req){
+    currentContainerDetails = null;
+    let hostId = req.data.hostId;
+    currentServer.hostId = hostId
+    currentServer.hostAlias = hostsAliasesLookupTable[hostId]
+    createDashboardSidebar()
+    _loadServerDetailsIfReq(hostId);
+    changeActiveNav(".overview")
+    $(".boxSlide, .serverViewBox").hide();
+    $("#serverInstanceBox, #serverBox").show();
+
+    addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Instances"], ["", "", "active"], false, ["/", "", ""]);
+
+    $("#serverBoxNav").find(".active").removeClass("active")
+    $("#serverBoxNav .nav-item:eq(1) > .nav-link").addClass("active")
+
+    ajaxRequest(globalUrls.hosts.instances.getHostContainers, {hostId: currentServer.hostId}, (data)=>{
+        let instances = makeToastr(data)
+        let instanceStatusesRows = {};
+
+        if(Object.keys(instances).length > 0){
+            $.each(instances, (name, instance)=>{
+                if(!instanceStatusesRows[instance.status]){
+                    instanceStatusesRows[instance.status] = `<tr class="statusRow">
+                        <td class="text-center text-primary" colspan="999">
+                            <i class="${instanceStatusesRows[instance.status]}"></i>
+                            ${instance.status}
+                            <input class="toggleStatusContainer" type="checkbox"/>
+                        </td>
+                    </tr>`
+                }
+
+                let storageUsage = instance.state.disk == null || instance.state.disk.length == 0 ? "N/A" : formatBytes(instance.state.disk.root.usage);
+
+                let bytesSent = 0, bytesRecieved = 0;
+                let ipAddresses = ``;
+                $.each(instance.state.network, (networkName, network)=>{
+                    if(networkName == "lo"){
+                        return true;
+                    }
+                    $.each(network.addresses, (_, address)=>{
+                        ipAddresses += `<div>${networkName}: <span>${address.address}</span></div>`
+                    });
+                    bytesSent += network.counters.bytes_sent;
+                    bytesRecieved += network.counters.bytes_received;
+                });
+
+                let metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-primary btn-sm enableMetrics'>
+                    Enable
+                </button>`;
+
+                if(instance.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics")){
+                    metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-warning btn-sm disableMetrics'>
+                        Disable
+                    </button>`;
+                }
+
+                instanceStatusesRows[instance.status] += `<tr data-name="${name}">
+                    <td><input name="instanceCheckbox" type="checkbox"/></td>
+                    <td>${name}</td>
+                    <td>${storageUsage}</td>
+                    <td>${formatBytes(instance.state.memory.usage)}</td>
+                    <td>${ipAddresses}</td>
+                    <td>R: ${formatBytes(bytesRecieved)} <br/> S: ${formatBytes(bytesSent)}</td>
+                    <td>${metricsButton}</td>
+                </tr>`
+            });
+        }else{
+            instanceStatusesRows = `<tr><td class="text-center" colspan="999"><i class="fas fa-info-circle text-info me-2"></i>No instances!</td></tr>`
+        }
+
+        $("#serverInstanceTable > tbody").empty()
+
+        if(typeof instanceStatusesRows == "string"){
+            $("#serverInstanceTable > tbody").append(instanceStatusesRows);
+        }else{
+            let keys = Object.keys(instanceStatusesRows).sort();
+            $.each(keys,  (_, key)=>{
+                $("#serverInstanceTable > tbody").append(instanceStatusesRows[key])
+            })
+        }
+    });
+}
+
 $(document).on("change", ".toggleStatusContainer", function(){
     let checked = $(this).is(":checked");
     let tr = $(this).parents("tr");
@@ -334,145 +621,14 @@ $(document).on("click", "#addProxyDevice", function(){
 });
 
 $(document).on("click", "#serverBoxNav > .nav-item", function(){
-    $("#serverBoxNav .active").removeClass("active")
-    $(this).find(".nav-link").addClass("active")
-    $(".serverViewBox").hide();
-    $(`#${$(this).data("view")}`).show();
-
-    if($(this).data("view") == "serverInstanceBox"){
-        ajaxRequest(globalUrls.hosts.instances.getHostContainers, {hostId: currentServer.hostId}, (data)=>{
-            let instances = makeToastr(data)
-            let instanceStatusesRows = {};
-
-            if(Object.keys(instances).length > 0){
-                $.each(instances, (name, instance)=>{
-                    if(!instanceStatusesRows[instance.status]){
-                        instanceStatusesRows[instance.status] = `<tr class="statusRow">
-                            <td class="text-center text-primary" colspan="999">
-                                <i class="${instanceStatusesRows[instance.status]}"></i>
-                                ${instance.status}
-                                <input class="toggleStatusContainer" type="checkbox"/>
-                            </td>
-                        </tr>`
-                    }
-
-                    let storageUsage = instance.state.disk == null || instance.state.disk.length == 0 ? "N/A" : formatBytes(instance.state.disk.root.usage);
-
-                    let bytesSent = 0, bytesRecieved = 0;
-                    let ipAddresses = ``;
-                    $.each(instance.state.network, (networkName, network)=>{
-                        if(networkName == "lo"){
-                            return true;
-                        }
-                        $.each(network.addresses, (_, address)=>{
-                            ipAddresses += `<div>${networkName}: <span>${address.address}</span></div>`
-                        });
-                        bytesSent += network.counters.bytes_sent;
-                        bytesRecieved += network.counters.bytes_received;
-                    });
-
-                    let metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-primary btn-sm enableMetrics'>
-                        Enable
-                    </button>`;
-
-                    if(instance.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics")){
-                        metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-warning btn-sm disableMetrics'>
-                            Disable
-                        </button>`;
-                    }
-
-                    instanceStatusesRows[instance.status] += `<tr data-name="${name}">
-                        <td><input name="instanceCheckbox" type="checkbox"/></td>
-                        <td>${name}</td>
-                        <td>${storageUsage}</td>
-                        <td>${formatBytes(instance.state.memory.usage)}</td>
-                        <td>${ipAddresses}</td>
-                        <td>R: ${formatBytes(bytesRecieved)} <br/> S: ${formatBytes(bytesSent)}</td>
-                        <td>${metricsButton}</td>
-                    </tr>`
-                });
-            }else{
-                instanceStatusesRows = `<tr><td class="text-center" colspan="999"><i class="fas fa-info-circle text-info me-2"></i>No instances!</td></tr>`
-            }
-
-            $("#serverInstanceTable > tbody").empty()
-
-            if(typeof instanceStatusesRows == "string"){
-                $("#serverInstanceTable > tbody").append(instanceStatusesRows);
-            }else{
-                let keys = Object.keys(instanceStatusesRows).sort();
-                $.each(keys,  (_, key)=>{
-                    $("#serverInstanceTable > tbody").append(instanceStatusesRows[key])
-                })
-            }
-
-
-        });
+    if($(this).data("view") == "serverInfoBox"){
+        router.navigate(`/host/${currentServer.hostAlias}/overview`)
+    }else if($(this).data("view") == "serverInstanceBox"){
+        router.navigate(`/host/${currentServer.hostAlias}/instances`)
     }else if($(this).data("view") == "serverProxyBox"){
-        ajaxRequest(globalUrls.hosts.instances.getAllProxyDevices, currentServer, (data)=>{
-            data = makeToastr(data);
-
-            let x = "";
-            if(Object.keys(data).length){
-                $.each(data, (container, proxies)=>{
-                    x += `<tr><td colspan="999" class="bg-primary text-white text-center">${container}</td></tr>`
-                    $.each(proxies, (name, device)=>{
-                        x += `<tr>
-                            <td>${name}</td>
-                            <td>${device.listen}</td>
-                            <td>${device.connect}</td>
-                            <td>
-                                <button
-                                    class="btn btn-danger deleteProxy"
-                                    data-instance="${container}"
-                                    data-device="${name}"
-                                >
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>`
-                    });
-                });
-            }else{
-                x += `<tr><td colspan="999" class="text-center text-info">No Proxy Devices</td></tr>`
-            }
-
-            $("#serverProxyTable > tbody").empty().append(x);
-        });
+        router.navigate(`/host/${currentServer.hostAlias}/proxies`)
     }else if($(this).data("view") == "serverWarningsBox"){
-        ajaxRequest(globalUrls.hosts.warnings.getOnHost, currentServer, (data)=>{
-            data = makeToastr(data);
-
-            let x = "";
-            if(Object.keys(data).length){
-                $.each(data, (_, warning)=>{
-                    let ackButton = '-';
-                    if(warning.status != "acknowledged"){
-                        ackButton = `<button class="btn btn-success ackWarning">
-                            <i class="fas fa-check" style="color: white !important;"></i>
-                        </button>`
-                    }
-                    x += `<tr id="${warning.uuid}">
-                        <td>${warning.severity}</td>
-                        <td>${warning.type}</td>
-                        <td>${warning.last_message}</td>
-                        <td>${warning.status}</td>
-                        <td>
-                            ${ackButton}
-                        </td>
-                        <td>
-                            <button class="btn btn-danger deleteWarning">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>`
-                });
-            }else{
-                x += `<tr><td colspan="999" class="text-center text-info">No Warnings</td></tr>`
-            }
-
-            $("#serverWarningTable > tbody").empty().append(x);
-        });
+        router.navigate(`/host/${currentServer.hostAlias}/warnings`)
     }
 });
 

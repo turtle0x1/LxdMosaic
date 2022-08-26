@@ -714,6 +714,9 @@ $(function(){
 
     router.on('/', loadDashboard);
     router.on('/host/:hostId/overview', loadHostOverview);
+    router.on('/host/:hostId/instances', loadHostInstances);
+    router.on('/host/:hostId/proxies', loadHostProxies);
+    router.on('/host/:hostId/warnings', loadHostWarnings);
 
     router.on('/instance/:hostId/:instance', loadContainerViewReq);
     router.on("/backups", loadBackupsView);
