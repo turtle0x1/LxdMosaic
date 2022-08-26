@@ -10,6 +10,7 @@ const fs = require('fs'),
   cors = require('cors'),
   dotenv = require('dotenv'),
   dotenvExpand = require('dotenv-expand'),
+  AuthenticateExpressRoute = require('./middleware/expressAuth.middleware'),
   Hosts = require('./classes/Hosts'),
   WsTokens = require('./models/wsTokens.model'),
   HostEvents = require('./classes/HostEvents'),
@@ -53,6 +54,17 @@ if(usingSqllite && !fs.existsSync(process.env.DB_SQLITE)){
 var privateKey = fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
     certificate = fs.readFileSync(process.env.CERT_PATH, 'utf8');
 
+
+var con = (new DbConnection).getDbConnection(usingSqllite);
+var hosts = new Hosts(con, fs, http, https);
+var allowedProjects = new AllowedProjects(con);
+var wsTokens = new WsTokens(con);
+var hostEvents = new HostEvents(hosts, allowedProjects);
+var terminals = new Terminals(http, https);
+var vgaTerminals = new VgaTerminals(http, https, hosts);
+
+var authenticateExpressRoute = new AuthenticateExpressRoute(wsTokens, allowedProjects)
+
 app = express();
 app.use(cors());
 app.use(bodyParser.json()); // to support JSON-encoded bodies
@@ -69,23 +81,7 @@ var httpsServer = https.createServer({
 expressWs(app, httpsServer)
 
 // Authenticate all routes
-app.use(async (req, res, next)=>{
-    let token = req.query.ws_token;
-    let userId = req.query.user_id;
-    let tokenIsValid = await wsTokens.isValid(token, userId);
-    let canAccessProject = await allowedProjects.canAccessHostProject(userId, req.query.hostId, req.query.project)
-
-    if(req.path === "/node/operations/.websocket"){
-        // We dont use the project provided by the user in this route
-        canAccessProject = true;
-    }
-
-    if (!tokenIsValid || !canAccessProject) {
-        return next(new Error('authentication error'));
-    }else{
-        next();
-    }
-});
+app.use(authenticateExpressRoute.authenticateReq);
 
 app.post('/terminals', function(req, res) {
   // Create a identifier for the console, this should allow multiple consolses
@@ -216,13 +212,6 @@ app.ws('/node/cloudConfig', (socket, req) => {
     });
 });
 
-var con = (new DbConnection).getDbConnection(usingSqllite);
-var hosts = new Hosts(con, fs, http, https);
-var allowedProjects = new AllowedProjects(con);
-var wsTokens = new WsTokens(con);
-var hostEvents = new HostEvents(hosts, allowedProjects);
-var terminals = new Terminals(http, https);
-var vgaTerminals = new VgaTerminals(http, https, hosts);
 
 // Prevent races, just loads on init
 hosts.loadHosts()
