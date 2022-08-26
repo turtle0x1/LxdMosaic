@@ -1,5 +1,8 @@
 Unreleased
 
+Added
+    Show IP addresses on server instances view (#531)
+
 Changed
     Update SNAP apache version to 2.4.54
 

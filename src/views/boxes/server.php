@@ -146,6 +146,7 @@
                                             <td> Instance </td>
                                             <td> Disk Usage </td>
                                             <td> Memory Usage </td>
+                                            <td> IP Addresses </td>
                                             <td> <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Excluding local interface bytes sent & received"> Network Usage </a> </td>
                                             <td> Gather Metrics</td>
                                         </tr>
@@ -358,12 +359,14 @@ $(document).on("click", "#serverBoxNav > .nav-item", function(){
                     let storageUsage = instance.state.disk == null || instance.state.disk.length == 0 ? "N/A" : formatBytes(instance.state.disk.root.usage);
 
                     let bytesSent = 0, bytesRecieved = 0;
-
+                    let ipAddresses = ``;
                     $.each(instance.state.network, (networkName, network)=>{
                         if(networkName == "lo"){
                             return true;
                         }
-
+                        $.each(network.addresses, (_, address)=>{
+                            ipAddresses += `<div>${networkName}: <span>${address.address}</span></div>`
+                        });
                         bytesSent += network.counters.bytes_sent;
                         bytesRecieved += network.counters.bytes_received;
                     });
@@ -383,6 +386,7 @@ $(document).on("click", "#serverBoxNav > .nav-item", function(){
                         <td>${name}</td>
                         <td>${storageUsage}</td>
                         <td>${formatBytes(instance.state.memory.usage)}</td>
+                        <td>${ipAddresses}</td>
                         <td>R: ${formatBytes(bytesRecieved)} <br/> S: ${formatBytes(bytesSent)}</td>
                         <td>${metricsButton}</td>
                     </tr>`
