@@ -11,4 +11,8 @@ module.exports = class Filesystem {
         }
         return true;
     }
+
+    readFileSync(path, options){
+        return fs.readFileSync(path, options)
+    }
 }

@@ -1,7 +1,6 @@
 // This originated from https://gist.github.com/CalebEverett/bed94582b437ffe88f650819d772b682
 // and was modified to suite our needs
-const fs = require('fs'),
-  express = require('express'),
+const express = require('express'),
   https = require('https'),
   expressWs = require('express-ws'),
   bodyParser = require('body-parser'),
@@ -52,8 +51,8 @@ app.use(bodyParser.urlencoded({
 }));
 
 var httpsServer = https.createServer({
-    key:  fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
-    cert: fs.readFileSync(process.env.CERT_PATH, 'utf8'),
+    key:  filesystem.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
+    cert: filesystem.readFileSync(process.env.CERT_PATH, 'utf8'),
 }, app);
 
 expressWs(app, httpsServer)
