@@ -49,12 +49,6 @@ if(usingSqllite && !fs.existsSync(process.env.DB_SQLITE)){
     }
 }
 
-
-// Https certificate and key file location for secure websockets + https server
-var privateKey = fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
-    certificate = fs.readFileSync(process.env.CERT_PATH, 'utf8');
-
-
 var con = (new DbConnection).getDbConnection(usingSqllite);
 var hosts = new Hosts(con, fs, http, https);
 var allowedProjects = new AllowedProjects(con);
@@ -74,8 +68,8 @@ app.use(bodyParser.urlencoded({
 }));
 
 var httpsServer = https.createServer({
-    key: privateKey,
-    cert: certificate,
+    key:  fs.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
+    cert: fs.readFileSync(process.env.CERT_PATH, 'utf8'),
 }, app);
 
 expressWs(app, httpsServer)
