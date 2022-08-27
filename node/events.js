@@ -1,19 +1,19 @@
 // This originated from https://gist.github.com/CalebEverett/bed94582b437ffe88f650819d772b682
 // and was modified to suite our needs
-const Environment = require("./services/environment.service.js"),
-    Filesystem = require("./services/filesystem.service.js"),
-    Express = require("./services/express.service.js"),
+const Environment = require('./services/environment.service'),
+    Filesystem = require('./services/filesystem.service'),
+    Express = require('./services/express.service'),
     AuthenticateExpressRoute = require('./middleware/expressAuth.middleware'),
     Hosts = require('./services/hosts.service'),
     WsTokens = require('./models/wsTokens.model'),
     FetchHosts = require('./models/fetchHosts.model'),
     HostEvents = require('./services/hostEvents.service'),
     Terminals = require('./services/terminals.service'),
-    VgaTerminals = require("./services/vgaTerminals.service"),
-    AllowedProjects = require("./models/allowedProjects.model"),
-    DbConnection = require("./services/db.service.js"),
-    TextTerminalController = require("./controllers/textTerminal.controller.js"),
-    CloudConfigController = require("./controllers/cloudConfig.controller.js");
+    VgaTerminals = require('./services/vgaTerminals.service'),
+    AllowedProjects = require('./models/allowedProjects.model'),
+    DbConnection = require('./services/db.service'),
+    TextTerminalController = require('./controllers/textTerminal.controller'),
+    CloudConfigController = require('./controllers/cloudConfig.controller');
 
 // LOAD ENVIRONMENT
 (new Environment).load(__dirname + '/../.env')
