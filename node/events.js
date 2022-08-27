@@ -15,7 +15,8 @@ const express = require('express'),
   VgaTerminals = require("./classes/VgaTerminals"),
   AllowedProjects = require("./models/allowedProjects.model"),
   DbConnection = require("./services/db.service.js"),
-  Filesystem = require("./services/filesystem.service.js");
+  Filesystem = require("./services/filesystem.service.js"),
+  TextTerminalController = require("./controllers/textTerminal.controller.js");
 
 var envImportResult = dotenvExpand(dotenv.config({
   path: __dirname + '/../.env',
@@ -32,6 +33,7 @@ if(!filesystem.checkAndAwaitFileExists(process.env.CERT_PATH)){
     process.exit(1);
 }
 
+// SERVICES
 var con = (new DbConnection(filesystem)).getDbConnection();
 var hosts = new Hosts(con);
 var allowedProjects = new AllowedProjects(con);
@@ -40,6 +42,10 @@ var hostEvents = new HostEvents(hosts, allowedProjects);
 var terminals = new Terminals();
 var vgaTerminals = new VgaTerminals(hosts);
 
+// CONTROLLERS
+var textTerminalController = new TextTerminalController(hosts, terminals)
+
+// MIDDLEWARE
 var authenticateExpressRoute = new AuthenticateExpressRoute(wsTokens, allowedProjects)
 
 app = express();
@@ -60,45 +66,13 @@ expressWs(app, httpsServer)
 // Authenticate all routes
 app.use(authenticateExpressRoute.authenticateReq);
 
-app.post('/terminals', function(req, res) {
-  // Create a identifier for the console, this should allow multiple consolses
-  // per user
-  let uuid = terminals.getInternalUuid(req.body.host, req.body.container, req.query.cols, req.query.rows);
-  res.json({ processId: uuid });
-  res.send();
-});
+// Create a identifier for the console, this should allow multiple consolses
+// per user
+app.post('/terminals', textTerminalController.getNewTerminalProcess);
 
 app.ws('/node/terminal/', vgaTerminals.openTerminal)
 app.ws('/node/operations', hostEvents.addClientSocket)
-
-app.ws('/node/console', (socket, req) => {
-     let host = req.query.hostId,
-         container = req.query.instance,
-         uuid = req.query.pid,
-         shell = req.query.shell,
-         project = req.query.project;
-  terminals
-    .createTerminalIfReq(socket, hosts.getHosts(), host, project, container, uuid, shell)
-    .then(() => {
-      //NOTE When user inputs from browser
-      socket.on("message", (msg) => {
-        let resizeCommand = msg.match(/resize-window\:cols=([0-9]+)&rows=([0-9]+)/);
-        if(resizeCommand){
-            terminals.resize(uuid, resizeCommand[1], resizeCommand[2])
-        }else{
-            terminals.sendToTerminal(uuid, msg);
-        }
-      });
-      socket.on('error', () => {
-          console.log("socket error");
-      });
-      socket.on('close', () => {
-          terminals.close(uuid);
-      });
-  }).catch(e => {
-      socket.close();
-  });
-});
+app.ws('/node/console', textTerminalController.openTerminal)
 
 app.ws('/node/cloudConfig', (socket, req) => {
      let host = req.query.hostId,
