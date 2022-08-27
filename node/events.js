@@ -34,21 +34,7 @@ if(!filesystem.checkAndAwaitFileExists(process.env.CERT_PATH)){
     process.exit(1);
 }
 
-var usingSqllite = process.env.hasOwnProperty("DB_SQLITE") && process.env.DB_SQLITE !== "";
-
-if(usingSqllite && !fs.existsSync(process.env.DB_SQLITE)){
-    if(process.env.hasOwnProperty("SNAP")){
-        if(!filesystem.checkAndAwaitFileExists(process.env.DB_SQLITE)){
-            console.log("Waited for sqlite file to be created but it didn't happen in time");
-            process.exit(1);
-        }
-    }else{
-        console.log("Sqlite file missing");
-        process.exit(1);
-    }
-}
-
-var con = (new DbConnection).getDbConnection(usingSqllite);
+var con = (new DbConnection(filesystem)).getDbConnection();
 var hosts = new Hosts(con, fs, http, https);
 var allowedProjects = new AllowedProjects(con);
 var wsTokens = new WsTokens(con);
