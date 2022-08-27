@@ -1,30 +1,36 @@
-// This originated from https://gist.github.com/CalebEverett/bed94582b437ffe88f650819d772b682
-// and was modified to suite our needs
+    // REQUIRE CORE COMPONENTS
 const Environment = require('./services/environment.service'),
     Filesystem = require('./services/filesystem.service'),
     Express = require('./services/express.service'),
+    // REQUIRE MIDDLEWARE
     AuthenticateExpressRoute = require('./middleware/expressAuth.middleware'),
-    Hosts = require('./services/hosts.service'),
-    WsTokens = require('./models/wsTokens.model'),
+    // REQUIRE MODELS
     FetchHosts = require('./models/fetchHosts.model'),
+    WsTokens = require('./models/wsTokens.model'),
+    AllowedProjects = require('./models/allowedProjects.model'),
+    // REQUIRE SERVICES
+    Hosts = require('./services/hosts.service'),
     HostEvents = require('./services/hostEvents.service'),
     Terminals = require('./services/terminals.service'),
     VgaTerminals = require('./services/vgaTerminals.service'),
-    AllowedProjects = require('./models/allowedProjects.model'),
     DbConnection = require('./services/db.service'),
+    // REQUIRE CONTROLLERS
     TextTerminalController = require('./controllers/textTerminal.controller'),
     CloudConfigController = require('./controllers/cloudConfig.controller');
 
 // LOAD ENVIRONMENT
 (new Environment).load(__dirname + '/../.env')
 
-var filesystem = new Filesystem();
+// INSTANTIATE FILESYSTEM
+var fileSystem = new Filesystem();
 
 // BUILD EXPRESS APP
-var app = (new Express(filesystem)).createExpressApp()
+var app = (new Express(fileSystem)).createExpressApp()
+
+// INSTANTIATE DB CONNECTION
+var con = (new DbConnection(fileSystem)).getDbConnection();
 
 // BUILD MODELS
-var con = (new DbConnection(filesystem)).getDbConnection();
 var allowedProjects = new AllowedProjects(con);
 var wsTokens = new WsTokens(con);
 var fetchHosts = new FetchHosts(con);
