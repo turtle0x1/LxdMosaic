@@ -1,12 +1,12 @@
 var WebSocket = require('ws');
 var internalUuidv1 = require('uuid/v1');
+var http = require('http');
+var https = require('https');
 
 module.exports = class VgaTerminals {
 
 
-  constructor(http, https, hosts) {
-    this.http = http;
-    this.https = https;
+  constructor(hosts) {
     this.hosts = hosts;
     this.instanceSockets = {};
   }
@@ -190,12 +190,12 @@ module.exports = class VgaTerminals {
           if(hostDetails.socketPath == null){
               execOptions.host = hostDetails.hostWithOutProtoOrPort
               execOptions.port = hostDetails.port
-              const clientRequest = this.https.request(execOptions, callback);
+              const clientRequest = https.request(execOptions, callback);
               clientRequest.write(data)
               clientRequest.end();
           }else{
               execOptions.socketPath = hostDetails.socketPath
-              const clientRequest = this.http.request(execOptions, callback);
+              const clientRequest = http.request(execOptions, callback);
               clientRequest.write(data)
               clientRequest.end();
           }

@@ -40,7 +40,7 @@ var allowedProjects = new AllowedProjects(con);
 var wsTokens = new WsTokens(con);
 var hostEvents = new HostEvents(hosts, allowedProjects);
 var terminals = new Terminals();
-var vgaTerminals = new VgaTerminals(http, https, hosts);
+var vgaTerminals = new VgaTerminals(hosts);
 
 var authenticateExpressRoute = new AuthenticateExpressRoute(wsTokens, allowedProjects)
 
