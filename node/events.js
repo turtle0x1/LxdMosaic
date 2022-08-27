@@ -16,7 +16,8 @@ const Environment = require('./services/environment.service'),
     DbConnection = require('./services/db.service'),
     // REQUIRE CONTROLLERS
     TextTerminalController = require('./controllers/textTerminal.controller'),
-    CloudConfigController = require('./controllers/cloudConfig.controller');
+    CloudConfigController = require('./controllers/cloudConfig.controller'),
+    VgaTerminalController = require('./controllers/vgaTerminal.controller');
 
 // LOAD ENVIRONMENT
 (new Environment).load(__dirname + '/../.env')
@@ -44,6 +45,7 @@ var vgaTerminals = new VgaTerminals(hosts);
 // BUILD CONTROLLERS
 var textTerminalController = new TextTerminalController(terminals)
 var cloudConfgController = new CloudConfigController(terminals)
+var vgaTerminalsController = new VgaTerminalController(vgaTerminals)
 
 // BUILD MIDDLEWARE
 var authenticateExpressRoute = new AuthenticateExpressRoute(wsTokens, allowedProjects)
@@ -55,7 +57,7 @@ app.use(authenticateExpressRoute.authenticateReq);
 app.post('/terminals', textTerminalController.getNewTerminalProcess);
 
 // REGISTER WEBSOCKET ENDPOINTS
-app.ws('/node/terminal/', vgaTerminals.openTerminal)
+app.ws('/node/terminal/', vgaTerminalsController.openTerminal)
 app.ws('/node/operations', hostEvents.addClientSocket)
 app.ws('/node/console', textTerminalController.openTerminal)
 app.ws('/node/cloudConfig', cloudConfgController.openTerminal)
