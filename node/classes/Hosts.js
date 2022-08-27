@@ -1,9 +1,10 @@
+var http = require('http');
+var https = require('https');
+var fs = require('fs');
+
 module.exports = class Hosts {
-  constructor(mysqlCon, filesystem, http, https) {
+  constructor(mysqlCon) {
     this.con = mysqlCon;
-    this.fs = filesystem;
-    this.http = http;
-    this.https = https;
     this.hostDetails = {};
     this.certDir = process.env.LXD_CERTS_DIR;
   }
@@ -58,8 +59,8 @@ module.exports = class Hosts {
             stringUrl = results[i].Host_Url_And_Port;
         }
 
-        results[i].cert = this.fs.readFileSync(lxdClientCert);
-        results[i].key = this.fs.readFileSync(lxdClientKey);
+        results[i].cert = fs.readFileSync(lxdClientCert);
+        results[i].key = fs.readFileSync(lxdClientKey);
 
         promises.push(
           this.getServerInfo(stringUrl, results[i].cert, results[i].key, socketPath)
@@ -134,11 +135,11 @@ module.exports = class Hosts {
                 let url = new URL(stringUrl)
                 options.host = url.hostname
                 options.port = url.port
-                const clientRequest = this.https.request(options, callback);
+                const clientRequest = https.request(options, callback);
                 clientRequest.end();
             }else{
                 options.socketPath = socketPath
-                const clientRequest = this.http.request(options, callback);
+                const clientRequest = http.request(options, callback);
                 clientRequest.end();
             }
         })

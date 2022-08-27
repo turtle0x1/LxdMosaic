@@ -35,7 +35,7 @@ if(!filesystem.checkAndAwaitFileExists(process.env.CERT_PATH)){
 }
 
 var con = (new DbConnection(filesystem)).getDbConnection();
-var hosts = new Hosts(con, fs, http, https);
+var hosts = new Hosts(con);
 var allowedProjects = new AllowedProjects(con);
 var wsTokens = new WsTokens(con);
 var hostEvents = new HostEvents(hosts, allowedProjects);
