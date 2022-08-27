@@ -11,7 +11,7 @@ module.exports = class VgaTerminals {
     this.instanceSockets = {};
   }
 
-  openTerminal(clientSocket, req){
+  openTerminal = (clientSocket, req)=>{
       this.hosts.loadHosts().then(hosts=>{
         let hostDetails = hosts[req.query.hostId];
 

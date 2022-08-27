@@ -91,9 +91,7 @@ app.post('/terminals', function(req, res) {
   res.send();
 });
 
-app.ws('/node/terminal/', (socket, req) => {
-    vgaTerminals.openTerminal(socket, req);
-})
+app.ws('/node/terminal/', vgaTerminals.openTerminal)
 
 app.ws('/node/operations', (socket, req) => {
     hostEvents.addClientSocket(req.query.user_id, socket)
