@@ -15,4 +15,8 @@ module.exports = class Filesystem {
     readFileSync(path, options){
         return fs.readFileSync(path, options)
     }
+
+    existsSync(path){
+        return fs.existsSync(path)
+    }
 }

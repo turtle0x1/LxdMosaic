@@ -1,6 +1,5 @@
 const mysql = require('mysql'),
-    sqlite3 = require('sqlite3').verbose(),
-    fs = require("fs");
+    sqlite3 = require('sqlite3').verbose();
 
 module.exports = class DbConnection {
     constructor(fileSystem){
@@ -25,7 +24,7 @@ module.exports = class DbConnection {
     }
 
     _checkSqliteExistsOrThrow(){
-        if(!fs.existsSync(process.env.DB_SQLITE)){
+        if(!this._fileSystem.existsSync(process.env.DB_SQLITE)){
             if(!this._fileSystem.checkAndAwaitFileExists(process.env.DB_SQLITE)){
                 throw "Waited for sqlite file to be created but it didn't happen in time"
                 process.exit(1);
