@@ -1,12 +1,8 @@
 // This originated from https://gist.github.com/CalebEverett/bed94582b437ffe88f650819d772b682
 // and was modified to suite our needs
-const express = require('express'),
-  https = require('https'),
-  expressWs = require('express-ws'),
-  bodyParser = require('body-parser'),
-  cors = require('cors'),
-  dotenv = require('dotenv'),
+const dotenv = require('dotenv'),
   dotenvExpand = require('dotenv-expand'),
+  Express = require ("./services/express.service.js")
   AuthenticateExpressRoute = require('./middleware/expressAuth.middleware'),
   Hosts = require('./classes/Hosts'),
   WsTokens = require('./models/wsTokens.model'),
@@ -28,11 +24,7 @@ if (envImportResult.error) {
 }
 
 var filesystem = new Filesystem();
-
-if(!filesystem.checkAndAwaitFileExists(process.env.CERT_PATH)){
-    console.log("Couldn't read HTTPS certificate file");
-    process.exit(1);
-}
+var app = (new Express(filesystem)).createExpressApp()
 
 // SERVICES
 var con = (new DbConnection(filesystem)).getDbConnection();
@@ -50,21 +42,6 @@ var cloudConfgController = new CloudConfigController(hosts, terminals)
 // MIDDLEWARE
 var authenticateExpressRoute = new AuthenticateExpressRoute(wsTokens, allowedProjects)
 
-app = express();
-app.use(cors());
-app.use(bodyParser.json()); // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({
-    // to support URL-encoded bodies
-    extended: true,
-}));
-
-var httpsServer = https.createServer({
-    key:  filesystem.readFileSync(process.env.CERT_PRIVATE_KEY, 'utf8'),
-    cert: filesystem.readFileSync(process.env.CERT_PATH, 'utf8'),
-}, app);
-
-expressWs(app, httpsServer)
-
 // Authenticate all routes
 app.use(authenticateExpressRoute.authenticateReq);
 
@@ -79,8 +56,6 @@ app.ws('/node/cloudConfig', cloudConfgController.openTerminal)
 
 // Prevent races, just loads on init
 hosts.loadHosts()
-
-httpsServer.listen(3000, function() {});
 
 process.on('SIGINT', function() {
   hostEvents.closeAllSockets();
