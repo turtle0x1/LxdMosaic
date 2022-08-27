@@ -9,10 +9,6 @@ module.exports = class Hosts {
     this.certDir = process.env.LXD_CERTS_DIR;
   }
 
-  getHosts() {
-    return this.hostDetails;
-  }
-
   loadHosts() {
     return new Promise((resolve, reject) => {
       this.hostDetails = {};

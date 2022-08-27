@@ -28,12 +28,12 @@ var hosts = new Hosts(con);
 var allowedProjects = new AllowedProjects(con);
 var wsTokens = new WsTokens(con);
 var hostEvents = new HostEvents(hosts, allowedProjects);
-var terminals = new Terminals();
+var terminals = new Terminals(hosts);
 var vgaTerminals = new VgaTerminals(hosts);
 
 // BUILD CONTROLLERS
-var textTerminalController = new TextTerminalController(hosts, terminals)
-var cloudConfgController = new CloudConfigController(hosts, terminals)
+var textTerminalController = new TextTerminalController(terminals)
+var cloudConfgController = new CloudConfigController(terminals)
 
 // BUILD MIDDLEWARE
 var authenticateExpressRoute = new AuthenticateExpressRoute(wsTokens, allowedProjects)
@@ -49,9 +49,6 @@ app.ws('/node/terminal/', vgaTerminals.openTerminal)
 app.ws('/node/operations', hostEvents.addClientSocket)
 app.ws('/node/console', textTerminalController.openTerminal)
 app.ws('/node/cloudConfig', cloudConfgController.openTerminal)
-
-// Prevent races, just loads on init
-hosts.loadHosts()
 
 // HANDLE EXIT
 process.on('SIGINT', function() {

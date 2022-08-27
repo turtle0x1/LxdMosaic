@@ -1,6 +1,5 @@
 module.exports = class TextTerminalController {
-    constructor(hosts, terminals) {
-        this._hosts = hosts
+    constructor(terminals) {
         this._terminals = terminals
     }
 
@@ -19,7 +18,7 @@ module.exports = class TextTerminalController {
             shell = req.query.shell,
             project = req.query.project;
 
-        await this._terminals.createTerminalIfReq(socket, this._hosts.getHosts(), host, project, container, uuid, shell)
+        await this._terminals.createTerminalIfReq(socket, host, project, container, uuid, shell)
 
         //NOTE When user inputs from browser
         socket.on("message", (msg) => {

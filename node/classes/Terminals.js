@@ -4,7 +4,8 @@ var http = require('http');
 var https = require('https');
 
 module.exports = class Terminals {
-  constructor() {
+  constructor(hosts) {
+    this._hosts = hosts
     this.activeTerminals = {};
     this.internalUuidMap = {};
   }
@@ -100,16 +101,15 @@ module.exports = class Terminals {
     this.activeTerminals = {};
   }
 
-  createTerminalIfReq(
+  createTerminalIfReq = async(
     socket,
-    hosts,
     host,
     project,
     container,
     internalUuid = null,
     shell = null,
-    callbacks = {}
-  ) {
+    callbacks = {}) => {
+    let hosts = await this._hosts.loadHosts()
     return new Promise((resolve, reject) => {
       if (this.activeTerminals[internalUuid] !== undefined) {
         this.activeTerminals[internalUuid][0].on('error', error =>

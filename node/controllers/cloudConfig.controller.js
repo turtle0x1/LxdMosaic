@@ -58,8 +58,7 @@ module.exports = class CloudConfigController {
         }
     };
 
-    constructor(hosts, terminals) {
-        this._hosts = hosts
+    constructor(terminals) {
         this._terminals = terminals
     }
 
@@ -69,7 +68,8 @@ module.exports = class CloudConfigController {
             uuid = this._terminals.getInternalUuid(req.body.host, req.body.container, req.query.cols ?? 80, req.query.rows ?? 24),
             shell = req.query.shell,
             project = req.query.project;
-        await this._terminals.createTerminalIfReq(socket, this._hosts.getHosts(), host, project, container, uuid, shell, this._messageCallbacks)
+
+        await this._terminals.createTerminalIfReq(socket, host, project, container, uuid, shell, this._messageCallbacks)
 
         // Need to give the socket some time to establish before reading log file
         setTimeout(() => {
