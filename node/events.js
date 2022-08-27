@@ -1,7 +1,6 @@
 // This originated from https://gist.github.com/CalebEverett/bed94582b437ffe88f650819d772b682
 // and was modified to suite our needs
-const dotenv = require('dotenv'),
-  dotenvExpand = require('dotenv-expand'),
+const Environment = require ("./services/environment.service.js")
   Express = require ("./services/express.service.js")
   AuthenticateExpressRoute = require('./middleware/expressAuth.middleware'),
   Hosts = require('./classes/Hosts'),
@@ -15,13 +14,7 @@ const dotenv = require('dotenv'),
   TextTerminalController = require("./controllers/textTerminal.controller.js"),
   CloudConfigController = require("./controllers/cloudConfig.controller.js");
 
-var envImportResult = dotenvExpand(dotenv.config({
-  path: __dirname + '/../.env',
-}))
-
-if (envImportResult.error) {
-  throw envImportResult.error;
-}
+(new Environment).load(__dirname + '/../.env')
 
 var filesystem = new Filesystem();
 var app = (new Express(filesystem)).createExpressApp()
