@@ -27,7 +27,9 @@ module.exports = class HostEvents {
         })
     }
 
-    addClientSocket(userId, clientSocket) {
+    addClientSocket = (clientSocket, req) => {
+        let userId = req.query.user_id;
+        console.log(userId);
         let uuid = internalUuidv1();
         this._clientSockets[uuid] = {
             socket: clientSocket,

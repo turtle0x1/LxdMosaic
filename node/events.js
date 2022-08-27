@@ -86,10 +86,7 @@ app.post('/terminals', function(req, res) {
 });
 
 app.ws('/node/terminal/', vgaTerminals.openTerminal)
-
-app.ws('/node/operations', (socket, req) => {
-    hostEvents.addClientSocket(req.query.user_id, socket)
-})
+app.ws('/node/operations', hostEvents.addClientSocket)
 
 app.ws('/node/console', (socket, req) => {
      let host = req.query.hostId,
