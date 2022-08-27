@@ -3,8 +3,8 @@ var https = require('https');
 var fs = require('fs');
 
 module.exports = class Hosts {
-  constructor(mysqlCon) {
-    this.con = mysqlCon;
+  constructor(fetchHosts) {
+    this._fetchHosts = fetchHosts
     this.hostDetails = {};
     this.certDir = process.env.LXD_CERTS_DIR;
   }
@@ -12,26 +12,12 @@ module.exports = class Hosts {
   loadHosts() {
     return new Promise((resolve, reject) => {
       this.hostDetails = {};
-      this.loadHostsFromDb().then(mysqlResults => {
+      this._fetchHosts.fetchAll().then(mysqlResults => {
         this.addDetails(mysqlResults).then(hosts => {
           this.hostDetails = hosts;
           resolve(hosts);
         });
       });
-    });
-  }
-
-  loadHostsFromDb() {
-    return new Promise((resolve, reject) => {
-        if(process.env.hasOwnProperty("DB_SQLITE") && process.env.DB_SQLITE !== ""){
-            this.con.all('SELECT * FROM Hosts', function(err, results) {
-              resolve(results);
-            });
-        }else{
-            this.con.query('SELECT * FROM Hosts', function(err, results) {
-              resolve(results);
-            });
-        }
     });
   }
 

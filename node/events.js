@@ -4,8 +4,9 @@ const Environment = require("./services/environment.service.js"),
     Filesystem = require("./services/filesystem.service.js"),
     Express = require("./services/express.service.js"),
     AuthenticateExpressRoute = require('./middleware/expressAuth.middleware'),
-    Hosts = require('./classes/Hosts'),
+    Hosts = require('./services/hosts.service'),
     WsTokens = require('./models/wsTokens.model'),
+    FetchHosts = require('./models/fetchHosts.model'),
     HostEvents = require('./services/hostEvents.service'),
     Terminals = require('./services/terminals.service'),
     VgaTerminals = require("./services/vgaTerminals.service"),
@@ -19,14 +20,17 @@ const Environment = require("./services/environment.service.js"),
 
 var filesystem = new Filesystem();
 
-// CREATE EXPRESS APP
+// BUILD EXPRESS APP
 var app = (new Express(filesystem)).createExpressApp()
 
-// BUILD SERVICES
+// BUILD MODELS
 var con = (new DbConnection(filesystem)).getDbConnection();
-var hosts = new Hosts(con);
 var allowedProjects = new AllowedProjects(con);
 var wsTokens = new WsTokens(con);
+var fetchHosts = new FetchHosts(con);
+
+// BUILD SERVICES
+var hosts = new Hosts(fetchHosts);
 var hostEvents = new HostEvents(hosts, allowedProjects);
 var terminals = new Terminals(hosts);
 var vgaTerminals = new VgaTerminals(hosts);
