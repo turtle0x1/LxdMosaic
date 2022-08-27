@@ -1,10 +1,10 @@
 var WebSocket = require('ws');
 var internalUuidv1 = require('uuid/v1');
+var http = require('http');
+var https = require('https');
 
 module.exports = class Terminals {
-  constructor(http, https) {
-    this.http = http;
-    this.https = https;
+  constructor() {
     this.activeTerminals = {};
     this.internalUuidMap = {};
   }
@@ -239,11 +239,11 @@ module.exports = class Terminals {
           };
 
           if(hostDetails.socketPath == null){
-              const clientRequest = this.https.request(execOptions, callback);
+              const clientRequest = https.request(execOptions, callback);
               clientRequest.write(data)
               clientRequest.end();
           }else{
-              const clientRequest = this.http.request(execOptions, callback);
+              const clientRequest = http.request(execOptions, callback);
               clientRequest.write(data)
               clientRequest.end();
           }
