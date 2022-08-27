@@ -2,7 +2,6 @@
 // and was modified to suite our needs
 const fs = require('fs'),
   express = require('express'),
-  http = require('http'),
   https = require('https'),
   expressWs = require('express-ws'),
   bodyParser = require('body-parser'),
