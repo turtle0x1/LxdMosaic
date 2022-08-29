@@ -19,7 +19,13 @@ class GetStoragePool
     {
         $info = $host->storage->info($poolName);
 
-        $info["used_by"] = $this->usedByFilter->filterUserProjects($userId, $host, $info["used_by"]);
+
+        if ($info["used_by"] !== null) {
+            $info["used_by"] = $this->usedByFilter->filterUserProjects($userId, $host, $info["used_by"]);
+        } else {
+            $info["used_by"] = [];
+        }
+
         $info["resources"] = $host->storage->resources->info($poolName);
 
         $volumes = [];
