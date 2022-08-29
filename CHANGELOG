@@ -5,6 +5,8 @@ Added
 
 Changed
     Update SNAP apache version to 2.4.54
+    Re-structure node code
+    Node should no longer need reloading after adding a host
 
 0.15.0 - 06/08/2022
 

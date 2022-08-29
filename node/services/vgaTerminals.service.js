@@ -1,29 +1,24 @@
 var WebSocket = require('ws');
 var internalUuidv1 = require('uuid/v1');
+var http = require('http');
+var https = require('https');
 
 module.exports = class VgaTerminals {
 
 
-  constructor(http, https, hosts) {
-    this.http = http;
-    this.https = https;
+  constructor(hosts) {
     this.hosts = hosts;
     this.instanceSockets = {};
   }
 
-  openTerminal(clientSocket, req){
-      this.hosts.loadHosts().then(hosts=>{
-        let hostDetails = hosts[req.query.hostId];
-
+  openTerminal = (clientSocket, userId, hostId, project, instance)=>{
+      this.hosts.getHost(hostId).then(hostDetails=>{
+          
         if(!hostDetails.supportsVms){
             clientSocket.close()
             return false;
         }
 
-        let hostId = hostDetails.hostId;
-        let instance = req.query.instance;
-        let userId = req.query.user_id;
-        let project = req.query.project;
 
         if(!this.instanceSockets.hasOwnProperty(hostId)){
             this.instanceSockets[hostId] = {}
@@ -190,12 +185,12 @@ module.exports = class VgaTerminals {
           if(hostDetails.socketPath == null){
               execOptions.host = hostDetails.hostWithOutProtoOrPort
               execOptions.port = hostDetails.port
-              const clientRequest = this.https.request(execOptions, callback);
+              const clientRequest = https.request(execOptions, callback);
               clientRequest.write(data)
               clientRequest.end();
           }else{
               execOptions.socketPath = hostDetails.socketPath
-              const clientRequest = this.http.request(execOptions, callback);
+              const clientRequest = http.request(execOptions, callback);
               clientRequest.write(data)
               clientRequest.end();
           }

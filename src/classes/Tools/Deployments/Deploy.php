@@ -8,7 +8,6 @@ use dhope0000\LXDClient\Tools\Utilities\StringTools;
 use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 use dhope0000\LXDClient\Tools\Instances\CreateInstance;
 use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
-use dhope0000\LXDClient\Tools\InstanceSettings\CreatePhoneHomeVendorString;
 use dhope0000\LXDClient\Tools\Deployments\Containers\StoreDeployedContainerNames;
 use dhope0000\LXDClient\Constants\LxdInstanceTypes;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
@@ -22,17 +21,15 @@ class Deploy
     private $hostHaveDeploymentProfiles;
     private $createInstance;
     private $getConfig;
-    private $createPhoneHomeVendorString;
     private $storeDeployedContainerNames;
     private $getDetails;
-    
+
     public function __construct(
         AuthoriseDeploymentAccess $authoriseDeploymentAccess,
         DeployToProfile $deployToProfile,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
         CreateInstance $createInstance,
         GetConfig $getConfig,
-        CreatePhoneHomeVendorString $createPhoneHomeVendorString,
         StoreDeployedContainerNames $storeDeployedContainerNames,
         GetDetails $getDetails
     ) {
@@ -41,7 +38,6 @@ class Deploy
         $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
         $this->createInstance = $createInstance;
         $this->getConfig = $getConfig;
-        $this->createPhoneHomeVendorString = $createPhoneHomeVendorString;
         $this->storeDeployedContainerNames = $storeDeployedContainerNames;
         $this->getDetails = $getDetails;
     }
@@ -57,7 +53,6 @@ class Deploy
         $revProfileNames = [];
 
         $deployedContainerInformation = [];
-        $vendorData = $this->createPhoneHomeVendorString->create($deploymentId);
 
         foreach ($instances as $instance) {
             foreach ($instance["hosts"] as $hostId) {
@@ -72,7 +67,7 @@ class Deploy
                 $hostCollection = new HostsCollection([$host]);
 
                 if (!$profile && !isset($revProfileNames[$instance["revId"]])) {
-                    $profile = $this->deployProfile($hostCollection, $deploymentId, $instance["revId"], $vendorData);
+                    $profile = $this->deployProfile($hostCollection, $deploymentId, $instance["revId"]);
                     $revProfileNames[$instance["revId"]] = $profile;
                 }
 
@@ -111,7 +106,7 @@ class Deploy
         ];
     }
 
-    private function deployProfile(HostsCollection $hostCollection, int $deploymentId, int $revId, string $vendorData)
+    private function deployProfile(HostsCollection $hostCollection, int $deploymentId, int $revId)
     {
         $profileName = StringTools::random(12);
         $this->deployToProfile->deployToHosts(
@@ -122,8 +117,7 @@ class Deploy
             [
                 "environment.deploymentId"=>"$deploymentId",
                 "environment.revId"=>"$revId"
-            ],
-            $vendorData
+            ]
         );
         return $profileName;
     }

@@ -18,36 +18,34 @@ module.exports = class HostEvents {
         // info we shouldn't
         this._allowedAdminLifecycleMessages = ["project-created", "project-deleted", "project-renamed"]
         this._allowedAnyoneLifecycleMessages = ["image-created", "image-deleted", "instance-deleted", "instance-paused", "instance-resumed", "instance-shutdown", "instance-started", "instance-stopped", "network-created", "network-deleted", "network-renamed", "profile-created", "profile-deleted", "profile-renamed", "storage-pool-created", "storage-pool-deleted"]
-
-        // On application start open a socket to all hosts on all projects
-        hosts.loadHosts().then(xyz => {
-            Object.keys(xyz).forEach((key, _) => {
-                this._openHostSocket(xyz[key])
-            });
-        })
     }
 
-    addClientSocket(userId, clientSocket) {
+    addClientSocket(clientSocket, userId){
         let uuid = internalUuidv1();
         this._clientSockets[uuid] = {
             socket: clientSocket,
             listeningTo: {},
             listeningToAdmin: false
         }
-        this._clientSockets[uuid].socket.on("message", (data) => {
+        this._clientSockets[uuid].socket.on("message", async (data) => {
             data = JSON.parse(data)
             let hostId = data.hostId
             let project = data.project
-            this._allowedProjects.canAccessHostProject(userId, hostId, project).then(allowed => {
-                if (allowed === true) {
-                    this._clientSockets[uuid].listeningTo[hostId] = project
-                }
-            })
-            this._allowedProjects.isAdmin(userId).then(isAdmin => {
-                if (isAdmin === true) {
-                    this._clientSockets[uuid].listeningToAdmin = true
-                }
-            })
+
+            // Open a socket to the host if we haven't seen it before
+            if(!this._hostSockets.hasOwnProperty(hostId)) {
+                await this._openHostSocket(await this.hosts.getHost(hostId))
+            }
+
+            let canAccessProject = await this._allowedProjects.canAccessHostProject(userId, hostId, project)
+            if(canAccessProject){
+                this._clientSockets[uuid].listeningTo[hostId] = project
+            }
+
+            let isAdmin = await this._allowedProjects.isAdmin(userId)
+            if(isAdmin) {
+                this._clientSockets[uuid].listeningToAdmin = true
+            }
         })
         this._clientSockets[uuid].socket.on("close", (data) => {
             delete this._clientSockets[uuid]

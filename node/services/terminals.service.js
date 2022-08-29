@@ -1,10 +1,11 @@
 var WebSocket = require('ws');
 var internalUuidv1 = require('uuid/v1');
+var http = require('http');
+var https = require('https');
 
 module.exports = class Terminals {
-  constructor(http, https) {
-    this.http = http;
-    this.https = https;
+  constructor(hosts) {
+    this._hosts = hosts
     this.activeTerminals = {};
     this.internalUuidMap = {};
   }
@@ -100,16 +101,15 @@ module.exports = class Terminals {
     this.activeTerminals = {};
   }
 
-  createTerminalIfReq(
+  createTerminalIfReq = async(
     socket,
-    hosts,
     host,
     project,
     container,
     internalUuid = null,
     shell = null,
-    callbacks = {}
-  ) {
+    callbacks = {}) => {
+    let hostDetails = await this._hosts.getHost(host)
     return new Promise((resolve, reject) => {
       if (this.activeTerminals[internalUuid] !== undefined) {
         this.activeTerminals[internalUuid][0].on('error', error =>
@@ -129,8 +129,6 @@ module.exports = class Terminals {
         resolve(true);
         return;
       }
-
-      let hostDetails = hosts[host];
 
       let cols = this.internalUuidMap[`${host}.${container}`].cols;
       let rows = this.internalUuidMap[`${host}.${container}`].rows;
@@ -239,11 +237,11 @@ module.exports = class Terminals {
           };
 
           if(hostDetails.socketPath == null){
-              const clientRequest = this.https.request(execOptions, callback);
+              const clientRequest = https.request(execOptions, callback);
               clientRequest.write(data)
               clientRequest.end();
           }else{
-              const clientRequest = this.http.request(execOptions, callback);
+              const clientRequest = http.request(execOptions, callback);
               clientRequest.write(data)
               clientRequest.end();
           }

@@ -1,21 +1,18 @@
+var http = require('http');
+var https = require('https');
+var fs = require('fs');
+
 module.exports = class Hosts {
-  constructor(mysqlCon, filesystem, http, https) {
-    this.con = mysqlCon;
-    this.fs = filesystem;
-    this.http = http;
-    this.https = https;
+  constructor(fetchHosts) {
+    this._fetchHosts = fetchHosts
     this.hostDetails = {};
     this.certDir = process.env.LXD_CERTS_DIR;
-  }
-
-  getHosts() {
-    return this.hostDetails;
   }
 
   loadHosts() {
     return new Promise((resolve, reject) => {
       this.hostDetails = {};
-      this.loadHostsFromDb().then(mysqlResults => {
+      this._fetchHosts.fetchAll().then(mysqlResults => {
         this.addDetails(mysqlResults).then(hosts => {
           this.hostDetails = hosts;
           resolve(hosts);
@@ -24,18 +21,10 @@ module.exports = class Hosts {
     });
   }
 
-  loadHostsFromDb() {
-    return new Promise((resolve, reject) => {
-        if(process.env.hasOwnProperty("DB_SQLITE") && process.env.DB_SQLITE !== ""){
-            this.con.all('SELECT * FROM Hosts', function(err, results) {
-              resolve(results);
-            });
-        }else{
-            this.con.query('SELECT * FROM Hosts', function(err, results) {
-              resolve(results);
-            });
-        }
-    });
+  async getHost(hostId){
+      let host = await this._fetchHosts.fetchHost(hostId)
+      let results = await this.addDetails([host])
+      return results[hostId]
   }
 
   addDetails(results) {
@@ -58,8 +47,8 @@ module.exports = class Hosts {
             stringUrl = results[i].Host_Url_And_Port;
         }
 
-        results[i].cert = this.fs.readFileSync(lxdClientCert);
-        results[i].key = this.fs.readFileSync(lxdClientKey);
+        results[i].cert = fs.readFileSync(lxdClientCert);
+        results[i].key = fs.readFileSync(lxdClientKey);
 
         promises.push(
           this.getServerInfo(stringUrl, results[i].cert, results[i].key, socketPath)
@@ -134,11 +123,11 @@ module.exports = class Hosts {
                 let url = new URL(stringUrl)
                 options.host = url.hostname
                 options.port = url.port
-                const clientRequest = this.https.request(options, callback);
+                const clientRequest = https.request(options, callback);
                 clientRequest.end();
             }else{
                 options.socketPath = socketPath
-                const clientRequest = this.http.request(options, callback);
+                const clientRequest = http.request(options, callback);
                 clientRequest.end();
             }
         })
