@@ -109,7 +109,7 @@ module.exports = class Terminals {
     internalUuid = null,
     shell = null,
     callbacks = {}) => {
-    let hosts = await this._hosts.loadHosts()
+    let hostDetails = await this._hosts.getHost(host)
     return new Promise((resolve, reject) => {
       if (this.activeTerminals[internalUuid] !== undefined) {
         this.activeTerminals[internalUuid][0].on('error', error =>
@@ -129,8 +129,6 @@ module.exports = class Terminals {
         resolve(true);
         return;
       }
-
-      let hostDetails = hosts[host];
 
       let cols = this.internalUuidMap[`${host}.${container}`].cols;
       let rows = this.internalUuidMap[`${host}.${container}`].rows;
