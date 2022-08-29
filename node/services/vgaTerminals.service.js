@@ -12,9 +12,8 @@ module.exports = class VgaTerminals {
   }
 
   openTerminal = (clientSocket, userId, hostId, project, instance)=>{
-      this.hosts.loadHosts().then(hosts=>{
-        let hostDetails = hosts[hostId];
-
+      this.hosts.getHost(hostId).then(hostDetails=>{
+          
         if(!hostDetails.supportsVms){
             clientSocket.close()
             return false;
