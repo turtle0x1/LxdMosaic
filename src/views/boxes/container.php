@@ -230,7 +230,7 @@
     </div>
     <div class="row" id="containerViewBtns">
         <div class="col-md-12 text-centert">
-            <ul class="nav nav-tabs justify-content-center" id="serverBoxNav" style="border: none !important;">
+            <ul class="nav nav-tabs justify-content-center" id="" style="border: none !important;">
                 <li class="nav-item" id="goToDetails">
                     <div class="nav-link active">
                         <i class="fas fa-info-circle pe-2"></i>Details
