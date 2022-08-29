@@ -34,7 +34,6 @@ module.exports = class HostEvents {
 
             // Open a socket to the host if we haven't seen it before
             if(!this._hostSockets.hasOwnProperty(hostId)) {
-                console.log("opening");
                 await this._openHostSocket(await this.hosts.getHost(hostId))
             }
 
