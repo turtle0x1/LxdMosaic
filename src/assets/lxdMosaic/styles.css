@@ -3,6 +3,11 @@ body {
     font-size: .85rem !important;
 }
 
+#sidebar-ul .nav-link {
+    padding-left: 10px;
+    padding-bottom: 5px;
+}
+
 #sidebar-ul .nav-link:hover {
     color: #0dcaf0 !important;
 }
