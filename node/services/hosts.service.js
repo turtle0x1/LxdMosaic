@@ -21,6 +21,12 @@ module.exports = class Hosts {
     });
   }
 
+  async getHost(hostId){
+      let host = await this._fetchHosts.fetchHost(hostId)
+      let results = await this.addDetails([host])
+      return results[hostId]
+  }
+
   addDetails(results) {
     return new Promise((resolve, reject) => {
       var promises = [];
