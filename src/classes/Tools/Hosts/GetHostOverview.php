@@ -63,6 +63,10 @@ class GetHostOverview
                 unset($socket["cache"]);
                 $socket["cores"] = count($socket["cores"]);
             }
+        } else {
+            $only = ["os_name", "os_version", "firewall"];
+            $hostDetails = array_intersect_key($host->host->info()["environment"], array_flip((array) $only));
+            $resources["hostDetails"] = $hostDetails;
         }
 
         $projectAnalytics = $this->getGraphableProjectAnalytics->getCurrent($userId, "-30 minutes", $host)["totals"];

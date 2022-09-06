@@ -274,6 +274,24 @@ function _loadServerDetailsIfReq(hostId){
         }
 
         $("#serverDisksDisplay").empty().append(disks);
+
+        if(data.resources.hasOwnProperty("hostDetails")){
+            hostDetailsTrs += `
+                <tr>
+                    <td>OS</td>
+                    <td>${data.resources.hostDetails.os_name}</td>
+                </tr>
+                <tr>
+                    <td>OS Version</td>
+                    <td>${data.resources.hostDetails.os_version}</td>
+                </tr>
+                <tr>
+                    <td>Firewall</td>
+                    <td>${data.resources.hostDetails.firewall}</td>
+                </tr>
+            `
+        }
+
         if(data.resources.hasOwnProperty("system")){
 
             let mbProduct = "Not Set";
@@ -852,6 +870,23 @@ function loadServerView(hostId)
         }
 
         $("#serverDisksDisplay").empty().append(disks);
+
+        if(data.resources.hasOwnProperty("hostDetails")){
+            hostDetailsTrs += `
+                <tr>
+                    <td>OS</td>
+                    <td>${data.resources.hostDetails.os_name}</td>
+                </tr>
+                <tr>
+                    <td>OS Version</td>
+                    <td>${data.resources.hostDetails.os_version}</td>
+                </tr>
+                <tr>
+                    <td>Firewall</td>
+                    <td>${data.resources.hostDetails.firewall}</td>
+                </tr>
+            `
+        }
 
         if(data.resources.hasOwnProperty("system")){
 
