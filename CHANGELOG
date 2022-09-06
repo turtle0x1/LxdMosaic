@@ -2,6 +2,7 @@ Unreleased
 
 Added
     Show IP addresses on server instances view (#531)
+    Can now change Apache listen address in SNAP (#527) (Code, mostly, cherry-picked from https://github.com/asmaack/nextcloud-snap)
 
 Changed
     Update SNAP apache version to 2.4.54
