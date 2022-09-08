@@ -60,6 +60,7 @@ if ($haveServers->haveAny() !== true) {
       <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
       <script src="/assets/lxdMosaic/lxdDevicesProperties.js" type="text/javascript" charset="utf-8"></script>
       <script src="/assets/lxdMosaic/lxdLifecycleCallbacks.js" type="text/javascript" charset="utf-8"></script>
+      <script src="/assets/lxdMosaic/lxdHostSettings.js" type="text/javascript" charset="utf-8"></script>
 
       <!-- <link rel="stylesheet" href="/assets/xterm/xterm.css" /> -->
 
@@ -717,6 +718,7 @@ $(function(){
     router.on('/host/:hostId/instances', loadHostInstances);
     router.on('/host/:hostId/proxies', loadHostProxies);
     router.on('/host/:hostId/warnings', loadHostWarnings);
+    router.on('/host/:hostId/settings', loadHostSettings);
 
     router.on('/instance/:hostId/:instance', loadContainerViewReq);
     router.on("/backups", loadBackupsView);

@@ -65,9 +65,14 @@
                                         <i class="fas fa-exchange-alt pe-2"></i>Proxy Devices
                                     </div>
                                 </li>
-                                <li class="nav-item" data-view="serverWarningsBox">
+                                <li class="nav-item enableIfAdmin" data-view="serverWarningsBox">
                                     <div class="nav-link " id="serverWarningsBtn">
                                         <i class="fas fa-exclamation-triangle pe-2" style="color: black !important;"></i>Warnings
+                                    </div>
+                                </li>
+                                <li class="nav-item enableIfAdmin" data-view="serverSettingsBox">
+                                    <div class="nav-link " id="serverSettingsBtn">
+                                        <i class="fas fa-cog pe-2" style="color: black !important;"></i>Settings
                                     </div>
                                 </li>
                             <ul>
@@ -184,6 +189,29 @@
                                                 <th>Status</th>
                                                 <th>Acknowledge</th>
                                                 <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="serverViewBox" id="serverSettingsBox">
+                            <div class="card bg-dark text-white">
+                                <div class="card-header text-white">
+                                    <h4>Settings
+                                        <button class="btn btn-outline-primary float-end" id="editHostSettings">
+                                            <i class="fas fa-wrench"></i>
+                                        </button>
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered table-dark" id="serverSettingTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Setting</th>
+                                                <th>Value</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -350,6 +378,35 @@ function _loadServerDetailsIfReq(hostId){
     });
 }
 
+function loadHostSettings(req){
+    currentContainerDetails = null;
+    let hostId = req.data.hostId;
+    currentServer.hostId = hostId
+    currentServer.hostAlias = hostsAliasesLookupTable[hostId]
+    createDashboardSidebar()
+    _loadServerDetailsIfReq(hostId);
+    changeActiveNav(".overview")
+    $(".boxSlide, .serverViewBox").hide();
+    $("#serverSettingsBox, #serverBox").show();
+
+    addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Settings"], ["", "", "active"], false, ["/", "", ""]);
+
+    $("#serverBoxNav").find(".active").removeClass("active")
+
+    ajaxRequest('/api/Hosts/Settings/GetHostSettingsController/get', currentServer, (data)=>{
+        data = makeToastr(data);
+        let settingTrs = "";
+        $.each(data, (key, value)=>{
+            settingTrs += `<tr>
+                <td>${key}</td>
+                <td>${value}</td>
+            </tr>`
+        });
+        $("#serverSettingTable > tbody").empty().append(settingTrs);
+    });
+
+    $("#serverBoxNav .nav-item:eq(4) > .nav-link").addClass("active")
+}
 function loadHostProxies(req){
     currentContainerDetails = null;
     let hostId = req.data.hostId;
@@ -647,6 +704,8 @@ $(document).on("click", "#serverBoxNav > .nav-item", function(){
         router.navigate(`/host/${currentServer.hostAlias}/proxies`)
     }else if($(this).data("view") == "serverWarningsBox"){
         router.navigate(`/host/${currentServer.hostAlias}/warnings`)
+    }else if($(this).data("view") == "serverSettingsBox"){
+        router.navigate(`/host/${currentServer.hostAlias}/settings`)
     }
 });
 
@@ -756,6 +815,12 @@ $(document).on("click", "#editHost", function(){
     editHostDetailsObj.hostAlias = currentServer.hostAlias
     editHostDetailsObj.hostId = currentServer.hostId
     $("#modal-hosts-edit").modal("show");
+});
+
+$(document).on("click", "#editHostSettings", function(){
+    editHostSettingsDetailsObj.hostAlias = currentServer.hostAlias
+    editHostSettingsDetailsObj.hostId = currentServer.hostId
+    $("#modal-hosts-editSettings").modal("show");
 });
 
 function loadServerView(hostId)
@@ -1097,4 +1162,5 @@ function loadServerView(hostId)
 
 <?php
     require __DIR__ . "/../modals/hosts/instances/addProxyDevices.php";
+    require __DIR__ . "/../modals/hosts/editSettings.php";
 ?>
