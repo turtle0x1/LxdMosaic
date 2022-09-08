@@ -817,6 +817,12 @@ $(document).on("click", "#editHost", function(){
     $("#modal-hosts-edit").modal("show");
 });
 
+$(document).on("click", "#editHostSettings", function(){
+    editHostSettingsDetailsObj.hostAlias = currentServer.hostAlias
+    editHostSettingsDetailsObj.hostId = currentServer.hostId
+    $("#modal-hosts-editSettings").modal("show");
+});
+
 function loadServerView(hostId)
 {
     changeActiveNav(".overview")
@@ -1156,4 +1162,5 @@ function loadServerView(hostId)
 
 <?php
     require __DIR__ . "/../modals/hosts/instances/addProxyDevices.php";
+    require __DIR__ . "/../modals/hosts/editSettings.php";
 ?>
