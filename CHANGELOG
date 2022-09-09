@@ -3,6 +3,9 @@ Unreleased
 Added
     View / update LXD settings on a host if admin (#534)
 
+Fixed
+    Deleting host removes to many metrics
+
 0.16.0 - 06/09/2022
 
 Added
