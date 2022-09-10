@@ -63,7 +63,7 @@ function openEventSocket()
         return true;
     }
 
-    currentEventSocket = new WebSocket(`wss://${getQueryVar("host", window.location.hostname)}:${getQueryVar("port", 443)}/node/operations?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}`);
+    currentEventSocket = new WebSocket(`wss://${location.host}/node/operations?ws_token=${userDetails.apiToken}&user_id=${userDetails.userId}`);
 
     currentEventSocket.onclose = (msg) => {
         currentEventSocket = null;

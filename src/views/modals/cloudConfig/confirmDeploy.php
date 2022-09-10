@@ -104,7 +104,7 @@ $("#modal-cloudConfig-confirm").on("click", "#confirm", function(){
         // is first connected (in this case when the
         // operations socket is setup - which will
         // always come before this) but to be safe ...
-        consoleSocket = new WebSocket(`wss://${getQueryVar("host", window.location.hostname)}:${getQueryVar("port", 443)}/node/cloudConfig?${$.param($.extend({
+        consoleSocket = new WebSocket(`wss://${location.host}/node/cloudConfig?${$.param($.extend({
             ws_token: userDetails.apiToken,
             user_id: userDetails.userId,
             shell: shell,
