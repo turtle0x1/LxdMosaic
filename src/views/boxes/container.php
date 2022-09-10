@@ -25,7 +25,7 @@
     position: absolute;z-index: 2;width: 20%;right: 0px;min-height: 5%;
 }
 
-#terminal-container {
+#terminals-container {
     z-index: 1;
     position: absolute;
     width: 100%;
@@ -320,7 +320,8 @@
         </div>
     </div>
     <div class="col-md-6 text-center" id="terminalDiv">
-        <div id="terminal-container"></div>
+        <div id="terminals-container"></div>
+        <!-- <div id="terminal-container"></div> -->
         <div id="terminalControls">
             <div class="btn-toolbar float-end" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group" role="group" aria-label="First group">
@@ -612,7 +613,7 @@
 var term = null;
 var fitAddon = new window.FitAddon.FitAddon()
 var consoleSocket;
-var currentTerminalProcessId = null;
+var currentTerminalProcesses = {};
 
 function loadContainerViewAfter(data = null, milSeconds = 2000)
 {
@@ -1161,11 +1162,10 @@ function loadContainerView(data)
     $(".instanceViewBox").hide();
     $("#containerDetails").show();
     $("#goToDetails").trigger("click");
-    if(consoleSocket !== undefined && currentTerminalProcessId !== null){
+    if(consoleSocket !== undefined){
         // Dont output "shell closed" message because the close is expected
-        consoleSocket.onclose = function(){}
-        consoleSocket.close();
-        currentTerminalProcessId = null;
+        // consoleSocket.onclose = function(){}
+        // consoleSocket.close();
     }
     currentContainerDetails = data
 
@@ -1488,55 +1488,72 @@ function loadContainerView(data)
         $('html, body').animate({scrollTop:0},500);
         router.updatePageLinks()
 
-        if(currentTerminalProcessId === null){
-            if(x.state.status_code === 103){
-                $("#terminalControls").find(".btn").removeClass("disabled")
-                openShell(null, x.details.config.hasOwnProperty("image.os") ? x.details.config["image.os"] : "")
-            }else{
-                $("#terminalControls").find(".btn").addClass("disabled")
-                const terminalContainer = document.getElementById('terminal-container');
-                // Clean terminal
-                while (terminalContainer.children.length) {
-                    terminalContainer.removeChild(terminalContainer.children[0]);
-                }
-
-                term = new Terminal({});
-                term.loadAddon(fitAddon)
-                term.open(terminalContainer);
-                fitAddon.fit()
-                $("#terminalDiv").height($("#terminal-container").height())
-                // fit is called within a setTimeout, cols and rows need this.
-                setTimeout(() => {
-                    term.writeln("Instance not in a running state, shell not opened.")
-                }, 0)
+        if(x.state.status_code === 103){
+            $("#terminalControls").find(".btn").removeClass("disabled")
+            openShell(null, x.details.config.hasOwnProperty("image.os") ? x.details.config["image.os"] : "")
+        }else{
+            $("#terminalDiv").find(".terminalScreen").hide()
+            $("#terminalControls").find(".btn").addClass("disabled")
+            if($("#notRunningTerm").length === 0){
+                $("#terminals-container").append(`<div id="notRunningTerm" class="terminalScreen"></div>`)
+            }
+            $("#notRunningTerm").show()
+            const terminalContainer = document.getElementById('notRunningTerm');
+            // Clean terminal
+            while (terminalContainer.children.length) {
+                terminalContainer.removeChild(terminalContainer.children[0]);
             }
 
-
+            term = new Terminal({});
+            term.loadAddon(fitAddon)
+            term.open(terminalContainer);
+            fitAddon.fit()
+            $("#terminalDiv").height($("#terminals-container").height())
+            // fit is called within a setTimeout, cols and rows need this.
+            setTimeout(() => {
+                term.writeln("Instance not in a running state, shell not opened.")
+            }, 0)
         }
     });
 }
 
 function openShell(shell = null, imageOsString = ""){
-    if(consoleSocket !== undefined && currentTerminalProcessId !== null){
-        // Dont output "shell closed" message because the close is expected
-        consoleSocket.onclose = function(){}
-        consoleSocket.close();
-        currentTerminalProcessId = null;
-    }
+    $("#terminalDiv").find(".terminalScreen").hide()
+    function _openTerm(term, terminalId){
+        $("#" + terminalId).show()
+        // Theoretically no need to inject credentials
+        // here as auth is only called when a socket
+        // is first connected (in this case when the
+        // operations socket is setup - which will
+        // always come before this) but to be safe ...
+        consoleSocket = new WebSocket(`wss://${getQueryVar("host", window.location.hostname)}:${getQueryVar("port", 443)}/node/console?${$.param({
+            ws_token: userDetails.apiToken,
+            user_id: userDetails.userId,
+            terminalId: terminalId
+        })}`);
 
-    const terminalContainer = document.getElementById('terminal-container');
-    // Clean terminal
-    while (terminalContainer.children.length) {
-        terminalContainer.removeChild(terminalContainer.children[0]);
+        consoleSocket.onclose = function(){
+            term.writeln("")
+            term.writeln("LXDMosaic: Shell closed, if this is un-expected it could be:")
+            term.writeln("")
+            term.writeln("  - A network error")
+            term.writeln("  - The instance was turned off")
+            term.writeln("  - LXDMosaic is missbehaving")
+            term.writeln("  - You're trying to use a shell not installed (I.E bash instead of ash)")
+        };
+        $("#terminalDiv").height($("#terminals-container").height())
+        term.loadAddon(new window.AttachAddon.AttachAddon(consoleSocket));
+        $("#terminalControls").find(".btn-toolbar").fadeOut(2000)
     }
-
-    term = new Terminal({});
-    term.loadAddon(fitAddon)
-    term.open(terminalContainer);
-    fitAddon.fit()
-    $("#terminalDiv").height($("#terminal-container").height())
 
     let project = $("#instanceProject").text();
+    let instanceProcessKey = `${currentContainerDetails.hostId}.${project}.${currentContainerDetails.container}`
+
+    if(currentTerminalProcesses.hasOwnProperty(instanceProcessKey)){
+        $("#terminalDiv").find(".terminalScreen").hide()
+        $("#" + currentTerminalProcesses[instanceProcessKey].terminalId).show()
+        return false;
+    }
 
     var defaultOsShells = {
         "ubuntu": "bash",
@@ -1547,7 +1564,7 @@ function openShell(shell = null, imageOsString = ""){
     if(shell == null){
         let myDefaultShells = JSON.parse(localStorage.getItem('myDefaultShells'));
 
-        if(myDefaultShells == null || !myDefaultShells.hasOwnProperty(currentContainerDetails.hostId)){
+        if(myDefaultShells == null || (!myDefaultShells.hasOwnProperty(currentContainerDetails.hostId) || !myDefaultShells[currentContainerDetails.hostId].hasOwnProperty(currentContainerDetails.container) )){
             if(defaultOsShells.hasOwnProperty(imageOsString.toLowerCase())){
                 shell = defaultOsShells[imageOsString.toLowerCase()]
             }
@@ -1560,11 +1577,31 @@ function openShell(shell = null, imageOsString = ""){
         }
     }
 
+    if($("#floatingWindowConsole").is(":visible")){
+        openFloatingTerminal(currentContainerDetails.hostId, project, currentContainerDetails.container, shell)
+        return false;
+    }
+
+    let randomId = shell == null ? "errorMessageTerminal" : makeRandomString();
+
+    if(randomId !== "errorMessageTerminal" || $("#errorMessageTerminal").length == 0){
+        $("#terminals-container").append(`<div id="${randomId}" class="terminalScreen"></div>`)
+        const terminalContainer = document.getElementById(randomId);
+        term = new Terminal({});
+        term.loadAddon(fitAddon)
+        term.open(terminalContainer);
+        fitAddon.fit()
+        $("#terminalDiv").height($("#terminals-container").height())
+        if(randomId === "errorMessageTerminal"){
+            term.writeln("")
+            term.writeln("LXDMosaic: Couldn't guess which shell to use.")
+            term.writeln("Please report the OS and the expected default shell on Github.")
+            term.writeln("You can change the shell above to gain access in the meantime.")
+        }
+    }
+
     if(shell == null){
-        term.writeln("")
-        term.writeln("LXDMosaic: Couldn't guess which shell to use.")
-        term.writeln("Please report the OS and the expected default shell on Github.")
-        term.writeln("You can change the shell above to gain access in the meantime.")
+        $("#errorMessageTerminal").show()
         return false;
     }
 
@@ -1585,40 +1622,20 @@ function openShell(shell = null, imageOsString = ""){
                 project: project
             }, currentContainerDetails))}`,
             data: JSON.stringify({
-                host: currentContainerDetails.hostId,
-                container: currentContainerDetails.container
+                hostId: currentContainerDetails.hostId,
+                instance: currentContainerDetails.container,
+                project: project,
+                shell: shell
             }),
             success: function(data) {
-                currentTerminalProcessId = data.processId;
-
-                // Theoretically no need to inject credentials
-                // here as auth is only called when a socket
-                // is first connected (in this case when the
-                // operations socket is setup - which will
-                // always come before this) but to be safe ...
-                consoleSocket = new WebSocket(`wss://${getQueryVar("host", window.location.hostname)}:${getQueryVar("port", 443)}/node/console?${$.param($.extend({
-                    ws_token: userDetails.apiToken,
-                    user_id: userDetails.userId,
-                    pid: data.processId,
-                    shell: shell,
-                    userId: userDetails.userId,
-                    host: currentContainerDetails.hostId,
-                    instance: currentContainerDetails.container,
-                    project: project
-                }, currentContainerDetails))}`);
-
-                consoleSocket.onclose = function(){
-                    term.writeln("")
-                    term.writeln("LXDMosaic: Shell closed, if this is un-expected it could be:")
-                    term.writeln("")
-                    term.writeln("  - A network error")
-                    term.writeln("  - The instance was turned off")
-                    term.writeln("  - LXDMosaic is missbehaving")
-                    term.writeln("  - You're trying to use a shell not installed (I.E bash instead of ash)")
-                };
-                $("#terminalDiv").height($("#terminal-container").height())
-                term.loadAddon(new window.AttachAddon.AttachAddon(consoleSocket));
-                $("#terminalControls").find(".btn-toolbar").fadeOut(2000)
+                $("#" + randomId).attr("id", data.terminalId)
+                if(!currentTerminalProcesses.hasOwnProperty(instanceProcessKey)){
+                    currentTerminalProcesses[instanceProcessKey] = {
+                        terminalId: data.terminalId,
+                        term: term
+                    }
+                }
+                _openTerm(term, data.terminalId)
             },
             error: function(){
                 term.writeln("LXDMosaic: Node server cant be reached.")
@@ -1647,13 +1664,13 @@ function resizeShell(){
 
 document.onfullscreenchange = function ( event ) {
     if(document.fullscreenElement == null){
-        resizeShell()
+        // resizeShell()
     }
 };
 
 $(window).resize(function(e) {
   if(term){
-      resizeShell()
+      // resizeShell()
   }
 });
 

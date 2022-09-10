@@ -40,7 +40,8 @@ function js(){
             "node_modules/jquery-contextmenu/dist/jquery.ui.position.min.js",
             "node_modules/chart.js/dist/Chart.min.js",
             "node_modules/masonry-layout/dist/masonry.pkgd.min.js",
-            'node_modules/navigo/lib/navigo.min.js'
+            'node_modules/navigo/lib/navigo.min.js',
+            'src/assets/jquery-resizeable/jquery-ui.min.js'
         ])
         .pipe(minify({
             noSource: true
