@@ -1540,6 +1540,7 @@ function openShell(shell = null, imageOsString = ""){
 
     var defaultOsShells = {
         "ubuntu": "bash",
+        "debian": "bash",
         "alpine": "ash",
         "openwrt": "ash"
     };
