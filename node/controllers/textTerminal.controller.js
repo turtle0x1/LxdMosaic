@@ -22,7 +22,7 @@ module.exports = class TextTerminalController {
 
         //NOTE When user inputs from browser
         socket.on("message", (msg) => {
-            let resizeCommand = msg.match(/resize-window\:cols=([0-9]+)&rows=([0-9]+)/);
+            let resizeCommand = msg.toString().match(/resize-window\:cols=([0-9]+)&rows=([0-9]+)/);
             if (resizeCommand) {
                 this._terminals.resize(uuid, resizeCommand[1], resizeCommand[2])
             } else {

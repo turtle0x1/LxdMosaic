@@ -5,6 +5,7 @@ Added
 
 Fixed
     Shell doesn't work when port is something other than 443 (#540)
+    Node server would crash when terminal sent binary data
 
 
 Fixed
