@@ -1542,7 +1542,8 @@ function openShell(shell = null, imageOsString = ""){
         "ubuntu": "bash",
         "debian": "bash",
         "alpine": "ash",
-        "openwrt": "ash"
+        "openwrt": "ash",
+        "oracle": "bash"
     };
 
     if(shell == null){

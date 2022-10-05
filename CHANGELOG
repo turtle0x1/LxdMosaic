@@ -4,6 +4,9 @@ Added
     View / update LXD settings on a host if admin (#534)
      Set snap cert location (#271)
 
+Changed
+    Use bash shell as the default for oracle images (#544)
+
 Fixed
     Shell doesn't work when port is something other than 443 (#540)
     Node server would crash when terminal sent binary data
