@@ -379,6 +379,7 @@ if ($haveServers->haveAny() !== true) {
               110: "fas fa-snowflake",
               111: "Thawed",
               112: "fa fa-exclamation-triangle",
+              113: "fas fa-play",
               200: "fa fa-check",
               400: "fa fa-exclamation-triangle",
               40:  "Cancelled",

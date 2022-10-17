@@ -1192,7 +1192,7 @@ function loadContainerView(data)
         let stateBtnsToEnable = [];
         let stateBtnsToDisable = [];
 
-        if(x.state.status_code == 103){
+        if(x.state.status_code == 103 || x.state.status_code == 113){
             stateBtnsToEnable = ["stop", "freeze", "restart"];
             stateBtnsToDisable = ["start", "unfreeze"];
         }else if(x.state.status_code == 102){
@@ -1386,7 +1386,7 @@ function loadContainerView(data)
             return res[1] * Math.pow(1024, powers[res[2].toLowerCase()]);
         }
 
-        if(x.state.status_code == 103){
+        if(x.state.status_code == 103 || x.state.status_code == 113){
             let totalMemory = x.totalMemory.total;
             var regExp = /[a-zA-Z]/g;
 
@@ -1489,7 +1489,7 @@ function loadContainerView(data)
         router.updatePageLinks()
 
         if(currentTerminalProcessId === null){
-            if(x.state.status_code === 103){
+            if(x.state.status_code === 103 || x.state.status_code === 113){
                 $("#terminalControls").find(".btn").removeClass("disabled")
                 openShell(null, x.details.config.hasOwnProperty("image.os") ? x.details.config["image.os"] : "")
             }else{
