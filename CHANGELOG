@@ -7,6 +7,7 @@ Added
 Changed
     Use bash shell as the default for oracle images (#544)
     Support instances in the custom state "Ready" (#547)
+    Set default shell for centos as bash (#546)
 
 Fixed
     Shell doesn't work when port is something other than 443 (#540)
