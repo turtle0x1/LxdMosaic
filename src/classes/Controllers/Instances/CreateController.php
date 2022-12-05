@@ -9,8 +9,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $createInstance;
-    
+    private CreateInstance $createInstance;
+
     public function __construct(CreateInstance $createInstance)
     {
         $this->createInstance = $createInstance;
@@ -19,12 +19,12 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
      * @Route("", name="Create Instance")
      */
     public function create(
-        $name,
-        $profileIds = [],
+        string $name,
+        array $profileIds = [],
         HostsCollection $hosts,
         array $imageDetails,
         string $instanceType = "",
-        $server = "",
+        string $server = "",
         array $gpus = [],
         array $config = [],
         bool $start = false

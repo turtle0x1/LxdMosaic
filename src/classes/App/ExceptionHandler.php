@@ -7,26 +7,26 @@ use dhope0000\LXDClient\Model\Hosts\ChangeStatus;
 
 class ExceptionHandler
 {
-    private $getDetails;
-    private $changeStatus;
-    private $stringTools;
+    private GetDetails $getDetails;
+    private ChangeStatus $changeStatus;
+    private StringTools $stringTools;
 
     /**
      * @Inject
      */
-    public function inject(GetDetails $getDetails, ChangeStatus $changeStatus, StringTools $stringTools)
+    public function inject(GetDetails $getDetails, ChangeStatus $changeStatus, StringTools $stringTools) :void
     {
         $this->getDetails = $getDetails;
         $this->changeStatus = $changeStatus;
         $this->stringTools = $stringTools;
     }
 
-    public function register()
+    public function register() :void
     {
         set_exception_handler([$this, "handle"]);
     }
 
-    public function handle($exception)
+    public function handle($exception) :void
     {
         $message = $exception->getMessage();
 
@@ -39,7 +39,7 @@ class ExceptionHandler
             $hostId = $this->getDetails->getIdByUrlMatch($url);
             if (is_numeric($hostId)) {
                 http_response_code(205);
-                $this->changeStatus->setOffline($hostId);
+                $this->changeStatus->setOffline((int) $hostId);
             }
         }
 

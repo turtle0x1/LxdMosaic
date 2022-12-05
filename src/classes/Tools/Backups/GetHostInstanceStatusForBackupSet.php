@@ -2,30 +2,23 @@
 
 namespace dhope0000\LXDClient\Tools\Backups;
 
-use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Tools\Instances\GetHostsInstances;
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\FetchBackupSchedules;
 use dhope0000\LXDClient\Tools\Universe;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetHostInstanceStatusForBackupSet
 {
-    private $getHostsInstances;
-    private $lxdClient;
-    private $fetchBackupSchedules;
-    private $universe;
-    private $hasExtension;
+    private FetchBackupSchedules $fetchBackupSchedules;
+    private Universe $universe;
+    private HasExtension $hasExtension;
 
     public function __construct(
-        GetHostsInstances $getHostsInstances,
-        LxdClient $lxdClient,
         FetchBackupSchedules $fetchBackupSchedules,
         HasExtension $hasExtension,
         Universe $universe
     ) {
-        $this->getHostsInstances = $getHostsInstances;
-        $this->lxdClient = $lxdClient;
         $this->fetchBackupSchedules = $fetchBackupSchedules;
         $this->universe = $universe;
         $this->hasExtension = $hasExtension;
@@ -58,7 +51,7 @@ class GetHostInstanceStatusForBackupSet
         return $missingBackups;
     }
 
-    private function addDetailsToHost($host, $backupsByHostId, $groupedSchedule)
+    private function addDetailsToHost(Host $host, array $backupsByHostId, array $groupedSchedule)
     {
         $backupsToSearch = [];
 
@@ -139,7 +132,7 @@ class GetHostInstanceStatusForBackupSet
         return $host;
     }
 
-    private function createBackupsByHostIdStruct(array $backups)
+    private function createBackupsByHostIdStruct(array $backups) :array
     {
         $backupsByHostId = [];
         foreach ($backups as $backup) {
@@ -151,7 +144,7 @@ class GetHostInstanceStatusForBackupSet
         return $backupsByHostId;
     }
 
-    private function findAllBackupsandTotalSize(string $container, array $hostBackups)
+    private function findAllBackupsandTotalSize(string $container, array $hostBackups) :array
     {
         $output = [];
         $totalSize = 0;
@@ -167,7 +160,7 @@ class GetHostInstanceStatusForBackupSet
         ];
     }
 
-    private function findLastBackup(string $project, string $container, ?array $hostBackups)
+    private function findLastBackup(string $project, string $container, ?array $hostBackups) :array
     {
         $x = [
             "neverBackedUp"=>true
@@ -191,7 +184,7 @@ class GetHostInstanceStatusForBackupSet
         return $x;
     }
 
-    private function groupSchedules(array $schedules)
+    private function groupSchedules(array $schedules) :array
     {
         foreach ($schedules as $hostId => $instances) {
             foreach ($instances as $index => $instance) {

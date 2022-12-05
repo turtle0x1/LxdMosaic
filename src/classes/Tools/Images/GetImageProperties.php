@@ -5,7 +5,7 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetImageProperties
 {
-    private $supportedProprties = [
+    private array $supportedProprties = [
         "public"=>"",
         "auto_update"=>""
     ];
@@ -15,7 +15,7 @@ class GetImageProperties
         return $host->images->info($fingerprint);
     }
 
-    public function getFiltertedList(Host $host, string  $fingerprint)
+    public function getFiltertedList(Host $host, string  $fingerprint) :array
     {
         $info = $this->getAll($host, $fingerprint);
         return array_intersect_key($info, $this->supportedProprties);

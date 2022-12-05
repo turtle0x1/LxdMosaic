@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class SetHostSettings
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function set(int $hostId, string $alias, int $supportsLoadAverages)
+    public function set(int $hostId, string $alias, int $supportsLoadAverages) :bool
     {
         $sql = "UPDATE
                     `Hosts`

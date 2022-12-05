@@ -4,8 +4,11 @@ namespace dhope0000\LXDClient\Tools\Images;
 
 class SearchRemoteImages
 {
-    public function get($urlKey = "linuxcontainers", $searchType = "container", $searchArch = "amd64")
-    {
+    public function get(
+        string $urlKey = "linuxcontainers",
+        string $searchType = "container",
+        string $searchArch = "amd64"
+    ) :array {
         $urlMap = [
             "linuxcontainers"=>'https://images.linuxcontainers.org/streams/v1/images.json',
             "ubuntu-release"=>'https://cloud-images.ubuntu.com/releases/streams/v1/com.ubuntu.cloud:released:download.json',
@@ -95,7 +98,7 @@ class SearchRemoteImages
         return $output;
     }
 
-    private function parseUbuntuSimpleStream($product)
+    private function parseUbuntuSimpleStream($product) :array
     {
         return [
             "imOs"=>$product["os"],
@@ -105,7 +108,7 @@ class SearchRemoteImages
         ];
     }
 
-    private function parseLinuxContainersSimpleStream($name, $product)
+    private function parseLinuxContainersSimpleStream($name, $product) :array
     {
         $nameParts = explode(":", $name);
         return [
@@ -116,7 +119,7 @@ class SearchRemoteImages
         ];
     }
 
-    public function getSimpleStreamsJson($url)
+    public function getSimpleStreamsJson($url) :array
     {
         // Get cURL resource
         $curl = curl_init();
@@ -131,6 +134,10 @@ class SearchRemoteImages
         $resp = curl_exec($curl);
         // Close request to clear up some resources
         curl_close($curl);
+
+        if (!is_string($resp)) {
+            throw new \Exception("Incorrect response from image server ", 1);
+        }
 
         return json_decode($resp, true);
     }

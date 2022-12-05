@@ -3,33 +3,29 @@
 namespace dhope0000\LXDClient\Tools\Clusters;
 
 use dhope0000\LXDClient\Model\Hosts\HostList;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Tools\Hosts\GetResources;
 use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class GetAllClusters
 {
-    private $hostList;
-    private $getDetails;
-    private $getResources;
+    private HostList $hostList;
+    private GetResources $getResources;
 
     public function __construct(
         HostList $hostList,
-        GetDetails $getDetails,
         GetResources $getResources
     ) {
         $this->hostList = $hostList;
-        $this->getDetails = $getDetails;
         $this->getResources = $getResources;
     }
 
-    public function get()
+    public function get() :array
     {
         $clusters = $this->createClusterGroupsWithInfo();
         return $this->calculateClusterStats($clusters);
     }
 
-    public function convertHostsToClusters($hosts, $addResources = false)
+    public function convertHostsToClusters($hosts, bool $addResources = false) :array
     {
         $hostByUrl = [];
         foreach ($hosts as $host) {
@@ -79,13 +75,13 @@ class GetAllClusters
         return $clusters;
     }
 
-    private function createClusterGroupsWithInfo()
+    private function createClusterGroupsWithInfo() :array
     {
         $hosts = $this->hostList->getOnlineHostsWithDetails();
         return $this->convertHostsToClusters($hosts, true);
     }
 
-    private function calculateClusterStats(array $clusters)
+    private function calculateClusterStats(array $clusters) :array
     {
         foreach ($clusters as $index => $cluster) {
             $totalMemory = 0;

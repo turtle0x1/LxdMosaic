@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertInstanceBackup
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -23,7 +23,7 @@ class InsertInstanceBackup
         int $filesize,
         int $failed = 0,
         string $failedReason = ""
-    ) {
+    ) :bool {
         $sql = "INSERT INTO `Container_Backups`
                 (
                     `CB_Backup_Date_Created`,

@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UploadFilesToPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $uploadFiles;
+    private UploadFiles $uploadFiles;
 
     public function __construct(UploadFiles $uploadFiles)
     {

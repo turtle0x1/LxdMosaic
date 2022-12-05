@@ -11,11 +11,11 @@ use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 class ImportLdapUsers
 {
-    private $ldap;
-    private $fetchUsers;
-    private $insertUser;
-    private $getSetting;
-    
+    private Ldap $ldap;
+    private FetchUsers $fetchUsers;
+    private InsertUser $insertUser;
+    private GetSetting $getSetting;
+
     public function __construct(Ldap $ldap, FetchUsers $fetchUsers, InsertUser $insertUser, GetSetting $getSetting)
     {
         $this->ldap = $ldap;
@@ -24,7 +24,7 @@ class ImportLdapUsers
         $this->getSetting = $getSetting;
     }
 
-    public function import()
+    public function import() :bool
     {
         $knownLdapIds = $this->fetchUsers->fetchLdapIds();
         $users = $this->findLdapUsers();
@@ -40,7 +40,7 @@ class ImportLdapUsers
         return true;
     }
 
-    private function findLdapUsers()
+    private function findLdapUsers() :array
     {
         $ldapconn = $this->ldap->getAdminBoundConnection();
 
@@ -62,7 +62,7 @@ class ImportLdapUsers
 
         $entries = ldap_get_entries($ldapconn, $result);
 
-        if ($entries["count"] == 0) {
+        if ($entries == false || $entries["count"] == 0) {
             throw new \Exception("No users found", 1);
         }
 

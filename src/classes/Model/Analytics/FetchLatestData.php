@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class FetchLatestData
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function lastHour()
+    public function lastHour() :array
     {
         $mod = isset($_ENV["DB_SQLITE"]) && !empty($_ENV["DB_SQLITE"]) ? "datetime('now', '-3600 seconds')" : "DATE_SUB(NOW(), INTERVAL 1 HOUR)";
         $sql = "SELECT
@@ -33,7 +33,7 @@ class FetchLatestData
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function lastEntry()
+    public function lastEntry() :array
     {
         $sql = "SELECT
                     `FA_Date_Created` as `dateTime`,
@@ -52,7 +52,7 @@ class FetchLatestData
         return $do->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function fetchAll()
+    public function fetchAll() :array
     {
         $sql = "SELECT
                     `FA_Date_Created` as `dateTime`,

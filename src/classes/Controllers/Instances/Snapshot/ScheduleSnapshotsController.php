@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ScheduleSnapshotsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $scheduleSnapshots;
+    private ScheduleSnapshots $scheduleSnapshots;
 
     public function __construct(ScheduleSnapshots $scheduleSnapshots)
     {

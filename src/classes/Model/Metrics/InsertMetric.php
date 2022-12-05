@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertMetric
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function insert(string $date, int $hostId, string $containerName, int $typeId, string $data)
+    public function insert(string $date, int $hostId, string $containerName, int $typeId, string $data) :bool
     {
         $sql = "INSERT INTO `Instance_Metric_Values`
                 (

@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class HostsHaveInstance
 {
-    public function ifHostInListHasContainerNameThrow(HostsCollection $hosts, string $name)
+    public function ifHostInListHasContainerNameThrow(HostsCollection $hosts, string $name) :bool
     {
         foreach ($hosts as $host) {
             $allContainers = $host->instances->all();

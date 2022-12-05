@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreatePoolController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $createStoragePool;
-    
+    private CreateStoragePool $createStoragePool;
+
     public function __construct(CreateStoragePool $createStoragePool)
     {
         $this->createStoragePool = $createStoragePool;

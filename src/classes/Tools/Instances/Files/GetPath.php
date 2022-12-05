@@ -9,7 +9,7 @@ class GetPath
 {
     private $cache;
     private $instanceUrlKey;
-    
+
 
     public function __construct(ArrayAdapter $cache)
     {
@@ -20,7 +20,7 @@ class GetPath
         Host $host,
         string $instance,
         string $path,
-        string $download
+        int $download
     ) {
         $host->callClientMethod("addCache", $this->cache);
 

@@ -16,8 +16,10 @@ class UsedByFilter
         $this->fetchAllowedProjects = $fetchAllowedProjects;
         $this->fetchUserDetails = $fetchUserDetails;
     }
-
-    public function filterUserProjects(int $userId, Host $host, array $usedBy)
+    /**
+     * @return array
+     */
+    public function filterUserProjects(int $userId, Host $host, array $usedBy) :array
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);
 

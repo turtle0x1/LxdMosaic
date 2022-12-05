@@ -8,14 +8,14 @@ use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 
 class GetProjectInfo
 {
-    private $fetchAllowedProjects;
-    
+    private FetchAllowedProjects $fetchAllowedProjects;
+
     public function __construct(FetchAllowedProjects $fetchAllowedProjects)
     {
         $this->fetchAllowedProjects = $fetchAllowedProjects;
     }
 
-    public function get(Host $host, string $projectName)
+    public function get(Host $host, string $projectName) :array
     {
         $project = $host->projects->info($projectName);
         $project["used_by"] = StringTools::usedByStringsToLinks(

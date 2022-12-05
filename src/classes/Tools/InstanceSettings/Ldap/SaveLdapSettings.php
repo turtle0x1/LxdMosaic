@@ -9,9 +9,9 @@ use dhope0000\LXDClient\Tools\Ldap\Ldap;
 
 class SaveLdapSettings
 {
-    private $validatePermissions;
-    private $insertSetting;
-    private $ldap;
+    private ValidatePermissions $validatePermissions;
+    private InsertSetting $insertSetting;
+    private Ldap $ldap;
 
     public function __construct(ValidatePermissions $validatePermissions, InsertSetting $insertSetting, Ldap $ldap)
     {
@@ -20,7 +20,7 @@ class SaveLdapSettings
         $this->ldap = $ldap;
     }
 
-    public function save($userId, $settings) :bool
+    public function save(int $userId, array $settings) :bool
     {
         $this->validatePermissions->isAdminOrThrow($userId);
 

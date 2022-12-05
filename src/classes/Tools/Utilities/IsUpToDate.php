@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Tools\Utilities;
 
 class IsUpToDate
 {
-    public static function isIt()
+    public static function isIt() :array
     {
         $x = [
             "master"=>false,
@@ -30,6 +30,11 @@ class IsUpToDate
         $resp = curl_exec($curl);
         // Close request to clear up some resources
         curl_close($curl);
+
+        if (!is_string($resp)) {
+            $x["cantSeeGithub"] = true;
+            return $x;
+        }
 
         $githubData = json_decode($resp, true);
 

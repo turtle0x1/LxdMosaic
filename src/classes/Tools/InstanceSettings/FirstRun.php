@@ -9,12 +9,12 @@ use dhope0000\LXDClient\Model\InstanceSettings\InsertSetting;
 
 class FirstRun
 {
-    private $fetchUserDetails;
-    private $addHosts;
-    private $resetPassword;
-    private $insertSetting;
+    private FetchUserDetails $fetchUserDetails;
+    private AddHosts $addHosts;
+    private ResetPassword $resetPassword;
+    private InsertSetting $insertSetting;
 
-    private $adminUserId = 1;
+    private int $adminUserId = 1;
 
     public function __construct(
         FetchUserDetails $fetchUserDetails,
@@ -28,7 +28,7 @@ class FirstRun
         $this->insertSetting = $insertSetting;
     }
 
-    public function run(array $hosts, string $adminPassword, array $settings = [])
+    public function run(array $hosts, string $adminPassword, array $settings = []) :void
     {
         if ($this->fetchUserDetails->adminPasswordBlank() !== true) {
             throw new \Exception("Cant run first run", 1);

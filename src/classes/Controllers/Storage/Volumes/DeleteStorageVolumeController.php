@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteStorageVolumeController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteVolume;
-    
+    private DeleteVolume $deleteVolume;
+
     public function __construct(DeleteVolume $deleteVolume)
     {
         $this->deleteVolume = $deleteVolume;

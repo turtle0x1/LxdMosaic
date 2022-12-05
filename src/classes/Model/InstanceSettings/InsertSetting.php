@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertSetting
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function insert(int $settingId, $value)
+    public function insert(int $settingId, string $value) :bool
     {
         $sql = "INSERT INTO
                     `Instance_Settings_Values`

@@ -8,10 +8,10 @@ use dhope0000\LXDClient\Tools\User\ValidateToken;
 
 class UserSession
 {
-    private $invalidateToken;
-    private $session;
-    private $validateToken;
-    
+    private InvalidateToken $invalidateToken;
+    private Session $session;
+    private ValidateToken $validateToken;
+
     public function __construct(
         InvalidateToken $invalidateToken,
         Session $session,
@@ -22,25 +22,25 @@ class UserSession
         $this->validateToken = $validateToken;
     }
 
-    public function isLoggedIn()
+    public function isLoggedIn() :bool
     {
         return !empty($this->getUserId()) && $this->validateToken->validate($this->getUserId(), $this->session->get("wsToken"));
     }
 
-    public function logout()
+    public function logout() :bool
     {
         $this->invalidateToken->invalidate($this->session->get("userId"), $this->session->get("wsToken"));
         $this->session->clear();
         return true;
     }
 
-    public function getToken()
+    public function getToken() :string
     {
         return $this->session->get("wsToken");
     }
 
-    public function getUserId()
+    public function getUserId() :int
     {
-        return $this->session->get("userId");
+        return (int) $this->session->get("userId");
     }
 }

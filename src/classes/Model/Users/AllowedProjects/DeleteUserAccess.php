@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteUserAccess
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function delete(int $userId, int $hostId, string $project)
+    public function delete(int $userId, int $hostId, string $project) :bool
     {
         $sql = "DELETE FROM `User_Allowed_Projects`
                 WHERE
@@ -30,10 +30,10 @@ class DeleteUserAccess
             ":hostId"=>$hostId,
             ":project"=>$project
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
 
-    public function deletAllForProject(int $hostId, string $project)
+    public function deletAllForProject(int $hostId, string $project) :bool
     {
         $sql = "DELETE FROM `User_Allowed_Projects`
                 WHERE
@@ -47,10 +47,10 @@ class DeleteUserAccess
             ":hostId"=>$hostId,
             ":project"=>$project
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
 
-    public function deleteForHost(int $hostId)
+    public function deleteForHost(int $hostId) :bool
     {
         $sql = "DELETE FROM `User_Allowed_Projects`
                 WHERE
@@ -60,9 +60,9 @@ class DeleteUserAccess
         $do->execute([
             ":hostId"=>$hostId
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
-    public function deleteForUser(int $targetUserId)
+    public function deleteForUser(int $targetUserId) :bool
     {
         $sql = "DELETE FROM `User_Allowed_Projects`
                 WHERE
@@ -72,6 +72,6 @@ class DeleteUserAccess
         $do->execute([
             ":targetUserId"=>$targetUserId
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
 }

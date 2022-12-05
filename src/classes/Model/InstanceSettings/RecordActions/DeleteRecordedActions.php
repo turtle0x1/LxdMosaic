@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteRecordedActions
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function deleteForUser(int $userId)
+    public function deleteForUser(int $userId) :bool
     {
         $sql = "DELETE FROM `Recorded_Actions`
                 WHERE

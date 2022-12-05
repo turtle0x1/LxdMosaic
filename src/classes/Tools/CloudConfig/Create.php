@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Model\CloudConfig\CreateConfig;
 
 class Create
 {
-    private $getCloudConfigs;
-    private $createConfig;
+    private GetCloudConfigs $getCloudConfigs;
+    private CreateConfig $createConfig;
 
     public function __construct(
         GetCloudConfigs $getCloudConfigs,
@@ -21,8 +21,8 @@ class Create
     public function create(
         string $name,
         string $namespace,
-        $description = ""
-    ) {
+        string $description = ""
+    ) :bool {
         if ($this->getCloudConfigs->haveCloudConfigInNamespace($name, $namespace)) {
             throw new \Exception("Have a cloud config with this name in this namespace", 1);
         }

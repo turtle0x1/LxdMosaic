@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Objects;
 
 class RouteToNameMapping
 {
-    public $routesToName = array (
+    public array $routesToName = array(
   'dhope0000\\LXDClient\\Controllers\\ProjectAnalytics\\GetGraphableProjectAnalyticsController\\get' => 'Get graphable analytics',
   'dhope0000\\LXDClient\\Controllers\\Profiles\\GetProfileController\\get' => 'Get Profile',
   'dhope0000\\LXDClient\\Controllers\\Profiles\\DeleteProfileController\\delete' => 'Delete Profile',
@@ -91,7 +91,7 @@ class RouteToNameMapping
   'dhope0000\\LXDClient\\Controllers\\Images\\ImportLinuxContainersByAliasController\\import' => 'Import LinunxContainer.Org Image',
 );
 
-    public function getControllerName(string $controller)
+    public function getControllerName(string $controller) :string
     {
         if (!isset($this->routesToName[$controller])) {
             return "";

@@ -8,8 +8,8 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class RestoreBackup
 {
-    private $fetchBackup;
-    private $validatePermissions;
+    private FetchBackup $fetchBackup;
+    private ValidatePermissions $validatePermissions;
 
     public function __construct(
         FetchBackup $fetchBackup,

@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Tools\Networks\GetNetworksDashboard;
 
 class GetNetworksDashboardController
 {
-    private $getNetworksDashboard;
-    
+    private GetNetworksDashboard $getNetworksDashboard;
+
     public function __construct(GetNetworksDashboard $getNetworksDashboard)
     {
         $this->getNetworksDashboard = $getNetworksDashboard;
     }
 
-    public function get(int $userId)
+    public function get(int $userId) :array
     {
         return $this->getNetworksDashboard->get($userId);
     }

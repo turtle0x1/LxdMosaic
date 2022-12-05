@@ -9,11 +9,11 @@ use dhope0000\LXDClient\Tools\User\Password\CheckPasswordPolicy;
 
 class AddUser
 {
-    private $validatePermissions;
-    private $insertUser;
-    private $fetchUserDetails;
-    private $checkPasswordPolicy;
-    
+    private ValidatePermissions $validatePermissions;
+    private InsertUser $insertUser;
+    private FetchUserDetails $fetchUserDetails;
+    private CheckPasswordPolicy $checkPasswordPolicy;
+
     public function __construct(
         ValidatePermissions $validatePermissions,
         InsertUser $insertUser,
@@ -26,7 +26,7 @@ class AddUser
         $this->checkPasswordPolicy = $checkPasswordPolicy;
     }
 
-    public function add(int $userId, string $username, string $password)
+    public function add(int $userId, string $username, string $password) :bool
     {
         $this->validatePermissions->isAdminOrThrow($userId);
 

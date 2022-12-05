@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class AddCloudConfig
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function add(int $deploymentId, int $cloudConfigRevId)
+    public function add(int $deploymentId, int $cloudConfigRevId) :bool
     {
         $sql = "INSERT INTO `Deployment_Cloud_Config`
                 (

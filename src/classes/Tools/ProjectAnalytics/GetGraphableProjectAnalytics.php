@@ -10,10 +10,10 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetGraphableProjectAnalytics
 {
-    private $fetchAnalytics;
-    private $fetchUserDetails;
-    private $fetchAllowedProjects;
-    private $dateTools;
+    private FetchAnalytics $fetchAnalytics;
+    private FetchUserDetails $fetchUserDetails;
+    private FetchAllowedProjects $fetchAllowedProjects;
+    private DateTools $dateTools;
 
     public function __construct(
         FetchAnalytics $fetchAnalytics,

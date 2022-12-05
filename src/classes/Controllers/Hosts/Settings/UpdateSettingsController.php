@@ -6,8 +6,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UpdateSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $updateHostSettings;
-    
+    private UpdateHostSettings $updateHostSettings;
+
     public function __construct(UpdateHostSettings $updateHostSettings)
     {
         $this->updateHostSettings = $updateHostSettings;

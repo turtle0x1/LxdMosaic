@@ -13,14 +13,14 @@ use dhope0000\LXDClient\Model\Users\UpdateLoginStatus;
 
 class DeleteUser
 {
-    private $validatePermissions;
-    private $updateUserDeletedStatus;
-    private $updateUsername;
-    private $deleteUserAccess;
-    private $deleteUserApiTokens;
-    private $deleteBackupSchedules;
-    private $deleteRecordedActions;
-    private $updateLoginStatus;
+    private ValidatePermissions $validatePermissions;
+    private UpdateUserDeletedStatus $updateUserDeletedStatus;
+    private UpdateUsername $updateUsername;
+    private DeleteUserAccess $deleteUserAccess;
+    private DeleteUserApiTokens $deleteUserApiTokens;
+    private DeleteBackupSchedules $deleteBackupSchedules;
+    private DeleteRecordedActions $deleteRecordedActions;
+    private UpdateLoginStatus $updateLoginStatus;
 
     public function __construct(
         ValidatePermissions $validatePermissions,
@@ -50,7 +50,7 @@ class DeleteUser
         int $removeApiKeys = 1,
         int $deleteAuditLogs = 0,
         int $deleteBackupSchedules = 0
-    ) {
+    ) :bool {
         $this->validatePermissions->isAdminOrThrow($userId);
 
         $this->updateUserDeletedStatus->setDeleted($userId, $targetUserId);

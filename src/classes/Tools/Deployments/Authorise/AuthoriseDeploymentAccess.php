@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\Deployments\Projects\FetchDeploymentProjectsUsers;
 
 class AuthoriseDeploymentAccess
 {
-    private $fetchDeploymentProjectsUsers;
-    
+    private FetchDeploymentProjectsUsers $fetchDeploymentProjectsUsers;
+
     public function __construct(
         FetchDeploymentProjectsUsers $fetchDeploymentProjectsUsers
     ) {

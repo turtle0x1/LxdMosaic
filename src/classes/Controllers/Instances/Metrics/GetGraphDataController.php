@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Tools\Instances\Metrics\GetMetricsForContainer;
 
 class GetGraphDataController
 {
-    private $getMetricsForContainer;
-    
+    private GetMetricsForContainer $getMetricsForContainer;
+
     public function __construct(GetMetricsForContainer $getMetricsForContainer)
     {
         $this->getMetricsForContainer = $getMetricsForContainer;

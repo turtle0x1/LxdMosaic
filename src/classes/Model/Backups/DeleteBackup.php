@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteBackup
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function deleteBefore(\DateTimeInterface $before)
+    public function deleteBefore(\DateTimeInterface $before) :bool
     {
         $sql = "DELETE FROM
                     `Container_Backups`
@@ -27,7 +27,7 @@ class DeleteBackup
         return $do->rowCount() ? true : false;
     }
 
-    public function setDeleted(int $backupId)
+    public function setDeleted(int $backupId) :bool
     {
         $sql = "UPDATE
                     `Container_Backups`
@@ -43,7 +43,7 @@ class DeleteBackup
         return $do->rowCount() ? true : false;
     }
 
-    public function deleteForHost(int $hostId)
+    public function deleteForHost(int $hostId) :bool
     {
         $sql = "DELETE FROM
                     `Container_Backups`

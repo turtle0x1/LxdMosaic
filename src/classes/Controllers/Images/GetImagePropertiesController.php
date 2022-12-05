@@ -6,15 +6,15 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetImagePropertiesController
 {
-    private $getImageProperties;
-    
+    private GetImageProperties $getImageProperties;
+
     public function __construct(GetImageProperties $getImageProperties)
     {
         $this->getImageProperties = $getImageProperties;
     }
 
 
-    public function getAll(Host $host, string $fingerprint)
+    public function getAll(Host $host, string $fingerprint) :array
     {
         return $this->getImageProperties->getAll($host, $fingerprint);
     }
@@ -22,7 +22,7 @@ class GetImagePropertiesController
     /**
      * This is the list of proprties we support updating for an image
      */
-    public function getFiltertedList(Host $host, string $fingerprint)
+    public function getFiltertedList(Host $host, string $fingerprint) :array
     {
         return $this->getImageProperties->getFiltertedList($host, $fingerprint);
     }

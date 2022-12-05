@@ -8,8 +8,8 @@ use \DI\Container;
 
 class DeleteUserController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteUser;
-    private $container;
+    private DeleteUser $deleteUser;
+    private Container $container;
 
     public function __construct(DeleteUser $deleteUser, Container $container)
     {
@@ -27,7 +27,7 @@ class DeleteUserController implements \dhope0000\LXDClient\Interfaces\RecordActi
         int $removeApiKeys = 1,
         int $deleteAuditLogs = 0,
         int $deleteBackupSchedules = 0
-    ) {
+    ) :array {
         $this->container->call(["dhope0000\LXDClient\Model\Database\Database", "beginTransaction"]);
         $this->deleteUser->delete(
             $userId,

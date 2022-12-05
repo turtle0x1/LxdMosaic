@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\UpdateBackupSche
 
 class DeleteInstances
 {
-    private $updateBackupSchedules;
-    
+    private UpdateBackupSchedules $updateBackupSchedules;
+
     public function __construct(UpdateBackupSchedules $updateBackupSchedules)
     {
         $this->updateBackupSchedules = $updateBackupSchedules;

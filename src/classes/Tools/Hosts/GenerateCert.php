@@ -8,9 +8,9 @@ use dhope0000\LXDClient\Model\Client\LxdClient;
 
 class GenerateCert
 {
-    private $lxdClient;
-    
-    private $certSettings = [
+    private LxdClient $lxdClient;
+
+    private array $certSettings = [
         "countryName"            => "UK",
         "stateOrProvinceName"    => "Isle Of Wight",
         "localityName"           => "Cowes",
@@ -26,10 +26,10 @@ class GenerateCert
     }
 
     public function createCertAndPushToServer(
-        $urlAndPort,
-        $trustPassword,
-        $socketPath
-    ) {
+        string $urlAndPort,
+        string $trustPassword,
+        ?string $socketPath = null
+    ) :array {
         $paths = $this->createCertKeyAndCombinedPaths($urlAndPort, $socketPath);
 
         $this->generateCert($paths);
@@ -44,12 +44,19 @@ class GenerateCert
         ];
     }
 
-    private function createCertKeyAndCombinedPaths($urlAndPort, $socketPath)
+    private function createCertKeyAndCombinedPaths(string $urlAndPort, ?string $socketPath) :array
     {
         if (!empty($socketPath)) {
             $host = $urlAndPort;
         } else {
-            $host = parse_url($urlAndPort)["host"];
+            $host = parse_url($urlAndPort);
+
+            if ($host == false) {
+                throw new \Exception("Couldn't parse '$urlAndPort'", 1);
+            }
+
+
+            $host = $host["host"];
         }
 
 
@@ -60,7 +67,7 @@ class GenerateCert
         ];
     }
 
-    private function createShortPaths($pathsArray)
+    private function createShortPaths(array $pathsArray) :array
     {
         foreach ($pathsArray as $key => $path) {
             $pathsArray[$key] = str_replace($_ENV["LXD_CERTS_DIR"], "", $path);
@@ -68,7 +75,7 @@ class GenerateCert
         return $pathsArray;
     }
 
-    private function addToServer($urlAndPort, $trustPassword, $pathToCert, $socketPath)
+    private function addToServer(string $urlAndPort, string $trustPassword, string $pathToCert, ?string $socketPath)
     {
         $config = $this->lxdClient->createConfigArray($pathToCert, $socketPath);
         $config["timeout"] = 2;
@@ -76,12 +83,21 @@ class GenerateCert
         return $lxd->certificates->add(file_get_contents($pathToCert), $trustPassword);
     }
 
-    private function generateCert($paths)
+    private function generateCert(array $paths) :bool
     {
         // Generate certificate
         $privkey = openssl_pkey_new();
         $cert    = openssl_csr_new($this->certSettings, $privkey);
+
+        if ($cert == false) {
+            throw new \Exception("Couldn't generate new certificate", 1);
+        }
+
         $cert    = openssl_csr_sign($cert, null, $privkey, 365);
+
+        if ($cert == false) {
+            throw new \Exception("Couldn't sign new certificate", 1);
+        }
 
         // Generate strings
         openssl_x509_export($cert, $certString);

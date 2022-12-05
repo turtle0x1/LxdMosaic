@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\User\ResetPassword;
 
 class ResetPasswordController
 {
-    private $resetPassword;
+    private ResetPassword $resetPassword;
 
     public function __construct(ResetPassword $resetPassword)
     {

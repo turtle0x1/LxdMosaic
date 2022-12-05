@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CopyInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $copy;
-    
+    private Copy $copy;
+
     public function __construct(Copy $copy)
     {
         $this->copy = $copy;

@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteMetrics
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function deleteForInstance(int $hostId, string $instance, string $project)
+    public function deleteForInstance(int $hostId, string $instance, string $project) :bool
     {
         $sql = "DELETE FROM
                     `Instance_Metric_Values`
@@ -33,7 +33,7 @@ class DeleteMetrics
         return $do->rowCount() ? true : false;
     }
 
-    public function deleteForHost(int $hostId)
+    public function deleteForHost(int $hostId) :bool
     {
         $sql = "DELETE FROM
                     `Instance_Metric_Values`
@@ -47,7 +47,7 @@ class DeleteMetrics
         return $do->rowCount() ? true : false;
     }
 
-    public function deleteByIds(array $ids)
+    public function deleteByIds(array $ids) :bool
     {
         $qMarks = join(',', array_fill(0, count($ids), '?'));
         $sql = "DELETE FROM
@@ -60,7 +60,7 @@ class DeleteMetrics
         return $do->rowCount() ? true : false;
     }
 
-    public function deleteBefore(\DateTimeInterface $before)
+    public function deleteBefore(\DateTimeInterface $before) :bool
     {
         $sql = "DELETE FROM
                     `Instance_Metric_Values`

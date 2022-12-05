@@ -7,9 +7,9 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class GetUserOverviewController
 {
-    private $getUserOverview;
-    private $validatePermissions;
-    
+    private GetUserOverview $getUserOverview;
+    private ValidatePermissions $validatePermissions;
+
     public function __construct(
         GetUserOverview $getUserOverview,
         ValidatePermissions $validatePermissions
@@ -18,7 +18,7 @@ class GetUserOverviewController
         $this->validatePermissions = $validatePermissions;
     }
 
-    public function get(int $userId, int $targetUser)
+    public function get(int $userId, int $targetUser) :array
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         return $this->getUserOverview->get($userId, $targetUser);

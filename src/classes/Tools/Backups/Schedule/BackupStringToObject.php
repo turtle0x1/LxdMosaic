@@ -6,12 +6,12 @@ use dhope0000\LXDClient\Objects\Backups\BackupSchedule;
 
 class BackupStringToObject
 {
-    public function trimString($data)
+    public function trimString($data) :string
     {
         return trim($data);
     }
 
-    public function convertStringArrayToPhp($string)
+    public function convertStringArrayToPhp(string $string) :array
     {
         $string = str_replace("[", "", $string);
         $string = str_replace("]", "", $string);
@@ -19,10 +19,10 @@ class BackupStringToObject
     }
 
 
-    public function parseString($string) :BackupSchedule
+    public function parseString(string $string) :BackupSchedule
     {
         $this->validateString($string);
-        
+
         $parts = array_map([$this, "trimString"], explode("~", $string));
 
         $time = $parts[1];
@@ -43,7 +43,7 @@ class BackupStringToObject
             $parts[0],
             $time,
             $daysOfWeek,
-            is_numeric($parts[3]) ? $parts[3] : 0
+            (int) is_numeric($parts[3]) ? $parts[3] : 0
         );
     }
 

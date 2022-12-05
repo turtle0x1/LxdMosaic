@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $backupInstance;
+    private BackupInstance $backupInstance;
 
     public function __construct(BackupInstance $backupInstance)
     {
@@ -21,7 +21,7 @@ class BackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
         Host $host,
         string $container,
         string $backup,
-        $wait = true,
+        bool $wait = true,
         int $importAndDelete
     ) {
         $lxdRespone = $this->backupInstance->create(

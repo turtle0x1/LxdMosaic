@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\Users\Dashboard\Graphs\InsertDashboardGraph;
 
 class AddGraph
 {
-    private $insertDashboardGraph;
-    
+    private InsertDashboardGraph $insertDashboardGraph;
+
     public function __construct(InsertDashboardGraph $insertDashboardGraph)
     {
         $this->insertDashboardGraph = $insertDashboardGraph;
@@ -22,7 +22,7 @@ class AddGraph
         int $metricId,
         string $filter,
         string $range
-    ) {
+    ) :void {
         $this->insertDashboardGraph->insert(
             $dashboardId,
             $name,

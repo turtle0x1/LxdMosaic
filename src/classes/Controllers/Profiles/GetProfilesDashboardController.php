@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetProfilesDashboardController
 {
-    private $getProfilesDashboard;
+    private GetProfilesDashboard $getProfilesDashboard;
 
     public function __construct(GetProfilesDashboard $getProfilesDashboard)
     {

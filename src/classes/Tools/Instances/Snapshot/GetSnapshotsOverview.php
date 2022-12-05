@@ -7,14 +7,14 @@ use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class GetSnapshotsOverview
 {
-    private $hasExtension;
+    private HasExtension $hasExtension;
 
     public function __construct(HasExtension $hasExtension)
     {
         $this->hasExtension = $hasExtension;
     }
 
-    public function get(Host $host, string $instance)
+    public function get(Host $host, string $instance) :array
     {
         $schedule = null;
         if ($this->hasExtension->checkWithHost($host, "snapshot_scheduling")) {

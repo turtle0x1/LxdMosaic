@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StartInstancesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $startInstances;
-    
+    private StartInstances $startInstances;
+
     public function __construct(StartInstances $startInstances)
     {
         $this->startInstances = $startInstances;

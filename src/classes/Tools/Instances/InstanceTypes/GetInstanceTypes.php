@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Instances\InstanceTypes\FetchInstanceTypes;
 
 class GetInstanceTypes
 {
-    private $fetchInstanceTypes;
-    
+    private FetchInstanceTypes $fetchInstanceTypes;
+
     public function __construct(FetchInstanceTypes $fetchInstanceTypes)
     {
         $this->fetchInstanceTypes = $fetchInstanceTypes;
     }
 
-    public function getGroupedByProvider()
+    public function getGroupedByProvider() :array
     {
         $types = $this->fetchInstanceTypes->fetchAll();
         $output = [];

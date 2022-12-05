@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Tools\Instances\Devices\Proxy;
 
 class GetAllInstanceProxies
 {
-    public function get(array $devices)
+    public function get(array $devices) :array
     {
         $output = [];
         foreach ($devices as $name => $device) {

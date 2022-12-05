@@ -10,12 +10,12 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class AddHosts
 {
-    private $generateCert;
-    private $addHost;
-    private $getDetails;
-    private $lxdClient;
-    private $fetchUserDetails;
-    
+    private GenerateCert $generateCert;
+    private AddHostModel $addHost;
+    private GetDetails $getDetails;
+    private LxdClient $lxdClient;
+    private FetchUserDetails $fetchUserDetails;
+
     public function __construct(
         AddHostModel $addHost,
         GenerateCert $generateCert,
@@ -30,7 +30,7 @@ class AddHosts
         $this->fetchUserDetails = $fetchUserDetails;
     }
 
-    public function add($userId, array $hostsDetails)
+    public function add(int $userId, array $hostsDetails) :bool
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId) === "1";
 
@@ -117,9 +117,13 @@ class AddHosts
         return true;
     }
 
-    private function addSchemeAndDefaultPort($name)
+    private function addSchemeAndDefaultPort(string $name)
     {
         $parts = parse_url($name);
+
+        if ($parts == false) {
+            throw new \Exception("Couldn't parse '$name'", 1);
+        }
 
         if (!isset($parts["scheme"])) {
             $parts["scheme"] = "https://";
@@ -136,7 +140,7 @@ class AddHosts
         return $parts["scheme"] . $path . ":" . $parts["port"];
     }
 
-    private function validateDetails($host)
+    private function validateDetails(array $host)
     {
         if (isset($host["socketPath"]) && !empty($host["socketPath"])) {
             if (!isset($host["alias"]) || empty($host["alias"])) {

@@ -7,9 +7,9 @@ use dhope0000\LXDClient\Model\Instances\InstanceTypes\InsertInstanceType;
 
 class AddInstanceType
 {
-    private $fetchInstanceType;
-    private $insertInstanceType;
-    
+    private FetchInstanceType $fetchInstanceType;
+    private InsertInstanceType $insertInstanceType;
+
     public function __construct(
         FetchInstanceType $fetchInstanceType,
         InsertInstanceType $insertInstanceType
@@ -18,7 +18,7 @@ class AddInstanceType
         $this->insertInstanceType = $insertInstanceType;
     }
 
-    public function add(int $userId, int $providerId, string $name, float $cpu, float $mem)
+    public function add(int $userId, int $providerId, string $name, float $cpu, float $mem) :void
     {
         if ($this->fetchInstanceType->fetchByName($name)) {
             throw new \Exception("Already have a instance with this name, they must be globally unique", 1);

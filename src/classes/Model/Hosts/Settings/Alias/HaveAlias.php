@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class HaveAlias
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function have(int $hostId, string $alias)
+    public function have(int $hostId, string $alias) :bool
     {
         $sql = "SELECT
                     1

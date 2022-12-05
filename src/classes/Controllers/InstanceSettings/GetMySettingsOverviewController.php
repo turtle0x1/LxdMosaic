@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetMySettingsOverviewController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $getSettingsOverview;
+    private GetSettingsOverview $getSettingsOverview;
 
     public function __construct(GetSettingsOverview $getSettingsOverview)
     {

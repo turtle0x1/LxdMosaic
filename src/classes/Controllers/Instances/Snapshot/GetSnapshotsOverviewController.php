@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetSnapshotsOverviewController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $getSnapshotsOverview;
+    private GetSnapshotsOverview $getSnapshotsOverview;
 
     public function __construct(GetSnapshotsOverview $getSnapshotsOverview)
     {

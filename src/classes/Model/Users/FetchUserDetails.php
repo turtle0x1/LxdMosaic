@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class FetchUserDetails
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function adminPasswordBlank()
+    public function adminPasswordBlank() :bool
     {
         $sql = "SELECT
                     1
@@ -94,7 +94,7 @@ class FetchUserDetails
         return $do->fetchColumn();
     }
 
-    public function isFromLdap(int $userId)
+    public function isFromLdap(int $userId) :bool
     {
         $sql = "SELECT
                     1
@@ -111,7 +111,7 @@ class FetchUserDetails
         ]);
         return $do->fetch() ? true : false;
     }
-    public function isLoginDisabled(int $userId)
+    public function isLoginDisabled(int $userId) :bool
     {
         $sql = "SELECT
                     1

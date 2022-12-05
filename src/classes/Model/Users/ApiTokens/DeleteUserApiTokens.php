@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteUserApiTokens
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function deleteAllNonPermanent(int $userId)
+    public function deleteAllNonPermanent(int $userId) :bool
     {
         $sql = "DELETE FROM `User_Api_Tokens`
                 WHERE
@@ -28,7 +28,7 @@ class DeleteUserApiTokens
         return $do->rowCount() ? true : false;
     }
 
-    public function deleteAllPermanent(int $userId)
+    public function deleteAllPermanent(int $userId) :bool
     {
         $sql = "DELETE FROM `User_Api_Tokens`
                 WHERE

@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteUserDashboard
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function delete(int $dashboardId)
+    public function delete(int $dashboardId) :bool
     {
         $sql = "DELETE FROM
                     `User_Dashboards`

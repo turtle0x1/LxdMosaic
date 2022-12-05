@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetHostSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $validatePermissions;
+    private ValidatePermissions $validatePermissions;
 
     public function __construct(ValidatePermissions $validatePermissions)
     {
@@ -16,7 +16,7 @@ class GetHostSettingsController implements \dhope0000\LXDClient\Interfaces\Recor
     /**
      * @Route("", name="Get hosts settings")
      */
-    public function get($userId, Host $host)
+    public function get(int $userId, Host $host)
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         return $host->host->info()["config"];

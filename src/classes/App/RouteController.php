@@ -14,16 +14,16 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class RouteController
 {
-    private $validateToken;
-    private $userSession;
-    private $logUserIn;
-    private $routeApi;
-    private $routeView;
-    private $routeAssets;
-    private $session;
-    private $fetchUserDetails;
+    private ValidateToken $validateToken;
+    private UserSession $userSession;
+    private LogUserIn $logUserIn;
+    private RouteApi $routeApi;
+    private RouteView $routeView;
+    private RouteAssets $routeAssets;
+    private Session $session;
+    private FetchUserDetails $fetchUserDetails;
 
-    public $loginError = null;
+    public ?string $loginError = null;
 
     public function __construct(
         UserSession $userSession,
@@ -118,6 +118,11 @@ class RouteController
         $path = "";
         if (isset($explodedPath[0])) {
             $parts = parse_url($explodedPath[0]);
+
+            if ($parts == false) {
+                throw new \Exception("Couldn't parse '{$explodedPath[0]}'", 1);
+            }
+
             $path = $parts["path"];
         }
 

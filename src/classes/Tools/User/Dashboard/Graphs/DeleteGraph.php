@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Users\Dashboard\Graphs\DeleteDashboardGraph;
 
 class DeleteGraph
 {
-    private $deleteDashboardGraph;
-    
+    private DeleteDashboardGraph $deleteDashboardGraph;
+
     public function __construct(DeleteDashboardGraph $deleteDashboardGraph)
     {
         $this->deleteDashboardGraph = $deleteDashboardGraph;
     }
 
-    public function delete(int $userId, int $graphId)
+    public function delete(int $userId, int $graphId) :void
     {
         //TODO Authenticate
         $this->deleteDashboardGraph->delete($graphId);

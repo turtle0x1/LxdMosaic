@@ -3,13 +3,12 @@
 namespace dhope0000\LXDClient\Tools\User;
 
 use dhope0000\LXDClient\Model\Users\UpdateLoginStatus;
-use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class ToggleLoginStatus
 {
-    private $updateLoginStatus;
-    private $fetchUserDetails;
+    private UpdateLoginStatus $updateLoginStatus;
+    private FetchUserDetails $fetchUserDetails;
 
     public function __construct(
         UpdateLoginStatus $updateLoginStatus,
@@ -19,7 +18,7 @@ class ToggleLoginStatus
         $this->fetchUserDetails = $fetchUserDetails;
     }
 
-    public function toggle(int $targetUser, int $status)
+    public function toggle(int $targetUser, int $status) :void
     {
         $isLoginDisabled = $this->fetchUserDetails->isLoginDisabled($targetUser);
 

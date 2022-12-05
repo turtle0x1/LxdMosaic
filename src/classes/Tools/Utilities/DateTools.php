@@ -17,7 +17,7 @@ class DateTools
         string $keyPrefix = '',
         bool $stopAtNow = false,
         int $startMinute = 0
-    ) {
+    ) :array {
         $times = array();
         $x = (int) (new \DateTimeImmutable())->format("Hi");
         for ($h = $startHour; $h < $endHour; $h++) {

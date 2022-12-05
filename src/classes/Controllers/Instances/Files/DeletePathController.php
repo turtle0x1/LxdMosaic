@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeletePathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deletePath;
+    private DeletePath $deletePath;
 
     public function __construct(DeletePath $deletePath)
     {

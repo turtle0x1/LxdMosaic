@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AttachVolumesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $attachVolumes;
+    private AttachVolumes $attachVolumes;
 
     public function __construct(AttachVolumes $attachVolumes)
     {

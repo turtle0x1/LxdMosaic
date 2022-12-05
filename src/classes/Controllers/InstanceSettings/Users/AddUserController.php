@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\User\AddUser;
 
 class AddUserController
 {
-    private $addUser;
+    private AddUser $addUser;
 
     public function __construct(AddUser $addUser)
     {

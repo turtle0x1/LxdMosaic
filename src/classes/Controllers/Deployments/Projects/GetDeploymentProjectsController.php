@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetDeploymentProjectsController
 {
-    private $authoriseDeploymentAccess;
-    private $fetchDeploymentProjects;
+    private AuthoriseDeploymentAccess $authoriseDeploymentAccess;
+    private FetchDeploymentProjects $fetchDeploymentProjects;
 
     public function __construct(AuthoriseDeploymentAccess $authoriseDeploymentAccess, FetchDeploymentProjects $fetchDeploymentProjects)
     {
@@ -19,7 +19,7 @@ class GetDeploymentProjectsController
     /**
      * @Route("", name="Get Deployment Projects")
      */
-    public function get(int $userId, int $deploymentId)
+    public function get(int $userId, int $deploymentId) :array
     {
         $this->authoriseDeploymentAccess->authorise($userId, $deploymentId);
         return $this->fetchDeploymentProjects->fetchAll($deploymentId);

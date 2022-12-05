@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertUserProject
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function putUsersOnProjectToProject(int $hostId, string $oldProject, string $newProject)
+    public function putUsersOnProjectToProject(int $hostId, string $oldProject, string $newProject) :bool
     {
         $sql = "UPDATE
                     `User_Host_Projects`
@@ -33,7 +33,7 @@ class InsertUserProject
         return $do->rowCount() ? true : false;
     }
 
-    public function insert(int $userId, int $hostId, string $project)
+    public function insert(int $userId, int $hostId, string $project) :bool
     {
         $mod = isset($_ENV["DB_SQLITE"]) && !empty($_ENV["DB_SQLITE"]) ? "CONFLICT(UHP_User_ID, UHP_Host_ID) DO UPDATE SET UHP_Project = :project;" : "DUPLICATE KEY UPDATE `UHP_Project` = :project";
         $sql = "INSERT INTO `User_Host_Projects`(

@@ -5,14 +5,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class UpdateHost
 {
-    private $database;
+    private \PDO $database;
 
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function updateCertificateDetails(int $hostId, string $keyPath, string $certPath, string $combinedPath)
+    public function updateCertificateDetails(int $hostId, string $keyPath, string $certPath, string $combinedPath) :bool
     {
         $sql = "UPDATE `Hosts` SET
                     `Host_Key_File` = :keyPath,

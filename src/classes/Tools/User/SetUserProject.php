@@ -7,9 +7,9 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class SetUserProject
 {
-    private $insertUserProject;
-    private $validatePermissions;
-    
+    private InsertUserProject $insertUserProject;
+    private ValidatePermissions $validatePermissions;
+
     public function __construct(
         InsertUserProject $insertUserProject,
         ValidatePermissions $validatePermissions
@@ -18,7 +18,7 @@ class SetUserProject
         $this->validatePermissions = $validatePermissions;
     }
 
-    public function set(int $userId, int $hostId, string $project)
+    public function set(int $userId, int $hostId, string $project) :void
     {
         $this->validatePermissions->canAccessHostProjectOrThrow($userId, $hostId, $project);
 

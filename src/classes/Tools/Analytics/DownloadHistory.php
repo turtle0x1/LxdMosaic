@@ -7,9 +7,9 @@ use dhope0000\LXDClient\Model\Analytics\FetchLatestData;
 
 class DownloadHistory
 {
-    private $validatePermissions;
-    private $fetchLatestData;
-    
+    private ValidatePermissions $validatePermissions;
+    private FetchLatestData $fetchLatestData;
+
     public function __construct(
         ValidatePermissions $validatePermissions,
         FetchLatestData $fetchLatestData
@@ -18,7 +18,7 @@ class DownloadHistory
         $this->fetchLatestData = $fetchLatestData;
     }
 
-    public function download(int $userId)
+    public function download(int $userId) :array
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         return $this->fetchLatestData->fetchAll();

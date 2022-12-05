@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\User\Dashboard\Graphs\AddGraph;
 
 class AddGraphController
 {
-    private $addGraph;
+    private AddGraph $addGraph;
 
     public function __construct(AddGraph $addGraph)
     {
@@ -22,7 +22,7 @@ class AddGraphController
         int $metricId,
         string $filter,
         string  $range
-    ) {
+    ) :array {
         $this->addGraph->add(
             $userId,
             $dashboardId,

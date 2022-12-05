@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteRemoteBackup;
+    private DeleteRemoteBackup $deleteRemoteBackup;
 
     public function __construct(DeleteRemoteBackup $deleteRemoteBackup)
     {

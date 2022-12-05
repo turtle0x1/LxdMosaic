@@ -7,16 +7,16 @@ use dhope0000\LXDClient\Model\Users\FetchUsers;
 
 class SearchUsers
 {
-    private $validatePermissions;
-    private $fetchUsers;
-    
+    private ValidatePermissions $validatePermissions;
+    private FetchUsers $fetchUsers;
+
     public function __construct(ValidatePermissions $validatePermissions, FetchUsers $fetchUsers)
     {
         $this->validatePermissions = $validatePermissions;
         $this->fetchUsers = $fetchUsers;
     }
 
-    public function search(int $userId, string $search)
+    public function search(int $userId, string $search) :array
     {
         $this->validatePermissions->isAdminOrThrow($userId);
 

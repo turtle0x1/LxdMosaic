@@ -16,13 +16,13 @@ use dhope0000\LXDClient\Exceptions\Users\DisabledUserAttemptedLogin;
 
 class LogUserIn
 {
-    private $fetchUserDetails;
-    private $insertToken;
-    private $session;
-    private $fetchAllowedProjects;
-    private $getSetting;
-    private $ldap;
-    
+    private FetchUserDetails $fetchUserDetails;
+    private InsertToken $insertToken;
+    private Session $session;
+    private FetchAllowedProjects $fetchAllowedProjects;
+    private GetSetting $getSetting;
+    private Ldap $ldap;
+
     public function __construct(
         FetchUserDetails $fetchUserDetails,
         InsertToken $insertToken,
@@ -39,7 +39,7 @@ class LogUserIn
         $this->ldap = $ldap;
     }
 
-    public function login(string $username, string $password)
+    public function login(string $username, string $password) :bool
     {
         $isLdapUser = !is_null($this->fetchUserDetails->fetchLdapId($username));
         $passwordHash = $this->fetchUserDetails->fetchHash($username);
@@ -61,16 +61,18 @@ class LogUserIn
                 throw new PasswordIncorrectException($username);
             }
         } elseif ($isLdapUser || $haveLdapServer) {
+            if (!$haveLdapServer) {
+                throw new \Exception("Can't login right now - contact admin", 1);
+            }
+
             try {
-                $ldapconn = $this->ldap->getAdminBoundConnection($server);
+                $ldapconn = $this->ldap->getAdminBoundConnection();
             } catch (\Throwable $e) {
                 throw new \Exception("Can't login right now - contact admin", 1);
             }
             // Will throw if cant find user / cant bind & gives us back a
             // username that we should be able to fetch from DB
             $username = $this->ldap->verifyAccount($ldapconn, $username, $password);
-        } elseif ($isLdapUser || !$haveLdapServer) {
-            throw new \Exception("Can't login right now - contact admin", 1);
         }
 
         $userId = $this->fetchUserDetails->fetchId($username);

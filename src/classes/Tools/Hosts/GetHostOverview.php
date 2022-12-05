@@ -2,7 +2,6 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts;
 
-use dhope0000\LXDClient\Tools\Instances\GetHostsInstances;
 use dhope0000\LXDClient\Tools\Hosts\GetResources;
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
@@ -13,22 +12,19 @@ use dhope0000\LXDClient\Tools\ProjectAnalytics\GetGraphableProjectAnalytics;
 
 class GetHostOverview
 {
-    private $getHostsInstances;
-    private $getResources;
-    private $hasExtension;
-    private $fetchUserDetails;
-    private $fetchAllowedProjects;
-    private $getGraphableProjectAnalytics;
-    
+    private GetResources $getResources;
+    private HasExtension $hasExtension;
+    private FetchUserDetails $fetchUserDetails;
+    private FetchAllowedProjects $fetchAllowedProjects;
+    private GetGraphableProjectAnalytics $getGraphableProjectAnalytics;
+
     public function __construct(
-        GetHostsInstances $getHostsInstances,
         GetResources $getResources,
         HasExtension $hasExtension,
         FetchUserDetails $fetchUserDetails,
         FetchAllowedProjects $fetchAllowedProjects,
         GetGraphableProjectAnalytics $getGraphableProjectAnalytics
     ) {
-        $this->getHostsInstances = $getHostsInstances;
         $this->getResources = $getResources;
         $this->hasExtension = $hasExtension;
         $this->fetchUserDetails = $fetchUserDetails;

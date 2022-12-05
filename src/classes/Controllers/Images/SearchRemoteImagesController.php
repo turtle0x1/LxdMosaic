@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Tools\Images\SearchRemoteImages;
 
 class SearchRemoteImagesController
 {
-    private $getImages;
-    
+    private SearchRemoteImages $getImages;
+
     public function __construct(SearchRemoteImages $searchRemoteImages)
     {
         $this->getImages = $searchRemoteImages;
     }
 
-    public function get($urlKey, $searchType, $searchArch)
+    public function get(string $urlKey, string $searchType, string $searchArch) :array
     {
         return $this->getImages->get($urlKey, $searchType, $searchArch);
     }

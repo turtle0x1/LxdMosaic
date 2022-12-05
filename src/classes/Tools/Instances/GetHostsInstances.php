@@ -9,9 +9,9 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetHostsInstances
 {
-    private $hostList;
-    private $hasExtension;
-    
+    private HostList $hostList;
+    private HasExtension $hasExtension;
+
     public function __construct(HostList $hostList, HasExtension $hasExtension)
     {
         $this->hostList = $hostList;

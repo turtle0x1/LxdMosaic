@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class UpdatePhoneHomeTime
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function update(int $deploymentId, string $name)
+    public function update(int $deploymentId, string $name) :bool
     {
         $sql = "UPDATE
                     `Deployment_Containers`

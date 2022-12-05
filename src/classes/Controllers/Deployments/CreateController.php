@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $createDeployment;
-    
+    private CreateDeployment $createDeployment;
+
     public function __construct(CreateDeployment $createDeployment)
     {
         $this->createDeployment = $createDeployment;
@@ -16,7 +16,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Create Deployment")
      */
-    public function create(string $name, array $cloudConfigs)
+    public function create(string $name, array $cloudConfigs) :array
     {
         $deploymentId = $this->createDeployment->create($name, $cloudConfigs);
         return [

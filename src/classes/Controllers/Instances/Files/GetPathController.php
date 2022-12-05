@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $getPath;
+    private GetPath $getPath;
 
     public function __construct(GetPath $getPath)
     {
@@ -21,7 +21,7 @@ class GetPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
         Host $host,
         string $container,
         string $path,
-        $download
+        bool $download
     ) {
         return $this->getPath->get($host, $container, $path, (int) $download);
     }

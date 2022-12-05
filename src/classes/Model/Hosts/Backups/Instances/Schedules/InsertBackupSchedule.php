@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertBackupSchedule
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -21,7 +21,7 @@ class InsertBackupSchedule
         string $schedule,
         int $strategyId,
         int $retention
-    ) {
+    ) :bool {
         $sql = "INSERT INTO `Instance_Backup_Schedule`
                 (
                     `IBS_User_ID`,

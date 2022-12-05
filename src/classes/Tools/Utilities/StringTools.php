@@ -18,10 +18,15 @@ class StringTools
      *                         to select from
      * @return string
      */
-    public static function random($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    public static function random($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') :string
     {
         $pieces = [];
         $max = mb_strlen($keyspace, '8bit') - 1;
+
+        if ($max <= 0) {
+            throw new \Exception("Keyspace length must be > 0", 1);
+        }
+
         for ($i = 0; $i < $length; ++$i) {
             $pieces []= $keyspace[random_int(0, $max)];
         }
@@ -31,7 +36,7 @@ class StringTools
     /**
      * https://stackoverflow.com/a/2790919/4008082
      */
-    public function stringStartsWith(string $string, string $query)
+    public function stringStartsWith(string $string, string $query) :bool
     {
         return substr($string, 0, strlen($query)) === $query;
     }
@@ -39,7 +44,7 @@ class StringTools
     /**
      * https://stackoverflow.com/a/9826656/4008082
      */
-    public static function getStringBetween(string $string, string $start, string $end)
+    public static function getStringBetween(string $string, string $start, string $end) :string
     {
         $string = ' ' . $string;
         $ini = strpos($string, $start);
@@ -51,10 +56,14 @@ class StringTools
         return substr($string, $ini, $len);
     }
 
-    public static function usedByStringsToLinks(Host $host, array $usedBy)
+    public static function usedByStringsToLinks(Host $host, array $usedBy) :array
     {
         foreach ($usedBy as $index => $item) {
             $parts = parse_url($item);
+
+            if ($parts == false) {
+                throw new \Exception("Couldn't parse '$item'", 1);
+            }
 
             $query = [];
 
@@ -69,7 +78,7 @@ class StringTools
             $itemProject = "default";
 
             if (isset($query["project"])) {
-                $itemProject = $query["project"];
+                $itemProject = (string) $query["project"];
             }
 
             $icon = "";

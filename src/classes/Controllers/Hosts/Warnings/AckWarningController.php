@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\Hosts\Warnings\AckWarning;
 
 class AckWarningController
 {
-    private $ackWarning;
+    private AckWarning $ackWarning;
 
     public function __construct(AckWarning $ackWarning)
     {

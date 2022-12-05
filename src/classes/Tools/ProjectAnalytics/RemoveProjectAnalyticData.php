@@ -8,17 +8,14 @@ use dhope0000\LXDClient\Model\ProjectAnalytics\DeleteAnalytics;
 
 class RemoveProjectAnalyticData
 {
-    private $getSetting;
-    private $instanceSettingsKeys;
-    private $deleteAnalytics;
+    private GetSetting $getSetting;
+    private DeleteAnalytics $deleteAnalytics;
 
     public function __construct(
         GetSetting $getSetting,
-        InstanceSettingsKeys $instanceSettingsKeys,
         DeleteAnalytics $deleteAnalytics
     ) {
         $this->getSetting = $getSetting;
-        $this->instanceSettingsKeys = $instanceSettingsKeys;
         $this->deleteAnalytics = $deleteAnalytics;
     }
 

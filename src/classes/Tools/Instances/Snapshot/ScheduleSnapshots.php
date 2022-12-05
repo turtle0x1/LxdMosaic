@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class ScheduleSnapshots
 {
-    private $hasExtension;
+    private HasExtension $hasExtension;
 
     public function __construct(HasExtension $hasExtension)
     {
@@ -21,7 +21,7 @@ class ScheduleSnapshots
         string $pattern,
         string $expiry,
         int $snapshotStopped
-    ) {
+    ) :void {
         if (!$this->hasExtension->checkWithHost($host, "snapshot_scheduling")) {
             throw new \Exception("Host doesn't support scheduling", 1);
         }

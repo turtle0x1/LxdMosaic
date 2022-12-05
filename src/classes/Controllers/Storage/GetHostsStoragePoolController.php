@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetHostsStoragePoolController
 {
-    private $getStoragePool;
-    
+    private GetStoragePool $getStoragePool;
+
     public function __construct(GetStoragePool $getStoragePool)
     {
         $this->getStoragePool = $getStoragePool;

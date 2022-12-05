@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class UpdateStartTimes
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function updateFirstStart(int $deploymentId, int $hostId, string  $name)
+    public function updateFirstStart(int $deploymentId, int $hostId, string  $name) :bool
     {
         $sql = "UPDATE
                     `Deployment_Containers`
@@ -37,7 +37,7 @@ class UpdateStartTimes
         return $do->rowCount() ? true : false;
     }
 
-    public function updateLastStart(int $deploymentId, int $hostId, string  $name)
+    public function updateLastStart(int $deploymentId, int $hostId, string  $name) :bool
     {
         $sql = "UPDATE
                     `Deployment_Containers`

@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertAnalytic
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -20,7 +20,7 @@ class InsertAnalytic
         int $typeId,
         int $value,
         ?int $limit
-    ) {
+    ) :bool {
         $sql = "INSERT INTO `Project_Analytics` (
                     `PA_Date_Created`,
                     `PA_Host_ID`,

@@ -16,13 +16,13 @@ use dhope0000\LXDClient\Tools\Utilities\ValidateInstanceName;
 
 class Deploy
 {
-    private $authoriseDeploymentAccess;
-    private $deployToProfile;
-    private $hostHaveDeploymentProfiles;
-    private $createInstance;
-    private $getConfig;
-    private $storeDeployedContainerNames;
-    private $getDetails;
+    private AuthoriseDeploymentAccess $authoriseDeploymentAccess;
+    private DeployToProfile $deployToProfile;
+    private HostHaveDeploymentProfiles $hostHaveDeploymentProfiles;
+    private CreateInstance $createInstance;
+    private GetConfig $getConfig;
+    private StoreDeployedContainerNames $storeDeployedContainerNames;
+    private GetDetails $getDetails;
 
     public function __construct(
         AuthoriseDeploymentAccess $authoriseDeploymentAccess,
@@ -42,7 +42,7 @@ class Deploy
         $this->getDetails = $getDetails;
     }
 
-    public function deploy(int $userId, int $deploymentId, array $instances)
+    public function deploy(int $userId, int $deploymentId, array $instances) :array
     {
         $this->authoriseDeploymentAccess->authorise($userId, $deploymentId);
         $this->validateInstances($instances);
@@ -106,7 +106,7 @@ class Deploy
         ];
     }
 
-    private function deployProfile(HostsCollection $hostCollection, int $deploymentId, int $revId)
+    private function deployProfile(HostsCollection $hostCollection, int $deploymentId, int $revId) :string
     {
         $profileName = StringTools::random(12);
         $this->deployToProfile->deployToHosts(
@@ -122,7 +122,7 @@ class Deploy
         return $profileName;
     }
 
-    public function getImageDetails($revIds)
+    public function getImageDetails($revIds) :array
     {
         $imageDetails = [];
         foreach ($revIds as $revId) {
@@ -135,7 +135,7 @@ class Deploy
         return $imageDetails;
     }
 
-    private function generateInstanceName()
+    private function generateInstanceName() :string
     {
         try {
             $name = StringTools::random(12);
@@ -148,7 +148,7 @@ class Deploy
         }
     }
 
-    public function validateInstances(array $instances)
+    public function validateInstances(array $instances) :bool
     {
         foreach ($instances as $instance) {
             if (!isset($instance["revId"]) || !is_numeric($instance["revId"])) {

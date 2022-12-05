@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteUserProject
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function removeFromProject(int $userId, int $hostId, string $project)
+    public function removeFromProject(int $userId, int $hostId, string $project) :bool
     {
         $sql = "DELETE FROM
                     `User_Host_Projects`
@@ -33,7 +33,7 @@ class DeleteUserProject
         return $do->rowCount() ? true : false;
     }
 
-    public function deleteForHost(int $hostId)
+    public function deleteForHost(int $hostId) :bool
     {
         $sql = "DELETE FROM
                     `User_Host_Projects`
@@ -47,7 +47,7 @@ class DeleteUserProject
         return $do->rowCount() ? true : false;
     }
 
-    public function removeAllUsersFromProject(int $hostId, string $project)
+    public function removeAllUsersFromProject(int $hostId, string $project) :bool
     {
         $sql = "DELETE FROM
                     `User_Host_Projects`

@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertDeploymentContainer
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function insert(int $deploymentId, int $hostId, string $name)
+    public function insert(int $deploymentId, int $hostId, string $name) :bool
     {
         $sql = "INSERT INTO `Deployment_Containers` (
                     `DC_Deployment_ID`,

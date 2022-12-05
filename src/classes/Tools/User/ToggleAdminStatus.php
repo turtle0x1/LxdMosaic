@@ -8,8 +8,8 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class ToggleAdminStatus
 {
-    private $updateAdminStatus;
-    private $fetchUserDetails;
+    private UpdateAdminStatus $updateAdminStatus;
+    private FetchUserDetails $fetchUserDetails;
 
     public function __construct(
         UpdateAdminStatus $updateAdminStatus,
@@ -19,7 +19,7 @@ class ToggleAdminStatus
         $this->fetchUserDetails = $fetchUserDetails;
     }
 
-    public function toggle(int $targetUser, int $status)
+    public function toggle(int $targetUser, int $status) :void
     {
         $isAlreadyAdmin = $this->fetchUserDetails->isAdmin($targetUser);
 

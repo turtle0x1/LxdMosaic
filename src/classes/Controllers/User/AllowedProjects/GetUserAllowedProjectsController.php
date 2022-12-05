@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetUserAllowedProjectsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $getUserAllowedProjects;
+    private GetUserAllowedProjects $getUserAllowedProjects;
 
     public function __construct(GetUserAllowedProjects $getUserAllowedProjects)
     {
@@ -16,7 +16,7 @@ class GetUserAllowedProjectsController implements \dhope0000\LXDClient\Interface
     /**
      * @Route("", name="Get a users allowed projects")
      */
-    public function get(int $userId, int $targetUser)
+    public function get(int $userId, int $targetUser) :array
     {
         return $this->getUserAllowedProjects->get($userId, $targetUser);
     }

@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetResources
 {
-    private $hasExtension;
-    
+    private HasExtension $hasExtension;
+
     public function __construct(HasExtension $hasExtension)
     {
         $this->hasExtension = $hasExtension;
     }
 
-    public function getHostExtended(Host $host)
+    public function getHostExtended(Host $host) :array
     {
         $details = $host->resources->info();
 

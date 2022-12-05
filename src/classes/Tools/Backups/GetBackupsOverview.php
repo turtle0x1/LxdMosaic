@@ -8,9 +8,9 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetBackupsOverview
 {
-    private $fetchBackups;
-    private $getHostInstanceStatusForBackupSet;
-    private $fetchUserDetails;
+    private FetchBackups $fetchBackups;
+    private GetHostInstanceStatusForBackupSet $getHostInstanceStatusForBackupSet;
+    private FetchUserDetails $fetchUserDetails;
 
     public function __construct(
         FetchBackups $fetchBackups,
@@ -22,7 +22,7 @@ class GetBackupsOverview
         $this->fetchUserDetails = $fetchUserDetails;
     }
 
-    public function get($userId)
+    public function get(int $userId) :array
     {
         if ($this->fetchUserDetails->isAdmin($userId)) {
             $allBackups = $this->fetchBackups->fetchAll();
@@ -41,7 +41,7 @@ class GetBackupsOverview
         ];
     }
 
-    private function getProperties(array $backups)
+    private function getProperties(array $backups) :array
     {
         $sizeByMonthYear = [];
         $filesByMonthYear = [];
@@ -52,8 +52,8 @@ class GetBackupsOverview
             $year = $date->format("Y");
 
             if (!isset($sizeByMonthYear[$year])) {
-                $this->createYearArray($sizeByMonthYear, $year);
-                $this->createYearArray($filesByMonthYear, $year);
+                $this->createYearArray($sizeByMonthYear, (int) $year);
+                $this->createYearArray($filesByMonthYear, (int) $year);
             }
 
 
@@ -81,7 +81,7 @@ class GetBackupsOverview
         ];
     }
 
-    private function createYearArray(&$array, $year)
+    private function createYearArray(array &$array, int $year) :void
     {
         $array[$year] = array_fill(1, 12, null);
     }

@@ -9,9 +9,9 @@ use dhope0000\LXDClient\Model\Hosts\GetDetails;
 
 class DownloadFile
 {
-    private $lxdClient;
-    private $getDetails;
-    
+    private LxdClient $lxdClient;
+    private GetDetails $getDetails;
+
     public function __construct(LxdClient $lxdClient, GetDetails $getDetails)
     {
         $this->lxdClient = $lxdClient;

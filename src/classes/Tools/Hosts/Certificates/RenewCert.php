@@ -7,9 +7,9 @@ use dhope0000\LXDClient\Model\Hosts\UpdateHost;
 
 class RenewCert
 {
-    private $updateHost;
+    private UpdateHost $updateHost;
 
-    private $certSettings = [
+    private array $certSettings = [
         "countryName"            => "UK",
         "stateOrProvinceName"    => "London",
         "localityName"           => "London",
@@ -24,7 +24,7 @@ class RenewCert
         $this->updateHost = $updateHost;
     }
 
-    public function renew(Host $host)
+    public function renew(Host $host) :bool
     {
         $certificate = $this->generateCert();
 
@@ -42,13 +42,20 @@ class RenewCert
         return true;
     }
 
-    private function generateCert()
+    private function generateCert() :array
     {
         // Generate certificate
         $privkey = openssl_pkey_new();
         $cert    = openssl_csr_new($this->certSettings, $privkey);
-        $cert    = openssl_csr_sign($cert, null, $privkey, 365);
 
+        if ($cert == false) {
+            throw new \Exception("Couldn't generate new certificate", 1);
+        }
+
+        $cert    = openssl_csr_sign($cert, null, $privkey, 365);
+        if ($cert == false) {
+            throw new \Exception("Couldn't sign new certificate", 1);
+        }
         // Generate strings
         openssl_x509_export($cert, $certString);
         openssl_pkey_export($privkey, $privkeyString);
@@ -60,7 +67,7 @@ class RenewCert
         ];
     }
 
-    private function writeCert($host, $cert)
+    private function writeCert(Host $host, array $cert) :bool
     {
         if (file_put_contents($_ENV["LXD_CERTS_DIR"] . $host->getAlias() . ".key", $cert["key"])  != true) {
             throw new \Exception("Couldn't store key file", 1);

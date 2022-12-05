@@ -7,9 +7,9 @@ use dhope0000\LXDClient\Model\Hosts\HostList;
 
 class GetClustersAndStandaloneHosts
 {
-    private $getAllClusters;
-    private $hostList;
-    
+    private GetAllClusters $getAllClusters;
+    private HostList $hostList;
+
     public function __construct(
         GetAllClusters $getAllClusters,
         HostList $hostList

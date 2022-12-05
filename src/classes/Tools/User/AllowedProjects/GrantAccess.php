@@ -10,11 +10,11 @@ use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 
 class GrantAccess
 {
-    private $validatePermissions;
-    private $fetchUserDetails;
-    private $insertUserAccess;
-    private $fetchAllowedProjects;
-    
+    private ValidatePermissions $validatePermissions;
+    private FetchUserDetails $fetchUserDetails;
+    private InsertUserAccess $insertUserAccess;
+    private FetchAllowedProjects $fetchAllowedProjects;
+
     public function __construct(
         ValidatePermissions $validatePermissions,
         FetchUserDetails $fetchUserDetails,
@@ -27,7 +27,7 @@ class GrantAccess
         $this->fetchAllowedProjects = $fetchAllowedProjects;
     }
 
-    public function grant(int $userId, int $targetUserId, array $hosts, array $projects)
+    public function grant(int $userId, int $targetUserId, array $hosts, array $projects) :bool
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         $isAdmin = (bool) $this->fetchUserDetails->isAdmin($targetUserId);

@@ -8,7 +8,7 @@ use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 class GetProfilesDashboard
 {
     private $universe;
-    
+
     public function __construct(Universe $universe)
     {
         $this->universe = $universe;
@@ -91,7 +91,7 @@ class GetProfilesDashboard
                 return 0;
             }
 
-            return $aC < $bC;
+            return $aC < $bC ? 1 : -1;
         });
 
         return $output;

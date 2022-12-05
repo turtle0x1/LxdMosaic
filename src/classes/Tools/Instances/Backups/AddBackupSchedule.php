@@ -8,9 +8,9 @@ use dhope0000\LXDClient\Objects\Host;
 
 class AddBackupSchedule
 {
-    private $insertBackupSchedule;
-    private $updateBackupSchedules;
-    
+    private InsertBackupSchedule $insertBackupSchedule;
+    private UpdateBackupSchedules $updateBackupSchedules;
+
     public function __construct(
         InsertBackupSchedule $insertBackupSchedule,
         UpdateBackupSchedules $updateBackupSchedules
@@ -20,7 +20,7 @@ class AddBackupSchedule
     }
 
     public function add(
-        string $userId,
+        int $userId,
         Host $host,
         string $instance,
         string $frequency,

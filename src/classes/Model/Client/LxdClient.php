@@ -11,11 +11,11 @@ use dhope0000\LXDClient\Model\Hosts\GetDetails;
 
 class LxdClient
 {
-    private $routeApi;
-    private $getUserProject;
-    private $getDetails;
-    
-    private $clientBag = [];
+    private RouteApi $routeApi;
+    private GetUserProject $getUserProject;
+    private GetDetails $getDetails;
+
+    private array $clientBag = [];
 
     public function __construct(
         RouteApi $routeApi,
@@ -27,7 +27,7 @@ class LxdClient
         $this->getDetails = $getDetails;
     }
 
-    public function getClientWithHost(Host $host, $checkCache = true, $setProject = true)
+    public function getClientWithHost(Host $host, bool $checkCache = true, bool $setProject = true) :Client
     {
         if ($checkCache && isset($this->clientBag[$host->getUrl()])) {
             return $this->clientBag[$host->getUrl()];
@@ -55,12 +55,12 @@ class LxdClient
         return $client;
     }
 
-    private function createFullcertPath(string $certName)
+    private function createFullcertPath(string $certName) :string
     {
         return $_ENV["LXD_CERTS_DIR"] . $certName;
     }
 
-    public function createConfigArray($certLocation, $socketPath)
+    public function createConfigArray(string $certLocation, ?string $socketPath) :array
     {
         $certPath = realpath($certLocation);
 
@@ -85,7 +85,7 @@ class LxdClient
         return $config;
     }
 
-    public function createNewClient($urlAndPort, $config)
+    public function createNewClient(string $urlAndPort, array $config) :Client
     {
         $s = $urlAndPort;
         if (isset($config["curl"]) && isset($config["curl"][CURLOPT_UNIX_SOCKET_PATH])) {

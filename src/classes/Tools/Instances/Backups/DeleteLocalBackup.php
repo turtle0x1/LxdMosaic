@@ -8,9 +8,9 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class DeleteLocalBackup
 {
-    private $fetchBackup;
-    private $deleteBackup;
-    private $validatePermissions;
+    private FetchBackup $fetchBackup;
+    private DeleteBackup $deleteBackup;
+    private ValidatePermissions $validatePermissions;
 
     public function __construct(
         FetchBackup $fetchBackup,

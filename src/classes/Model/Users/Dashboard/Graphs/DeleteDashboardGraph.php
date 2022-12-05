@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteDashboardGraph
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function delete(int $graphId)
+    public function delete(int $graphId) :bool
     {
         $sql = "DELETE FROM
                     `User_Dashboard_Graphs`

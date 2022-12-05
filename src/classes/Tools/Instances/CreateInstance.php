@@ -9,9 +9,9 @@ use dhope0000\LXDClient\Model\Instances\InstanceTypes\FetchInstanceType;
 
 class CreateInstance
 {
-    private $hostsHaveInstance;
-    private $importImageIfNotHave;
-    private $fetchInstanceType;
+    private HostsHaveInstance $hostsHaveInstance;
+    private ImportImageIfNotHave $importImageIfNotHave;
+    private FetchInstanceType $fetchInstanceType;
 
     public function __construct(
         HostsHaveInstance $hostsHaveInstance,
@@ -83,11 +83,11 @@ class CreateInstance
 
 
     private function createOptionsArray(
-        $type,
-        $profiles,
-        $imageDetails,
-        $server = "",
-        $instanceType = "",
+        string $type,
+        array $profiles,
+        array $imageDetails,
+        string $server = "",
+        string $instanceType = "",
         array $gpus = null,
         array $config = []
     ) {

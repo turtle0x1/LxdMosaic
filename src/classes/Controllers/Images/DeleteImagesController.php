@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteImagesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteImages;
-    
+    private DeleteImages $deleteImages;
+
     public function __construct(DeleteImages $deleteImages)
     {
         $this->deleteImages = $deleteImages;
@@ -16,7 +16,7 @@ class DeleteImagesController implements \dhope0000\LXDClient\Interfaces\RecordAc
     /**
      * @Route("", name="Delete Images From Hosts")
      */
-    public function delete(int $userId, $imageData)
+    public function delete(int $userId, array $imageData) :array
     {
         $lxdResponse = $this->deleteImages->delete($userId, $imageData);
         return ["state"=>"success", "message"=>"Deleting Image", "lxdResponse"=>$lxdResponse];

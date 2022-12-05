@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class AttachVolumes
 {
-    private $validatePermissions;
+    private ValidatePermissions $validatePermissions;
 
     public function __construct(ValidatePermissions $validatePermissions)
     {
@@ -20,7 +20,7 @@ class AttachVolumes
         array $volume,
         string $name,
         string $path
-    ) {
+    ) :void {
         $this->validateVolume($volume);
         $this->validatePermissions->canAccessHostProjectOrThrow($userId, $host->getHostId(), $volume["project"]);
 
@@ -36,7 +36,7 @@ class AttachVolumes
             "type"=>"disk",
             "path"=>$path
         ];
-        
+
         $result = $host->instances->replace($container, $instanceConfig, true);
 
         if (isset($result["err"]) && $result["err"] !== "") {

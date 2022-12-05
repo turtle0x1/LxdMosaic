@@ -8,10 +8,10 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetDeployments
 {
-    private $fetchDeployments;
-    private $getDeployment;
-    private $fetchUserDetails;
-    
+    private FetchDeployments $fetchDeployments;
+    private GetDeployment $getDeployment;
+    private FetchUserDetails $fetchUserDetails;
+
     public function __construct(
         FetchDeployments $fetchDeployments,
         GetDeployment $getDeployment,
@@ -22,7 +22,7 @@ class GetDeployments
         $this->fetchUserDetails = $fetchUserDetails;
     }
 
-    public function getAll(int $userId)
+    public function getAll(int $userId) :array
     {
         $deploymentList = [];
 
@@ -35,7 +35,7 @@ class GetDeployments
         return $this->addDetails($userId, $deploymentList);
     }
 
-    private function addDetails($userId, $deploymentList)
+    private function addDetails(int $userId, array $deploymentList) :array
     {
         foreach ($deploymentList as $index =>$deployment) {
             $details = $this->getDeployment->get($userId, $deployment["id"]);
@@ -45,7 +45,7 @@ class GetDeployments
         return $deploymentList;
     }
 
-    private function getContainerDetails($containerDetails)
+    private function getContainerDetails(array $containerDetails) :array
     {
         $totalMem = 0;
         $totalContainers = 0;

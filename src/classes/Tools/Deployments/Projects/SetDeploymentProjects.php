@@ -10,11 +10,11 @@ use dhope0000\LXDClient\Model\Deployments\Projects\DeleteDeploymentProject;
 
 class SetDeploymentProjects
 {
-    private $authoriseDeploymentAccess;
-    private $validatePermissions;
-    private $fetchDeploymentProjects;
-    private $insertDeploymentProject;
-    private $deleteDeploymentProject;
+    private AuthoriseDeploymentAccess $authoriseDeploymentAccess;
+    private ValidatePermissions $validatePermissions;
+    private FetchDeploymentProjects $fetchDeploymentProjects;
+    private InsertDeploymentProject $insertDeploymentProject;
+    private DeleteDeploymentProject $deleteDeploymentProject;
 
     public function __construct(
         AuthoriseDeploymentAccess $authoriseDeploymentAccess,

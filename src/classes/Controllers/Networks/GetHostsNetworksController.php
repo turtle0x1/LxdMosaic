@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Tools\Networks\GetHostsNetworks;
 
 class GetHostsNetworksController
 {
-    private $getHostsNetworks;
-    
+    private GetHostsNetworks $getHostsNetworks;
+
     public function __construct(GetHostsNetworks $getHostsNetworks)
     {
         $this->getHostsNetworks = $getHostsNetworks;
     }
 
-    public function get(int $userId)
+    public function get(int $userId) :array
     {
         return $this->getHostsNetworks->getAll($userId);
     }

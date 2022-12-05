@@ -7,9 +7,9 @@ use dhope0000\LXDClient\Tools\ProjectAnalytics\GetGraphableProjectAnalytics;
 
 class GetDashboard
 {
-    private $fetchUserDashboards;
-    private $getGraphableProjectAnalytics;
-    
+    private FetchUserDashboards $fetchUserDashboards;
+    private GetGraphableProjectAnalytics $getGraphableProjectAnalytics;
+
     public function __construct(
         FetchUserDashboards $fetchUserDashboards,
         GetGraphableProjectAnalytics $getGraphableProjectAnalytics

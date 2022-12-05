@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\Projects\GetHostProjectsOverview;
 
 class GetHostsProjectsOverviewController
 {
-    private $getHostProjectsOverview;
+    private GetHostProjectsOverview $getHostProjectsOverview;
 
     public function __construct(GetHostProjectsOverview $getHostProjectsOverview)
     {

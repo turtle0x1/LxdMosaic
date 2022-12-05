@@ -3,17 +3,18 @@
 namespace dhope0000\LXDClient\Controllers\Images\Search;
 
 use dhope0000\LXDClient\Tools\Images\GetAllImages;
+use dhope0000\LXDClient\Objects\Host;
 
 class SearchController
 {
-    private $getAllImages;
-    
+    private GetAllImages $getAllImages;
+
     public function __construct(GetAllImages $getAllImages)
     {
         $this->getAllImages = $getAllImages;
     }
 
-    public function getAllAvailableImages(int $userId, string $search, string $type = "")
+    public function getAllAvailableImages(int $userId, string $search, string $type = "") :array
     {
         $allImages = $this->getAllImages->getAllHostImages($userId);
         $output = [];
@@ -31,7 +32,7 @@ class SearchController
         return $output;
     }
 
-    private function doWork(&$output, &$seenFingerPrints, $images, & $unknownCount, $search, $type, $host)
+    private function doWork(array &$output, array &$seenFingerPrints, array $images, int &$unknownCount, string $search, string $type, Host $host) :void
     {
         foreach ($images as $image) {
             if (in_array($image["fingerprint"], $seenFingerPrints)) {

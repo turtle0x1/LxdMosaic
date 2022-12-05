@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MigrateInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $migrate;
-    
+    private Migrate $migrate;
+
     public function __construct(Migrate $migrate)
     {
         $this->migrate = $migrate;
@@ -16,7 +16,7 @@ class MigrateInstanceController implements \dhope0000\LXDClient\Interfaces\Recor
     /**
      * @Route("", name="Migrate Instance")
      */
-    public function migrate(Host $hostId, $container, Host $destination)
+    public function migrate(Host $hostId, string $container, Host $destination)
     {
         $this->migrate->migrate($hostId, $container, $destination, $container, true);
         return array("success"=>"Instance Has Been Migrated");

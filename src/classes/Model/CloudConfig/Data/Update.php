@@ -5,7 +5,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class Update
 {
-    private $database;
+    private \PDO $database;
 
     public function __construct(Database $database)
     {
@@ -17,7 +17,7 @@ class Update
         string $codeJson,
         string $imageJson,
         string $envVariablesJson
-    ) {
+    ) :bool {
         $sql = "INSERT INTO `Cloud_Config_Data`
                 (
                     `CCD_Cloud_Config_ID`,

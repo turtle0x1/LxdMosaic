@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Objects\Host;
 
 class HostHasImage
 {
-    public function has(Host $host, $fingerPrint)
+    public function has(Host $host, string $fingerPrint)
     {
         //NOTE The end point throws a 404 exception so we have to catch (sigh)
         try {
