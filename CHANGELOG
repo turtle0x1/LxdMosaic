@@ -13,6 +13,7 @@ Fixed
     Shell doesn't work when port is something other than 443 (#540)
     Node server would crash when terminal sent binary data
     Deleting host removes to many metrics
+    Cant restore VM snapshot to origin (#551)
 
 0.16.0 - 06/09/2022
 
