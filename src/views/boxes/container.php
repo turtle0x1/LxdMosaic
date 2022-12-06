@@ -1544,7 +1544,8 @@ function openShell(shell = null, imageOsString = ""){
         "alpine": "ash",
         "openwrt": "ash",
         "oracle": "bash",
-        "centos": "bash"
+        "centos": "bash",
+        "rocky": "bash"
     };
 
     if(shell == null){

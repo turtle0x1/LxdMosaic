@@ -2,10 +2,10 @@ Unreleased
 
 Added
     View / update LXD settings on a host if admin (#534)
-     Set snap cert location (#271)
+    Set snap cert location (#271)
 
 Changed
-    Use bash shell as the default for oracle images (#544)
+    Use bash shell as the default for {oracle, rocky} images (#544)
     Support instances in the custom state "Ready" (#547)
     Set default shell for centos as bash (#546)
 
