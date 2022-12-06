@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Tools\Backups\GetBackupsOverview;
 
 class GetBackupsOverviewController
 {
-    private $getBackupsOverview;
+    private GetBackupsOverview $getBackupsOverview;
 
     public function __construct(GetBackupsOverview $getBackupsOverview)
     {
         $this->getBackupsOverview = $getBackupsOverview;
     }
 
-    public function get($userId)
+    public function get(int $userId) :array
     {
         return $this->getBackupsOverview->get($userId);
     }

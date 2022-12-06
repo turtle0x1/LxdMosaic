@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Tools\Universe;
 
 class GetAllImages
 {
-    private $universe;
-    
+    private Universe $universe;
+
     public function __construct(Universe $universe)
     {
         $this->universe = $universe;
@@ -45,7 +45,7 @@ class GetAllImages
         }
 
         usort($details, function ($a, $b) {
-            return $a["properties"]["description"] > $b["properties"]["description"];
+            return $a["properties"]["description"] > $b["properties"]["description"] ? 1 : -1;
         });
 
         return $details;

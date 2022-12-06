@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ScheduleBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $addBackupSchedule;
+    private AddBackupSchedule $addBackupSchedule;
 
     public function __construct(AddBackupSchedule $addBackupSchedule)
     {

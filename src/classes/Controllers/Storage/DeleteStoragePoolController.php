@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteStoragePoolController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteStoragePool;
-    
+    private DeleteStoragePool $deleteStoragePool;
+
     public function __construct(DeleteStoragePool $deleteStoragePool)
     {
         $this->deleteStoragePool = $deleteStoragePool;

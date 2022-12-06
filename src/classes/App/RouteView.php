@@ -5,14 +5,15 @@ use \DI\Container;
 
 class RouteView
 {
-    private $container;
-    
+    /** @phpstan-ignore-next-line */
+    private Container $container;
+
     public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
-    public function route($pathParts)
+    public function route(array $pathParts)
     {
         if (empty($pathParts)) {
             require __DIR__ . "/../../views/index.php";

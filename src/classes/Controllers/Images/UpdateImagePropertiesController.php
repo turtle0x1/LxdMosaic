@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class UpdateImagePropertiesController
 {
-    private $updateImageProperties;
-    
+    private UpdateImageProperties $updateImageProperties;
+
     public function __construct(UpdateImageProperties $updateImageProperties)
     {
         $this->updateImageProperties = $updateImageProperties;
@@ -16,7 +16,7 @@ class UpdateImagePropertiesController
     /**
      * This is the list of proprties we support updating for an image
      */
-    public function update(Host $host, string $fingerprint, array $settings)
+    public function update(Host $host, string $fingerprint, array $settings) :array
     {
         $this->updateImageProperties->update($host, $fingerprint, $settings);
         return ["state"=>"success", "message"=>"Update image"];

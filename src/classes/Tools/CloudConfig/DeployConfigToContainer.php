@@ -11,10 +11,10 @@ use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 
 class DeployConfigToContainer
 {
-    private $deployToProfile;
-    private $createInstance;
-    private $getConfig;
-    
+    private DeployToProfile $deployToProfile;
+    private CreateInstance $createInstance;
+    private GetConfig $getConfig;
+
     public function __construct(
         DeployToProfile $deployToProfile,
         CreateInstance $createInstance,
@@ -44,7 +44,7 @@ class DeployConfigToContainer
             }
         }
 
-        if (!is_numeric($cloudConfigRevId)) {
+        if (is_numeric($cloudConfigId) && !is_numeric($cloudConfigRevId)) {
             $imageDetails = $this->getConfig->getLatestConfig($cloudConfigId)["imageDetails"];
         } else {
             $imageDetails = $this->getConfig->getLatestConfigByRevId($cloudConfigRevId)["imageDetails"];

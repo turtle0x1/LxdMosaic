@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertUser
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function insert(string $username, string $passwordHash, $ldapId = null)
+    public function insert(string $username, string $passwordHash, string $ldapId = null) :bool
     {
         $sql = "INSERT INTO `Users`
                 (
@@ -35,8 +35,12 @@ class InsertUser
         return $do->rowCount() ? true : false;
     }
 
-    public function getId()
+    public function getId() :int
     {
-        return $this->database->lastInsertId();
+        $newUserId = $this->database->lastInsertId();
+        if ($newUserId === false) {
+            throw new \Exception("User wasn't created successfully", 1);
+        }
+        return (int) $newUserId;
     }
 }

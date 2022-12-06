@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteBackupSchedules
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function deleteforHost(int $hostId)
+    public function deleteforHost(int $hostId) :bool
     {
         $sql = "DELETE FROM
                     `Instance_Backup_Schedule`
@@ -27,7 +27,7 @@ class DeleteBackupSchedules
         return $do->rowCount() ? true : false;
     }
 
-    public function deleteforUser(int $userId)
+    public function deleteforUser(int $userId) :bool
     {
         $sql = "DELETE FROM
                     `Instance_Backup_Schedule`

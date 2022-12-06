@@ -1,14 +1,13 @@
 <?php
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
-use dhope0000\LXDClient\Tools\Profiles\Copy;
 use dhope0000\LXDClient\Tools\Profiles\CreateProfile;
 use dhope0000\LXDClient\Objects\HostsCollection;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CreateProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $createProfile;
+    private CreateProfile $createProfile;
 
     public function __construct(CreateProfile $createProfile)
     {

@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\User\GetUsers;
 
 class GetUsersController
 {
-    private $getUsers;
+    private GetUsers $getUsers;
 
     public function __construct(GetUsers $getUsers)
     {

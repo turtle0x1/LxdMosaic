@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class UpdateUserDeletedStatus
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function setDeleted(int $userId, int $targetUserId)
+    public function setDeleted(int $userId, int $targetUserId) :bool
     {
         $sql = "UPDATE
                     `Users`

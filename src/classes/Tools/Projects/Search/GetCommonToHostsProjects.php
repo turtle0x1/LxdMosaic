@@ -8,8 +8,8 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class GetCommonToHostsProjects
 {
-    private $validatePermissions;
-    private $hasExtension;
+    private ValidatePermissions $validatePermissions;
+    private HasExtension $hasExtension;
 
     public function __construct(ValidatePermissions $validatePermissions, HasExtension $hasExtension)
     {
@@ -17,7 +17,7 @@ class GetCommonToHostsProjects
         $this->hasExtension = $hasExtension;
     }
 
-    public function get(int $userId, HostsCollection $hosts)
+    public function get(int $userId, HostsCollection $hosts) :array
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         $projectsCount = [];

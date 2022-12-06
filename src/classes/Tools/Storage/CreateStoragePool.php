@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateStoragePool
 {
-    public function create(HostsCollection $hosts, string $name, string $driver, array $config)
+    public function create(HostsCollection $hosts, string $name, string $driver, array $config) :bool
     {
         if ($driver === "dir" && isset($config["size"])) {
             unset($config["size"]);

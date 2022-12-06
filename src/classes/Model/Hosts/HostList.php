@@ -7,9 +7,9 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class HostList
 {
-    private $database;
+    private \PDO $database;
     private $container;
-    
+
     public function __construct(Database $database, Container $container)
     {
         $this->database = $database->dbObject;
@@ -27,7 +27,8 @@ class HostList
                     `Host_Key_File` as `keyFilePath`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
                     `Host_Online` as `hostOnline`,
-                    `Host_Support_Load_Averages` as `supportsLoadAvgs`
+                    `Host_Support_Load_Averages` as `supportsLoadAvgs`,
+                    `Host_Socket_Path` as `socketPath`
                 FROM
                     `Hosts`
                 WHERE
@@ -71,7 +72,8 @@ class HostList
                     `Host_Key_File` as `keyFilePath`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
                     `Host_Online` as `hostOnline`,
-                    `Host_Support_Load_Averages` as `supportsLoadAvgs`
+                    `Host_Support_Load_Averages` as `supportsLoadAvgs`,
+                    `Host_Socket_Path` as `socketPath`
                 FROM
                     `Hosts`
                 WHERE
@@ -97,8 +99,9 @@ class HostList
                     `Host_Cert_Only_File` as `certFilePath`,
                     `Host_Key_File` as `keyFilePath`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
-                    `Host_Online` as `hostOnline`,
-                    `Host_Support_Load_Averages` as `supportsLoadAvgs`
+                    '`Host_Online`' as `hostOnline`,
+                    `Host_Support_Load_Averages` as `supportsLoadAvgs`,
+                    `Host_Socket_Path` as `socketPath`
                 FROM
                     `Hosts`
                 WHERE
@@ -121,7 +124,8 @@ class HostList
                     `Host_Key_File` as `keyFilePath`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
                     `Host_Online` as `hostOnline`,
-                    `Host_Support_Load_Averages` as `supportsLoadAvgs`
+                    `Host_Support_Load_Averages` as `supportsLoadAvgs`,
+                    `Host_Socket_Path` as `socketPath`
                 FROM
                     `Hosts`
                 ORDER BY

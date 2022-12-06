@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertDashboardGraph
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -21,7 +21,7 @@ class InsertDashboardGraph
         int $metricId,
         string $filter,
         string $range
-    ) {
+    ) :bool {
         $sql = "INSERT INTO `User_Dashboard_Graphs`
                 (
                     `UDG_UD_ID`,

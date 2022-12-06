@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteSnapshot;
-    
+    private DeleteSnapshot $deleteSnapshot;
+
     public function __construct(DeleteSnapshot $deleteSnapshot)
     {
         $this->deleteSnapshot = $deleteSnapshot;

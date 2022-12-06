@@ -5,7 +5,7 @@ use dhope0000\LXDClient\Objects\Host;
 
 class SetInstanceComment
 {
-    public function set(Host $host, string $instanceName, string $comment)
+    public function set(Host $host, string $instanceName, string $comment) :bool
     {
         $instance = $host->instances->info($instanceName);
 
@@ -16,7 +16,7 @@ class SetInstanceComment
         }
 
         $host->instances->replace($instanceName, $instance);
-        
+
         return true;
     }
 }

@@ -6,9 +6,15 @@ use dhope0000\LXDClient\Objects\Host;
 
 class HostsCollection implements \Iterator, \JsonSerializable
 {
+    /**
+     * @var array<\dhope0000\LXDClient\Objects\Host>
+     */
     private $hosts = [];
     private $index = 0;
 
+    /**
+     * @param array<\dhope0000\LXDClient\Objects\Host> $hosts
+     */
     public function __construct(array $hosts)
     {
         foreach ($hosts as $host) {
@@ -20,7 +26,9 @@ class HostsCollection implements \Iterator, \JsonSerializable
     {
         return $this->hosts;
     }
-
+    /**
+     * @param \dhope0000\LXDClient\Objects\Host $host
+     */
     public function addHost(Host $host)
     {
         $this->hosts[] = $host;

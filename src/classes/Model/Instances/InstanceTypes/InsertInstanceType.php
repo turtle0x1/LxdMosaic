@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertInstanceType
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function insert(int $providerId, string $name, float $cpu, float $mem)
+    public function insert(int $providerId, string $name, float $cpu, float $mem) :bool
     {
         $sql = "INSERT INTO `Instance_Types`(
                     `IT_Provider_ID`,
@@ -33,6 +33,6 @@ class InsertInstanceType
             ":cpu"=>$cpu,
             ":mem"=>$mem
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
 }

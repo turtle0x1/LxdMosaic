@@ -7,16 +7,16 @@ use dhope0000\LXDClient\Model\Users\RemoveToken;
 
 class DeleteToken
 {
-    private $fetchTokens;
-    private $removeToken;
-    
+    private FetchTokens $fetchTokens;
+    private RemoveToken $removeToken;
+
     public function __construct(FetchTokens $fetchTokens, RemoveToken $removeToken)
     {
         $this->fetchTokens = $fetchTokens;
         $this->removeToken = $removeToken;
     }
 
-    public function delete(int $userId, int $tokenId)
+    public function delete(int $userId, int $tokenId) :bool
     {
         $tokenOwner = $this->fetchTokens->fetchTokenUser($tokenId);
 

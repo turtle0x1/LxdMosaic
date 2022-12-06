@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $state;
-    
+    private State $state;
+
     public function __construct(State $state)
     {
         $this->state = $state;
@@ -17,7 +17,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Start Instance")
      */
-    public function start(Host $host, $container)
+    public function start(Host $host, string $container) :array
     {
         $this->state->change($host, $container, StateCon::START);
         return ["state"=>"success", "message"=>"Starting {$host->getAlias()}/$container", "code"=>101];
@@ -25,7 +25,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Stop Instance")
      */
-    public function stop(Host $host, $container)
+    public function stop(Host $host, string $container) :array
     {
         $this->state->change($host, $container, StateCon::STOP);
         return ["state"=>"success", "message"=>"Stopping {$host->getAlias()}alias/$container", "code"=>102];
@@ -33,7 +33,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Restart Instance")
      */
-    public function restart(Host $host, $container)
+    public function restart(Host $host, string $container) :array
     {
         $this->state->change($host, $container, StateCon::RESTART);
         return ["state"=>"success", "message"=>"Restarting {$host->getAlias()}/$container", "code"=>101];
@@ -41,7 +41,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Freeze Instance")
      */
-    public function freeze(Host $host, $container)
+    public function freeze(Host $host, string $container) :array
     {
         $this->state->change($host, $container, StateCon::FREEZE);
         return ["state"=>"success", "message"=>"Freezing {$host->getAlias()}/$container", "code"=>110];
@@ -49,7 +49,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="UnFreeze Instance")
      */
-    public function unfreeze(Host $host, $container)
+    public function unfreeze(Host $host, string $container) :array
     {
         $this->state->change($host, $container, StateCon::UNFREEZE);
         return ["state"=>"success", "message"=>"Unfreezing {$host->getAlias()}/$container", "code"=>101];

@@ -8,8 +8,8 @@ use dhope0000\LXDClient\Tools\Utilities\StringTools;
 
 class GetVolumes
 {
-    private $usedByFilter;
-    
+    private UsedByFilter $usedByFilter;
+
     public function __construct(UsedByFilter $usedByFilter)
     {
         $this->usedByFilter = $usedByFilter;
@@ -26,6 +26,11 @@ class GetVolumes
             foreach ($pool["used_by"] as $item) {
                 if (strpos($item, '/1.0/storage-pools/') !==  false) {
                     $url = parse_url($item);
+
+                    if ($url == false) {
+                        throw new \Exception("Couldn't parse '$item'", 1);
+                    }
+
                     $project = "default";
                     if (isset($url["query"])) {
                         parse_str($url["query"], $query);

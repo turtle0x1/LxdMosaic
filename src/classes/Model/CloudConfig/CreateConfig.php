@@ -5,14 +5,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class CreateConfig
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function create(string $name, string $namespace, $description)
+    public function create(string $name, string $namespace, string $description) :bool
     {
         $sql = "INSERT INTO `Cloud_Config`
                 (

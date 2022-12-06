@@ -7,9 +7,9 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class ToggleAdminStatusController
 {
-    private $toggleAdminStatus;
-    private $validatePermissions;
-    
+    private ToggleAdminStatus $toggleAdminStatus;
+    private ValidatePermissions $validatePermissions;
+
     public function __construct(
         ToggleAdminStatus $toggleAdminStatus,
         ValidatePermissions $validatePermissions
@@ -18,7 +18,7 @@ class ToggleAdminStatusController
         $this->validatePermissions = $validatePermissions;
     }
 
-    public function toggle(int $userId, int $targetUser, int $status)
+    public function toggle(int $userId, int $targetUser, int $status) :array
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         $this->toggleAdminStatus->toggle($targetUser, $status);

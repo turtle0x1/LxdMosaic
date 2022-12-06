@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class FetchUserProject
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function fetch(int $userId, int $hostId)
+    public function fetch(int $userId, int $hostId) :string
     {
         $sql = "SELECT
                     `UHP_Project`
@@ -32,7 +32,7 @@ class FetchUserProject
         return $do->fetchColumn();
     }
 
-    public function fetchCurrentProjects(int $userId)
+    public function fetchCurrentProjects(int $userId) :array
     {
         $sql = "SELECT
                     `UHP_Host_ID`,

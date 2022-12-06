@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteAnalytics
 {
-    private $database;
+    private \PDO $database;
 
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function deleteBefore(\DateTimeInterface $before)
+    public function deleteBefore(\DateTimeInterface $before) :bool
     {
         $sql = "DELETE FROM
                     `Project_Analytics`
@@ -27,7 +27,7 @@ class DeleteAnalytics
         return $do->rowCount() ? true : false;
     }
 
-    public function deleteForHost(int $hostId)
+    public function deleteForHost(int $hostId) :bool
     {
         $sql = "DELETE FROM
                     `Project_Analytics`

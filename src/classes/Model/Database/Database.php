@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Model\Database;
 
 class Database
 {
-    public $dbObject;
+    public \PDO $dbObject;
 
     public function __construct()
     {
@@ -17,20 +17,24 @@ class Database
             $this->dbObject->exec("SET time_zone='$tz';");
         }
 
+        if ($this->dbObject == false) {
+            throw new \Exception("Couldn't connect to database", 1);
+        }
+
         $this->dbObject->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
-    public function beginTransaction()
+    public function beginTransaction() :void
     {
         $this->dbObject->beginTransaction();
     }
 
-    public function commitTransaction()
+    public function commitTransaction() :void
     {
         $this->dbObject->commit();
     }
 
-    public function rollbackTransaction()
+    public function rollbackTransaction() :void
     {
         $this->dbObject->rollback();
     }

@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AddProxyDeviceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $addProxyDevice;
-    
+    private AddProxyDevice $addProxyDevice;
+
     public function __construct(AddProxyDevice $addProxyDevice)
     {
         $this->addProxyDevice = $addProxyDevice;

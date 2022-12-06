@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertUserAccess
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function insert(int $grantedBy, int $userId, int $hostId, string $project)
+    public function insert(int $grantedBy, int $userId, int $hostId, string $project) :bool
     {
         $sql = "INSERT INTO `User_Allowed_Projects`(
                     `UAP_Granted_By`,
@@ -33,6 +33,6 @@ class InsertUserAccess
             ":hostId"=>$hostId,
             ":project"=>$project
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
 }

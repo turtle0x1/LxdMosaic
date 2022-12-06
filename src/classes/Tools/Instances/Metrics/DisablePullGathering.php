@@ -8,8 +8,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class DisablePullGathering
 {
-    private $deleteMetrics;
-    private $removeProfiles;
+    private DeleteMetrics $deleteMetrics;
+    private RemoveProfiles $removeProfiles;
 
     public function __construct(DeleteMetrics $deleteMetrics, RemoveProfiles $removeProfiles)
     {
@@ -17,7 +17,7 @@ class DisablePullGathering
         $this->removeProfiles = $removeProfiles;
     }
 
-    public function disable(Host $host, string $instance, bool $clearData = false)
+    public function disable(Host $host, string $instance, bool $clearData = false) :bool
     {
         if ($clearData) {
             $this->deleteMetrics->deleteForInstance($host->getHostId(), $instance, "default");

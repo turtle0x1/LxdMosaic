@@ -7,15 +7,15 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetUserStorage
 {
-    private $universe;
-    
+    private Universe $universe;
+
     public function __construct(
         Universe $universe
     ) {
         $this->universe = $universe;
     }
 
-    public function getAll($userId)
+    public function getAll(int $userId) :array
     {
         $clusters = $this->universe->getEntitiesUserHasAccesTo($userId, "pools");
 
@@ -50,7 +50,7 @@ class GetUserStorage
         ];
     }
 
-    private function calculateStats($stats, $pools)
+    private function calculateStats(array $stats, array $pools) :array
     {
         foreach ($pools as $pool) {
             $stats["storage"]["total"] += $pool["resources"]["space"]["total"];
@@ -62,7 +62,7 @@ class GetUserStorage
         return $stats;
     }
 
-    private function getHostPools(Host $host)
+    private function getHostPools(Host $host) :array
     {
         if (!$host->hostOnline()) {
             return [];

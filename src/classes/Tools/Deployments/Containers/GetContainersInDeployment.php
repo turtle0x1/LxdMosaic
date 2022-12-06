@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 
 class GetContainersInDeployment
 {
-    private $getConfig;
-    
+    private GetConfig $getConfig;
+
     public function __construct(GetConfig $getConfig)
     {
         $this->getConfig = $getConfig;

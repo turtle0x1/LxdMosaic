@@ -44,7 +44,18 @@ class Migrate
 
     private function checkIfHostUrlIsLocalhost(Host $host, string $type)
     {
-        if (parse_url($host->getUrl())["host"] == "localhost") {
+        if ($host->getSocketPath()) {
+            throw new \Exception("{$host->getAlias()} uses socket, cant migrate", 1);
+        }
+
+        $urlParts = parse_url($host->getUrl());
+
+        if ($urlParts == false) {
+            throw new \Exception("Couldn't parse host url {$host->getUrl()}", 1);
+        }
+
+
+        if ($urlParts["host"] == "localhost") {
             throw new \Exception("Your $type server has a URL of 'localhost', this wont work!", 1);
         }
     }

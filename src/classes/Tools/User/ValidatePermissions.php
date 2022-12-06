@@ -7,9 +7,9 @@ use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 
 class ValidatePermissions
 {
-    private $fetchUserDetails;
-    private $fetchAllowedProjects;
-    
+    private FetchUserDetails $fetchUserDetails;
+    private FetchAllowedProjects $fetchAllowedProjects;
+
     public function __construct(
         FetchUserDetails $fetchUserDetails,
         FetchAllowedProjects $fetchAllowedProjects
@@ -23,7 +23,7 @@ class ValidatePermissions
         return (bool) $this->fetchUserDetails->isAdmin($userId);
     }
 
-    public function canAccessHostProjectOrThrow(int $userId, int $hostId, string $project)
+    public function canAccessHostProjectOrThrow(int $userId, int $hostId, string $project) :bool
     {
         $isAdmin = $this->isAdmin($userId);
         if ($isAdmin) {

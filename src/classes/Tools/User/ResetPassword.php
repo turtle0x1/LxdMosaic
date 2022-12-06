@@ -9,11 +9,11 @@ use dhope0000\LXDClient\Tools\User\Password\CheckPasswordPolicy;
 
 class ResetPassword
 {
-    private $validatePermissions;
-    private $updatePasswordHash;
-    private $fetchUserDetails;
-    private $checkPasswordPolicy;
-    
+    private ValidatePermissions $validatePermissions;
+    private UpdatePasswordHash $updatePasswordHash;
+    private FetchUserDetails $fetchUserDetails;
+    private CheckPasswordPolicy $checkPasswordPolicy;
+
     public function __construct(
         ValidatePermissions $validatePermissions,
         UpdatePasswordHash $updatePasswordHash,
@@ -26,7 +26,7 @@ class ResetPassword
         $this->checkPasswordPolicy = $checkPasswordPolicy;
     }
 
-    public function reset(int $userId, int $targetUserId, string $newPassword)
+    public function reset(int $userId, int $targetUserId, string $newPassword) :bool
     {
         $this->validatePermissions->isAdminOrThrow($userId);
 

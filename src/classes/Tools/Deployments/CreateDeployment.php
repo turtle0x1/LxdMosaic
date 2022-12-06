@@ -8,10 +8,10 @@ use dhope0000\LXDClient\Model\Deployments\CloudConfig\AddCloudConfig;
 
 class CreateDeployment
 {
-    private $insertDeployment;
-    private $getConfig;
-    private $addCloudConfig;
-    
+    private InsertDeployment $insertDeployment;
+    private GetConfig $getConfig;
+    private AddCloudConfig $addCloudConfig;
+
     public function __construct(
         InsertDeployment $insertDeployment,
         GetConfig $getConfig,

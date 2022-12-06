@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteNetworkController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteNetwork;
-    
+    private DeleteNetwork $deleteNetwork;
+
     public function __construct(DeleteNetwork $deleteNetwork)
     {
         $this->deleteNetwork = $deleteNetwork;
@@ -17,7 +17,7 @@ class DeleteNetworkController implements \dhope0000\LXDClient\Interfaces\RecordA
     /**
      * @Route("", name="Delete Network")
      */
-    public function delete(Host $host, $network)
+    public function delete(Host $host, string $network) :array
     {
         $this->deleteNetwork->delete($host, $network);
         return ["state"=>"success", "message"=>"Deleted network"];

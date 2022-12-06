@@ -10,11 +10,11 @@ use dhope0000\LXDClient\Model\Users\Projects\DeleteUserProject;
 
 class RevokeAccess
 {
-    private $validatePermissions;
-    private $fetchUserDetails;
-    private $deleteUserAccess;
-    private $deleteUserProject;
-    
+    private ValidatePermissions $validatePermissions;
+    private FetchUserDetails $fetchUserDetails;
+    private DeleteUserAccess $deleteUserAccess;
+    private DeleteUserProject $deleteUserProject;
+
     public function __construct(
         ValidatePermissions $validatePermissions,
         FetchUserDetails $fetchUserDetails,

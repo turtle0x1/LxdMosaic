@@ -2,25 +2,22 @@
 namespace dhope0000\LXDClient\Controllers\Hosts;
 
 use dhope0000\LXDClient\Tools\Hosts\GetHostsOverview;
-use dhope0000\LXDClient\Model\Users\FetchUserDetails;
+use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class GetHostsController
 {
-    private $getHostsOverview;
-    private $fetchUserDetails;
-    
-    public function __construct(GetHostsOverview $getHostsOverview, FetchUserDetails $fetchUserDetails)
+    private GetHostsOverview $getHostsOverview;
+    private ValidatePermissions $validatePermissions;
+
+    public function __construct(GetHostsOverview $getHostsOverview, ValidatePermissions $validatePermissions)
     {
         $this->getHostsOverview = $getHostsOverview;
-        $this->fetchUserDetails = $fetchUserDetails;
+        $this->validatePermissions = $validatePermissions;
     }
 
     public function getAllHosts(int $userId)
     {
-        $isAdmin = $this->fetchUserDetails->isAdmin($userId) === '1';
-        if (!$isAdmin) {
-            throw new \Exception("No access", 1);
-        }
+        $this->validatePermissions->isAdminOrThrow($userId);
         return $this->getHostsOverview->get();
     }
 }

@@ -8,9 +8,9 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class RemoveController
 {
-    private $validatePermissions;
-    private $removeProvider;
-    private $container;
+    private ValidatePermissions $validatePermissions;
+    private RemoveProvider $removeProvider;
+    private Container $container;
 
     public function __construct(
         Container $container,

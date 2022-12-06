@@ -5,12 +5,13 @@ namespace dhope0000\LXDClient\Tools\Projects;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 use dhope0000\LXDClient\Tools\Universe;
 use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetHostProjectsOverview
 {
-    private $validatePermissions;
-    private $universe;
-    private $fetchAllowedProjects;
+    private ValidatePermissions $validatePermissions;
+    private Universe $universe;
+    private FetchAllowedProjects $fetchAllowedProjects;
 
     public function __construct(ValidatePermissions $validatePermissions, Universe $universe, FetchAllowedProjects $fetchAllowedProjects)
     {
@@ -46,7 +47,7 @@ class GetHostProjectsOverview
         return $x;
     }
 
-    private function addHostDetails($host, $groupedPermissions)
+    private function addHostDetails(Host $host, array $groupedPermissions)
     {
         $projects = $host->getCustomProp("projects");
 
@@ -64,7 +65,7 @@ class GetHostProjectsOverview
         $host->setCustomProp("projects", $out);
     }
 
-    private function groupAllowedPermissions($permissions)
+    private function groupAllowedPermissions(array $permissions)
     {
         $output = [];
         foreach ($permissions as $permission) {

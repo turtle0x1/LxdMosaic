@@ -9,11 +9,11 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetUserProject
 {
-    private $fetchAllowedProjects;
-    private $fetchUserProject;
-    private $setUserProject;
-    private $fetchUserDetails;
-    
+    private FetchAllowedProjects $fetchAllowedProjects;
+    private FetchUserProject $fetchUserProject;
+    private SetUserProject $setUserProject;
+    private FetchUserDetails $fetchUserDetails;
+
     public function __construct(
         FetchAllowedProjects $fetchAllowedProjects,
         FetchUserProject $fetchUserProject,

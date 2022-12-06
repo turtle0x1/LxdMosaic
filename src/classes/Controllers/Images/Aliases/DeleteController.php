@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteAlias;
-    
+    private DeleteAlias $deleteAlias;
+
     public function __construct(DeleteAlias $deleteAlias)
     {
         $this->deleteAlias = $deleteAlias;
@@ -17,7 +17,7 @@ class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Delete Image Alias")
      */
-    public function delete(Host $host, string $name)
+    public function delete(Host $host, string $name) :array
     {
         $lxdResponse = $this->deleteAlias->delete($host, $name);
         return ["state"=>"success", "message"=>"Deleted alias", "lxdResponse"=>$lxdResponse];

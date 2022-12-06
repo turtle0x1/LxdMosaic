@@ -8,9 +8,9 @@ use dhope0000\LXDClient\Tools\Utilities\DateTools;
 
 class GetMetricsForContainer
 {
-    private $fetchMetrics;
-    private $fetchType;
-    private $dateTools;
+    private FetchMetrics $fetchMetrics;
+    private FetchType $fetchType;
+    private DateTools $dateTools;
 
     public function __construct(FetchMetrics $fetchMetrics, FetchType $fetchType, DateTools $dateTools)
     {
@@ -19,12 +19,12 @@ class GetMetricsForContainer
         $this->dateTools = $dateTools;
     }
 
-    public function getAllTypes($hostId, $container)
+    public function getAllTypes(int $hostId, string $container) :array
     {
         return $this->fetchMetrics->fetchAllTypes($hostId, $container);
     }
 
-    public function getTypeFilters($hostId, $container, $type)
+    public function getTypeFilters(int $hostId, string $container, int $type) :array
     {
         $startDate = (new \DateTime)->modify("-6 months");
         $allMetrics = $this->fetchMetrics->fetchByHostContainerType($hostId, $container, $type, $startDate);
@@ -42,7 +42,7 @@ class GetMetricsForContainer
         return array_values($keys);
     }
 
-    public function get($hostId, $container, $type, $filter, $range = "P30I")
+    public function get(int $hostId, string $container, int $type, string $filter, string $range = "P30I") :array
     {
         $startDate = (new \DateTime())->modify($range);
 

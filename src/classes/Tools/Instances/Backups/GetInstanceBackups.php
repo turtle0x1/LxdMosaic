@@ -9,8 +9,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetInstanceBackups
 {
-    private $fetchInstanceBackups;
-    private $hasExtension;
+    private FetchInstanceBackups $fetchInstanceBackups;
+    private HasExtension $hasExtension;
 
     public function __construct(
         FetchInstanceBackups $fetchInstanceBackups,
@@ -20,7 +20,7 @@ class GetInstanceBackups
         $this->hasExtension = $hasExtension;
     }
 
-    public function get(Host $host, string $instance)
+    public function get(Host $host, string $instance) :array
     {
         if ($this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP) !== true) {
             throw new \Exception("Host doesn't support backups", 1);
@@ -37,7 +37,7 @@ class GetInstanceBackups
         ];
     }
 
-    private function addFileSizeToLocal(array &$localBackups)
+    private function addFileSizeToLocal(array &$localBackups) :void
     {
         foreach ($localBackups as $index => $backup) {
             $fileSize = $backup["fileszie"];
@@ -48,7 +48,7 @@ class GetInstanceBackups
         }
     }
 
-    private function getRemoteBackups($host, string $instance, array $localBackups)
+    private function getRemoteBackups($host, string $instance, array $localBackups) :array
     {
         $backups = $host->instances->backups->all($instance);
 
@@ -66,7 +66,7 @@ class GetInstanceBackups
         return $backups;
     }
 
-    private function backupDownloadedLocally($localBackups, string $name, $created)
+    private function backupDownloadedLocally($localBackups, string $name, $created) :bool
     {
         foreach ($localBackups as $backup) {
             if ($backup["backupName"] == $name && new \DateTime($created) == new \DateTime($backup["dateCreated"])) {

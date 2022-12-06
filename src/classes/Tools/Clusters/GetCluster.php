@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\Clusters\GetAllClusters;
 
 class GetCluster
 {
-    private $getAllClusters;
+    private GetAllClusters $getAllClusters;
 
     public function __construct(GetAllClusters $getAllClusters)
     {

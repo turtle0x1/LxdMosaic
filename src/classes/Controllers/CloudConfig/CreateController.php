@@ -6,7 +6,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $create;
+    private Create $create;
 
     public function __construct(Create $create)
     {
@@ -15,7 +15,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Create Cloud Config")
      */
-    public function create(string $name, string $namespace, $description = "")
+    public function create(string $name, string $namespace, string $description = "")
     {
         $this->create->create($name, $namespace, $description);
         return ["state"=>"success", "message"=>"Created cloud config"];

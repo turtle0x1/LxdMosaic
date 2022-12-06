@@ -9,11 +9,11 @@ use dhope0000\LXDClient\Model\Deployments\RemoveDeployment;
 
 class DeleteDeployment
 {
-    private $authoriseDeploymentAccess;
-    private $hostHaveDeploymentProfiles;
-    private $getContainersInDeployment;
-    private $removeDeployment;
-    
+    private AuthoriseDeploymentAccess $authoriseDeploymentAccess;
+    private HostHaveDeploymentProfiles $hostHaveDeploymentProfiles;
+    private GetContainersInDeployment $getContainersInDeployment;
+    private RemoveDeployment $removeDeployment;
+
     public function __construct(
         AuthoriseDeploymentAccess $authoriseDeploymentAccess,
         HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,

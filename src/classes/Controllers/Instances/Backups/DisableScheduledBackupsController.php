@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DisableScheduledBackupsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $updateBackupSchedules;
+    private UpdateBackupSchedules $updateBackupSchedules;
 
     public function __construct(UpdateBackupSchedules $updateBackupSchedules)
     {

@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RenameProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $rename;
-    
+    private Rename $rename;
+
     public function __construct(Rename $rename)
     {
         $this->rename = $rename;

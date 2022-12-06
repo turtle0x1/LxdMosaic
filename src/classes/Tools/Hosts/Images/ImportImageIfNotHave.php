@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class ImportImageIfNotHave
 {
-    private $hostHasImage;
-    
+    private HostHasImage $hostHasImage;
+
     public function __construct(HostHasImage $hostHasImage)
     {
         $this->hostHasImage = $hostHasImage;

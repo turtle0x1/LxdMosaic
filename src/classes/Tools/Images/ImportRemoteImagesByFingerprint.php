@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class ImportRemoteImagesByFingerprint
 {
-    public function import(HostsCollection $hosts, array $images, $urlKey)
+    public function import(HostsCollection $hosts, array $images, string $urlKey) :array
     {
         $urlMap = [
             "linuxcontainers"=>'https://images.linuxcontainers.org',

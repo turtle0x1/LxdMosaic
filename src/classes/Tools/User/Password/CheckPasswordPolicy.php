@@ -7,14 +7,14 @@ use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 class CheckPasswordPolicy
 {
-    private $getSetting;
-    
+    private GetSetting $getSetting;
+
     public function __construct(GetSetting $getSetting)
     {
         $this->getSetting = $getSetting;
     }
 
-    public function conforms($pwd) :void
+    public function conforms(string $pwd) :void
     {
         if ((bool) $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::STRONG_PASSWORD_POLICY) === false) {
             return;

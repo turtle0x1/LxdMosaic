@@ -7,14 +7,14 @@ use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class GetHostContainerStatus
 {
-    private $getAllProfiles;
-    
+    private GetAllProfiles $getAllProfiles;
+
     public function __construct(GetAllProfiles $getAllProfiles)
     {
         $this->getAllProfiles = $getAllProfiles;
     }
 
-    public function get()
+    public function get() :array
     {
         $allProfiles = $this->getAllProfiles->getAllProfiles(true);
 

@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Model\Instances\InstanceTypes\DeleteTypes;
 
 class RemoveProvider
 {
-    private $deleteTypes;
-    private $deleteProvider;
+    private DeleteTypes $deleteTypes;
+    private DeleteProvider $deleteProvider;
 
     public function __construct(
         DeleteTypes $deleteTypes,
@@ -18,7 +18,7 @@ class RemoveProvider
         $this->deleteProvider = $deleteProvider;
     }
 
-    public function remove(int $providerId)
+    public function remove(int $providerId) :void
     {
         //NOTE Setting the FK to cascade would be nice, but ive made terrible
         //     design descisions.

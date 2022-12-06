@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class UpdateBackupSchedules
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -18,7 +18,7 @@ class UpdateBackupSchedules
         int $hostId,
         string $instance,
         string $project
-    ) {
+    ) :bool {
         $sql = "UPDATE `Instance_Backup_Schedule`
                 SET
                     `IBS_Disabled` = 1,

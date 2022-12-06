@@ -4,12 +4,13 @@ namespace dhope0000\LXDClient\Tools\Projects;
 
 use dhope0000\LXDClient\Tools\Universe;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
+use dhope0000\LXDClient\Objects\Host;
 
 class GetProjectsOverview
 {
-    private $universe;
-    private $hasExtension;
-    
+    private Universe $universe;
+    private HasExtension $hasExtension;
+
     public function __construct(Universe $universe, HasExtension $hasExtension)
     {
         $this->universe = $universe;
@@ -17,7 +18,7 @@ class GetProjectsOverview
     }
 
     //Based on https://github.com/lxc/lxd/issues/7946#issuecomment-703367651
-    public function get($userId)
+    public function get(int $userId) :array
     {
         $clustersAndStandalone = $this->universe->getEntitiesUserHasAccesTo($userId, "projects");
 
@@ -39,7 +40,7 @@ class GetProjectsOverview
         return $clustersAndStandalone;
     }
 
-    private function calculateUsage(&$member)
+    private function calculateUsage(Host &$member) :void
     {
         if (!$member->hostOnline()) {
             return;
@@ -106,7 +107,7 @@ class GetProjectsOverview
         $member->setCustomProp("projects", $hostProjects);
     }
 
-    private function getLimitValues($config)
+    private function getLimitValues(array $config) :array
     {
         $expectedKeys = [
             "limits.containers"=>["limit"=>null, "value"=>0],

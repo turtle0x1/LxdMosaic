@@ -8,8 +8,8 @@ use dhope0000\LXDClient\Model\Metrics\DeleteMetrics;
 
 class RemoveInstanceMetricHistory
 {
-    private $getSetting;
-    private $deleteMetrics;
+    private GetSetting $getSetting;
+    private DeleteMetrics $deleteMetrics;
 
     public function __construct(
         GetSetting $getSetting,
@@ -19,7 +19,7 @@ class RemoveInstanceMetricHistory
         $this->deleteMetrics = $deleteMetrics;
     }
 
-    public function remove()
+    public function remove() :void
     {
         $howFarBack = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::INSTANCE_METRIC_HISTORY);
         $before = (new \DateTime())->modify($howFarBack);

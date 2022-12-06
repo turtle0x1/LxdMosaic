@@ -8,14 +8,14 @@ use dhope0000\LXDClient\Tools\Utilities\UsedByFilter;
 
 class GetStoragePool
 {
-    private $usedByFilter;
+    private UsedByFilter $usedByFilter;
 
     public function __construct(UsedByFilter $usedByFilter)
     {
         $this->usedByFilter = $usedByFilter;
     }
 
-    public function get(int $userId, Host $host, string $poolName)
+    public function get(int $userId, Host $host, string $poolName) :array
     {
         $info = $host->storage->info($poolName);
 
@@ -33,6 +33,11 @@ class GetStoragePool
         foreach ($info["used_by"] as $i => $item) {
             if (strpos($item, '/1.0/storage-pools/') !==  false) {
                 $url = parse_url($item);
+
+                if ($url == false) {
+                    throw new \Exception("Couldn't parse '$item'", 1);
+                }
+
                 $project = "default";
                 if (isset($url["query"])) {
                     parse_str($url["query"], $query);

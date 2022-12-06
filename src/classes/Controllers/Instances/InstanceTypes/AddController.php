@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class AddController
 {
-    private $validatePermissions;
-    private $addInstanceType;
+    private ValidatePermissions $validatePermissions;
+    private AddInstanceType $addInstanceType;
 
     public function __construct(
         ValidatePermissions $validatePermissions,

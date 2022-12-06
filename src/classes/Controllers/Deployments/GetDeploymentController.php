@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\Deployments\GetDeployment;
 
 class GetDeploymentController
 {
-    private $getDeployment;
+    private GetDeployment $getDeployment;
 
     public function __construct(GetDeployment $getDeployment)
     {

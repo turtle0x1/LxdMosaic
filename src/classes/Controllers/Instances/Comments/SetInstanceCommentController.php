@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SetInstanceCommentController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $setInstanceComment;
+    private SetInstanceComment $setInstanceComment;
 
     public function __construct(SetInstanceComment $setInstanceComment)
     {

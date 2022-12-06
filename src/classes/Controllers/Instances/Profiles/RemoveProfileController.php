@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RemoveProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $removeProfiles;
-    
+    private RemoveProfiles $removeProfiles;
+
     public function __construct(RemoveProfiles $removeProfiles)
     {
         $this->removeProfiles = $removeProfiles;

@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RevokeAccessController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $revokeAccess;
+    private RevokeAccess $revokeAccess;
 
     public function __construct(RevokeAccess $revokeAccess)
     {
@@ -16,7 +16,7 @@ class RevokeAccessController implements \dhope0000\LXDClient\Interfaces\RecordAc
     /**
      * @Route("", name="Revoke a users access from a hosts project")
      */
-    public function revoke(int $userId, int $targetUser, int $hostId, string $project)
+    public function revoke(int $userId, int $targetUser, int $hostId, string $project) :array
     {
         $this->revokeAccess->revoke($userId, $targetUser, $hostId, $project);
         return ["state"=>"success", "message"=>"Revoked Access"];

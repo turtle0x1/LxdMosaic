@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 
 class GetLatest
 {
-    private $getConfig;
-    
+    private GetConfig $getConfig;
+
     public function __construct(GetConfig $getConfig)
     {
         $this->getConfig = $getConfig;
     }
 
-    public function getLatest(int $cloudConfigId)
+    public function getLatest(int $cloudConfigId) :array
     {
         $latest = $this->getConfig->getLatestConfig($cloudConfigId);
         if (empty($latest)) {
@@ -25,14 +25,14 @@ class GetLatest
                 "envVariables"=>[]
             ];
         }
-        
+
         $latest["imageDetails"] = $this->getJsonOrEmptyArray($latest, "imageDetails");
         $latest["envVariables"] = $this->getJsonOrEmptyArray($latest, "envVariables");
 
         return $latest;
     }
 
-    private function getJsonOrEmptyArray($array, $key) :array
+    private function getJsonOrEmptyArray(array $array, string $key) :array
     {
         return !empty($array[$key]) ? json_decode($array[$key], true) : [];
     }

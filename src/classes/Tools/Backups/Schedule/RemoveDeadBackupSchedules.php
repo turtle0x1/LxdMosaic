@@ -8,9 +8,9 @@ use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\UpdateBackupSche
 
 class RemoveDeadBackupSchedules
 {
-    private $fetchBackupSchedules;
-    private $getDetails;
-    private $updateBackupSchedules;
+    private FetchBackupSchedules $fetchBackupSchedules;
+    private GetDetails $getDetails;
+    private UpdateBackupSchedules $updateBackupSchedules;
 
     public function __construct(
         FetchBackupSchedules $fetchBackupSchedules,
@@ -22,7 +22,7 @@ class RemoveDeadBackupSchedules
         $this->updateBackupSchedules = $updateBackupSchedules;
     }
 
-    public function remove()
+    public function remove() :void
     {
         $hostBackups = $this->fetchBackupSchedules->fetchActiveSchedsGroupedByHostId();
         foreach ($hostBackups as $hostId => $backups) {

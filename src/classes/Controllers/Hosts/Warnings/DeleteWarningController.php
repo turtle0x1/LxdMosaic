@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\Hosts\Warnings\DeleteWarning;
 
 class DeleteWarningController
 {
-    private $deleteWarning;
+    private DeleteWarning $deleteWarning;
 
     public function __construct(DeleteWarning $deleteWarning)
     {

@@ -8,14 +8,14 @@ use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 
 class GetAllProxyDevices
 {
-    private $getAllInstanceProxies;
+    private GetAllInstanceProxies $getAllInstanceProxies;
 
     public function __construct(GetAllInstanceProxies $getAllInstanceProxies)
     {
         $this->getAllInstanceProxies = $getAllInstanceProxies;
     }
 
-    public function get(Host $host)
+    public function get(Host $host) :array
     {
         // Recursion target?
         $instances = $host->instances->all(LxdRecursionLevels::INSTANCE_FULL_RECURSION);

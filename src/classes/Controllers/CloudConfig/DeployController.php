@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deployConfigToContainer;
-    
+    private DeployConfigToContainer $deployConfigToContainer;
+
     public function __construct(DeployConfigToContainer $deploy)
     {
         $this->deployConfigToContainer = $deploy;
@@ -20,10 +20,10 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
         HostsCollection $hosts,
         string $containerName,
         int $cloudConfigId,
-        $additionalProfiles = [],
-        $gpus = [],
+        array $additionalProfiles = [],
+        array $gpus = [],
         string $project = ""
-    ) {
+    ) :array {
         $response = $this->deployConfigToContainer->deploy(
             $hosts,
             $containerName,

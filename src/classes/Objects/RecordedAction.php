@@ -4,10 +4,10 @@ namespace dhope0000\LXDClient\Objects;
 
 class RecordedAction implements \JsonSerializable
 {
-    private $title;
-    private $date;
-    private $category;
-    private $method;
+    private string $title;
+    private DateTimeInterface $date;
+    private string $category;
+    private string $method;
 
     public function __construct(string $title, \DateTimeInterface $date, string $category, string $method)
     {
@@ -17,12 +17,12 @@ class RecordedAction implements \JsonSerializable
         $this->method = $method;
     }
 
-    public function __set($prop, $value)
+    public function __set(string $prop, $value)
     {
         throw new \Exception("Not allowed to set public properties on this object, use get/set/removeCustomProp", 1);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize() :array
     {
         return [
             "title"=>$this->title,
@@ -30,17 +30,17 @@ class RecordedAction implements \JsonSerializable
         ];
     }
 
-    public function getTitle()
+    public function getTitle() :string
     {
         return $this->title;
     }
 
-    public function getCategory()
+    public function getCategory() :string
     {
         return $this->category;
     }
 
-    public function getMethod()
+    public function getMethod() :string
     {
         return $this->method;
     }

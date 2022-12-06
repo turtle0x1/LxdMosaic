@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Tools\Universe;
 
 class GetEntitiesFromUniverseController
 {
-    private $universe;
-    
+    private Universe $universe;
+
     public function __construct(Universe $universe)
     {
         $this->universe = $universe;
     }
 
-    public function get(int $userId, string $entity = null)
+    public function get(int $userId, string $entity = null) :array
     {
         return $this->universe->getEntitiesUserHasAccesTo($userId, $entity);
     }

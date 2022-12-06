@@ -6,8 +6,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UpdateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $update;
-    
+    private Update $update;
+
     public function __construct(Update $update)
     {
         $this->update = $update;
@@ -15,7 +15,7 @@ class UpdateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Update Cloud Config")
      */
-    public function update(int $cloudConfigId, string $code, array $imageDetails, array $envVariables = [])
+    public function update(int $cloudConfigId, string $code, array $imageDetails, array $envVariables = []) :array
     {
         $this->update->update($cloudConfigId, $code, $imageDetails, $envVariables);
         return ["state"=>"success", "message"=>"Save cloud config"];

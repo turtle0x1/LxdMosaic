@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetProjectsOverviewController
 {
-    private $getProjectsOverview;
-    
+    private GetProjectsOverview $getProjectsOverview;
+
     public function __construct(GetProjectsOverview $getProjectsOverview)
     {
         $this->getProjectsOverview = $getProjectsOverview;

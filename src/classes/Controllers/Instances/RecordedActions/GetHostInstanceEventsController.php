@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetHostInstanceEventsController
 {
-    private $getAllInstanceRecordedActions;
-    
+    private GetAllInstanceRecordedActions $getAllInstanceRecordedActions;
+
     public function __construct(GetAllInstanceRecordedActions $getAllInstanceRecordedActions)
     {
         $this->getAllInstanceRecordedActions = $getAllInstanceRecordedActions;

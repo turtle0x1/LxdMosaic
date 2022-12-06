@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\GetActions;
 
 class GetLastController
 {
-    private $getActions;
+    private GetActions $getActions;
 
     public function __construct(GetActions $getActions)
     {

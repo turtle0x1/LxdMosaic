@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class UpdatePasswordHash
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function update(int $userId, string $passwordHash)
+    public function update(int $userId, string $passwordHash) :bool
     {
         $sql = "UPDATE
                     `Users`

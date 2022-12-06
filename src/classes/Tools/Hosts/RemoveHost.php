@@ -15,16 +15,16 @@ use dhope0000\LXDClient\Model\Users\Projects\DeleteUserProject;
 
 class RemoveHost
 {
-    private $deleteHost;
-    private $fetchUserDetails;
-    private $deleteDeploymentInstances;
-    private $deleteBackup;
-    private $deleteBackupSchedules;
-    private $deleteMetrics;
-    private $deleteAnalytics;
-    private $deleteUserAccess;
-    private $deleteUserProject;
-    
+    private DeleteHost $deleteHost;
+    private FetchUserDetails $fetchUserDetails;
+    private DeleteDeploymentInstances $deleteDeploymentInstances;
+    private DeleteBackup $deleteBackup;
+    private DeleteBackupSchedules $deleteBackupSchedules;
+    private DeleteMetrics $deleteMetrics;
+    private DeleteAnalytics $deleteAnalytics;
+    private DeleteUserAccess $deleteUserAccess;
+    private DeleteUserProject $deleteUserProject;
+
     public function __construct(
         DeleteHost $deleteHost,
         FetchUserDetails $fetchUserDetails,
@@ -47,7 +47,7 @@ class RemoveHost
         $this->deleteUserProject = $deleteUserProject;
     }
 
-    public function remove($userId, int $hostId)
+    public function remove($userId, int $hostId) :void
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId) === "1";
 

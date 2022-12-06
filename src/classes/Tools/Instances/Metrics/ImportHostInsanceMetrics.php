@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace dhope0000\LXDClient\Tools\Instances\Metrics;
 
@@ -10,9 +10,9 @@ use dhope0000\LXDClient\Constants\LxdRecursionLevels;
 class ImportHostInsanceMetrics
 {
     // So we dont have to call the db for template key ids every time
-    private $keyCache = [];
-    private $fetchType;
-    private $insertMetric;
+    private array $keyCache = [];
+    private FetchType $fetchType;
+    private InsertMetric $insertMetric;
 
     public function __construct(
         FetchType $fetchType,
@@ -22,7 +22,7 @@ class ImportHostInsanceMetrics
         $this->insertMetric = $insertMetric;
     }
 
-    public function import(Host $host, array $instancesToScan)
+    public function import(Host $host, array $instancesToScan) :void
     {
         //TODO Should probably check that the host supports this extension
         //     but how old is that host (Wish the LXD docs were clearer)?
@@ -60,7 +60,7 @@ class ImportHostInsanceMetrics
         }
     }
 
-    private function addInstanceNvidiaGpuUsage($host, $instance, $state)
+    private function addInstanceNvidiaGpuUsage(Host $host, string $instance, array $state) :bool
     {
         $command = "nvidia-smi --query-gpu=name,gpu_uuid,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv";
         $lxdResponse = $host->instances->execute($instance, $command, $record = true, [], true);
@@ -80,7 +80,7 @@ class ImportHostInsanceMetrics
         $csv = array_map('str_getcsv', $output);
         $gpuDetails = [];
         foreach ($csv as $gpu) {
-            $gpu = array_map("trim", $gpu);
+            $gpu = array_map('trim', $gpu);
             $gpuDetails["{$gpu[0]} temperature (Id: {$gpu[1]}"] = $gpu[2];
             $gpuDetails["{$gpu[0]} utilization % (Id: {$gpu[1]}"] = explode(" ", $gpu[3])[0];
             $gpuDetails["{$gpu[0]} memory utilization % (Id: {$gpu[1]}"] = explode(" ", $gpu[4])[0];
@@ -96,9 +96,10 @@ class ImportHostInsanceMetrics
             $instance,
             [$metricKey=>$gpuDetails]
         );
+        return true;
     }
 
-    private function addInstanceLoadAverage($host, $instance)
+    private function addInstanceLoadAverage(Host $host, string $instance) :bool
     {
         $output = $host->instances->execute($instance, "cat /proc/loadavg", $record = true, [], true);
 
@@ -109,7 +110,7 @@ class ImportHostInsanceMetrics
 
         $x = explode(" ", $averages);
         $dateTime = (new \DateTimeImmutable())->format("Y-m-d H:i:s");
-        $matched = $this->matchTypeAndStore($dateTime, $host, $instance, [
+        $this->matchTypeAndStore($dateTime, $host, $instance, [
             "loadAvg"=>[
                 "1 minute"=>$x[0],
                 "5 minutes"=>$x[1],
@@ -119,7 +120,7 @@ class ImportHostInsanceMetrics
         return true;
     }
 
-    private function addInstanceStorageUsage($host, $instance, $instanceState)
+    private function addInstanceStorageUsage(Host $host, string $instance, array $instanceState) :void
     {
         $metricKey = "storageUsage";
 
@@ -138,7 +139,7 @@ class ImportHostInsanceMetrics
             [$metricKey=>$storageDetails]
         );
     }
-    private function addInstanceNetworkUsage($host, $instance, $instanceState)
+    private function addInstanceNetworkUsage(Host $host, string $instance, array $instanceState) :void
     {
         $metricKey = "networkUsage";
 
@@ -160,7 +161,7 @@ class ImportHostInsanceMetrics
         );
     }
 
-    private function addInstanceMemoryUsage($host, $instance, $instanceState)
+    private function addInstanceMemoryUsage(Host $host, string $instance, array $instanceState) :void
     {
         $key = "memoryUsage";
 
@@ -172,9 +173,8 @@ class ImportHostInsanceMetrics
         );
     }
 
-    private function matchTypeAndStore($date, $host, $container, $content)
+    private function matchTypeAndStore(string $date, Host $host, string $container, array $content) :void
     {
-        $output = [];
         foreach ($content as $key=>$value) {
             if (!isset($this->keyCache[$key])) {
                 $this->keyCache[$key] = $this->fetchType->fetchIdByTemplateKey($key);
@@ -190,6 +190,5 @@ class ImportHostInsanceMetrics
                 json_encode($value)
             );
         }
-        return $output;
     }
 }

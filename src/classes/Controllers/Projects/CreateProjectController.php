@@ -9,9 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateProjectController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $validatePermissions;
-    private $createProject;
-    
+    private ValidatePermissions $validatePermissions;
+    private CreateProject $createProject;
+
     public function __construct(ValidatePermissions $validatePermissions, CreateProject $createProject)
     {
         $this->validatePermissions = $validatePermissions;

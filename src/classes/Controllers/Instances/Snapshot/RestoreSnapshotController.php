@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RestoreSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $restoreSnapshot;
-    
+    private RestoreSnapshot $restoreSnapshot;
+
     public function __construct(RestoreSnapshot $restoreSnapshot)
     {
         $this->restoreSnapshot = $restoreSnapshot;

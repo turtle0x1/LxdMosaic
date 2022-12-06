@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportRemoteImagesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $importRemoteImagesByFingerprint;
-    
+    private ImportRemoteImagesByFingerprint $importRemoteImagesByFingerprint;
+
     public function __construct(ImportRemoteImagesByFingerprint $importRemoteImagesByFingerprint)
     {
         $this->importRemoteImagesByFingerprint = $importRemoteImagesByFingerprint;
@@ -16,7 +16,7 @@ class ImportRemoteImagesController implements \dhope0000\LXDClient\Interfaces\Re
     /**
      * @Route("", name="Import image from simplestream server")
      */
-    public function import(HostsCollection $hosts, array $aliases, $urlKey)
+    public function import(HostsCollection $hosts, array $aliases, string $urlKey) :array
     {
         $operations = $this->importRemoteImagesByFingerprint->import($hosts, $aliases, $urlKey);
 

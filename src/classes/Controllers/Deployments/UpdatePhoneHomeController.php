@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\Deployments\Containers\UpdatePhoneHomeTime;
 
 class UpdatePhoneHomeController
 {
-    private $updatePhoneHomeTime;
-    
+    private UpdatePhoneHomeTime $updatePhoneHomeTime;
+
     public function __construct(UpdatePhoneHomeTime $updatePhoneHomeTime)
     {
         $this->updatePhoneHomeTime = $updatePhoneHomeTime;

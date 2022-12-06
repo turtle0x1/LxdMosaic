@@ -8,8 +8,8 @@ use \DI\Container;
 
 class FirstRunController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $firstRun;
-    private $container;
+    private FirstRun $firstRun;
+    private Container $container;
 
     public function __construct(FirstRun $firstRun, Container $container)
     {

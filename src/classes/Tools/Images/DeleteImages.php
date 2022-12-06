@@ -7,10 +7,10 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class DeleteImages
 {
-    private $getDetails;
-    private $fetchAllowedProjects;
-    private $fetchUserDetails;
-    
+    private GetDetails $getDetails;
+    private FetchAllowedProjects $fetchAllowedProjects;
+    private FetchUserDetails $fetchUserDetails;
+
     public function __construct(
         GetDetails $getDetails,
         FetchAllowedProjects $fetchAllowedProjects,
@@ -21,7 +21,7 @@ class DeleteImages
         $this->fetchUserDetails = $fetchUserDetails;
     }
 
-    public function delete(int $userId, array $imageData)
+    public function delete(int $userId, array $imageData) :array
     {
         $output = [];
         $hostCache = [];

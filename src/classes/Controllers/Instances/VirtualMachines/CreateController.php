@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateController
 {
-    private $createVirutalMachine;
-    
+    private CreateVirutalMachine $createVirutalMachine;
+
     public function __construct(CreateVirutalMachine $createVirutalMachine)
     {
         $this->createVirutalMachine = $createVirutalMachine;

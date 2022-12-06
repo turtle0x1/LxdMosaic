@@ -9,9 +9,9 @@ use dhope0000\LXDClient\Objects\Host;
 
 class BackupInstance
 {
-    private $storeBackupLocally;
+    private StoreBackupLocally $storeBackupLocally;
 
-    private $hasExtension;
+    private HasExtension $hasExtension;
 
     public function __construct(
         StoreBackupLocally $storeBackupLocally,

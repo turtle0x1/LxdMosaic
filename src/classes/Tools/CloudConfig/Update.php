@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\CloudConfig\Data\Update as UpdateModel;
 
 class Update
 {
-    private $updateModel;
-    
+    private UpdateModel $updateModel;
+
     public function __construct(UpdateModel $updateModel)
     {
         $this->updateModel = $updateModel;

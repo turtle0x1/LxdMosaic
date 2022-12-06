@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Tools\User\SearchUsers;
 
 class SeachUsersController
 {
-    private $searchUsers;
+    private SearchUsers $searchUsers;
 
     public function __construct(SearchUsers $searchUsers)
     {

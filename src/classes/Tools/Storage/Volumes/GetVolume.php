@@ -9,9 +9,9 @@ use dhope0000\LXDClient\Tools\Utilities\StringTools;
 
 class GetVolume
 {
-    private $validatePermissions;
-    private $usedByFilter;
-    
+    private ValidatePermissions $validatePermissions;
+    private UsedByFilter $usedByFilter;
+
     public function __construct(ValidatePermissions $validatePermissions, UsedByFilter $usedByFilter)
     {
         $this->validatePermissions = $validatePermissions;

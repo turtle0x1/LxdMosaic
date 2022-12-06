@@ -2,14 +2,13 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts;
 
-use Opensaucesystems\Lxd\Client;
 use dhope0000\LXDClient\Objects\Host;
 
 class HasExtension
 {
-    private $hostCache = [];
+    private array $hostCache = [];
 
-    public function checkWithHost(Host $host, $extension)
+    public function checkWithHost(Host $host, string $extension) :bool
     {
         $hostUrl = $host->getUrl();
         $info = isset($this->hostCache[$hostUrl]) ? $this->hostCache[$hostUrl] : $host->host->info();

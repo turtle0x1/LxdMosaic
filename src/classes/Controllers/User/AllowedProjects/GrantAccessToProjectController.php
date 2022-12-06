@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GrantAccessToProjectController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $grantAccessToProject;
+    private GrantAccessToProject $grantAccessToProject;
 
     public function __construct(GrantAccessToProject $grantAccessToProject)
     {
@@ -17,7 +17,7 @@ class GrantAccessToProjectController implements \dhope0000\LXDClient\Interfaces\
     /**
      * @Route("", name="Grant a user access to one hosts project")
      */
-    public function grant(int $userId, array $targetUsers, Host $host, string $project)
+    public function grant(int $userId, array $targetUsers, Host $host, string $project) :array
     {
         $this->grantAccessToProject->grant($userId, $targetUsers, $host, $project);
         return ["state"=>"success", "message"=>"Granted Access"];

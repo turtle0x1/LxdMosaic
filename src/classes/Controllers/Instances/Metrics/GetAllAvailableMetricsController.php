@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Tools\Instances\Metrics\GetAvailableHostsMetrics;
 
 class GetAllAvailableMetricsController
 {
-    private $getAvailableHostsMetrics;
-    
+    private GetAvailableHostsMetrics $getAvailableHostsMetrics;
+
     public function __construct(GetAvailableHostsMetrics $getAvailableHostsMetrics)
     {
         $this->getAvailableHostsMetrics = $getAvailableHostsMetrics;

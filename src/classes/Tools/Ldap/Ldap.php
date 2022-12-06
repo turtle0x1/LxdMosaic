@@ -9,14 +9,14 @@ use dhope0000\LXDClient\Exceptions\Users\PasswordIncorrectException;
 
 class Ldap
 {
-    private $getSetting;
+    private GetSetting $getSetting;
 
     public function __construct(GetSetting $getSetting)
     {
         $this->getSetting = $getSetting;
     }
 
-    public function getConnectionOrThrow($server)
+    public function getConnectionOrThrow(string $server)
     {
         $connection = ldap_connect($server);
 
@@ -29,7 +29,7 @@ class Ldap
         return $connection;
     }
 
-    public function bindLdapOrThrow($con, $adminUser, $adminPass)
+    public function bindLdapOrThrow($con, string $adminUser, string $adminPass)
     {
         $ldapbind = @ldap_bind($con, $adminUser, $adminPass);
         if (!$ldapbind) {
@@ -41,7 +41,7 @@ class Ldap
     /**
      * Returns username that can be looked up in the DB
      */
-    public function verifyAccount($con, $username, $password) :string
+    public function verifyAccount($con, string $username, string $password) :string
     {
         $baseDn = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_BASE_DN);
         $username = ldap_escape($username, "", LDAP_ESCAPE_FILTER);
@@ -49,8 +49,14 @@ class Ldap
 
         $attrs = array("dn", "cn");
         $search = ldap_search($con, $baseDn, $filter, $attrs);
+
+        if ($search == false) {
+            throw new CantFindUserException($username);
+        }
+
         $entries = ldap_get_entries($con, $search);
-        if ($entries["count"] == 0) {
+
+        if ($entries == false || $entries["count"] == 0) {
             throw new CantFindUserException($username);
         }
 

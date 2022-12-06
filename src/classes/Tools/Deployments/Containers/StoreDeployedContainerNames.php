@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\Deployments\Containers\InsertDeploymentContainer;
 
 class StoreDeployedContainerNames
 {
-    private $insertDeploymentContainer;
-    
+    private InsertDeploymentContainer $insertDeploymentContainer;
+
     public function __construct(InsertDeploymentContainer $insertDeploymentContainer)
     {
         $this->insertDeploymentContainer = $insertDeploymentContainer;

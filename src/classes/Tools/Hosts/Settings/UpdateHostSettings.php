@@ -8,10 +8,10 @@ use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class UpdateHostSettings
 {
-    private $setHostSettings;
-    private $haveAlias;
-    private $fetchUserDetails;
-    
+    private SetHostSettings $setHostSettings;
+    private HaveAlias $haveAlias;
+    private FetchUserDetails $fetchUserDetails;
+
     public function __construct(
         SetHostSettings $setHostSettings,
         HaveAlias $haveAlias,

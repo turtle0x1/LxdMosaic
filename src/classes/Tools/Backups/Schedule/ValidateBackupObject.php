@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Objects\Backups\BackupSchedule;
 
 class ValidateBackupObject
 {
-    public function validate(BackupSchedule $schedule)
+    public function validate(BackupSchedule $schedule) :void
     {
         $this->validateRange($schedule);
         $this->validateTimes($schedule);
@@ -15,7 +15,7 @@ class ValidateBackupObject
     }
 
 
-    public function validateRange(BackupSchedule $schedule)
+    public function validateRange(BackupSchedule $schedule) :void
     {
         $allowedRange = ["daily", "weekly", "monthly"];
         if (!in_array($schedule->getRange(), $allowedRange)) {
@@ -23,7 +23,7 @@ class ValidateBackupObject
         }
     }
 
-    public function validateTimes(BackupSchedule $schedule)
+    public function validateTimes(BackupSchedule $schedule) :void
     {
         $times = $schedule->getTimes();
         foreach ($times as $time) {
@@ -34,7 +34,7 @@ class ValidateBackupObject
         }
     }
 
-    public function validateDaysOfWeek(BackupSchedule $schedule)
+    public function validateDaysOfWeek(BackupSchedule $schedule) :void
     {
         $daysOfWeek = $schedule->getDaysOfWeek();
         foreach ($daysOfWeek as $day) {
@@ -44,7 +44,7 @@ class ValidateBackupObject
         }
     }
 
-    public function validateDayOfMonth(BackupSchedule $schedule)
+    public function validateDayOfMonth(BackupSchedule $schedule) :void
     {
         $dayOfMonth = $schedule->getDayOfMonth();
 

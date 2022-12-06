@@ -6,8 +6,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteCloudConfig;
-    
+    private DeleteCloudConfig $deleteCloudConfig;
+
     public function __construct(DeleteCloudConfig $deleteCloudConfig)
     {
         $this->deleteCloudConfig = $deleteCloudConfig;
@@ -15,7 +15,7 @@ class DeleteController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Delete Cloud Config")
      */
-    public function delete(int $cloudConfigId)
+    public function delete(int $cloudConfigId) :array
     {
         $this->deleteCloudConfig->delete($cloudConfigId);
         return ["state"=>"success", "message"=>"Deleted Cloud Config"];

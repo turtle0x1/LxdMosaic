@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $createAlias;
-    
+    private CreateAlias $createAlias;
+
     public function __construct(CreateAlias $createAlias)
     {
         $this->createAlias = $createAlias;
@@ -17,7 +17,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Create Image Alias")
      */
-    public function create(Host $host, string $fingerprint, string $name, string $description = "")
+    public function create(Host $host, string $fingerprint, string $name, string $description = "") :array
     {
         $lxdResponse = $this->createAlias->create(
             $host,

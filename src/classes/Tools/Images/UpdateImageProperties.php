@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Objects\Host;
 
 class UpdateImageProperties
 {
-    private $supportedProprties = [
+    private array $supportedProprties = [
         "public"=>"",
         "auto_update"=>""
     ];

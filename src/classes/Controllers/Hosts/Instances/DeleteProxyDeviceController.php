@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteProxyDeviceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteProxyDevice;
-    
+    private DeleteProxyDevice $deleteProxyDevice;
+
     public function __construct(DeleteProxyDevice $deleteProxyDevice)
     {
         $this->deleteProxyDevice = $deleteProxyDevice;

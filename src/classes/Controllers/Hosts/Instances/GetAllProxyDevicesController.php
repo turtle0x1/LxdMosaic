@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetAllProxyDevicesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $getAllProxyDevices;
-    
+    private GetAllProxyDevices $getAllProxyDevices;
+
     public function __construct(GetAllProxyDevices $getAllProxyDevices)
     {
         $this->getAllProxyDevices = $getAllProxyDevices;

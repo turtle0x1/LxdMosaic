@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FindIpAddressController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $findIpAddress;
-    
+    private FindIpAddress $findIpAddress;
+
     public function __construct(FindIpAddress $findIpAddress)
     {
         $this->findIpAddress = $findIpAddress;
@@ -16,7 +16,7 @@ class FindIpAddressController implements \dhope0000\LXDClient\Interfaces\RecordA
     /**
      * @Route("", name="Find instance ip address")
      */
-    public function find(string $ip)
+    public function find(string $ip) :array
     {
         $result = $this->findIpAddress->find($ip);
         return ["state"=>"success", "result"=>$result];

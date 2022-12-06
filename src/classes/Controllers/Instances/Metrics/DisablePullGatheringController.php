@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class DisablePullGatheringController
 {
-    private $disablePullGathering;
-    
+    private DisablePullGathering $disablePullGathering;
+
     public function __construct(DisablePullGathering $disablePullGathering)
     {
         $this->disablePullGathering = $disablePullGathering;

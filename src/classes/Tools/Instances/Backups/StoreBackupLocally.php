@@ -18,12 +18,12 @@ use dhope0000\LXDClient\Tools\Instances\Backups\DownloadFile;
 
 class StoreBackupLocally
 {
-    private $getSetting;
-    private $filesystem;
-    private $insertInstanceBackup;
-    private $deleteRemoteBackup;
-    private $hasExtension;
-    private $downloadFile;
+    private GetSetting $getSetting;
+    private Filesystem $filesystem;
+    private InsertInstanceBackup $insertInstanceBackup;
+    private DeleteRemoteBackup $deleteRemoteBackup;
+    private HasExtension $hasExtension;
+    private DownloadFile $downloadFile;
 
     public function __construct(
         GetSetting $getSetting,

@@ -8,16 +8,16 @@ use dhope0000\LXDClient\Objects\RouteToNameMapping;
 
 class GetAllInstanceRecordedActions
 {
-    private $fetchRecordedActions;
-    private $routeToNameMapping;
-    
+    private FetchRecordedActions $fetchRecordedActions;
+    private RouteToNameMapping $routeToNameMapping;
+
     public function __construct(FetchRecordedActions $fetchRecordedActions, RouteToNameMapping $routeToNameMapping)
     {
         $this->fetchRecordedActions = $fetchRecordedActions;
         $this->routeToNameMapping = $routeToNameMapping;
     }
 
-    public function get(Host $host, string $instance)
+    public function get(Host $host, string $instance) :array
     {
         $logs = $this->fetchRecordedActions->fetchForHostInstance($host->getHostId(), $instance);
         $paramsToRemove = [

@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class FetchAnalytics
 {
-    private $database;
+    private \PDO $database;
     
     public function __construct(Database $database)
     {

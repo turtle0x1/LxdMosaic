@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class RemoveToken
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function remove(int $tokenId)
+    public function remove(int $tokenId) :bool
     {
         $sql = "DELETE FROM
                     `User_Api_Tokens`

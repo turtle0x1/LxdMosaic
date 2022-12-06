@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteDeploymentController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteDeployment;
-    
+    private DeleteDeployment $deleteDeployment;
+
     public function __construct(DeleteDeployment $deleteDeployment)
     {
         $this->deleteDeployment = $deleteDeployment;
@@ -16,7 +16,7 @@ class DeleteDeploymentController implements \dhope0000\LXDClient\Interfaces\Reco
     /**
      * @Route("", name="Delete Deployment")
      */
-    public function delete(int $userId, int $deploymentId)
+    public function delete(int $userId, int $deploymentId) :array
     {
         $this->deleteDeployment->delete($userId, $deploymentId);
         return ["state"=>"success", "message"=>"Deleted deployment"];

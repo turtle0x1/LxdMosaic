@@ -7,14 +7,14 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetNetworkController
 {
-    private $getNetwork;
-    
+    private GetNetwork $getNetwork;
+
     public function __construct(GetNetwork $getNetwork)
     {
         $this->getNetwork = $getNetwork;
     }
 
-    public function get(int $userId, Host $host, $network)
+    public function get(int $userId, Host $host, string $network) :array
     {
         return $this->getNetwork->get($userId, $host, $network);
     }

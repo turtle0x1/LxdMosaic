@@ -5,8 +5,8 @@ use dhope0000\LXDClient\Tools\Universe;
 
 class GetAllProfilesController
 {
-    private $universe;
-    
+    private Universe $universe;
+
     public function __construct(Universe $universe)
     {
         $this->universe = $universe;

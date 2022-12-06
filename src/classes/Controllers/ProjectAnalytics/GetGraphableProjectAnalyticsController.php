@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetGraphableProjectAnalyticsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $getGraphableProjectAnalytics;
-    
+    private GetGraphableProjectAnalytics $getGraphableProjectAnalytics;
+
     public function __construct(GetGraphableProjectAnalytics $getGraphableProjectAnalytics)
     {
         $this->getGraphableProjectAnalytics = $getGraphableProjectAnalytics;

@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetCommonToHostsProjectsController
 {
-    private $getCommonToHostsProjects;
-    
+    private GetCommonToHostsProjects $getCommonToHostsProjects;
+
     public function __construct(GetCommonToHostsProjects $getCommonToHostsProjects)
     {
         $this->getCommonToHostsProjects = $getCommonToHostsProjects;

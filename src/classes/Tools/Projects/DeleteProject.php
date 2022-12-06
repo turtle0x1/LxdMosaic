@@ -8,9 +8,9 @@ use dhope0000\LXDClient\Model\Users\Projects\DeleteUserProject;
 
 class DeleteProject
 {
-    private $deleteUserAccess;
-    private $deleteUserProject;
-    
+    private DeleteUserAccess $deleteUserAccess;
+    private DeleteUserProject $deleteUserProject;
+
     public function __construct(
         DeleteUserAccess $deleteUserAccess,
         DeleteUserProject $deleteUserProject

@@ -8,8 +8,8 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateVirutalMachine
 {
-    private $createInstance;
-    
+    private CreateInstance $createInstance;
+
     public function __construct(
         CreateInstance $createInstance
     ) {
@@ -23,7 +23,7 @@ class CreateVirutalMachine
         array $imageDetails,
         bool $start,
         array $config = []
-    ) {
+    ) :bool {
         $config["user.vendor-data"] = $this->getVendorData($username);
 
         $profileName = "VM-$username-" . (new \DateTime())->format("Y-m-d_H_i_s");
@@ -60,7 +60,7 @@ class CreateVirutalMachine
         return true;
     }
 
-    private function getVendorData(string $username)
+    private function getVendorData(string $username) :string
     {
         return '#cloud-config
             users:

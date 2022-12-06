@@ -8,7 +8,7 @@ use dhope0000\LXDClient\Objects\Host;
 
 class DeleteRemoteBackup
 {
-    private $hasExtension;
+    private HasExtension $hasExtension;
 
     public function __construct(HasExtension $hasExtension)
     {
@@ -24,6 +24,6 @@ class DeleteRemoteBackup
             throw new \Exception("Host doesn't support backups", 1);
         }
 
-        return $host->instances->backups->remove($instance, $backup, [], true);
+        return $host->instances->backups->remove($instance, $backup, true);
     }
 }

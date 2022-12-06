@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class GetCloudConfigs
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function haveCloudConfigInNamespace(string $name, string $namespace)
+    public function haveCloudConfigInNamespace(string $name, string $namespace) :bool
     {
         $sql = "SELECT
                     1

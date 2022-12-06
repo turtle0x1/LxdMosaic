@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class DeployToProfile
 {
-    private $getConfig;
-    
+    private GetConfig $getConfig;
+
     public function __construct(GetConfig $getConfig)
     {
         $this->getConfig = $getConfig;

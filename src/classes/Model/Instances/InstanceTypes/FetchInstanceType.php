@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class FetchInstanceType
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function fetchByName($name)
+    public function fetchByName(string $name)
     {
         $sql = "SELECT
                     `ITP_ID` as `providerId`,

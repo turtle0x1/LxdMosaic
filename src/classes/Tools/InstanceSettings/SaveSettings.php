@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Model\InstanceSettings\InsertSetting;
 
 class SaveSettings
 {
-    private $insertSetting;
-    private $validatePermissions;
+    private InsertSetting $insertSetting;
+    private ValidatePermissions $validatePermissions;
 
     public function __construct(ValidatePermissions $validatePermissions, InsertSetting $insertSetting)
     {

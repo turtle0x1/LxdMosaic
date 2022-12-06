@@ -8,7 +8,7 @@ use \DI\Container;
 
 class GetDetails
 {
-    private $database;
+    private \PDO $database;
     private $container;
 
     public function __construct(Database $database, Container $container)
@@ -48,7 +48,7 @@ class GetDetails
         return $do->fetchColumn();
     }
 
-    public function fetchHost($hostId)
+    public function fetchHost(int $hostId)
     {
         $sql = "SELECT
                     `Host_ID` as `id`,
@@ -58,7 +58,8 @@ class GetDetails
                     `Host_Key_File` as `keyFilePath`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
                     `Host_Online` as `hostOnline`,
-                    `Host_Support_Load_Averages` as `supportsLoadAvgs`
+                    `Host_Support_Load_Averages` as `supportsLoadAvgs`,
+                    `Host_Socket_Path` as `socketPath`
                 FROM
                     `Hosts`
                 WHERE
@@ -73,7 +74,7 @@ class GetDetails
         return $do->fetchObject("dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]);
     }
 
-    public function fetchHostByUrl($hostUrl)
+    public function fetchHostByUrl(string $hostUrl)
     {
         $sql = "SELECT
                     `Host_ID` as `id`,
@@ -83,7 +84,8 @@ class GetDetails
                     `Host_Key_File` as `keyFilePath`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `alias`,
                     `Host_Online` as `hostOnline`,
-                    `Host_Support_Load_Averages` as `supportsLoadAvgs`
+                    `Host_Support_Load_Averages` as `supportsLoadAvgs`,
+                    `Host_Socket_Path` as `socketPath`
                 FROM
                     `Hosts`
                 WHERE
@@ -97,7 +99,7 @@ class GetDetails
         return $do->fetchObject("dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]);
     }
 
-    public function getCertificate($hostId)
+    public function getCertificate(int $hostId)
     {
         $sql = "SELECT
                     `Host_Cert_Path`
@@ -115,7 +117,7 @@ class GetDetails
         return $do->fetchColumn();
     }
 
-    public function getSocketPath($hostId)
+    public function getSocketPath(int $hostId)
     {
         $sql = "SELECT
                     `Host_Socket_Path`

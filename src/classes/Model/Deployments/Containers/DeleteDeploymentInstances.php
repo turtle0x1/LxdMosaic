@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class DeleteDeploymentInstances
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function deleteForHost(int $hostId)
+    public function deleteForHost(int $hostId) :bool
     {
         $sql = "DELETE FROM
                     `Deployment_Containers`

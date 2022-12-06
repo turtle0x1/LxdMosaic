@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateNetworkController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $createNetwork;
+    private CreateNetwork $createNetwork;
 
     public function __construct(CreateNetwork $createNetwork)
     {
@@ -17,7 +17,7 @@ class CreateNetworkController implements \dhope0000\LXDClient\Interfaces\RecordA
     /**
      * @Route("", name="Create Network")
      */
-    public function create(HostsCollection $hosts, string $name, string $description = "", array $config = [])
+    public function create(HostsCollection $hosts, string $name, string $description = "", array $config = []) :array
     {
         $this->createNetwork->create($hosts, $name, $description, $config);
         return ["state"=>"success", "message"=>"Created network"];

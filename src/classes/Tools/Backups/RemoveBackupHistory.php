@@ -8,8 +8,8 @@ use dhope0000\LXDClient\Model\Backups\DeleteBackup;
 
 class RemoveBackupHistory
 {
-    private $getSetting;
-    private $deleteBackup;
+    private GetSetting $getSetting;
+    private DeleteBackup $deleteBackup;
 
     public function __construct(
         GetSetting $getSetting,
@@ -19,7 +19,7 @@ class RemoveBackupHistory
         $this->deleteBackup = $deleteBackup;
     }
 
-    public function remove()
+    public function remove() :void
     {
         $howFarBack = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::BACKUP_HISTORY);
         $before = (new \DateTime())->modify($howFarBack);

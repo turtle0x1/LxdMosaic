@@ -6,15 +6,21 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class AddHost
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function addHost($urlAndPort, $keyPath, $certPath, $combiendPath, $alias = null, $socketPath = "")
-    {
+    public function addHost(
+        string $urlAndPort,
+        string $keyPath,
+        string $certPath,
+        string $combiendPath,
+        string $alias = null,
+        ?string $socketPath = ""
+    ) :bool {
         $sql = "INSERT INTO `Hosts`
                 (
                     `Host_Url_And_Port`,

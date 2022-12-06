@@ -8,8 +8,8 @@ use \DI\Container;
 
 class SetDeploymentProjectsController
 {
-    private $setDeploymentProjects;
-    private $container;
+    private SetDeploymentProjects $setDeploymentProjects;
+    private Container $container;
 
     public function __construct(SetDeploymentProjects $setDeploymentProjects, Container $container)
     {
@@ -19,7 +19,7 @@ class SetDeploymentProjectsController
     /**
      * @Route("", name="Set Deployment Projects")
      */
-    public function set(int $userId, int $deploymentId, array $newProjectsLayout)
+    public function set(int $userId, int $deploymentId, array $newProjectsLayout) :array
     {
         $this->container->call(["dhope0000\LXDClient\Model\Database\Database", "beginTransaction"]);
         $this->setDeploymentProjects->set($userId, $deploymentId, $newProjectsLayout);

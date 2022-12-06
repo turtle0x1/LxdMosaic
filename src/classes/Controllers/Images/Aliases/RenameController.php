@@ -8,8 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RenameController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $renameAlias;
-    
+    private RenameAlias $renameAlias;
+
     public function __construct(RenameAlias $renameAlias)
     {
         $this->renameAlias = $renameAlias;
@@ -17,7 +17,7 @@ class RenameController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Rename Image Alias")
      */
-    public function rename(Host $host, string $name, string $newName)
+    public function rename(Host $host, string $name, string $newName) :array
     {
         $lxdResponse = $this->renameAlias->rename($host, $name, $newName);
         return ["state"=>"success", "message"=>"Renamed alias", "lxdResponse"=>$lxdResponse];

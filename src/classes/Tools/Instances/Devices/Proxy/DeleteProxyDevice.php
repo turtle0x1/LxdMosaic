@@ -10,7 +10,7 @@ class DeleteProxyDevice
         Host $host,
         string $instance,
         string $device
-    ) {
+    ) :bool {
         $info = $host->instances->info($instance);
 
         if (isset($info["devices"][$device]) && $info["devices"][$device]["type"] == "proxy") {

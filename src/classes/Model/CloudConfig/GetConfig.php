@@ -5,7 +5,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class GetConfig
 {
-    private $database;
+    private \PDO $database;
     
     public function __construct(Database $database)
     {

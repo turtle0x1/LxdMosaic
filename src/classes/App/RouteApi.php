@@ -12,17 +12,17 @@ use dhope0000\LXDClient\Model\Users\InvalidateToken;
 
 class RouteApi
 {
-    private $container;
-    private $recordAction;
-    private $getDetails;
-    private $hostList;
-    private $fetchAllowedProjects;
-    private $fetchUserDetails;
-    private $fetchUserProject;
-    private $invalidateToken;
+    private Container $container;
+    private RecordAction $recordAction;
+    private GetDetails $getDetails;
+    private HostList $hostList;
+    private FetchAllowedProjects $fetchAllowedProjects;
+    private FetchUserDetails $fetchUserDetails;
+    private FetchUserProject $fetchUserProject;
+    private InvalidateToken $invalidateToken;
 
-    private $project;
-    private $userId;
+    private ?string $project;
+    private int $userId;
 
 
     public function __construct(
@@ -50,12 +50,12 @@ class RouteApi
         return $this->project;
     }
 
-    public function getUserId()
+    public function getUserId() :int
     {
         return $this->userId;
     }
 
-    public function route($pathParts, $headers, $returnResult = false)
+    public function route(array $pathParts, array $headers, bool $returnResult = false)
     {
         $userId = $headers["userid"];
 
@@ -75,7 +75,7 @@ class RouteApi
 
         unset($pathParts[$methodkey]);
 
-        $controllerStr = "dhope0000\\LXDClient\\Controllers\\" . implode($pathParts, "\\");
+        $controllerStr = "dhope0000\\LXDClient\\Controllers\\" . implode("\\", $pathParts);
         if (!class_exists($controllerStr)) {
             throw new \Exception("End point not found", 1);
         } elseif (method_exists($controllerStr, $method) !== true) {
@@ -90,8 +90,14 @@ class RouteApi
             $this->recordAction->record($userId, $controllerStr . "\\" . $method, $params);
         }
 
+        $callback = array($controller, $method);
+
+        if (!is_callable($callback)) {
+            throw new \Exception("Cant find route", 1);
+        }
+
         // TODO Pass provided arguments to controller
-        $data = call_user_func_array(array($controller, $method), $params);
+        $data = call_user_func_array($callback, $params);
 
         if ($returnResult) {
             return $data;
@@ -101,7 +107,7 @@ class RouteApi
         echo json_encode($data);
     }
 
-    public function orderParams($passedArguments, $class, $method, int $userId, $headers)
+    public function orderParams(array $passedArguments, string $class, string $method, int $userId, array $headers) :array
     {
         $reflectedMethod = new \ReflectionMethod($class, $method);
         $paramaters = $reflectedMethod->getParameters();
@@ -124,7 +130,7 @@ class RouteApi
             $hasDefault = $param->isDefaultValueAvailable();
 
             $type = $param->getType();
-            if (!empty($type)) {
+            if (!empty($type) && $type instanceof \ReflectionNamedType) {
                 $type = $type->getName();
             }
 
@@ -186,7 +192,7 @@ class RouteApi
         return $o;
     }
 
-    private function canAccessProject($allowedProjects, $hostId, $project)
+    private function canAccessProject(array $allowedProjects, int $hostId, string $project) :void
     {
         if (!is_string($project) || strlen($project) == 0) {
             throw new \Exception("Cant work out which project to use", 1);

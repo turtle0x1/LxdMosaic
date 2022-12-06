@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class UpdateLoginStatus
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function update(int $userId, int $status = null)
+    public function update(int $userId, int $status = null) :bool
     {
         $sql = "UPDATE
                     `Users`

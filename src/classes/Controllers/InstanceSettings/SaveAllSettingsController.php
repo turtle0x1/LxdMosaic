@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SaveAllSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $saveSettings;
+    private SaveSettings $saveSettings;
 
     public function __construct(SaveSettings $saveSettings)
     {
@@ -16,7 +16,7 @@ class SaveAllSettingsController implements \dhope0000\LXDClient\Interfaces\Recor
     /**
      * @Route("", name="Save LXDMosaic Settings")
      */
-    public function saveAll($userId, $settings)
+    public function saveAll(int $userId, array $settings)
     {
         $this->saveSettings->save($userId, $settings);
         return ["state"=>"success", "message"=>"Saved Settings"];

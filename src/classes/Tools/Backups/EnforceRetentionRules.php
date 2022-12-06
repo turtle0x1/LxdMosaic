@@ -11,11 +11,11 @@ use dhope0000\LXDClient\Model\Users\FetchUsers;
 
 class EnforceRetentionRules
 {
-    private $fetchBackupSchedules;
-    private $fetchInstanceBackups;
-    private $deleteLocalBackup;
-    private $fetchUsers;
-    
+    private FetchBackupSchedules $fetchBackupSchedules;
+    private FetchInstanceBackups $fetchInstanceBackups;
+    private DeleteLocalBackup $deleteLocalBackup;
+    private FetchUsers $fetchUsers;
+
     public function __construct(
         FetchInstanceBackups $fetchInstanceBackups,
         FetchBackupSchedules $fetchBackupSchedules,
@@ -28,7 +28,7 @@ class EnforceRetentionRules
         $this->fetchUsers = $fetchUsers;
     }
 
-    public function enforce()
+    public function enforce() :void
     {
         $hostBackups = $this->fetchBackupSchedules->fetchActiveSchedsGroupedByHostId();
 

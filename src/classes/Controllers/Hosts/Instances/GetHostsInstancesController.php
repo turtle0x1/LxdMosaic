@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetHostsInstancesController
 {
-    private $getHostsInstances;
-    
+    private GetHostsInstances $getHostsInstances;
+
     public function __construct(GetHostsInstances $getHostsInstances)
     {
         $this->getHostsInstances = $getHostsInstances;

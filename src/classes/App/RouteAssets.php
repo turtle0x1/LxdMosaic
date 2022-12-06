@@ -3,7 +3,7 @@ namespace dhope0000\LXDClient\App;
 
 class RouteAssets
 {
-    private $extensionMapping = [
+    private array $extensionMapping = [
         "css"=>"text/css",
         "js"=>"text/javascript",
         "png"=>"image/png",
@@ -12,20 +12,29 @@ class RouteAssets
         "woff2"=>"font/woff2"
     ];
 
-    public function route($path)
+    public function route(array $path) :void
     {
         $this->outputFile($path);
     }
 
-    public function outputFile($path)
+    public function outputFile(array $path) :void
     {
-        $path = __DIR__ . "/../../" . implode($path, "/");
+        $path = __DIR__ . "/../../" . implode("/", $path);
         if (strpos($path, "?") !== false) {
             $path = substr($path, 0, strpos($path, "?"));
         }
 
+        if (!is_file($path)) {
+            throw new \Exception("Cant find asset", 1);
+        }
+
         //get the last-modified-date of this very file
         $lastModified=filemtime($path);
+
+        if (!$lastModified) {
+            throw new \Exception("Cant find asset", 1);
+        }
+
         //get a unique hash of this file (etag)
         $etagFile = md5_file($path);
         //get the HTTP_IF_MODIFIED_SINCE header if set

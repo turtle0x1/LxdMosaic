@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Model\Database\Database;
 
 class InsertActionLog
 {
-    private $database;
-    
+    private \PDO $database;
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function insert(int $userId, string $controller, string $params)
+    public function insert(int $userId, string $controller, string $params) :bool
     {
         $sql = "INSERT INTO `Recorded_Actions`
                 (

@@ -8,9 +8,9 @@ use dhope0000\LXDClient\Model\Metrics\DeleteMetrics;
 
 class RemoveMetrics
 {
-    private $fetchMetrics;
-    private $insertMetric;
-    private $deleteMetrics;
+    private FetchMetrics $fetchMetrics;
+    private InsertMetric $insertMetric;
+    private DeleteMetrics $deleteMetrics;
 
     public function __construct(
         FetchMetrics $fetchMetrics,
@@ -22,16 +22,14 @@ class RemoveMetrics
         $this->deleteMetrics = $deleteMetrics;
     }
 
-    public function remove()
+    public function remove() :void
     {
         $olderThan = new \DateTime("-1 day");
         $olderThan->setTime(
-            $olderThan->format('H'),
-            $olderThan->format('i'),
+            (int) $olderThan->format('H'),
+            (int) $olderThan->format('i'),
             00
         );
-
-        
 
         $metrics = $this->fetchMetrics->fetchGroupedByFiveMinutes($olderThan);
         $groupedByHost = $this->groupMetrics($metrics);
@@ -44,7 +42,7 @@ class RemoveMetrics
         $this->insertMetrics($result["toInsert"]);
     }
 
-    public function insertMetrics(array $toInsert)
+    public function insertMetrics(array $toInsert) :void
     {
         foreach ($toInsert as $metric) {
             $this->insertMetric->insert(
@@ -57,7 +55,7 @@ class RemoveMetrics
         }
     }
 
-    public function groupMetrics($metrics)
+    public function groupMetrics(array $metrics) :array
     {
         $groupedByHost = [];
         foreach ($metrics as $metric) {
@@ -91,7 +89,7 @@ class RemoveMetrics
         return $groupedByHost;
     }
 
-    public function averageGrouped(array $groupedByHost)
+    public function averageGrouped(array $groupedByHost) :array
     {
         $idsToDelete = [];
         $toInsert = [];

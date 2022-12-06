@@ -14,16 +14,16 @@ use dhope0000\LXDClient\App\RouteApi;
 
 class Universe
 {
-    private $fetchAllowedProjects;
-    private $hostList;
-    private $getAllClusters;
-    private $fetchUserProject;
-    private $fetchUserDetails;
-    private $getUserProject;
-    private $hasExtension;
-    private $routeApi;
-    
-    private $entityConversion = [
+    private FetchAllowedProjects $fetchAllowedProjects;
+    private HostList $hostList;
+    private GetAllClusters $getAllClusters;
+    private FetchUserProject $fetchUserProject;
+    private FetchUserDetails $fetchUserDetails;
+    private GetUserProject $getUserProject;
+    private HasExtension $hasExtension;
+    private RouteApi $routeApi;
+
+    private array $entityConversion = [
         "instances"=>"/1.0/instances/",
         "images"=>"/1.0/images/",
         "profiles"=>"/1.0/profiles/",
@@ -52,7 +52,7 @@ class Universe
         $this->routeApi = $routeApi;
     }
 
-    public function getEntitiesUserHasAccesTo(int $userId, string $entity = null)
+    public function getEntitiesUserHasAccesTo(int $userId, string $entity = null) :array
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId) === "1";
 
@@ -187,7 +187,7 @@ class Universe
         ];
     }
 
-    private function buildOldUsedBy($host)
+    private function buildOldUsedBy(Host $host) :array
     {
         $instances = $this->prefixString($host->instances->all(), "/1.0/instances/");
         $images = $this->prefixString($host->images->all(), "/1.0/images/");
@@ -196,7 +196,7 @@ class Universe
         return array_merge($instances, $images, $profiles, $networks);
     }
 
-    private function prefixString($objs, $string)
+    private function prefixString(array $objs, string $string) :array
     {
         foreach ($objs as $i => $obj) {
             $objs[$i] = "$string$obj";

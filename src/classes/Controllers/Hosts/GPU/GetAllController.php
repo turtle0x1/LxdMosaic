@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class GetAllController
 {
-    private $getAll;
-    
+    private GetAll $getAll;
+
     public function __construct(GetAll $getAll)
     {
         $this->getAll = $getAll;

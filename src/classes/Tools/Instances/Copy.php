@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Tools\Instances\Migrate;
 
 class Copy
 {
-    private $migrate;
-    
+    private Migrate $migrate;
+
     public function __construct(Migrate $migrate)
     {
         $this->migrate = $migrate;
@@ -20,7 +20,7 @@ class Copy
         Host $destination,
         string $targetProject = "",
         bool $copyProfiles = false
-    ) {
+    ) :array {
         if ($host->getHostId() !== $destination->getHostId()) {
             return $this->migrate->migrate(
                 $host,

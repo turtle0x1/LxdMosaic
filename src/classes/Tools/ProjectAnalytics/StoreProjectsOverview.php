@@ -12,10 +12,10 @@ use dhope0000\LXDClient\Model\ProjectAnalytics\InsertAnalytic;
 
 class StoreProjectsOverview
 {
-    private $fetchProjectAnalyticsTypes;
-    private $getProjectsOverview;
-    private $insertAnalytic;
-    private $fetchUsers;
+    private FetchProjectAnalyticsTypes $fetchProjectAnalyticsTypes;
+    private GetProjectsOverview $getProjectsOverview;
+    private InsertAnalytic $insertAnalytic;
+    private FetchUsers $fetchUsers;
 
     private $knownTypes = [];
 

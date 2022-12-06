@@ -6,8 +6,8 @@ use dhope0000\LXDClient\Model\Deployments\Containers\UpdateStartTimes;
 
 class SetStartTimes
 {
-    private $updateStartTimes;
-    
+    private UpdateStartTimes $updateStartTimes;
+
     public function __construct(UpdateStartTimes $updateStartTimes)
     {
         $this->updateStartTimes = $updateStartTimes;

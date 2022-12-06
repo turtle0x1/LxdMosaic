@@ -6,14 +6,14 @@ use dhope0000\LXDClient\Tools\Instances\Metrics\GetUserDashboard;
 
 class GetDashboardController
 {
-    private $getUserDashboard;
-    
+    private GetUserDashboard $getUserDashboard;
+
     public function __construct(GetUserDashboard $getUserDashboard)
     {
         $this->getUserDashboard = $getUserDashboard;
     }
 
-    public function get(int $userId, int $dashboardId)
+    public function get(int $userId, int $dashboardId) :array
     {
         return $this->getUserDashboard->get($userId, $dashboardId);
     }

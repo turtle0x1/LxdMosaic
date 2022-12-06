@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deploy;
-    
+    private Deploy $deploy;
+
     public function __construct(Deploy $deploy)
     {
         $this->deploy = $deploy;
@@ -16,7 +16,7 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Deploy Deployment")
      */
-    public function deploy(int $userId, int $deploymentId, array $instances)
+    public function deploy(int $userId, int $deploymentId, array $instances) :array
     {
         $data = $this->deploy->deploy($userId, $deploymentId, $instances);
         return ["state"=>"success", "message"=>"Deployment complete", "data"=>$data];

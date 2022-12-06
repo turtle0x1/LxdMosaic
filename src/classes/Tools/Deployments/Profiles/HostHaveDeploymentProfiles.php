@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 
 class HostHaveDeploymentProfiles
 {
-    private $getAllProfiles;
-    
+    private GetAllProfiles $getAllProfiles;
+
     public function __construct(GetAllProfiles $getAllProfiles)
     {
         $this->getAllProfiles = $getAllProfiles;

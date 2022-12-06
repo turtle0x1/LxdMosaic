@@ -6,8 +6,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AddHostsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $addHosts;
-    
+    private AddHosts $addHosts;
+
     public function __construct(AddHosts $addHosts)
     {
         $this->addHosts = $addHosts;
@@ -15,7 +15,7 @@ class AddHostsController implements \dhope0000\LXDClient\Interfaces\RecordAction
     /**
      * @Route("", name="Add Hosts")
      */
-    public function add($userId, array $hostsDetails)
+    public function add(int $userId, array $hostsDetails)
     {
         $this->addHosts->add($userId, $hostsDetails);
         return ["state"=>"success", "messages"=>"Added Hosts"];

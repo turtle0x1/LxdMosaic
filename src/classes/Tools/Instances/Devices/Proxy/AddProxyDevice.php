@@ -12,7 +12,7 @@ class AddProxyDevice
         string $proxyName,
         string $source,
         string $destination
-    ) {
+    ) :bool {
         $devices = [
             $proxyName=>[
                 "listen"=>$source,

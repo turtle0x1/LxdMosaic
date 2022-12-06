@@ -7,14 +7,14 @@ use dhope0000\LXDClient\Objects\Host;
 
 class DeleteWarning
 {
-    private $validatePermissions;
-    
+    private ValidatePermissions $validatePermissions;
+
     public function __construct(ValidatePermissions $validatePermissions)
     {
         $this->validatePermissions = $validatePermissions;
     }
 
-    public function delete(int $userId, Host $host, string $id)
+    public function delete(int $userId, Host $host, string $id) :void
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         $host->warnings->remove($id);
