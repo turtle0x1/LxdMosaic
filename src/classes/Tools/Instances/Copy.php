@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Tools\Instances\Migrate;
 class Copy
 {
     private $migrate;
-    
+
     public function __construct(Migrate $migrate)
     {
         $this->migrate = $migrate;
@@ -29,10 +29,15 @@ class Copy
                 $newInstance
             );
         }
+
         $options = [];
 
         if ($copyProfiles) {
-            $i = $host->instances->info($instance);
+            $iName = $instance;
+            if (strpos($instance, "/") !== false) {
+                $iName = explode("/", $instance)[0];
+            }
+            $i = $host->instances->info($iName);
             $options["profiles"] = $i["profiles"];
         }
 

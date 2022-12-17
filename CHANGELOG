@@ -14,6 +14,7 @@ Fixed
     Node server would crash when terminal sent binary data
     Deleting host removes to many metrics
     Cant restore VM snapshot to origin (#551)
+    Cant restore instance snapshot to new instance (#555)
 
 0.16.0 - 06/09/2022
 

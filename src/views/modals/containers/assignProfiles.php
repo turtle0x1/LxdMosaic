@@ -22,10 +22,6 @@
 </div>
 <script>
 
-    var snapshotDetails = {
-        snapshotName: null
-    };
-
     $("#newProfilesListInput").tokenInput(globalUrls.profiles.search.searchHostProfiles, {
         queryParam: "search",
         propertyToSearch: "name",

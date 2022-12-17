@@ -2251,6 +2251,8 @@ $("#instanceSnapshotsTable").on("click", ".restoreSnapToOrigin", function(){
 });
 
 $("#instanceSnapshotsTable").on("click", ".createFromSnapshot", function(){
+    const snapshotName = $(this).parents("tr").attr("id");
+
     $.confirm({
         title: `Create From Snapshot!`,
         content: `
@@ -2261,6 +2263,12 @@ $("#instanceSnapshotsTable").on("click", ".createFromSnapshot", function(){
             <div class="mb-2">
                 <label> New Name </label>
                 <input class="form-control" id="modal-container-restoreSnapshot-newName" type="string" />
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="1" id="copyProfiles" checked>
+              <label class="form-check-label" for="copyProfiles">
+                Copy Profiles
+              </label>
             </div>
             `,
         buttons: {
@@ -2287,10 +2295,11 @@ $("#instanceSnapshotsTable").on("click", ".createFromSnapshot", function(){
                         newContainer: $("#modal-container-restoreSnapshot-newName").val(),
                         hostId: currentContainerDetails.hostId,
                         newHostId: currentContainerDetails.hostId,
-                        container: `${currentContainerDetails.container}/${snapshotDetails.snapshotName}`
+                        container: `${currentContainerDetails.container}/${snapshotName}`,
+                        copyProfiles: modal.$content.find("#copyProfiles").is(":checked") ? 1 : 0
                     };
 
-                    let newHost = mapObjToSignleDimension($("#modal-container-restoreSnapshot-newTargetHost").tokenInput("get"), "hostId");
+                    let newHost = mapObjToSignleDimension(modal.$content.find("input[name=targetHost]").tokenInput("get"), "hostId");
 
                     if(newHost.length > 0){
                         x.newHostId = newHost[0];
