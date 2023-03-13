@@ -42,7 +42,7 @@
     "perfect-scrollbar": "^1.5.5",
     "popper.js": "^1.16.1",
     "request": "^2.88.2",
-    "sqlite3": "^5.0.3",
+    "sqlite3": "^5.1.5",
     "utf-8-validate": "^5.0.9",
     "uuid": "^3.4.0",
     "ws": "^6.2.2",
