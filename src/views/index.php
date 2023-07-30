@@ -667,6 +667,7 @@ $(function(){
                             let projects = makeProjectDropDown(member)
                             if(member.hostOnline == true){
                                 projectsDropdown += `<div><b>${member.alias}</b>${projects}</div>`
+                                openHostOperationSocket(member.hostId, member.currentProject)
                             }
                         });
                     });

@@ -104,7 +104,7 @@ module.exports = class HostEvents {
         }
 
         // If the message if from another node in a cluster
-        if (message.hasOwnProperty("location") && message.location !== "" && message.location !== "none" && message.location !== details.alias) {
+        if (message.hasOwnProperty("location") && message.location !== "" && message.location !== "none" && message.location !== hostDetails.alias) {
             return;
         }
 
