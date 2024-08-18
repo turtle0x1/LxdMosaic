@@ -1,47 +1,59 @@
 ## Installation
 
+### Pre-Installation
 
-### Pre Installation
+#### Initialize LXD
 
-#### Initialise LXD
+An opinionated guide on how to set up LXD is forthcoming. For now, refer to these guides:
 
-An opinionated guide on how to setup LXD is to come, for now there are a few guides;
+- [Official Guide](https://linuxcontainers.org/lxd/getting-started-cli/)
+- [Managing LXD Snap](https://discuss.linuxcontainers.org/t/managing-the-lxd-snap/8178)
 
- - <a href="https://linuxcontainers.org/lxd/getting-started-cli/">Official Guide</a>
- - <a href="https://discuss.linuxcontainers.org/t/managing-the-lxd-snap/8178">Managing LXD Snap</a>
+#### Make LXD Available Over the Network
 
-#### Make LXD available over the network
+When LXDMosaic accesses each LXD server for the first time, it needs to authenticate using a token or trust password. This allows LXDMosaic to deploy a trust certificate for future communications.
 
-When LXDMosaic accesses each LXD server for the first time it needs to be able to authenticate
-using a trust password, this is so LXDMOsaic can deploy a trust certificate for future communications.
-
-You can set a trust password by executing the following commands on each LXD server.
+First, make LXD available over the network:
 
 ```bash
-lxc config set core.https_address [::] # make LXD available over IPV4 & IPV6 on all interafaces
-lxc config set core.trust_password some-secret-string # password LXDMosaic needs, you will be asked for this later
+lxc config set core.https_address :8443
 ```
 
-_If you try to connect to LXD server in a cluster we will try to add all cluster members using the same trust password_
+For LXD version 6+ Token-based authentication is required. Token auth is available in version 5 onwards and is the recommended process:
 
-### Installing LXDMosaic Ubuntu
+```bash
+lxc config trust add --name lxdmosaic
 ```
-# Launch a ubuntu container
+
+For LXD versions older than 6 You can use a "trust password," but this has security drawbacks and is not recommended:
+
+```bash
+lxc config set core.trust_password some-secret-string
+```
+
+Note: If you try to connect to an LXD server in a cluster, we will attempt to add all cluster members using the same trust password.
+
+## Installing LXDMosaic on Ubuntu
+
+```bash
+# Launch an Ubuntu container
 lxc launch ubuntu: lxdMosaic
-# Connect to ubuntu console
+
+# Connect to Ubuntu console
 lxc exec lxdMosaic bash
-#  Download the script
+
+# Download the script
 curl https://raw.githubusercontent.com/turtle0x1/LxdMosaic/master/examples/install_with_clone.sh >> installLxdMosaic.sh
-# Then give the script execution permissions
+
+# Give the script execution permissions
 chmod +x installLxdMosaic.sh
-# Then run bellow to setup the program
+
+# Run the script to set up the program
 ./installLxdMosaic.sh
 ```
 
-### Post Installation
-Once the installation is complete you need to go to into your browser and vist;
-
-`https://container_ip_address`
-
-and accept the self signed certificate, you will then be able to enter your LXD instance
-details.
+## Post-Installation
+Once the installation is complete, follow these steps:
+ - Open your browser and visit: https://container_ip_address
+ - Accept the self-signed certificate
+ - Follow the on screen instructions
