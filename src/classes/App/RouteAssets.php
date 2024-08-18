@@ -19,7 +19,7 @@ class RouteAssets
 
     public function outputFile($path)
     {
-        $path = __DIR__ . "/../../" . implode($path, "/");
+        $path = __DIR__ . "/../../" . implode("/", $path);
         if (strpos($path, "?") !== false) {
             $path = substr($path, 0, strpos($path, "?"));
         }
