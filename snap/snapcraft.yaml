@@ -60,8 +60,8 @@ hooks:
 parts:
   apache:
     plugin: apache
-    source: https://dlcdn.apache.org/httpd/httpd-2.4.54.tar.bz2
-    source-checksum: sha256/eb397feeefccaf254f8d45de3768d9d68e8e73851c49afd5b7176d1ecf80c340
+    source: https://dlcdn.apache.org/httpd/httpd-2.4.62.tar.bz2
+    source-checksum: sha256/674188e7bf44ced82da8db522da946849e22080d73d16c93f7f4df89e25729ec
 
     override-pull: |
       snapcraftctl pull
