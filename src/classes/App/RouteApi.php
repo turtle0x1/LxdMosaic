@@ -75,7 +75,7 @@ class RouteApi
 
         unset($pathParts[$methodkey]);
 
-        $controllerStr = "dhope0000\\LXDClient\\Controllers\\" . implode($pathParts, "\\");
+        $controllerStr = "dhope0000\\LXDClient\\Controllers\\" . implode("\\", $pathParts);
         if (!class_exists($controllerStr)) {
             throw new \Exception("End point not found", 1);
         } elseif (method_exists($controllerStr, $method) !== true) {
