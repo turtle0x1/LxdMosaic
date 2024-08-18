@@ -23,6 +23,7 @@ if certificates_are_active; then
 	fi
 else
 	generate_self_signed_certificate
+	activate_self_signed_certificate
 fi
 
 if debug_mode_enabled; then
