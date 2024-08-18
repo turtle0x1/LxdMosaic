@@ -4,8 +4,8 @@ use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 require "../../vendor/autoload.php";
 
+// @phpstan-ignore-next-line
 $haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
-/** @phpstan-ignore-line */
 
 if ($haveServers->haveAny() === true) {
     header("Location: /");
