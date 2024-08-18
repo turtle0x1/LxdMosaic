@@ -17,7 +17,8 @@ final class AddHostTest extends TestCase
         $result = $this->addHosts->add(1, [
             [
                 "name"=>"localhost",
-                "trustPassword"=>"examplePassword"
+                "trustPassword"=>"examplePassword",
+                "token"=>null
             ]
         ]);
         $this->assertEquals(["state"=>"success", "messages"=>"Added Hosts"], $result);

@@ -15,7 +15,7 @@ class AddHosts
     private $getDetails;
     private $lxdClient;
     private $fetchUserDetails;
-    
+
     public function __construct(
         AddHostModel $addHost,
         GenerateCert $generateCert,
@@ -60,7 +60,8 @@ class AddHosts
                 $result = $this->generateCert->createCertAndPushToServer(
                     $hostName,
                     $hostsDetail["trustPassword"],
-                    $socketPath
+                    $socketPath,
+                    $hostsDetail["token"]
                 );
 
                 $alias = null;
@@ -145,10 +146,13 @@ class AddHosts
             return true;
         }
 
+        $missingTrustPassword = !isset($host["trustPassword"]) || empty($host["trustPassword"]);
+        $missingToken = !isset($host["token"]) || empty($host["token"]);
+
         if (!isset($host["name"]) || empty($host["name"])) {
             throw new \Exception("Please provide name", 1);
-        } elseif (!isset($host["trustPassword"]) || empty($host["trustPassword"])) {
-            throw new \Exception("Please provide trust password", 1);
+        } elseif ($missingTrustPassword && $missingToken) {
+            throw new \Exception("Please provide token or trust password", 1);
         }
         return true;
     }

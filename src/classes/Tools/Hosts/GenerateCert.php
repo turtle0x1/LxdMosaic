@@ -9,7 +9,7 @@ use dhope0000\LXDClient\Model\Client\LxdClient;
 class GenerateCert
 {
     private $lxdClient;
-    
+
     private $certSettings = [
         "countryName"            => "UK",
         "stateOrProvinceName"    => "Isle Of Wight",
@@ -27,14 +27,15 @@ class GenerateCert
 
     public function createCertAndPushToServer(
         $urlAndPort,
-        $trustPassword,
-        $socketPath
+        $trustPassword = null,
+        $socketPath = null,
+        $token = null
     ) {
         $paths = $this->createCertKeyAndCombinedPaths($urlAndPort, $socketPath);
 
         $this->generateCert($paths);
 
-        $lxdResponse = $this->addToServer($urlAndPort, $trustPassword, $paths["combined"], $socketPath);
+        $lxdResponse = $this->addToServer($urlAndPort, $trustPassword, $token, $paths["combined"], $socketPath);
 
         $shortPaths = $this->createShortPaths($paths);
 
@@ -68,12 +69,12 @@ class GenerateCert
         return $pathsArray;
     }
 
-    private function addToServer($urlAndPort, $trustPassword, $pathToCert, $socketPath)
+    private function addToServer($urlAndPort, $trustPassword, $token, $pathToCert, $socketPath)
     {
         $config = $this->lxdClient->createConfigArray($pathToCert, $socketPath);
         $config["timeout"] = 2;
         $lxd = $this->lxdClient->createNewClient($urlAndPort, $config);
-        return $lxd->certificates->add(file_get_contents($pathToCert), $trustPassword);
+        return $lxd->certificates->add(file_get_contents($pathToCert), $trustPassword, null, $token);
     }
 
     private function generateCert($paths)
