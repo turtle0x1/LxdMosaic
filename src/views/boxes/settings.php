@@ -772,25 +772,37 @@ function loadInstanceSettings(){
 }
 
 $("#instanceHostsBox").on("click", "#addHostBtn", function(){
-    $.confirm({
-        icon: "fa fa-server",
-        title: "Add Host",
-        content: `<div class="mb-2">
+   $.confirm({
+            icon: "fa fa-server",
+            title: "Add Host",
+            columnClass: "col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1",
+            content: `<div class="mb-2">
             <label>Alias</label>
             <input class="form-control" name="alias" placeholder="PC, Laptop, Server-1"/>
         </div>
         <label class="mb-2">How Do You Want To Access The Host?</label>
-        <nav class="text-dark">
+        <nav>
           <div class="nav nav-pills mb-3" id="host-nav" role="tablist">
-            <button class="nav-link w-50 text-dark active" id="nav-network-tab" data-bs-toggle="tab" data-bs-target="#nav-network" type="button" role="tab" aria-controls="nav-network" aria-selected="true">Trust Password</button>
-            <button class="nav-link w-50 text-dark" id="nav-socket-tab" data-bs-toggle="tab" data-bs-target="#nav-socket" type="button" role="tab" aria-controls="nav-socket" aria-selected="false">Socket</button>
+            <button class="nav-link text-dark  active" id="nav-token-tab" data-bs-toggle="tab" data-bs-target="#nav-token" type="button" role="tab" aria-controls="nav-token" aria-selected="true">Token</button>
+            <button class="nav-link text-dark" id="nav-network-tab" data-bs-toggle="tab" data-bs-target="#nav-network" type="button" role="tab" aria-controls="nav-network" aria-selected="true">Trust Password (Depreciated)</button>
+            <button class="nav-link text-dark" id="nav-socket-tab" data-bs-toggle="tab" data-bs-target="#nav-socket" type="button" role="tab" aria-controls="nav-socket" aria-selected="false">Socket</button>
           </div>
         </nav>
         <div class="tab-content" id="host-navContent">
-          <div class="tab-pane fade show active" id="nav-network" role="tabpanel" aria-labelledby="nav-network-tab">
+          <div class="tab-pane fade show active" id="nav-token" role="tabpanel" aria-labelledby="nav-token-tab">
               <div class="mb-2">
                   <label>IP Address / Hostname</label>
-                  <input class="form-control" name="name" placeholder=""/>
+                  <input class="form-control" name="name" placeholder="" autocomplete="off"/>
+              </div>
+              <div class="mb-2">
+                  <label>Token</label>
+                  <textarea class="form-control" type="text" name="token" placeholder="" autocomplete="off"></textarea>
+              </div>
+          </div>
+          <div class="tab-pane fade show" id="nav-network" role="tabpanel" aria-labelledby="nav-network-tab">
+              <div class="mb-2">
+                  <label>IP Address / Hostname</label>
+                  <input class="form-control" name="name" placeholder="" autocomplete="off"/>
               </div>
               <div class="mb-2">
                   <label>Trust Password</label>
@@ -800,7 +812,7 @@ $("#instanceHostsBox").on("click", "#addHostBtn", function(){
           <div class="tab-pane fade" id="nav-socket" role="tabpanel" aria-labelledby="nav-socket-tab">
               <div class="mb-2">
                   <label>Socket Path</label>
-                  <input class="form-control" name="socketPath" placeholder="/var/snap/lxd/common/lxd/unix.socket"/>
+                  <input class="form-control" name="socketPath" value="/var/snap/lxd/common/lxd/unix.socket"/>
               </div>
           </div>
         </div>
@@ -819,6 +831,7 @@ $("#instanceHostsBox").on("click", "#addHostBtn", function(){
 
                     let name = ""
                     let trustPassword = ""
+                    let token = ""
                     let socketPath = ""
 
                     let activeNav = this.$content.find("#host-nav .active").data().bsTarget
@@ -832,19 +845,31 @@ $("#instanceHostsBox").on("click", "#addHostBtn", function(){
                         }
                     }else{
                         name = this.$content.find('input[name=name]').val().trim();
-                        trustPassword = this.$content.find('input[name=trustPassword]').val().trim();
+
                         if(name === ""){
                             $.alert("Please enter ip address / hostname")
                             return false;
-                        }else if(trustPassword === ""){
-                            $.alert("Please enter trust password")
-                            return false;
                         }
+                        if(activeNav == "#nav-token"){
+                            token = this.$content.find('textarea[name=token]').val().trim();
+                            if(token === ""){
+                                $.alert("Please enter token")
+                                return false;
+                            }
+                        }else{
+                            trustPassword = this.$content.find('input[name=trustPassword]').val().trim();
+                            if(trustPassword === ""){
+                                $.alert("Please enter trust password")
+                                return false;
+                            }
+                        }
+
                     }
                     let x = {hostsDetails: [
                         {
                             name: name,
                             trustPassword: trustPassword,
+                            token: token,
                             socketPath: socketPath,
                             alias: alias
                         }
