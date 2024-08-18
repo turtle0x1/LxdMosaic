@@ -5,7 +5,7 @@ sudo dpkg --purge --force-all lxd lxc
 apt-get update
 
 # # Install Dependecies
-apt-get install -y apache2 php7.4 php7.4-cli php7.4-json php7.4-mysql php7.4-xml php7.4-curl unzip zip git nodejs openssl || exit $?
+apt-get install -y apache2 php7.4 php7.4-cli php7.4-json php7.4-mysql php7.4-xml php7.4-curl php7.4-mbstring unzip zip git nodejs openssl || exit $?
 apt-get install -y mysql-server || exit $?
 apt-get install -y --no-install-recommends cron || exit $?
 apt-get install -y --no-install-recommends php7.4-xdebug || exit $?
