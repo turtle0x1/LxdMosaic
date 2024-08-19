@@ -59,9 +59,9 @@ class AddHosts
             try {
                 $result = $this->generateCert->createCertAndPushToServer(
                     $hostName,
-                    $hostsDetail["trustPassword"],
+                    $hostsDetail["trustPassword"], // Might end with whitepsace
                     $socketPath,
-                    $hostsDetail["token"]
+                    trim($hostsDetail["token"]) // b64 shouldn't have whitespace
                 );
 
                 $alias = null;
