@@ -61,7 +61,7 @@ class AddHosts
                     $hostName,
                     $hostsDetail["trustPassword"], // Might end with whitepsace
                     $socketPath,
-                    trim($hostsDetail["token"]) // b64 shouldn't have whitespace
+                    $hostsDetail["token"] !== null ? trim($hostsDetail["token"]) : null // b64 shouldn't have whitespace
                 );
 
                 $alias = null;
