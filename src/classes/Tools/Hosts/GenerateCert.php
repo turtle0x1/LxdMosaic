@@ -74,7 +74,16 @@ class GenerateCert
         $config = $this->lxdClient->createConfigArray($pathToCert, $socketPath);
         $config["timeout"] = 2;
         $lxd = $this->lxdClient->createNewClient($urlAndPort, $config);
-        return $lxd->certificates->add(file_get_contents($pathToCert), $trustPassword, null, $token);
+
+        $clientName = null;
+        if($token !== null){
+            if(base64_decode($token) == false || json_decode(base64_decode($token), true) == null){
+                throw new \Exception("'$urlAndPort' Token is not valid");
+            }
+            $clientName = json_decode(base64_decode($token), true)["client_name"];
+        }
+
+        return $lxd->certificates->add(file_get_contents($pathToCert), $trustPassword, $clientName, $token);
     }
 
     private function generateCert($paths)
