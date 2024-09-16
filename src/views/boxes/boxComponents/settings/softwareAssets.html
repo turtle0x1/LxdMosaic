@@ -1,0 +1,134 @@
+<div id="softwareSnapshots" class="settingsBox">
+    <div class="row softwareSnapshotBox" id="softwareSnapshotLoadingBox">
+        <h4 class="text-center"><i class="fas fa-cog fa-spin"></i></h4>
+    </div>
+    <div class="row softwareSnapshotBox" id="softwareSnapshotResultBox">
+        <div class="col-md-3 border-end" style="min-height: 80vh">
+            <div class="card card-body bg-dark mb-3" style="min-height: 80vh">
+                <table class="table table-bordered table-dark" id="softwareSnapshotsTbl">
+                    <thead>
+                        <tr>
+                            <th>Snapshot Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Snapshot <span id="softwareSnapshotDateTitle"></span></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-body bg-dark mb-3" id="managerPieChartDiv" style="min-height: 25vh; max-height: 25vh">
+                    </div>
+                    <div class="card card-body bg-dark mb-3" id="hostPieChartDiv" style="min-height: 25vh; max-height: 25vh">
+                    </div>
+                    <div class="card card-body bg-dark" id="projectMetricsDiv" style="min-height: 25vh; max-height: 25vh">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-body bg-dark mb-3" style="min-height: 65vh">
+                        <table class="table table-bordered table-dark" id="softwareSnapshotTopPackagesTbl">
+                            <thead>
+                                <tr>
+                                    <th>Package</th>
+                                    <th>Installs</th>
+                                    <th>No Versions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function loadSoftwareAssets() {
+        $(".settingsBox").hide();
+        $("#settingsBox").show();
+        putAdminSidebar(adminSettingUrls.softwareSnapshots);
+        changeActiveNav(null)
+        $(".viewSettings").addClass("active");
+        $("#softwareSnapshots").show();
+        addBreadcrumbs(["Admin Settings", "Software Snapshots"], ["", "active"], false, ["/admin"]);
+        $(".softwareSnapshotBox").hide()
+        $("#softwareSnapshotLoadingBox").show()
+
+        ajaxRequest('/api/Hosts/SoftwareAssets/GetSoftwareAssetsOverviewController/get', {}, (data) => {
+            data = makeToastr(data)
+
+            $("#softwareSnapshotDateTitle").text(moment(data.date).format("ll"))
+
+            let snapshotTrs = ""
+            data.snapshotHeaders.forEach(header => {
+                snapshotTrs += `<tr>
+                    <td><a href="">${moment(header.date).format("ll")}</a></td>
+                </tr>`
+            });
+            $("#softwareSnapshotsTbl > tbody").empty().append(snapshotTrs)
+
+            function _makeChart(targetDiv, dataset, datasetLabel, chartTtitle) {
+                let id = randomColor().replace("#", "")
+                $(targetDiv).empty().append(`<canvas id="${id}"></canvas>`)
+                let ctx = $(`#${id}`)[0].getContext('2d');
+
+                let labels = []
+                let colors = [];
+                let values = []
+                dataset.forEach(element => {
+                    labels.push(element.name)
+                    values.push(element.packages)
+                    colors.push(randomColor())
+                });
+
+                var myPieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: datasetLabel,
+                            data: values,
+                            backgroundColor: colors,
+                            borderColor: colors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        title: {
+                            display: true,
+                            text: chartTtitle
+                        }
+                    }
+                });
+            }
+
+            _makeChart("#managerPieChartDiv", data.managerMetrics, "Package Managers", "Source Breakdown")
+            _makeChart("#hostPieChartDiv", data.hostMetrics, "Hosts", "Host Breakdown")
+            _makeChart("#projectMetricsDiv", data.projectMetrics, "Projects", "Project Breakdown")
+
+            $(".softwareSnapshotBox").hide()
+            $("#softwareSnapshotResultBox").show()
+
+            let trs = "";
+            data.packages.forEach(package => {
+                trs += `<tr>
+                    <td>${package.name}</td>
+                    <td>${package.totalInstalls}</td>
+                    <td>${Object.keys(package.versions).length}</td>
+                </tr>`
+            });
+
+            $("#softwareSnapshotTopPackagesTbl > tbody").empty().append(trs)
+        })
+    }
+</script>
