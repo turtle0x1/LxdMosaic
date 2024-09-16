@@ -28,7 +28,6 @@ class GetSoftwareSnapshotOverview
 
 
         $output = [
-            "snapshotHeaders" => $snapshotHeaders,
             "date" => $date->format("Y-m-d"),
             "totalPackages" => 0,
             "managerMetrics" => [],

@@ -24,11 +24,14 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="card card-body bg-dark mb-3" id="managerPieChartDiv" style="min-height: 25vh; max-height: 25vh">
+                    <div class="card card-body bg-dark mb-3" id="managerPieChartDiv"
+                        style="min-height: 25vh; max-height: 25vh">
                     </div>
-                    <div class="card card-body bg-dark mb-3" id="hostPieChartDiv" style="min-height: 25vh; max-height: 25vh">
+                    <div class="card card-body bg-dark mb-3" id="hostPieChartDiv"
+                        style="min-height: 25vh; max-height: 25vh">
                     </div>
-                    <div class="card card-body bg-dark" id="projectMetricsDiv" style="min-height: 25vh; max-height: 25vh">
+                    <div class="card card-body bg-dark" id="projectMetricsDiv"
+                        style="min-height: 25vh; max-height: 25vh">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -62,18 +65,33 @@
         $(".softwareSnapshotBox").hide()
         $("#softwareSnapshotLoadingBox").show()
 
-        ajaxRequest('/api/Hosts/SoftwareAssets/GetSoftwareAssetsOverviewController/get', {}, (data) => {
+        ajaxRequest('/api/Hosts/SoftwareAssets/GetSoftwareAsssetsHeadersController/get', {}, (data) => {
             data = makeToastr(data)
 
-            $("#softwareSnapshotDateTitle").text(moment(data.date).format("ll"))
 
             let snapshotTrs = ""
-            data.snapshotHeaders.forEach(header => {
+            data.forEach(header => {
                 snapshotTrs += `<tr>
-                    <td><a href="">${moment(header.date).format("ll")}</a></td>
+                    <td><a href="#" class="viewSnapshot" data-date="${header.date}">${moment(header.date).format("ll")}</a></td>
                 </tr>`
             });
             $("#softwareSnapshotsTbl > tbody").empty().append(snapshotTrs)
+
+
+            $(".softwareSnapshotBox").hide()
+            $("#softwareSnapshotResultBox").show()
+            $("#softwareSnapshotsTbl > tbody").find("a:eq(0)").trigger("click")
+        })
+    }
+
+    $("#softwareSnapshotsTbl").on("click", ".viewSnapshot", function (e) {
+        e.preventDefault()
+        let tr = $(this).parents("tr")
+        $("#softwareSnapshotsTbl > tbody").find(".table-info").removeClass("table-info")
+        tr.addClass("table-info")
+        ajaxRequest('/api/Hosts/SoftwareAssets/GetSoftwareAssetsOverviewController/get', { date: $(this).data("date") }, (data) => {
+            data = $.parseJSON(data)
+            $("#softwareSnapshotDateTitle").text(moment(data.date).format("ll"))
 
             function _makeChart(targetDiv, dataset, datasetLabel, chartTtitle) {
                 let id = randomColor().replace("#", "")
@@ -116,9 +134,6 @@
             _makeChart("#hostPieChartDiv", data.hostMetrics, "Hosts", "Host Breakdown")
             _makeChart("#projectMetricsDiv", data.projectMetrics, "Projects", "Project Breakdown")
 
-            $(".softwareSnapshotBox").hide()
-            $("#softwareSnapshotResultBox").show()
-
             let trs = "";
             data.packages.forEach(package => {
                 trs += `<tr>
@@ -130,5 +145,5 @@
 
             $("#softwareSnapshotTopPackagesTbl > tbody").empty().append(trs)
         })
-    }
+    });
 </script>
