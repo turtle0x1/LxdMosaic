@@ -23,9 +23,8 @@ class GetSoftwareSnapshotOverview
         if ($date == null) {
             $date = new \DateTimeImmutable();
         }
-        $snapshot = $this->fetchSoftwareAssetSnapshots->fetchForDate($date);
-        $snapshotHeaders = $this->fetchSoftwareAssetSnapshots->fetchLastSevenHeaders();
 
+        $snapshot = $this->fetchSoftwareAssetSnapshots->fetchForDate($date);
 
         $output = [
             "date" => $date->format("Y-m-d"),
@@ -85,7 +84,7 @@ class GetSoftwareSnapshotOverview
                         if (!isset($output["packages"][$packageKey])) {
                             $output["packages"][$packageKey] = [
                                 "name" => $package["name"],
-                                "totalInstalls"=>0,
+                                "totalInstalls" => 0,
                                 "versions" => []
                             ];
                         }
@@ -110,7 +109,7 @@ class GetSoftwareSnapshotOverview
 
         usort($output["packages"], [$this, "sortInstalls"]);
 
-        $output["packages"] = array_slice($output["packages"], 0 , 20);
+        $output["packages"] = array_slice($output["packages"], 0, 20);
 
         return $output;
     }
