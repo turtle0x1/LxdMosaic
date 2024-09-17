@@ -62,7 +62,7 @@ jobs:
     - name: run phpstan
       run: /usr/bin/php7.4 vendor/bin/phpstan analyse src --level 1
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: test-coverage
         path: coverage/
