@@ -65,6 +65,11 @@
                                         <i class="fas fa-exchange-alt pe-2"></i>Proxy Devices
                                     </div>
                                 </li>
+                                <li class="nav-item enableIfAdmin" data-view="serverDiskBox">
+                                    <div class="nav-link " id="serverDiskBtn">
+                                        <i class="fas fa-hdd pe-2" style="color: black !important;"></i>Disks
+                                    </div>
+                                </li>
                                 <li class="nav-item enableIfAdmin" data-view="serverWarningsBox">
                                     <div class="nav-link " id="serverWarningsBtn">
                                         <i class="fas fa-exclamation-triangle pe-2" style="color: black !important;"></i>Warnings
@@ -218,6 +223,31 @@
                                         </tbody>
                                     </table>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="serverViewBox" id="serverDiskBox">
+                            <div class="card bg-dark card-body">
+                                <table class="table table-dark" id="serverDisksTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Device</th>
+                                            <th>Model</th>
+                                            <th>Type</th>
+                                            <th>Read Only</th>
+                                            <th>Mounted</th>
+                                            <th>Size</th>
+                                            <th>Removable</th>
+                                            <th>Block Size</th>
+                                            <th>RPM</th>
+                                            <th>Device ID</th>
+                                            <th>Partitions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -392,7 +422,7 @@ function loadHostSettings(req){
     addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Settings"], ["", "", "active"], false, ["/", "", ""]);
 
     $("#serverBoxNav").find(".active").removeClass("active")
-
+    $("#serverBoxNav .nav-item[data-view='serverSettingsBox'] > .nav-link").addClass("active")
     ajaxRequest('/api/Hosts/Settings/GetHostSettingsController/get', currentServer, (data)=>{
         data = makeToastr(data);
         let settingTrs = "";
@@ -404,8 +434,6 @@ function loadHostSettings(req){
         });
         $("#serverSettingTable > tbody").empty().append(settingTrs);
     });
-
-    $("#serverBoxNav .nav-item:eq(4) > .nav-link").addClass("active")
 }
 function loadHostProxies(req){
     currentContainerDetails = null;
@@ -421,7 +449,7 @@ function loadHostProxies(req){
     addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Proxy Devices"], ["", "", "active"], false, ["/", "", ""]);
 
     $("#serverBoxNav").find(".active").removeClass("active")
-    $("#serverBoxNav .nav-item:eq(2) > .nav-link").addClass("active")
+    $("#serverBoxNav .nav-item[data-view='serverProxyBox'] > .nav-link").addClass("active")
 
     ajaxRequest(globalUrls.hosts.instances.getAllProxyDevices, currentServer, (data)=>{
         data = makeToastr(data);
@@ -455,6 +483,42 @@ function loadHostProxies(req){
     });
 }
 
+function loadHostDisks(req){
+    currentContainerDetails = null;
+    let hostId = req.data.hostId;
+    currentServer.hostId = hostId
+    currentServer.hostAlias = hostsAliasesLookupTable[hostId]
+    createDashboardSidebar()
+    _loadServerDetailsIfReq(hostId);
+    changeActiveNav(".overview")
+    $(".boxSlide, .serverViewBox").hide();
+    $("#serverDiskBox, #serverBox").show();
+    $("#serverBoxNav").find(".active").removeClass("active")
+    $("#serverBoxNav .nav-item[data-view='serverDiskBox'] > .nav-link").addClass("active")
+    ajaxRequest(globalUrls.hosts.getHostOverview, {hostId: hostId}, (data)=>{
+        data = makeToastr(data)
+        console.log(data.resources)
+        let diskTrs = "";
+        data.resources.storage.disks.forEach(disk => {
+            diskTrs += `<tr>
+                <td>${disk.id}</td>
+                <td>${disk.device}</td>
+                <td>${disk.model}</td>
+                <td>${disk.type}</td>
+                <td>${disk.read_only ? `<i class="fas fa-check">` : `<i class="fas fa-times"></i>`}</td>
+                <td>${disk.mounted ? `<i class="fas fa-check">` : `<i class="fas fa-times"></i>`}</td>
+                <td>${formatBytes(disk.size)}</td>
+                <td>${disk.removeable ? `<i class="fas fa-check">` : `<i class="fas fa-times"></i>`}</td>
+                <td>${disk.block_size}</td>
+                <td>${disk.rpm}</td>
+                <td>${disk.device_id}</td>
+                <td>${disk.partitions.length}</td>
+            </tr>`
+        });
+        $("#serverDisksTable > tbody").empty().append(diskTrs)
+    })
+}
+
 function loadHostWarnings(req){
     currentContainerDetails = null;
     let hostId = req.data.hostId;
@@ -469,7 +533,7 @@ function loadHostWarnings(req){
     addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Warnings"], ["", "", "active"], false, ["/", "", ""]);
 
     $("#serverBoxNav").find(".active").removeClass("active")
-    $("#serverBoxNav .nav-item:eq(3) > .nav-link").addClass("active")
+    $("#serverBoxNav .nav-item[data-view='serverWarningsBox'] > .nav-link").addClass("active")
 
     ajaxRequest(globalUrls.hosts.warnings.getOnHost, currentServer, (data)=>{
         data = makeToastr(data);
@@ -520,7 +584,7 @@ function loadHostInstances(req){
     addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Instances"], ["", "", "active"], false, ["/", "", ""]);
 
     $("#serverBoxNav").find(".active").removeClass("active")
-    $("#serverBoxNav .nav-item:eq(1) > .nav-link").addClass("active")
+    $("#serverBoxNav .nav-item[data-view='serverInstanceBox'] > .nav-link").addClass("active")
 
     ajaxRequest(globalUrls.hosts.instances.getHostContainers, {hostId: currentServer.hostId}, (data)=>{
         let instances = makeToastr(data)
@@ -706,6 +770,8 @@ $(document).on("click", "#serverBoxNav > .nav-item", function(){
         router.navigate(`/host/${currentServer.hostAlias}/warnings`)
     }else if($(this).data("view") == "serverSettingsBox"){
         router.navigate(`/host/${currentServer.hostAlias}/settings`)
+    }else if($(this).data("view") == "serverDiskBox"){
+        router.navigate(`/host/${currentServer.hostAlias}/disks`)
     }
 });
 
@@ -830,7 +896,7 @@ function loadServerView(hostId)
     $("#serverOverview, #serverBox, #serverInfoBox").show();
 
     $("#serverBoxNav").find(".active").removeClass("active")
-    $("#serverBoxNav .nav-item:eq(0)").addClass("active")
+    $("#serverBoxNav .nav-item[data-view='serverInfoBox']").addClass("active")
 
     if(userDetails.isAdmin){
         $(".enableIfAdmin").show();
@@ -840,7 +906,7 @@ function loadServerView(hostId)
 
     addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId]], ["", "active"], false, ["/", ""]);
 
-    $("#serverDetailsBtn, #serverProxyDevicesBtn, #serverWarningsBtn").removeClass("active");
+    $("#serverNavBox").find(".active").removeClass("active");
     $("#serverDetailsBtn").addClass("active");
 
     $("#serverInfoBox").find('[data-bs-toggle="tooltip"]').tooltip("disable")

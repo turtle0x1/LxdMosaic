@@ -721,6 +721,7 @@ $(function(){
     router.on('/host/:hostId/proxies', loadHostProxies);
     router.on('/host/:hostId/warnings', loadHostWarnings);
     router.on('/host/:hostId/settings', loadHostSettings);
+    router.on('/host/:hostId/disks', loadHostDisks);
 
     router.on('/instance/:hostId/:instance', loadContainerViewReq);
     router.on("/backups", loadBackupsView);
