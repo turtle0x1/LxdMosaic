@@ -48,6 +48,22 @@ class GetDetails
         return $do->fetchColumn();
     }
 
+    public function fetchAliases(array $hostIds)
+    {
+        $qMarks = join(',', array_fill(0, count($hostIds), '?'));
+        $sql = "SELECT
+                    `Host_ID`,
+                    COALESCE(`Host_Alias`, `Host_Url_And_Port`)
+                FROM
+                    `Hosts`
+                WHERE
+                    `Host_ID` IN ($qMarks)
+                ";
+        $do = $this->database->prepare($sql);
+        $do->execute($hostIds);
+        return $do->fetchAll(\PDO::FETCH_KEY_PAIR);
+    }
+
     public function fetchHost($hostId)
     {
         $sql = "SELECT

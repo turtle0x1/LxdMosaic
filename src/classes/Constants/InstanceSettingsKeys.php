@@ -16,4 +16,6 @@ class InstanceSettingsKeys
     const TIMEZONE = 11;
     const BACKUP_HISTORY = 12;
     const INSTANCE_METRIC_HISTORY = 13;
+    const SOFTWARE_INVENTORY_MONITOR = 14;
+    const SOFTWARE_INVENTORY_MONITOR_DAYS_DURATION = 15;
 }

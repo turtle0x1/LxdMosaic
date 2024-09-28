@@ -1,0 +1,256 @@
+<div id="softwareSnapshots" class="settingsBox">
+    <div class="row softwareSnapshotBox" id="softwareSnapshotLoadingBox">
+        <h4 class="text-center"><i class="fas fa-cog fa-spin"></i></h4>
+    </div>
+    <div class="row softwareSnapshotBox" id="softwareSnapshotResultBox">
+        <div class="col-md-3 border-end" style="min-height: 80vh">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4><i class="fas fa-images me-2"></i>All Snapshots</h4>
+                </div>
+            </div>
+            <div class="card card-body bg-dark mb-3" style="min-height: 80vh">
+                <table class="table table-bordered table-dark" id="softwareSnapshotsTbl">
+                    <thead>
+                        <tr>
+                            <th>Snapshot Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4><i class="fas fa-image me-2"></i>Snapshot: <span id="softwareSnapshotDateTitle"></span></h4>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-12 text-center justify-content" id="">
+                    <ul class="nav nav-tabs text-center" id="softwareSnapnotNav" style="border: none !important;">
+                        <li class="nav-item">
+                            <div class="nav-link active" data-target="softwareSnapshotOverviewBox">
+                                <i class="fas fa-tachometer-alt pe-2"></i>Overview
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="nav-link" data-target="softwareSnapshotListBox">
+                                <i class="fas fa-box pe-2"></i>All Software
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row softwareSnapshotDetailBox" id="softwareSnapshotOverviewBox">
+                <div class="col-md-6">
+                    <div class="card card-body bg-dark mb-3" id="managerPieChartDiv"
+                        style="min-height: 25vh; max-height: 25vh">
+                    </div>
+                    <div class="card card-body bg-dark mb-3" id="hostPieChartDiv"
+                        style="min-height: 25vh; max-height: 25vh">
+                    </div>
+                    <div class="card card-body bg-dark" id="projectMetricsDiv"
+                        style="min-height: 25vh; max-height: 25vh">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-body bg-dark mb-3" style="min-height: 65vh">
+                        <table class="table table-bordered table-dark" id="softwareSnapshotTopPackagesTbl">
+                            <thead>
+                                <tr>
+                                    <th>Package</th>
+                                    <th>Installs</th>
+                                    <th>No Versions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row softwareSnapshotDetailBox" id="softwareSnapshotListBox" style="display: none">
+                <div class="col-md-12">
+                    <div class="card card-body bg-dark text-white"
+                        style="min-height: 80vh; max-height: 80vh; overflow-y: scroll;">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-filter"></i></span>
+                            <input type="text" class="form-control" placeholder="Filter ..."
+                                id="snapshotSnapshotPackageFilter">
+                        </div>
+                        <table class="table table-bordered table-dark table-responsive" id="softwareSnapshotPackageTbl">
+                            <thead>
+                                <tr>
+                                    <th>Host</th>
+                                    <th>Project</th>
+                                    <th>Instance</th>
+                                    <th>Package</th>
+                                    <th>Version</th>
+                                    <th>Manager</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    var _currentSnapshotDate = null
+
+    function loadSoftwareAssets() {
+        $(".settingsBox").hide();
+        $("#settingsBox").show();
+        putAdminSidebar(adminSettingUrls.softwareSnapshots);
+        changeActiveNav(null)
+        $(".viewSettings").addClass("active");
+        $("#softwareSnapshots").show();
+        addBreadcrumbs(["Admin Settings", "Software Snapshots"], ["", "active"], false, ["/admin"]);
+        $(".softwareSnapshotBox").hide()
+        $("#softwareSnapshotLoadingBox").show()
+
+        ajaxRequest('/api/Hosts/SoftwareAssets/GetSoftwareAsssetsHeadersController/get', {}, (data) => {
+            data = makeToastr(data)
+
+
+            let snapshotTrs = ""
+            data.forEach(header => {
+                snapshotTrs += `<tr>
+                    <td><a href="#" class="viewSnapshot" data-date="${header.date}">${moment(header.date).format("ll")}</a></td>
+                </tr>`
+            });
+            $("#softwareSnapshotsTbl > tbody").empty().append(snapshotTrs)
+
+
+            $(".softwareSnapshotBox").hide()
+            $("#softwareSnapshotResultBox").show()
+            $("#softwareSnapshotsTbl > tbody").find("a:eq(0)").trigger("click")
+        })
+    }
+
+    $("#softwareSnapshotsTbl").on("click", ".viewSnapshot", function (e) {
+        e.preventDefault()
+        let tr = $(this).parents("tr")
+        $("#softwareSnapshotsTbl > tbody").find(".table-info").removeClass("table-info")
+        tr.addClass("table-info")
+        _currentSnapshotDate = $(this).data("date")
+        ajaxRequest('/api/Hosts/SoftwareAssets/GetSoftwareAssetsOverviewController/get', { date: _currentSnapshotDate }, (data) => {
+            data = $.parseJSON(data)
+            $("#softwareSnapshotDateTitle").text(moment(data.date).format("ll"))
+
+            function _makeChart(targetDiv, dataset, datasetLabel, chartTtitle) {
+                let id = randomColor().replace("#", "")
+                $(targetDiv).empty().append(`<canvas id="${id}"></canvas>`)
+                let ctx = $(`#${id}`)[0].getContext('2d');
+
+                let labels = []
+                let colors = [];
+                let values = []
+                dataset.forEach(element => {
+                    labels.push(element.name)
+                    values.push(element.packages)
+                    colors.push(randomColor())
+                });
+
+                var myPieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: datasetLabel,
+                            data: values,
+                            backgroundColor: colors,
+                            borderColor: colors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        title: {
+                            display: true,
+                            text: chartTtitle
+                        }
+                    }
+                });
+            }
+
+            _makeChart("#managerPieChartDiv", data.managerMetrics, "Package Managers", "Source Breakdown")
+            _makeChart("#hostPieChartDiv", data.hostMetrics, "Hosts", "Host Breakdown")
+            _makeChart("#projectMetricsDiv", data.projectMetrics, "Projects", "Project Breakdown")
+
+            let trs = "";
+            data.packages.forEach(package => {
+                trs += `<tr>
+                    <td>${package.name}</td>
+                    <td>${package.totalInstalls}</td>
+                    <td>${Object.keys(package.versions).length}</td>
+                </tr>`
+            });
+
+            $("#softwareSnapshotTopPackagesTbl > tbody").empty().append(trs)
+        })
+    });
+
+    $("#softwareSnapshotListBox").on("keyup", "#snapshotSnapshotPackageFilter", function () {
+        let search = $(this).val().trim().toLowerCase()
+        let trs = $("#softwareSnapshotPackageTbl > tbody > tr")
+        if (search == "") {
+            trs.show()
+            return false;
+        }
+
+        trs.each(function () {
+            let tr = $(this)
+            let tds = $(this).find("td")
+            tds.each(function () {
+                if ($(this).text().toLowerCase().includes(search)) {
+                    tr.show()
+                    return false;
+                } else {
+                    tr.hide()
+                }
+            })
+        });
+    })
+
+
+
+    $("#softwareSnapnotNav").on("click", ".nav-link", function (e) {
+        e.preventDefault()
+        $("#softwareSnapnotNav").find(".active").removeClass("active")
+        $(this).addClass("active")
+        $(".softwareSnapshotDetailBox").hide()
+        let target = $(this).data("target")
+        $(`#${target}`).show()
+        if (target == "softwareSnapshotListBox") {
+            $("#softwareSnapshotPackageTbl > tbody").empty().append(`<tr>
+                <td class="text-center" colspan="6"><i class="fas fa-cog fa-spin"></i></td>
+            </tr>`)
+            ajaxRequest('/api/Hosts/SoftwareAssets/GetSnapshotSoftwareListController/get', { date: _currentSnapshotDate }, (data) => {
+                let packages = makeToastr(data)
+                let packageHtml = ""
+                packages.forEach(package => {
+                    packageHtml += `<tr>
+                        <td>${package.hostName}</td>
+                        <td>${package.project}</td>
+                        <td>${package.instance}</td>
+                        <td>${package.name}</td>
+                        <td>${package.version}</td>
+                        <td>${package.manager}</td>
+                    </tr>`
+                });
+                $("#softwareSnapshotPackageTbl > tbody").empty().append(packageHtml)
+            });
+        }
+
+    })
+</script>

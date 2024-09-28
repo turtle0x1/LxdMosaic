@@ -317,6 +317,7 @@
             </div>
         </div>
     </div>
+    <?php require_once __DIR__ . "/boxComponents/settings/softwareAssets.html" ?>
 </div>
 
 <script>
@@ -334,6 +335,7 @@ var adminSettingUrls = {
     userAccessControl: '/admin/userAccessControl',
     history: '/admin/history',
     retiredData: '/admin/retiredData',
+    softwareSnapshots: '/admin/softwareAssets',
 };
 
 function putAdminSidebar(selected) {
@@ -350,6 +352,11 @@ function putAdminSidebar(selected) {
         <li class="nav-item mt-2">
             <a class="nav-link p-0 ${selected === `${adminSettingUrls.hosts}` ? "active" : null } " href="${adminSettingUrls.hosts}" data-navigo>
                 <i class="fas fa-server me-2"></i>Hosts
+            </a>
+        </li>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0  ${selected === adminSettingUrls.softwareSnapshots ? "active" : null }" href="${adminSettingUrls.softwareSnapshots}" data-navigo>
+                <i class="fas fa-list me-2"></i>Software Snapshots
             </a>
         </li>
         <li class="nav-item mt-2">
@@ -376,7 +383,8 @@ function putAdminSidebar(selected) {
             <a class="nav-link p-0  ${selected === `${adminSettingUrls.retiredData}` ? "active" : null }" href="${adminSettingUrls.retiredData}" data-navigo>
                 <i class="fas fa-eraser me-2"></i>Retired Data
             </a>
-        </li>`
+        </li>
+        `
     }
 
     $("#sidebar-ul").empty().append(sidebar);
