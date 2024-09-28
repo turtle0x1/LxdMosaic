@@ -4,6 +4,7 @@ Added
     View / update LXD settings on a host if admin (#534)
     Set snap cert location (#271)
     Admin can view disks list on server page
+    Opt in attempt to gather software versions from containers (#576)
 
 Changed
     Use bash shell as the default for {oracle, rocky} images (#544)
