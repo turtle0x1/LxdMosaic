@@ -111,7 +111,7 @@ function makeLineData(data, setLabel){
         });
     });
 
-    let color = randomColor();
+    let color = '#2ecc71'
 
     dataByYearMonth.push({
         label: setLabel,

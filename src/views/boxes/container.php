@@ -2056,7 +2056,7 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
 
     let x = {...{type: type, filter: filter, range: range}, ...currentContainerDetails}
     ajaxRequest(globalUrls.instances.metrics.getGraphData, x, (data)=>{
-        let color = randomColor();
+        let color = '#2ecc71'
         data = $.parseJSON(data);
         $("#metricGraphBody").empty().append('<canvas id="metricGraph"></canvas>');
 
