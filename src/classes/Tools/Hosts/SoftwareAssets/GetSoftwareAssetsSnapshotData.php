@@ -17,7 +17,7 @@ class GetSoftwareAssetsSnapshotData
         "apk info" => "apkParse",
         // General package managers
         "snap list" => "snapParse",
-        "npm list -g -l  --parseable" => "npmParse",
+        "npm list -g -l  --parseable --silent" => "npmParse",
         "pip list --format=columns" => "pipParse",
         "composer g show" => "composerParse"
     ];
@@ -72,6 +72,9 @@ class GetSoftwareAssetsSnapshotData
                     foreach ($this->commandMap as $command => $fn) {
                         try {
                             $result = $host->instances->execute($instance["name"], $command, true, [], true);
+                            if ($result == null) {
+                                continue;
+                            }
                             $result = $host->instances->logs->read(
                                 $instance["name"],
                                 $result["output"][0]
@@ -126,7 +129,7 @@ class GetSoftwareAssetsSnapshotData
 
         foreach ($lines as $line) {
             // Use regex to extract fields
-            if (preg_match('/^(?P<name>[\w\-]+)\s+(?P<version>[\w\.\-]+)\s+(?P<rev>\d+)\s+(?P<tracking>[\w\/\-\.]+)\s+(?P<publisher>[\w\.\-✓✪]+)\s+(?P<notes>.*)$/', $line, $matches)) {
+            if (preg_match('/^(?P<name>[\w\-]+)\s+(?P<version>[\w\.\-]+)\s+(?P<rev>\d+)\s+(?P<tracking>[\w\/\-\.]+)\s+(?P<publisher>[\w\.\-✓✪\*\*]+)\s+(?P<notes>.*)$/', $line, $matches)) {
                 $packages[] = [
                     'manager' => 'SNAP',
                     'name' => trim($matches['name']),
@@ -187,6 +190,8 @@ class GetSoftwareAssetsSnapshotData
             // Skip empty lines
             if (empty($line)) {
                 continue;
+            } else if (strpos($line, "@") === false) {
+                continue;
             }
 
             // Split the line into parts
@@ -194,13 +199,19 @@ class GetSoftwareAssetsSnapshotData
 
             // Get the package path and name/version
             $packagePath = $parts[0];
-            $packageInfo = end($parts); // Get the last part which is the package name and version
+            $packageInfo = $parts[1];
+            if (strpos($packageInfo, "@") === false) {
+                if (strpos($parts[2], "@") === false) {
+                    continue;
+                }
+                $packageInfo = $parts[2];
+            }
 
             $packageParts = explode('@', $packageInfo);
             $packageName = $packageParts[0] ?? null;
             $packageVersion = $packageParts[1] ?? null;
 
-            if($packageName == null){
+            if ($packageName == null) {
                 continue;
             }
 
