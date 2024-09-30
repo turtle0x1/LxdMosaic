@@ -107,6 +107,10 @@ class GetSoftwareSnapshotOverview
         $output["projectMetrics"] = array_values($output["projectMetrics"]);
         $output["packages"] = array_values($output["packages"]);
 
+        usort($output["managerMetrics"], [$this, "sortPackages"]);
+        usort($output["hostMetrics"], [$this, "sortPackages"]);
+        usort($output["projectMetrics"], [$this, "sortPackages"]);
+
         usort($output["packages"], [$this, "sortInstalls"]);
 
         $output["packages"] = array_slice($output["packages"], 0, 20);
@@ -117,5 +121,10 @@ class GetSoftwareSnapshotOverview
     private function sortInstalls($a, $b)
     {
         return $a["totalInstalls"] > $b["totalInstalls"] ? -1 : 1;
+    }
+
+    private function sortPackages($a, $b)
+    {
+        return $a["packages"] > $b["packages"] ? -1 : 1;
     }
 }
