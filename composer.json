@@ -5,7 +5,7 @@
         "php-di/php-di": "^5.4",
         "dhope0000/lxd": "^0.25.0",
         "vlucas/phpdotenv": "^2.5",
-        "symfony/http-foundation": "^4.2",
+        "symfony/http-foundation": "^5.4",
         "symfony/filesystem": "^4.3",
         "symfony/cache": "^4.3",
         "doctrine/annotations": "^1.10",
