@@ -2,15 +2,15 @@
     "name": "dhope0000/infrastructure",
     "require": {
         "php-http/guzzle6-adapter": "^1.1",
-        "php-di/php-di": "^5.4",
+        "php-di/php-di": "6.2.3",
         "dhope0000/lxd": "^0.25.0",
-        "vlucas/phpdotenv": "^2.5",
-        "symfony/http-foundation": "^4.2",
-        "symfony/filesystem": "^4.3",
-        "symfony/cache": "^4.3",
+        "vlucas/phpdotenv": "^5.6",
+        "symfony/http-foundation": "^5.4",
+        "symfony/filesystem": "^5.4",
+        "symfony/cache": "^5.4",
         "doctrine/annotations": "^1.10",
-        "crunzphp/crunz": "^2.2",
-        "symfony/routing": "^5.1",
+        "crunzphp/crunz": "^3.1",
+        "symfony/routing": "^5.4",
         "robmorgan/phinx": "^0.12.4"
     },
     "autoload": {
@@ -21,5 +21,10 @@
     "require-dev": {
         "phpunit/phpunit": "^9",
         "phpstan/phpstan": "^1.7"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": false
+        }
     }
 }

@@ -11,8 +11,7 @@ $container = $builder->build();
 $exceptionHandler = new dhope0000\LXDClient\App\ExceptionHandler();
 $exceptionHandler->register();
 
-$env = new Dotenv\Dotenv(__DIR__ . "/../../");
-$env->load();
+(\Dotenv\Dotenv::createImmutable(__DIR__ . '/../../'))->load();
 if (!isset($_ENV["DB_SQLITE"]) && !empty($_ENV["DB_SQLITE"])) {
     $env->required(['DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME']);
 }

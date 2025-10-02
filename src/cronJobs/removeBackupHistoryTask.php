@@ -4,8 +4,7 @@ use Crunz\Schedule;
 
 $container = (new \DI\ContainerBuilder())->build();
 
-$env = new Dotenv\Dotenv(__DIR__ . "/../../");
-$env->load();
+(\Dotenv\Dotenv::createImmutable(__DIR__ . '/../../'))->load();
 
 $getInstanceSetting = $container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting");
 $timezone = $getInstanceSetting->getSettingLatestValue(dhope0000\LXDClient\Constants\InstanceSettingsKeys::TIMEZONE);

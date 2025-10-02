@@ -8,7 +8,7 @@ $cronSchedule = new Schedule();
 
 $container = (new \DI\ContainerBuilder())->build();
 
-$env = (new Dotenv\Dotenv(__DIR__ . "/../../"))->load();
+(\Dotenv\Dotenv::createImmutable(__DIR__ . '/../../'))->load();
 
 $fetchBackupSchedules = $container->make("dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\FetchBackupSchedules");
 $createBackupSchedule = $container->make("dhope0000\LXDClient\Tools\Backups\Schedule\BackupStringToObject");

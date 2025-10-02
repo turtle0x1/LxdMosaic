@@ -5,8 +5,7 @@ use Crunz\Schedule;
 $builder = new \DI\ContainerBuilder();
 $container = $builder->build();
 
-$env = new Dotenv\Dotenv(__DIR__ . "/../../");
-$env->load();
+(\Dotenv\Dotenv::createImmutable(__DIR__ . '/../../'))->load();
 
 $getInstanceSetting = $container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting");
 

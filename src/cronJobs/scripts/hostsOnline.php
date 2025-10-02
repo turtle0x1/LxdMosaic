@@ -8,8 +8,7 @@ require __DIR__ . "/../../../vendor/autoload.php";
 $builder = new \DI\ContainerBuilder();
 $container = $builder->build();
 
-$env = new Dotenv\Dotenv(__DIR__ . "/../../../");
-$env->load();
+(\Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../'))->load();
 
 $hostList = $container->make("dhope0000\LXDClient\Model\Hosts\HostList");
 $details = $container->make("dhope0000\LXDClient\Model\Hosts\GetDetails");
