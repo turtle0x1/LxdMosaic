@@ -1065,7 +1065,7 @@ function SpiceMsgcKeyDown(e)
 {
     if (e)
     {
-        this.code = keycode_to_start_scan(e.keyCode);
+        this.code = keycode_to_start_scan(e.keyCode, e.code);
     }
     else
     {
@@ -1092,7 +1092,7 @@ function SpiceMsgcKeyUp(e)
 {
     if (e)
     {
-        this.code = keycode_to_end_scan(e.keyCode);
+        this.code = keycode_to_end_scan(e.keyCode, e.code);
     }
     else
     {

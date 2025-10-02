@@ -19,6 +19,7 @@
 */
 
 import { KeyNames } from './atKeynames.js';
+import { code_to_scancode } from './code_to_scancode.js';
 
 /*----------------------------------------------------------------------------
 **  Utility settings and functions for Spice
@@ -251,34 +252,38 @@ DOM_scanmap[189]                = KeyNames.KEY_Minus;
 DOM_scanmap[187]                = KeyNames.KEY_Equal;
 DOM_scanmap[186]                = KeyNames.KEY_SemiColon;
 
-function get_scancode(code)
+function get_scancode(keyCode, code)
 {
-    if (common_scanmap[code] === undefined)
+    if (code_to_scancode[code] !== undefined) {
+        return code_to_scancode[code];
+    }
+
+    if (common_scanmap[keyCode] === undefined)
     {
         if (navigator.userAgent.indexOf("Firefox") != -1)
-            return firefox_scanmap[code];
+            return firefox_scanmap[keyCode];
         else
-            return DOM_scanmap[code];
+            return DOM_scanmap[keyCode];
     }
     else
-        return common_scanmap[code];
+        return common_scanmap[keyCode];
 }
 
-function keycode_to_start_scan(code)
+function keycode_to_start_scan(keyCode, code)
 {
-    var scancode = get_scancode(code);
+    var scancode = get_scancode(keyCode, code);
     if (scancode === undefined)
     {
-        alert('no map for ' + code);
+        alert('no map for ' + keyCode);
         return 0;
     }
 
     return scancode;
 }
 
-function keycode_to_end_scan(code)
+function keycode_to_end_scan(keyCode, code)
 {
-    var scancode = get_scancode(code);
+    var scancode = get_scancode(keyCode, code);
     if (scancode === undefined)
         return 0;
 

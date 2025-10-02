@@ -33,6 +33,7 @@ function SpiceWireReader(sc, callback)
     this.sc = sc;
     this.callback = callback;
     this.needed = 0;
+    this.size = 0;
 
     this.buffers = [];
 
@@ -55,6 +56,7 @@ SpiceWireReader.prototype =
         if (this.needed == 0)
         {
             this.buffers.push(mb);
+            this.size += mb.byteLength;
             return;
         }
 
@@ -64,6 +66,7 @@ SpiceWireReader.prototype =
         {
             if (mb.byteLength > this.needed)
             {
+                this.size = mb.byteLength - this.needed;
                 this.buffers.push(mb.slice(this.needed));
                 mb = mb.slice(0, this.needed);
             }
@@ -73,32 +76,40 @@ SpiceWireReader.prototype =
         else
         {
             this.buffers.push(mb);
+            this.size += mb.byteLength;
         }
 
 
-        /* If we have fragments that add up to what we need, combine them */
-        /*  FIXME - it would be faster to revise the processing code to handle
-        **          multiple fragments directly.  Essentially, we should be
-        **          able to do this without any slice() or combine_array_buffers() calls */
-        while (this.buffers.length > 1 && this.buffers[0].byteLength < this.needed)
-        {
-            var mb1 = this.buffers.shift();
-            var mb2 = this.buffers.shift();
+        /* Optimization - All it takes is one combine  */
+        while (this.size >= this.needed) {
+            var count = 0;
+            var frame = new ArrayBuffer(this.needed);
+            var view = new Uint8Array(frame);
 
-            this.buffers.unshift(combine_array_buffers(mb1, mb2));
-        }
+            while (count < frame.byteLength && this.buffers.length > 0) {
+                var buf = this.buffers.shift();
+                if (!buf) {
+                    return;
+                }
+                var uint8 = new Uint8Array(buf);
+                var step = frame.byteLength - count;
 
-
-        while (this.buffers.length > 0 && this.buffers[0].byteLength >= this.needed)
-        {
-            mb = this.buffers.shift();
-            if (mb.byteLength > this.needed)
-            {
-                this.buffers.unshift(mb.slice(this.needed));
-                mb = mb.slice(0, this.needed);
+                /* Optimization - use dataview.set() instead of combine_array_buffers() */
+                if (uint8.length <= step) {
+                    view.set(uint8, count);
+                    count += uint8.length;
+                    this.size -= uint8.length;
+                } else {
+                    var temp = uint8.slice(0, step);
+                    view.set(temp, count);
+                    count += temp.length;
+                    this.size -= temp.length;
+            
+                    this.buffers.unshift(uint8.slice(step));
+                }
             }
-            this.callback.call(this.sc, mb,
-                        this.saved_msg_header || undefined);
+
+            this.callback.call(this.sc, frame, this.saved_msg_header || undefined);
         }
 
     },
