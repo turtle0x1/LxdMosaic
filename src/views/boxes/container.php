@@ -319,7 +319,7 @@
           </div>
         </div>
     </div>
-    <div class="col-md-6 text-center" id="terminalDiv">
+    <div class="col-md-6" id="terminalDiv">
         <div id="terminal-container"></div>
         <div id="terminalControls">
             <div class="btn-toolbar float-end" role="toolbar" aria-label="Toolbar with button groups">
