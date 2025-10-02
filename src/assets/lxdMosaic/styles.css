@@ -320,3 +320,7 @@ a:hover {
     margin-left: 10px;
     margin-right: 10px;
 }
+
+.table-transparent {
+    --bs-table-bg: transparent !important;
+}

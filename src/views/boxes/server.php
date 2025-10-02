@@ -40,7 +40,7 @@
                 </div>
                 <div class="mt-2 mb-2 enableIfAdmin" style="display: none;">
                     <h5><i style="min-width: 20px; text-align: center;" class="fas fa-server me-2"></i>Hardware</h5>
-                    <table class="table" id="hostDetailsTable">
+                    <table class="table table-transparent" id="hostDetailsTable">
                         <tbody>
                         </tbody>
                     </table>
