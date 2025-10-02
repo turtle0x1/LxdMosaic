@@ -20,7 +20,7 @@ class GetSnapshotSoftwareListController
 
     public function get(int $userId, string $date)
     {
-        $isAdmin = $this->fetchUserDetails->isAdmin($userId) === '1';
+        $isAdmin = $this->fetchUserDetails->isAdmin($userId);
         if (!$isAdmin) {
             throw new \Exception("No access", 1);
         }

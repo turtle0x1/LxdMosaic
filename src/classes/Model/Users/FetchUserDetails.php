@@ -78,7 +78,7 @@ class FetchUserDetails
         return $do->fetchColumn();
     }
 
-    public function isAdmin(int $userId)
+    public function isAdmin(int $userId): bool
     {
         $sql = "SELECT
                     `User_Admin`
@@ -91,7 +91,7 @@ class FetchUserDetails
         $do->execute([
             ":userId"=>$userId
         ]);
-        return $do->fetchColumn();
+        return (int) $do->fetchColumn() === 1;
     }
 
     public function isFromLdap(int $userId)

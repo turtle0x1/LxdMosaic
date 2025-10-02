@@ -27,7 +27,7 @@ class SearchHosts
 
     public function search(int $userId, string $hostSearch, array $extensionRequirements = [])
     {
-        $isAdmin = $this->fetchUserDetails->isAdmin($userId) === "1";
+        $isAdmin = $this->fetchUserDetails->isAdmin($userId);
 
         $projectsWithAccess = $this->fetchAllowedProjects->fetchAll($userId);
 

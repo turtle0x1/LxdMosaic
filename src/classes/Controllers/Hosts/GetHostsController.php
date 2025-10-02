@@ -17,7 +17,7 @@ class GetHostsController
 
     public function getAllHosts(int $userId)
     {
-        $isAdmin = $this->fetchUserDetails->isAdmin($userId) === '1';
+        $isAdmin = $this->fetchUserDetails->isAdmin($userId);
         if (!$isAdmin) {
             throw new \Exception("No access", 1);
         }

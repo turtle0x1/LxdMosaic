@@ -109,7 +109,7 @@ class RouteApi
 
         $allowedProjects = $this->fetchAllowedProjects->fetchAll($userId);
 
-        $userIsAdmin = $this->fetchUserDetails->isAdmin($userId) === '1';
+        $userIsAdmin = $this->fetchUserDetails->isAdmin($userId);
 
         if (empty($allowedProjects) && !$userIsAdmin) {
             $this->invalidateToken->invalidate($userId, $headers["apitoken"]);

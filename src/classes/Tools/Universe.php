@@ -54,7 +54,7 @@ class Universe
 
     public function getEntitiesUserHasAccesTo(int $userId, string $entity = null)
     {
-        $isAdmin = $this->fetchUserDetails->isAdmin($userId) === "1";
+        $isAdmin = $this->fetchUserDetails->isAdmin($userId);
 
         $projectsWithAccess = $this->fetchAllowedProjects->fetchAll($userId);
 

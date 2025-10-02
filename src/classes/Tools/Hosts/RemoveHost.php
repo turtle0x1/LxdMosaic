@@ -49,7 +49,7 @@ class RemoveHost
 
     public function remove($userId, int $hostId)
     {
-        $isAdmin = $this->fetchUserDetails->isAdmin($userId) === "1";
+        $isAdmin = $this->fetchUserDetails->isAdmin($userId);
 
         if (!$isAdmin) {
             throw new \Exception("Not allowed to delete hosts", 1);

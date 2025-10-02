@@ -24,7 +24,7 @@ class UpdateHostSettings
 
     public function update(int $userId, int $hostId, string $alias, int $supportsLoadAverages)
     {
-        $isAdmin = $this->fetchUserDetails->isAdmin($userId) === "1";
+        $isAdmin = $this->fetchUserDetails->isAdmin($userId);
 
         if (!$isAdmin) {
             throw new \Exception("Not allowed to update host settings", 1);

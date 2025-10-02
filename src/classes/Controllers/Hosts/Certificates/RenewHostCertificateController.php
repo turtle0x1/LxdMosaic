@@ -20,7 +20,7 @@ class RenewHostCertificateController implements \dhope0000\LXDClient\Interfaces\
      */
     public function renew(int $userId, Host $host)
     {
-        $isAdmin = $this->fetchUserDetails->isAdmin($userId) === '1';
+        $isAdmin = $this->fetchUserDetails->isAdmin($userId);
         if (!$isAdmin) {
             throw new \Exception("No access", 1);
         }
