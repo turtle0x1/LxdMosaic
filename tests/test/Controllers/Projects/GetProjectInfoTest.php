@@ -41,6 +41,7 @@ final class GetProjectInfoTest extends TestCase
                         "features.images" => "true",
                         "features.profiles" => "true",
                         "features.storage.volumes" => "true",
+                        "features.storage.buckets" => "true",
                     ],
                     "name" => "testProject",
                     "used_by" => [

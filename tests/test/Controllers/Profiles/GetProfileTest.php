@@ -41,6 +41,7 @@ final class GetProfileTest extends TestCase
                     "name" => "testProfile",
                     "used_by" => [],
                     "devices" => [],
+                    "project" => "default"
                 ]
             ]
         ];
