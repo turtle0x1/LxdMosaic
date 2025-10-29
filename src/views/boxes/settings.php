@@ -318,6 +318,7 @@
         </div>
     </div>
     <?php require_once __DIR__ . "/boxComponents/settings/softwareAssets.html" ?>
+    <?php require_once __DIR__ . "/boxComponents/settings/timers.html" ?>
 </div>
 
 <script>
@@ -336,6 +337,7 @@ var adminSettingUrls = {
     history: '/admin/history',
     retiredData: '/admin/retiredData',
     softwareSnapshots: '/admin/softwareAssets',
+    timersSnapshots: '/admin/timers',
 };
 
 function putAdminSidebar(selected) {
@@ -357,6 +359,11 @@ function putAdminSidebar(selected) {
         <li class="nav-item mt-2">
             <a class="nav-link p-0  ${selected === adminSettingUrls.softwareSnapshots ? "active" : null }" href="${adminSettingUrls.softwareSnapshots}" data-navigo>
                 <i class="fas fa-list me-2"></i>Software Snapshots
+            </a>
+        </li>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0  ${selected === adminSettingUrls.timersSnapshots ? "active" : null }" href="${adminSettingUrls.timersSnapshots}" data-navigo>
+                <i class="fas fa-hourglass-half me-2"></i>Timers Snapshots
             </a>
         </li>
         <li class="nav-item mt-2">
