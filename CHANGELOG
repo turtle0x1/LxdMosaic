@@ -11,6 +11,7 @@ Changed
     Use bash shell as the default for {oracle, rocky} images (#544)
     Support instances in the custom state "Ready" (#547)
     Set default shell for centos as bash (#546)
+    Image servers no longer hardcoded and can be controlled in admin
 
 Fixed
     Shell doesn't work when port is something other than 443 (#540)
