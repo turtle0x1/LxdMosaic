@@ -45,7 +45,7 @@ class SearchRemoteImages
             }
 
 
-            if ($imArch !== $searchArch) {
+            if ($searchArch !== "" && $imArch !== $searchArch) {
                 continue;
             }
 
