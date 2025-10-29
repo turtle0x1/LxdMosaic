@@ -13,6 +13,20 @@ class FetchImageServers
         $this->database = $database->dbObject;
     }
 
+    public function fetchAll()
+    {
+        $sql = "SELECT
+                    `IS_Date_Created` as `created`,
+                    `IS_Alias` as `alias`,
+                    `IS_Url` as `url`
+                FROM
+                    `Image_Servers`
+                ORDER BY
+                    `IS_Alias` ASC
+                ";
+        return $this->database->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function fetchAllAliases()
     {
         $sql = "SELECT
