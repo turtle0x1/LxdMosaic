@@ -1,0 +1,165 @@
+<div id="timersSnapshots" class="settingsBox">
+    <div class="row timersSnapshotBox" id="timersSnapshotLoadingBox">
+        <h4 class="text-center"><i class="fas fa-cog fa-spin"></i></h4>
+    </div>
+    <div class="row timersSnapshotBox" id="timersSnapshotResultBox">
+        <div class="col-md-3 border-end" style="min-height: 80vh">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4><i class="fas fa-images me-2"></i>All Snapshots</h4>
+                </div>
+            </div>
+            <div class="card card-body bg-dark mb-3" style="min-height: 80vh">
+                <table class="table table-bordered table-dark" id="timersSnapshotsTbl">
+                    <thead>
+                        <tr>
+                            <th>Snapshot Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4><i class="fas fa-image me-2"></i>Snapshot: <span id="timersSnapshotDateTitle"></span></h4>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-12 text-center justify-content" id="">
+                    <ul class="nav nav-tabs text-center" id="timersSnapnotNav" style="border: none !important;">
+                        <li class="nav-item">
+                            <div class="nav-link active" data-target="timersSnapshotOverviewBox">
+                                <i class="fas fa-tachometer-alt pe-2"></i>Overview
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row timersSnapshotDetailBox" id="timersSnapshotOverviewBox">
+                <div class="col-md-12">
+                    <div class="card card-body bg-dark mb-3" style="min-height: 65vh">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-filter"></i></span>
+                            <input type="text" class="form-control" placeholder="Filter ..." id="timersSnapshotFilter">
+                        </div>
+                        <table class="table table-bordered table-dark" id="timersSnapshotTbl">
+                            <thead>
+                                <tr>
+                                    <th>Command</th>
+                                    <th>Schedule</th>
+                                    <th># Instances</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    var _currentSnapshotDate = null
+
+    function loadTimers() {
+        $(".settingsBox").hide();
+        $("#settingsBox").show();
+        putAdminSidebar(adminSettingUrls.timersSnapshots);
+        changeActiveNav(null)
+        $(".viewSettings").addClass("active");
+        $("#timersSnapshots").show();
+        addBreadcrumbs(["Admin Settings", "timers Snapshots"], ["", "active"], false, ["/admin"]);
+        $(".timersSnapshotBox").hide()
+        $("#timersSnapshotLoadingBox").show()
+
+        ajaxRequest('/api/Hosts/Timers/GetTimersSnapshotHeadersController/get', {}, (data) => {
+            data = makeToastr(data)
+            let snapshotTrs = ""
+            data.forEach(header => {
+                snapshotTrs += `<tr>
+                    <td><a href="#" class="viewSnapshot" data-date="${header.date}">${moment(header.date).format("ll")}</a></td>
+                </tr>`
+            });
+            $("#timersSnapshotsTbl > tbody").empty().append(snapshotTrs)
+
+
+            $(".timersSnapshotBox").hide()
+            $("#timersSnapshotResultBox").show()
+            $("#timersSnapshotsTbl > tbody").find("a:eq(0)").trigger("click")
+        })
+    }
+
+    $("#timersSnapshotsTbl").on("click", ".viewSnapshot", function (e) {
+        e.preventDefault()
+        let tr = $(this).parents("tr")
+        $("#timersSnapshotsTbl > tbody").find(".table-info").removeClass("table-info")
+        tr.addClass("table-info")
+        _currentSnapshotDate = $(this).data("date")
+        ajaxRequest('/api/Hosts/Timers/GetTimersOverivewController/get', { date: _currentSnapshotDate }, (data) => {
+            data = $.parseJSON(data)
+
+            $("#timersSnapshotTbl > tbody").empty()
+            data.uniqueCommands.forEach(package => {
+                let tr = $(`<tr>
+                    <td>${package.command}</td>
+                    <td>${package.schedules.length == 1 ? package.schedules[0] : `${package.schedules.length} Schedules`}</td>
+                    <td><a href="#" class="viewTimerInstances">${package.count}</a></td>
+                </tr>`)
+                tr.on("click", ".viewTimerInstances", function(e){
+                    e.preventDefault()
+                    let trs = package.instances.map(instance => {
+                        return `<tr>
+                            <td>${instance.hostAlias}</td>
+                            <td>${instance.project}</td>
+                            <td>${instance.instance}</td>
+                        </tr>`
+                    }).join("")
+                    $.confirm({
+                        title: `<small><code>${package.command}</code></small>`,
+                        content: `<table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Host</th>
+                                    <th>Project</th>
+                                    <th>Instance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${trs}
+                            </tbody>
+                        </table>`
+                    })
+                });
+                $("#timersSnapshotTbl > tbody").append(tr)
+            });           
+        })
+    });
+
+    $("#timersSnapshotOverviewBox").on("keyup", "#timersSnapshotFilter", function () {
+        let search = $(this).val().trim().toLowerCase()
+        let trs = $("#timersSnapshotTbl > tbody > tr")
+        if (search == "") {
+            trs.show()
+            return false;
+        }
+
+        trs.each(function () {
+            let tr = $(this)
+            let tds = $(this).find("td")
+            tds.each(function () {
+                if ($(this).text().toLowerCase().includes(search)) {
+                    tr.show()
+                    return false;
+                } else {
+                    tr.hide()
+                }
+            })
+        });
+    })
+</script>
