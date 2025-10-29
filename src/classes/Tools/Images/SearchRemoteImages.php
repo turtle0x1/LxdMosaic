@@ -2,22 +2,28 @@
 
 namespace dhope0000\LXDClient\Tools\Images;
 
+use dhope0000\LXDClient\Constants\ImageServerType;
+use dhope0000\LXDClient\Model\InstanceSettings\ImageServers\FetchImageServers;
+
 class SearchRemoteImages
 {
+    private $fetchImageServers;
+
+    public function __construct(FetchImageServers $fetchImageServers)
+    {
+        $this->fetchImageServers = $fetchImageServers;
+    }
+
     public function get($urlKey = "linuxcontainers", $searchType = "container", $searchArch = "amd64")
     {
-        $urlMap = [
-            "linuxcontainers"=>'https://images.linuxcontainers.org/streams/v1/images.json',
-            "ubuntu-release"=>'https://cloud-images.ubuntu.com/releases/streams/v1/com.ubuntu.cloud:released:download.json',
-            "ubuntu-daily"=>'https://cloud-images.ubuntu.com/daily/streams/v1/com.ubuntu.cloud:daily:download.json'
-        ];
+        $imageServer = $this->fetchImageServers->fetchAliasDetails($urlKey);
+        if ($imageServer == false) {
+            throw new \Exception("Server Not Found");
+        }
 
-        $url = $urlMap[$urlKey];
+        $url = $imageServer["url"];
 
-        $isUbuntuUrl = in_array($urlKey, [
-            "ubuntu-release",
-            "ubuntu-daily"
-        ]);
+        $isUbuntuRelaseServer = (int) $imageServer["protocol"] === ImageServerType::UBUNTU_RELEASE;
 
         $server = $this->getSimpleStreamsJson($url);
         $products = $server["products"];
@@ -34,10 +40,10 @@ class SearchRemoteImages
             $imArch = null;
             $imVariation = null;
 
-            if ($isUbuntuUrl) {
+            if ($isUbuntuRelaseServer) {
                 extract($this->parseUbuntuSimpleStream($product));
             } else {
-                extract($this->parseLinuxContainersSimpleStream($name, $product));
+                extract($this->parseSimpleStreams($name, $product));
             }
 
             if (!in_array($imArch, $seenArches)) {
@@ -70,9 +76,7 @@ class SearchRemoteImages
             foreach ($sList as $fingerKey) {
                 if (isset($lxdFolder[$fingerKey])) {
                     if (!isset($output[$imOs])) {
-                        $output[$imOs] = [
-
-                        ];
+                        $output[$imOs] = [];
                     }
 
                     $variant = "default";
@@ -98,21 +102,21 @@ class SearchRemoteImages
     private function parseUbuntuSimpleStream($product)
     {
         return [
-            "imOs"=>$product["os"],
-            "imRelease"=>$product["release_title"],
-            "imArch"=>$product["arch"],
-            "imVariation"=>"default"
+            "imOs" => $product["os"],
+            "imRelease" => $product["release_title"],
+            "imArch" => $product["arch"],
+            "imVariation" => "default"
         ];
     }
 
-    private function parseLinuxContainersSimpleStream($name, $product)
+    private function parseSimpleStreams($name, $product)
     {
         $nameParts = explode(":", $name);
         return [
-            "imOs"=>$nameParts[0],
-            "imRelease"=>$nameParts[1],
-            "imArch"=>$nameParts[2],
-            "imVariation"=>$nameParts[3]
+            "imOs" => $nameParts[0],
+            "imRelease" => $nameParts[1],
+            "imArch" => $nameParts[2],
+            "imVariation" => $nameParts[3]
         ];
     }
 
@@ -125,7 +129,7 @@ class SearchRemoteImages
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_URL => $url,
             CURLOPT_USERAGENT => 'LXDMosaic',
-            CURLOPT_FOLLOWLOCATION=>true
+            CURLOPT_FOLLOWLOCATION => true
         ));
         // Send the request & save response to $resp
         $resp = curl_exec($curl);
