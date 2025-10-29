@@ -282,7 +282,7 @@ function loadProjectsSidebar(){
     if($("#sidebar-ul").find("[id^=projects]").length == 0){
         ajaxRequest(globalUrls.projects.getAllFromHosts, {}, function(data){
 
-            data = $.parseJSON(data);
+            data = makeToastr(data);
             let a = currentProject.hostId == null ? "active" : null;
             let hosts = `
             <li class="nav-item mt-2">
@@ -332,7 +332,7 @@ function loadProjectView()
     $("#projectsOverview, #projectsBox").show();
     $("#projectCards").empty().append(`<h4 class='text-center'><i class="fas fa-cog fa-spin"></i></h4>`)
     ajaxRequest(globalUrls.projects.getOverview, {}, function(data){
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let cards = "";
 
         $.each(data.clusters, (clusterIndex, cluster)=>{
@@ -364,7 +364,7 @@ function viewProject(project, hostId, hostAlias){
     $(".boxSlide, #projectDetails").hide();
     $("#projectsBox").show();
     ajaxRequest(globalUrls.projects.info, currentProject, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         $("#projectsOverview").hide();
         $("#projectsBox").show();
         $("#projectDetails").show();

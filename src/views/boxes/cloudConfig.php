@@ -131,7 +131,7 @@ function loadCloudConfigView(req)
 
     ajaxRequest(globalUrls.cloudConfig.getDetails, data ,function(data){
 
-        let config = $.parseJSON(data);
+        let config = makeToastr(data);
         $("#cloudConfigImage").tokenInput("clear");
 
         if(config.data.imageDetails.hasOwnProperty("description")){
@@ -162,7 +162,7 @@ function loadCloudConfigTree(force = false)
 {
     if(force || $("#sidebar-ul").find("[id^=cloudConfig]").length == 0){
         ajaxRequest(globalUrls.cloudConfig.getAll, null, function(data){
-            var data = $.parseJSON(data);
+            var data = makeToastr(data);
             let a = currentCloudConfigId == null ? 'active' : '';
             let hosts = `
             <li class="mb-2 mt-2 nav-item">

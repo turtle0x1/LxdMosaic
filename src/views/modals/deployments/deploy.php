@@ -37,7 +37,7 @@ var deploymentDeployObj = {
 $("#modal-deployments-deploy").on("shown.bs.modal", function(){
     $("#deployCloudConfigTable > tbody").empty();
     ajaxRequest(globalUrls.deployments.getDeploymentConfigs, deploymentDeployObj, function(data){
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let trs = $();
         $.each(data, function(i, item){
             let x = $(`<tr id="${item.revId}">

@@ -62,7 +62,7 @@ $("#modal-cloudConfig-deploy").on("change", "#deployCloudConfigHosts", function(
     let hostId = $(this).find(":selected").parents("optgroup").attr("id")
     if($.isNumeric(hostId)){
         ajaxRequest(globalUrls.hosts.gpu.getAll, {hostId}, (data)=>{
-            data =  $.parseJSON(data);
+            data =  makeToastr(data);
             //TODO if len == 0
             let gpus = "";
             $.each(data, function(i, item){
@@ -91,7 +91,7 @@ $("#modal-cloudConfig-deploy").on("show.bs.modal", function(){
     }
 
     ajaxRequest(globalUrls.projects.getAllFromHosts, {}, function(data){
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let options = "<option value=''>Please select</option>";
         $.each(data.clusters, (clusterIndex, cluster)=>{
             $.each(cluster.members, (_, host)=>{

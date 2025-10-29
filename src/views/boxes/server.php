@@ -279,7 +279,7 @@ function _loadServerDetailsIfReq(hostId){
         return true;
     }
     ajaxRequest(globalUrls.hosts.getHostOverview, {hostId: hostId}, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         //TODO This is duplicate code, clear this up
         let ident = data.header.alias == null ? data.header.urlAndPort : data.header.alias;
         currentServer.hostAlias = data.header.alias;
@@ -914,7 +914,7 @@ function loadServerView(hostId)
     currentServer.hostId = hostId;
 
     ajaxRequest(globalUrls.hosts.getHostOverview, {hostId: hostId}, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
 
         let ident = data.header.alias == null ? data.header.urlAndPort : data.header.alias;
         currentServer.hostAlias = data.header.alias;

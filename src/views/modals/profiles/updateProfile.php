@@ -70,7 +70,7 @@
         if(!$.isPlainObject(currentProfileDetails) || typeof currentProfileDetails.profile !== "string"){
             $("#profileUpdateData").hide();
             ajaxRequest(globalUrls.profiles.getAllProfiles, null, function(data){
-                var data = $.parseJSON(data);
+                var data = makeToastr(data);
                 let html = "<option value=''>Please Select </option>";
                 $.each(data, function(host, profiles){
                     $.each(profiles.profiles, function(name, data){
@@ -104,7 +104,7 @@
         }
 
         ajaxRequest(globalUrls.profiles.search.getCommonProfiles, x, function(data){
-            let hosts = $.parseJSON(data);
+            let hosts = makeToastr(data);
             let checkboxHtml = '';
             $.each(hosts, function(i, host){
                 checkboxHtml += '<div class="items col-xs-5 col-sm-5 col-md-3 col-lg-3">' +

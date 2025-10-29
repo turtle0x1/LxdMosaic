@@ -21,16 +21,15 @@ function hostIdOrAliasForUrl(hostAlias, hostId){
 
 function makeToastr(x) {
     if(!$.isPlainObject(x)){
-        x = $.parseJSON(x);
+        x = JSON.parse(x);
     }
 
     if(x.hasOwnProperty("responseText")){
-        x = $.parseJSON(x.responseText);
+        x = JSON.parse(x.responseText);
     }
 
 
-    if(x.hasOwnProperty("state")){
-
+    if(x.hasOwnProperty("state") && x.hasOwnProperty("message")){
         toastr[x.state](x.message);
     }
     return x;

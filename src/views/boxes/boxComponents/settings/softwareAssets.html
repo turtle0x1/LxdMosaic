@@ -143,7 +143,7 @@
         tr.addClass("table-info")
         _currentSnapshotDate = $(this).data("date")
         ajaxRequest('/api/Hosts/SoftwareAssets/GetSoftwareAssetsOverviewController/get', { date: _currentSnapshotDate }, (data) => {
-            data = $.parseJSON(data)
+            data = makeToastr(data)
             $("#softwareSnapshotDateTitle").text(moment(data.date).format("ll"))
 
             function _makeChart(targetDiv, dataset, datasetLabel, chartTtitle) {

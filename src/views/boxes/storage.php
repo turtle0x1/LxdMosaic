@@ -305,7 +305,7 @@ function loadStorageSidebar(data = null){
     if(data == null){
         if($("#sidebar-ul").find("[id^=storage]").length == 0){
             ajaxRequest(globalUrls.storage.getAll, {}, (data)=>{
-                data = $.parseJSON(data);
+                data = makeToastr(data);
                 return _doResult(data)
             });
         }else {
@@ -333,7 +333,7 @@ function loadStorageView()
     currentPool = {hostId: null, poolName: null}
     loadStorageSidebar()
     ajaxRequest(globalUrls.storage.getAll, {}, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
 
         let tableList = "";
 
@@ -393,7 +393,7 @@ function viewStoragePool(hostId, hostAlias, poolName)
     addBreadcrumbs(["Storage", hostAlias, poolName], ["", "", "active"], false, ["/storage"]);
 
     ajaxRequest(globalUrls.storage.getPool, currentPool, function(data){
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let configHtml = "",
             usedByHtml = "";
 

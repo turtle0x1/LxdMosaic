@@ -104,7 +104,7 @@ $("#newVmHosts").tokenInput(globalUrls.hosts.search.search, {
 
 $("#modal-vms-create").on("show.bs.modal", function(){
     ajaxRequest(globalUrls.instances.settings.getAllAvailableSettings, {}, function(data){
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let selectHtml = "<select name='key' class='form-select containerSetting'><option value=''>Please Select</option>";
         $.each(data, function(i, item){
             selectHtml += `<option value='${item.key}' data-value="${item.value}">${item.key}</option>`;

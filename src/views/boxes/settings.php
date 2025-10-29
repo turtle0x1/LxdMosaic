@@ -500,7 +500,7 @@ function loadProjectAccesOverview(req){
     $("#userProjectOverview").show();
     addBreadcrumbs(["Admin Settings", "Users Projects Access"], ["", "active"], false, ["/admin"]);
     ajaxRequest(globalUrls.projects.getProjectsOverview, {}, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let hosts = "";
         $.each(data.clusters, (clusterIndex, cluster)=>{
             hosts += `<h4 class="c-sidebar-nav-title text-success pt-2"><u>Cluster ${clusterIndex}</u></h4>`;
@@ -527,7 +527,7 @@ function loadRecordedActions(req, ammount = 30){
     addBreadcrumbs(["Admin Settings", "Recorded Actions"], ["", "active"], false, ["/admin"]);
     $("#actionCount").text(ammount);
     ajaxRequest(globalUrls.settings.recordedActions.getLastResults, {ammount: ammount}, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let trs = "";
         if(data.length > 0 ){
             $.each(data, (_, item)=>{
@@ -587,7 +587,7 @@ function loadUsers(){
     addBreadcrumbs(["Admin Settings", "User Management"], ["", "active"], false, ["/admin"]);
     $("#showDeletedUserFilter").prop("checked", false)
     ajaxRequest(globalUrls.settings.users.getAll, {}, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let trs = "";
         if(data.length > 0 ){
             $.each(data, (_, user)=>{
@@ -653,7 +653,7 @@ function loadInstancesHostsView(){
     $("#instanceHostsBox").show();
     addBreadcrumbs(["Admin Settings", "Hosts Management"], ["", "active"], false, ["/admin"]);
     ajaxRequest(globalUrls.hosts.getAllHosts, {}, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let trs = "";
         if(data.length > 0 ){
             let now = moment();
@@ -706,7 +706,7 @@ function loadInstanceTypes(){
     $("#instanceTypesOverviewProviderDetailsSplash").show();
     $("#instanceTypesOverviewProviderDetails").hide();
     ajaxRequest(globalUrls.instances.instanceTypes.getInstanceTypes, {}, function(data){
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         allInstanceTypes = data;
         let h = "";
         $.each(data, function(provider, provDetails){

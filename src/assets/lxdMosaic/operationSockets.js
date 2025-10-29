@@ -82,7 +82,7 @@ function openEventSocket()
         $("#noOps").remove();
 
         if(msg.mosaicType == "hostChange"){
-            let data = $.parseJSON(msg);
+            let data = makeToastr(msg);
             let status = data.offline ? "offline" : "online";
             makeServerChangePopup(status, data.host);
         }else if(msg.mosaicType == "deploymentProgress"){

@@ -118,7 +118,7 @@ function makeNetworkHostSidebarHtml(hosthtml, host, id){
 function loadNetworkSidebar(){
     if($("#sidebar-ul").find("[id^=networks]").length == 0){
         ajaxRequest(globalUrls.networks.getAll, {}, (data)=>{
-            data = $.parseJSON(data);
+            data = makeToastr(data);
 
             let a = currentNetwork.hostId == null ? "active" : "";
 
@@ -172,7 +172,7 @@ function loadNetworksView()
     loadNetworkSidebar()
     // Dont normally like 2 requests to load dashboard but this could be slow
     ajaxRequest(globalUrls.networks.getDashboard, {}, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let html = "";
         $("#networksOverview").empty().append(`<h4 class="text-center"><i class="fas fa-cog fa-spin"></i></h4>`)
         $.each(data.standalone.members, (_, host)=>{
@@ -246,7 +246,7 @@ function viewNetwork(req)
     loadNetworkSidebar()
     changeActiveNav(".viewNetwork")
     ajaxRequest(globalUrls.networks.get, currentNetwork, function(data){
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let configHtml = "",
             usedByHtml = "";
 

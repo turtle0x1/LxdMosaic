@@ -196,7 +196,7 @@ function loadDeploymentsSidebar(inputData = null){
     }
     if(inputData == null && $("#sidebar-ul").find("[href^='/deployments']").length == 0){
         ajaxRequest(globalUrls.deployments.getAll, {}, (data)=>{
-            _doResult($.parseJSON(data))
+            _doResult(makeToastr(data))
         });
     }else if(inputData !== null){
         _doResult(inputData);
@@ -221,7 +221,7 @@ function loadDeploymentsView()
     $("#deploymentsOverview, #deploymentsBox").show();
     $("#deploymentList").empty();
     ajaxRequest(globalUrls.deployments.getAll, {}, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
 
         if(data.hasOwnProperty("state") && data.state == "error"){
             $("#sidebar-ul").empty()
@@ -255,7 +255,7 @@ function viewDeployment(deploymentId)
     $("#deploymentsOverview").hide();
     $("#depoymentDetails").show();
     ajaxRequest(globalUrls.deployments.getDeployment, x, function(data){
-        data = $.parseJSON(data);
+        data = makeToastr(data);
 
         $("#deploymentName").text(`Deployment: ${data.details.name}`);
 

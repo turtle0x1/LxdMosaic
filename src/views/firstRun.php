@@ -586,7 +586,7 @@ if (file_exists($socketPath)) {
             },
             url: "/api/InstanceSettings/FirstRunController/run",
             success: function(data) {
-                let result = $.parseJSON(data);
+                let result = makeToastr(data);
                 if (result.state !== "success") {
                     launchBtn.attr("disabled", false)
                     if (result.message.match(/Password too short/g)) {

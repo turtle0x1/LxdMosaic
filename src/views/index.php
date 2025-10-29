@@ -652,7 +652,7 @@ $(function(){
         before(done, match){
             if(Object.keys(hostsAliasesLookupTable).length == 0){
                 ajaxRequest(globalUrls.universe.getEntities, {entity: "projects"}, function(data){
-                    data = $.parseJSON(data)
+                    data = makeToastr(data)
                     let providedHostId = match.data !== null && match.data.hasOwnProperty("hostId") ? match.data.hostId : null;
                     let projectsDropdown = "";
 

@@ -207,7 +207,7 @@
         ajaxRequest('/api/ProjectAnalytics/GetGraphableProjectAnalyticsController/get', {
             history: $(this).val()
         }, (data) => {
-            data = $.parseJSON(data)
+            data = makeToastr(data)
             makeProjectAnalyticsGraphs(data.projectAnalytics)
         });
     });

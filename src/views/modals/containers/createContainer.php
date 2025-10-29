@@ -133,7 +133,7 @@
             }else{
                 let x = {hostId: h[0].hostId}
                 ajaxRequest(globalUrls.hosts.gpu.getAll, x, (data)=>{
-                    data =  $.parseJSON(data);
+                    data =  makeToastr(data);
                     //TODO if len == 0
                     let gpus = "";
                     $.each(data, function(i, gpu){
@@ -173,7 +173,7 @@
     $("#modal-container-create").on("shown.bs.modal", function(){
         changeCreateContainerBox(1)
         ajaxRequest(globalUrls.instances.settings.getAllAvailableSettings, {}, function(data){
-            data = $.parseJSON(data);
+            data = makeToastr(data);
             let selectHtml = "<select name='key' class='form-select containerSetting'><option value=''>Please Select</option>";
             $.each(data, function(i, item){
                 selectHtml += `<option value='${item.key}' data-value="${item.value}">${item.key}</option>`;
@@ -189,7 +189,7 @@
 
         $("#gpuWarning").hide();
         ajaxRequest(globalUrls.instances.instanceTypes.getInstanceTypes, {}, function(data){
-            data = $.parseJSON(data);
+            data = makeToastr(data);
             let h = "<option value=''>Please Select</option>";
             $.each(data, function(provider, provDetails){
                 h += `<optgroup label='${provider}'>`;

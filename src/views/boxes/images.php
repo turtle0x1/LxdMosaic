@@ -348,7 +348,7 @@
             searchType: $("#searchImages-type").val(),
             searchArch: $("#searchImages-arch").val(),
         }, function(data){
-            let x = $.parseJSON(data);
+            let x = makeToastr(data);
             if(x.hasOwnProperty("error")){
                 return false;
             }
@@ -386,7 +386,7 @@
         }
         addBreadcrumbs(["Images"], ["active"], false, ["/images"])
         ajaxRequest(globalUrls.images.getAll, null, function(data){
-            data = $.parseJSON(data);
+            data = makeToastr(data);
             let a = changeView == false ? "" : "active";
             let hosts = `
             <li class="mt-2 p-0">

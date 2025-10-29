@@ -231,7 +231,7 @@ function loadProfileSidebar(){
     if($("#sidebar-ul").find("[id^=profiles]").length == 0){
 
         ajaxRequest(globalUrls.profiles.getAllProfiles, null, function(data){
-            var data = $.parseJSON(data);
+            var data = makeToastr(data);
 
             let a = currentProfileDetails.hostId == null ? "active" : "";
             let hosts = `
@@ -286,7 +286,7 @@ function loadProfileView()
 
     $("#profileCards").empty().append(`<h4 class='text-center'><i class="fas fa-cog fa-spin"></i></h4>`)
     ajaxRequest(globalUrls.profiles.getDashboard, null, function(data){
-        var data = $.parseJSON(data);
+        var data = makeToastr(data);
         let cards = "";
 
         $.each(data.clusters, (clusterIndex, cluster)=>{
@@ -348,7 +348,7 @@ function viewProfile(profileId, hostAlias, hostId){
     changeActiveNav(".viewProfiles");
     loadProfileSidebar()
     ajaxRequest(globalUrls.profiles.getProfile, {hostId: hostId, profile: profileId}, (data)=>{
-        let details = $.parseJSON(data);
+        let details = makeToastr(data);
 
         let deviceTableRows = createTableRowsHtml(details.devices);
 

@@ -50,7 +50,7 @@
         }
 
         ajaxRequest(globalUrls.instances.getCurrentSettings, currentContainerDetails, function(data){
-            data = $.parseJSON(data);
+            data = makeToastr(data);
             if(data.existingSettings.length > 0){
                 let existingSettingsHtml = "";
                 $.each(data.existingSettings, function(i, item){

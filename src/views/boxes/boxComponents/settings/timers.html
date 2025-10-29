@@ -102,7 +102,7 @@
         tr.addClass("table-info")
         _currentSnapshotDate = $(this).data("date")
         ajaxRequest('/api/Hosts/Timers/GetTimersOverivewController/get', { date: _currentSnapshotDate }, (data) => {
-            data = $.parseJSON(data)
+            data = makeToastr(data)
 
             $("#timersSnapshotTbl > tbody").empty()
             data.uniqueCommands.forEach(package => {

@@ -1045,7 +1045,7 @@ function copyContainerConfirm(hostId, container) {
         onContentReady: function () {
             var jc = this;
             ajaxRequest(globalUrls.projects.getAllFromHosts, {}, function(data){
-                data = $.parseJSON(data);
+                data = makeToastr(data);
                 let options = "<option value=''>Please select</option>";
                 $.each(data.clusters, (clusterIndex, cluster)=>{
                     options += `<li class="c-sidebar-nav-title text-success ps-1 pt-2"><u>Cluster ${clusterIndex}</u></li>`;
@@ -1178,7 +1178,7 @@ function loadContainerView(data)
     });
 
     ajaxRequest(globalUrls.instances.getInstance, data, function(result){
-        let x = $.parseJSON(result);
+        let x = makeToastr(result);
 
         if(x.state == "error"){
             makeToastr(result);
@@ -2020,7 +2020,7 @@ $("#containerBox").on("change", "#metricTypeSelect", function(){
     }
     let x = {...{type: type}, ...currentContainerDetails}
     ajaxRequest(globalUrls.instances.metrics.getTypeFilters, x, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let html = "<option value=''>Please select</option>";
         $.each(data, (_, filter)=>{
             html += `<option value='${filter}'>${filter}</option>`
@@ -2057,7 +2057,7 @@ $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
     let x = {...{type: type, filter: filter, range: range}, ...currentContainerDetails}
     ajaxRequest(globalUrls.instances.metrics.getGraphData, x, (data)=>{
         let color = '#2ecc71'
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         $("#metricGraphBody").empty().append('<canvas id="metricGraph"></canvas>');
 
         let scales = data.formatBytes ? scalesBytesCallbacks : {yAxes: [{}]}
@@ -2138,7 +2138,7 @@ $("#containerBox").on("click", "#goToMetrics", function(){
     let x = {...{type: 1}, ...currentContainerDetails}
 
     ajaxRequest(globalUrls.instances.metrics.getAllTypes, currentContainerDetails, (data)=>{
-        data = $.parseJSON(data);
+        data = makeToastr(data);
         let html = "<option value=''>Please select</option>";
         $.each(data, (_, item)=>{
             html += `<option value='${item.typeId}'>${item.type}</option>`

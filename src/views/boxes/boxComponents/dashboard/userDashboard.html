@@ -362,7 +362,7 @@
             container: $("#addDashMetricInstanceSelect").val()
         }
         ajaxRequest(globalUrls.instances.metrics.getTypeFilters, x, (data) => {
-            data = $.parseJSON(data);
+            data = makeToastr(data);
             let html = "<option value=''>Please select</option>";
             $.each(data, (_, filter) => {
                 html += `<option value='${filter}'>${filter}</option>`
