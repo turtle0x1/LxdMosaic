@@ -16,16 +16,12 @@
                     <div class="input-group mb-2 me-sm-2">
                         <div class="input-group-text">Server</div>
                         <select id="searchImages-server" class="form-select">
-                            <option value="" selected>Select...</option>
-                            <option value="linuxcontainers">linuxcontainers</option>
-                            <option value="ubuntu-release">ubuntu-release</option>
-                            <option value="ubuntu-daily">ubuntu-daily</option>
                         </select>
                     </div>
                     <div class="input-group mb-2 me-sm-2">
                         <div class="input-group-text">Type</div>
                         <select id="searchImages-type" class="form-select">
-                            <option value="" selected>Select...</option>
+                            <option value="" selected>All</option>
                             <option value="container">Container</option>
                             <option value="virtual-machine">Virtual Machine</option>
                         </select>
@@ -33,7 +29,7 @@
                     <div class="input-group mb-2 me-sm-2">
                         <div class="input-group-text">Arch</div>
                         <select id="searchImages-arch" class="form-select">
-                            <option value="" selected>Select...</option>
+                            <option value="" selected>All</option>
                             <option value="amd64">amd64</option>
                             <option value="i386">i386</option>
                             <option value="armel">armel</option>
@@ -143,6 +139,21 @@
         $(".sidebar-fixed").addClass("sidebar-lg-show");
         changeActiveNav(".viewImages")
         loadImageOverview();
+
+        ajaxRequest('/api/InstanceSettings/ImageServers/GetAllImageServersController/all', {}, (data)=>{
+            data = makeToastr(data)
+            let options = "";
+            if(data.servers.length == 0){
+                options = `<option value="">No Image Servers</option>`;
+                $("#searchImages-server, #searchImages-type, #searchImages-arch, #filterImages").attr("disabled", true);
+            }else{
+                options = `<option value="">Please select</option>` + data.servers.map(server => {
+                    return `<option value="${server}">${server}</option>`
+                })
+                $("#searchImages-server, #searchImages-type, #searchImages-arch, #filterImages").attr("disabled", false);
+            }
+            $("#searchImages-server").empty().append(options)
+        });
     }
 
     function makeImageName(image){
