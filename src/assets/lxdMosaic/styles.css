@@ -105,6 +105,10 @@ body {
     text-decoration: line-through !important;
 }
 
+.toggleDropdown {
+padding: .25rem !important;
+}
+
 .sidebar .nav-dropdown-toggle.disabled::before {
     display: none !important;
 }

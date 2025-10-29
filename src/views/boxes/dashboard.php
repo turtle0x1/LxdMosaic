@@ -67,7 +67,7 @@ $(document).on("click", ".viewDashboard", function(){
 
 function _makeDashboardSidebarHostItem(host, currentHostId) {
     let disabled = "";
-    let expandBtn = `<button class="btn  btn-outline-secondary d-inline btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false"><i class="fas fa-caret-left"></i></button>`;
+    let expandBtn = `<button class="btn  btn-outline-secondary d-inline btn-sm btn-toggle align-items-center rounded collapsed showServerInstances d-inline float-end me-2 toggleDropdown" data-bs-toggle="collapse" data-bs-target="#host-${host.hostId}" aria-expanded="false"><i class="fas fa-caret-left"></i></button>`;
     let active = currentHostId == host.hostId ? "active" : ""
 
     if(host.hostOnline != 1){
