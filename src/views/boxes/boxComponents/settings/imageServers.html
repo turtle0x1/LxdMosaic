@@ -1,0 +1,165 @@
+<div id="imageServers" class="settingsBox">
+    <div class="row imageServersBox" id="imageServersLoadingBox">
+        <h4 class="text-center"><i class="fas fa-cog fa-spin"></i></h4>
+    </div>
+    <div class="row imageServersBox" id="imageServersResultBox">
+        <div class="col-md-12 border-end" style="min-height: 80vh">
+            <div class="card bg-dark text-white mb-3" style="min-height: 80vh">
+                <div  class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                    <h4><i class="fas fa-images me-2"></i>All Image Servers</h4>
+                    <button class="btn btn-outline-primary p-1" id="addNewImageServer"><i class="fas fa-plus"></i></button>
+                </div>
+                <div class="card-body">
+
+                    <table class="table table-bordered table-dark" id="imageServersTbl">
+                        <thead>
+                            <tr>
+                                <th>Created</th>
+                                <th>Alias</th>
+                                <th>URL</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function loadImageServers() {
+        $(".settingsBox").hide();
+        $("#settingsBox").show();
+        putAdminSidebar(adminSettingUrls.imageServers);
+        changeActiveNav(null)
+        $(".viewSettings").addClass("active");
+        $("#imageServers").show();
+        addBreadcrumbs(["Admin Settings", "Image Servers"], ["", "active"], false, ["/admin"]);
+        $(".imageServersBox").hide()
+        $("#imageServersLoadingBox").show()
+
+        ajaxRequest('/api/InstanceSettings/ImageServers/GetAllImageServersListController/all', {}, (data) => {
+            data = makeToastr(data)
+            let snapshotTrs = ""
+            data.servers.forEach(server => {
+                snapshotTrs += `<tr id="${server.alias}">
+                    <td>${moment(server.created).format("ll")}</td>
+                    <td>${server.alias}</td>
+                    <td>${server.url}</td>
+                    <td><button class="btn btn-sm btn-outline-danger p-1 deleteImageServer"><i class="fas fa-trash"></i></button></td>
+                </tr>`
+            });
+            $("#imageServersTbl > tbody").empty().append(snapshotTrs)
+            $(".imageServersBox").hide()
+            $("#imageServersResultBox").show()
+            $("#imageServersTbl > tbody").find("a:eq(0)").trigger("click")
+        })
+    }
+
+    $("#imageServersResultBox").on("click", ".deleteImageServer", function(){
+        const btn = $(this)
+        btn.attr("disabled", true);
+        const tr = $(this).parents("tr");
+        const alias = tr.attr("id")
+        $.confirm({
+            title: "Delete Image Server?!",
+            content: `Are you sure?`,
+            buttons: {
+                cancel: ()=>{},
+                delete: {
+                    btnClass: "btn-danger",
+                    action: function(){
+                        const modal = this
+                        modal.buttons.delete.setText('<i class="fa fa-cog fa-spin"></i>Deleeting..'); // let the user know
+                        modal.buttons.delete.disable();
+                        modal.buttons.cancel.disable();                    
+                        ajaxRequest('/api/InstanceSettings/ImageServers/DeleteImageServerController/delete', {
+                            alias
+                        }, (data)=>{
+                            data = makeToastr(data)
+                            if(data.state == "error"){
+                                btn.attr("disabled", false)
+                                modal.buttons.delete.setText('DELETE'); // let the user know
+                                modal.buttons.delete.enable();
+                                modal.buttons.cancel.enable();
+                                return false
+                            }
+                            tr.remove()
+                            modal.close();
+                        })
+                        return false;
+                    }
+                }
+            }
+        })
+    });
+    $("#imageServersResultBox").on("click", "#addNewImageServer", function(){
+        $.confirm({
+            title: "Add Image Server",
+            content: `
+                <div class="mb-2">
+                    <label>Protocol</label>
+                    <input class="form-control" value="simplestreams" disabled/>
+                </div>
+                <div class="mb-2">
+                    <label>Alias</label>
+                    <input class="form-control" name="alias"/>
+                </div>
+                <div class="mb-2">
+                    <label>URL</label>
+                    <input class="form-control" name="url"/>
+                    <small style="display: none" class="mt-1 text-center" id="urlWarning"><i class="fas fa-exclamation-triangle text-warning me-1"></i>URL should end images.json unless you know what your doing!</small>
+                </div>
+            `,
+            buttons: {
+                cancel: ()=>{},
+                add: {
+                    btnClass: "btn-primary",
+                    action: function(){
+                        let modal = this
+                        const aliasInput = modal.$content.find("input[name=alias]")
+                        const alias = aliasInput.val().trim()
+                        const urlInput = modal.$content.find("input[name=url]")
+                        const url = urlInput.val().trim()
+                        modal.buttons.add.setText('<i class="fa fa-cog fa-spin"></i>Adding..'); // let the user know
+                        modal.buttons.add.disable();
+                        modal.buttons.cancel.disable();    
+                        ajaxRequest('/api/InstanceSettings/ImageServers/AddImageServerController/add', {
+                            alias,
+                            url
+                        }, (data)=>{
+                            data = makeToastr(data)
+                            if(data.state == "error"){
+                                modal.buttons.add.setText('ADD'); // let the user know
+                                modal.buttons.add.enable();
+                                modal.buttons.cancel.enable();
+                                return false
+                            }
+                            $("#imageServersTbl > tbody").append(`<tr id="${alias}">
+                                <td>${moment().format("ll")}</td>
+                                <td>${alias}</td>
+                                <td>${url}</td>
+                                <td><button class="btn btn-sm btn-outline-danger p-1 deleteImageServer"><i class="fas fa-trash"></i></button></td>
+                            </tr>`)
+                            modal.close()
+                        })
+                        return false
+                    }
+                }
+            },
+            onContentReady: function () { 
+                const modal = this
+                modal.$content.on("keyup", "input[name=url]", function(){
+                    const input = $(this).val().trim()
+                    if(!input.endsWith("images.json")){
+                        modal.$content.find("#urlWarning").css("display", "block")
+                    }else{
+                        modal.$content.find("#urlWarning").hide()
+                    }
+                })
+            }
+        })
+    });
+</script>

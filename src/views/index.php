@@ -752,6 +752,7 @@ $(function(){
     router.on("/admin/retiredData", loadRetiredData);
     router.on("/admin/softwareAssets", loadSoftwareAssets);
     router.on("/admin/timers", loadTimers);
+    router.on("/admin/imageServers", loadImageServers);
 
     router.on("*", function(){
         $(".boxSlide").hide()
