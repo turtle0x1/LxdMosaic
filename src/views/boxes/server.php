@@ -312,7 +312,7 @@ function _loadServerDetailsIfReq(hostId){
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
             $.each(data.resources.gpu.cards, function(i, gpu){
-                let name = gpu.hasOwnProperty("nvidia") && gpu.nvidia.hasOwnProperty("model") ? gpu.nvidia.model : gpu.vendor + " - " + gpu.product
+                let name = gpu?.nvidia?.model ?? (gpu?.vendor ?? gpu.driver)  + " - " + (gpu?.product ?? gpu.driver_version)
                 gpuHtml += `<div class="ps-2">${name}</div>`;
             });
         }else{
@@ -497,7 +497,6 @@ function loadHostDisks(req){
     $("#serverBoxNav .nav-item[data-view='serverDiskBox'] > .nav-link").addClass("active")
     ajaxRequest(globalUrls.hosts.getHostOverview, {hostId: hostId}, (data)=>{
         data = makeToastr(data)
-        console.log(data.resources)
         let diskTrs = "";
         data.resources.storage.disks.forEach(disk => {
             diskTrs += `<tr>
@@ -981,7 +980,7 @@ function loadServerView(hostId)
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
             $.each(data.resources.gpu.cards, function(i, gpu){
-                let name = gpu.hasOwnProperty("nvidia") && gpu.nvidia.hasOwnProperty("model") ? gpu.nvidia.model : gpu.vendor + " - " + gpu.product
+                let name = gpu?.nvidia?.model ?? (gpu?.vendor ?? gpu.driver)  + " - " + (gpu?.product ?? gpu.driver_version)
                 gpuHtml += `<div class="ps-2">${name}</div>`;
             });
         }else{
