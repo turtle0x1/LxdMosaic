@@ -43,7 +43,7 @@ var lxdDevicesProperties = {
                 "name": "source",
                 "type": "string",
                 "default": "-",
-                "required": true,
+                "required": false,
                 "description": "Path on the host, either to a file/directory or to a block device"
             },
             {

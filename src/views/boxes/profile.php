@@ -5,7 +5,7 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <h4> Profiles </h4>
                 <div class="btn-group me-2">
-                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Profile" class="btn btn-primary" id="createProfile">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Profile" class="btn btn-primary p-1" id="createProfile">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -25,16 +25,16 @@
             </u></h4>
             <div class="btn-toolbar float-end">
               <div class="btn-group me-2">
-                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy Profile" class="btn btn-primary" id="copyProfile">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy Profile" class="btn btn-primary p-1" id="copyProfile">
                       <i class="fas fa-copy"></i>
                   </button>
-                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit Profile" class="btn btn-info" id="editProfile">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit Profile" class="btn btn-info p-1" id="editProfile">
                       <i class="fa fa-edit"></i>
                   </button>
-                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Rename Profile" class="btn btn-warning" id="renameProfile">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Rename Profile" class="btn btn-warning p-1" id="renameProfile">
                       <i class="fas fa-heading"></i>
                   </button>
-                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Profile" class="btn btn-danger" id="deleteProfile">
+                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Profile" class="btn btn-danger p-1" id="deleteProfile">
                       <i class="fas fa-trash"></i>
                   </button>
               </div>

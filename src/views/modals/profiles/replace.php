@@ -1,9 +1,12 @@
 <!-- Modal -->
 <div class="modal fade" id="modal-profile-edit" tabindex="-1" aria-labelledby="exampleModalLongTitle" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Update Profile <b><span class="renameProfile-profileName"></span></b></h5>
+                <div>
+                    <h5 class="modal-title">Update Profile <b><span id="replaceProfileName"></span></b></h5>
+                    <div><i class="fas fa-server me-1"></i><span id="replaceProfileHost"></span></div>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -18,16 +21,8 @@
                     <div class="col-md-9" style="max-height: 57vh; min-height: 57vh; overflow-y: scroll; border-left: 1px solid black;">
                         <div class="editProfileBox" data-step="1">
                             <div class="mb-2">
-                                <b> Host </b>
-                                <div id="renameProfile-host"></div>
-                            </div>
-                            <div class="mb-2">
-                                <b> Profile Name </b>
-                                <input class="form-control" id="replaceProfileName" disabled/>
-                            </div>
-                            <div class="mb-2">
                                 <b> Description (Optional) </b>
-                                <textarea class="form-control" id="replaceProfileDescription"></textarea>
+                                <textarea class="form-control" id="replaceProfileDescription" rows="10"></textarea>
                             </div>
                         </div>
                         <div class="editProfileBox pt-2" data-step="2" style="display: none">
@@ -78,19 +73,19 @@
 
     var editProfilesTableRow = null;
 
-    function changeEditProfileBox(newIndex){
+    function changeEditProfileBox(newIndex) {
         $(".editProfileBox").hide();
         $(`.editProfileBox[data-step='${(newIndex)}']`).show();
         $("#editProfileStepList").find(".active").removeClass("active");
         $("#editProfileStepList").find(`li:eq(${newIndex - 1})`).addClass("active");
     }
 
-    function _createDeviceHtml(device){
+    function _createDeviceHtml(device) {
 
         let editDisabled = ["nic", "proxy"].includes(device.type) ? "disabled" : ""
 
         let editButton = ""
-        if(editDisabled == "disabled"){
+        if (editDisabled == "disabled") {
             editButton = `<span class="" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Device type ${device.type} not supported yet">`
         }
 
@@ -98,7 +93,7 @@
           <i class="fas fa-edit"></i>
         </button>
         `
-        if(editDisabled == "disabled"){
+        if (editDisabled == "disabled") {
             editButton += `</span>`
         }
 
@@ -106,7 +101,7 @@
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1">${device.name}</h5>
           <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-              <div class="btn-group me-2" role="group" aria-label="First group">
+              <div class="btn-group me-2" role="group">
                   ${editButton}
                   <button class="btn btn-sm btn-outline-danger removeProfileDevice">
                     <i class="fas fa-trash"></i>
@@ -116,7 +111,7 @@
         </div>
         <p class="mb-1">${device.type}</p>`
 
-        $.each(device.properties, (key, value)=>{
+        $.each(device.properties, (key, value) => {
             html += `<div><small><b>${key}:</b> ${value}</small></div>`
         })
 
@@ -124,7 +119,7 @@
         return html;
     }
 
-    $("#modal-profile-edit").on("click", "#editProfileStepList li", function(){
+    $("#modal-profile-edit").on("click", "#editProfileStepList li", function() {
         changeEditProfileBox($(this).index() + 1);
     });
 
@@ -133,7 +128,7 @@
         $("#editProfileDeviceObjects, #replaceProfileSettingTable > tbody").empty()
     });
 
-    $("#modal-profile-edit").on("click", "#addReplaceProfileSettingRow", function(){
+    $("#modal-profile-edit").on("click", "#addReplaceProfileSettingRow", function() {
         $("#replaceProfileSettingTable > tbody").append(editProfilesTableRow);
     });
 
@@ -152,7 +147,7 @@
             return false;
         }
         let options = "";
-        $.each(lxdProfileKeys, (_, item)=>{
+        $.each(lxdProfileKeys, (_, item) => {
             options += `<option value='${item}'>${item}</option>`
         });
         editProfilesTableRow = `<tr>
@@ -161,12 +156,15 @@
             <td><button class='btn btn-outline-danger deleteProfileSettingRow'><i class="fas fa-trash"></i></button></td>
         </tr>`
 
-        ajaxRequest(globalUrls.profiles.getProfile, {hostId: editProfileData.hostId, profile: editProfileData.currentName}, (data)=>{
+        ajaxRequest(globalUrls.profiles.getProfile, {
+            hostId: editProfileData.hostId,
+            profile: editProfileData.currentName
+        }, (data) => {
             data = makeToastr(data)
             $("#replaceProfileDescription").val(data.description)
 
-            $.each(data.config, (key, value)=>{
-                if(!lxdProfileKeys.includes(key)){
+            $.each(data.config, (key, value) => {
+                if (!lxdProfileKeys.includes(key)) {
                     return true;
                 }
 
@@ -180,7 +178,7 @@
 
             let html = ""
 
-            $.each(data.devices, (name, properties)=>{
+            $.each(data.devices, (name, properties) => {
                 let t = properties.type
                 delete properties["type"]
 
@@ -193,19 +191,21 @@
                 html += _createDeviceHtml(device)
             })
             $("#editProfileDeviceObjects").append(html)
-            $("#editProfileDeviceObjects").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
+            $("#editProfileDeviceObjects").find('[data-bs-toggle="tooltip"]').tooltip({
+                html: true
+            })
         });
 
-        $("#replaceProfileName").val(editProfileData.currentName);
-        $("#renameProfile-host").text(editProfileData.hostAlias);
+        $("#replaceProfileName").text(editProfileData.currentName);
+        $("#replaceProfileHost").text(editProfileData.hostAlias);
     });
 
-    $("#modal-profile-edit").on("click", ".removeProfileDevice", function(){
+    $("#modal-profile-edit").on("click", ".removeProfileDevice", function() {
         $(this).parents(".list-group-item").remove()
     });
 
-    $("#modal-profile-edit").on("click", "#addReplaceProfileDevice", function(){
-        newDeviceHelperObj.callback = function(device){
+    $("#modal-profile-edit").on("click", "#addReplaceProfileDevice", function() {
+        newDeviceHelperObj.callback = function(device) {
             let html = `<div href="#" class="list-group-item list-group-item-action text-dark" aria-current="true" data-device='${JSON.stringify(device)}'>
             <div class="d-flex w-100 justify-content-between">
               <h5 class="mb-1">${device.name}</h5>
@@ -215,7 +215,7 @@
             </div>
             <p class="mb-1">${device.type}</p>`
 
-            $.each(device.properties, (key, value)=>{
+            $.each(device.properties, (key, value) => {
                 html += `<div><small><b>${key}:</b> ${value}</small></div>`
             })
 
@@ -230,7 +230,7 @@
         let listGroupItem = $(this).parents(".list-group-item")
         let device = listGroupItem.data().device
         editDeviceHelperObj.mosaicDevice = device
-        editDeviceHelperObj.callback = function (device){
+        editDeviceHelperObj.callback = function(device) {
             listGroupItem.replaceWith(_createDeviceHtml(device))
         }
         $("#modal-helpers-editDeviceObj").modal("show")
@@ -241,18 +241,18 @@
         let invalid = false;
         let config = {};
 
-        $("#replaceProfileSettingTable > tbody > tr").each(function(){
+        $("#replaceProfileSettingTable > tbody > tr").each(function() {
             let tr = $(this);
             let keyInput = tr.find("select[name=key]");
             let key = keyInput.val().trim();
             let valueInput = tr.find("input[name=value]")
             let value = valueInput.val().trim();
 
-            if(key == ""){
+            if (key == "") {
                 keyInput.focus()
                 invalid = true;
                 return false;
-            }else if(value == ""){
+            } else if (value == "") {
                 valueInput.focus()
                 invalid = true;
                 return false;
@@ -261,15 +261,18 @@
             config[key] = value;
         });
 
-        if(invalid){
-            makeToastr(JSON.stringify({state: "error", message: "Check profile config values"}));
+        if (invalid) {
+            makeToastr(JSON.stringify({
+                state: "error",
+                message: "Check profile config values"
+            }));
             changeCreateProfileBox(2)
             return false;
         }
 
         let devices = {}
 
-        $("#editProfileDeviceObjects .list-group-item").each(function(){
+        $("#editProfileDeviceObjects .list-group-item").each(function() {
             let device = $(this).data().device
 
             devices[device.name] = {

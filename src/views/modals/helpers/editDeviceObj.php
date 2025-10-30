@@ -116,7 +116,7 @@
         let typeType = $("#editDeviceTypeType").val()
 
         if(name == ""){
-            makeToastr(JSON.stringify({state: "error", message: "Please provide instance name"}));
+            makeToastr(JSON.stringify({state: "error", message: "Please provide device name"}));
             $("#editDeviceName").focus()
             return false;
         }
@@ -139,13 +139,15 @@
         }
 
         let failed = false;
+        let failedKey = false
         $("#editDeviceProperties > tbody > tr").each(function(){
             let d = $(this).data()
 
             let v = $(this).find("input:eq(0)").val()
 
             if(d.required === true && (v === "" || v === "-")){
-                failed = true;
+                failed = $(this).find("input:eq(0)");
+                failedKey = d.key
                 return false;
             }
 
@@ -165,7 +167,7 @@
         });
 
         if(failed){
-            makeToastr(JSON.stringify({state: "error", message: "Please fill out all required fields"}));
+            makeToastr(JSON.stringify({state: "error", message: `Please fill out ${failedKey}`}));
             return false;
         }
         editDeviceHelperObj.callback({

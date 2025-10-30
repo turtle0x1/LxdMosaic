@@ -29,9 +29,8 @@
                                 Please select new device type.
                             </div>
                         </div>
-
-                        <div id="propertiesTableDiv" style="max-height: 42vh; overflow-y: scroll; display: none;">
-                            <b>Properties</b>
+                        <b>Properties</b>
+                        <div id="propertiesTableDiv" style="max-height: 50vh; overflow-y: scroll; display: none;">
                             <table class="table table-bordered" id="newDeviceProperties">
                                 <thead>
                                     <tr>
@@ -142,13 +141,13 @@
         let typeType = $("#newDeviceTypeType").val()
 
         if(name == ""){
-            makeToastr(JSON.stringify({state: "error", message: "Please provide instance name"}));
+            makeToastr(JSON.stringify({state: "error", message: "Please provide device name"}));
             $("#newDeviceName").focus()
             return false;
         }
 
         if(type == ""){
-            makeToastr(JSON.stringify({state: "error", message: "Please select device"}));
+            makeToastr(JSON.stringify({state: "error", message: "Please select device type"}));
             $("#newDeviceType").focus()
             return false;
         }
@@ -165,13 +164,15 @@
         }
 
         let failed = false;
+        let failedKey = false;
         $("#newDeviceProperties > tbody > tr").each(function(){
             let d = $(this).data()
 
             let v = $(this).find("input:eq(0)").val()
 
             if(d.required === true && (v === "" || v === "-")){
-                failed = true;
+                failed = $(this).find("input:eq(0)");
+                failedKey = d.key
                 return false;
             }
 
@@ -191,7 +192,8 @@
         });
 
         if(failed){
-            makeToastr(JSON.stringify({state: "error", message: "Please fill out all required fields"}));
+            failed.focus()
+            makeToastr(JSON.stringify({state: "error", message: `Please fill out ${failedKey}`}));
             return false;
         }
         newDeviceHelperObj.callback({

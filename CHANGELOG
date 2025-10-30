@@ -21,6 +21,7 @@ Fixed
     Cant restore instance snapshot to new instance (#555)
     Unavailable to deploy cloud config on servers (#549)
     Cluster memeber events socket not being connected
+    Cant edit profile devices while creating
 
 0.16.0 - 06/09/2022
 
