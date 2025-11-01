@@ -3,6 +3,10 @@ body {
     font-size: .85rem !important;
 }
 
+.boxSlide {
+    display: none;
+}
+
 #sidebar-ul .nav-link {
     padding-left: 10px;
     padding-bottom: 5px;
