@@ -1,10 +1,4 @@
 <?php
-$haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList"); /** @phpstan-ignore-line */
-
-if ($haveServers->haveAny() !== true) {
-    header("Location: /views/firstRun");
-    exit;
-}
 
 $expectedGet = ["hostId", "project", "instance"];
 

@@ -19,7 +19,7 @@ class RouteViewController
      * @Route("/", name="frontend_root")
      * @Route("/login", name="frontend_app")
      * @Route("/terminal", name="frontend_app")
-     * @Route("/firstRun", name="frontend_app")
+     * @Route("/first-run", name="frontend_app")
      */
     public function route(Request $request): Response
     {
@@ -32,7 +32,7 @@ class RouteViewController
             $file = __DIR__ . "/../../../views/login.php";
         } elseif ($path === 'terminal') {
             $file = __DIR__ . "/../../../views/vmTerminal.php";
-        } elseif (str_contains($path, '/firstRun') || $path === 'firstRun') {
+        } elseif ($path === 'first-run') {
             $file = __DIR__ . "/../../../views/firstRun.php";
         }
 

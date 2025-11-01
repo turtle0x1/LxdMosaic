@@ -58,7 +58,10 @@ class RouteController
 
         $adminPassBlank = $this->fetchUserDetails->adminPasswordBlank();
         if ($adminPassBlank && !$canSkipAuth) {
-            $request = Request::create('/views/firstRun', 'GET');
+            if($path !== "first-run"){
+                header("Location: /first-run");
+                exit;
+            }
             $this->routeApi->route($request, ["userid"=>1]);
             exit;
         }

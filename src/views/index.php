@@ -1,5 +1,4 @@
 <?php
-$haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList"); /** @phpstan-ignore-line */
 
 $userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession"); /** @phpstan-ignore-line */
 $validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions"); /** @phpstan-ignore-line */
@@ -22,11 +21,6 @@ var userDetails = {
 }
 var recordActionsEnabled = parseInt($recordActionsEnabled);
 </script>";
-
-if ($haveServers->haveAny() !== true) {
-    header("Location: /views/firstRun");
-    exit;
-}
 ?>
 <!DOCTYPE html>
 <!--
