@@ -742,17 +742,28 @@ function loadInstanceSettings(){
             if(item.settingId == 11){
                 currentTimezone = item.currentValue;
                 return true;
+            }else if([2,8, 14, 16].includes(item.settingId)){
+                trs += `<tr data-setting-id="${item.settingId}">
+                    <td>${item.settingName}</td>
+                    <td>
+                        <select class="form-select" name="settingValue" value="${item.currentValue}">
+                            <option value="0" ${item.currentValue == 0 ? "selected" : ""}>No</option>
+                            <option value="1" ${item.currentValue == 1 ? "selected" : ""}>Yes</option>
+                        </select>
+                    </td>
+                </tr>`;
+                return true;
             }else if(ldapKeys.includes(parseInt(item.settingId))){
                 let extraText = ldapExtraText.hasOwnProperty(item.settingId) ? ldapExtraText[item.settingId] : "";
                 let tr = `<tr data-setting-id="${item.settingId}">
                         <td>${item.settingName}${extraText}</td>
-                        <td><input class="form-control" name="settingValue" value="${item.currentValue}"/></td>
+                        <td><input class="form-control" name="settingValue" value="${item.currentValue ?? ""}"/></td>
                     </tr>`;
                 ldapTrs += tr;
             }else{
                 let tr = `<tr data-setting-id="${item.settingId}">
                         <td>${item.settingName}</td>
-                        <td><input class="form-control" name="settingValue" value="${item.currentValue}"/></td>
+                        <td><input class="form-control" name="settingValue" value="${item.currentValue ?? ""}"/></td>
                     </tr>`;
                 trs += tr;
             }
