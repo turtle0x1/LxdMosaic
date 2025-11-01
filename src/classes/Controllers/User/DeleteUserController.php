@@ -17,7 +17,7 @@ class DeleteUserController implements \dhope0000\LXDClient\Interfaces\RecordActi
         $this->container = $container;
     }
     /**
-     * @Route("", name="Delete a user")
+     * @Route("/api/User/DeleteUserController/delete", name="Delete a user", methods={"POST"})
      */
     public function delete(
         int $userId,

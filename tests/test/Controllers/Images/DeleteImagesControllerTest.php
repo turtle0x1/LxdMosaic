@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class DeleteImagesControllerTest extends TestCase
 {
@@ -23,7 +24,7 @@ final class DeleteImagesControllerTest extends TestCase
 
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Images/DeleteImagesController/delete')),
+            Request::create('/api/Images/DeleteImagesController/delete', 'POST'),
             ["userid"=>2, "project"=>"testProject"],
             true
         );

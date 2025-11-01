@@ -14,7 +14,7 @@ class GetAllProxyDevicesController implements \dhope0000\LXDClient\Interfaces\Re
         $this->getAllProxyDevices = $getAllProxyDevices;
     }
     /**
-     * @Route("", name="Get all proxy devices")
+     * @Route("/api/Hosts/Instances/GetAllProxyDevicesController/get", name="Get all proxy devices", methods={"POST"})
      */
     public function get(Host $host)
     {

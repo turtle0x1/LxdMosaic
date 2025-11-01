@@ -16,7 +16,7 @@ class CreateProfileController implements \dhope0000\LXDClient\Interfaces\RecordA
     }
 
     /**
-     * @Route("", name="Create Profile")
+     * @Route("/api/Profiles/CreateProfileController/create", name="Create Profile", methods={"POST"})
      */
     public function create(
         HostsCollection $hosts,

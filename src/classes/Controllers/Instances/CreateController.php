@@ -16,7 +16,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->createInstance = $createInstance;
     }
     /**
-     * @Route("", name="Create Instance")
+     * @Route("/api/Instances/CreateController/create", name="Create Instance", methods={"POST"})
      */
     public function create(
         $name,

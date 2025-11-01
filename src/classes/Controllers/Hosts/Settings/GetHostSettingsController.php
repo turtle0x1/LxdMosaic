@@ -14,7 +14,7 @@ class GetHostSettingsController implements \dhope0000\LXDClient\Interfaces\Recor
         $this->validatePermissions = $validatePermissions;
     }
     /**
-     * @Route("", name="Get hosts settings")
+     * @Route("/api/Hosts/Settings/GetHostSettingsController/get", name="Get hosts settings", methods={"POST"})
      */
     public function get($userId, Host $host)
     {

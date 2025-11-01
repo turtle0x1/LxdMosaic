@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
+
 require __DIR__ . "/../../vendor/autoload.php";
 
 date_default_timezone_set("UTC");
@@ -20,10 +22,8 @@ if (!isset($_ENV["DB_SQLITE"]) && !empty($_ENV["DB_SQLITE"])) {
 
 $container->injectOn($exceptionHandler);
 
-$router = $container->make("dhope0000\LXDClient\App\RouteController");
+$router = $container->make(dhope0000\LXDClient\App\RouteController::class);
 
-$path = ltrim($_SERVER['REQUEST_URI'], '/');    // Trim leading slash(es)
-$path = parse_url($path);
-$explodedPath = array_filter(explode('/', $path["path"]));  // Split path on slashes
+$request = Request::createFromGlobals();
 
-$router->routeRequest($explodedPath);
+$router->routeRequest($request);

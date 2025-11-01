@@ -15,7 +15,7 @@ class DeleteBackupController implements \dhope0000\LXDClient\Interfaces\RecordAc
         $this->deleteRemoteBackup = $deleteRemoteBackup;
     }
     /**
-     * @Route("", name="Delete Remote Instance Backup")
+     * @Route("/api/Instances/Backups/DeleteBackupController/delete", name="Delete Remote Instance Backup", methods={"POST"})
      */
     public function delete(Host $host, string $container, string $backup)
     {

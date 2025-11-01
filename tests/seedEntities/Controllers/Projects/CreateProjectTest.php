@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class CreateProjectTest extends TestCase
 {
@@ -19,7 +20,7 @@ final class CreateProjectTest extends TestCase
         $_POST = $data;
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Projects/CreateProjectController/create')),
+            Request::create('/api/Projects/CreateProjectController/create', 'POST'),
             ["userid"=>1],
             true
         );

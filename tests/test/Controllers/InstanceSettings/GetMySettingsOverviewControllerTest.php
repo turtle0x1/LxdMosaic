@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 final class GetMySettingsOverviewControllerTest extends TestCase
@@ -16,7 +17,7 @@ final class GetMySettingsOverviewControllerTest extends TestCase
     public function test_userCanGetTheirSettings() :void
     {
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/GetMySettingsOverviewController/get')),
+            Request::create('/api/InstanceSettings/GetMySettingsOverviewController/get', 'POST'),
             ["userid"=>2],
             true
         );

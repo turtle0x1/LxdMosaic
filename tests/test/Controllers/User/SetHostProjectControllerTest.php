@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class SetHostProjectControllerTest extends TestCase
 {
@@ -31,7 +32,7 @@ final class SetHostProjectControllerTest extends TestCase
         $_POST = ["hostId"=>$this->newHostId, "project"=>"default"];
 
         $this->routeApi->route(
-            array_filter(explode('/', '/User/SetHostProjectController/set')),
+            Request::create('/api/User/SetHostProjectController/set', 'POST'),
             ["userid"=>2],
             true
         );
@@ -44,7 +45,7 @@ final class SetHostProjectControllerTest extends TestCase
         $_POST = ["hostId"=>1, "project"=>"default"];
 
         $this->routeApi->route(
-            array_filter(explode('/', '/User/SetHostProjectController/set')),
+            Request::create('/api/User/SetHostProjectController/set', 'POST'),
             ["userid"=>2],
             true
         );
@@ -55,7 +56,7 @@ final class SetHostProjectControllerTest extends TestCase
         $_POST = ["hostId"=>1, "project"=>"testProject"];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/User/SetHostProjectController/set')),
+            Request::create('/api/User/SetHostProjectController/set', 'POST'),
             ["userid"=>2],
             true
         );

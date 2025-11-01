@@ -15,7 +15,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->state = $state;
     }
     /**
-     * @Route("", name="Start Instance")
+     * @Route("/api/Instances/StateController/start", name="Start Instance", methods={"POST"})
      */
     public function start(Host $host, $container)
     {
@@ -23,7 +23,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         return ["state"=>"success", "message"=>"Starting {$host->getAlias()}/$container", "code"=>101];
     }
     /**
-     * @Route("", name="Stop Instance")
+     * @Route("/api/Instances/StateController/stop", name="Stop Instance", methods={"POST"})
      */
     public function stop(Host $host, $container)
     {
@@ -31,7 +31,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         return ["state"=>"success", "message"=>"Stopping {$host->getAlias()}alias/$container", "code"=>102];
     }
     /**
-     * @Route("", name="Restart Instance")
+     * @Route("/api/Instances/StateController/restart", name="Restart Instance", methods={"POST"})
      */
     public function restart(Host $host, $container)
     {
@@ -39,7 +39,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         return ["state"=>"success", "message"=>"Restarting {$host->getAlias()}/$container", "code"=>101];
     }
     /**
-     * @Route("", name="Freeze Instance")
+     * @Route("/api/Instances/StateController/freeze", name="Freeze Instance", methods={"POST"})
      */
     public function freeze(Host $host, $container)
     {
@@ -47,7 +47,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         return ["state"=>"success", "message"=>"Freezing {$host->getAlias()}/$container", "code"=>110];
     }
     /**
-     * @Route("", name="UnFreeze Instance")
+     * @Route("/api/Instances/StateController/unfreeze", name="UnFreeze Instance", methods={"POST"})
      */
     public function unfreeze(Host $host, $container)
     {

@@ -14,7 +14,7 @@ class GrantAccessController implements \dhope0000\LXDClient\Interfaces\RecordAct
         $this->grantAccess = $grantAccess;
     }
     /**
-     * @Route("", name="Grant user access to a hosts project")
+     * @Route("/api/User/AllowedProjects/GrantAccessController/grant", name="Grant user access to a hosts project", methods={"POST"})
      */
     public function grant(int $userId, int $targetUser, array $hosts, array $projects)
     {

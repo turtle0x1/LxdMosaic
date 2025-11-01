@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class CreateProfileTest extends TestCase
 {
@@ -19,7 +20,7 @@ final class CreateProfileTest extends TestCase
         $_POST = $data;
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Profiles/CreateProfileController/create')),
+            Request::create('/api/Profiles/CreateProfileController/create', 'POST'),
             ["userid"=>1],
             true
         );

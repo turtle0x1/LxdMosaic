@@ -13,7 +13,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->create = $create;
     }
     /**
-     * @Route("", name="Create Cloud Config")
+     * @Route("/api/CloudConfig/CreateController/create", name="Create Cloud Config", methods={"POST"})
      */
     public function create(string $name, string $namespace, $description = "")
     {

@@ -14,7 +14,7 @@ class RemoveProfileController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->removeProfiles = $removeProfiles;
     }
     /**
-     * @Route("", name="Remove profile from instance")
+     * @Route("/api/Instances/Profiles/RemoveProfileController/remove", name="Remove profile from instance", methods={"POST"})
      */
     public function remove(Host $host, string $container, string $profile)
     {

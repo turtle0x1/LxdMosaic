@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\App;
 
 use \DI\Container;
@@ -9,6 +10,11 @@ use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\Model\Users\InvalidateToken;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use dhope0000\LXDClient\Controllers\Assets\RouteViewController;
 
 class RouteApi
 {
@@ -20,6 +26,7 @@ class RouteApi
     private $fetchUserDetails;
     private $fetchUserProject;
     private $invalidateToken;
+    private $routeViewController;
 
     private $project;
     private $userId;
@@ -33,7 +40,8 @@ class RouteApi
         FetchAllowedProjects $fetchAllowedProjects,
         FetchUserDetails $fetchUserDetails,
         FetchUserProject $fetchUserProject,
-        InvalidateToken $invalidateToken
+        InvalidateToken $invalidateToken,
+        RouteViewController $routeViewController
     ) {
         $this->container = $container;
         $this->recordAction = $recordAction;
@@ -43,6 +51,7 @@ class RouteApi
         $this->fetchUserDetails = $fetchUserDetails;
         $this->fetchUserProject = $fetchUserProject;
         $this->invalidateToken = $invalidateToken;
+        $this->routeViewController = $routeViewController;
     }
 
     public function getRequestedProject()
@@ -55,53 +64,58 @@ class RouteApi
         return $this->userId;
     }
 
-    public function route($pathParts, $headers, $returnResult = false)
+    public function route($request, $headers, $returnResult = false)
     {
         $userId = $headers["userid"];
 
         $this->project = isset($headers["project"]) && !empty($headers["project"]) ? $headers["project"] : null;
         $this->userId = $userId;
 
-        if (count($pathParts) < 3) {
-            throw new \Exception("Api String Not Long Enough", 1);
+        $routes = require __DIR__ . '/Router/routes.cache';
+        $context = new RequestContext();
+        $context->fromRequest($request);
+        $matcher = new UrlMatcher($routes, $context);
+
+        try {
+            $parameters = $matcher->match($context->getPathInfo());
+            $controllerClass = $parameters['_controller'];
+
+            $method = $parameters['_method'];
+            if (!class_exists($controllerClass)) {
+                throw new \Exception("End point not found", 1);
+            } elseif (method_exists($controllerClass, $method) !== true) {
+                throw new \Exception("Method point not found");
+            }
+
+            $params = $this->orderParams($_POST, $controllerClass, $method, $userId, $headers, $request);
+            $controller = $this->container->make($controllerClass);
+
+            if ($controller instanceof \dhope0000\LXDClient\Interfaces\RecordAction) {
+                $this->recordAction->record($userId, $controllerClass . "\\" . $method, $params);
+            }
+
+            $data = call_user_func_array(array($controller, $method), $params);
+
+            if ($returnResult) {
+                return $data;
+            }
+
+            if ($data instanceof Response) {
+                $data->send();
+            } else {
+                echo json_encode($data);
+            }
+        } catch (\Symfony\Component\Routing\Exception\ResourceNotFoundException $e) {
+            if (substr($request->getPathInfo(), 0, strlen('/api')) === '/api') {
+                http_response_code(404);
+                echo json_encode(["error"=>"Not found"]);
+            } else {
+                $this->routeViewController->route($request)->send();
+            }
         }
-
-        unset($pathParts[0]);
-
-        end($pathParts);
-
-        $methodkey = key($pathParts);
-        $method = $pathParts[$methodkey];
-
-        unset($pathParts[$methodkey]);
-
-        $controllerStr = "dhope0000\\LXDClient\\Controllers\\" . implode("\\", $pathParts);
-        if (!class_exists($controllerStr)) {
-            throw new \Exception("End point not found", 1);
-        } elseif (method_exists($controllerStr, $method) !== true) {
-            throw new \Exception("Method point not found");
-        }
-
-        $params = $this->orderParams($_POST, $controllerStr, $method, $userId, $headers);
-
-        $controller = $this->container->make($controllerStr);
-
-        if ($controller instanceof \dhope0000\LXDClient\Interfaces\RecordAction) {
-            $this->recordAction->record($userId, $controllerStr . "\\" . $method, $params);
-        }
-
-        // TODO Pass provided arguments to controller
-        $data = call_user_func_array(array($controller, $method), $params);
-
-        if ($returnResult) {
-            return $data;
-        }
-
-        //TODO So lazy
-        echo json_encode($data);
     }
 
-    public function orderParams($passedArguments, $class, $method, int $userId, $headers)
+    public function orderParams($passedArguments, $class, $method, int $userId, $headers, $request)
     {
         $reflectedMethod = new \ReflectionMethod($class, $method);
         $paramaters = $reflectedMethod->getParameters();
@@ -177,6 +191,8 @@ class RouteApi
                 }
 
                 $o[$name] = $this->hostList->getHostCollection($passedArguments[$name]);
+            } elseif ($type == Request::class) {
+                $o[$name] = $request;
             } elseif (!$hasDefault && !isset($passedArguments[$name])) {
                 throw new \Exception("Missing Paramater $name", 1);
             } else {

@@ -15,7 +15,7 @@ class DeleteStorageVolumeController implements \dhope0000\LXDClient\Interfaces\R
         $this->deleteVolume = $deleteVolume;
     }
     /**
-     * @Route("", name="Delete storage volume")
+     * @Route("/api/Storage/Volumes/DeleteStorageVolumeController/delete", name="Delete storage volume", methods={"POST"})
      */
     public function delete(Host $hostId, string $pool, string $path)
     {

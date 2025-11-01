@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class AddUserControllerTest extends TestCase
 {
@@ -27,7 +28,7 @@ final class AddUserControllerTest extends TestCase
         $_POST = ["username"=>"cantAdd", "password"=>"test123"];
 
         $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/Users/AddUserController/add')),
+            Request::create('/api/InstanceSettings/Users/AddUserController/add', 'POST'),
             ["userid"=>2],
             true
         );
@@ -38,7 +39,7 @@ final class AddUserControllerTest extends TestCase
         $_POST = ["username"=>"cantAdd", "password"=>"testlongpassword123"];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/Users/AddUserController/add')),
+            Request::create('/api/InstanceSettings/Users/AddUserController/add', 'POST'),
             ["userid"=>1],
             true
         );

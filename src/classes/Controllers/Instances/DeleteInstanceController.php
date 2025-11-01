@@ -14,7 +14,7 @@ class DeleteInstanceController implements \dhope0000\LXDClient\Interfaces\Record
         $this->deleteInstance =  $deleteInstance;
     }
     /**
-     * @Route("", name="Delete Instance")
+     * @Route("/api/Instances/DeleteInstanceController/delete", name="Delete Instance", methods={"POST"})
      */
     public function delete(
         int $userId,

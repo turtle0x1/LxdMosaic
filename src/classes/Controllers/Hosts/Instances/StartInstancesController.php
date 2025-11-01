@@ -14,7 +14,7 @@ class StartInstancesController implements \dhope0000\LXDClient\Interfaces\Record
         $this->startInstances = $startInstances;
     }
     /**
-     * @Route("", name="Start Instances")
+     * @Route("/api/Hosts/Instances/StartInstancesController/start", name="Start Instances", methods={"POST"})
      */
     public function start(Host $host, array $containers)
     {

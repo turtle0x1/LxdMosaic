@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class GetUserOverviewControllerTest extends TestCase
 {
@@ -18,7 +19,7 @@ final class GetUserOverviewControllerTest extends TestCase
         $_POST = ["targetUser"=>1];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/User/GetUserOverviewController/get')),
+            Request::create('/api/User/GetUserOverviewController/get', 'POST'),
             ["userid"=>2],
             true
         );

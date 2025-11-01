@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
+use Symfony\Component\HttpFoundation\Request;
 
 final class DeleteLocalBackupControllerTest extends TestCase
 {
@@ -38,7 +39,7 @@ final class DeleteLocalBackupControllerTest extends TestCase
 
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Instances/Backups/DeleteLocalBackupController/delete')),
+            Request::create('/api/Instances/Backups/DeleteLocalBackupController/delete', 'POST'),
             ["userid"=>2, "project"=>"testProject"],
             true
         );

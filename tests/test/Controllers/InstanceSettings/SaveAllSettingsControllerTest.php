@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 final class SaveAllSettingsControllerTest extends TestCase
@@ -28,7 +29,7 @@ final class SaveAllSettingsControllerTest extends TestCase
         $_POST = ["settings"=>[]];
 
         $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/SaveAllSettingsController/saveAll')),
+            Request::create('/api/InstanceSettings/SaveAllSettingsController/saveAll', 'POST'),
             ["userid"=>2],
             true
         );
@@ -39,7 +40,7 @@ final class SaveAllSettingsControllerTest extends TestCase
         $_POST = ["settings"=>[["id"=>InstanceSettingsKeys::STRONG_PASSWORD_POLICY, "value"=>0]]];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/SaveAllSettingsController/saveAll')),
+            Request::create('/api/InstanceSettings/SaveAllSettingsController/saveAll', 'POST'),
             ["userid"=>1],
             true
         );

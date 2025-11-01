@@ -14,7 +14,7 @@ class RenameSnapshotController implements \dhope0000\LXDClient\Interfaces\Record
         $this->renameSnapshot = $renameSnapshot;
     }
     /**
-     * @Route("", name="Rename Instance Snapshot")
+     * @Route("/api/Instances/Snapshot/RenameSnapshotController/renameSnapshot", name="Rename Instance Snapshot", methods={"POST"})
      */
     public function renameSnapshot(
         Host $host,

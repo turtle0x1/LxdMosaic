@@ -20,7 +20,7 @@ class AddImageServerController implements \dhope0000\LXDClient\Interfaces\Record
         $this->addImageServer = $addImageServer;
     }
     /**
-     * @Route("", name="Add a new image server")
+     * @Route("/api/InstanceSettings/ImageServers/AddImageServerController/add", name="Add a new image server", methods={"POST"})
      */
     public function add(string $userId, string $alias, string $url)
     {

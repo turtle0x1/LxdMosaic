@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class RevokeAccessControllerTest extends TestCase
 {
@@ -30,7 +31,7 @@ final class RevokeAccessControllerTest extends TestCase
         $_POST = ["targetUser"=>1, "hostId"=>1, "project"=>"default"];
 
         $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/RevokeAccessController/revoke')),
+            Request::create('/api/User/AllowedProjects/RevokeAccessController/revoke', 'POST'),
             ["userid"=>2],
             true
         );
@@ -42,7 +43,7 @@ final class RevokeAccessControllerTest extends TestCase
         $_POST = ["targetUser"=>1, "hostId"=>1, "project"=>"default"];
 
         $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/RevokeAccessController/revoke')),
+            Request::create('/api/User/AllowedProjects/RevokeAccessController/revoke', 'POST'),
             ["userid"=>1],
             true
         );
@@ -53,7 +54,7 @@ final class RevokeAccessControllerTest extends TestCase
         $_POST = ["targetUser"=>2, "hostId"=>1, "project"=>"default"];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/RevokeAccessController/revoke')),
+            Request::create('/api/User/AllowedProjects/RevokeAccessController/revoke', 'POST'),
             ["userid"=>1],
             true
         );

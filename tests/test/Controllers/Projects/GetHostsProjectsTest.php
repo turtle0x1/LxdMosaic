@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class GetHostsProjectsTest extends TestCase
 {
@@ -15,7 +16,7 @@ final class GetHostsProjectsTest extends TestCase
     public function test_getHostsProjects() :void
     {
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Projects/GetHostsProjectsController/get')),
+            Request::create('/api/Projects/GetHostsProjectsController/get', 'POST'),
             ["userid"=>1],
             true
         );

@@ -17,7 +17,7 @@ class FirstRunController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->container = $container;
     }
     /**
-     * @Route("", name="Run LXDMosaic First Run")
+     * @Route("/api/InstanceSettings/FirstRunController/run", name="Run LXDMosaic First Run", methods={"POST"})
      */
     public function run(array $hosts, string $adminPassword, array $settings = [])
     {

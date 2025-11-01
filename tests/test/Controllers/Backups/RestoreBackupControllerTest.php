@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class RestoreBackupControllerTest extends TestCase
 {
@@ -39,7 +40,7 @@ final class RestoreBackupControllerTest extends TestCase
 
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Backups/RestoreBackupController/restore')),
+            Request::create('/api/Backups/RestoreBackupController/restore', 'POST'),
             ["userid"=>2, "project"=>"testProject"],
             true
         );

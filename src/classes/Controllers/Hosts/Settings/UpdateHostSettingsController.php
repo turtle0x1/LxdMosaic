@@ -14,7 +14,7 @@ class UpdateHostSettingsController implements \dhope0000\LXDClient\Interfaces\Re
         $this->validatePermissions = $validatePermissions;
     }
     /**
-     * @Route("", name="Get hosts settings")
+     * @Route("/api/Hosts/Settings/UpdateHostSettingsController/update", name="Get hosts settings", methods={"POST"})
      */
     public function update($userId, Host $host, array $settings)
     {

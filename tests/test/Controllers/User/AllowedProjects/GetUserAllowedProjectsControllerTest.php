@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class GetUserAllowedProjectsControllerTest extends TestCase
 {
@@ -19,7 +20,7 @@ final class GetUserAllowedProjectsControllerTest extends TestCase
         $_POST = ["targetUser"=>1];
 
         $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/GetUserAllowedProjectsController/get')),
+            Request::create('/api/User/AllowedProjects/GetUserAllowedProjectsController/get', 'POST'),
             ["userid"=>2],
             true
         );
@@ -30,7 +31,7 @@ final class GetUserAllowedProjectsControllerTest extends TestCase
         $_POST = ["targetUser"=>1];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/GetUserAllowedProjectsController/get')),
+            Request::create('/api/User/AllowedProjects/GetUserAllowedProjectsController/get', 'POST'),
             ["userid"=>1],
             true
         );
@@ -43,7 +44,7 @@ final class GetUserAllowedProjectsControllerTest extends TestCase
         $_POST = ["targetUser"=>2];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/GetUserAllowedProjectsController/get')),
+            Request::create('/api/User/AllowedProjects/GetUserAllowedProjectsController/get', 'POST'),
             ["userid"=>1],
             true
         );

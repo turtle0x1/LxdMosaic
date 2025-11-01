@@ -15,7 +15,7 @@ class ImportBackupController implements \dhope0000\LXDClient\Interfaces\RecordAc
         $this->storeBackupLocally = $storeBackupLocally;
     }
     /**
-     * @Route("", name="Import Remote Instance Backup")
+     * @Route("/api/Instances/Backups/ImportBackupController/import", name="Import Remote Instance Backup", methods={"POST"})
      */
     public function import(Host $host, string $container, string $backup, int $delete)
     {
