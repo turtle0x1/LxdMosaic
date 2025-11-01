@@ -32,6 +32,7 @@
                                     <th>Pool</th>
                                     <th>Used</th>
                                     <th>Total</th>
+                                    <th>Usage</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -236,7 +237,7 @@ function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
 
 
     if(host.hostOnline == true) {
-        tableListHtml += `<tr><td class='text-info text-center' colspan='3'><h5>${host.alias}${offlineText}</h5></td></tr>`;
+        tableListHtml += `<tr><td class="text-center text-primary" colspan='4'><h5 class="m-0 p-0"><i class="fas fa-server me-1"></i>${host.alias}${offlineText}</h5></td></tr>`;
     }
 
 
@@ -257,6 +258,11 @@ function makeStorageHostSidebarHtml(hosthtml, host, id, tableListHtml){
              <td>${pool.name}</td>
              <td>${formatBytes(pool.resources.space.used)}</td>
              <td>${formatBytes(pool.resources.space.total)}</td>
+             <td>
+                <div class="progress">
+                    <div class="progress-bar bg-primary" style="width: ${(pool.resources.space.used / pool.resources.space.total) * 100}%"></div>
+                </div>
+             </td>
          </tr>`;
      });
 

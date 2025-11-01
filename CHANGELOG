@@ -6,6 +6,7 @@ Added
     Admin can view disks list on server page
     Opt in attempt to gather software versions from containers (#576)
     Opt in attempt to gather cronjob/systemd timers from instances
+    Progress bars indicating storage usage on storage dashboard
 
 Changed
     Use bash shell as the default for {oracle, rocky} images (#544)
