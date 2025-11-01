@@ -7,7 +7,7 @@
                 <?php if ($isAdmin === 1) : /* @phpstan-ignore-line */ ?>
                 <div class="btn-toolbar float-end">
                   <div class="btn-group me-2">
-                      <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Project" class="btn btn-primary" id="createProject">
+                      <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Project" class="btn btn-outline-primary p-1" id="createProject">
                           <i class="fas fa-plus"></i>
                       </button>
                   </div>

@@ -5,7 +5,7 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <h4> Profiles </h4>
                 <div class="btn-group me-2">
-                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Profile" class="btn btn-primary p-1" id="createProfile">
+                    <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Profile" class="btn btn-outline-primary p-1" id="createProfile">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>

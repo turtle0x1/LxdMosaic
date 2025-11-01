@@ -8,7 +8,7 @@
                             <h4> Deployments </h4>
                             <div class="btn-toolbar float-end">
                               <div class="btn-group me-2">
-                                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Deployment" class="btn btn-primary" id="createDeployment">
+                                  <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Deployment" class="btn btn-outline-primary p-1" id="createDeployment">
                                       <i class="fas fa-plus"></i>
                                   </button>
                               </div>

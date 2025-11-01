@@ -6,7 +6,7 @@
                     <h4> Networks </h4>
                     <div class="btn-toolbar float-end">
                         <div class="btn-group me-2">
-                            <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create network" class="btn btn-primary" id="createNetwork">
+                            <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create network" class="btn btn-outline-primary p-1" id="createNetwork">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
@@ -249,7 +249,7 @@
         addBreadcrumbs(["Networks", alias, network], ["", "", "active"], false, ["/networks"]);
         loadNetworkSidebar()
         changeActiveNav(".viewNetwork")
-    
+
         ajaxRequest(globalUrls.networks.get, currentNetwork, function(data) {
             data = makeToastr(data);
             let configHtml = "",

@@ -11,7 +11,7 @@
                         <div class="nav-link viewDashboard" id="projectAnalyticsDashboardLink" href="#"><i class="fas fa-chart-bar me-2"></i>Project Analytics</div>
                     </li>
                 </ul>
-                <button class="btn btn-sm btn-outline-primary" id="newDashboardBtn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create dashboard">
+                <button class="btn btn-outline-primary p-1" id="newDashboardBtn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create dashboard">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>

@@ -6,7 +6,7 @@
                     <h4> Storage </h4>
                     <div class="btn-toolbar float-end">
                       <div class="btn-group me-2">
-                          <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create storage pool" class="btn btn-primary" id="createPool">
+                          <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create storage pool" class="btn btn-outline-primary p-1" id="createPool">
                               <i class="fas fa-plus"></i>
                           </button>
                       </div>

@@ -5,7 +5,7 @@
         <h4>Cloud Config</h4>
         <div class="btn-toolbar float-end">
           <div class="btn-group me-2">
-              <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Cloud Config" class="btn btn-block btn-primary" id="createCloudConfig">
+              <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Cloud Config" class="btn btn-outline-primary p-1" id="createCloudConfig">
                   <i class="fa fa-plus"></i>
               </button>
           </div>
