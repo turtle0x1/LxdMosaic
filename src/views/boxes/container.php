@@ -1220,8 +1220,15 @@ function loadContainerView(data)
             $("#goToTerminal").show();
         }
 
+        if(x.mosaicExtensions.audit){
+            $("#goToEvents").removeClass("disabled")
+            $("#goToEvents").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+        }else{
+            $("#goToEvents").addClass("disabled")
+            $("#goToEvents").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+        }
 
-        if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.haveMetrics){
+        if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.mosaicExtensions.haveMetrics){
             $("#goToMetrics").removeClass("disabled")
             $("#goToMetrics").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
         }else{
