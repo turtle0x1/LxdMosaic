@@ -96,8 +96,6 @@ class LogUserIn
         $this->session->set("wsToken", $token);
         $this->insertToken->insert($userId, $token);
 
-        header("Location: /");
-
         return true;
     }
 }
