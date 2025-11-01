@@ -15,7 +15,7 @@ class UploadFilesToPathController implements \dhope0000\LXDClient\Interfaces\Rec
         $this->uploadFiles = $uploadFiles;
     }
     /**
-     * @Route("", name="Upload File To Instance")
+     * @Route("/api/Instances/Files/UploadFilesToPathController/upload", name="Upload File To Instance", methods={"POST"})
      */
     public function upload(
         Host $host,

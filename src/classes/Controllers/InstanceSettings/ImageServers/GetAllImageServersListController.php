@@ -19,7 +19,7 @@ class GetAllImageServersListController implements \dhope0000\LXDClient\Interface
         $this->fetchImageServers = $fetchImageServers;
     }
     /**
-     * @Route("", name="Get all image servers list")
+     * @Route("/api/InstanceSettings/ImageServers/GetAllImageServersListController/all", name="Get all image servers list", methods={"POST"})
      */
     public function all(string $userId)
     {

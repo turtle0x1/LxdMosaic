@@ -15,7 +15,7 @@ class GetHostStorageVolumesController implements \dhope0000\LXDClient\Interfaces
         $this->getVolumes = $getVolumes;
     }
     /**
-     * @Route("", name="Get all storage volumes on host")
+     * @Route("/api/Storage/Volumes/GetHostStorageVolumesController/get", name="Get all storage volumes on host", methods={"POST"})
      */
     public function get(int $userId, Host $hostId)
     {

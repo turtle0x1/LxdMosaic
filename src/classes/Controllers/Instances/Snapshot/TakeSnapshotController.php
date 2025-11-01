@@ -14,7 +14,7 @@ class TakeSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAc
         $this->takeSnapshot = $takeSnapshot;
     }
     /**
-     * @Route("", name="Take Instance Snapshot")
+     * @Route("/api/Instances/Snapshot/TakeSnapshotController/takeSnapshot", name="Take Instance Snapshot", methods={"POST"})
      */
     public function takeSnapshot(Host $host, string $container, string $snapshotName)
     {

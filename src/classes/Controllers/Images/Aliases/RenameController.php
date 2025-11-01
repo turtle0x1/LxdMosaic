@@ -15,7 +15,7 @@ class RenameController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->renameAlias = $renameAlias;
     }
     /**
-     * @Route("", name="Rename Image Alias")
+     * @Route("/api/Images/Aliases/RenameController/rename", name="Rename Image Alias", methods={"POST"})
      */
     public function rename(Host $host, string $name, string $newName)
     {

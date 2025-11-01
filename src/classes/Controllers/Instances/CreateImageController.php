@@ -15,7 +15,7 @@ class CreateImageController implements \dhope0000\LXDClient\Interfaces\RecordAct
         $this->createImage = $createImage;
     }
     /**
-     * @Route("", name="Create image from instance")
+     * @Route("/api/Instances/CreateImageController/create", name="Create image from instance", methods={"POST"})
      */
     public function create(
         Host $host,

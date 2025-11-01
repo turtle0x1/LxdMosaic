@@ -18,7 +18,7 @@ class CreateProjectController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->createProject = $createProject;
     }
     /**
-     * @Route("", name="Create Project")
+     * @Route("/api/Projects/CreateProjectController/create", name="Create Project", methods={"POST"})
      */
     public function create(
         int $userId,

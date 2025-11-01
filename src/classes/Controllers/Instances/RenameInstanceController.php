@@ -14,7 +14,7 @@ class RenameInstanceController implements \dhope0000\LXDClient\Interfaces\Record
         $this->renameInstance = $renameInstance;
     }
     /**
-     * @Route("", name="Rename Instance")
+     * @Route("/api/Instances/RenameInstanceController/rename", name="Rename Instance", methods={"POST"})
      */
     public function rename(
         Host $host,

@@ -19,7 +19,7 @@ class DeleteImageServerController implements \dhope0000\LXDClient\Interfaces\Rec
         $this->deleteImageServer = $deleteImageServer;
     }
     /**
-     * @Route("", name="Delete an image server")
+     * @Route("/api/InstanceSettings/ImageServers/DeleteImageServerController/delete", name="Delete an image server", methods={"POST"})
      */
     public function delete(string $userId, string $alias)
     {

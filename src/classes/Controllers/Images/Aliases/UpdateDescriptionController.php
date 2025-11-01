@@ -15,7 +15,7 @@ class UpdateDescriptionController implements \dhope0000\LXDClient\Interfaces\Rec
         $this->updateDescription = $updateDescription;
     }
     /**
-     * @Route("", name="Update Image Alias Description")
+     * @Route("/api/Images/Aliases/UpdateDescriptionController/update", name="Update Image Alias Description", methods={"POST"})
      */
     public function update(Host $host, string $fingerprint, string $name, string $description = "")
     {

@@ -14,7 +14,7 @@ class MigrateInstanceController implements \dhope0000\LXDClient\Interfaces\Recor
         $this->migrate = $migrate;
     }
     /**
-     * @Route("", name="Migrate Instance")
+     * @Route("/api/Instances/MigrateInstanceController/migrate", name="Migrate Instance", methods={"POST"})
      */
     public function migrate(Host $hostId, $container, Host $destination)
     {

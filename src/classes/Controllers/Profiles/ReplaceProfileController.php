@@ -14,7 +14,7 @@ class ReplaceProfileController implements \dhope0000\LXDClient\Interfaces\Record
         $this->rename = $rename;
     }
     /**
-     * @Route("", name="Replace Profile")
+     * @Route("/api/Profiles/ReplaceProfileController/replace", name="Replace Profile", methods={"POST"})
      */
     public function replace(
         Host $host,

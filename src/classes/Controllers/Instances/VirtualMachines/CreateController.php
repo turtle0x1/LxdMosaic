@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\VirtualMachines;
 
 use dhope0000\LXDClient\Tools\Instances\VirtualMachines\CreateVirutalMachine;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CreateController
 {
@@ -14,6 +15,9 @@ class CreateController
         $this->createVirutalMachine = $createVirutalMachine;
     }
 
+    /**
+     * @Route("/api/Instances/VirtualMachines/CreateController/create", name="api_instances_virtualmachines_createcontroller_create", methods={"POST"})
+     */
     public function create(
         string $name,
         string $username,

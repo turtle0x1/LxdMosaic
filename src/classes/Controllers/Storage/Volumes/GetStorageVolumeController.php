@@ -15,7 +15,7 @@ class GetStorageVolumeController implements \dhope0000\LXDClient\Interfaces\Reco
         $this->getVolume = $getVolume;
     }
     /**
-     * @Route("", name="Get storage volume info")
+     * @Route("/api/Storage/Volumes/GetStorageVolumeController/get", name="Get storage volume info", methods={"POST"})
      */
     public function get(int $userId, Host $hostId, string $pool, string $path, string $project)
     {

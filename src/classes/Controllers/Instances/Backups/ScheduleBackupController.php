@@ -15,7 +15,7 @@ class ScheduleBackupController implements \dhope0000\LXDClient\Interfaces\Record
         $this->addBackupSchedule = $addBackupSchedule;
     }
     /**
-     * @Route("", name="Set Instance Backup Schedule")
+     * @Route("/api/Instances/Backups/ScheduleBackupController/schedule", name="Set Instance Backup Schedule", methods={"POST"})
      */
     public function schedule(
         int $userId,

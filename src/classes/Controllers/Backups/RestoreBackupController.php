@@ -15,7 +15,7 @@ class RestoreBackupController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->restoreBackup = $restoreBackup;
     }
     /**
-     * @Route("", name="Restore Local Backup To Host")
+     * @Route("/api/Backups/RestoreBackupController/restore", name="Restore Local Backup To Host", methods={"POST"})
      */
     public function restore(int $userId, int $backupId, Host $targetHost)
     {

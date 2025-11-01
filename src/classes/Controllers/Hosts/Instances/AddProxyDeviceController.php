@@ -14,7 +14,7 @@ class AddProxyDeviceController implements \dhope0000\LXDClient\Interfaces\Record
         $this->addProxyDevice = $addProxyDevice;
     }
     /**
-     * @Route("", name="Add proxy device")
+     * @Route("/api/Hosts/Instances/AddProxyDeviceController/add", name="Add proxy device", methods={"POST"})
      */
     public function add(Host $host, string $instance, string $name, string $source, string $destination)
     {

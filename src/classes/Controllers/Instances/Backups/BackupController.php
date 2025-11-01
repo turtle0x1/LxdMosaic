@@ -15,7 +15,7 @@ class BackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->backupInstance = $backupInstance;
     }
     /**
-     * @Route("", name="Backup Instance")
+     * @Route("/api/Instances/Backups/BackupController/backup", name="Backup Instance", methods={"POST"})
      */
     public function backup(
         Host $host,

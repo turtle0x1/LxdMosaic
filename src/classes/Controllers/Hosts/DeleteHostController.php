@@ -16,7 +16,7 @@ class DeleteHostController implements \dhope0000\LXDClient\Interfaces\RecordActi
         $this->container = $container;
     }
     /**
-     * @Route("", name="Delete Host")
+     * @Route("/api/Hosts/DeleteHostController/delete", name="Delete Host", methods={"POST"})
      */
     public function delete(int $userId, int $hostId)
     {

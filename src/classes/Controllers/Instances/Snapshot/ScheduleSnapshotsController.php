@@ -14,7 +14,7 @@ class ScheduleSnapshotsController implements \dhope0000\LXDClient\Interfaces\Rec
         $this->scheduleSnapshots = $scheduleSnapshots;
     }
     /**
-     * @Route("", name="Schedule instance snapshots with LXD")
+     * @Route("/api/Instances/Snapshot/ScheduleSnapshotsController/schedule", name="Schedule instance snapshots with LXD", methods={"POST"})
      */
     public function schedule(
         Host $host,

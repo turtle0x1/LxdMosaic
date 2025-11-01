@@ -14,7 +14,7 @@ class DeleteProfileController implements \dhope0000\LXDClient\Interfaces\RecordA
         $this->deleteProfile = $deleteProfile;
     }
     /**
-     * @Route("", name="Delete Profile")
+     * @Route("/api/Profiles/DeleteProfileController/delete", name="Delete Profile", methods={"POST"})
      */
     public function delete(Host $host, string $profile)
     {

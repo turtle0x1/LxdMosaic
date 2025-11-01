@@ -13,7 +13,7 @@ class UpdateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         $this->update = $update;
     }
     /**
-     * @Route("", name="Update Cloud Config")
+     * @Route("/api/CloudConfig/UpdateController/update", name="Update Cloud Config", methods={"POST"})
      */
     public function update(int $cloudConfigId, string $code, array $imageDetails, array $envVariables = [])
     {
