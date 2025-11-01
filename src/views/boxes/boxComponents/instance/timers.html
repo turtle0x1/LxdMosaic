@@ -1,0 +1,58 @@
+<div id="instanceTimers" class="instanceViewBox mt-2 row">
+    <div class="col-md-2">
+        <div class="card card-body bg-dark text-center text-white mb-2">
+            <h4>
+                <span class="d-block" id="instanceTotalTimers"></span>
+                Total Timers
+            </h4>
+        </div>
+        <div class="card card-body bg-dark text-center text-white mb-2">
+            <h4>
+                <span class="d-block" id="instanceTimersSnapshotDate"></span>
+                Snapshot Date
+            </h4>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h4>Packages</h4>
+            </div>
+            <div class="card-body bg-dark" style="max-height: 75vh; overflow-y: scroll;">
+                <table class="table table-dark table-bordered" id="instanceTimersTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Command</th>
+                            <th>Pattern</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#containerBox").on("click", "#goToTimers", function () {
+        $(".instanceViewBox").hide();
+        $("#instanceTimers").show();
+        ajaxRequest('/api/instances/timers/latest', currentContainerDetails, (data) => {
+            data = makeToastr(data);
+            let trs = "";
+            Object.keys(data.timers).forEach(timerKey => {
+                const timer = data.timers[timerKey]
+                trs += `<tr>
+                    <td>${timerKey}</td>
+                    <td>${timer[0].command}</td>
+                    <td>${timer[0].pattern}</td>
+                </tr>`
+            });
+            $("#instanceTimersSnapshotDate").text(moment(data.date).format("ll"))
+            $("#instanceTotalTimers").text(Object.keys(data.timers).length)
+            $("#instanceTimersTable > tbody").empty().append(trs);
+        });
+    });
+</script>
