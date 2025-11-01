@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class GetClusterControllerTest extends TestCase
 {
@@ -18,7 +19,7 @@ final class GetClusterControllerTest extends TestCase
         $_POST = ["cluster"=>1];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Clusters/GetClusterController/get')),
+            Request::create('/api/Clusters/GetClusterController/get', 'POST'),
             ["userid"=>2],
             true
         );

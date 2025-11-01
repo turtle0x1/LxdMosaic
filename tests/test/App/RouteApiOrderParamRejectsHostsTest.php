@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class RouteApiOrderParamRejectsHostsTest extends TestCase
 {
@@ -26,7 +27,7 @@ final class RouteApiOrderParamRejectsHostsTest extends TestCase
         $this->expectException(\Exception::class);
         $_POST = ["hostId"=>2];
         $this->routeApi->route(
-            array_filter(explode("/", "/Profiles/CopyProfileController/copyProfile")),
+            Request::create("/api/Profiles/CopyProfileController/copyProfile", 'POST'),
             ["userid"=>3, "apitoken"=>"wow"]
         );
     }
@@ -36,7 +37,7 @@ final class RouteApiOrderParamRejectsHostsTest extends TestCase
         $this->expectException(\Exception::class);
         $_POST = ["hostId"=>2];
         $this->routeApi->route(
-            array_filter(explode("/", "/Profiles/CopyProfileController/copyProfile")),
+            Request::create("/api/Profiles/CopyProfileController/copyProfile", 'POST'),
             ["userid"=>2, "project"=>"default"]
         );
     }
@@ -46,7 +47,7 @@ final class RouteApiOrderParamRejectsHostsTest extends TestCase
         $this->expectException(\Exception::class);
         $_POST = ["hostId"=>2];
         $this->routeApi->route(
-            array_filter(explode("/", "/Instances/MigrateInstanceController/migrate")),
+            Request::create("/api/Instances/MigrateInstanceController/migrate", 'POST'),
             ["userid"=>2, "project"=>"default"]
         );
     }
@@ -56,7 +57,7 @@ final class RouteApiOrderParamRejectsHostsTest extends TestCase
         $this->expectException(\Exception::class);
         $_POST = ["hosts"=>[2]];
         $this->routeApi->route(
-            array_filter(explode("/", "/CloudConfig/DeployController/deploy")),
+            Request::create("/api/CloudConfig/DeployController/deploy", 'POST'),
             ["userid"=>2, "project"=>"default"]
         );
     }

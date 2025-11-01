@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class GetHostsProfilesTest extends TestCase
 {
@@ -15,7 +16,7 @@ final class GetHostsProfilesTest extends TestCase
     public function test_getHostsProjects() :void
     {
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Profiles/GetAllProfilesController/getAllProfiles')),
+            Request::create('/api/Profiles/GetAllProfilesController/getAllProfiles', 'POST'),
             ["userid"=>1],
             true
         );

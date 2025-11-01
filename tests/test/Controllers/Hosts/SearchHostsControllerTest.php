@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class SearchHostsControllerTest extends TestCase
 {
@@ -27,7 +28,7 @@ final class SearchHostsControllerTest extends TestCase
         $_POST = ["hostSearch"=>"localhost"];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/SearchHosts/search')),
+            Request::create('/api/Hosts/SearchHosts/search', 'POST'),
             ["userid"=>2],
             true
         );
@@ -40,7 +41,7 @@ final class SearchHostsControllerTest extends TestCase
         $_POST = ["hostSearch"=>"localhost"];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/SearchHosts/search')),
+            Request::create('/api/Hosts/SearchHosts/search', 'POST'),
             ["userid"=>1],
             true
         );

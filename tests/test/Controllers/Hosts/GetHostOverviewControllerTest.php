@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class GetHostOverviewControllerTest extends TestCase
 {
@@ -18,7 +19,7 @@ final class GetHostOverviewControllerTest extends TestCase
         $_POST = ["hostId"=>2];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/GetHostOverviewController/get')),
+            Request::create('/api/Hosts/GetHostOverviewController/get', 'POST'),
             ["userid"=>2],
             true
         );
@@ -29,7 +30,7 @@ final class GetHostOverviewControllerTest extends TestCase
         $_POST = ["hostId"=>1];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/GetHostOverviewController/get')),
+            Request::create('/api/Hosts/GetHostOverviewController/get', 'POST'),
             ["userid"=>1],
             true
         );

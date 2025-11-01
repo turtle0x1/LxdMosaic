@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 final class FirstRunControllerTest extends TestCase
@@ -20,7 +21,7 @@ final class FirstRunControllerTest extends TestCase
         $_POST = ["adminPassword"=>"test123", "hosts"=>[]];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/FirstRunController/run')),
+            Request::create('/api/InstanceSettings/FirstRunController/run', 'POST'),
             ["userid"=>2],
             true
         );

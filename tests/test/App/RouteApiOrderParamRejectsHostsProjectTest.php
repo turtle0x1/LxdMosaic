@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class RouteApiOrderParamRejectsHostsProjectTest extends TestCase
 {
@@ -17,7 +18,7 @@ final class RouteApiOrderParamRejectsHostsProjectTest extends TestCase
         $this->expectException(\Exception::class);
         $_POST = ["hostId"=>1];
         $this->routeApi->route(
-            array_filter(explode('/', "/Hosts/GetHostOverviewController/get")),
+            Request::create("/api/Hosts/GetHostOverviewController/get", 'POST'),
             ["userid"=>2, "project"=>"default"]
         );
     }
@@ -27,7 +28,7 @@ final class RouteApiOrderParamRejectsHostsProjectTest extends TestCase
         $this->expectException(\Exception::class);
         $_POST = ["hostId"=>1];
         $this->routeApi->route(
-            array_filter(explode('/', "/Instances/MigrateInstanceController/migrate")),
+            Request::create("/api/Instances/MigrateInstanceController/migrate", 'POST'),
             ["userid"=>2, "project"=>"default"]
         );
     }
@@ -37,7 +38,7 @@ final class RouteApiOrderParamRejectsHostsProjectTest extends TestCase
         $this->expectException(\Exception::class);
         $_POST = ["hosts"=>[1]];
         $this->routeApi->route(
-            array_filter(explode('/', "/CloudConfig/DeployController/deploy")),
+            Request::create("/api/CloudConfig/DeployController/deploy", 'POST'),
             ["userid"=>2, "project"=>"default"]
         );
     }

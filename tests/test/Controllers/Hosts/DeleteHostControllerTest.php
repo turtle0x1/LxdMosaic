@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class DeleteHostControllerTest extends TestCase
 {
@@ -19,7 +20,7 @@ final class DeleteHostControllerTest extends TestCase
         $_POST = ["hostId"=>1];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/DeleteHostController/delete')),
+            Request::create('/api/Hosts/DeleteHostController/delete', 'POST'),
             ["userid"=>2],
             true
         );

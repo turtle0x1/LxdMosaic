@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class UpdateSettingsControllerTest extends TestCase
 {
@@ -30,7 +31,7 @@ final class UpdateSettingsControllerTest extends TestCase
         $_POST = ["hostId"=>1, "alias"=>"test", "supportsLoadAverages"=>0];
 
         $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/Settings/UpdateSettingsController/update')),
+            Request::create('/api/Hosts/Settings/UpdateSettingsController/update', 'POST'),
             ["userid"=>2],
             true
         );
@@ -41,7 +42,7 @@ final class UpdateSettingsControllerTest extends TestCase
         $_POST = ["hostId"=>1, "alias"=>"test", "supportsLoadAverages"=>0];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/Settings/UpdateSettingsController/update')),
+            Request::create('/api/Hosts/Settings/UpdateSettingsController/update', 'POST'),
             ["userid"=>1],
             true
         );
@@ -57,7 +58,7 @@ final class UpdateSettingsControllerTest extends TestCase
         $_POST = ["hostId"=>1, "alias"=>"duplicateAlias", "supportsLoadAverages"=>0];
 
         $this->routeApi->route(
-            array_filter(explode('/', '/Hosts/Settings/UpdateSettingsController/update')),
+            Request::create('/api/Hosts/Settings/UpdateSettingsController/update', 'POST'),
             ["userid"=>1],
             true
         );

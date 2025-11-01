@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 final class GrantAccessControllerTest extends TestCase
 {
@@ -27,7 +28,7 @@ final class GrantAccessControllerTest extends TestCase
         $_POST = ["targetUser"=>1, "hosts"=>[1], "projects"=>["default"]];
 
         $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/GrantAccessController/grant')),
+            Request::create('/api/User/AllowedProjects/GrantAccessController/grant', 'POST'),
             ["userid"=>2],
             true
         );
@@ -38,7 +39,7 @@ final class GrantAccessControllerTest extends TestCase
         $_POST = ["targetUser"=>2, "hosts"=>[1], "projects"=>["default"]];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/User/AllowedProjects/GrantAccessController/grant')),
+            Request::create('/api/User/AllowedProjects/GrantAccessController/grant', 'POST'),
             ["userid"=>1],
             true
         );

@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 final class GetLastControllerTest extends TestCase
@@ -31,7 +32,7 @@ final class GetLastControllerTest extends TestCase
         $_POST = ["ammount"=>5];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/RecordedActions/GetLastController/get')),
+            Request::create('/api/InstanceSettings/RecordedActions/GetLastController/get', 'POST'),
             ["userid"=>2],
             true
         );
@@ -42,7 +43,7 @@ final class GetLastControllerTest extends TestCase
         $_POST = ["ammount"=>5];
 
         $result = $this->routeApi->route(
-            array_filter(explode('/', '/InstanceSettings/RecordedActions/GetLastController/get')),
+            Request::create('/api/InstanceSettings/RecordedActions/GetLastController/get', 'POST'),
             ["userid"=>1],
             true
         );
