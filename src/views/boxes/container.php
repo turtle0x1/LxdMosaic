@@ -1928,10 +1928,9 @@ function loadFileSystemPath(path){
                  }
                  if(path !== "/"){
 
-                     h = `<div class="col-md-4"><div class="card bg-dark textg-white mb-2 mt-2 goUpDirectory">
+                     h = `<div class="col-md-2"><div class="card bg-dark text-white mb-2 mt-2 goUpDirectory" style="font-size: .5rem">
                         <div class="card-body text-center">
-                            <i class="fas fa-circle text-white fa-3x"></i>
-                            <i class="fas fa-circle text-white fa-3x"></i>
+                            <i class="fas fa-ellipsis text-white fa-3x"></i>
                             <h4>Back</h4>
                         </div>
                       </div></div>`;
@@ -1939,8 +1938,8 @@ function loadFileSystemPath(path){
                  $.each(data.contents, function(_, item){
                      let icon = `<i class="fas fa-3x fa-${item.isDirectory ? "folder" : "file"}"></i>`
 
-                     h += `<div class="col-md-4">
-                     <div class="card bg-dark text-white mb-2 mt-2 filesystemObject bg-dark" data-name="${item.name}" data-path="${path}${item.name}">
+                     h += `<div class="col-md-2">
+                     <div class="card bg-dark text-white mb-2 mt-2 filesystemObject bg-dark" data-name="${item.name}" data-path="${path}${item.name}" style="font-size: .5rem">
                         <div class="card-body text-center">
                             ${icon}
                             <h4>${item.name}</h4>
