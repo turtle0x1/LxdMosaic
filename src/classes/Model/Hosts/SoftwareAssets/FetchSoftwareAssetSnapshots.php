@@ -13,6 +13,18 @@ class FetchSoftwareAssetSnapshots
         $this->database = $database->dbObject;
     }
 
+    public function fetchLatest()
+    {
+        $sql = "SELECT SAS_Date as `date`, SAS_Data as `data` FROM `Software_Assets_Snapshots` WHERE SAS_ID = (SELECT
+                    SAS_ID
+                FROM
+                    `Software_Assets_Snapshots`
+                ORDER BY
+                    `SAS_Date` DESC
+                LIMIT 1)
+                ";
+        return $this->database->query($sql)->fetch(\PDO::FETCH_ASSOC);
+    }
     public function fetchForDate(\DateTimeImmutable $date)
     {
         $sql = "SELECT
