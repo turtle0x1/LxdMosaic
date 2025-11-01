@@ -12,6 +12,8 @@ $reader = new AnnotationReader();
 $cacheFile = __DIR__ . "/../classes/App/Router/routes.cache";
 $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__ . '/../classes/Controllers'));
 
+$seenPaths = [];
+$seenNames = [];
 foreach ($rii as $file) {
     if (!$file->isFile() || $file->getExtension() !== 'php') {
         continue;
@@ -40,6 +42,14 @@ foreach ($rii as $file) {
             if ($annot instanceof Symfony\Component\Routing\Annotation\Route) {
                 $path = $annot->getPath();
                 $name = $annot->getName() ?: strtolower(str_replace('\\', '_', $fqcn . '_' . $method->getName()));
+                if (in_array($path, $seenPaths)) {
+                    throw new \Exception("Seen route path '$path' already");
+                }
+                $seenPaths[] = $path;
+                if (in_array($name, $seenNames)) {
+                    throw new \Exception("Seen route name '$name' already");
+                }
+                $seenNames[] = $name;
                 $route = new Route(
                     $path,
                     array_merge($annot->getDefaults(), ['_controller' => $fqcn, '_method' => $method->getName()]),

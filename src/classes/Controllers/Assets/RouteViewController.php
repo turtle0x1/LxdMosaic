@@ -16,10 +16,10 @@ class RouteViewController
         $this->container = $container;
     }
     /**
-     * @Route("/", name="frontend_root")
-     * @Route("/login", name="frontend_app")
-     * @Route("/terminal", name="frontend_app")
-     * @Route("/first-run", name="frontend_app")
+     * @Route("/", name="Root page")
+     * @Route("/login", name="Login page")
+     * @Route("/terminal", name="Terminal page")
+     * @Route("/first-run", name="First run page")
      */
     public function route(Request $request): Response
     {
