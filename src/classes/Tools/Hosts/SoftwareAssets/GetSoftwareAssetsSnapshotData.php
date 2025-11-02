@@ -50,22 +50,13 @@ class GetSoftwareAssetsSnapshotData
 
                 $output[$host->getHostId()][$projectName] = [];
 
-
-                $lxd = $host->host->info()["environment"]["server"] === "lxd";
-
-                // See https://github.com/turtle0x1/LxdMosaic/issues/576#issuecomment-2351794173
-                // to see when LXD VM's are supported
-                $supportsVms = $lxd ? false : true;
-
                 if ($supportsProjects) {
                     $host->setProject($projectName);
                 }
 
                 $instances = $host->instances->all(1);
                 foreach ($instances as $instance) {
-                    if ($instance["status_code"] !== "103") {
-                        continue;
-                    } else if ($instance["type"] == "virtual-machine" && !$supportsVms) {
+                    if ((int) $instance["status_code"] !== 103) {
                         continue;
                     }
                     $instacePackages = [];
