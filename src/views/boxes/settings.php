@@ -526,6 +526,7 @@ function loadRecordedActions(req, ammount = 30){
     $("#recordedActionsBox").show();
     addBreadcrumbs(["Admin Settings", "Recorded Actions"], ["", "active"], false, ["/admin"]);
     $("#actionCount").text(ammount);
+    $("#recordedActionsTable > tbody").empty()
     ajaxRequest(globalUrls.settings.recordedActions.getLastResults, {ammount: ammount}, (data)=>{
         data = makeToastr(data);
         let trs = "";
@@ -546,34 +547,44 @@ function loadRecordedActions(req, ammount = 30){
                         let t = typeof value
                         if(t !== "array" && t !== "object"){
                             params += `<div class="mb-1">
-                                ${key}: ${value}
+                                <b>${key}</b>: ${value}
                             </div>`
                         // NOTE 1 level recursion not traversing whole tree's
                         } else if(t === "object"){
                             let pKeys = Object.keys(value);
                             params += `<div class="mb-1">
-                                ${key}:
+                                <b>${key}</b>:
                             </div>`
                             $.each(pKeys, (_, k)=>{
                                 params += `<div class="mb-1 ps-2">
-                                    ${k}: ${value[k]}
+                                    <b>${k}</b>: ${value[k]}
                                 </div>`
                             });
                         }
                     });
                 }
 
-                trs += `<tr>
+                const tr = $(`<tr>
                     <td>${item.userName}</td>
                     <td>${moment.utc(item.date).local().fromNow()}</td>
                     <td>${item.controllerName == "" ? item.controller : item.controllerName}</td>
-                    <td class="text-break">${params}</td>
-                </tr>`;
+                    <td class="text-break" data-params="${JSON.stringify(item.params)}"><button class="btn btn-outline-primary btn-sm p-1 viewParams"><i class="fas fa-eye"></i></button></td>
+                </tr>`)
+                tr.on("click", ".viewParams", function(){
+                    $.confirm({
+                        title: "Request params",
+                        content: params,
+                        buttons: {
+                            ok: ()=>{}
+                        }
+                    })
+                })
+                $("#recordedActionsTable > tbody").append(tr);
             });
         }else{
             trs += `<tr><td colspan="999" class="text-info text-center">No Recorded Actions</td></tr>`
         }
-        $("#recordedActionsTable > tbody").empty().append(trs);
+        
     });
 }
 
@@ -1390,13 +1401,13 @@ $("#recordedActionsBox").on("click", "#loadMoreRecordedActions", function(){
     $.confirm({
     title: 'Prompt!',
     content: `
-    <div class="alert alert-danger">
-        Loading to many logs may crash your browser!
-    </div>
     <form action="" class="formName">
         <div class="mb-2">
             <label>Ammount Of Logs To Fetch</label>
             <input type="text" value="30" class="ammount form-control" required />
+        </div>
+        <div class="alert alert-danger">
+            Loading to many logs may crash your browser!
         </div>
     </form>`,
     buttons: {
