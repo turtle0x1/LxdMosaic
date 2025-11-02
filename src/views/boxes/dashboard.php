@@ -272,9 +272,6 @@ $(document).on("click", ".showServerInstances", function(e){
 function loadDashboard(){
     currentContainerDetails = null
     currentServer = {hostId: null}
-    if(recordActionsEnabled == 0){
-        $("#goToEvents").hide();
-    }
     $('[data-bs-toggle="tooltip"]').tooltip({html: true})
     createDashboardSidebar();
     window.setInterval(clearOldOperations, 60 * 1000);

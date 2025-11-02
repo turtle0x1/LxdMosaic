@@ -5,7 +5,6 @@ $validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\Va
 $getSetting = $this->container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting"); /** @phpstan-ignore-line */
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
-$recordActionsEnabled = $getSetting->getSettingLatestValue(InstanceSettingsKeys::RECORD_ACTIONS);
 $siteTitle = $getSetting->getSettingLatestValue(InstanceSettingsKeys::SITE_TITLE);
 
 $userId = $userSession->getUserId();
@@ -19,7 +18,6 @@ var userDetails = {
     apiToken: '$apiToken',
     userId: $userId
 }
-var recordActionsEnabled = parseInt($recordActionsEnabled);
 </script>";
 ?>
 <!DOCTYPE html>

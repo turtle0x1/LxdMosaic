@@ -2,12 +2,14 @@
 
 namespace dhope0000\LXDClient\Tools\Instances;
 
+use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 use dhope0000\LXDClient\Model\Deployments\FetchDeployments;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Model\Metrics\FetchMetrics;
 use dhope0000\LXDClient\Tools\Instances\Devices\Proxy\GetAllInstanceProxies;
+use dhope0000\LXDClient\Model\InstanceSettings\GetSettings;
 
 class GetInstance
 {
@@ -15,17 +17,20 @@ class GetInstance
     private $hasExtension;
     private $fetchMetrics;
     private $getAllInstanceProxies;
+    private $getSettings;
 
     public function __construct(
         FetchDeployments $fetchDeployments,
         HasExtension $hasExtension,
         FetchMetrics $fetchMetrics,
-        GetAllInstanceProxies $getAllInstanceProxies
+        GetAllInstanceProxies $getAllInstanceProxies,
+        GetSettings $getSettings
     ) {
         $this->fetchDeployments = $fetchDeployments;
         $this->hasExtension = $hasExtension;
         $this->fetchMetrics = $fetchMetrics;
         $this->getAllInstanceProxies = $getAllInstanceProxies;
+        $this->getSettings = $getSettings;
     }
 
     public function get(Host $host, string $instance)
@@ -36,8 +41,6 @@ class GetInstance
 
         $hostId = $host->getHostId();
         $deploymentDetails = $this->fetchDeployments->byHostContainer($hostId, $instance);
-        $hostSupportsBackups = $this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP);
-        $haveMetrics = $this->fetchMetrics->instanceHasMetrics($host->getHostId(), $host->getProject(), $instance);
 
         $totalMemory = $host->resources->info()["memory"]["total"];
         $memorySource = "Available On Host";
@@ -64,10 +67,9 @@ class GetInstance
         return [
             "details"=>$details,
             "state"=>$state,
-            "haveMetrics"=>$haveMetrics,
+            "mosaicExtensions"=>$this->getMosaicExtensions($host, $instance),
             "snapshots"=>$snapshots,
             "deploymentDetails"=>$deploymentDetails,
-            "backupsSupported"=>$hostSupportsBackups,
             "project"=>$host->callClientMethod("getProject"),
             "proxyDevices"=>$proxyDevices,
             "totalMemory"=>[
@@ -75,5 +77,26 @@ class GetInstance
                 "total"=>$totalMemory
             ]
         ];
+    }
+
+    private function getMosaicExtensions($host, $instance){
+        $output = [
+            "timers"=>false,
+            "packages"=>false,
+            "audit"=>false,
+            "metrics"=> $this->fetchMetrics->instanceHasMetrics($host->getHostId(), $host->getProject(), $instance),
+            "backups"=>$this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP)
+        ];
+        $allSettings = $this->getSettings->getAllSettingsWithLatestValues();
+        foreach($allSettings as $setting){
+            if($setting["settingId"] == InstanceSettingsKeys::TIMERS_MONITOR){
+                $output["timers"] = (int) $setting["currentValue"] === 1;
+            }else if($setting["settingId"] == InstanceSettingsKeys::SOFTWARE_INVENTORY_MONITOR){
+                $output["packages"] = (int) $setting["currentValue"] === 1;
+            }else if($setting["settingId"] == InstanceSettingsKeys::RECORD_ACTIONS){
+                $output["packages"] = (int) $setting["currentValue"] === 1;
+            }
+        }
+        return $output;
     }
 }

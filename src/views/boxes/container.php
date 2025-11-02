@@ -236,24 +236,20 @@
                         <i class="fas fa-info-circle pe-2"></i>Details
                     </div>
                 </li>
-                <li class="nav-item" id="goToTerminal">
-                    <div class="nav-link ">
-                        <i class="fas fa-tv pe-2"></i>Terminal
-                    </div>
-                </li>
-                <li class="nav-item" id="goToSnapshots">
-                    <div class="nav-link ">
-                        <i class="fas fa-images pe-2"></i>Snapshots
-                    </div>
-                </li>
                 <li class="nav-item" id="goToBackups">
                     <div class="nav-link ">
                         <i class="fas fa-save pe-2"></i>Backups
                     </div>
                 </li>
+                    </li>
+                <li class="nav-item" id="goToEvents">
+                    <div class="nav-link" >
+                        <i class="fas fa-book-open pe-2"></i>Events
+                    </div>
+                </li>
                 <li class="nav-item" id="goToFiles">
                     <div class="nav-link ">
-                        <i class="fas fa-save pe-2"></i>Files
+                        <i class="fas fa-folder pe-2"></i>File System
                     </div>
                 </li>
                 <li class="nav-item" id="goToMetrics">
@@ -261,9 +257,24 @@
                         <i class="fas fa-chart-bar pe-2"></i>Metrics
                     </div>
                 </li>
-                <li class="nav-item">
-                    <div class="nav-link " id="goToEvents">
-                        <i class="fas fa-book-open pe-2"></i>Events
+                <li class="nav-item" id="goToPackages">
+                    <div class="nav-link" >
+                        <i class="fas fa-box pe-2"></i>Packages
+                    </div>
+                </li>
+                <li class="nav-item" id="goToSnapshots">
+                    <div class="nav-link ">
+                        <i class="fas fa-images pe-2"></i>Snapshots
+                    </div>
+                </li>
+                <li class="nav-item" id="goToTerminal">
+                    <div class="nav-link ">
+                        <i class="fas fa-tv pe-2"></i>Terminal
+                    </div>
+                </li>
+                <li class="nav-item" id="goToTimers">
+                    <div class="nav-link" >
+                        <i class="fas fa-hourglass-half pe-2"></i>Timers
                     </div>
                 </li>
             <ul>
@@ -605,6 +616,10 @@
     </div>
 
 </div>
+<?php
+    require_once __DIR__ . "/boxComponents/instance/packages.html";
+    require_once __DIR__ . "/boxComponents/instance/timers.html";
+?>
 </div>
 <script src="/assets/dist/xterm.js"></script>
 <script>
@@ -1220,8 +1235,32 @@ function loadContainerView(data)
             $("#goToTerminal").show();
         }
 
+        if(x.mosaicExtensions.audit){
+            $("#goToEvents").removeClass("disabled")
+            $("#goToEvents").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+        }else{
+            $("#goToEvents").addClass("disabled")
+            $("#goToEvents").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+        }
+        
 
-        if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.haveMetrics){
+        if(x.mosaicExtensions.packages){
+            $("#goToPackages").removeClass("disabled")
+            $("#goToPackages").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+        }else{
+            $("#goToPackages").addClass("disabled")
+            $("#goToPackages").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+        }
+        if(x.mosaicExtensions.timers){
+            $("#goToTimers").removeClass("disabled")
+            $("#goToTimers").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+        }else{
+            $("#goToTimers").addClass("disabled")
+            $("#goToTimers").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+        }
+
+
+        if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.mosaicExtensions.haveMetrics){
             $("#goToMetrics").removeClass("disabled")
             $("#goToMetrics").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
         }else{
@@ -1234,7 +1273,7 @@ function loadContainerView(data)
 
         $("#container-currentState").html(`<i class="` + statusCodeIconMap[x.state.status_code] +`"></i>`);
 
-        if(x.backupsSupported){
+        if(x.mosaicExtensions.backups){
             $("#goToBackups").removeClass("disabled")
             $("#goToBackups").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
         }else{

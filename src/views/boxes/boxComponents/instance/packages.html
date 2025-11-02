@@ -1,0 +1,90 @@
+<div id="instancePackages" class="instanceViewBox mt-2 row">
+    <div class="col-md-2">
+        <div class="card card-body bg-dark text-center text-white mb-2">
+            <h4>
+                <span class="d-block" id="instanceTotalPackages"></span>
+                Total Packages
+            </h4>
+        </div>
+        <div class="card card-body bg-dark text-center text-white mb-2">
+            <h4>
+                <span class="d-block" id="instancePackageSnapshotDate"></span>
+                Snapshot Date
+            </h4>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h4>Packages</h4>
+            </div>
+            <div class="card-body bg-dark" style="max-height: 75vh; overflow-y: scroll;">
+                <table class="table table-dark table-bordered" id="instancePackagesTable">
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Name</th>
+                            <th>Version</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card card-body bg-dark text-center text-white mb-2" style="min-height: 40vh;" id="instacePackageManagerChartDiv">
+        </div>
+    </div>
+</div>
+<script>
+    $("#containerBox").on("click", "#goToPackages", function () {
+        $(".instanceViewBox").hide();
+        $("#instancePackages").show();
+        ajaxRequest('/api/instances/packages/latest', currentContainerDetails, (data) => {
+            data = makeToastr(data);
+            let trs = "";
+            data.packages.forEach(package => {
+                trs += `<tr>
+                    <td>${package.manager}</td>
+                    <td>${package.name}</td>
+                    <td>${package.version}</td>
+                </tr>`
+            });
+            $("#instancePackageSnapshotDate").text(moment(data.date).format("ll"))
+            $("#instanceTotalPackages").text(data.packages.length)
+            $("#instancePackagesTable > tbody").empty().append(trs);
+
+            let chartId = "instancePackageManagerChart"
+            $("#instacePackageManagerChartDiv").empty().append(`<canvas id="${chartId}"></canvas>`)
+            let ctx = $(`#${chartId}`)[0].getContext('2d');
+
+            let colors = Object.keys(data.stats.managers).map(_ => {
+                return randomColor()
+            })
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data.stats.managers),
+                    datasets: [{
+                        label: "Package Manager",
+                        data: Object.values(data.stats.managers),
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: "Package Managers"
+                    }
+                }
+            });
+        });
+    });
+</script>

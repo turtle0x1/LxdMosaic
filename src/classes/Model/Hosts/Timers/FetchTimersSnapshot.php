@@ -13,6 +13,19 @@ class FetchTimersSnapshot
         $this->database = $database->dbObject;
     }
 
+    public function fetchLatest()
+    {
+        $sql = "SELECT TS_Date as `date`, TS_Data as `data` FROM `Timers_Snapshots` WHERE TS_ID = (SELECT
+                    TS_ID
+                FROM
+                    `Timers_Snapshots`
+                ORDER BY
+                    `TS_Date` DESC
+                LIMIT 1)
+                ";
+        return $this->database->query($sql)->fetch(\PDO::FETCH_ASSOC);
+    }
+
     public function fetchForDate(\DateTimeImmutable $date)
     {
         $sql = "SELECT
