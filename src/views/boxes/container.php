@@ -2237,29 +2237,35 @@ $("#containerBox").on("click", "#goToSnapshots", function() {
         }
 
         let trs = "";
-        $.each(data.snapshots, (_, snapshot)=>{
-            let expires = "Never expries";
-            if(snapshot.hasOwnProperty("expires_at") && snapshot.expires_at !== "0001-01-01T00:00:00Z"){
-                expires = moment(snapshot.expires_at).format("llll");
-            }
-            trs += `<tr id="${snapshot.name}">
-                <td>${snapshot.name}</td>
-                <td>${expires}</td>
-                <td>${formatBytes(snapshot.size)}</td>
-                <td>
-                    <div class="dropdown">
-                      <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v"></i>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
-                            <li><span class="dropdown-item createFromSnapshot"><i class="fas fa-plus text-success me-2"></i>Create Instance From Snapshot</span></li>
-                            <li><span class="dropdown-item deleteSnap"><i class="fas fa-trash text-warning me-2"></i>Delete</span></li>
-                            <li><span class="dropdown-item restoreSnapToOrigin"><i class="fas fa-trash-restore text-danger me-2"></i>Restore To Origin</span></li>
-                      </ul>
-                    </div>
-                </td>
+        if(data.snapshots.length == 0){
+            trs = `<tr>
+                <td class="text-center" colspan="4"><i class="fas fa-info-circle text-primary me-1"></i>No Snapshots</td>
             </tr>`
-        })
+        }else{
+            $.each(data.snapshots, (_, snapshot)=>{
+                let expires = "Never expries";
+                if(snapshot.hasOwnProperty("expires_at") && snapshot.expires_at !== "0001-01-01T00:00:00Z"){
+                    expires = moment(snapshot.expires_at).format("llll");
+                }
+                trs += `<tr id="${snapshot.name}">
+                    <td>${snapshot.name}</td>
+                    <td>${expires}</td>
+                    <td>${formatBytes(snapshot.size)}</td>
+                    <td>
+                        <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
+                                <li><span class="dropdown-item createFromSnapshot"><i class="fas fa-plus text-success me-2"></i>Create Instance From Snapshot</span></li>
+                                <li><span class="dropdown-item deleteSnap"><i class="fas fa-trash text-warning me-2"></i>Delete</span></li>
+                                <li><span class="dropdown-item restoreSnapToOrigin"><i class="fas fa-trash-restore text-danger me-2"></i>Restore To Origin</span></li>
+                        </ul>
+                        </div>
+                    </td>
+                </tr>`
+            })
+        }
         $("#instanceSnapshotsTable > tbody").empty().append(trs)
     });
 });
