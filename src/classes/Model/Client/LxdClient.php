@@ -2,7 +2,7 @@
 namespace dhope0000\LXDClient\Model\Client;
 
 use GuzzleHttp\Client as GuzzleClient;
-use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
+use Http\Adapter\Guzzle7\Client as GuzzleAdapter;
 use \Opensaucesystems\Lxd\Client;
 use dhope0000\LXDClient\App\RouteApi;
 use dhope0000\LXDClient\Objects\Host;
