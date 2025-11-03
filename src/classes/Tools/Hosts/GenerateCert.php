@@ -2,8 +2,6 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts;
 
-use GuzzleHttp\Client as GuzzleClient;
-use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 use dhope0000\LXDClient\Model\Client\LxdClient;
 
 class GenerateCert
