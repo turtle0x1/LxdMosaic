@@ -8,6 +8,7 @@ Added
     Opt in attempt to gather cronjob/systemd timers from instances
     Progress bars indicating storage usage on storage dashboard
     View packages & timers for instance if setting is enabled
+    Create VM from iso file
 
 Changed
     Use bash shell as the default for {oracle, rocky} images (#544)
