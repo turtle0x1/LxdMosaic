@@ -80,24 +80,29 @@ function ajaxRequest(url, data, callback){
         })
     }
 
-    $.ajax({
-         type: 'POST',
-         data: data,
-         url: url,
-         success: function(data, _, jqXHR){
-             if(jqXHR.status == 205){
-                 $.alert("its likely a host has gone offline, refresh the page");
-                 return false;
-             }
-             callback(data);
-         },
-         error: function(data){
-             if(data.status == 403){
-                 location.reload();
-             }
-             callback(data);
-         }
-     });
+    let ajaxParams = {
+        type: 'POST',
+        data: data,
+        url: url,
+        success: function (data, _, jqXHR) {
+            if (jqXHR.status == 205) {
+                $.alert("its likely a host has gone offline, refresh the page");
+                return false;
+            }
+            callback(data);
+        },
+        error: function (data) {
+            if (data.status == 403) {
+                location.reload();
+            }
+            callback(data);
+        }
+    }
+    if( data instanceof FormData){
+        ajaxParams.contentType = false
+        ajaxParams.processData = false
+    }
+    $.ajax(ajaxParams);
 }
 
 

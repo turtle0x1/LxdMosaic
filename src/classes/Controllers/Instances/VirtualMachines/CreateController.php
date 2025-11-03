@@ -22,16 +22,16 @@ class CreateController
         string $name,
         string $username,
         HostsCollection $hostIds,
-        array $imageDetails,
         bool $start,
+        array $imageDetails = [],
         array $config = []
     ) {
         $response = $this->createVirutalMachine->create(
             $name,
             $username,
             $hostIds,
-            $imageDetails,
             $start,
+            $imageDetails,
             $config
         );
 

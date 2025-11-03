@@ -16,6 +16,10 @@ body {
     color: #0dcaf0 !important;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .provider {
     cursor: pointer;
 }
@@ -146,10 +150,6 @@ padding: .25rem !important;
 li.breadcrumb-item:nth-child(1) {
     cursor: pointer;
     text-decoration: underline;
-}
-
-.card {
-    border: none;
 }
 
 #cloudConfig-editorCollapse {

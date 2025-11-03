@@ -52,10 +52,13 @@ class CreateInstance
         $results = [];
 
         foreach ($hosts as $host) {
-            $newFingerPrint = $this->importImageIfNotHave->importIfNot($host, $imageDetails);
-
-            if ($newFingerPrint !== $options["fingerprint"]) {
-                $options["fingerprint"] = $newFingerPrint;
+            if (isset($imageDetails["empty"]) && $imageDetails["empty"]) {
+                $options["source"] = ["type" => "none"];
+            } else {
+                $newFingerPrint = $this->importImageIfNotHave->importIfNot($host, $imageDetails);
+                if ($newFingerPrint !== $options["fingerprint"]) {
+                    $options["fingerprint"] = $newFingerPrint;
+                }
             }
 
             $alias = "";
@@ -92,17 +95,17 @@ class CreateInstance
         array $config = []
     ) {
         $x = [
-            "type"=>$type,
-            "fingerprint"=>$imageDetails["fingerprint"],
-            "profiles"=>$profiles,
-            "server"=>$server
+            "type" => $type,
+            "fingerprint" => $imageDetails["fingerprint"],
+            "profiles" => $profiles,
+            "server" => $server
         ];
         if (is_array($gpus) && !empty($gpus)) {
             $x["devices"] = [];
             foreach ($gpus as $index => $id) {
                 $x["devices"]["gpu_$index"] = [
-                    "type"=>"gpu",
-                    "pci"=>$id
+                    "type" => "gpu",
+                    "pci" => $id
                 ];
             }
         }
