@@ -15,6 +15,7 @@ Changed
     Support instances in the custom state "Ready" (#547)
     Set default shell for centos as bash (#546)
     Image servers no longer hardcoded and can be controlled in admin
+    Improve search by indexing available LXD servers every 15 minutes
 
 Fixed
     Shell doesn't work when port is something other than 443 (#540)

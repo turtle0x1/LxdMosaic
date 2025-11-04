@@ -196,9 +196,6 @@ var userDetails = {
                 getMyOverview: "/api/InstanceSettings/GetMySettingsOverviewController/get"
               },
               networks: {
-                  tools: {
-                      findIpAddress: "/api/Networks/Tools/FindIpAddressController/find"
-                  },
                   getAll: "/api/Networks/GetHostsNetworksController/get",
                   get: "/api/Networks/GetNetworkController/get",
                   deleteNetwork: "/api/Networks/DeleteNetworkController/delete",
@@ -424,44 +421,18 @@ var userDetails = {
           });
 
           $(document).on("click", "#openSearch", function(){
-              $.confirm({
-                  title: `Search`,
-                  content: `
-                      <div class="mb-2">
-                          <label>IP Address IPV4/IPV6</label>
-                          <input class="form-control" name="ip" />
-                      </div>
-                  `,
-                  buttons: {
-                      cancel: {
-                          btnClass: "btn btn-secondary",
-                          text: "cancel"
-                      },
-                      search: {
-                          btnClass: "btn btn-success",
-                          text: "Search",
-                          action: function(){
-                              let x = {
-                                  ip: this.$content.find("input[name=ip]").val()
-                              }
-
-                              ajaxRequest(globalUrls.networks.tools.findIpAddress, x, (data)=>{
-                                  data = makeToastr(data);
-                                  if(data.state == "error"){
-                                      return false;
-                                  }
-                                  if(data.result == false){
-                                      makeToastr({state: "error", message: "Couldn't find instance"})
-                                      return false;
-                                  }
-                                  router.navigate(`/instance/${hostIdOrAliasForUrl(data.result.alias, data.result.hostId)}/${data.result.container}`);
-                              });
-                          }
-                      }
-                  }
-              });
+              $("#modal-search").modal("show");
           });
-
+          $(window).bind('keydown', function(event) {
+              if (event.ctrlKey || event.metaKey) {
+                  switch (String.fromCharCode(event.which).toLowerCase()) {
+                  case 's':
+                      event.preventDefault();
+                      $("#navbarSearchInput").focus()
+                      break;
+                  }
+              }
+          });
       </script>
   </head>
   <form style="display: none;" method="POST" id="downloadContainerFileForm" action="/api/Instances/Files/GetPathController/get">
@@ -855,6 +826,6 @@ $(document).on("click", ".openProjectAccess", function(){
     require_once __DIR__ . "/modals/projects/projectAccess.php";
     require_once __DIR__ . "/modals/helpers/newDeviceObj.php";
     require_once __DIR__ . "/modals/helpers/editDeviceObj.php";
-
+    require_once __DIR__ . "/modals/search/search.php";
 ?>
 </html>

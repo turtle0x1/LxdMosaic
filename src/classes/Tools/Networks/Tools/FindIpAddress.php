@@ -3,6 +3,7 @@ namespace dhope0000\LXDClient\Tools\Networks\Tools;
 
 use dhope0000\LXDClient\Tools\Instances\GetHostsInstances;
 
+/** @deprecated */
 class FindIpAddress
 {
     private $getHostsInstances;
@@ -12,7 +13,7 @@ class FindIpAddress
     ) {
         $this->getHostsInstances = $getHostsInstances;
     }
-
+    /** @deprecated */
     public function find(string $ip)
     {
         $hostsContainers = $this->getHostsInstances->getAll();
