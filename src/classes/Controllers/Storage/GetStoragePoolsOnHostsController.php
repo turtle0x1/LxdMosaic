@@ -16,7 +16,7 @@ class GetStoragePoolsOnHostsController
     }
 
     /**
-     * @Route("/api/storage/pools/common", name="Given a list of hosts get storage available on all hosts", methods={"POST", "GET})
+     * @Route("/api/storage/pools/common", name="Given a list of hosts get storage available on all hosts", methods={"POST", "GET"})
      */
     public function get(HostsCollection $hosts)
     {
