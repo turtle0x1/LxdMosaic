@@ -753,7 +753,7 @@ function loadInstanceSettings(){
             if(item.settingId == 11){
                 currentTimezone = item.currentValue;
                 return true;
-            }else if([2,8, 14, 16].includes(item.settingId)){
+            }else if([2,8, 14, 16, 18].includes(item.settingId)){
                 trs += `<tr data-setting-id="${item.settingId}">
                     <td>${item.settingName}</td>
                     <td>
