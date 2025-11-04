@@ -20,4 +20,5 @@ class InstanceSettingsKeys
     const SOFTWARE_INVENTORY_MONITOR_DAYS_DURATION = 15;
     const TIMERS_MONITOR = 16;
     const TIMERS_MONITOR_DAYS_DURATION = 17;
+    const SEARCH_INDEX = 18;
 }
