@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts\Settings;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class UpdateHostSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class UpdateHostSettingsController implements \dhope0000\LXDClient\Interfaces\Re
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/Settings/UpdateHostSettingsController/update", name="Update hosts config settings", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/Settings/UpdateHostSettingsController/update', name: 'Update hosts config settings', methods: ['POST'])]
     public function update($userId, Host $host, array $settings)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

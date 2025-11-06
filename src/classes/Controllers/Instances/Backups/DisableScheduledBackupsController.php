@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\UpdateBackupSchedules;
 use dhope0000\LXDClient\Objects\Host;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DisableScheduledBackupsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class DisableScheduledBackupsController implements \dhope0000\LXDClient\Interfac
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/Backups/DisableScheduledBackupsController/disable", name="Disable Instance Backup Schedule", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/Backups/DisableScheduledBackupsController/disable', name: 'Disable Instance Backup Schedule', methods: ['POST'])]
     public function disable(int $userId, Host $host, string $instance)
     {
         $this->updateBackupSchedules->disableActiveScheds(

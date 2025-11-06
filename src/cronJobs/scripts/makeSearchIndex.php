@@ -10,7 +10,7 @@ date_default_timezone_set('UTC');
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
-$container = (new \DI\ContainerBuilder())->build();
+$container = new \DI\Container();
 
 $createSearchIndex = $container->make(CreateSearchIndex::class);
 $insertIndex = $container->make(InsertIndex::class);

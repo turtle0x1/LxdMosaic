@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts\Settings;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetHostSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class GetHostSettingsController implements \dhope0000\LXDClient\Interfaces\Recor
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/Settings/GetHostSettingsController/get", name="Get hosts settings", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/Settings/GetHostSettingsController/get', name: 'Get hosts settings', methods: ['POST'])]
     public function get($userId, Host $host)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

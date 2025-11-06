@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\InstanceSettings\ImageServers;
 
 use dhope0000\LXDClient\Model\InstanceSettings\ImageServers\FetchImageServers;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetAllImageServersController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,9 +12,7 @@ class GetAllImageServersController implements \dhope0000\LXDClient\Interfaces\Re
     ) {
     }
 
-    /**
-     * @Route("/api/InstanceSettings/ImageServers/GetAllImageServersController/all", name="Get all image servers aliases", methods={"POST"})
-     */
+    #[Route(path: '/api/InstanceSettings/ImageServers/GetAllImageServersController/all', name: 'Get all image servers aliases', methods: ['POST'])]
     public function all()
     {
         $aliases = $this->fetchImageServers->fetchAllAliases();

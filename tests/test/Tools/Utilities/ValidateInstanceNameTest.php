@@ -10,9 +10,7 @@ final class ValidateInstanceNameTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $builder = new \DI\ContainerBuilder();
-        $builder->useAnnotations(true);
-        $container = $builder->build();
+        $container = (new \DI\ContainerBuilder)->useAttributes(true)->build();
     }
 
     public function testValidInstanceName()

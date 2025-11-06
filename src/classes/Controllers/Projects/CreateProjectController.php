@@ -5,7 +5,7 @@ namespace dhope0000\LXDClient\Controllers\Projects;
 use dhope0000\LXDClient\Objects\HostsCollection;
 use dhope0000\LXDClient\Tools\Projects\CreateProject;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class CreateProjectController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -15,9 +15,7 @@ class CreateProjectController implements \dhope0000\LXDClient\Interfaces\RecordA
     ) {
     }
 
-    /**
-     * @Route("/api/Projects/CreateProjectController/create", name="Create Project", methods={"POST"})
-     */
+    #[Route(path: '/api/Projects/CreateProjectController/create', name: 'Create Project', methods: ['POST'])]
     public function create(
         int $userId,
         HostsCollection $hosts,

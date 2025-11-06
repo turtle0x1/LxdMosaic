@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Dashboard;
 
 use dhope0000\LXDClient\Tools\Dashboard\GetDashboard;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetController
 {
@@ -12,9 +12,7 @@ class GetController
     ) {
     }
 
-    /**
-     * @Route("/api/Dashboard/GetController/get", name="api_dashboard_getcontroller_get", methods={"POST"})
-     */
+    #[Route(path: '/api/Dashboard/GetController/get', name: 'api_dashboard_getcontroller_get', methods: ['POST'])]
     public function get($userId, string $history = '-30 minutes')
     {
         return $this->getDashboard->get($userId);

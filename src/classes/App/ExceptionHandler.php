@@ -6,6 +6,7 @@ use dhope0000\LXDClient\Exceptions\Users\Permissions\PermissionsError;
 use dhope0000\LXDClient\Model\Hosts\ChangeStatus;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
+use DI\Attribute\Inject;
 
 class ExceptionHandler
 {
@@ -15,9 +16,7 @@ class ExceptionHandler
 
     private $stringTools;
 
-    /**
-     * @Inject
-     */
+    #[Inject]
     public function inject(GetDetails $getDetails, ChangeStatus $changeStatus, StringTools $stringTools)
     {
         $this->getDetails = $getDetails;

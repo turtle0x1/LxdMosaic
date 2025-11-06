@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
 use dhope0000\LXDClient\Tools\CloudConfig\Create;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,9 +12,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     ) {
     }
 
-    /**
-     * @Route("/api/CloudConfig/CreateController/create", name="Create Cloud Config", methods={"POST"})
-     */
+    #[Route(path: '/api/CloudConfig/CreateController/create', name: 'Create Cloud Config', methods: ['POST'])]
     public function create(string $name, string $namespace, $description = '')
     {
         $this->create->create($name, $namespace, $description);

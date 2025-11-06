@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class SaveAllSettingsControllerTest extends TestCase
 {
+    private $routeApi;
+    private $database;
     #[\Override]
     protected function setUp(): void
     {
-        $builder = new \DI\ContainerBuilder();
-        $builder->useAnnotations(true);
-        $container = $builder->build();
+        $container = (new \DI\ContainerBuilder)->useAttributes(true)->build();
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
 
         $this->database = $container->get("dhope0000\LXDClient\Model\Database\Database");

@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Snapshot;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Snapshot\ScheduleSnapshots;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ScheduleSnapshotsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class ScheduleSnapshotsController implements \dhope0000\LXDClient\Interfaces\Rec
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/Snapshot/ScheduleSnapshotsController/schedule", name="Schedule instance snapshots with LXD", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/Snapshot/ScheduleSnapshotsController/schedule', name: 'Schedule instance snapshots with LXD', methods: ['POST'])]
     public function schedule(
         Host $host,
         string $container,

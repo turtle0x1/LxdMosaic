@@ -5,7 +5,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\InstanceTypes\Providers;
 use dhope0000\LXDClient\Tools\Instances\InstanceTypes\Providers\AddProvider;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 use DI\Container;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class AddController
 {
@@ -16,9 +16,7 @@ class AddController
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/InstanceTypes/Providers/AddController/add", name="api_instances_instancetypes_providers_addcontroller_add", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/InstanceTypes/Providers/AddController/add', name: 'api_instances_instancetypes_providers_addcontroller_add', methods: ['POST'])]
     public function add(int $userId, string $name)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

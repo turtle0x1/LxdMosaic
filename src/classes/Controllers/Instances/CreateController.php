@@ -5,7 +5,7 @@ namespace dhope0000\LXDClient\Controllers\Instances;
 use dhope0000\LXDClient\Constants\LxdInstanceTypes;
 use dhope0000\LXDClient\Objects\HostsCollection;
 use dhope0000\LXDClient\Tools\Instances\CreateInstance;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -14,9 +14,7 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/CreateController/create", name="Create Instance", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/CreateController/create', name: 'Create Instance', methods: ['POST'])]
     public function create(
         $name,
         HostsCollection $hosts,

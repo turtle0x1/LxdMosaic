@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\User\Dashboard;
 
 use dhope0000\LXDClient\Model\Users\Dashboard\InsertUserDashboard;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class CreateDashboardController
 {
@@ -12,9 +12,7 @@ class CreateDashboardController
     ) {
     }
 
-    /**
-     * @Route("/api/User/Dashboard/CreateDashboardController/create", name="api_user_dashboard_createdashboardcontroller_create", methods={"POST"})
-     */
+    #[Route(path: '/api/User/Dashboard/CreateDashboardController/create', name: 'api_user_dashboard_createdashboardcontroller_create', methods: ['POST'])]
     public function create(int $userId, string $name)
     {
         $this->insertUserDashboard->insert($userId, $name);

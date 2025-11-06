@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Tools\Hosts\HasExtension;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class SearchHosts
 {
@@ -18,9 +18,7 @@ class SearchHosts
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/SearchHosts/search", name="api_hosts_searchhosts_search", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/SearchHosts/search', name: 'api_hosts_searchhosts_search', methods: ['POST'])]
     public function search(int $userId, string $hostSearch, array $extensionRequirements = [])
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

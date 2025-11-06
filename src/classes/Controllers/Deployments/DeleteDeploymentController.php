@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Deployments;
 
 use dhope0000\LXDClient\Tools\Deployments\DeleteDeployment;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DeleteDeploymentController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,9 +12,7 @@ class DeleteDeploymentController implements \dhope0000\LXDClient\Interfaces\Reco
     ) {
     }
 
-    /**
-     * @Route("/api/Deployments/DeleteDeploymentController/delete", name="Delete Deployment", methods={"POST"})
-     */
+    #[Route(path: '/api/Deployments/DeleteDeploymentController/delete', name: 'Delete Deployment', methods: ['POST'])]
     public function delete(int $userId, int $deploymentId)
     {
         $this->deleteDeployment->delete($userId, $deploymentId);

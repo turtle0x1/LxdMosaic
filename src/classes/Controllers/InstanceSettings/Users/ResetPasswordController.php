@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\InstanceSettings\Users;
 
 use dhope0000\LXDClient\Tools\User\ResetPassword;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ResetPasswordController
 {
@@ -12,9 +12,7 @@ class ResetPasswordController
     ) {
     }
 
-    /**
-     * @Route("/api/InstanceSettings/Users/ResetPasswordController/reset", name="api_instancesettings_users_resetpasswordcontroller_reset", methods={"POST"})
-     */
+    #[Route(path: '/api/InstanceSettings/Users/ResetPasswordController/reset', name: 'api_instancesettings_users_resetpasswordcontroller_reset', methods: ['POST'])]
     public function reset(int $userId, int $targetUser, string $newPassword)
     {
         $this->resetPassword->reset($userId, $targetUser, $newPassword);

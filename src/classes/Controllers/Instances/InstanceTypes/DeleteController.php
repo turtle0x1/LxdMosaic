@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\InstanceTypes;
 
 use dhope0000\LXDClient\Model\Instances\InstanceTypes\DeleteInstanceType;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DeleteController
 {
@@ -14,9 +14,7 @@ class DeleteController
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/InstanceTypes/DeleteController/delete", name="api_instances_instancetypes_deletecontroller_delete", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/InstanceTypes/DeleteController/delete', name: 'api_instances_instancetypes_deletecontroller_delete', methods: ['POST'])]
     public function delete(int $userId, int $typeId)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

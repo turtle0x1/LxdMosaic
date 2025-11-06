@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Networks;
 
 use dhope0000\LXDClient\Tools\Networks\GetNetworksDashboard;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetNetworksDashboardController
 {
@@ -12,9 +12,7 @@ class GetNetworksDashboardController
     ) {
     }
 
-    /**
-     * @Route("/api/Networks/GetNetworksDashboardController/get", name="api_networks_getnetworksdashboardcontroller_get", methods={"POST"})
-     */
+    #[Route(path: '/api/Networks/GetNetworksDashboardController/get', name: 'api_networks_getnetworksdashboardcontroller_get', methods: ['POST'])]
     public function get(int $userId)
     {
         return $this->getNetworksDashboard->get($userId);

@@ -6,12 +6,11 @@ use PHPUnit\Framework\TestCase;
 
 final class UniverseTest extends TestCase
 {
+    private $universe;
     #[\Override]
     protected function setUp(): void
     {
-        $builder = new \DI\ContainerBuilder();
-        $builder->useAnnotations(true);
-        $container = $builder->build();
+        $container = (new \DI\ContainerBuilder)->useAttributes(true)->build();
         $this->universe = $container->make("dhope0000\LXDClient\Tools\Universe");
     }
 

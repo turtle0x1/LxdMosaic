@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Deployments;
 
 use dhope0000\LXDClient\Constants\StateConstants;
 use dhope0000\LXDClient\Tools\Deployments\ChangeDeploymentState;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class StopDeploymentController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class StopDeploymentController implements \dhope0000\LXDClient\Interfaces\Record
     ) {
     }
 
-    /**
-     * @Route("/api/Deployments/StopDeploymentController/stop", name="Stop Deployment", methods={"POST"})
-     */
+    #[Route(path: '/api/Deployments/StopDeploymentController/stop', name: 'Stop Deployment', methods: ['POST'])]
     public function stop(int $userId, int $deploymentId)
     {
         $this->changeDeploymentState->change($userId, $deploymentId, StateConstants::STOP);

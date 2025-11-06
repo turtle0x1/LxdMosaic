@@ -6,12 +6,11 @@ use PHPUnit\Framework\TestCase;
 
 final class StringToolsTest extends TestCase
 {
+    private $stringTools;
     #[\Override]
     protected function setUp(): void
     {
-        $builder = new \DI\ContainerBuilder();
-        $builder->useAnnotations(true);
-        $container = $builder->build();
+        $container = (new \DI\ContainerBuilder)->useAttributes(true)->build();
         $this->stringTools = $container->make("dhope0000\LXDClient\Tools\Utilities\StringTools");
     }
 

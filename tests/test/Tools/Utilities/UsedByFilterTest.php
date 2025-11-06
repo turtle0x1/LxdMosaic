@@ -6,12 +6,12 @@ use PHPUnit\Framework\TestCase;
 
 final class UsedByFilterTest extends TestCase
 {
+    private $usedByFilter;
+    private $host;
     #[\Override]
     protected function setUp(): void
     {
-        $builder = new \DI\ContainerBuilder();
-        $builder->useAnnotations(true);
-        $container = $builder->build();
+        $container = (new \DI\ContainerBuilder)->useAttributes(true)->build();
         $this->usedByFilter = $container->make("dhope0000\LXDClient\Tools\Utilities\UsedByFilter");
 
         $getHost = $container->make("dhope0000\LXDClient\Model\Hosts\GetDetails");

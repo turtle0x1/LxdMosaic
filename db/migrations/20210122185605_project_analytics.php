@@ -9,7 +9,7 @@ final class ProjectAnalytics extends AbstractMigration
     {
         // Create a table store types of project analytics (you just know LXD
         // team will add more later)
-        $table = $this->table('Project_Analytics_Types', ['id' => "PAT_ID", 'primary_key' => ["PAT_ID"]]);
+        $table = $this->table('Project_Analytics_Types', ['id' => "PAT_ID", "signed"=>true]);
         $table->addColumn('PAT_Name', 'string')
             ->addColumn('PAT_Key', 'string')
             ->create();

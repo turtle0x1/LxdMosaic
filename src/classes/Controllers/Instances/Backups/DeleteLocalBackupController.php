@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
 use dhope0000\LXDClient\Tools\Instances\Backups\DeleteLocalBackup;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DeleteLocalBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,9 +12,7 @@ class DeleteLocalBackupController implements \dhope0000\LXDClient\Interfaces\Rec
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/Backups/DeleteLocalBackupController/delete", name="Delete Local Instance Backup", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/Backups/DeleteLocalBackupController/delete', name: 'Delete Local Instance Backup', methods: ['POST'])]
     public function delete(int $userId, int $backupId)
     {
         $lxdRespone = $this->deleteLocalBackup->delete($userId, $backupId);

@@ -5,7 +5,7 @@ namespace dhope0000\LXDClient\Controllers\Instances;
 use dhope0000\LXDClient\Constants\StateConstants as StateCon;
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\State;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -14,9 +14,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/StateController/start", name="Start Instance", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/StateController/start', name: 'Start Instance', methods: ['POST'])]
     public function start(Host $host, $container)
     {
         $this->state->change($host, $container, StateCon::START);
@@ -27,9 +25,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         ];
     }
 
-    /**
-     * @Route("/api/Instances/StateController/stop", name="Stop Instance", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/StateController/stop', name: 'Stop Instance', methods: ['POST'])]
     public function stop(Host $host, $container)
     {
         $this->state->change($host, $container, StateCon::STOP);
@@ -40,9 +36,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         ];
     }
 
-    /**
-     * @Route("/api/Instances/StateController/restart", name="Restart Instance", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/StateController/restart', name: 'Restart Instance', methods: ['POST'])]
     public function restart(Host $host, $container)
     {
         $this->state->change($host, $container, StateCon::RESTART);
@@ -53,9 +47,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         ];
     }
 
-    /**
-     * @Route("/api/Instances/StateController/freeze", name="Freeze Instance", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/StateController/freeze', name: 'Freeze Instance', methods: ['POST'])]
     public function freeze(Host $host, $container)
     {
         $this->state->change($host, $container, StateCon::FREEZE);
@@ -66,9 +58,7 @@ class StateController implements \dhope0000\LXDClient\Interfaces\RecordAction
         ];
     }
 
-    /**
-     * @Route("/api/Instances/StateController/unfreeze", name="UnFreeze Instance", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/StateController/unfreeze', name: 'UnFreeze Instance', methods: ['POST'])]
     public function unfreeze(Host $host, $container)
     {
         $this->state->change($host, $container, StateCon::UNFREEZE);

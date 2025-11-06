@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Storage;
 
 use dhope0000\LXDClient\Objects\HostsCollection;
 use dhope0000\LXDClient\Tools\Storage\CreateStoragePool;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class CreatePoolController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class CreatePoolController implements \dhope0000\LXDClient\Interfaces\RecordActi
     ) {
     }
 
-    /**
-     * @Route("/api/Storage/CreatePoolController/create", name="Create Storage", methods={"POST"})
-     */
+    #[Route(path: '/api/Storage/CreatePoolController/create', name: 'Create Storage', methods: ['POST'])]
     public function create(HostsCollection $hosts, string $name, string $driver, array $config)
     {
         $this->createStoragePool->create($hosts, $name, $driver, $config);

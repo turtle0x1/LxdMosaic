@@ -6,12 +6,11 @@ use PHPUnit\Framework\TestCase;
 
 final class AddUserTest extends TestCase
 {
+    private $addUser;
     #[\Override]
     protected function setUp(): void
     {
-        $builder = new \DI\ContainerBuilder();
-        $builder->useAnnotations(true);
-        $container = $builder->build();
+        $container = (new \DI\ContainerBuilder)->useAttributes(true)->build();
         $this->addUser = $container->make("dhope0000\LXDClient\Tools\User\AddUser");
     }
 

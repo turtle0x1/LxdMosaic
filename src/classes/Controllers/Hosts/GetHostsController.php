@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts;
 
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Tools\Hosts\GetHostsOverview;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetHostsController
 {
@@ -14,9 +14,7 @@ class GetHostsController
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/GetHostsController/getAllHosts", name="api_hosts_gethostscontroller_getallhosts", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/GetHostsController/getAllHosts', name: 'api_hosts_gethostscontroller_getallhosts', methods: ['POST'])]
     public function getAllHosts(int $userId)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

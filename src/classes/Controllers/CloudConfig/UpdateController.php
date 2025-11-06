@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
 use dhope0000\LXDClient\Tools\CloudConfig\Update;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class UpdateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,9 +12,7 @@ class UpdateController implements \dhope0000\LXDClient\Interfaces\RecordAction
     ) {
     }
 
-    /**
-     * @Route("/api/CloudConfig/UpdateController/update", name="Update Cloud Config", methods={"POST"})
-     */
+    #[Route(path: '/api/CloudConfig/UpdateController/update', name: 'Update Cloud Config', methods: ['POST'])]
     public function update(int $cloudConfigId, string $code, array $imageDetails, array $envVariables = [])
     {
         $this->update->update($cloudConfigId, $code, $imageDetails, $envVariables);

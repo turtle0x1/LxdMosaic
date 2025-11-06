@@ -97,14 +97,11 @@ class RouteToNameMapping
         'dhope0000\\LXDClient\\Controllers\\InstanceSettings\\ImageServers\\DeleteImageServerController\\delete' => 'Delete an image server',
         'dhope0000\\LXDClient\\Controllers\\InstanceSettings\\SaveAllSettingsController\\saveAll' => 'Save LXDMosaic Settings',
         'dhope0000\\LXDClient\\Controllers\\InstanceSettings\\GetMySettingsOverviewController\\get' => 'Get My LXDMosaic Settings Overview',
-        'dhope0000\\LXDClient\\Controllers\\Images\\ImportLinuxContainersByAliasController\\import' => 'Import LinunxContainer.Org Image',
+        'dhope0000\\LXDClient\\Controllers\\Images\\ImportLinuxContainersByAliasController\\import' => 'Import LinuxContainer.Org Image',
     ];
 
-    public function getControllerName(string $controller)
+    public function getControllerName(string $controller): string
     {
-        if (!isset($this->routesToName[$controller])) {
-            return '';
-        }
-        return $this->routesToName[$controller];
+        return $this->routesToName[$controller] ?? "";
     }
 }

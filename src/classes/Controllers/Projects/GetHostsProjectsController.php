@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Projects;
 
 use dhope0000\LXDClient\Tools\Projects\GetHostsProjects;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetHostsProjectsController
 {
@@ -12,9 +12,7 @@ class GetHostsProjectsController
     ) {
     }
 
-    /**
-     * @Route("/api/Projects/GetHostsProjectsController/get", name="api_projects_gethostsprojectscontroller_get", methods={"POST"})
-     */
+    #[Route(path: '/api/Projects/GetHostsProjectsController/get', name: 'api_projects_gethostsprojectscontroller_get', methods: ['POST'])]
     public function get(int $userId)
     {
         return $this->getHostsProjects->getAll($userId);

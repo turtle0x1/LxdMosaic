@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Profiles\Rename;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ReplaceProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class ReplaceProfileController implements \dhope0000\LXDClient\Interfaces\Record
     ) {
     }
 
-    /**
-     * @Route("/api/Profiles/ReplaceProfileController/replace", name="Replace Profile", methods={"POST"})
-     */
+    #[Route(path: '/api/Profiles/ReplaceProfileController/replace', name: 'Replace Profile', methods: ['POST'])]
     public function replace(
         Host $host,
         string $name,

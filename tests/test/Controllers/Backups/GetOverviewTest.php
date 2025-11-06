@@ -6,12 +6,11 @@ use PHPUnit\Framework\TestCase;
 
 final class GetOverviewTest extends TestCase
 {
+    private $getBackupsOverview;
     #[\Override]
     protected function setUp(): void
     {
-        $builder = new \DI\ContainerBuilder();
-        $builder->useAnnotations(true);
-        $container = $builder->build();
+        $container = (new \DI\ContainerBuilder)->useAttributes(true)->build();
         $this->getBackupsOverview = $container->make(
             "dhope0000\LXDClient\Controllers\Backups\GetBackupsOverviewController"
         );

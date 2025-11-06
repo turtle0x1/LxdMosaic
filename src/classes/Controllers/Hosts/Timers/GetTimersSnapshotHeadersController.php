@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts\Timers;
 
 use dhope0000\LXDClient\Model\Hosts\Timers\FetchTimersSnapshot;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetTimersSnapshotHeadersController
 {
@@ -14,9 +14,7 @@ class GetTimersSnapshotHeadersController
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/Timers/GetTimersSnapshotHeadersController/get", name="api_hosts_timers_gettimerssnapshotheaderscontroller_get", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/Timers/GetTimersSnapshotHeadersController/get', name: 'api_hosts_timers_gettimerssnapshotheaderscontroller_get', methods: ['POST'])]
     public function get(int $userId)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

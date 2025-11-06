@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Backups\StoreBackupLocally;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ImportBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class ImportBackupController implements \dhope0000\LXDClient\Interfaces\RecordAc
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/Backups/ImportBackupController/import", name="Import Remote Instance Backup", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/Backups/ImportBackupController/import', name: 'Import Remote Instance Backup', methods: ['POST'])]
     public function import(Host $host, string $container, string $backup, int $delete)
     {
         $this->storeBackupLocally->store(

@@ -5,7 +5,7 @@ namespace dhope0000\LXDClient\Controllers\Assets;
 use DI\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class RouteViewController
 {
@@ -14,12 +14,10 @@ class RouteViewController
     ) {
     }
 
-    /**
-     * @Route("/", name="Root page")
-     * @Route("/login", name="Login page")
-     * @Route("/terminal", name="Terminal page")
-     * @Route("/first-run", name="First run page")
-     */
+    #[Route(path: '/', name: 'Root page')]
+    #[Route(path: '/login', name: 'Login page')]
+    #[Route(path: '/terminal', name: 'Terminal page')]
+    #[Route(path: '/first-run', name: 'First run page')]
     public function route(Request $request): Response
     {
         $path = trim($request->getPathInfo(), '/');

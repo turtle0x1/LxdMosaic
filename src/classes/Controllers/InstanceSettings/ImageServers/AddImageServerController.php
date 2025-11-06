@@ -5,7 +5,7 @@ namespace dhope0000\LXDClient\Controllers\InstanceSettings\ImageServers;
 use dhope0000\LXDClient\Constants\ImageServerType;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Tools\InstanceSettings\ImageServers\AddImageServer;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class AddImageServerController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -15,9 +15,7 @@ class AddImageServerController implements \dhope0000\LXDClient\Interfaces\Record
     ) {
     }
 
-    /**
-     * @Route("/api/InstanceSettings/ImageServers/AddImageServerController/add", name="Add a new image server", methods={"POST"})
-     */
+    #[Route(path: '/api/InstanceSettings/ImageServers/AddImageServerController/add', name: 'Add a new image server', methods: ['POST'])]
     public function add(string $userId, string $alias, string $url)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

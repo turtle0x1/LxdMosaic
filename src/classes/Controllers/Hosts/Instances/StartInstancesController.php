@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\StartInstances;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class StartInstancesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class StartInstancesController implements \dhope0000\LXDClient\Interfaces\Record
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/Instances/StartInstancesController/start", name="Start Instances", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/Instances/StartInstancesController/start', name: 'Start Instances', methods: ['POST'])]
     public function start(Host $host, array $containers)
     {
         $this->startInstances->start($host, $containers);

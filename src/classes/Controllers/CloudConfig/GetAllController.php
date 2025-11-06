@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
 use dhope0000\LXDClient\Model\CloudConfig\GetConfigs;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetAllController
 {
@@ -12,9 +12,7 @@ class GetAllController
     ) {
     }
 
-    /**
-     * @Route("/api/CloudConfig/GetAllController/getAll", name="api_cloudconfig_getallcontroller_getall", methods={"POST"})
-     */
+    #[Route(path: '/api/CloudConfig/GetAllController/getAll', name: 'api_cloudconfig_getallcontroller_getall', methods: ['POST'])]
     public function getAll()
     {
         return $this->getConfigs->getAll();

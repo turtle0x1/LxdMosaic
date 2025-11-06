@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Packages;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Packages\GetLatestPackages;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetLatestPackagesController
 {
@@ -13,9 +13,7 @@ class GetLatestPackagesController
     ) {
     }
 
-    /**
-     * @Route("/api/instances/packages/latest", name="Get instance latest packages", methods={"POST", "GET"})
-     */
+    #[Route(path: '/api/instances/packages/latest', name: 'Get instance latest packages', methods: ['POST', 'GET'])]
     public function get(Host $host, string $container)
     {
         return $this->getLatestPackages->get($host, $container);

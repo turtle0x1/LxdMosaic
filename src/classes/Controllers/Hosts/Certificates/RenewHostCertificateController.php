@@ -5,7 +5,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts\Certificates;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Hosts\Certificates\RenewCert;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class RenewHostCertificateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -15,9 +15,7 @@ class RenewHostCertificateController implements \dhope0000\LXDClient\Interfaces\
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/Certificates/RenewHostCertificateController/renew", name="Renew LXDMosaic certificate with LXD", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/Certificates/RenewHostCertificateController/renew', name: 'Renew LXDMosaic certificate with LXD', methods: ['POST'])]
     public function renew(int $userId, Host $host)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

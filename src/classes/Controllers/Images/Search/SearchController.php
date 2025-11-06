@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Images\Search;
 
 use dhope0000\LXDClient\Tools\Images\GetAllImages;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class SearchController
 {
@@ -12,9 +12,7 @@ class SearchController
     ) {
     }
 
-    /**
-     * @Route("/api/Images/Search/SearchController/getAllAvailableImages", name="api_images_search_searchcontroller_getallavailableimages", methods={"POST"})
-     */
+    #[Route(path: '/api/Images/Search/SearchController/getAllAvailableImages', name: 'api_images_search_searchcontroller_getallavailableimages', methods: ['POST'])]
     public function getAllAvailableImages(int $userId, string $search, string $type = '')
     {
         $allImages = $this->getAllImages->getAllHostImages($userId);

@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Deployments\Projects;
 
 use dhope0000\LXDClient\Tools\Deployments\Projects\SetDeploymentProjects;
 use DI\Container;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class SetDeploymentProjectsController
 {
@@ -14,9 +14,7 @@ class SetDeploymentProjectsController
     ) {
     }
 
-    /**
-     * @Route("/api/Deployments/Projects/SetDeploymentProjectsController/set", name="Set Deployment Projects", methods={"POST"})
-     */
+    #[Route(path: '/api/Deployments/Projects/SetDeploymentProjectsController/set', name: 'Set Deployment Projects', methods: ['POST'])]
     public function set(int $userId, int $deploymentId, array $newProjectsLayout)
     {
         $this->container->call(["dhope0000\LXDClient\Model\Database\Database", 'beginTransaction']);
