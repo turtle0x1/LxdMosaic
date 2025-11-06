@@ -103,7 +103,7 @@ class Host implements \JsonSerializable
     }
 
     #[\Override]
-    final public function jsonSerialize()
+    final public function jsonSerialize(): mixed
     {
         return array_merge([
             'hostId' => $this->id,

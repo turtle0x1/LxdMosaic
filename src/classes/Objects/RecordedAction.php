@@ -18,7 +18,7 @@ class RecordedAction implements \JsonSerializable
     }
 
     #[\Override]
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'title' => $this->title,

@@ -16,7 +16,7 @@ class HostsCollection implements \Iterator, \JsonSerializable
     }
 
     #[\Override]
-    final public function jsonSerialize()
+    final public function jsonSerialize(): mixed
     {
         return $this->hosts;
     }
@@ -42,31 +42,31 @@ class HostsCollection implements \Iterator, \JsonSerializable
     }
 
     #[\Override]
-    public function current()
+    public function current(): mixed
     {
         return $this->hosts[$this->index];
     }
 
     #[\Override]
-    public function next()
+    public function next(): void
     {
         $this->index ++;
     }
 
     #[\Override]
-    public function key()
+    public function key():  mixed
     {
         return $this->index;
     }
 
     #[\Override]
-    public function valid()
+    public function valid(): bool
     {
         return isset($this->hosts[$this->key()]);
     }
 
     #[\Override]
-    public function rewind()
+    public function rewind(): void
     {
         $this->index = 0;
     }

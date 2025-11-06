@@ -13,9 +13,11 @@ $project = $_GET['project'];
 $instance = $_GET['instance'];
 
 $userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession"); /** @phpstan-ignore-line */
-$validatePermissions = $this->container->make(
+
+// @phpstan-ignore-next-line
+$validatePermissions = $this->container->make( 
     "dhope0000\LXDClient\Tools\User\ValidatePermissions"
-); /** @phpstan-ignore-line */
+);
 
 $userId = $userSession->getUserId();
 $apiToken = $userSession->getToken();

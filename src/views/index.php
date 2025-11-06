@@ -1,12 +1,14 @@
 <?php
 
 $userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession"); /** @phpstan-ignore-line */
+// @phpstan-ignore-next-line
 $validatePermissions = $this->container->make(
     "dhope0000\LXDClient\Tools\User\ValidatePermissions"
-); /** @phpstan-ignore-line */
+);
+// @phpstan-ignore-next-line
 $getSetting = $this->container->make(
     "dhope0000\LXDClient\Model\InstanceSettings\GetSetting"
-); /** @phpstan-ignore-line */
+);
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 $siteTitle = $getSetting->getSettingLatestValue(InstanceSettingsKeys::SITE_TITLE);
