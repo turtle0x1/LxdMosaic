@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RevokeAccessControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -16,49 +19,71 @@ final class RevokeAccessControllerTest extends TestCase
         $this->database->dbObject->beginTransaction();
 
         $grantAccess = $container->make("dhope0000\LXDClient\Tools\User\AllowedProjects\GrantAccess");
-        $grantAccess->grant(1, 2, [1], ["default"]);
+        $grantAccess->grant(1, 2, [1], ['default']);
     }
 
-    public function tearDown() :void
+    #[\Override]
+    protected function tearDown(): void
     {
         $this->database->dbObject->rollBack();
     }
 
-    public function test_nonAdminTryingToRevokeAccess() :void
+    public function testNonAdminTryingToRevokeAccess(): void
     {
         $this->expectException(\Exception::class);
 
-        $_POST = ["targetUser"=>1, "hostId"=>1, "project"=>"default"];
+        $_POST = [
+            'targetUser' => 1,
+            'hostId' => 1,
+            'project' => 'default',
+        ];
 
         $this->routeApi->route(
             Request::create('/api/User/AllowedProjects/RevokeAccessController/revoke', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
     }
 
-    public function test_adminTryingToRevokeAdminAccess() :void
+    public function testAdminTryingToRevokeAdminAccess(): void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["targetUser"=>1, "hostId"=>1, "project"=>"default"];
+        $_POST = [
+            'targetUser' => 1,
+            'hostId' => 1,
+            'project' => 'default',
+        ];
 
         $this->routeApi->route(
             Request::create('/api/User/AllowedProjects/RevokeAccessController/revoke', 'POST'),
-            ["userid"=>1],
+            [
+                'userid' => 1,
+            ],
             true
         );
     }
 
-    public function test_adminRevokingUserAccess() :void
+    public function testAdminRevokingUserAccess(): void
     {
-        $_POST = ["targetUser"=>2, "hostId"=>1, "project"=>"default"];
+        $_POST = [
+            'targetUser' => 2,
+            'hostId' => 1,
+            'project' => 'default',
+        ];
 
         $result = $this->routeApi->route(
             Request::create('/api/User/AllowedProjects/RevokeAccessController/revoke', 'POST'),
-            ["userid"=>1],
+            [
+                'userid' => 1,
+            ],
             true
         );
 
-        $this->assertEquals(["state"=>"success", "message"=>"Revoked Access"], $result);
+        $this->assertEquals([
+            'state' => 'success',
+            'message' => 'Revoked Access',
+        ], $result);
     }
 }

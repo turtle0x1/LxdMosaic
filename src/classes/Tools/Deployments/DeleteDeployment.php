@@ -2,28 +2,19 @@
 
 namespace dhope0000\LXDClient\Tools\Deployments;
 
-use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
-use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
-use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInDeployment;
 use dhope0000\LXDClient\Model\Deployments\RemoveDeployment;
+use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
+use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInDeployment;
+use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 
 class DeleteDeployment
 {
-    private $authoriseDeploymentAccess;
-    private $hostHaveDeploymentProfiles;
-    private $getContainersInDeployment;
-    private $removeDeployment;
-    
     public function __construct(
-        AuthoriseDeploymentAccess $authoriseDeploymentAccess,
-        HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
-        GetContainersInDeployment $getContainersInDeployment,
-        RemoveDeployment $removeDeployment
+        private readonly AuthoriseDeploymentAccess $authoriseDeploymentAccess,
+        private readonly HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
+        private readonly GetContainersInDeployment $getContainersInDeployment,
+        private readonly RemoveDeployment $removeDeployment
     ) {
-        $this->authoriseDeploymentAccess = $authoriseDeploymentAccess;
-        $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
-        $this->getContainersInDeployment = $getContainersInDeployment;
-        $this->removeDeployment = $removeDeployment;
     }
 
     public function delete(int $userId, int $deploymentId)
@@ -33,15 +24,15 @@ class DeleteDeployment
         $containers = $this->getContainersInDeployment->getFromProfile($profiles);
 
         foreach ($containers as $host) {
-            foreach ($host->getCustomProp("containers") as $container) {
-                $host->instances->setState($container["name"], "stop", 30, true, false, true);
-                $host->instances->remove($container["name"], true);
+            foreach ($host->getCustomProp('containers') as $container) {
+                $host->instances->setState($container['name'], 'stop', 30, true, false, true);
+                $host->instances->remove($container['name'], true);
             }
         }
 
         foreach ($profiles as $host) {
-            foreach ($host->getCustomProp("profiles") as $profile) {
-                $host->profiles->remove($profile["name"]);
+            foreach ($host->getCustomProp('profiles') as $profile) {
+                $host->profiles->remove($profile['name']);
             }
         }
 

@@ -458,6 +458,6 @@ $("#projectsBox").on("click", "#renameProject", function(){
 </script>
 
 <?php
-    require __DIR__ . "/../modals/projects/createProject.php";
-    require __DIR__ . "/../modals/projects/renameProject.php";
+require __DIR__ . '/../modals/projects/createProject.php';
+require __DIR__ . '/../modals/projects/renameProject.php';
 ?>

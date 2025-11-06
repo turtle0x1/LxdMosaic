@@ -8,8 +8,8 @@ class CreateStoragePool
 {
     public function create(HostsCollection $hosts, string $name, string $driver, array $config)
     {
-        if ($driver === "dir" && isset($config["size"])) {
-            unset($config["size"]);
+        if ($driver === 'dir' && isset($config['size'])) {
+            unset($config['size']);
         }
 
         foreach ($hosts as $host) {

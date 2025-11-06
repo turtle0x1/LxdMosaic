@@ -2,58 +2,39 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\Metrics;
 
+use dhope0000\LXDClient\Model\Metrics\DeleteMetrics;
 use dhope0000\LXDClient\Model\Metrics\FetchMetrics;
 use dhope0000\LXDClient\Model\Metrics\InsertMetric;
-use dhope0000\LXDClient\Model\Metrics\DeleteMetrics;
 
 class RemoveMetrics
 {
-    private $fetchMetrics;
-    private $insertMetric;
-    private $deleteMetrics;
-
     public function __construct(
-        FetchMetrics $fetchMetrics,
-        InsertMetric $insertMetric,
-        DeleteMetrics $deleteMetrics
+        private readonly FetchMetrics $fetchMetrics,
+        private readonly InsertMetric $insertMetric,
+        private readonly DeleteMetrics $deleteMetrics
     ) {
-        $this->fetchMetrics = $fetchMetrics;
-        $this->insertMetric = $insertMetric;
-        $this->deleteMetrics = $deleteMetrics;
     }
 
     public function remove()
     {
-        $olderThan = new \DateTime("-1 day");
-        $olderThan->setTime(
-            $olderThan->format('H'),
-            $olderThan->format('i'),
-            00
-        );
-
-        
+        $olderThan = new \DateTime('-1 day');
+        $olderThan->setTime($olderThan->format('H'), $olderThan->format('i'), 00);
 
         $metrics = $this->fetchMetrics->fetchGroupedByFiveMinutes($olderThan);
         $groupedByHost = $this->groupMetrics($metrics);
         $result = $this->averageGrouped($groupedByHost);
 
-        if (!empty($result["toDelete"])) {
-            $this->deleteMetrics->deleteByIds($result["toDelete"]);
+        if (!empty($result['toDelete'])) {
+            $this->deleteMetrics->deleteByIds($result['toDelete']);
         }
 
-        $this->insertMetrics($result["toInsert"]);
+        $this->insertMetrics($result['toInsert']);
     }
 
     public function insertMetrics(array $toInsert)
     {
         foreach ($toInsert as $metric) {
-            $this->insertMetric->insert(
-                $metric[0],
-                $metric[1],
-                $metric[2],
-                $metric[3],
-                $metric[4]
-            );
+            $this->insertMetric->insert($metric[0], $metric[1], $metric[2], $metric[3], $metric[4]);
         }
     }
 
@@ -61,11 +42,11 @@ class RemoveMetrics
     {
         $groupedByHost = [];
         foreach ($metrics as $metric) {
-            $hostId = $metric["hostId"];
-            $project = $metric["project"];
-            $instance = $metric["instance"];
-            $typeId = $metric["typeId"];
-            $dTime = $metric["dTime"];
+            $hostId = $metric['hostId'];
+            $project = $metric['project'];
+            $instance = $metric['instance'];
+            $typeId = $metric['typeId'];
+            $dTime = $metric['dTime'];
 
             if (!isset($groupedByHost[$hostId])) {
                 $groupedByHost[$hostId] = [];
@@ -86,7 +67,10 @@ class RemoveMetrics
             if (!isset($groupedByHost[$hostId][$project][$instance][$typeId][$dTime])) {
                 $groupedByHost[$hostId][$project][$instance][$typeId][$dTime] = [];
             }
-            $groupedByHost[$hostId][$project][$instance][$typeId][$dTime][$metric["id"]] = json_decode($metric["data"], true);
+            $groupedByHost[$hostId][$project][$instance][$typeId][$dTime][$metric['id']] = json_decode(
+                (string) $metric['data'],
+                true
+            );
         }
         return $groupedByHost;
     }
@@ -121,7 +105,7 @@ class RemoveMetrics
 
                             foreach ($metrics as $id => $data) {
                                 $idsToDelete[] = $id;
-                                foreach ($data as $key=>$value) {
+                                foreach ($data as $key => $value) {
                                     if (!isset($keys[$key])) {
                                         $keys[$key] = 0;
                                     }
@@ -136,21 +120,24 @@ class RemoveMetrics
                             }
 
                             // The values are (18:30, 18:31, 18:32, 18:33, 18:34)
-                            $newDate = (new \DateTime($dTime))->modify("+5 minutes");
+                            $newDate = (new \DateTime($dTime))->modify('+5 minutes');
 
                             // Inserting in a loop is slow should probably try to batch
                             $toInsert[] = [
-                                $newDate->format("Y-m-d H:i:s"),
+                                $newDate->format('Y-m-d H:i:s'),
                                 $hostId,
                                 $instance,
                                 $typeId,
-                                json_encode($periodAverages)
+                                json_encode($periodAverages),
                             ];
                         }
                     }
                 }
             }
         }
-        return ["toDelete"=>$idsToDelete, "toInsert"=>$toInsert];
+        return [
+            'toDelete' => $idsToDelete,
+            'toInsert' => $toInsert,
+        ];
     }
 }

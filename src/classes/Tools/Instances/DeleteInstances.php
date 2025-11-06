@@ -1,16 +1,15 @@
 <?php
+
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\UpdateBackupSchedules;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteInstances
 {
-    private $updateBackupSchedules;
-    
-    public function __construct(UpdateBackupSchedules $updateBackupSchedules)
-    {
-        $this->updateBackupSchedules = $updateBackupSchedules;
+    public function __construct(
+        private readonly UpdateBackupSchedules $updateBackupSchedules
+    ) {
     }
 
     public function delete(int $userId, Host $host, array $instances)
@@ -18,8 +17,8 @@ class DeleteInstances
         foreach ($instances as $instance) {
             $state = $host->instances->state($instance);
 
-            if ($state["status_code"] == 103) {
-                $host->instances->setState($instance, "stop", 30, true, false, true);
+            if ($state['status_code'] == 103) {
+                $host->instances->setState($instance, 'stop', 30, true, false, true);
             }
 
             $this->updateBackupSchedules->disableActiveScheds(

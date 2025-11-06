@@ -1,18 +1,18 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Instances\Snapshot;
 
-use dhope0000\LXDClient\Tools\Instances\Snapshot\ScheduleSnapshots;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Instances\Snapshot\ScheduleSnapshots;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ScheduleSnapshotsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $scheduleSnapshots;
-
-    public function __construct(ScheduleSnapshots $scheduleSnapshots)
-    {
-        $this->scheduleSnapshots = $scheduleSnapshots;
+    public function __construct(
+        private readonly ScheduleSnapshots $scheduleSnapshots
+    ) {
     }
+
     /**
      * @Route("/api/Instances/Snapshot/ScheduleSnapshotsController/schedule", name="Schedule instance snapshots with LXD", methods={"POST"})
      */
@@ -24,15 +24,11 @@ class ScheduleSnapshotsController implements \dhope0000\LXDClient\Interfaces\Rec
         string $expiry,
         int $snapshotStopped
     ) {
-        $this->scheduleSnapshots->schedule(
-            $host,
-            $container,
-            $schedule,
-            $pattern,
-            $expiry,
-            $snapshotStopped
-        );
+        $this->scheduleSnapshots->schedule($host, $container, $schedule, $pattern, $expiry, $snapshotStopped);
 
-        return ["state"=>"success", "message"=>"Scheduled snapshots for $container"];
+        return [
+            'state' => 'success',
+            'message' => "Scheduled snapshots for {$container}",
+        ];
     }
 }

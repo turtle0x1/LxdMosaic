@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetHostsNetworksController
 {
-    private $getHostsNetworks;
-    
-    public function __construct(GetHostsNetworks $getHostsNetworks)
-    {
-        $this->getHostsNetworks = $getHostsNetworks;
+    public function __construct(
+        private readonly GetHostsNetworks $getHostsNetworks
+    ) {
     }
 
     /**

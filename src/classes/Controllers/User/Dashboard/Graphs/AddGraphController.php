@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AddGraphController
 {
-    private $addGraph;
-
-    public function __construct(AddGraph $addGraph)
-    {
-        $this->addGraph = $addGraph;
+    public function __construct(
+        private readonly AddGraph $addGraph
+    ) {
     }
 
     /**
@@ -25,18 +23,12 @@ class AddGraphController
         string $instance,
         int $metricId,
         string $filter,
-        string  $range
+        string $range
     ) {
-        $this->addGraph->add(
-            $userId,
-            $dashboardId,
-            $name,
-            $hostId,
-            $instance,
-            $metricId,
-            $filter,
-            $range
-        );
-        return ["state"=>"success", "message"=>"Added Graph"];
+        $this->addGraph->add($userId, $dashboardId, $name, $hostId, $instance, $metricId, $filter, $range);
+        return [
+            'state' => 'success',
+            'message' => 'Added Graph',
+        ];
     }
 }

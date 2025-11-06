@@ -9,12 +9,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class RouteAssetController
 {
     private $extensionMapping = [
-        "css" => "text/css",
-        "js" => "text/javascript",
-        "png" => "image/png",
-        "ttf" => "font/ttf",
-        "woff" => "font/woff",
-        "woff2" => "font/woff2"
+        'css' => 'text/css',
+        'js' => 'text/javascript',
+        'png' => 'image/png',
+        'ttf' => 'font/ttf',
+        'woff' => 'font/woff',
+        'woff2' => 'font/woff2',
     ];
 
     /**
@@ -23,11 +23,11 @@ class RouteAssetController
     public function get(Request $request): Response
     {
         $path = trim($request->getPathInfo(), '/');
-        $fullPath = realpath(__DIR__ . "/../../../" . $path);
-        $assetsDir = realpath(__DIR__ . "/../../../assets");
+        $fullPath = realpath(__DIR__ . '/../../../' . $path);
+        $assetsDir = realpath(__DIR__ . '/../../../assets');
 
-        if (substr($fullPath, 0, strlen($assetsDir)) !== $assetsDir) {
-            throw new \Exception("Hmm");
+        if (!str_starts_with($fullPath, $assetsDir)) {
+            throw new \Exception('Hmm');
         }
 
         if (($pos = strpos($fullPath, '?')) !== false) {
@@ -35,14 +35,14 @@ class RouteAssetController
         }
 
         if (!file_exists($fullPath)) {
-            throw new \Exception("File not found");
+            throw new \Exception('File not found');
         }
 
         $extension = pathinfo($fullPath, PATHINFO_EXTENSION);
         $content = file_get_contents($fullPath);
         $mimeType = $this->extensionMapping[$extension];
         if (!isset($this->extensionMapping[$extension])) {
-            throw new \Exception("Mime type not allowed");
+            throw new \Exception('Mime type not allowed');
         }
 
         $lastModified = filemtime($fullPath);

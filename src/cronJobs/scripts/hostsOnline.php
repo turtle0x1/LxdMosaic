@@ -2,8 +2,8 @@
 <?php
 
 $_ENV = getenv();
-date_default_timezone_set("UTC");
-require __DIR__ . "/../../../vendor/autoload.php";
+date_default_timezone_set('UTC');
+require __DIR__ . '/../../../vendor/autoload.php';
 
 $builder = new \DI\ContainerBuilder();
 $container = $builder->build();
@@ -24,31 +24,31 @@ function disableHost($hostId, $changeStatus)
 
 foreach ($allHosts as $host) {
     try {
-        $pathToCert = $details->getCertificate($host["Host_ID"]);
-        $pathToCert = $_ENV["LXD_CERTS_DIR"] . "$pathToCert";
-        $socketPath = $details->getSocketPath($host["Host_ID"]);
+        $pathToCert = $details->getCertificate($host['Host_ID']);
+        $pathToCert = $_ENV['LXD_CERTS_DIR'] . "{$pathToCert}";
+        $socketPath = $details->getSocketPath($host['Host_ID']);
 
         if ($socketPath == null) {
             $certinfo = openssl_x509_parse(file_get_contents($pathToCert));
 
             if ($certinfo['validFrom_time_t'] > time() || $certinfo['validTo_time_t'] < time()) {
-                disableHost($host["Host_ID"], $changeStatus);
+                disableHost($host['Host_ID'], $changeStatus);
                 continue;
             }
         }
 
         $config = $clients->createConfigArray($pathToCert, $socketPath);
-        $config["timeout"] = 2;
-        $lxd = $clients->createNewClient($host["Host_Url_And_Port"], $config);
+        $config['timeout'] = 2;
+        $lxd = $clients->createNewClient($host['Host_Url_And_Port'], $config);
         $lxd->host->info();
-        $changeStatus->setOnline($host["Host_ID"]);
-    } catch (\Http\Client\Exception\NetworkException $e) {
-        disableHost($host["Host_ID"], $changeStatus);
-    } catch (\Http\Client\Exception\HttpException $e) {
+        $changeStatus->setOnline($host['Host_ID']);
+    } catch (\Http\Client\Exception\NetworkException) {
+        disableHost($host['Host_ID'], $changeStatus);
+    } catch (\Http\Client\Exception\HttpException) {
         // Well this may be interesting cause you capture an error like this
         // from a broken cluster
         // "failed to begin transaction: call exec-sql (budget 0s): receive: header: EOF"
         // which is pretty useful i guess to log
-        disableHost($host["Host_ID"], $changeStatus);
+        disableHost($host['Host_ID'], $changeStatus);
     }
 }

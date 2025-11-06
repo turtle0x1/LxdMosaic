@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 final class GetLastControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -16,35 +18,48 @@ final class GetLastControllerTest extends TestCase
         $this->database = $container->get("dhope0000\LXDClient\Model\Database\Database");
         $this->database->dbObject->beginTransaction();
 
-        $insertRecordedAction = $container->make("dhope0000\LXDClient\Model\InstanceSettings\RecordActions\InsertActionLog");
-        $insertRecordedAction->insert(1, "dhope0000\LXDClient\Controllers\Containers\StateController", json_encode(["test"=>"test"]));
+        $insertRecordedAction = $container->make(
+            "dhope0000\LXDClient\Model\InstanceSettings\RecordActions\InsertActionLog"
+        );
+        $insertRecordedAction->insert(1, "dhope0000\LXDClient\Controllers\Containers\StateController", json_encode([
+            'test' => 'test',
+        ]));
     }
 
-    public function tearDown() :void
+    #[\Override]
+    protected function tearDown(): void
     {
         $this->database->dbObject->rollBack();
     }
 
-    public function test_nonAdminCantGetAllSettings() :void
+    public function testNonAdminCantGetAllSettings(): void
     {
         $this->expectException(\Exception::class);
 
-        $_POST = ["ammount"=>5];
+        $_POST = [
+            'ammount' => 5,
+        ];
 
         $result = $this->routeApi->route(
             Request::create('/api/InstanceSettings/RecordedActions/GetLastController/get', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
     }
 
-    public function test_adminCanGetSettings() :void
+    public function testAdminCanGetSettings(): void
     {
-        $_POST = ["ammount"=>5];
+        $_POST = [
+            'ammount' => 5,
+        ];
 
         $result = $this->routeApi->route(
             Request::create('/api/InstanceSettings/RecordedActions/GetLastController/get', 'POST'),
-            ["userid"=>1],
+            [
+                'userid' => 1,
+            ],
             true
         );
         $this->assertTrue(count($result) > 0);

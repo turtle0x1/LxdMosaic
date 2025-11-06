@@ -9,9 +9,9 @@ class ImportRemoteImagesByFingerprint
     public function import(HostsCollection $hosts, array $images, $urlKey)
     {
         $urlMap = [
-            "linuxcontainers"=>'https://images.linuxcontainers.org',
-            "ubuntu-release"=>'https://cloud-images.ubuntu.com/releases',
-            "ubuntu-daily"=>'https://cloud-images.ubuntu.com/daily'
+            'linuxcontainers' => 'https://images.linuxcontainers.org',
+            'ubuntu-release' => 'https://cloud-images.ubuntu.com/releases',
+            'ubuntu-daily' => 'https://cloud-images.ubuntu.com/daily',
         ];
         $output = [];
         foreach ($hosts as $host) {
@@ -19,8 +19,8 @@ class ImportRemoteImagesByFingerprint
                 $output[] = $host->images->createFromRemote(
                     $urlMap[$urlKey],
                     [
-                        "protocol"=>"simplestreams",
-                        "fingerprint"=>$image["fingerprint"],
+                        'protocol' => 'simplestreams',
+                        'fingerprint' => $image['fingerprint'],
                     ]
                 );
             }

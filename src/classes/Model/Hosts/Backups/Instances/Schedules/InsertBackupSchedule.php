@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class InsertBackupSchedule
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -22,7 +22,7 @@ class InsertBackupSchedule
         int $strategyId,
         int $retention
     ) {
-        $sql = "INSERT INTO `Instance_Backup_Schedule`
+        $sql = 'INSERT INTO `Instance_Backup_Schedule`
                 (
                     `IBS_User_ID`,
                     `IBS_Host_ID`,
@@ -39,16 +39,16 @@ class InsertBackupSchedule
                     :schedule,
                     :strategyId,
                     :retention
-                );";
+                );';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId,
-            ":hostId"=>$hostId,
-            ":instance"=>$instance,
-            ":project"=>$project,
-            ":schedule"=>$schedule,
-            ":strategyId"=>$strategyId,
-            ":retention"=>$retention
+            ':userId' => $userId,
+            ':hostId' => $hostId,
+            ':instance' => $instance,
+            ':project' => $project,
+            ':schedule' => $schedule,
+            ':strategyId' => $strategyId,
+            ':retention' => $retention,
         ]);
         return $do->rowCount() ? true : false;
     }

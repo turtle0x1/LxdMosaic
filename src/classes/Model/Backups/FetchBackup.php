@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchBackup
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class FetchBackup
 
     public function fetch(int $backupId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `CB_ID` as `id`,
                     `CB_Date_Created` as `storedDateCreated`,
                     `CB_Backup_Date_Created` as `backupDateCreated`,
@@ -30,10 +30,10 @@ class FetchBackup
                     `CB_ID` = :backupId
                 ORDER BY
                     `storedDateCreated` ASC
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":backupId"=>$backupId
+            ':backupId' => $backupId,
         ]);
         return $do->fetch(\PDO::FETCH_ASSOC);
     }

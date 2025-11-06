@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class SetHostProjectControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -16,51 +19,70 @@ final class SetHostProjectControllerTest extends TestCase
         $this->database->dbObject->beginTransaction();
 
         $addHost = $container->make("dhope0000\LXDClient\Model\Hosts\AddHost");
-        $addHost->addHost("localhostTwo", "fake", "fake", "fake", "localHostTwo");
+        $addHost->addHost('localhostTwo', 'fake', 'fake', 'fake', 'localHostTwo');
         $this->newHostId = $addHost->getId();
     }
 
-    public function tearDown() :void
+    #[\Override]
+    protected function tearDown(): void
     {
         $this->database->dbObject->rollBack();
     }
 
-    public function test_userTryingToSetProjectOnAHostWithNoAccess() :void
+    public function testUserTryingToSetProjectOnAHostWithNoAccess(): void
     {
         $this->expectException(\Exception::class);
 
-        $_POST = ["hostId"=>$this->newHostId, "project"=>"default"];
+        $_POST = [
+            'hostId' => $this->newHostId,
+            'project' => 'default',
+        ];
 
         $this->routeApi->route(
             Request::create('/api/User/SetHostProjectController/set', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
     }
 
-    public function test_userTryingToSetToProjectWithNoAcess() :void
+    public function testUserTryingToSetToProjectWithNoAcess(): void
     {
         $this->expectException(\Exception::class);
 
-        $_POST = ["hostId"=>1, "project"=>"default"];
+        $_POST = [
+            'hostId' => 1,
+            'project' => 'default',
+        ];
 
         $this->routeApi->route(
             Request::create('/api/User/SetHostProjectController/set', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
     }
 
-    public function test_userChangesProject() :void
+    public function testUserChangesProject(): void
     {
-        $_POST = ["hostId"=>1, "project"=>"testProject"];
+        $_POST = [
+            'hostId' => 1,
+            'project' => 'testProject',
+        ];
 
         $result = $this->routeApi->route(
             Request::create('/api/User/SetHostProjectController/set', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
 
-        $this->assertEquals(["state"=>"success", "message"=>"Changed project to testProject"], $result);
+        $this->assertEquals([
+            'state' => 'success',
+            'message' => 'Changed project to testProject',
+        ], $result);
     }
 }

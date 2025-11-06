@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetHostsStorageController
 {
-    private $getUserStorage;
-    
-    public function __construct(GetUserStorage $getUserStorage)
-    {
-        $this->getUserStorage = $getUserStorage;
+    public function __construct(
+        private readonly GetUserStorage $getUserStorage
+    ) {
     }
 
     /**

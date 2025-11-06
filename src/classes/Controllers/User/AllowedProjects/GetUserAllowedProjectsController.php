@@ -7,12 +7,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetUserAllowedProjectsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $getUserAllowedProjects;
-
-    public function __construct(GetUserAllowedProjects $getUserAllowedProjects)
-    {
-        $this->getUserAllowedProjects = $getUserAllowedProjects;
+    public function __construct(
+        private readonly GetUserAllowedProjects $getUserAllowedProjects
+    ) {
     }
+
     /**
      * @Route("/api/User/AllowedProjects/GetUserAllowedProjectsController/get", name="Get a users allowed projects", methods={"POST"})
      */

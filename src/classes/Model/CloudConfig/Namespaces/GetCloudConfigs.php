@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class GetCloudConfigs
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,18 +15,18 @@ class GetCloudConfigs
 
     public function haveCloudConfigInNamespace(string $name, string $namespace)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     1
                 FROM
                     `Cloud_Config`
                 WHERE
                     `CC_Name` = :name
                 AND
-                    `CC_Namespace` = :namespace";
+                    `CC_Namespace` = :namespace';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":name"=>$name,
-            ":namespace"=>$namespace
+            ':name' => $name,
+            ':namespace' => $namespace,
         ]);
         return $do->rowCount() ? true : false;
     }

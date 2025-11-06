@@ -11,7 +11,7 @@ class HostsHaveInstance
         foreach ($hosts as $host) {
             $allContainers = $host->instances->all();
             if (in_array($name, $allContainers)) {
-                throw new \Exception("Already have a container with the name $name", 1);
+                throw new \Exception("Already have a container with the name {$name}", 1);
             }
         }
         return true;

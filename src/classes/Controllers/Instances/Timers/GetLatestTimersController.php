@@ -2,18 +2,17 @@
 
 namespace dhope0000\LXDClient\Controllers\Instances\Timers;
 
-use dhope0000\LXDClient\Tools\Instances\Timers\GetLatestTimers;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Instances\Timers\GetLatestTimers;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetLatestTimersController
 {
-    private $getLatestTimers;
-    
-    public function __construct(GetLatestTimers $getLatestTimers)
-    {
-        $this->getLatestTimers = $getLatestTimers;
+    public function __construct(
+        private readonly GetLatestTimers $getLatestTimers
+    ) {
     }
+
     /**
      * @Route("/api/instances/timers/latest", name="Get instance latest timers (systemd/cron)", methods={"POST", "GET"})
      */

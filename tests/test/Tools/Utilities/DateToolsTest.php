@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
 final class DateToolsTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -12,7 +15,7 @@ final class DateToolsTest extends TestCase
         $this->dateTools = $container->make("dhope0000\LXDClient\Tools\Utilities\DateTools");
     }
 
-    public function test_hoursRange() :void
+    public function testHoursRange(): void
     {
         $x = $this->dateTools->hoursRange(0, 1, 15);
         $this->assertEquals([

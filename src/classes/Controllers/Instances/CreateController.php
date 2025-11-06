@@ -2,29 +2,28 @@
 
 namespace dhope0000\LXDClient\Controllers\Instances;
 
-use dhope0000\LXDClient\Tools\Instances\CreateInstance;
 use dhope0000\LXDClient\Constants\LxdInstanceTypes;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use dhope0000\LXDClient\Tools\Instances\CreateInstance;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $createInstance;
-    
-    public function __construct(CreateInstance $createInstance)
-    {
-        $this->createInstance = $createInstance;
+    public function __construct(
+        private readonly CreateInstance $createInstance
+    ) {
     }
+
     /**
      * @Route("/api/Instances/CreateController/create", name="Create Instance", methods={"POST"})
      */
     public function create(
         $name,
-        $profileIds = [],
         HostsCollection $hosts,
         array $imageDetails,
-        string $instanceType = "",
-        $server = "",
+        $profileIds = [],
+        string $instanceType = '',
+        $server = '',
         array $gpus = [],
         array $config = [],
         bool $start = false
@@ -41,6 +40,9 @@ class CreateController implements \dhope0000\LXDClient\Interfaces\RecordAction
             $config,
             $start
         );
-        return ["success"=>"Created Container", "lxdResponses"=>$lxdResponses];
+        return [
+            'success' => 'Created Container',
+            'lxdResponses' => $lxdResponses,
+        ];
     }
 }

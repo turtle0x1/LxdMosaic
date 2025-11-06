@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchDeployments
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,21 +15,21 @@ class FetchDeployments
 
     public function fetchAll()
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `Deployment_ID` as `id`,
                     `Deployment_Name` as `name`
                 FROM
                     `Deployments`
                 ORDER BY
                     `Deployment_ID` DESC
-                ";
+                ';
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function fetchUserHasAccessTo(int $userId)
     {
-        $sql = "SELECT DISTINCT
+        $sql = 'SELECT DISTINCT
                     `Deployment_ID` as `id`,
                     `Deployment_Name` as `name`
                 FROM
@@ -46,34 +46,34 @@ class FetchDeployments
                     `Deployment_Projects`.`DP_Host_ID` IS NOT NULL
                 ORDER BY
                     `Deployment_ID` DESC
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId
+            ':userId' => $userId,
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function fetch(int $deploymentId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `Deployment_ID` as `id`,
                     `Deployment_Name` as `name`
                 FROM
                     `Deployments`
                 WHERE
                     `Deployment_ID` = :id
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":id"=>$deploymentId
+            ':id' => $deploymentId,
         ]);
         return $do->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function byHostContainer(int $hostId, string $container)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `Deployment_ID` as `id`,
                     `Deployment_Name` as `name`
                 FROM
@@ -89,11 +89,11 @@ class FetchDeployments
                         AND
                             `DC_Name` = :container
                     )
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId,
-            ":container"=>$container
+            ':hostId' => $hostId,
+            ':container' => $container,
         ]);
         return $do->fetch(\PDO::FETCH_ASSOC);
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
@@ -7,11 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetCurrentInstanceSettingsController
 {
-    private $getInstanceSettings;
-    
-    public function __construct(GetInstanceSettings $getInstanceSettings)
-    {
-        $this->getInstanceSettings = $getInstanceSettings;
+    public function __construct(
+        private readonly GetInstanceSettings $getInstanceSettings
+    ) {
     }
 
     /**

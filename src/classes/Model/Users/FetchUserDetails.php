@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchUserDetails
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -32,71 +32,71 @@ class FetchUserDetails
 
     public function fetchHash(string $username)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `User_Password`
                 FROM
                     `Users`
                 WHERE
                     `User_Name` = :username
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":username"=>$username
+            ':username' => $username,
         ]);
         return $do->fetchColumn();
     }
 
     public function fetchLdapId(string $username)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `User_Ldap_ID`
                 FROM
                     `Users`
                 WHERE
                     `User_Name` = :username
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":username"=>$username
+            ':username' => $username,
         ]);
         return $do->fetchColumn();
     }
 
     public function fetchId(string $username)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `User_ID`
                 FROM
                     `Users`
                 WHERE
                     `User_Name` = :username
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":username"=>$username
+            ':username' => $username,
         ]);
         return $do->fetchColumn();
     }
 
     public function isAdmin(int $userId): bool
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `User_Admin`
                 FROM
                     `Users`
                 WHERE
                     `User_ID` = :userId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId
+            ':userId' => $userId,
         ]);
         return (int) $do->fetchColumn() === 1;
     }
 
     public function isFromLdap(int $userId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     1
                 FROM
                     `Users`
@@ -104,16 +104,17 @@ class FetchUserDetails
                     `User_ID` = :userId
                 AND
                     `User_Ldap_ID` IS NOT NULL
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId
+            ':userId' => $userId,
         ]);
         return $do->fetch() ? true : false;
     }
+
     public function isLoginDisabled(int $userId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     1
                 FROM
                     `Users`
@@ -121,10 +122,10 @@ class FetchUserDetails
                     `User_ID` = :userId
                 AND
                     `User_Login_Disabled` = 1
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId
+            ':userId' => $userId,
         ]);
         return $do->fetch() ? true : false;
     }

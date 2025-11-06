@@ -7,37 +7,34 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class GetPath
 {
-    private $cache;
     private $instanceUrlKey;
-    
 
-    public function __construct(ArrayAdapter $cache)
-    {
-        $this->cache = $cache;
+    public function __construct(
+        private readonly ArrayAdapter $cache
+    ) {
     }
 
-    public function get(
-        Host $host,
-        string $instance,
-        string $path,
-        string $download
-    ) {
-        $host->callClientMethod("addCache", $this->cache);
+    public function get(Host $host, string $instance, string $path, string $download)
+    {
+        $host->callClientMethod('addCache', $this->cache);
 
         $response = $host->instances->files->read($instance, $path);
 
-        $this->instanceUrlKey = str_replace("/", "", $host->instances->getEndpoint());
+        $this->instanceUrlKey = str_replace('/', '', $host->instances->getEndpoint());
         $params = http_build_query([
-            "project"=>$host->getProject(),
-            "path"=>$path
+            'project' => $host->getProject(),
+            'path' => $path,
         ]);
 
-        $cacheKey = hash("sha1", "GET " . $host->callClientMethod("getUrl") . "/1.0/$this->instanceUrlKey/$instance/files?$params");
+        $cacheKey = hash(
+            'sha1',
+            'GET ' . $host->callClientMethod('getUrl') . "/1.0/{$this->instanceUrlKey}/{$instance}/files?{$params}"
+        );
 
         if ($response == null) {
             $isDirectory = $this->isCachedResponsePathDirectory($cacheKey);
             if (!$isDirectory) {
-                throw new \Exception("The file is litreally null", 1);
+                throw new \Exception('The file is litreally null', 1);
             }
         } else {
             $isDirectory = is_array($response) || $response == null;
@@ -52,46 +49,44 @@ class GetPath
         $contents = is_string($response) ? null : $this->labelDirContents($host, $instance, $path, $response);
 
         return [
-            "isDirectory"=>$isDirectory,
-            "contents"=>$contents
+            'isDirectory' => $isDirectory,
+            'contents' => $contents,
         ];
     }
 
     private function labelDirContents($host, $instance, $path, $contents)
     {
         foreach ($contents as $index => $content) {
-            $contentPath = $path == "/" ? "/$content" : "$path/$content";
+            $contentPath = $path == '/' ? "/{$content}" : "{$path}/{$content}";
 
             $response = $host->instances->files->read($instance, $contentPath);
             $params = http_build_query([
-                "project"=>$host->getProject(),
-                "path"=>$contentPath
+                'project' => $host->getProject(),
+                'path' => $contentPath,
             ]);
-            $cacheKey = hash("sha1", "GET " . $host->callClientMethod("getUrl") . "/1.0/$this->instanceUrlKey/$instance/files?$params");
+            $cacheKey = hash(
+                'sha1',
+                'GET ' . $host->callClientMethod('getUrl') . "/1.0/{$this->instanceUrlKey}/{$instance}/files?{$params}"
+            );
             $contents[$index] = [
-                "name"=>$content,
-                "isDirectory"=>$this->isCachedResponsePathDirectory($cacheKey)
+                'name' => $content,
+                'isDirectory' => $this->isCachedResponsePathDirectory($cacheKey),
             ];
         }
 
         $dirs = [];
         $files = [];
         foreach ($contents as $content) {
-            if ($content["isDirectory"]) {
+            if ($content['isDirectory']) {
                 $dirs[] = $content;
             } else {
                 $files[] = $content;
             }
         }
 
-        usort($files, function ($a, $b) {
-            return strcmp($a["name"], $b["name"]);
-        });
+        usort($files, fn ($a, $b) => strcmp((string) $a['name'], (string) $b['name']));
 
-        usort($dirs, function ($a, $b) {
-            return strcmp($a["name"], $b["name"]);
-        });
-
+        usort($dirs, fn ($a, $b) => strcmp((string) $a['name'], (string) $b['name']));
 
         return array_merge($dirs, $files);
     }
@@ -100,7 +95,7 @@ class GetPath
     {
         $response = $this->cache->getItem($cacheKey);
 
-        $response = $response->get()["response"];
+        $response = $response->get()['response'];
 
         if ($response === null) {
             return false;
@@ -108,7 +103,7 @@ class GetPath
 
         $headers = $response->getHeaders();
 
-        if (isset($headers["X-Lxd-Type"]) && $headers["X-Lxd-Type"][0] == "directory") {
+        if (isset($headers['X-Lxd-Type']) && $headers['X-Lxd-Type'][0] == 'directory') {
             return true;
         }
 
@@ -119,7 +114,7 @@ class GetPath
     {
         $response = $this->cache->getItem($cacheKey);
 
-        $response = $response->get()["response"];
+        $response = $response->get()['response'];
 
         if (headers_sent()) {
             throw new \RuntimeException('Headers were already sent. The response could not be emitted!');
@@ -135,16 +130,16 @@ class GetPath
         header($statusLine, true);
 
         foreach ($response->getHeaders() as $name => $values) {
-            $responseHeader = sprintf(
-                '%s: %s',
-                $name,
-                $response->getHeaderLine($name)
-            );
+            $responseHeader = sprintf('%s: %s', $name, $response->getHeaderLine($name));
             header($responseHeader, false); /* The header doesn't replace a previous similar header. */
         }
 
         header('Content-Description: File Transfer');
-        header('Content-Disposition: attachment; filename="' . $this->getFileName($response->getHeader("Content-Disposition")[0]) . '"');
+        header(
+            'Content-Disposition: attachment; filename="' . $this->getFileName(
+                $response->getHeader('Content-Disposition')[0]
+            ) . '"'
+        );
 
         // Step 3: Output the message body.
         echo $currentResponseBody;
@@ -153,6 +148,6 @@ class GetPath
 
     private function getFileName($string)
     {
-        return str_replace("inline;filename=", "", $string);
+        return str_replace('inline;filename=', '', $string);
     }
 }

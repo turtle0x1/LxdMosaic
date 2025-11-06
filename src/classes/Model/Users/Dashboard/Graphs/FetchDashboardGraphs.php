@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchDashboardGraphs
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class FetchDashboardGraphs
 
     public function fetchAll(int $dashboardId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `UDG_Name` as `graphName`,
                     `UDG_ID` as `graphId`,
                     `UDG_Host_ID` as `hostId`,
@@ -27,10 +27,10 @@ class FetchDashboardGraphs
                     `User_Dashboard_Graphs`
                 WHERE
                     `UDG_UD_ID` = :dashboardId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":dashboardId"=>$dashboardId
+            ':dashboardId' => $dashboardId,
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

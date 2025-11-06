@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class SearchCloudConfig
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,18 +15,18 @@ class SearchCloudConfig
 
     public function searchAll(string $criteria)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `CC_ID` as `id`,
                     `CC_Name` as `name`
                 FROM
                     `Cloud_Config`
                 WHERE
                     `CC_Name` LIKE :name
-                ";
+                ';
 
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":name"=>"%$criteria%"
+            ':name' => "%{$criteria}%",
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

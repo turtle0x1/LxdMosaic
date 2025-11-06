@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class InsertActionLog
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class InsertActionLog
 
     public function insert(int $userId, string $controller, string $params)
     {
-        $sql = "INSERT INTO `Recorded_Actions`
+        $sql = 'INSERT INTO `Recorded_Actions`
                 (
                     `RA_User_ID`,
                     `RA_Controller`,
@@ -24,12 +24,12 @@ class InsertActionLog
                     :userId,
                     :controller,
                     :params
-                );";
+                );';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId,
-            ":controller"=>$controller,
-            ":params"=>$params
+            ':userId' => $userId,
+            ':controller' => $controller,
+            ':params' => $params,
         ]);
         return $do->rowCount() ? true : false;
     }

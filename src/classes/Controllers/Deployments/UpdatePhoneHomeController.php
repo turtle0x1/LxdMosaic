@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UpdatePhoneHomeController
 {
-    private $updatePhoneHomeTime;
-    
-    public function __construct(UpdatePhoneHomeTime $updatePhoneHomeTime)
-    {
-        $this->updatePhoneHomeTime = $updatePhoneHomeTime;
+    public function __construct(
+        private readonly UpdatePhoneHomeTime $updatePhoneHomeTime
+    ) {
     }
 
     /**
@@ -21,8 +19,8 @@ class UpdatePhoneHomeController
     {
         $this->updatePhoneHomeTime->update($deploymentId, $hostname);
         return [
-            "state"=>"success",
-            "message"=>"Update time"
+            'state' => 'success',
+            'message' => 'Update time',
         ];
     }
 }

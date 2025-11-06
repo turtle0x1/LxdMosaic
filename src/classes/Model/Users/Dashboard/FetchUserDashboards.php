@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchUserDashboards
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class FetchUserDashboards
 
     public function fetchAll(int $userId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `UD_ID` as `id`,
                     `UD_Name` as `name`
                 FROM
@@ -24,17 +24,17 @@ class FetchUserDashboards
                     `UD_User_ID` = :userId
                 ORDER BY
                     `UD_ID` ASC
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId
+            ':userId' => $userId,
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function fetchDashboard(int $dashboardId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `UD_ID` as `id`,
                     `UD_User_ID` as `userId`,
                     `UD_Name` as `name`,
@@ -45,10 +45,10 @@ class FetchUserDashboards
                     `UD_ID` = :dashboardId
                 ORDER BY
                     `UD_ID` ASC
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":dashboardId"=>$dashboardId
+            ':dashboardId' => $dashboardId,
         ]);
         return $do->fetch(\PDO::FETCH_ASSOC);
     }

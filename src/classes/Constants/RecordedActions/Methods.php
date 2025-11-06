@@ -1,10 +1,14 @@
 <?php
+
 namespace dhope0000\LXDClient\Constants\RecordedActions;
 
 class Methods
 {
-    const CREATE = "create";
-    const DELETE = "delete";
-    const SCHEDULE = "schedule";
-    const DISABLE = "disable";
+    public const CREATE = 'create';
+
+    public const DELETE = 'delete';
+
+    public const SCHEDULE = 'schedule';
+
+    public const DISABLE = 'disable';
 }

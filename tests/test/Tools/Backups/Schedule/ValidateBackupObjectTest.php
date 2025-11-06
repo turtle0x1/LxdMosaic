@@ -1,21 +1,27 @@
-<?php declare(strict_types=1);
+<?php
 
-use PHPUnit\Framework\TestCase;
+declare(strict_types=1);
+
 use dhope0000\LXDClient\Objects\Backups\BackupSchedule;
+use PHPUnit\Framework\TestCase;
 
 final class ValidateBackupObjectTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
         $container = $builder->build();
-        $this->validateBackupObject = $container->make("dhope0000\LXDClient\Tools\Backups\Schedule\ValidateBackupObject");
+        $this->validateBackupObject = $container->make(
+            "dhope0000\LXDClient\Tools\Backups\Schedule\ValidateBackupObject"
+        );
     }
+
     /**
      * @dataProvider validateData
      */
-    public function test_validate($schedule, $fails) :void
+    public function testValidate($schedule, $fails): void
     {
         if ($fails) {
             $this->expectException(\Exception::class);
@@ -32,45 +38,25 @@ final class ValidateBackupObjectTest extends TestCase
     {
         return [
             [ // Perfectly fine if not with junk values
-                new BackupSchedule(
-                    "daily",
-                    ["21:00"],
-                    [1, 2, 3],
-                    22
-                ),
-                false
+                new BackupSchedule('daily', ['21:00'], [1, 2, 3], 22),
+                false,
             ],
             [ // Wrong backup range
-                new BackupSchedule(
-                    "wow_this_is_wrong",
-                    ["21:00"]
-                ),
-                true
+                new BackupSchedule('wow_this_is_wrong', ['21:00']),
+                true,
             ],
             [ // Invalid times
-                new BackupSchedule(
-                    "daily",
-                    ["25:70"]
-                ),
-                true
+                new BackupSchedule('daily', ['25:70']),
+                true,
             ],
             [ // Invalid days of the week
-                new BackupSchedule(
-                    "weekly",
-                    ["23:00"],
-                    [-1, 5]
-                ),
-                true
+                new BackupSchedule('weekly', ['23:00'], [-1, 5]),
+                true,
             ],
             [ // Invalid days of the month
-                new BackupSchedule(
-                    "monthly",
-                    ["23:00"],
-                    [0, 5],
-                    200
-                ),
-                true
-            ]
+                new BackupSchedule('monthly', ['23:00'], [0, 5], 200),
+                true,
+            ],
         ];
     }
 }

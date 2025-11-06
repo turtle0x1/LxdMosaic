@@ -2,24 +2,16 @@
 
 namespace dhope0000\LXDClient\Tools\InstanceSettings\RecordActions;
 
-use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\KnownControllerConversions;
 use dhope0000\LXDClient\Model\InstanceSettings\RecordActions\FetchRecordedActions;
-use \DI\Container;
+use DI\Container;
 
 class GetUserOverview
 {
-    private $knownControllerConversions;
-    private $fetchRecordedActions;
-    private $container;
-
     public function __construct(
-        KnownControllerConversions $knownControllerConversions,
-        FetchRecordedActions $fetchRecordedActions,
-        Container $container
+        private readonly KnownControllerConversions $knownControllerConversions,
+        private readonly FetchRecordedActions $fetchRecordedActions,
+        private readonly Container $container
     ) {
-        $this->knownControllerConversions = $knownControllerConversions;
-        $this->fetchRecordedActions = $fetchRecordedActions;
-        $this->container = $container;
     }
 
     public function get(int $userId, int $targetUser)
@@ -35,7 +27,7 @@ class GetUserOverview
             $convertor = $this->knownControllerConversions->getConvertorClass($controller);
             $convertor = $this->container->make($convertor);
             foreach ($actions as $action) {
-                $action["params"] = json_decode($action["params"], true);
+                $action['params'] = json_decode((string) $action['params'], true);
                 $action = $convertor->convert($action);
 
                 $cat = $action->getCategory();

@@ -1,63 +1,66 @@
-<?php declare(strict_types=1);
+<?php
 
-use PHPUnit\Framework\TestCase;
+declare(strict_types=1);
+
 use dhope0000\LXDClient\Tools\Utilities\ValidateInstanceName;
+use PHPUnit\Framework\TestCase;
 
 final class ValidateInstanceNameTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
         $container = $builder->build();
     }
 
-    public function test_valid_instance_name()
+    public function testValidInstanceName()
     {
-        $this->assertNull(ValidateInstanceName::validate("instance-01"));
-        $this->assertNull(ValidateInstanceName::validate("instance-02"));
-        $this->assertNull(ValidateInstanceName::validate("demo-03-instance"));
+        $this->assertNull(ValidateInstanceName::validate('instance-01'));
+        $this->assertNull(ValidateInstanceName::validate('instance-02'));
+        $this->assertNull(ValidateInstanceName::validate('demo-03-instance'));
     }
 
-    public function test_to_short_instance_name()
+    public function testToShortInstanceName()
     {
         $this->expectException(\Exception::class);
-        ValidateInstanceName::validate("");
+        ValidateInstanceName::validate('');
     }
 
-    public function test_to_long_instance_name()
+    public function testToLongInstanceName()
     {
         $this->expectException(\Exception::class);
-        ValidateInstanceName::validate("Loremipsumdolorsitamet,consecteturadipiscingelit");
+        ValidateInstanceName::validate('Loremipsumdolorsitamet,consecteturadipiscingelit');
     }
 
-    public function test_numeric_instance_Name()
+    public function testNumericInstanceName()
     {
         $this->expectException(\Exception::class);
-        ValidateInstanceName::validate("01234");
+        ValidateInstanceName::validate('01234');
     }
 
-    public function test_starts_with_digit_instance_name()
+    public function testStartsWithDigitInstanceName()
     {
         $this->expectException(\Exception::class);
-        ValidateInstanceName::validate("01-instance");
+        ValidateInstanceName::validate('01-instance');
     }
 
-    public function test_starts_with_hypen_instance_name()
+    public function testStartsWithHypenInstanceName()
     {
         $this->expectException(\Exception::class);
-        ValidateInstanceName::validate("-instance");
+        ValidateInstanceName::validate('-instance');
     }
 
-    public function test_ends_with_hypen_instance_name()
+    public function testEndsWithHypenInstanceName()
     {
         $this->expectException(\Exception::class);
-        ValidateInstanceName::validate("instance-");
+        ValidateInstanceName::validate('instance-');
     }
 
-    public function test_contains_invalid_chars_instance_name()
+    public function testContainsInvalidCharsInstanceName()
     {
         $this->expectException(\Exception::class);
-        ValidateInstanceName::validate("instance@@");
+        ValidateInstanceName::validate('instance@@');
     }
 }

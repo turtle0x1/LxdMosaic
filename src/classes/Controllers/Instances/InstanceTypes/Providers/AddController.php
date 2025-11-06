@@ -2,25 +2,18 @@
 
 namespace dhope0000\LXDClient\Controllers\Instances\InstanceTypes\Providers;
 
-use \DI\Container;
 use dhope0000\LXDClient\Tools\Instances\InstanceTypes\Providers\AddProvider;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
+use DI\Container;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AddController
 {
-    private $validatePermissions;
-    private $addProvider;
-    private $container;
-
     public function __construct(
-        Container $container,
-        ValidatePermissions $validatePermissions,
-        AddProvider $addProvider
+        private readonly Container $container,
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly AddProvider $addProvider
     ) {
-        $this->container = $container;
-        $this->validatePermissions = $validatePermissions;
-        $this->addProvider = $addProvider;
     }
 
     /**
@@ -29,9 +22,12 @@ class AddController
     public function add(int $userId, string $name)
     {
         $this->validatePermissions->isAdminOrThrow($userId);
-        $this->container->call(["dhope0000\LXDClient\Model\Database\Database", "beginTransaction"]);
+        $this->container->call(["dhope0000\LXDClient\Model\Database\Database", 'beginTransaction']);
         $this->addProvider->add($userId, $name);
-        $this->container->call(["dhope0000\LXDClient\Model\Database\Database", "commitTransaction"]);
-        return ["state"=>"success", "message"=>"Added instance type provider"];
+        $this->container->call(["dhope0000\LXDClient\Model\Database\Database", 'commitTransaction']);
+        return [
+            'state' => 'success',
+            'message' => 'Added instance type provider',
+        ];
     }
 }

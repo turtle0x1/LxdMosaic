@@ -1,19 +1,20 @@
 <?php
+
 namespace dhope0000\LXDClient\Model\Hosts;
 
 use dhope0000\LXDClient\Model\Database\Database;
-use \DI\Container;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use DI\Container;
 
 class HostList
 {
     private $database;
-    private $container;
-    
-    public function __construct(Database $database, Container $container)
-    {
+
+    public function __construct(
+        Database $database,
+        private readonly Container $container
+    ) {
         $this->database = $database->dbObject;
-        $this->container = $container;
     }
 
     public function getHostCollection(array $hostIds)
@@ -31,13 +32,17 @@ class HostList
                 FROM
                     `Hosts`
                 WHERE
-                    `Host_ID` IN ($qMarks)
+                    `Host_ID` IN ({$qMarks})
                 ORDER BY
                     `Host_Alias`, `Host_Url_And_Port` ASC
                 ";
         $do = $this->database->prepare($sql);
         $do->execute($hostIds);
-        return new HostsCollection($do->fetchAll(\PDO::FETCH_CLASS, "dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]));
+        return new HostsCollection($do->fetchAll(
+            \PDO::FETCH_CLASS,
+            "dhope0000\LXDClient\Objects\Host",
+            [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]
+        ));
     }
 
     public function haveAny()
@@ -47,7 +52,7 @@ class HostList
 
     public function getHostListWithDetails()
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `Host_ID`,
                     `Host_Url_And_Port`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `Host_Alias`,
@@ -56,14 +61,14 @@ class HostList
                     `Hosts`
                 ORDER BY
                     `Host_Alias`, `Host_Url_And_Port` ASC
-                ";
+                ';
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function getOnlineHostsWithDetails()
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `Host_ID` as `id`,
                     `Host_Url_And_Port` as `urlAndPort`,
                     `Host_Cert_Path` as `certPath`,
@@ -78,9 +83,13 @@ class HostList
                     `Host_Online` = 1
                 ORDER BY
                     `Host_Alias`, `Host_Url_And_Port` ASC
-                ";
+                ';
         $do = $this->database->query($sql);
-        return $do->fetchAll(\PDO::FETCH_CLASS, "dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]);
+        return $do->fetchAll(
+            \PDO::FETCH_CLASS,
+            "dhope0000\LXDClient\Objects\Host",
+            [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]
+        );
     }
 
     public function fetchHostsNotInList(array $hostIds)
@@ -102,18 +111,22 @@ class HostList
                 FROM
                     `Hosts`
                 WHERE
-                    `Host_ID` NOT IN ($qMarks)
+                    `Host_ID` NOT IN ({$qMarks})
                 ORDER BY
                     `Host_Alias`, `Host_Url_And_Port` ASC
                 ";
         $do = $this->database->prepare($sql);
         $do->execute($hostIds);
-        return $do->fetchAll(\PDO::FETCH_CLASS, "dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]);
+        return $do->fetchAll(
+            \PDO::FETCH_CLASS,
+            "dhope0000\LXDClient\Objects\Host",
+            [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]
+        );
     }
 
     public function fetchAllHosts()
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `Host_ID` as `id`,
                     `Host_Url_And_Port` as `urlAndPort`,
                     `Host_Cert_Path` as `certPath`,
@@ -126,8 +139,12 @@ class HostList
                     `Hosts`
                 ORDER BY
                     `Host_Alias`, `Host_Url_And_Port` ASC
-                ";
+                ';
         $do = $this->database->query($sql);
-        return $do->fetchAll(\PDO::FETCH_CLASS, "dhope0000\LXDClient\Objects\Host", [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]);
+        return $do->fetchAll(
+            \PDO::FETCH_CLASS,
+            "dhope0000\LXDClient\Objects\Host",
+            [$this->container->get("dhope0000\LXDClient\Model\Client\LxdClient")]
+        );
     }
 }

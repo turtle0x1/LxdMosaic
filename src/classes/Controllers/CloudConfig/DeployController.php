@@ -1,18 +1,18 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
-use dhope0000\LXDClient\Tools\CloudConfig\DeployConfigToContainer;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use dhope0000\LXDClient\Tools\CloudConfig\DeployConfigToContainer;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deployConfigToContainer;
-    
-    public function __construct(DeployConfigToContainer $deploy)
-    {
-        $this->deployConfigToContainer = $deploy;
+    public function __construct(
+        private readonly DeployConfigToContainer $deployConfigToContainer
+    ) {
     }
+
     /**
      * @Route("/api/CloudConfig/DeployController/deploy", name="Deploy Cloud Config", methods={"POST"})
      */
@@ -22,7 +22,7 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
         int $cloudConfigId,
         $additionalProfiles = [],
         $gpus = [],
-        string $project = ""
+        string $project = ''
     ) {
         $response = $this->deployConfigToContainer->deploy(
             $hosts,
@@ -33,6 +33,9 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
             $gpus,
             $project
         );
-        return ["state"=>"success", "message"=>"Begun deploy"];
+        return [
+            'state' => 'success',
+            'message' => 'Begun deploy',
+        ];
     }
 }

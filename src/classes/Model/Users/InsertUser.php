@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class InsertUser
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class InsertUser
 
     public function insert(string $username, string $passwordHash, $ldapId = null)
     {
-        $sql = "INSERT INTO `Users`
+        $sql = 'INSERT INTO `Users`
                 (
                     `User_Name`,
                     `User_Password`,
@@ -25,12 +25,12 @@ class InsertUser
                     :password,
                     :ldapId
                 );
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":username"=>$username,
-            ":password"=>$passwordHash,
-            ":ldapId"=>$ldapId
+            ':username' => $username,
+            ':password' => $passwordHash,
+            ':ldapId' => $ldapId,
         ]);
         return $do->rowCount() ? true : false;
     }

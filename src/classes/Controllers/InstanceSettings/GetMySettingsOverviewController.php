@@ -7,12 +7,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetMySettingsOverviewController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $getSettingsOverview;
-
-    public function __construct(GetSettingsOverview $getSettingsOverview)
-    {
-        $this->getSettingsOverview = $getSettingsOverview;
+    public function __construct(
+        private readonly GetSettingsOverview $getSettingsOverview
+    ) {
     }
+
     /**
      * @Route("/api/InstanceSettings/GetMySettingsOverviewController/get", name="Get My LXDMosaic Settings Overview", methods={"POST"})
      */

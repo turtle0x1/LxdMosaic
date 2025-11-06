@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SearchRemoteImagesController
 {
-    private $getImages;
-    
-    public function __construct(SearchRemoteImages $searchRemoteImages)
-    {
-        $this->getImages = $searchRemoteImages;
+    public function __construct(
+        private readonly SearchRemoteImages $getImages
+    ) {
     }
 
     /**

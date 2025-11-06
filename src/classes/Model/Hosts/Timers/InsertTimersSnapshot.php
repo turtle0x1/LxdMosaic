@@ -15,7 +15,7 @@ class InsertTimersSnapshot
 
     public function insert(\DateTimeImmutable $date, array $data)
     {
-        $sql = "INSERT INTO `Timers_Snapshots`
+        $sql = 'INSERT INTO `Timers_Snapshots`
                 (
                     `TS_Last_Updated`,
                     `TS_Date`,
@@ -27,15 +27,12 @@ class InsertTimersSnapshot
                 ) ON DUPLICATE KEY UPDATE
                     `TS_Last_Updated` = CURRENT_TIMESTAMP(),
                     `TS_Data` = :data;
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":date"=>$date->format("Y-m-d"),
-            ":data"=>json_encode($data),
+            ':date' => $date->format('Y-m-d'),
+            ':data' => json_encode($data),
         ]);
         return $do->rowCount() ? true : false;
     }
 }
-
-
-

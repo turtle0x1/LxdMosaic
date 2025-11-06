@@ -1,10 +1,8 @@
 <?php
 
 $_ENV = getenv();
-date_default_timezone_set("UTC");
-require __DIR__ . "/../../../vendor/autoload.php";
-
-use dhope0000\LXDClient\Constants\Constants;
+date_default_timezone_set('UTC');
+require __DIR__ . '/../../../vendor/autoload.php';
 
 $builder = new \DI\ContainerBuilder();
 $container = $builder->build();
@@ -17,18 +15,18 @@ $p = $o->get();
 
 function importInstancesStats($member, $import)
 {
-    $instances = $member->getCustomProp("instances");
+    $instances = $member->getCustomProp('instances');
     $o = [];
     foreach ($instances as $instance) {
-        if ($instance["pullMetrics"]) {
-            $o[] = $instance["name"];
+        if ($instance['pullMetrics']) {
+            $o[] = $instance['name'];
         }
     }
     $import->import($member, $o);
 }
 
-foreach ($p["clusters"] as $cluster) {
-    foreach ($cluster["members"] as $member) {
+foreach ($p['clusters'] as $cluster) {
+    foreach ($cluster['members'] as $member) {
         if (!$member->hostOnline()) {
             continue;
         }
@@ -36,7 +34,7 @@ foreach ($p["clusters"] as $cluster) {
     }
 }
 
-foreach ($p["standalone"]["members"] as $member) {
+foreach ($p['standalone']['members'] as $member) {
     if (!$member->hostOnline()) {
         continue;
     }

@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class DeleteDashboardGraph
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,14 +15,14 @@ class DeleteDashboardGraph
 
     public function delete(int $graphId)
     {
-        $sql = "DELETE FROM
+        $sql = 'DELETE FROM
                     `User_Dashboard_Graphs`
                 WHERE
                     `UDG_ID` = :graphId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":graphId"=>$graphId
+            ':graphId' => $graphId,
         ]);
         return $do->rowCount() ? true : false;
     }

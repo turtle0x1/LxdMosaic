@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class GetSettings
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class GetSettings
 
     public function getAllSettingsWithLatestValues()
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `IS_ID` as `settingId`,
                     `IS_Name` as `settingName`,
                     `Instance_Settings_Values`.`ISV_Date` as `currentValueDateSet`,
@@ -33,7 +33,7 @@ class GetSettings
                     )
                 ORDER BY
                     `settingId` ASC
-                ";
+                ';
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

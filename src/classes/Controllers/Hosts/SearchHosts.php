@@ -1,29 +1,21 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Hosts;
 
 use dhope0000\LXDClient\Model\Hosts\HostList;
-use dhope0000\LXDClient\Tools\Hosts\HasExtension;
-use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
+use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SearchHosts
 {
-    private $hostList;
-    private $hasExtension;
-    private $fetchUserDetails;
-    private $fetchAllowedProjects;
-    
     public function __construct(
-        HostList $hostList,
-        HasExtension $hasExtension,
-        FetchUserDetails $fetchUserDetails,
-        FetchAllowedProjects $fetchAllowedProjects
+        private readonly HostList $hostList,
+        private readonly HasExtension $hasExtension,
+        private readonly FetchUserDetails $fetchUserDetails,
+        private readonly FetchAllowedProjects $fetchAllowedProjects
     ) {
-        $this->hostList = $hostList;
-        $this->hasExtension = $hasExtension;
-        $this->fetchUserDetails = $fetchUserDetails;
-        $this->fetchAllowedProjects = $fetchAllowedProjects;
     }
 
     /**
@@ -46,11 +38,11 @@ class SearchHosts
             if ($server->hostOnline() == false) {
                 continue;
             }
-            if (stripos($server->getAlias(), $hostSearch) !== false) {
+            if (stripos((string) $server->getAlias(), $hostSearch) !== false) {
                 $doesntHaveExt = false;
                 if (!empty($extensionRequirements)) {
                     foreach ($extensionRequirements as $requirement) {
-                        if (!$this->hasExtension->checkWithHost($server, $requirement)) {
+                        if (! $this->hasExtension->checkWithHost($server, $requirement)) {
                             $doesntHaveExt = true;
                             break;
                         }
@@ -60,8 +52,8 @@ class SearchHosts
                     continue;
                 }
                 $output[] = [
-                    "host"=>$server->getAlias(),
-                    "hostId"=>$server->getHostId()
+                    'host' => $server->getAlias(),
+                    'hostId' => $server->getHostId(),
                 ];
             }
         }

@@ -1,18 +1,18 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
-use dhope0000\LXDClient\Tools\Profiles\Rename;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Profiles\Rename;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ReplaceProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $rename;
-    
-    public function __construct(Rename $rename)
-    {
-        $this->rename = $rename;
+    public function __construct(
+        private readonly Rename $rename
+    ) {
     }
+
     /**
      * @Route("/api/Profiles/ReplaceProfileController/replace", name="Replace Profile", methods={"POST"})
      */
@@ -24,6 +24,9 @@ class ReplaceProfileController implements \dhope0000\LXDClient\Interfaces\Record
         array $devices = []
     ) {
         $host->profiles->replace($name, $description, $config, $devices);
-        return ["state"=>"success", "message"=>"Updated profile"];
+        return [
+            'state' => 'success',
+            'message' => 'Updated profile',
+        ];
     }
 }

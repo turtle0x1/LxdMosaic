@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Hosts\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
@@ -7,18 +8,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AddProxyDeviceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $addProxyDevice;
-    
-    public function __construct(AddProxyDevice $addProxyDevice)
-    {
-        $this->addProxyDevice = $addProxyDevice;
+    public function __construct(
+        private readonly AddProxyDevice $addProxyDevice
+    ) {
     }
+
     /**
      * @Route("/api/Hosts/Instances/AddProxyDeviceController/add", name="Add proxy device", methods={"POST"})
      */
     public function add(Host $host, string $instance, string $name, string $source, string $destination)
     {
         $this->addProxyDevice->add($host, $instance, $name, $source, $destination);
-        return ["state"=>"success", "message"=>"Added proxy device"];
+        return [
+            'state' => 'success',
+            'message' => 'Added proxy device',
+        ];
     }
 }

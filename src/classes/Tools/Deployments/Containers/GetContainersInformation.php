@@ -6,11 +6,9 @@ use dhope0000\LXDClient\Model\Deployments\Containers\GetDeployedContainers;
 
 class GetContainersInformation
 {
-    private $getDeployedContainers;
-    
-    public function __construct(GetDeployedContainers $getDeployedContainers)
-    {
-        $this->getDeployedContainers = $getDeployedContainers;
+    public function __construct(
+        private readonly GetDeployedContainers $getDeployedContainers
+    ) {
     }
 
     public function getContainersInDeployment(int $deploymentId)

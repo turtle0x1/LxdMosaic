@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class DeleteMetrics
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class DeleteMetrics
 
     public function deleteForInstance(int $hostId, string $instance, string $project)
     {
-        $sql = "DELETE FROM
+        $sql = 'DELETE FROM
                     `Instance_Metric_Values`
                 WHERE
                     `IMV_Host_ID` = :hostId
@@ -23,26 +23,26 @@ class DeleteMetrics
                     `IMV_Instance_Name` = :instance
                 AND
                     `IMV_Project_Name` = :project
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId,
-            ":instance"=>$instance,
-            ":project"=>$project
+            ':hostId' => $hostId,
+            ':instance' => $instance,
+            ':project' => $project,
         ]);
         return $do->rowCount() ? true : false;
     }
 
     public function deleteForHost(int $hostId)
     {
-        $sql = "DELETE FROM
+        $sql = 'DELETE FROM
                     `Instance_Metric_Values`
                 WHERE
                     `IMV_Host_ID` = :hostId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId
+            ':hostId' => $hostId,
         ]);
         return $do->rowCount() ? true : false;
     }
@@ -53,7 +53,7 @@ class DeleteMetrics
         $sql = "DELETE FROM
                     `Instance_Metric_Values`
                 WHERE
-                    `IMV_ID` IN ($qMarks)
+                    `IMV_ID` IN ({$qMarks})
                 ";
         $do = $this->database->prepare($sql);
         $do->execute($ids);
@@ -62,14 +62,14 @@ class DeleteMetrics
 
     public function deleteBefore(\DateTimeInterface $before)
     {
-        $sql = "DELETE FROM
+        $sql = 'DELETE FROM
                     `Instance_Metric_Values`
                 WHERE
                     `IMV_Date` < :before
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":before"=>$before->format("Y-m-d H:i:s")
+            ':before' => $before->format('Y-m-d H:i:s'),
         ]);
         return $do->rowCount() ? true : false;
     }

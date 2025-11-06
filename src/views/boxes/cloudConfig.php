@@ -349,6 +349,6 @@ $("#cloudConfigBox").on("click", "#deleteCloudConfig", function(){
 </script>
 
 <?php
-    require __DIR__ . "/../modals/cloudConfig/create.php";
-    require __DIR__ . "/../modals/cloudConfig/deploy.php";
+require __DIR__ . '/../modals/cloudConfig/create.php';
+require __DIR__ . '/../modals/cloudConfig/deploy.php';
 ?>

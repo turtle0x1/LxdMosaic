@@ -1,17 +1,16 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Instances;
 
-use dhope0000\LXDClient\Tools\Instances\GetInstance;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Instances\GetInstance;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetInstanceController
 {
-    private $getInstance;
-    
-    public function __construct(GetInstance $getInstance)
-    {
-        $this->getInstance = $getInstance;
+    public function __construct(
+        private readonly GetInstance $getInstance
+    ) {
     }
 
     /**

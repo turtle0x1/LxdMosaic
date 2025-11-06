@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class InsertUserDashboard
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,18 +15,18 @@ class InsertUserDashboard
 
     public function insert(int $userId, string $name)
     {
-        $sql = "INSERT INTO `User_Dashboards`
+        $sql = 'INSERT INTO `User_Dashboards`
                 (
                     `UD_User_ID`,
                     `UD_Name`
                 ) VALUES (
                     :userId,
                     :name
-                )";
+                )';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId,
-            ":name"=>$name
+            ':userId' => $userId,
+            ':name' => $name,
         ]);
         return $do->rowCount() ? true : false;
     }

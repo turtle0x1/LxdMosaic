@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetGraphDataController
 {
-    private $getMetricsForContainer;
-    
-    public function __construct(GetMetricsForContainer $getMetricsForContainer)
-    {
-        $this->getMetricsForContainer = $getMetricsForContainer;
+    public function __construct(
+        private readonly GetMetricsForContainer $getMetricsForContainer
+    ) {
     }
 
     /**

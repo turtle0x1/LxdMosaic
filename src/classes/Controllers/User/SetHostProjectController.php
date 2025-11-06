@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SetHostProjectController
 {
-    private $setUserProject;
-    
-    public function __construct(SetUserProject $setUserProject)
-    {
-        $this->setUserProject = $setUserProject;
+    public function __construct(
+        private readonly SetUserProject $setUserProject
+    ) {
     }
 
     /**
@@ -20,6 +18,9 @@ class SetHostProjectController
     public function set(int $userId, int $hostId, string $project)
     {
         $this->setUserProject->set($userId, $hostId, $project);
-        return ["state"=>"success", "message"=>"Changed project to $project"];
+        return [
+            'state' => 'success',
+            'message' => "Changed project to {$project}",
+        ];
     }
 }

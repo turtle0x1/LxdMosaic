@@ -13,9 +13,9 @@ class FetchDeploymentProjectsUsers
         $this->database = $database->dbObject;
     }
 
-    public function userHasAccess(int $userId, int $deploymentId) :bool
+    public function userHasAccess(int $userId, int $deploymentId): bool
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     1
                 FROM
                     `Users`
@@ -33,11 +33,11 @@ class FetchDeploymentProjectsUsers
                         OR
                         `User_Admin` = 1
                     )
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":deploymentId"=>$deploymentId,
-            ":userId"=>$userId
+            ':deploymentId' => $deploymentId,
+            ':userId' => $userId,
         ]);
         return $do->fetchColumn() ? true : false;
     }

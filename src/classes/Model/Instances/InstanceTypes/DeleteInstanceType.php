@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class DeleteInstanceType
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,11 +15,11 @@ class DeleteInstanceType
 
     public function delete(int $typeId)
     {
-        $sql = "DELETE FROM `Instance_Types` WHERE `IT_ID` = :typeId";
+        $sql = 'DELETE FROM `Instance_Types` WHERE `IT_ID` = :typeId';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":typeId"=>$typeId
+            ':typeId' => $typeId,
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
 }

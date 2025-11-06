@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class InsertInstanceType
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class InsertInstanceType
 
     public function insert(int $providerId, string $name, float $cpu, float $mem)
     {
-        $sql = "INSERT INTO `Instance_Types`(
+        $sql = 'INSERT INTO `Instance_Types`(
                     `IT_Provider_ID`,
                     `IT_Name`,
                     `IT_CPU`,
@@ -25,14 +25,14 @@ class InsertInstanceType
                     :name,
                     :cpu,
                     :mem
-                )";
+                )';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":providerId"=>$providerId,
-            ":name"=>$name,
-            ":cpu"=>$cpu,
-            ":mem"=>$mem
+            ':providerId' => $providerId,
+            ':name' => $name,
+            ':cpu' => $cpu,
+            ':mem' => $mem,
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
 }

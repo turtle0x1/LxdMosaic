@@ -3,27 +3,27 @@
 namespace dhope0000\LXDClient\Controllers\Instances\Files;
 
 use dhope0000\LXDClient\Objects\Host;
-use \dhope0000\LXDClient\Tools\Instances\Files\UploadFiles;
+use dhope0000\LXDClient\Tools\Instances\Files\UploadFiles;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UploadFilesToPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $uploadFiles;
-
-    public function __construct(UploadFiles $uploadFiles)
-    {
-        $this->uploadFiles = $uploadFiles;
+    public function __construct(
+        private readonly UploadFiles $uploadFiles
+    ) {
     }
+
     /**
      * @Route("/api/Instances/Files/UploadFilesToPathController/upload", name="Upload File To Instance", methods={"POST"})
      */
-    public function upload(
-        Host $host,
-        string $container,
-        string $path
-    ) {
+    public function upload(Host $host, string $container, string $path)
+    {
         $response = $this->uploadFiles->upload($host, $container, $path, $_FILES);
 
-        return ["state"=>"success", "message"=>"Uploaded file", "lxdResponse"=>$response];
+        return [
+            'state' => 'success',
+            'message' => 'Uploaded file',
+            'lxdResponse' => $response,
+        ];
     }
 }

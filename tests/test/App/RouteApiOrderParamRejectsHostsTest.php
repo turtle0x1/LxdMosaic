@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RouteApiOrderParamRejectsHostsTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -14,51 +17,72 @@ final class RouteApiOrderParamRejectsHostsTest extends TestCase
         $this->database = $container->get("dhope0000\LXDClient\Model\Database\Database");
         $this->database->dbObject->beginTransaction();
         $addHost = $container->make("dhope0000\LXDClient\Model\Hosts\AddHost");
-        $addHost->addHost("fake", "fake", "fake", "fake", "fake");
+        $addHost->addHost('fake', 'fake', 'fake', 'fake', 'fake');
     }
 
-    public function tearDown() :void
+    #[\Override]
+    protected function tearDown(): void
     {
         $this->database->dbObject->rollBack();
     }
 
-    public function test_noAcessToAnyHosts() :void
+    public function testNoAcessToAnyHosts(): void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hostId"=>2];
+        $_POST = [
+            'hostId' => 2,
+        ];
         $this->routeApi->route(
-            Request::create("/api/Profiles/CopyProfileController/copyProfile", 'POST'),
-            ["userid"=>3, "apitoken"=>"wow"]
+            Request::create('/api/Profiles/CopyProfileController/copyProfile', 'POST'),
+            [
+                'userid' => 3,
+                'apitoken' => 'wow',
+            ]
         );
     }
 
-    public function test_orderParamRejectsOnOneHost() :void
+    public function testOrderParamRejectsOnOneHost(): void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hostId"=>2];
+        $_POST = [
+            'hostId' => 2,
+        ];
         $this->routeApi->route(
-            Request::create("/api/Profiles/CopyProfileController/copyProfile", 'POST'),
-            ["userid"=>2, "project"=>"default"]
+            Request::create('/api/Profiles/CopyProfileController/copyProfile', 'POST'),
+            [
+                'userid' => 2,
+                'project' => 'default',
+            ]
         );
     }
 
-    public function test_orderParamRejectsOnOneHostObject() :void
+    public function testOrderParamRejectsOnOneHostObject(): void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hostId"=>2];
+        $_POST = [
+            'hostId' => 2,
+        ];
         $this->routeApi->route(
-            Request::create("/api/Instances/MigrateInstanceController/migrate", 'POST'),
-            ["userid"=>2, "project"=>"default"]
+            Request::create('/api/Instances/MigrateInstanceController/migrate', 'POST'),
+            [
+                'userid' => 2,
+                'project' => 'default',
+            ]
         );
     }
 
-    public function test_orderParamRejectsManyHosts() :void
+    public function testOrderParamRejectsManyHosts(): void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hosts"=>[2]];
+        $_POST = [
+            'hosts' => [2],
+        ];
         $this->routeApi->route(
-            Request::create("/api/CloudConfig/DeployController/deploy", 'POST'),
-            ["userid"=>2, "project"=>"default"]
+            Request::create('/api/CloudConfig/DeployController/deploy', 'POST'),
+            [
+                'userid' => 2,
+                'project' => 'default',
+            ]
         );
     }
 }

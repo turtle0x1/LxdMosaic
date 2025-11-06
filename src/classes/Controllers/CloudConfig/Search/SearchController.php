@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController
 {
-    private $searchCloudConfig;
-    
-    public function __construct(SearchCloudConfig $searchCloudConfig)
-    {
-        $this->searchCloudConfig = $searchCloudConfig;
+    public function __construct(
+        private readonly SearchCloudConfig $searchCloudConfig
+    ) {
     }
 
     /**

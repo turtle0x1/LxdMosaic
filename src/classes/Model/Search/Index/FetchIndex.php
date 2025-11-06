@@ -15,10 +15,11 @@ class FetchIndex
 
     public function fetchLatestData()
     {
-        $sql = "SELECT `SI_Data`
+        $sql = 'SELECT `SI_Data`
                 FROM `Search_Index`
                 ORDER BY `SI_Last_Updated` DESC
-                ";
-        return $this->database->query($sql)->fetchColumn();
+                ';
+        return $this->database->query($sql)
+            ->fetchColumn();
     }
 }

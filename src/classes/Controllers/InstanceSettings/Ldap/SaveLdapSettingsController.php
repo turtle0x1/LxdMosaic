@@ -7,18 +7,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SaveLdapSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $saveLdapSettings;
-
-    public function __construct(SaveLdapSettings $saveLdapSettings)
-    {
-        $this->saveLdapSettings = $saveLdapSettings;
+    public function __construct(
+        private readonly SaveLdapSettings $saveLdapSettings
+    ) {
     }
+
     /**
      * @Route("/api/InstanceSettings/Ldap/SaveLdapSettingsController/save", name="Save LXDMosaic Ldap Settings", methods={"POST"})
      */
     public function save($userId, $settings)
     {
         $this->saveLdapSettings->save($userId, $settings);
-        return ["state"=>"success", "message"=>"Saved Ldap Settings"];
+        return [
+            'state' => 'success',
+            'message' => 'Saved Ldap Settings',
+        ];
     }
 }

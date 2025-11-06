@@ -2,16 +2,14 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts\Warnings;
 
-use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class AckWarning
 {
-    private $validatePermissions;
-    
-    public function __construct(ValidatePermissions $validatePermissions)
-    {
-        $this->validatePermissions = $validatePermissions;
+    public function __construct(
+        private readonly ValidatePermissions $validatePermissions
+    ) {
     }
 
     public function ack(int $userId, Host $host, string $id)

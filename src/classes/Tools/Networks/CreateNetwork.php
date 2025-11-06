@@ -6,7 +6,7 @@ use dhope0000\LXDClient\Objects\HostsCollection;
 
 class CreateNetwork
 {
-    public function create(HostsCollection $hosts, string $name, string $description = "", array $config = [])
+    public function create(HostsCollection $hosts, string $name, string $description = '', array $config = [])
     {
         foreach ($hosts as $host) {
             $host->networks->create($name, $description, $config);

@@ -2,21 +2,16 @@
 
 namespace dhope0000\LXDClient\Tools\Backups;
 
-use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 use dhope0000\LXDClient\Model\Backups\DeleteBackup;
+use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
 
 class RemoveBackupHistory
 {
-    private $getSetting;
-    private $deleteBackup;
-
     public function __construct(
-        GetSetting $getSetting,
-        DeleteBackup $deleteBackup
+        private readonly GetSetting $getSetting,
+        private readonly DeleteBackup $deleteBackup
     ) {
-        $this->getSetting = $getSetting;
-        $this->deleteBackup = $deleteBackup;
     }
 
     public function remove()

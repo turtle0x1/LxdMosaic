@@ -2,9 +2,9 @@
 
 use Symfony\Component\HttpFoundation\Request;
 
-require __DIR__ . "/../../vendor/autoload.php";
+require __DIR__ . '/../../vendor/autoload.php';
 
-date_default_timezone_set("UTC");
+date_default_timezone_set('UTC');
 
 $builder = new \DI\ContainerBuilder();
 $builder->useAnnotations(true);
@@ -15,10 +15,9 @@ $exceptionHandler->register();
 
 $env = \Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
 $env->load();
-if (!isset($_ENV["DB_SQLITE"]) && !empty($_ENV["DB_SQLITE"])) {
+if (!isset($_ENV['DB_SQLITE']) && !empty($_ENV['DB_SQLITE'])) {
     $env->required(['DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME']);
 }
-
 
 $container->injectOn($exceptionHandler);
 

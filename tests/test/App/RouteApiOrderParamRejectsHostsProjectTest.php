@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RouteApiOrderParamRejectsHostsProjectTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -13,33 +16,48 @@ final class RouteApiOrderParamRejectsHostsProjectTest extends TestCase
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
     }
 
-    public function test_orderParamRejectsOnOneHost() :void
+    public function testOrderParamRejectsOnOneHost(): void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hostId"=>1];
+        $_POST = [
+            'hostId' => 1,
+        ];
         $this->routeApi->route(
-            Request::create("/api/Hosts/GetHostOverviewController/get", 'POST'),
-            ["userid"=>2, "project"=>"default"]
+            Request::create('/api/Hosts/GetHostOverviewController/get', 'POST'),
+            [
+                'userid' => 2,
+                'project' => 'default',
+            ]
         );
     }
 
-    public function test_orderParamRejectsOnOneHostObject() :void
+    public function testOrderParamRejectsOnOneHostObject(): void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hostId"=>1];
+        $_POST = [
+            'hostId' => 1,
+        ];
         $this->routeApi->route(
-            Request::create("/api/Instances/MigrateInstanceController/migrate", 'POST'),
-            ["userid"=>2, "project"=>"default"]
+            Request::create('/api/Instances/MigrateInstanceController/migrate', 'POST'),
+            [
+                'userid' => 2,
+                'project' => 'default',
+            ]
         );
     }
 
-    public function test_orderParamRejectsManyHosts() :void
+    public function testOrderParamRejectsManyHosts(): void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["hosts"=>[1]];
+        $_POST = [
+            'hosts' => [1],
+        ];
         $this->routeApi->route(
-            Request::create("/api/CloudConfig/DeployController/deploy", 'POST'),
-            ["userid"=>2, "project"=>"default"]
+            Request::create('/api/CloudConfig/DeployController/deploy', 'POST'),
+            [
+                'userid' => 2,
+                'project' => 'default',
+            ]
         );
     }
 }

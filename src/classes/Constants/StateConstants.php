@@ -1,11 +1,16 @@
 <?php
+
 namespace dhope0000\LXDClient\Constants;
 
 class StateConstants
 {
-    const START = "start";
-    const STOP = "stop";
-    const RESTART = "restart";
-    const FREEZE = "freeze";
-    const UNFREEZE = "unfreeze";
+    public const START = 'start';
+
+    public const STOP = 'stop';
+
+    public const RESTART = 'restart';
+
+    public const FREEZE = 'freeze';
+
+    public const UNFREEZE = 'unfreeze';
 }

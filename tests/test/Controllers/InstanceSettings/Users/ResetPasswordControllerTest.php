@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ResetPasswordControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -16,52 +19,70 @@ final class ResetPasswordControllerTest extends TestCase
         $this->database->dbObject->beginTransaction();
 
         $insertUser = $container->make("dhope0000\LXDClient\Model\Users\InsertUser");
-        $insertUser->insert("fromLdapuser", "hash", "123");
+        $insertUser->insert('fromLdapuser', 'hash', '123');
         $this->ldapUserId = $insertUser->getId();
     }
 
-    public function tearDown() :void
+    #[\Override]
+    protected function tearDown(): void
     {
         $this->database->dbObject->rollBack();
     }
 
-
-    public function test_nonAdminTryingToResetPassword() :void
+    public function testNonAdminTryingToResetPassword(): void
     {
         $this->expectException(\Exception::class);
 
-        $_POST = ["targetUser"=>2, "newPassword"=>"testlongpassword123"];
+        $_POST = [
+            'targetUser' => 2,
+            'newPassword' => 'testlongpassword123',
+        ];
 
         $this->routeApi->route(
             Request::create('/api/InstanceSettings/Users/ResetPasswordController/reset', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
     }
 
-    public function test_tryingToResetLdapUserFails() :void
+    public function testTryingToResetLdapUserFails(): void
     {
         $this->expectException(\Exception::class);
 
-        $_POST = ["targetUser"=>$this->ldapUserId, "newPassword"=>"testlongpassword123"];
+        $_POST = [
+            'targetUser' => $this->ldapUserId,
+            'newPassword' => 'testlongpassword123',
+        ];
 
         $this->routeApi->route(
             Request::create('/api/InstanceSettings/Users/ResetPasswordController/reset', 'POST'),
-            ["userid"=>1],
+            [
+                'userid' => 1,
+            ],
             true
         );
     }
 
-    public function test_adminResetsPassword() :void
+    public function testAdminResetsPassword(): void
     {
-        $_POST = ["targetUser"=>2, "newPassword"=>"testlongpassword123"];
+        $_POST = [
+            'targetUser' => 2,
+            'newPassword' => 'testlongpassword123',
+        ];
 
         $result = $this->routeApi->route(
             Request::create('/api/InstanceSettings/Users/ResetPasswordController/reset', 'POST'),
-            ["userid"=>1],
+            [
+                'userid' => 1,
+            ],
             true
         );
 
-        $this->assertEquals(["state"=>"success", "message"=>"Updated password"], $result);
+        $this->assertEquals([
+            'state' => 'success',
+            'message' => 'Updated password',
+        ], $result);
     }
 }

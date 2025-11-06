@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class DeleteImagesControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -13,19 +16,24 @@ final class DeleteImagesControllerTest extends TestCase
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
     }
 
-    public function test_no_access_doesnt_allow_deleting_images() :void
+    public function testNoAccessDoesntAllowDeletingImages(): void
     {
         $this->expectException(\Exception::class);
         $_POST = [
-            "imageData"=>[
-                ["hostId"=>2, "fingerprint"=>"fakeFingerPrint"]
-            ]
+            'imageData' => [
+                [
+                    'hostId' => 2,
+                    'fingerprint' => 'fakeFingerPrint',
+                ],
+            ],
         ];
-
 
         $result = $this->routeApi->route(
             Request::create('/api/Images/DeleteImagesController/delete', 'POST'),
-            ["userid"=>2, "project"=>"testProject"],
+            [
+                'userid' => 2,
+                'project' => 'testProject',
+            ],
             true
         );
     }

@@ -2,30 +2,20 @@
 
 namespace dhope0000\LXDClient\Tools\Backups;
 
+use dhope0000\LXDClient\Constants\BackupStrategies;
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\FetchInstanceBackups;
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\FetchBackupSchedules;
-use dhope0000\LXDClient\Tools\Instances\Backups\DeleteLocalBackup;
-use dhope0000\LXDClient\Objects\Host;
-use dhope0000\LXDClient\Constants\BackupStrategies;
 use dhope0000\LXDClient\Model\Users\FetchUsers;
+use dhope0000\LXDClient\Tools\Instances\Backups\DeleteLocalBackup;
 
 class EnforceRetentionRules
 {
-    private $fetchBackupSchedules;
-    private $fetchInstanceBackups;
-    private $deleteLocalBackup;
-    private $fetchUsers;
-    
     public function __construct(
-        FetchInstanceBackups $fetchInstanceBackups,
-        FetchBackupSchedules $fetchBackupSchedules,
-        DeleteLocalBackup $deleteLocalBackup,
-        FetchUsers $fetchUsers
+        private readonly FetchInstanceBackups $fetchInstanceBackups,
+        private readonly FetchBackupSchedules $fetchBackupSchedules,
+        private readonly DeleteLocalBackup $deleteLocalBackup,
+        private readonly FetchUsers $fetchUsers
     ) {
-        $this->fetchBackupSchedules = $fetchBackupSchedules;
-        $this->fetchInstanceBackups = $fetchInstanceBackups;
-        $this->deleteLocalBackup = $deleteLocalBackup;
-        $this->fetchUsers = $fetchUsers;
     }
 
     public function enforce()
@@ -35,12 +25,12 @@ class EnforceRetentionRules
         foreach ($hostBackups as $hostId => $scheduleItems) {
             $adminUserId = $this->fetchUsers->fetchAnyAdminUserId();
             foreach ($scheduleItems as $item) {
-                $instanceBackups  = [];
+                $instanceBackups = [];
 
-                if ($item["strategyId"] == BackupStrategies::IMPORT_AND_DELETE) {
-                    $instanceBackups = $this->fetchInstanceBackups->fetchAll($hostId, $item["instance"]);
+                if ($item['strategyId'] == BackupStrategies::IMPORT_AND_DELETE) {
+                    $instanceBackups = $this->fetchInstanceBackups->fetchAll($hostId, $item['instance']);
                     foreach ($instanceBackups as $i => $b) {
-                        if ($b["dateDeleted"] !== null) {
+                        if ($b['dateDeleted'] !== null) {
                             unset($instanceBackups[$i]);
                         }
                     }
@@ -49,21 +39,23 @@ class EnforceRetentionRules
 
                 $backupCount = count($instanceBackups);
 
-                if ($backupCount <= 1 || $backupCount < $item["scheduleRetention"]) {
+                if ($backupCount <= 1 || $backupCount < $item['scheduleRetention']) {
                     continue;
                 }
 
                 $instanceBackups = array_reverse($instanceBackups);
 
-                if ((new \DateTime($instanceBackups[0]["dateCreated"])) > (new \DateTime($instanceBackups[$backupCount - 1]["dateCreated"]))) {
-                    throw new \Exception("Developer change fail - Backups in wrong order", 1);
+                if ((new \DateTime($instanceBackups[0]['dateCreated'])) > (new \DateTime(
+                    $instanceBackups[$backupCount - 1]['dateCreated']
+                ))) {
+                    throw new \Exception('Developer change fail - Backups in wrong order', 1);
                 }
 
-                $toRemoveCount = $backupCount - $item["scheduleRetention"];
+                $toRemoveCount = $backupCount - $item['scheduleRetention'];
 
-                if ($item["strategyId"] == BackupStrategies::IMPORT_AND_DELETE) {
+                if ($item['strategyId'] == BackupStrategies::IMPORT_AND_DELETE) {
                     for ($i = 0; $i < $toRemoveCount; $i++) {
-                        $this->deleteLocalBackup->delete($adminUserId, $instanceBackups[$i]["id"]);
+                        $this->deleteLocalBackup->delete($adminUserId, $instanceBackups[$i]['id']);
                     }
                 }
             }

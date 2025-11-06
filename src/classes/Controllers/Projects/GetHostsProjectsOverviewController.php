@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetHostsProjectsOverviewController
 {
-    private $getHostProjectsOverview;
-
-    public function __construct(GetHostProjectsOverview $getHostProjectsOverview)
-    {
-        $this->getHostProjectsOverview = $getHostProjectsOverview;
+    public function __construct(
+        private readonly GetHostProjectsOverview $getHostProjectsOverview
+    ) {
     }
 
     /**

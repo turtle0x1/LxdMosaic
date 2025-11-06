@@ -4,24 +4,17 @@ namespace dhope0000\LXDClient\Controllers\InstanceSettings;
 
 use dhope0000\LXDClient\Model\InstanceSettings\GetSettings;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
-use dhope0000\LXDClient\Tools\Utilities\IsUpToDate;
 use dhope0000\LXDClient\Tools\Utilities\DateTools;
+use dhope0000\LXDClient\Tools\Utilities\IsUpToDate;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetAllSettingsController
 {
-    private $getSettings;
-    private $validatePermissions;
-    private $dateTools;
-    
     public function __construct(
-        GetSettings $getSettings,
-        ValidatePermissions $validatePermissions,
-        DateTools $dateTools
+        private readonly GetSettings $getSettings,
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly DateTools $dateTools
     ) {
-        $this->getSettings = $getSettings;
-        $this->validatePermissions = $validatePermissions;
-        $this->dateTools = $dateTools;
     }
 
     /**
@@ -32,9 +25,9 @@ class GetAllSettingsController
         $this->validatePermissions->isAdminOrThrow($userId);
 
         return [
-            "settings"=>$this->getSettings->getAllSettingsWithLatestValues(),
-            "versionDetails"=>IsUpToDate::isIt(),
-            "timezones"=>$this->dateTools->getTimezoneList()
+            'settings' => $this->getSettings->getAllSettingsWithLatestValues(),
+            'versionDetails' => IsUpToDate::isIt(),
+            'timezones' => $this->dateTools->getTimezoneList(),
         ];
     }
 }

@@ -8,15 +8,11 @@ use dhope0000\LXDClient\Tools\Utilities\DateTools;
 
 class GetMetricsForContainer
 {
-    private $fetchMetrics;
-    private $fetchType;
-    private $dateTools;
-
-    public function __construct(FetchMetrics $fetchMetrics, FetchType $fetchType, DateTools $dateTools)
-    {
-        $this->fetchMetrics = $fetchMetrics;
-        $this->fetchType = $fetchType;
-        $this->dateTools = $dateTools;
+    public function __construct(
+        private readonly FetchMetrics $fetchMetrics,
+        private readonly FetchType $fetchType,
+        private readonly DateTools $dateTools
+    ) {
     }
 
     public function getAllTypes($hostId, $container)
@@ -26,11 +22,11 @@ class GetMetricsForContainer
 
     public function getTypeFilters($hostId, $container, $type)
     {
-        $startDate = (new \DateTime)->modify("-6 months");
+        $startDate = (new \DateTime())->modify('-6 months');
         $allMetrics = $this->fetchMetrics->fetchByHostContainerType($hostId, $container, $type, $startDate);
         $keys = [];
         foreach ($allMetrics as $metricsIndex => $metricEntry) {
-            $data = json_decode($metricEntry["data"], true);
+            $data = json_decode((string) $metricEntry['data'], true);
             // We iterate through all the seen entries because the user
             // may have added a new key at some random point at time but this
             // could be way to slow with to much data
@@ -42,26 +38,19 @@ class GetMetricsForContainer
         return array_values($keys);
     }
 
-    public function get($hostId, $container, $type, $filter, $range = "P30I")
+    public function get($hostId, $container, $type, $filter, $range = 'P30I')
     {
         $startDate = (new \DateTime())->modify($range);
 
-        $allMetrics = $this->fetchMetrics->fetchByHostContainerType(
-            $hostId,
-            $container,
-            $type,
-            $startDate
-        );
+        $allMetrics = $this->fetchMetrics->fetchByHostContainerType($hostId, $container, $type, $startDate);
 
-        $period = new \DatePeriod(
-            $startDate,
-            new \DateInterval('P1D'),
-            (new \DateTime())->setTime(23, 59, 00)
-        );
+        $period = new \DatePeriod($startDate, new \DateInterval('P1D'), (new \DateTime())->setTime(23, 59, 00));
 
         $dataByDate = [];
 
-        $numberOfDays = (int) ($period->getStartDate())->diff($period->getEndDate())->format("%R%a");
+        $numberOfDays = (int) ($period->getStartDate())
+            ->diff($period->getEndDate())
+            ->format('%R%a');
         $moreThanOneDay = $numberOfDays > 1;
 
         $step = 1;
@@ -72,25 +61,35 @@ class GetMetricsForContainer
         }
 
         foreach ($period as $key => $value) {
-            $dateString = $value->format("Y-m-d");
+            $dateString = $value->format('Y-m-d');
 
             $startMinute = 0;
             $startHour = 0;
-            $stopAtNow = $dateString === $period->getEndDate()->format("Y-m-d");
+            $stopAtNow = $dateString === $period->getEndDate()
+                ->format('Y-m-d');
 
             // If this day is the start date
-            if ($period->getStartDate()->format("Y-m-d") === $dateString) {
-                $startHour = $period->getStartDate()->format("H");
-                $startMinute = $period->getStartDate()->format("i");
+            if ($period->getStartDate()->format('Y-m-d') === $dateString) {
+                $startHour = $period->getStartDate()
+                    ->format('H');
+                $startMinute = $period->getStartDate()
+                    ->format('i');
             }
 
-            $dataByDate[$dateString] = $this->dateTools->hoursRange($startHour, 24, $step, "", $stopAtNow, $startMinute);
+            $dataByDate[$dateString] = $this->dateTools->hoursRange(
+                $startHour,
+                24,
+                $step,
+                '',
+                $stopAtNow,
+                $startMinute
+            );
         }
 
         foreach ($allMetrics as $metricsIndex => $metricEntry) {
-            $data = json_decode($metricEntry["data"], true);
+            $data = json_decode((string) $metricEntry['data'], true);
 
-            if ($filter !== "") {
+            if ($filter !== '') {
                 $found = false;
                 foreach ($data as $dataKey => $dataValue) {
                     if ($dataKey == $filter) {
@@ -108,12 +107,12 @@ class GetMetricsForContainer
                 continue;
             }
 
-            $date = new \DateTimeImmutable($metricEntry["date"]);
+            $date = new \DateTimeImmutable($metricEntry['date']);
 
-            $format = "H:i";
+            $format = 'H:i';
 
-            if (array_key_exists($date->format($format), $dataByDate[$date->format("Y-m-d")])) {
-                $dataByDate[$date->format("Y-m-d")][$date->format($format)] = $data;
+            if (array_key_exists($date->format($format), $dataByDate[$date->format('Y-m-d')])) {
+                $dataByDate[$date->format('Y-m-d')][$date->format($format)] = $data;
             }
         }
 
@@ -124,15 +123,15 @@ class GetMetricsForContainer
         foreach ($dataByDate as $date => $data) {
             $times = array_keys($data);
             foreach ($times as $time) {
-                $labels[] = $date . " " . $time;
+                $labels[] = $date . ' ' . $time;
             }
 
             $outData = array_merge($outData, array_values($data));
         }
         return [
-            "formatBytes"=>$this->fetchType->formatTypeAsBytes($type),
-            "labels"=>$labels,
-            "data"=>$outData
+            'formatBytes' => $this->fetchType->formatTypeAsBytes($type),
+            'labels' => $labels,
+            'data' => $outData,
         ];
     }
 }

@@ -8,15 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetSnapshotSoftwareListController
 {
-    private $fetchUserDetails;
-    private $getSnapshotSoftwareList;
-
     public function __construct(
-        FetchUserDetails $fetchUserDetails,
-        GetSnapshotSoftwareList $getSnapshotSoftwareList
+        private readonly FetchUserDetails $fetchUserDetails,
+        private readonly GetSnapshotSoftwareList $getSnapshotSoftwareList
     ) {
-        $this->fetchUserDetails = $fetchUserDetails;
-        $this->getSnapshotSoftwareList = $getSnapshotSoftwareList;
     }
 
     /**
@@ -26,7 +21,7 @@ class GetSnapshotSoftwareListController
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);
         if (!$isAdmin) {
-            throw new \Exception("No access", 1);
+            throw new \Exception('No access', 1);
         }
         $date = new \DateTimeImmutable($date);
         return $this->getSnapshotSoftwareList->get($date);

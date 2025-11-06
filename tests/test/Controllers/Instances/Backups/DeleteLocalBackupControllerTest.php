@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 use Symfony\Component\HttpFoundation\Request;
 
 final class DeleteLocalBackupControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -19,28 +21,33 @@ final class DeleteLocalBackupControllerTest extends TestCase
         $this->backupId = $inesrtBackup->insert(
             new \DateTime(),
             1,
-            "default",
-            "fakeInstance",
-            "fakeBackupName",
-            "/not/a/real/path",
+            'default',
+            'fakeInstance',
+            'fakeBackupName',
+            '/not/a/real/path',
             0
         );
     }
 
-    public function tearDown() :void
+    #[\Override]
+    protected function tearDown(): void
     {
         $this->database->dbObject->rollBack();
     }
 
-    public function test_no_acces_to_project_doesnt_allow_delete() :void
+    public function testNoAccesToProjectDoesntAllowDelete(): void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["backupId"=>$this->backupId];
-
+        $_POST = [
+            'backupId' => $this->backupId,
+        ];
 
         $result = $this->routeApi->route(
             Request::create('/api/Instances/Backups/DeleteLocalBackupController/delete', 'POST'),
-            ["userid"=>2, "project"=>"testProject"],
+            [
+                'userid' => 2,
+                'project' => 'testProject',
+            ],
             true
         );
     }

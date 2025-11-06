@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Instances\Settings;
 
 use dhope0000\LXDClient\Model\Instances\Settings\GetSettings;
@@ -6,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetAllAvailableSettingsController
 {
-    private $getSettings;
-    
-    public function __construct(GetSettings $getSettings)
-    {
-        $this->getSettings = $getSettings;
+    public function __construct(
+        private readonly GetSettings $getSettings
+    ) {
     }
 
     /**

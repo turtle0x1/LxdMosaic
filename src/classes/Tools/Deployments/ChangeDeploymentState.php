@@ -2,29 +2,20 @@
 
 namespace dhope0000\LXDClient\Tools\Deployments;
 
-use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
-use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
-use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInDeployment;
 use dhope0000\LXDClient\Constants\StateConstants;
+use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
+use dhope0000\LXDClient\Tools\Deployments\Containers\GetContainersInDeployment;
 use dhope0000\LXDClient\Tools\Deployments\Containers\SetStartTimes;
+use dhope0000\LXDClient\Tools\Deployments\Profiles\HostHaveDeploymentProfiles;
 
 class ChangeDeploymentState
 {
-    private $authoriseDeploymentAccess;
-    private $hostHaveDeploymentProfiles;
-    private $getContainersInDeployment;
-    private $setStartTimes;
-    
     public function __construct(
-        AuthoriseDeploymentAccess $authoriseDeploymentAccess,
-        HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
-        GetContainersInDeployment $getContainersInDeployment,
-        SetStartTimes $setStartTimes
+        private readonly AuthoriseDeploymentAccess $authoriseDeploymentAccess,
+        private readonly HostHaveDeploymentProfiles $hostHaveDeploymentProfiles,
+        private readonly GetContainersInDeployment $getContainersInDeployment,
+        private readonly SetStartTimes $setStartTimes
     ) {
-        $this->authoriseDeploymentAccess = $authoriseDeploymentAccess;
-        $this->hostHaveDeploymentProfiles = $hostHaveDeploymentProfiles;
-        $this->getContainersInDeployment = $getContainersInDeployment;
-        $this->setStartTimes = $setStartTimes;
     }
 
     public function change(int $userId, int $deploymentId, string $state)
@@ -35,15 +26,11 @@ class ChangeDeploymentState
         $containers = $this->getContainersInDeployment->getFromProfile($profiles);
 
         foreach ($containers as $host) {
-            foreach ($host->getCustomProp("containers") as $container) {
-                $host->instances->setState($container["name"], $state, 30, true, false, true);
+            foreach ($host->getCustomProp('containers') as $container) {
+                $host->instances->setState($container['name'], $state, 30, true, false, true);
 
-                if (StateConstants::START == $state) {
-                    $this->setStartTimes->set(
-                        $deploymentId,
-                        $host->getHostId(),
-                        $container["name"]
-                    );
+                if ($state == StateConstants::START) {
+                    $this->setStartTimes->set($deploymentId, $host->getHostId(), $container['name']);
                 }
             }
         }

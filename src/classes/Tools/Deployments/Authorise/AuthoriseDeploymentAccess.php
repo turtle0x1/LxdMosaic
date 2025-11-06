@@ -6,23 +6,17 @@ use dhope0000\LXDClient\Model\Deployments\Projects\FetchDeploymentProjectsUsers;
 
 class AuthoriseDeploymentAccess
 {
-    private $fetchDeploymentProjectsUsers;
-    
     public function __construct(
-        FetchDeploymentProjectsUsers $fetchDeploymentProjectsUsers
+        private readonly FetchDeploymentProjectsUsers $fetchDeploymentProjectsUsers
     ) {
-        $this->fetchDeploymentProjectsUsers = $fetchDeploymentProjectsUsers;
     }
 
-    public function authorise(int $userId, int $deploymentId) :bool
+    public function authorise(int $userId, int $deploymentId): bool
     {
-        $allowedAccess = $this->fetchDeploymentProjectsUsers->userHasAccess(
-            $userId,
-            $deploymentId
-        );
+        $allowedAccess = $this->fetchDeploymentProjectsUsers->userHasAccess($userId, $deploymentId);
 
         if ($allowedAccess === false) {
-            throw new \Exception("No access to deployment", 1);
+            throw new \Exception('No access to deployment', 1);
         }
 
         return true;

@@ -1,10 +1,14 @@
 <?php
+
 namespace dhope0000\LXDClient\Constants;
 
 class LxdApiExtensions
 {
-    const CONTAINER_BACKUP = "container_backup";
-    const VIRTUAL_MACHINES = "virtual-machines";
-    const CONTAINER_FULL = "container_full";
-    const WARNINGS = "warnings";
+    public const CONTAINER_BACKUP = 'container_backup';
+
+    public const VIRTUAL_MACHINES = 'virtual-machines';
+
+    public const CONTAINER_FULL = 'container_full';
+
+    public const WARNINGS = 'warnings';
 }

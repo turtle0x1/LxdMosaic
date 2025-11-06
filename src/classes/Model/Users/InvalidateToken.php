@@ -15,19 +15,19 @@ class InvalidateToken
 
     public function invalidate(int $userId, string $token)
     {
-        $sql = "DELETE FROM
+        $sql = 'DELETE FROM
                     `User_Api_Tokens`
                 WHERE
                     `UAT_Token` = :token
                 AND
                     `UAT_User_ID` = :user_id
 		AND
-                    `UAT_Permanent` = 0"
-		;
+                    `UAT_Permanent` = 0'
+        ;
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":user_id" => $userId,
-	    ":token"   => $token
+            ':user_id' => $userId,
+            ':token' => $token,
         ]);
         return $do->rowCount() ? true : false;
     }

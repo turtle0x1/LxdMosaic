@@ -1,14 +1,14 @@
 <?php
 
+use dhope0000\LXDClient\Model\Search\Index\DeleteIndex;
 use dhope0000\LXDClient\Model\Search\Index\InsertIndex;
 use dhope0000\LXDClient\Tools\Search\CreateSearchIndex;
-use dhope0000\LXDClient\Model\Search\Index\DeleteIndex;
 
 $_ENV = getenv();
 
-date_default_timezone_set("UTC");
+date_default_timezone_set('UTC');
 
-require __DIR__ . "/../../../vendor/autoload.php";
+require __DIR__ . '/../../../vendor/autoload.php';
 
 $container = (new \DI\ContainerBuilder())->build();
 

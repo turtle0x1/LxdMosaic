@@ -1,17 +1,16 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Profiles\Search;
 
-use dhope0000\LXDClient\Tools\Profiles\GetProfilesOnAllHosts;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Profiles\GetProfilesOnAllHosts;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SearchProfiles
 {
-    private $getProfilesOnAllHosts;
-    
-    public function __construct(GetProfilesOnAllHosts $getProfilesOnAllHosts)
-    {
-        $this->getProfilesOnAllHosts = $getProfilesOnAllHosts;
+    public function __construct(
+        private readonly GetProfilesOnAllHosts $getProfilesOnAllHosts
+    ) {
     }
 
     /**
@@ -30,10 +29,12 @@ class SearchProfiles
         $profiles = $host->profiles->all();
         $output = [];
         foreach ($profiles as $profile) {
-            if (stripos($profile, $search) === false) {
+            if (stripos((string) $profile, $search) === false) {
                 continue;
             }
-            $output[] = ["name"=>$profile];
+            $output[] = [
+                'name' => $profile,
+            ];
         }
         return $output;
     }

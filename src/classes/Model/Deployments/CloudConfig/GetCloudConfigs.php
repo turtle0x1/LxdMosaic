@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class GetCloudConfigs
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class GetCloudConfigs
 
     public function getAll(int $deploymentId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `DCC_Cloud_Config_Rev_ID` as `revId`,
                     `CC_ID` as `id`,
                     `CC_Name` as `name`,
@@ -28,10 +28,10 @@ class GetCloudConfigs
                     `Cloud_Config_Data`.`CCD_Cloud_Config_ID` = `Cloud_Config`.`CC_ID`
                 WHERE
                     `DCC_Deployment_ID` = :deploymentId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":deploymentId"=>$deploymentId
+            ':deploymentId' => $deploymentId,
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class InsertDashboardGraph
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -22,7 +22,7 @@ class InsertDashboardGraph
         string $filter,
         string $range
     ) {
-        $sql = "INSERT INTO `User_Dashboard_Graphs`
+        $sql = 'INSERT INTO `User_Dashboard_Graphs`
                 (
                     `UDG_UD_ID`,
                     `UDG_Name`,
@@ -40,16 +40,16 @@ class InsertDashboardGraph
                     :filter,
                     :range
                 )
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":dashboardId"=>$dashboardId,
-            ":name"=>$name,
-            ":hostId"=>$hostId,
-            ":instance"=>$instance,
-            ":metricId"=>$metricId,
-            ":filter"=>$filter,
-            ":range"=>$range
+            ':dashboardId' => $dashboardId,
+            ':name' => $name,
+            ':hostId' => $hostId,
+            ':instance' => $instance,
+            ':metricId' => $metricId,
+            ':filter' => $filter,
+            ':range' => $range,
         ]);
         return $do->rowCount() ? true : false;
     }

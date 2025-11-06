@@ -7,8 +7,8 @@ use dhope0000\LXDClient\Objects\Host;
 class UpdateImageProperties
 {
     private $supportedProprties = [
-        "public"=>"",
-        "auto_update"=>""
+        'public' => '',
+        'auto_update' => '',
     ];
 
     public function update(Host $host, string $fingerprint, array $settings)
@@ -19,9 +19,9 @@ class UpdateImageProperties
 
         foreach ($newProps as $key => $value) {
             // Its late but it works
-            if ($value === "false") {
+            if ($value === 'false') {
                 $value = false;
-            } elseif ($value === "true") {
+            } elseif ($value === 'true') {
                 $value = true;
             }
             $details[$key] = $value;

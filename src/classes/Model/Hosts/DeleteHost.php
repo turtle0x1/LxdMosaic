@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Model\Hosts;
 
 use dhope0000\LXDClient\Model\Database\Database;
@@ -6,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class DeleteHost
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -14,14 +15,14 @@ class DeleteHost
 
     public function delete(int $hostId)
     {
-        $sql = "DELETE FROM
+        $sql = 'DELETE FROM
                     `Hosts`
                 WHERE
                     `Host_ID` = :hostId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId
+            ':hostId' => $hostId,
         ]);
         return $do->rowCount() ? true : false;
     }

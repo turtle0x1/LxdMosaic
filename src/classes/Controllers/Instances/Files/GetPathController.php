@@ -8,21 +8,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetPathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $getPath;
-
-    public function __construct(GetPath $getPath)
-    {
-        $this->getPath = $getPath;
+    public function __construct(
+        private readonly GetPath $getPath
+    ) {
     }
+
     /**
      * @Route("/api/Instances/Files/GetPathController/get", name="Get Instance Path Contents", methods={"POST"})
      */
-    public function get(
-        Host $host,
-        string $container,
-        string $path,
-        $download
-    ) {
+    public function get(Host $host, string $container, string $path, $download)
+    {
         return $this->getPath->get($host, $container, $path, (int) $download);
     }
 }

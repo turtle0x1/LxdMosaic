@@ -6,23 +6,23 @@ class KnownControllerConversions
 {
     private $knowHowToConvert = [
         // Instances
-        "dhope0000\LXDClient\Controllers\Instances\CreateController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Instances\CreateInstance",
-        "dhope0000\LXDClient\Controllers\Instances\DeleteInstanceController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Instances\DeleteInstance",
+        "dhope0000\LXDClient\Controllers\Instances\CreateController\create" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Instances\CreateInstance",
+        "dhope0000\LXDClient\Controllers\Instances\DeleteInstanceController\delete" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Instances\DeleteInstance",
         // Backups
-        "dhope0000\LXDClient\Controllers\Instances\Backups\ScheduleBackupController\schedule"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Backups\ScheduleBackup",
-        "dhope0000\LXDClient\Controllers\Instances\Backups\DisableScheduledBackupsController\disable"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Backups\DisableBackupSchedule",
+        "dhope0000\LXDClient\Controllers\Instances\Backups\ScheduleBackupController\schedule" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Backups\ScheduleBackup",
+        "dhope0000\LXDClient\Controllers\Instances\Backups\DisableScheduledBackupsController\disable" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Backups\DisableBackupSchedule",
         // Projects
-        "dhope0000\LXDClient\Controllers\Projects\CreateProjectController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Projects\CreateProject",
-        "dhope0000\LXDClient\Controllers\Projects\DeleteProjectController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Projects\DeleteProject",
+        "dhope0000\LXDClient\Controllers\Projects\CreateProjectController\create" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Projects\CreateProject",
+        "dhope0000\LXDClient\Controllers\Projects\DeleteProjectController\delete" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Projects\DeleteProject",
         // Profiles
-        "dhope0000\LXDClient\Controllers\Profiles\CreateProfileController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Profiles\CreateProfile",
-        "dhope0000\LXDClient\Controllers\Profiles\DeleteProfileController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Profiles\DeleteProfile",
+        "dhope0000\LXDClient\Controllers\Profiles\CreateProfileController\create" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Profiles\CreateProfile",
+        "dhope0000\LXDClient\Controllers\Profiles\DeleteProfileController\delete" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Profiles\DeleteProfile",
         // Networks
-        "dhope0000\LXDClient\Controllers\Networks\CreateNetworkController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Networks\CreateNetwork",
-        "dhope0000\LXDClient\Controllers\Networks\DeleteNetworkController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Networks\DeleteNetwork",
+        "dhope0000\LXDClient\Controllers\Networks\CreateNetworkController\create" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Networks\CreateNetwork",
+        "dhope0000\LXDClient\Controllers\Networks\DeleteNetworkController\delete" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Networks\DeleteNetwork",
         // Storage
-        "dhope0000\LXDClient\Controllers\Storage\CreatePoolController\create"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Storage\CreateStorage",
-        "dhope0000\LXDClient\Controllers\Storage\DeleteStoragePoolController\delete"=>"dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Storage\DeleteStorage",
+        "dhope0000\LXDClient\Controllers\Storage\CreatePoolController\create" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Storage\CreateStorage",
+        "dhope0000\LXDClient\Controllers\Storage\DeleteStoragePoolController\delete" => "dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\Convertors\Storage\DeleteStorage",
     ];
 
     public function getAllControllers()
@@ -33,7 +33,7 @@ class KnownControllerConversions
     public function getConvertorClass(string $controller)
     {
         if (!isset($this->knowHowToConvert[$controller])) {
-            throw new \Exception("Trying to convert a controller we dont know to convert", 1);
+            throw new \Exception('Trying to convert a controller we dont know to convert', 1);
         }
 
         return $this->knowHowToConvert[$controller];

@@ -1,27 +1,33 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class CreateProjectTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
         $container = $builder->build();
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
     }
+
     /**
      * @dataProvider data_createProjectData
      */
-    public function test_createProject($data, $expected) :void
+    public function testCreateProject($data, $expected): void
     {
         $_POST = $data;
 
         $result = $this->routeApi->route(
             Request::create('/api/Projects/CreateProjectController/create', 'POST'),
-            ["userid"=>1],
+            [
+                'userid' => 1,
+            ],
             true
         );
 
@@ -33,14 +39,15 @@ final class CreateProjectTest extends TestCase
         return [
             [
                 [
-                    "hosts"=>[1],
-                    "name"=>"testProject",
-                    "description"=>"testProjectDescription"
+                    'hosts' => [1],
+                    'name' => 'testProject',
+                    'description' => 'testProjectDescription',
                 ],
                 [
-                    "state"=>"success", "message"=>"Created Projects"
-                ]
-            ]
+                    'state' => 'success',
+                    'message' => 'Created Projects',
+                ],
+            ],
         ];
     }
 }

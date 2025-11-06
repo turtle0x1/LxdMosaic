@@ -1,30 +1,24 @@
 <?php
+
 namespace dhope0000\LXDClient\Model\Client;
 
-use GuzzleHttp\Client as GuzzleClient;
-use Http\Adapter\Guzzle7\Client as GuzzleAdapter;
-use \Opensaucesystems\Lxd\Client;
 use dhope0000\LXDClient\App\RouteApi;
+use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\User\GetUserProject;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
+use GuzzleHttp\Client as GuzzleClient;
+use Http\Adapter\Guzzle7\Client as GuzzleAdapter;
+use Opensaucesystems\Lxd\Client;
 
 class LxdClient
 {
-    private $routeApi;
-    private $getUserProject;
-    private $getDetails;
-    
     private $clientBag = [];
 
     public function __construct(
-        RouteApi $routeApi,
-        GetUserProject $getUserProject,
-        GetDetails $getDetails
+        private readonly RouteApi $routeApi,
+        private readonly GetUserProject $getUserProject,
+        private readonly GetDetails $getDetails
     ) {
-        $this->routeApi = $routeApi;
-        $this->getUserProject = $getUserProject;
-        $this->getDetails = $getDetails;
     }
 
     public function getClientWithHost(Host $host, $checkCache = true, $setProject = true)
@@ -32,7 +26,6 @@ class LxdClient
         if ($checkCache && isset($this->clientBag[$host->getUrl()])) {
             return $this->clientBag[$host->getUrl()];
         }
-
 
         $socketPath = $this->getDetails->getSocketPath($host->getHostId());
         $certPath = $this->createFullcertPath($host->getCertPath());
@@ -44,7 +37,7 @@ class LxdClient
 
             if ($project == null) {
                 $userId = $this->routeApi->getUserId();
-                $project = "default";
+                $project = 'default';
                 if (!empty($userId)) {
                     $project = $this->getUserProject->getForHost($userId, $host);
                 }
@@ -55,30 +48,22 @@ class LxdClient
         return $client;
     }
 
-    private function createFullcertPath(string $certName)
-    {
-        return $_ENV["LXD_CERTS_DIR"] . $certName;
-    }
-
     public function createConfigArray($certLocation, $socketPath)
     {
         $certPath = realpath($certLocation);
 
         if ($certPath === false) {
-            throw new \Exception("Certificate has gone walk abouts", 1);
+            throw new \Exception('Certificate has gone walk abouts', 1);
         }
 
         $config = [
             'verify' => false,
-            'cert' => [
-                $certPath,
-                ''
-            ]
+            'cert' => [$certPath, ''],
         ];
 
         if ($socketPath !== null) {
-            $config["curl"] = [
-                CURLOPT_UNIX_SOCKET_PATH => $socketPath
+            $config['curl'] = [
+                CURLOPT_UNIX_SOCKET_PATH => $socketPath,
             ];
         }
 
@@ -88,7 +73,7 @@ class LxdClient
     public function createNewClient($urlAndPort, $config)
     {
         $s = $urlAndPort;
-        if (isset($config["curl"]) && isset($config["curl"][CURLOPT_UNIX_SOCKET_PATH])) {
+        if (isset($config['curl']) && isset($config['curl'][CURLOPT_UNIX_SOCKET_PATH])) {
             $s = 'http://unix.socket/';
         }
         $guzzle = new GuzzleClient($config);
@@ -96,5 +81,10 @@ class LxdClient
         $client = new Client($adapter, null, $s);
         $this->clientBag[$urlAndPort] = $client;
         return $client;
+    }
+
+    private function createFullcertPath(string $certName)
+    {
+        return $_ENV['LXD_CERTS_DIR'] . $certName;
     }
 }

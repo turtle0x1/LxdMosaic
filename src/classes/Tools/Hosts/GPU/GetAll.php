@@ -2,23 +2,21 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts\GPU;
 
-use dhope0000\LXDClient\Tools\Hosts\GetResources;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Hosts\GetResources;
 
 class GetAll
 {
-    private $getResources;
-    
-    public function __construct(GetResources $getResources)
-    {
-        $this->getResources = $getResources;
+    public function __construct(
+        private readonly GetResources $getResources
+    ) {
     }
 
     public function getAll(Host $host)
     {
         $x = $this->getResources->getHostExtended($host);
-        if ($x["extensions"]["resGpu"]) {
-            return $x["gpu"]["cards"];
+        if ($x['extensions']['resGpu']) {
+            return $x['gpu']['cards'];
         }
 
         return [];

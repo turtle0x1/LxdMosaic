@@ -1,19 +1,18 @@
 <?php
 
- namespace dhope0000\LXDClient\Controllers\Instances\Packages;
+namespace dhope0000\LXDClient\Controllers\Instances\Packages;
 
-use dhope0000\LXDClient\Tools\Instances\Packages\GetLatestPackages;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Instances\Packages\GetLatestPackages;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetLatestPackagesController
 {
-    private $getLatestPackages;
-    
-    public function __construct(GetLatestPackages $getLatestPackages)
-    {
-        $this->getLatestPackages = $getLatestPackages;
+    public function __construct(
+        private readonly GetLatestPackages $getLatestPackages
+    ) {
     }
+
     /**
      * @Route("/api/instances/packages/latest", name="Get instance latest packages", methods={"POST", "GET"})
      */

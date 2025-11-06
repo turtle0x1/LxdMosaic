@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SeachUsersController
 {
-    private $searchUsers;
-
-    public function __construct(SearchUsers $searchUsers)
-    {
-        $this->searchUsers = $searchUsers;
+    public function __construct(
+        private readonly SearchUsers $searchUsers
+    ) {
     }
 
     /**

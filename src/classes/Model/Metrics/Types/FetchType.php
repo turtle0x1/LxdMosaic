@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchType
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,33 +15,32 @@ class FetchType
 
     public function fetchIdByTemplateKey(string $key)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `IMT_ID`
                 FROM
                     `Instance_Metric_Types`
                 WHERE
                     `IMT_Metrics_Template_Key` = :key
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":key"=>$key
+            ':key' => $key,
         ]);
         return $do->fetchColumn();
     }
 
-
-    public function formatTypeAsBytes(int $typeId) :bool
+    public function formatTypeAsBytes(int $typeId): bool
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `IMT_Format_Bytes`
                 FROM
                     `Instance_Metric_Types`
                 WHERE
                     `IMT_ID` = :typeId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":typeId"=>$typeId
+            ':typeId' => $typeId,
         ]);
         return (int) $do->fetchColumn() === 1;
     }

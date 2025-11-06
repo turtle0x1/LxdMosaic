@@ -2,17 +2,15 @@
 
 namespace dhope0000\LXDClient\Controllers\Hosts\GPU;
 
-use dhope0000\LXDClient\Tools\Hosts\GPU\GetAll;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Hosts\GPU\GetAll;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetAllController
 {
-    private $getAll;
-    
-    public function __construct(GetAll $getAll)
-    {
-        $this->getAll = $getAll;
+    public function __construct(
+        private readonly GetAll $getAll
+    ) {
     }
 
     /**

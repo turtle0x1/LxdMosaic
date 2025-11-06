@@ -152,5 +152,5 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
 });
 </script>
 <?php
-    require_once __DIR__ . "/confirmDeploy.php";
+    require_once __DIR__ . '/confirmDeploy.php';
 ?>

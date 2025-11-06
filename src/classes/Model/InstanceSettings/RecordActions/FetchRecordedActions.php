@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchRecordedActions
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -28,7 +28,7 @@ class FetchRecordedActions
                 LIMIT :ammount
                 ";
         $do = $this->database->prepare($sql);
-        $do->bindValue(":ammount", (int) $ammount, \PDO::PARAM_INT);
+        $do->bindValue(':ammount', (int) $ammount, \PDO::PARAM_INT);
         $do->execute();
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -52,9 +52,9 @@ class FetchRecordedActions
                 LIMIT :ammount
                 ";
         $do = $this->database->prepare($sql);
-        $do->bindValue(":controller", $controller, \PDO::PARAM_STR);
-        $do->bindValue(":userId", (int) $userId, \PDO::PARAM_INT);
-        $do->bindValue(":ammount", (int) $ammount, \PDO::PARAM_INT);
+        $do->bindValue(':controller', $controller, \PDO::PARAM_STR);
+        $do->bindValue(':userId', (int) $userId, \PDO::PARAM_INT);
+        $do->bindValue(':ammount', (int) $ammount, \PDO::PARAM_INT);
         $do->execute();
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -74,14 +74,14 @@ class FetchRecordedActions
                 WHERE
                     `RA_User_ID` = ?
                 AND
-                    `RA_Controller` IN ($qMarks)
+                    `RA_Controller` IN ({$qMarks})
                 ORDER BY
                     `RA_ID` DESC
                 ";
         $do = $this->database->prepare($sql);
         $params = array_merge([$userId], $controllers);
         $do->execute($params);
-        return $do->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_ASSOC);
+        return $do->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_ASSOC);
     }
 
     public function fetchForHostInstance(int $hostId, string $instance)
@@ -114,8 +114,8 @@ class FetchRecordedActions
                 ORDER BY `Recorded_Actions`.`RA_Date_Created`  DESC";
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId,
-            ":instance"=>$instance
+            ':hostId' => $hostId,
+            ':instance' => $instance,
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

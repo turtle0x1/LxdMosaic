@@ -6,11 +6,9 @@ use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 
 class GetLatest
 {
-    private $getConfig;
-    
-    public function __construct(GetConfig $getConfig)
-    {
-        $this->getConfig = $getConfig;
+    public function __construct(
+        private readonly GetConfig $getConfig
+    ) {
     }
 
     public function getLatest(int $cloudConfigId)
@@ -18,22 +16,22 @@ class GetLatest
         $latest = $this->getConfig->getLatestConfig($cloudConfigId);
         if (empty($latest)) {
             return [
-                "revisionId"=>null,
-                "cloudConfigId"=>$cloudConfigId,
-                "data"=>"",
-                "imageDetails"=>[],
-                "envVariables"=>[]
+                'revisionId' => null,
+                'cloudConfigId' => $cloudConfigId,
+                'data' => '',
+                'imageDetails' => [],
+                'envVariables' => [],
             ];
         }
-        
-        $latest["imageDetails"] = $this->getJsonOrEmptyArray($latest, "imageDetails");
-        $latest["envVariables"] = $this->getJsonOrEmptyArray($latest, "envVariables");
+
+        $latest['imageDetails'] = $this->getJsonOrEmptyArray($latest, 'imageDetails');
+        $latest['envVariables'] = $this->getJsonOrEmptyArray($latest, 'envVariables');
 
         return $latest;
     }
 
-    private function getJsonOrEmptyArray($array, $key) :array
+    private function getJsonOrEmptyArray($array, $key): array
     {
-        return !empty($array[$key]) ? json_decode($array[$key], true) : [];
+        return !empty($array[$key]) ? json_decode((string) $array[$key], true) : [];
     }
 }

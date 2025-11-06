@@ -2,17 +2,15 @@
 
 namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
-use dhope0000\LXDClient\Tools\Instances\Backups\GetInstanceBackups;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Instances\Backups\GetInstanceBackups;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetInstanceBackupsController
 {
-    private $getInstanceBackups;
-
-    public function __construct(GetInstanceBackups $getInstanceBackups)
-    {
-        $this->getInstanceBackups = $getInstanceBackups;
+    public function __construct(
+        private readonly GetInstanceBackups $getInstanceBackups
+    ) {
     }
 
     /**

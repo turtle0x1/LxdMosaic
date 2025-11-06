@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class GetSetting
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class GetSetting
 
     public function getSettingLatestValue(int $settingId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `ISV_Value`
                 FROM
                     `Instance_Settings_Values`
@@ -24,10 +24,10 @@ class GetSetting
                 ORDER BY
                     `ISV_ID` DESC
                 LIMIT 1
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":settingId"=>$settingId
+            ':settingId' => $settingId,
         ]);
         return $do->fetchColumn();
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Tools\Universe;
@@ -6,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetAllProfilesController
 {
-    private $universe;
-    
-    public function __construct(Universe $universe)
-    {
-        $this->universe = $universe;
+    public function __construct(
+        private readonly Universe $universe
+    ) {
     }
 
     /**
@@ -18,6 +17,6 @@ class GetAllProfilesController
      */
     public function getAllProfiles(int $userId)
     {
-        return $this->universe->getEntitiesUserHasAccesTo($userId, "profiles");
+        return $this->universe->getEntitiesUserHasAccesTo($userId, 'profiles');
     }
 }

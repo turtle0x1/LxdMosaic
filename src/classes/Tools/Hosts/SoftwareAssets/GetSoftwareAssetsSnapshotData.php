@@ -7,27 +7,22 @@ use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 
 class GetSoftwareAssetsSnapshotData
 {
-    private $hostList;
-    private $hasExtension;
-
     private $commandMap = [
         // Ubuntu / deb
-        "apt list --installed" => "aptParse",
+        'apt list --installed' => 'aptParse',
         // Alpine
-        "apk info" => "apkParse",
+        'apk info' => 'apkParse',
         // General package managers
-        "snap list" => "snapParse",
-        "npm list -g -l  --parseable --silent" => "npmParse",
-        "pip list --format=columns" => "pipParse",
-        "composer g show" => "composerParse"
+        'snap list' => 'snapParse',
+        'npm list -g -l  --parseable --silent' => 'npmParse',
+        'pip list --format=columns' => 'pipParse',
+        'composer g show' => 'composerParse',
     ];
 
     public function __construct(
-        HostList $hostList,
-        HasExtension $hasExtension
+        private readonly HostList $hostList,
+        private readonly HasExtension $hasExtension
     ) {
-        $this->hostList = $hostList;
-        $this->hasExtension = $hasExtension;
     }
 
     public function get()
@@ -37,16 +32,19 @@ class GetSoftwareAssetsSnapshotData
         $output = [];
 
         foreach ($hosts as $host) {
-            $supportsProjects = $this->hasExtension->checkWithHost($host, "projects");
+            $supportsProjects = $this->hasExtension->checkWithHost($host, 'projects');
             $output[$host->getHostId()] = [];
-            $allProjects = [["name" => "default", "config" => []]];
+            $allProjects = [[
+                'name' => 'default',
+                'config' => [],
+            ]];
 
             if ($supportsProjects) {
                 $allProjects = $host->projects->all(2);
             }
 
             foreach ($allProjects as $project) {
-                $projectName = $project["name"];
+                $projectName = $project['name'];
 
                 $output[$host->getHostId()][$projectName] = [];
 
@@ -56,24 +54,21 @@ class GetSoftwareAssetsSnapshotData
 
                 $instances = $host->instances->all(1);
                 foreach ($instances as $instance) {
-                    if ((int) $instance["status_code"] !== 103) {
+                    if ((int) $instance['status_code'] !== 103) {
                         continue;
                     }
                     $instacePackages = [];
                     foreach ($this->commandMap as $command => $fn) {
                         try {
-                            $result = $host->instances->execute($instance["name"], $command, true, [], true);
+                            $result = $host->instances->execute($instance['name'], $command, true, [], true);
                             if ($result == null) {
                                 continue;
                             }
-                            $result = $host->instances->logs->read(
-                                $instance["name"],
-                                $result["output"][0]
-                            );
+                            $result = $host->instances->logs->read($instance['name'], $result['output'][0]);
                             $parsedPackages = call_user_func([$this, $fn], $result);
                             $instacePackages = array_merge($instacePackages, $parsedPackages);
-                            $output[$host->getHostId()][$projectName][$instance["name"]] = $instacePackages;
-                        } catch (\Throwable $th) {
+                            $output[$host->getHostId()][$projectName][$instance['name']] = $instacePackages;
+                        } catch (\Throwable) {
                             continue;
                         }
                     }
@@ -85,12 +80,16 @@ class GetSoftwareAssetsSnapshotData
 
     public function aptParse($result)
     {
-        $lines = explode("\n", trim($result));
+        $lines = explode("\n", trim((string) $result));
         $packages = [];
 
         foreach ($lines as $line) {
             // Use regex to extract package details
-            if (preg_match('/^(?P<name>[\w\.\-\/]+),now (?P<version>[\w\:\-\.]+) (?P<architecture>\w+) \[(?P<status>[^\]]+)\]$/', $line, $matches)) {
+            if (preg_match(
+                '/^(?P<name>[\w\.\-\/]+),now (?P<version>[\w\:\-\.]+) (?P<architecture>\w+) \[(?P<status>[^\]]+)\]$/',
+                $line,
+                $matches
+            )) {
                 $packages[] = [
                     'manager' => 'apt',
                     'name' => $matches['name'],
@@ -111,7 +110,7 @@ class GetSoftwareAssetsSnapshotData
     public function snapParse($data)
     {
         // Split the input data into lines
-        $lines = explode("\n", trim($data));
+        $lines = explode("\n", trim((string) $data));
 
         // Remove the header line
         array_shift($lines);
@@ -120,7 +119,11 @@ class GetSoftwareAssetsSnapshotData
 
         foreach ($lines as $line) {
             // Use regex to extract fields
-            if (preg_match('/^(?P<name>[\w\-]+)\s+(?P<version>[\w\.\-]+)\s+(?P<rev>\d+)\s+(?P<tracking>[\w\/\-\.]+)\s+(?P<publisher>[\w\.\-✓✪\*\*]+)\s+(?P<notes>.*)$/', $line, $matches)) {
+            if (preg_match(
+                '/^(?P<name>[\w\-]+)\s+(?P<version>[\w\.\-]+)\s+(?P<rev>\d+)\s+(?P<tracking>[\w\/\-\.]+)\s+(?P<publisher>[\w\.\-✓✪\*\*]+)\s+(?P<notes>.*)$/',
+                $line,
+                $matches
+            )) {
                 $packages[] = [
                     'manager' => 'SNAP',
                     'name' => trim($matches['name']),
@@ -140,7 +143,7 @@ class GetSoftwareAssetsSnapshotData
 
     public function apkParse($data)
     {
-        $lines = explode("\n", $data);
+        $lines = explode("\n", (string) $data);
         array_shift($lines); // Remove the first line
 
         $packages = [];
@@ -171,7 +174,7 @@ class GetSoftwareAssetsSnapshotData
     public function npmParse($data)
     {
         // Split the output into lines
-        $lines = explode("\n", trim($data));
+        $lines = explode("\n", trim((string) $data));
 
         // Initialize an array to hold package details
         $packages = [];
@@ -181,7 +184,7 @@ class GetSoftwareAssetsSnapshotData
             // Skip empty lines
             if (empty($line)) {
                 continue;
-            } else if (strpos($line, "@") === false) {
+            } elseif (!str_contains($line, '@')) {
                 continue;
             }
 
@@ -191,8 +194,8 @@ class GetSoftwareAssetsSnapshotData
             // Get the package path and name/version
             $packagePath = $parts[0];
             $packageInfo = $parts[1];
-            if (strpos($packageInfo, "@") === false) {
-                if (strpos($parts[2], "@") === false) {
+            if (!str_contains($packageInfo, '@')) {
+                if (!str_contains($parts[2], '@')) {
                     continue;
                 }
                 $packageInfo = $parts[2];
@@ -216,7 +219,7 @@ class GetSoftwareAssetsSnapshotData
                 'publisher' => null, // Placeholder for publisher, if applicable
                 'notes' => null, // Placeholder for notes, if applicable
                 'architecture' => null, // Placeholder for architecture, if applicable
-                'status' => 'installed' // Default status
+                'status' => 'installed', // Default status
             ];
         }
         return $packages;
@@ -225,7 +228,7 @@ class GetSoftwareAssetsSnapshotData
     public function pipParse($data)
     {
         // Split the output into lines
-        $lines = explode("\n", trim($data));
+        $lines = explode("\n", trim((string) $data));
 
         // Initialize an array to hold package details
         $packages = [];
@@ -233,7 +236,7 @@ class GetSoftwareAssetsSnapshotData
         // Loop through each line to extract package information
         foreach ($lines as $line) {
             // Skip the header and empty lines
-            if (strpos($line, 'Package') !== false || empty(trim($line))) {
+            if (str_contains($line, 'Package') || empty(trim($line))) {
                 continue;
             }
 
@@ -254,7 +257,7 @@ class GetSoftwareAssetsSnapshotData
                 'publisher' => null, // Placeholder for publisher, if applicable
                 'notes' => null, // Placeholder for notes, if applicable
                 'architecture' => null, // Placeholder for architecture, if applicable
-                'status' => 'installed' // Default status
+                'status' => 'installed', // Default status
             ];
         }
         return $packages;
@@ -263,7 +266,7 @@ class GetSoftwareAssetsSnapshotData
     public function composerParse($data)
     {
         // Split the output into data
-        $lines = explode("\n", trim($data));
+        $lines = explode("\n", trim((string) $data));
 
         // Initialize an array to hold package details
         $packages = [];
@@ -271,7 +274,7 @@ class GetSoftwareAssetsSnapshotData
         // Loop through each line to extract package information
         foreach ($lines as $line) {
             // Skip the header and empty lines
-            if (empty(trim($line)) || strpos($line, 'Changed current directory') !== false) {
+            if (empty(trim($line)) || str_contains($line, 'Changed current directory')) {
                 continue;
             }
 
@@ -282,7 +285,7 @@ class GetSoftwareAssetsSnapshotData
             if (count($parts) >= 2) {
                 $packageName = $parts[0];
                 $packageVersion = $parts[1];
-                $packageDescription = isset($parts[2]) ? $parts[2] : '';
+                $packageDescription = $parts[2] ?? '';
 
                 // Fill the array with the specified keys
                 $packages[] = [
@@ -294,7 +297,7 @@ class GetSoftwareAssetsSnapshotData
                     'publisher' => null, // Placeholder for publisher, if applicable
                     'notes' => $packageDescription, // Use description as notes
                     'architecture' => null, // Placeholder for architecture, if applicable
-                    'status' => 'installed' // Default status
+                    'status' => 'installed', // Default status
                 ];
             }
         }

@@ -8,16 +8,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetAllImageServersListController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $fetchUserDetails;
-    private $fetchImageServers;
-
     public function __construct(
-        FetchUserDetails $fetchUserDetails,
-        FetchImageServers $fetchImageServers)
-    {
-        $this->fetchUserDetails = $fetchUserDetails;
-        $this->fetchImageServers = $fetchImageServers;
+        private readonly FetchUserDetails $fetchUserDetails,
+        private readonly FetchImageServers $fetchImageServers
+    ) {
     }
+
     /**
      * @Route("/api/InstanceSettings/ImageServers/GetAllImageServersListController/all", name="Get all image servers list", methods={"POST"})
      */
@@ -25,9 +21,12 @@ class GetAllImageServersListController implements \dhope0000\LXDClient\Interface
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);
         if (!$isAdmin) {
-            throw new \Exception("No access", 1);
+            throw new \Exception('No access', 1);
         }
         $aliases = $this->fetchImageServers->fetchAll();
-        return ["state" => "success", "servers" => $aliases];
+        return [
+            'state' => 'success',
+            'servers' => $aliases,
+        ];
     }
 }

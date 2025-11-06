@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Hosts\Warnings;
 
 use dhope0000\LXDClient\Objects\Host;
@@ -7,11 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AckWarningController
 {
-    private $ackWarning;
-
-    public function __construct(AckWarning $ackWarning)
-    {
-        $this->ackWarning = $ackWarning;
+    public function __construct(
+        private readonly AckWarning $ackWarning
+    ) {
     }
 
     /**
@@ -20,6 +19,10 @@ class AckWarningController
     public function ack(int $userId, Host $host, string $id)
     {
         $this->ackWarning->ack($userId, $host, $id);
-        return ["state"=>"success", "message"=>"Acknowledged warning", "id"=>$id];
+        return [
+            'state' => 'success',
+            'message' => 'Acknowledged warning',
+            'id' => $id,
+        ];
     }
 }

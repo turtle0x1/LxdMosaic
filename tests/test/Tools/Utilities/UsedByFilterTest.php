@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
 final class UsedByFilterTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -15,15 +18,13 @@ final class UsedByFilterTest extends TestCase
         $this->host = $getHost->fetchHost(1);
     }
 
-    public function test_noAccessToDefaultHidesDefaultEntities()
+    public function testNoAccessToDefaultHidesDefaultEntities()
     {
         $result = $this->usedByFilter->filterUserProjects(2, $this->host, [
-            "/1.0/instance/c1",
-            "/1.0/instance/canSeeMe?project=testProject"
+            '/1.0/instance/c1',
+            '/1.0/instance/canSeeMe?project=testProject',
         ]);
 
-        $this->assertEquals([
-            "/1.0/instance/canSeeMe?project=testProject",
-        ], $result);
+        $this->assertEquals(['/1.0/instance/canSeeMe?project=testProject'], $result);
     }
 }

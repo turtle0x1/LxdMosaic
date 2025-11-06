@@ -8,15 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetTimersOverivewController
 {
-    private $fetchUserDetails;
-    private $getTimersOverview;
-
     public function __construct(
-        FetchUserDetails $fetchUserDetails,
-        GetTimersOverview $getTimersOverview
+        private readonly FetchUserDetails $fetchUserDetails,
+        private readonly GetTimersOverview $getTimersOverview
     ) {
-        $this->fetchUserDetails = $fetchUserDetails;
-        $this->getTimersOverview = $getTimersOverview;
     }
 
     /**
@@ -26,7 +21,7 @@ class GetTimersOverivewController
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);
         if (!$isAdmin) {
-            throw new \Exception("No access", 1);
+            throw new \Exception('No access', 1);
         }
         $date = new \DateTimeImmutable($date);
         return $this->getTimersOverview->get($date);

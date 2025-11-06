@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteGraphController
 {
-    private $deleteGraph;
-
-    public function __construct(DeleteGraph $deleteGraph)
-    {
-        $this->deleteGraph = $deleteGraph;
+    public function __construct(
+        private readonly DeleteGraph $deleteGraph
+    ) {
     }
 
     /**
@@ -20,6 +18,9 @@ class DeleteGraphController
     public function delete(int $userId, int $graphId)
     {
         $this->deleteGraph->delete($userId, $graphId);
-        return ["state"=>"success", "message"=>"Delete Graph"];
+        return [
+            'state' => 'success',
+            'message' => 'Delete Graph',
+        ];
     }
 }

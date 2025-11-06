@@ -1,29 +1,29 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
-use dhope0000\LXDClient\Tools\Profiles\Copy;
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use dhope0000\LXDClient\Tools\Profiles\Copy;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CopyProfileController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $copy;
-    
-    public function __construct(Copy $copy)
-    {
-        $this->copy = $copy;
+    public function __construct(
+        private readonly Copy $copy
+    ) {
     }
+
     /**
      * @Route("/api/Profiles/CopyProfileController/copyProfile",  name="Copy profile", methods={"POST"})
      */
-    public function copyProfile(
-        Host $host,
-        string $profile,
-        HostsCollection $targetHosts,
-        string $newName
-    ) {
+    public function copyProfile(Host $host, string $profile, HostsCollection $targetHosts, string $newName)
+    {
         $response = $this->copy->copyToTargetHosts($host, $profile, $targetHosts, $newName);
-        return ["state"=>"success", "message"=>"Copied Profile", "lxdResponse"=>$response];
+        return [
+            'state' => 'success',
+            'message' => 'Copied Profile',
+            'lxdResponse' => $response,
+        ];
     }
 }

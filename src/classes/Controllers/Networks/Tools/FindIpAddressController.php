@@ -8,12 +8,11 @@ use Symfony\Component\Routing\Annotation\Route;
 /** @deprecated */
 class FindIpAddressController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $findIpAddress;
-    
-    public function __construct(FindIpAddress $findIpAddress)
-    {
-        $this->findIpAddress = $findIpAddress;
+    public function __construct(
+        private readonly FindIpAddress $findIpAddress
+    ) {
     }
+
     /**
      * @Route("/api/Networks/Tools/FindIpAddressController/find", name="Find instance ip address", methods={"POST"})
      * @deprecated
@@ -21,6 +20,9 @@ class FindIpAddressController implements \dhope0000\LXDClient\Interfaces\RecordA
     public function find(string $ip)
     {
         $result = $this->findIpAddress->find($ip);
-        return ["state"=>"success", "result"=>$result];
+        return [
+            'state' => 'success',
+            'result' => $result,
+        ];
     }
 }

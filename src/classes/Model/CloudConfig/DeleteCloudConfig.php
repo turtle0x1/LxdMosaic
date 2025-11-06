@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Model\CloudConfig;
 
 use dhope0000\LXDClient\Model\Database\Database;
@@ -6,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class DeleteCloudConfig
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -14,14 +15,14 @@ class DeleteCloudConfig
 
     public function delete(int $cloudConfigId)
     {
-        $sql = "DELETE FROM
+        $sql = 'DELETE FROM
                     `Cloud_Config`
                 WHERE
                     `CC_ID` = :cloudConfigId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":cloudConfigId"=>$cloudConfigId
+            ':cloudConfigId' => $cloudConfigId,
         ]);
         return $do->rowCount() ? true : false;
     }

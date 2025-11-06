@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Tools\Instances\Comments;
 
 use dhope0000\LXDClient\Objects\Host;
@@ -9,14 +10,14 @@ class SetInstanceComment
     {
         $instance = $host->instances->info($instanceName);
 
-        $instance["config"]["user.comment"] = $comment;
+        $instance['config']['user.comment'] = $comment;
 
-        if (empty($instance["devices"])) {
-            unset($instance["devices"]);
+        if (empty($instance['devices'])) {
+            unset($instance['devices']);
         }
 
         $host->instances->replace($instanceName, $instance);
-        
+
         return true;
     }
 }

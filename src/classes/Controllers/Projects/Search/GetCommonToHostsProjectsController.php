@@ -2,17 +2,15 @@
 
 namespace dhope0000\LXDClient\Controllers\Projects\Search;
 
-use dhope0000\LXDClient\Tools\Projects\Search\GetCommonToHostsProjects;
 use dhope0000\LXDClient\Objects\HostsCollection;
+use dhope0000\LXDClient\Tools\Projects\Search\GetCommonToHostsProjects;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetCommonToHostsProjectsController
 {
-    private $getCommonToHostsProjects;
-    
-    public function __construct(GetCommonToHostsProjects $getCommonToHostsProjects)
-    {
-        $this->getCommonToHostsProjects = $getCommonToHostsProjects;
+    public function __construct(
+        private readonly GetCommonToHostsProjects $getCommonToHostsProjects
+    ) {
     }
 
     /**

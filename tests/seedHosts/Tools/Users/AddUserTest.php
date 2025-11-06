@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
 final class AddUserTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -15,15 +18,15 @@ final class AddUserTest extends TestCase
     /**
      * Test used to create user, thats given permisons later on
      */
-    public function test_create_new_user() :void
+    public function testCreateNewUser(): void
     {
-        $this->assertEquals(true, $this->addUser->add(1, "testUser", "Test1234"));
-        $this->assertEquals(true, $this->addUser->add(1, "testUserNoAccess", "Test1234"));
+        $this->assertEquals(true, $this->addUser->add(1, 'testUser', 'Test1234'));
+        $this->assertEquals(true, $this->addUser->add(1, 'testUserNoAccess', 'Test1234'));
     }
 
-    public function test_duplicate_username_throws() :void
+    public function testDuplicateUsernameThrows(): void
     {
         $this->expectException(\Exception::class);
-        $this->addUser->add(1, "admin", "test123");
+        $this->addUser->add(1, 'admin', 'test123');
     }
 }

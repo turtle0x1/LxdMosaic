@@ -309,5 +309,5 @@
 </script>
 
 <?php
-require __DIR__ . "/../modals/networks/createNetwork.php";
+require __DIR__ . '/../modals/networks/createNetwork.php';
 ?>

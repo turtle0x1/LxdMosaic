@@ -2,24 +2,20 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\Metrics;
 
-use dhope0000\LXDClient\Model\Metrics\Types\FetchType;
-use dhope0000\LXDClient\Model\Metrics\InsertMetric;
-use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Constants\LxdRecursionLevels;
+use dhope0000\LXDClient\Model\Metrics\InsertMetric;
+use dhope0000\LXDClient\Model\Metrics\Types\FetchType;
+use dhope0000\LXDClient\Objects\Host;
 
 class ImportHostInsanceMetrics
 {
     // So we dont have to call the db for template key ids every time
     private $keyCache = [];
-    private $fetchType;
-    private $insertMetric;
 
     public function __construct(
-        FetchType $fetchType,
-        InsertMetric $insertMetric
+        private readonly FetchType $fetchType,
+        private readonly InsertMetric $insertMetric
     ) {
-        $this->fetchType = $fetchType;
-        $this->insertMetric = $insertMetric;
     }
 
     public function import(Host $host, array $instancesToScan)
@@ -29,14 +25,14 @@ class ImportHostInsanceMetrics
         $instances = $host->instances->all(LxdRecursionLevels::INSTANCE_FULL_RECURSION);
 
         foreach ($instances as $index => $instance) {
-            $instances[$instance["name"]] = $instance;
+            $instances[$instance['name']] = $instance;
             unset($instances[$index]);
         }
 
         foreach ($instancesToScan as $instance) {
-            $state = $instances[$instance]["state"];
+            $state = $instances[$instance]['state'];
 
-            if ($state["status_code"] !== 103) {
+            if ($state['status_code'] !== 103) {
                 continue;
             }
             // Can always gatther these two thanks to the LXD API
@@ -49,12 +45,12 @@ class ImportHostInsanceMetrics
             }
 
             // Nvidia GPU support
-            if (isset($instances[$instance]["expanded_config"]["nvidia.runtime"])) {
+            if (isset($instances[$instance]['expanded_config']['nvidia.runtime'])) {
                 $this->addInstanceNvidiaGpuUsage($host, $instance, $state);
             }
 
             // Storage Details
-            if (!empty($state["disk"])) {
+            if (!empty($state['disk'])) {
                 $this->addInstanceStorageUsage($host, $instance, $state);
             }
         }
@@ -62,12 +58,14 @@ class ImportHostInsanceMetrics
 
     private function addInstanceNvidiaGpuUsage($host, $instance, $state)
     {
-        $command = "nvidia-smi --query-gpu=name,gpu_uuid,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv";
+        $command = 'nvidia-smi --query-gpu=name,gpu_uuid,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv';
         $lxdResponse = $host->instances->execute($instance, $command, $record = true, [], true);
-        $output = array_filter(explode("\n", $host->instances->logs->read($instance, $lxdResponse["output"][0])));
+        $output = array_filter(
+            explode("\n", (string) $host->instances->logs->read($instance, $lxdResponse['output'][0]))
+        );
 
-        $host->instances->logs->remove($instance, $lxdResponse["output"][0]);
-        $host->instances->logs->remove($instance, $lxdResponse["output"][1]);
+        $host->instances->logs->remove($instance, $lxdResponse['output'][0]);
+        $host->instances->logs->remove($instance, $lxdResponse['output'][1]);
 
         if (empty($output)) {
             // Throwing an exception would interupt exectution but im adding this
@@ -80,102 +78,111 @@ class ImportHostInsanceMetrics
         $csv = array_map('str_getcsv', $output);
         $gpuDetails = [];
         foreach ($csv as $gpu) {
-            $gpu = array_map("trim", $gpu);
+            $gpu = array_map('trim', $gpu);
             $gpuDetails["{$gpu[0]} temperature (Id: {$gpu[1]}"] = $gpu[2];
-            $gpuDetails["{$gpu[0]} utilization % (Id: {$gpu[1]}"] = explode(" ", $gpu[3])[0];
-            $gpuDetails["{$gpu[0]} memory utilization % (Id: {$gpu[1]}"] = explode(" ", $gpu[4])[0];
-            $gpuDetails["{$gpu[0]} memory total MiB (Id: {$gpu[1]}"] = explode(" ", $gpu[5])[0];
-            $gpuDetails["{$gpu[0]} memory free MiB (Id: {$gpu[1]}"] = explode(" ", $gpu[6])[0];
-            $gpuDetails["{$gpu[0]} memory used MiB (Id: {$gpu[1]}"] = explode(" ", $gpu[7])[0];
+            $gpuDetails["{$gpu[0]} utilization % (Id: {$gpu[1]}"] = explode(' ', $gpu[3])[0];
+            $gpuDetails["{$gpu[0]} memory utilization % (Id: {$gpu[1]}"] = explode(' ', $gpu[4])[0];
+            $gpuDetails["{$gpu[0]} memory total MiB (Id: {$gpu[1]}"] = explode(' ', $gpu[5])[0];
+            $gpuDetails["{$gpu[0]} memory free MiB (Id: {$gpu[1]}"] = explode(' ', $gpu[6])[0];
+            $gpuDetails["{$gpu[0]} memory used MiB (Id: {$gpu[1]}"] = explode(' ', $gpu[7])[0];
         }
 
-        $metricKey = "nvidiaGpuDetails";
+        $metricKey = 'nvidiaGpuDetails';
         $this->matchTypeAndStore(
-            (new \DateTimeImmutable())->format("Y-m-d H:i:s"),
+            (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
             $host,
             $instance,
-            [$metricKey=>$gpuDetails]
+            [
+                $metricKey => $gpuDetails,
+            ]
         );
     }
 
     private function addInstanceLoadAverage($host, $instance)
     {
-        $output = $host->instances->execute($instance, "cat /proc/loadavg", $record = true, [], true);
+        $output = $host->instances->execute($instance, 'cat /proc/loadavg', $record = true, [], true);
 
-        $averages = trim($host->instances->logs->read($instance, $output["output"][0]));
+        $averages = trim((string) $host->instances->logs->read($instance, $output['output'][0]));
 
-        $host->instances->logs->remove($instance, $output["output"][0]);
-        $host->instances->logs->remove($instance, $output["output"][1]);
+        $host->instances->logs->remove($instance, $output['output'][0]);
+        $host->instances->logs->remove($instance, $output['output'][1]);
 
-        $x = explode(" ", $averages);
-        $dateTime = (new \DateTimeImmutable())->format("Y-m-d H:i:s");
+        $x = explode(' ', $averages);
+        $dateTime = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
         $matched = $this->matchTypeAndStore($dateTime, $host, $instance, [
-            "loadAvg"=>[
-                "1 minute"=>$x[0],
-                "5 minutes"=>$x[1],
-                "15 minutes"=>$x[2]
-            ]
+            'loadAvg' => [
+                '1 minute' => $x[0],
+                '5 minutes' => $x[1],
+                '15 minutes' => $x[2],
+            ],
         ]);
         return true;
     }
 
     private function addInstanceStorageUsage($host, $instance, $instanceState)
     {
-        $metricKey = "storageUsage";
+        $metricKey = 'storageUsage';
 
         $storageDetails = [];
 
-        foreach ($instanceState["disk"] as $disk => $details) {
-            $storageDetails["$disk usage"] = $details["usage"];
+        foreach ($instanceState['disk'] as $disk => $details) {
+            $storageDetails["{$disk} usage"] = $details['usage'];
         }
 
         ksort($storageDetails);
 
         $this->matchTypeAndStore(
-            (new \DateTimeImmutable())->format("Y-m-d H:i:s"),
+            (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
             $host,
             $instance,
-            [$metricKey=>$storageDetails]
+            [
+                $metricKey => $storageDetails,
+            ]
         );
     }
+
     private function addInstanceNetworkUsage($host, $instance, $instanceState)
     {
-        $metricKey = "networkUsage";
+        $metricKey = 'networkUsage';
 
         $networkDetails = [];
         $networkData = [];
-        foreach ($instanceState["network"] as $name => $network) {
-            foreach ($network["counters"] as $key => $value) {
-                $networkData["$name $key"] = $value;
+        foreach ($instanceState['network'] as $name => $network) {
+            foreach ($network['counters'] as $key => $value) {
+                $networkData["{$name} {$key}"] = $value;
             }
         }
 
         ksort($networkData);
 
         $this->matchTypeAndStore(
-            (new \DateTimeImmutable())->format("Y-m-d H:i:s"),
+            (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
             $host,
             $instance,
-            [$metricKey=>$networkData]
+            [
+                $metricKey => $networkData,
+            ]
         );
     }
 
     private function addInstanceMemoryUsage($host, $instance, $instanceState)
     {
-        $key = "memoryUsage";
+        $key = 'memoryUsage';
 
         $this->matchTypeAndStore(
-            (new \DateTimeImmutable())->format("Y-m-d H:i:s"),
+            (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
             $host,
             $instance,
-            [$key=>$instanceState["memory"]]
+            [
+                $key => $instanceState['memory'],
+            ]
         );
     }
 
     private function matchTypeAndStore($date, $host, $container, $content)
     {
         $output = [];
-        foreach ($content as $key=>$value) {
+        foreach ($content as $key => $value) {
             if (!isset($this->keyCache[$key])) {
                 $this->keyCache[$key] = $this->fetchType->fetchIdByTemplateKey($key);
                 //TODO If we fail on finding a log type, store the log,

@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class RemoveDeployment
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,14 +15,14 @@ class RemoveDeployment
 
     public function delete(int $deploymentId)
     {
-        $sql = "DELETE FROM
+        $sql = 'DELETE FROM
                     `Deployments`
                 WHERE
                     `Deployment_ID` = :deploymentId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":deploymentId"=>$deploymentId
+            ':deploymentId' => $deploymentId,
         ]);
         return $do->rowCount() ? true : false;
     }

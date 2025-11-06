@@ -2,33 +2,22 @@
 
 namespace dhope0000\LXDClient\Tools\ProjectAnalytics;
 
-use dhope0000\LXDClient\Objects\Host;
-
-use dhope0000\LXDClient\Model\ProjectAnalytics\Types\FetchProjectAnalyticsTypes;
-use dhope0000\LXDClient\Tools\Projects\GetProjectsOverview;
-use dhope0000\LXDClient\Model\Users\FetchUsers;
-
 use dhope0000\LXDClient\Model\ProjectAnalytics\InsertAnalytic;
+use dhope0000\LXDClient\Model\ProjectAnalytics\Types\FetchProjectAnalyticsTypes;
+use dhope0000\LXDClient\Model\Users\FetchUsers;
+use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Projects\GetProjectsOverview;
 
 class StoreProjectsOverview
 {
-    private $fetchProjectAnalyticsTypes;
-    private $getProjectsOverview;
-    private $insertAnalytic;
-    private $fetchUsers;
-
     private $knownTypes = [];
 
     public function __construct(
-        FetchUsers $fetchUsers,
-        FetchProjectAnalyticsTypes $fetchProjectAnalyticsTypes,
-        GetProjectsOverview $getProjectsOverview,
-        InsertAnalytic $insertAnalytic
+        private readonly FetchUsers $fetchUsers,
+        private readonly FetchProjectAnalyticsTypes $fetchProjectAnalyticsTypes,
+        private readonly GetProjectsOverview $getProjectsOverview,
+        private readonly InsertAnalytic $insertAnalytic
     ) {
-        $this->fetchUsers = $fetchUsers;
-        $this->fetchProjectAnalyticsTypes = $fetchProjectAnalyticsTypes;
-        $this->getProjectsOverview = $getProjectsOverview;
-        $this->insertAnalytic = $insertAnalytic;
     }
 
     public function storeCurrent()
@@ -45,22 +34,22 @@ class StoreProjectsOverview
 
         $clustersAndStandalone = $this->getProjectsOverview->get($userId);
 
-        foreach ($clustersAndStandalone["clusters"] as $cluserIndex => $cluster) {
-            foreach ($cluster["members"] as $index => $member) {
+        foreach ($clustersAndStandalone['clusters'] as $cluserIndex => $cluster) {
+            foreach ($cluster['members'] as $index => $member) {
                 $this->storeHostDetails($date, $member);
             }
         }
 
-        foreach ($clustersAndStandalone["standalone"]["members"] as $member) {
+        foreach ($clustersAndStandalone['standalone']['members'] as $member) {
             $this->storeHostDetails($date, $member);
         }
     }
 
     private function storeHostDetails(\DateTimeInterface $date, Host $host)
     {
-        $allStats = $host->getCustomProp("projects");
+        $allStats = $host->getCustomProp('projects');
         foreach ($allStats as $project => $stats) {
-            foreach ($stats as $key=>$details) {
+            foreach ($stats as $key => $details) {
                 if (!isset($this->knownTypes[$key])) {
                     continue;
                 }
@@ -70,8 +59,8 @@ class StoreProjectsOverview
                     $host->getHostId(),
                     $project,
                     $typeId,
-                    $details["value"],
-                    $details["limit"]
+                    $details['value'],
+                    $details['limit']
                 );
             }
         }

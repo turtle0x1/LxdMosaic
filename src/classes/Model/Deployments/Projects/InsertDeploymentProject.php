@@ -13,9 +13,9 @@ class InsertDeploymentProject
         $this->database = $database->dbObject;
     }
 
-    public function insert(int $userId, int $deploymentId, int $hostId, string $project) :bool
+    public function insert(int $userId, int $deploymentId, int $hostId, string $project): bool
     {
-        $sql = "INSERT INTO `Deployment_Projects` (
+        $sql = 'INSERT INTO `Deployment_Projects` (
                     `DP_User_ID`,
                     `DP_Deployment_ID`,
                     `DP_Host_ID`,
@@ -25,13 +25,13 @@ class InsertDeploymentProject
                     :deploymentId,
                     :hostId,
                     :project
-                );";
+                );';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId,
-            ":deploymentId"=>$deploymentId,
-            ":hostId"=>$hostId,
-            ":project"=>$project
+            ':userId' => $userId,
+            ':deploymentId' => $deploymentId,
+            ':hostId' => $hostId,
+            ':project' => $project,
         ]);
         return $do->rowCount() ? true : false;
     }

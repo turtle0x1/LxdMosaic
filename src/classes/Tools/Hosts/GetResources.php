@@ -1,36 +1,34 @@
 <?php
+
 namespace dhope0000\LXDClient\Tools\Hosts;
 
-use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Objects\Host;
 
 class GetResources
 {
-    private $hasExtension;
-    
-    public function __construct(HasExtension $hasExtension)
-    {
-        $this->hasExtension = $hasExtension;
+    public function __construct(
+        private readonly HasExtension $hasExtension
+    ) {
     }
 
     public function getHostExtended(Host $host)
     {
         $details = $host->resources->info();
 
-        $supportsProjects = $this->hasExtension->checkWithHost($host, "projects");
-        $resCpuSocket = $this->hasExtension->checkWithHost($host, "resources_cpu_socket");
-        $resGpu = $this->hasExtension->checkWithHost($host, "resources_gpu");
+        $supportsProjects = $this->hasExtension->checkWithHost($host, 'projects');
+        $resCpuSocket = $this->hasExtension->checkWithHost($host, 'resources_cpu_socket');
+        $resGpu = $this->hasExtension->checkWithHost($host, 'resources_gpu');
 
-        $details["extensions"] = [
-            "supportsProjects"=>$supportsProjects,
-            "resCpuSocket"=>$resCpuSocket,
-            "resGpu"=>$resGpu
+        $details['extensions'] = [
+            'supportsProjects' => $supportsProjects,
+            'resCpuSocket' => $resCpuSocket,
+            'resGpu' => $resGpu,
         ];
 
-        $details["projects"] = [];
+        $details['projects'] = [];
 
         if ($supportsProjects) {
-            $details["projects"] = $host->projects->all();
+            $details['projects'] = $host->projects->all();
         }
 
         return $details;

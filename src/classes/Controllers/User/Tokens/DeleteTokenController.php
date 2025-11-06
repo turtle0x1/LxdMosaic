@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteTokenController
 {
-    private $deleteToken;
-
-    public function __construct(DeleteToken $deleteToken)
-    {
-        $this->deleteToken = $deleteToken;
+    public function __construct(
+        private readonly DeleteToken $deleteToken
+    ) {
     }
 
     /**
@@ -20,6 +18,9 @@ class DeleteTokenController
     public function delete(int $userId, int $tokenId)
     {
         $this->deleteToken->delete($userId, $tokenId);
-        return ["state"=>"success", "message"=>"Deleted token"];
+        return [
+            'state' => 'success',
+            'message' => 'Deleted token',
+        ];
     }
 }

@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class AddUserControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -16,34 +19,48 @@ final class AddUserControllerTest extends TestCase
         $this->database->dbObject->beginTransaction();
     }
 
-    public function tearDown() :void
+    #[\Override]
+    protected function tearDown(): void
     {
         $this->database->dbObject->rollBack();
     }
 
-    public function test_nonAdminTryingToAddUser() :void
+    public function testNonAdminTryingToAddUser(): void
     {
         $this->expectException(\Exception::class);
 
-        $_POST = ["username"=>"cantAdd", "password"=>"test123"];
+        $_POST = [
+            'username' => 'cantAdd',
+            'password' => 'test123',
+        ];
 
         $this->routeApi->route(
             Request::create('/api/InstanceSettings/Users/AddUserController/add', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
     }
 
-    public function test_adminCreatesUser() :void
+    public function testAdminCreatesUser(): void
     {
-        $_POST = ["username"=>"cantAdd", "password"=>"testlongpassword123"];
+        $_POST = [
+            'username' => 'cantAdd',
+            'password' => 'testlongpassword123',
+        ];
 
         $result = $this->routeApi->route(
             Request::create('/api/InstanceSettings/Users/AddUserController/add', 'POST'),
-            ["userid"=>1],
+            [
+                'userid' => 1,
+            ],
             true
         );
 
-        $this->assertEquals(["state"=>"success", "message"=>"Addded user"], $result);
+        $this->assertEquals([
+            'state' => 'success',
+            'message' => 'Addded user',
+        ], $result);
     }
 }

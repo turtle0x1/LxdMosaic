@@ -2,32 +2,21 @@
 
 namespace dhope0000\LXDClient\Tools\Deployments\Projects;
 
-use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
-use dhope0000\LXDClient\Tools\User\ValidatePermissions;
+use dhope0000\LXDClient\Model\Deployments\Projects\DeleteDeploymentProject;
 use dhope0000\LXDClient\Model\Deployments\Projects\FetchDeploymentProjects;
 use dhope0000\LXDClient\Model\Deployments\Projects\InsertDeploymentProject;
-use dhope0000\LXDClient\Model\Deployments\Projects\DeleteDeploymentProject;
+use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
+use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class SetDeploymentProjects
 {
-    private $authoriseDeploymentAccess;
-    private $validatePermissions;
-    private $fetchDeploymentProjects;
-    private $insertDeploymentProject;
-    private $deleteDeploymentProject;
-
     public function __construct(
-        AuthoriseDeploymentAccess $authoriseDeploymentAccess,
-        ValidatePermissions $validatePermissions,
-        FetchDeploymentProjects $fetchDeploymentProjects,
-        InsertDeploymentProject $insertDeploymentProject,
-        DeleteDeploymentProject $deleteDeploymentProject
+        private readonly AuthoriseDeploymentAccess $authoriseDeploymentAccess,
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly FetchDeploymentProjects $fetchDeploymentProjects,
+        private readonly InsertDeploymentProject $insertDeploymentProject,
+        private readonly DeleteDeploymentProject $deleteDeploymentProject
     ) {
-        $this->authoriseDeploymentAccess = $authoriseDeploymentAccess;
-        $this->validatePermissions = $validatePermissions;
-        $this->fetchDeploymentProjects = $fetchDeploymentProjects;
-        $this->insertDeploymentProject = $insertDeploymentProject;
-        $this->deleteDeploymentProject = $deleteDeploymentProject;
     }
 
     public function set(int $userId, int $deploymentId, array $newProjectsLayout)
@@ -42,15 +31,15 @@ class SetDeploymentProjects
             // can access
             if ($this->validatePermissions->canAccessHostProject(
                 $userId,
-                $project["hostId"],
-                $project["project"]
+                $project['hostId'],
+                $project['project']
             ) == false) {
                 continue;
             }
 
-            if (isset($currentProjects[$project["hostId"]])) {
-                if (isset($currentProjects[$project["hostId"]][$project["project"]])) {
-                    unset($currentProjects[$project["hostId"]][$project["project"]]);
+            if (isset($currentProjects[$project['hostId']])) {
+                if (isset($currentProjects[$project['hostId']][$project['project']])) {
+                    unset($currentProjects[$project['hostId']][$project['project']]);
                     continue;
                 }
             }
@@ -58,8 +47,8 @@ class SetDeploymentProjects
             $this->insertDeploymentProject->insert(
                 $userId,
                 $deploymentId,
-                $project["hostId"],
-                $project["project"]
+                $project['hostId'],
+                $project['project']
             );
         }
 
@@ -70,12 +59,12 @@ class SetDeploymentProjects
                 // as it isn't within their control
                 if ($this->validatePermissions->canAccessHostProject(
                     $userId,
-                    $project["hostId"],
-                    $project["project"]
+                    $project['hostId'],
+                    $project['project']
                 ) == false) {
                     continue;
                 }
-                $this->deleteDeploymentProject->delete($project["id"]);
+                $this->deleteDeploymentProject->delete($project['id']);
             }
         }
     }
@@ -84,10 +73,10 @@ class SetDeploymentProjects
     {
         $output = [];
         foreach ($currentProjects as $project) {
-            if (!isset($output[$project["hostId"]])) {
-                $output[$project["hostId"]] = [];
+            if (!isset($output[$project['hostId']])) {
+                $output[$project['hostId']] = [];
             }
-            $output[$project["hostId"]][$project["project"]] = $project;
+            $output[$project['hostId']][$project['project']] = $project;
         }
         return $output;
     }

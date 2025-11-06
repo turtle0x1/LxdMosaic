@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetDashboardController
 {
-    private $getUserDashboard;
-    
-    public function __construct(GetUserDashboard $getUserDashboard)
-    {
-        $this->getUserDashboard = $getUserDashboard;
+    public function __construct(
+        private readonly GetUserDashboard $getUserDashboard
+    ) {
     }
 
     /**

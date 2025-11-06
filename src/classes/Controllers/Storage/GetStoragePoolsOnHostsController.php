@@ -8,11 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetStoragePoolsOnHostsController
 {
-    private $getStorageOnHosts;
-    
-    public function __construct(GetStorageOnHosts $getStorageOnHosts)
-    {
-        $this->getStorageOnHosts = $getStorageOnHosts;
+    public function __construct(
+        private readonly GetStorageOnHosts $getStorageOnHosts
+    ) {
     }
 
     /**

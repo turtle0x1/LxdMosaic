@@ -8,15 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AddController
 {
-    private $validatePermissions;
-    private $addInstanceType;
-
     public function __construct(
-        ValidatePermissions $validatePermissions,
-        AddInstanceType $addInstanceType
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly AddInstanceType $addInstanceType
     ) {
-        $this->validatePermissions = $validatePermissions;
-        $this->addInstanceType = $addInstanceType;
     }
 
     /**
@@ -26,6 +21,9 @@ class AddController
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         $this->addInstanceType->add($userId, $providerId, $name, $cpu, $mem);
-        return ["state"=>"success", "message"=>"Added instance type"];
+        return [
+            'state' => 'success',
+            'message' => 'Added instance type',
+        ];
     }
 }

@@ -8,7 +8,7 @@ class GetAllInstanceProxies
     {
         $output = [];
         foreach ($devices as $name => $device) {
-            if (isset($device["type"]) && $device["type"] !== "proxy") {
+            if (isset($device['type']) && $device['type'] !== 'proxy') {
                 continue;
             }
 

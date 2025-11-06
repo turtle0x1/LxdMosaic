@@ -8,15 +8,10 @@ use dhope0000\LXDClient\Objects\Host;
 
 class AddBackupSchedule
 {
-    private $insertBackupSchedule;
-    private $updateBackupSchedules;
-    
     public function __construct(
-        InsertBackupSchedule $insertBackupSchedule,
-        UpdateBackupSchedules $updateBackupSchedules
+        private readonly InsertBackupSchedule $insertBackupSchedule,
+        private readonly UpdateBackupSchedules $updateBackupSchedules
     ) {
-        $this->insertBackupSchedule = $insertBackupSchedule;
-        $this->updateBackupSchedules = $updateBackupSchedules;
     }
 
     public function add(
@@ -36,15 +31,15 @@ class AddBackupSchedule
             $userId,
             $host->getHostId(),
             $instance,
-            $host->callClientMethod("getProject")
+            $host->callClientMethod('getProject')
         );
 
         $this->insertBackupSchedule->insert(
             $userId,
             $host->getHostId(),
             $instance,
-            $host->callClientMethod("getProject"),
-            $frequency . "~ " . $time . "~ [" . implode(",", $daysOfWeek) . "]~ $dayOfMonth~",
+            $host->callClientMethod('getProject'),
+            $frequency . '~ ' . $time . '~ [' . implode(',', $daysOfWeek) . "]~ {$dayOfMonth}~",
             $strategyId,
             $retention
         );
@@ -52,13 +47,13 @@ class AddBackupSchedule
 
     private function validateBakupSchedule(string $frequency, string $time)
     {
-        $allowedSchedules = ["daily", "weekly", "monthly"];
+        $allowedSchedules = ['daily', 'weekly', 'monthly'];
         if (!in_array($frequency, $allowedSchedules)) {
-            throw new \Exception("Only supporting daily & weekly backups for the time being", 1);
+            throw new \Exception('Only supporting daily & weekly backups for the time being', 1);
         }
         // https://stackoverflow.com/a/3964994/4008082
-        if (preg_match("/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/", $time) == false) {
-            throw new \Exception("Time not correct format HH:MM 24 hour format", 1);
+        if (preg_match('/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/', $time) == false) {
+            throw new \Exception('Time not correct format HH:MM 24 hour format', 1);
         }
     }
 }

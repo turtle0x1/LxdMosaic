@@ -7,17 +7,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetEntitiesFromUniverseController
 {
-    private $universe;
-    
-    public function __construct(Universe $universe)
-    {
-        $this->universe = $universe;
+    public function __construct(
+        private readonly Universe $universe
+    ) {
     }
 
     /**
      * @Route("/api/Universe/GetEntitiesFromUniverseController/get", name="api_universe_getentitiesfromuniversecontroller_get", methods={"POST"})
      */
-    public function get(int $userId, string $entity = null)
+    public function get(int $userId, ?string $entity = null)
     {
         return $this->universe->getEntitiesUserHasAccesTo($userId, $entity);
     }

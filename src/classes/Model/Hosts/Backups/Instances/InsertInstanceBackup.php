@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class InsertInstanceBackup
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -22,9 +22,9 @@ class InsertInstanceBackup
         string $localPath,
         int $filesize,
         int $failed = 0,
-        string $failedReason = ""
+        string $failedReason = ''
     ) {
-        $sql = "INSERT INTO `Container_Backups`
+        $sql = 'INSERT INTO `Container_Backups`
                 (
                     `CB_Backup_Date_Created`,
                     `CB_Host_ID`,
@@ -45,18 +45,18 @@ class InsertInstanceBackup
                     :filesize,
                     :failed,
                     :failedReason
-                );";
+                );';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":backupDateCreated"=>$backupDateCreated->format("Y-m-d H:i:s"),
-            ":hostId"=>$hostId,
-            ":project"=>$project,
-            ":instance"=>$instance,
-            ":backup"=>$backup,
-            ":localPath"=>$localPath,
-            ":filesize"=>$filesize,
-            ":failed"=>$failed,
-            ":failedReason"=>$failedReason
+            ':backupDateCreated' => $backupDateCreated->format('Y-m-d H:i:s'),
+            ':hostId' => $hostId,
+            ':project' => $project,
+            ':instance' => $instance,
+            ':backup' => $backup,
+            ':localPath' => $localPath,
+            ':filesize' => $filesize,
+            ':failed' => $failed,
+            ':failedReason' => $failedReason,
         ]);
         return $this->database->lastInsertId();
     }
