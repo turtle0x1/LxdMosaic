@@ -39,7 +39,7 @@ final class GetHostsProfilesTest extends TestCase
             'currentProject',
             'profiles',
         ], $hostKeys);
-
+        sort($host['profiles']);
         $this->assertEquals(['default', 'testProfile'], $host['profiles']);
     }
 }
