@@ -1,9 +1,10 @@
 {
     "name": "dhope0000/infrastructure",
     "require": {
+        "php": "^8.4",
         "php-http/guzzle7-adapter": "^1.1",
         "php-di/php-di": "6.2.3",
-        "dhope0000/lxd": "^1.0.0",
+        "dhope0000/lxd": "1.1.0",
         "vlucas/phpdotenv": "^5.6",
         "symfony/http-foundation": "^5.4",
         "symfony/filesystem": "^5.4",
