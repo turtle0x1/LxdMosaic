@@ -18,22 +18,19 @@ os_distribution=`lsb_release -c -s`
 
 apt-get install -y curl || exit $?
 
-if [ "$os_distribution" != "bullseye" ]
-then
-    curl -sL https://deb.nodesource.com/setup_14.x | bash -
-    if [ $? -ne 0 ]; then exit 1; fi
-fi
-
+# Add ondrej/php for php8.4  on ubuntu
+add-apt-repository ppa:ondrej/php -y
+apt update
 
 # Install Dependecies
-apt-get install -y apache2 php php-cli php-json php-mysql php-xml php-curl php-ldap php-mbstring unzip zip git nodejs openssl ssl-cert || exit $?
+apt-get install -y apache2 php8.4 php8.4-cli php8.4-mysql php8.4-xml php8.4-curl php8.4-ldap php8.4-mbstring unzip zip git openssl ssl-cert || exit $?
 apt-get install -y mysql-server || apt-get install -y default-mysql-server || exit $?
 apt-get install -y --no-install-recommends cron || exit $?
 
-if [ "$os_distribution" == "bullseye" ]
-then
-    apt-get install -y npm || exit $?
-fi
+# Download and install nvm + node v24
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+\. "$HOME/.nvm/nvm.sh"
+nvm install 24
 
 if [ "$(uname -m)" == "aarch64" ] || [ "$(uname -m)" == "armv7l" ]
 then
