@@ -2,8 +2,7 @@
 
 use Crunz\Schedule;
 
-$builder = new \DI\ContainerBuilder();
-$container = $builder->build();
+$container = new \DI\Container();
 
 (\Dotenv\Dotenv::createImmutable(__DIR__ . '/../../'))->load();
 

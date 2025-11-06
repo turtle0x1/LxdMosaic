@@ -9,7 +9,7 @@ date_default_timezone_set('UTC');
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
-$container = (new \DI\ContainerBuilder())->build();
+$container = new \DI\Container();
 
 $getSoftwareAssetsSnapshotData = $container->make(GetTimersSnapshotData::class);
 $insertSoftwareAssets = $container->make(InsertTimersSnapshot::class);

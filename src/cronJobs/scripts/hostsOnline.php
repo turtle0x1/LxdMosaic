@@ -5,8 +5,7 @@ $_ENV = getenv();
 date_default_timezone_set('UTC');
 require __DIR__ . '/../../../vendor/autoload.php';
 
-$builder = new \DI\ContainerBuilder();
-$container = $builder->build();
+$container = new \DI\Container();
 
 (\Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../'))->load();
 

@@ -10,9 +10,7 @@ final class GetHostsProfilesTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $builder = new \DI\ContainerBuilder();
-        $builder->useAnnotations(true);
-        $container = $builder->build();
+        $container = (new \DI\ContainerBuilder)->useAttributes(true)->build();
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
     }
 

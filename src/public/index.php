@@ -6,9 +6,8 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 date_default_timezone_set('UTC');
 
-$builder = new \DI\ContainerBuilder();
-$builder->useAnnotations(true);
-$container = $builder->build();
+
+$container = (new \DI\ContainerBuilder)->useAttributes(true)->build();
 
 $exceptionHandler = new dhope0000\LXDClient\App\ExceptionHandler();
 $exceptionHandler->register();

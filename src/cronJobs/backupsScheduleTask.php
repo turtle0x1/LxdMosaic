@@ -5,7 +5,7 @@ use dhope0000\LXDClient\Objects\Backups\BackupSchedule;
 
 $cronSchedule = new Schedule();
 
-$container = (new \DI\ContainerBuilder())->build();
+$container = new \DI\Container();
 
 (\Dotenv\Dotenv::createImmutable(__DIR__ . '/../../'))->load();
 
