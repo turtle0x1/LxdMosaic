@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class RestoreBackupControllerTest extends TestCase
 {
+    private $routeApi;
+    private $database;
+    private $backupId;
     #[\Override]
     protected function setUp(): void
     {

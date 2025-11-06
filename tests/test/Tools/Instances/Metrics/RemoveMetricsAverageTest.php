@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class RemoveMetricsAverageTest extends TestCase
 {
+    private $removeMetrics;
     #[\Override]
     protected function setUp(): void
     {

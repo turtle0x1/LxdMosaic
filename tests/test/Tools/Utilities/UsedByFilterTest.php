@@ -6,6 +6,8 @@ use PHPUnit\Framework\TestCase;
 
 final class UsedByFilterTest extends TestCase
 {
+    private $usedByFilter;
+    private $host;
     #[\Override]
     protected function setUp(): void
     {

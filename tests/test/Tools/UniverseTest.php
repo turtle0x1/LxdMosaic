@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class UniverseTest extends TestCase
 {
+    private $universe;
     #[\Override]
     protected function setUp(): void
     {

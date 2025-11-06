@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class AddHostTest extends TestCase
 {
+    private $addHosts;
     #[\Override]
     protected function setUp(): void
     {

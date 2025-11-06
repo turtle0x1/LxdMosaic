@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 use dhope0000\LXDClient\Objects\Backups\BackupSchedule;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ValidateBackupObjectTest extends TestCase
 {
+    private $validateBackupObject;
     #[\Override]
     protected function setUp(): void
     {
@@ -16,9 +18,7 @@ final class ValidateBackupObjectTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider validateData
-     */
+    #[DataProvider('validateData')]
     public function testValidate($schedule, $fails): void
     {
         if ($fails) {
@@ -32,7 +32,7 @@ final class ValidateBackupObjectTest extends TestCase
         }
     }
 
-    public function validateData()
+    public static function validateData()
     {
         return [
             [ // Perfectly fine if not with junk values

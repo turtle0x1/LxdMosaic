@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class SetHostProjectControllerTest extends TestCase
 {
+    private $routeApi;
+    private $database;
+    private $newHostId;
     #[\Override]
     protected function setUp(): void
     {

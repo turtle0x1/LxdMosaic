@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class GetOverviewTest extends TestCase
 {
+    private $getBackupsOverview;
     #[\Override]
     protected function setUp(): void
     {

@@ -1,30 +1,53 @@
-<phpunit bootstrap="tests/bootstrap.php">
-    <!-- "Tests should need to run in order" blah blah blah -->
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.0/phpunit.xsd"
+
+    bootstrap="tests/bootstrap.php"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnPhpunitDeprecations="true"
+    failOnRisky="true"
+    failOnWarning="true"
+    cacheDirectory=".phpunit.cache"
+    beStrictAboutChangesToGlobalState="true"
+    beStrictAboutOutputDuringTests="true"
+    testdox="false"
+>
+    <coverage
+        includeUncoveredFiles="true"
+        ignoreDeprecatedCodeUnits="true"
+        disableCodeCoverageIgnore="false"
+        pathCoverage="false"
+    >
+        <report>
+            <html outputDirectory="build/coverage-html" lowUpperBound="50" highLowerBound="90"/>
+            <text outputFile="build/coverage.txt" showOnlySummary="true"/>
+            <clover outputFile="build/logs/clover.xml"/>
+        </report>
+    </coverage>
+
+    <source>
+        <include>
+            <directory suffix=".php">src/classes</directory>
+        </include>
+
+        <exclude>
+            <directory>src/classes/Legacy</directory>
+            <directory>vendor</directory>
+        </exclude>
+    </source>
+
     <testsuites>
-        <!-- Add the local LXD server to the DB -->
-        <testsuite name="test">
-           <directory>tests/seedHosts</directory>
-         </testsuite>
-         <!--
-            Create instances, profiles, storage, networks or what ever
-            to fetch later on
-        -->
-        <testsuite name="test">
-           <directory>tests/seedEntities</directory>
-         </testsuite>
-         <!--
-            Basicly testing GET methods but because you can create
-            more complex entities and know they exist (because seedEntities
-            runs first) you can test more complex situations (beyond just
-            calling the "default" profile / project / storage or whatever)
-        -->
-         <testsuite name="test">
+        <testsuite name="seedHosts">
+            <directory>tests/seedHosts</directory>
+        </testsuite>
+
+        <testsuite name="seedEntities">
+            <directory>tests/seedEntities</directory>
+        </testsuite>
+
+        <testsuite name="tests">
             <directory>tests/test</directory>
-          </testsuite>
+        </testsuite>
     </testsuites>
-    <filter>
-      <whitelist processUncoveredFilesFromWhitelist="false">
-        <directory suffix=".php">src/classes/</directory>
-      </whitelist>
-    </filter>
 </phpunit>

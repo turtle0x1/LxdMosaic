@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class ResetPasswordControllerTest extends TestCase
 {
+    private $routeApi;
+    private $database;
+    private $ldapUserId;
     #[\Override]
     protected function setUp(): void
     {

@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class GetStrategiesTest extends TestCase
 {
+    private $getStrategies;
     #[\Override]
     protected function setUp(): void
     {

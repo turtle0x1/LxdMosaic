@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class DateToolsTest extends TestCase
 {
+    private $dateTools;
     #[\Override]
     protected function setUp(): void
     {

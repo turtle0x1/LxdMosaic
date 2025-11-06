@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class AddUserTest extends TestCase
 {
+    private $addUser;
     #[\Override]
     protected function setUp(): void
     {

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class CreateProfileTest extends TestCase
 {
+    private $routeApi;
     #[\Override]
     protected function setUp(): void
     {
@@ -14,9 +16,7 @@ final class CreateProfileTest extends TestCase
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
     }
 
-    /**
-     * @dataProvider data_createProjectData
-     */
+    #[DataProvider('data_createProjectData')]
     public function testCreateProfile($data, $expected): void
     {
         $_POST = $data;
@@ -32,7 +32,7 @@ final class CreateProfileTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function data_createProjectData()
+    public static function data_createProjectData()
     {
         return [
             [

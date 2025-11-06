@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class RouteApiOrderParamRejectsHostsTest extends TestCase
 {
+    private $routeApi;
+    private $database;
     #[\Override]
     protected function setUp(): void
     {

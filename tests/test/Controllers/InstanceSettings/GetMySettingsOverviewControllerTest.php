@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class GetMySettingsOverviewControllerTest extends TestCase
 {
+    private $routeApi;
     #[\Override]
     protected function setUp(): void
     {

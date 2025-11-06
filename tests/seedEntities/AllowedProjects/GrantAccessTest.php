@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class GrantAccessTest extends TestCase
 {
+    private $grantAccess;
     #[\Override]
     protected function setUp(): void
     {

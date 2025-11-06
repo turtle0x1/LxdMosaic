@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class StringToolsTest extends TestCase
 {
+    private $stringTools;
     #[\Override]
     protected function setUp(): void
     {
