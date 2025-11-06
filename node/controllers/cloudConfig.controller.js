@@ -1,6 +1,6 @@
 module.exports = class CloudConfigController {
-    _startBlueText = '\033[34m';
-    _endBlueText = '\033[0m';
+    _startBlueText = '\x1B[34m';
+    _endBlueText = '\x1B[0m';
     _dangerRegexs = [
         // A command not found in cloud-config `runcmd` array
         new RegExp('\/var\/lib\/cloud\/instance\/scripts\/runcmd:.* not found'),
