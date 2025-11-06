@@ -39,14 +39,6 @@ jobs:
           ${{ runner.os }}-build-
           ${{ runner.os }}-
 
-    - name: Install PHP 7.4
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y software-properties-common
-        sudo add-apt-repository ppa:ondrej/php -y
-        sudo apt-get update
-        sudo apt-get install -y php7.4
-
     - name: setup lxdmosaic
       run: sudo sh examples/test_setup.sh
 
@@ -57,10 +49,10 @@ jobs:
       run: cat examples/tests_lxd_init.yaml | sudo lxd init --preseed
 
     - name: run tests
-      run: /usr/bin/php7.4 -dxdebug.mode=coverage vendor/bin/phpunit --coverage-html=./coverage
+      run: /usr/bin/php8.4 -dxdebug.mode=coverage vendor/bin/phpunit --coverage-html=./coverage
 
     - name: run phpstan
-      run: /usr/bin/php7.4 vendor/bin/phpstan analyse src --level 1
+      run: /usr/bin/php8.4 vendor/bin/phpstan analyse src --level 1
 
     - uses: actions/upload-artifact@v4
       with:
