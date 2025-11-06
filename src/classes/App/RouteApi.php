@@ -11,6 +11,7 @@ use dhope0000\LXDClient\Model\Users\InvalidateToken;
 use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\RecordAction;
 use DI\Container;
+use dhope0000\LXDClient\Exceptions\Users\Permissions\NoProjectsError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -111,8 +112,7 @@ class RouteApi
 
         if (empty($allowedProjects) && !$userIsAdmin) {
             $this->invalidateToken->invalidate($userId, $headers['apitoken']);
-            http_response_code(403);
-            throw new \Exception('No Access To Any Projects', 1);
+            throw new NoProjectsError();
         }
 
         $currentProjects = $this->fetchUserProject->fetchCurrentProjects($userId);

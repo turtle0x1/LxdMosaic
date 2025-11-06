@@ -2,6 +2,7 @@
 
 namespace dhope0000\LXDClient\App;
 
+use dhope0000\LXDClient\Exceptions\Users\Permissions\PermissionsError;
 use dhope0000\LXDClient\Model\Hosts\ChangeStatus;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Tools\Utilities\StringTools;
@@ -44,6 +45,10 @@ class ExceptionHandler
                 http_response_code(205);
                 $this->changeStatus->setOffline($hostId);
             }
+        }
+
+        if ($exception instanceof PermissionsError) {
+            http_response_code(403);
         }
 
         echo json_encode([
