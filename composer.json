@@ -10,7 +10,7 @@
         "symfony/filesystem": "^5.4",
         "symfony/cache": "^5.4",
         "doctrine/annotations": "^1.10",
-        "crunzphp/crunz": "^3.1",
+        "crunzphp/crunz": "^3.8.0",
         "symfony/routing": "^5.4",
         "robmorgan/phinx": "^0.12.4"
     },
