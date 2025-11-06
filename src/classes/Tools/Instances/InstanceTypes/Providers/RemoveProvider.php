@@ -2,20 +2,15 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\InstanceTypes\Providers;
 
-use dhope0000\LXDClient\Model\Instances\InstanceTypes\Providers\DeleteProvider;
 use dhope0000\LXDClient\Model\Instances\InstanceTypes\DeleteTypes;
+use dhope0000\LXDClient\Model\Instances\InstanceTypes\Providers\DeleteProvider;
 
 class RemoveProvider
 {
-    private $deleteTypes;
-    private $deleteProvider;
-
     public function __construct(
-        DeleteTypes $deleteTypes,
-        DeleteProvider $deleteProvider
+        private readonly DeleteTypes $deleteTypes,
+        private readonly DeleteProvider $deleteProvider
     ) {
-        $this->deleteTypes = $deleteTypes;
-        $this->deleteProvider = $deleteProvider;
     }
 
     public function remove(int $providerId)

@@ -2,17 +2,15 @@
 
 namespace dhope0000\LXDClient\Controllers\Storage;
 
-use dhope0000\LXDClient\Tools\Storage\GetStoragePool;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Storage\GetStoragePool;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetHostsStoragePoolController
 {
-    private $getStoragePool;
-    
-    public function __construct(GetStoragePool $getStoragePool)
-    {
-        $this->getStoragePool = $getStoragePool;
+    public function __construct(
+        private readonly GetStoragePool $getStoragePool
+    ) {
     }
 
     /**

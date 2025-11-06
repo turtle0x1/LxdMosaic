@@ -2,25 +2,18 @@
 
 namespace dhope0000\LXDClient\Tools\Clusters;
 
-use dhope0000\LXDClient\Model\Hosts\HostList;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
-use dhope0000\LXDClient\Tools\Hosts\GetResources;
 use dhope0000\LXDClient\Constants\LxdRecursionLevels;
+use dhope0000\LXDClient\Model\Hosts\GetDetails;
+use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Hosts\GetResources;
 
 class GetAllClusters
 {
-    private $hostList;
-    private $getDetails;
-    private $getResources;
-
     public function __construct(
-        HostList $hostList,
-        GetDetails $getDetails,
-        GetResources $getResources
+        private readonly HostList $hostList,
+        private readonly GetDetails $getDetails,
+        private readonly GetResources $getResources
     ) {
-        $this->hostList = $hostList;
-        $this->getDetails = $getDetails;
-        $this->getResources = $getResources;
     }
 
     public function get()
@@ -51,27 +44,27 @@ class GetAllClusters
                 continue;
             }
 
-            if (!$host->cluster->info()["enabled"]) {
+            if (!$host->cluster->info()['enabled']) {
                 continue;
             }
 
             $clusterMembers = $host->cluster->members->all(LxdRecursionLevels::INSTANCE_FULL_RECURSION);
 
             foreach ($clusterMembers as $member) {
-                if (!isset($hostByUrl[$member["url"]])) {
+                if (!isset($hostByUrl[$member['url']])) {
                     continue;
                 }
 
-                $memberHostObj = $hostByUrl[$member["url"]];
+                $memberHostObj = $hostByUrl[$member['url']];
 
-                $memberHostObj->setCustomProp("clusterInfo", $member);
+                $memberHostObj->setCustomProp('clusterInfo', $member);
                 if ($addResources) {
-                    $memberHostObj->setCustomProp("resources", $this->getResources->getHostExtended($memberHostObj));
+                    $memberHostObj->setCustomProp('resources', $this->getResources->getHostExtended($memberHostObj));
                 }
-                $memberHostObj->setCustomProp("status", $member["status"]);
+                $memberHostObj->setCustomProp('status', $member['status']);
 
-                $clusters[$clusterId]["members"][] = $memberHostObj;
-                $hostsInACluster[] = $member["url"];
+                $clusters[$clusterId]['members'][] = $memberHostObj;
+                $hostsInACluster[] = $member['url'];
             }
             $clusterId++;
         }
@@ -93,25 +86,25 @@ class GetAllClusters
 
             $onlineMembers = 0;
 
-            foreach ($cluster["members"] as &$member) {
-                $resources = $member->getCustomProp("resources");
+            foreach ($cluster['members'] as &$member) {
+                $resources = $member->getCustomProp('resources');
 
-                $totalMemory += $resources["memory"]["total"];
-                $usedMemory += $resources["memory"]["used"];
+                $totalMemory += $resources['memory']['total'];
+                $usedMemory += $resources['memory']['used'];
 
-                $member->removeCustomProp("resources");
+                $member->removeCustomProp('resources');
 
-                if ($member->getCustomProp("status") == "Online") {
+                if ($member->getCustomProp('status') == 'Online') {
                     $onlineMembers++;
                 }
             }
 
-            $status = count($cluster["members"]) == $onlineMembers ? "Online" : "Degraded";
+            $status = count($cluster['members']) == $onlineMembers ? 'Online' : 'Degraded';
 
-            $clusters[$index]["stats"] = [
-                "totalMemory"=>$totalMemory,
-                "usedMemory"=>$usedMemory,
-                "status"=>$status
+            $clusters[$index]['stats'] = [
+                'totalMemory' => $totalMemory,
+                'usedMemory' => $usedMemory,
+                'status' => $status,
             ];
         }
         return $clusters;

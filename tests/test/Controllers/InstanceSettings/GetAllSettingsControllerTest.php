@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 final class GetAllSettingsControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -14,22 +16,26 @@ final class GetAllSettingsControllerTest extends TestCase
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
     }
 
-    public function test_nonAdminCantGetAllSettings() :void
+    public function testNonAdminCantGetAllSettings(): void
     {
         $this->expectException(\Exception::class);
 
         $result = $this->routeApi->route(
             Request::create('/api/InstanceSettings/GetAllSettingsController/getAll', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
     }
 
-    public function test_adminCanGetSettings() :void
+    public function testAdminCanGetSettings(): void
     {
         $result = $this->routeApi->route(
             Request::create('/api/InstanceSettings/GetAllSettingsController/getAll', 'POST'),
-            ["userid"=>1],
+            [
+                'userid' => 1,
+            ],
             true
         );
         $this->assertTrue(count($result) > 0);

@@ -2,30 +2,20 @@
 
 namespace dhope0000\LXDClient\Tools\User\AllowedProjects;
 
-use dhope0000\LXDClient\Tools\User\ValidatePermissions;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
-use dhope0000\LXDClient\Model\Users\FetchUserDetails;
-use dhope0000\LXDClient\Model\Users\AllowedProjects\InsertUserAccess;
 use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
+use dhope0000\LXDClient\Model\Users\AllowedProjects\InsertUserAccess;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class GrantAccessToProject
 {
-    private $validatePermissions;
-    private $fetchUserDetails;
-    private $insertUserAccess;
-    private $fetchAllowedProjects;
-    
     public function __construct(
-        ValidatePermissions $validatePermissions,
-        FetchUserDetails $fetchUserDetails,
-        InsertUserAccess $insertUserAccess,
-        FetchAllowedProjects $fetchAllowedProjects
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly FetchUserDetails $fetchUserDetails,
+        private readonly InsertUserAccess $insertUserAccess,
+        private readonly FetchAllowedProjects $fetchAllowedProjects
     ) {
-        $this->validatePermissions = $validatePermissions;
-        $this->fetchUserDetails = $fetchUserDetails;
-        $this->insertUserAccess = $insertUserAccess;
-        $this->fetchAllowedProjects = $fetchAllowedProjects;
     }
 
     public function grant(int $userId, array $targetUsers, Host $host, string $project)

@@ -8,20 +8,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DisableScheduledBackupsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $updateBackupSchedules;
-
-    public function __construct(UpdateBackupSchedules $updateBackupSchedules)
-    {
-        $this->updateBackupSchedules = $updateBackupSchedules;
+    public function __construct(
+        private readonly UpdateBackupSchedules $updateBackupSchedules
+    ) {
     }
+
     /**
      * @Route("/api/Instances/Backups/DisableScheduledBackupsController/disable", name="Disable Instance Backup Schedule", methods={"POST"})
      */
-    public function disable(
-        int $userId,
-        Host $host,
-        string $instance
-    ) {
+    public function disable(int $userId, Host $host, string $instance)
+    {
         $this->updateBackupSchedules->disableActiveScheds(
             $userId,
             $host->getHostId(),
@@ -29,6 +25,9 @@ class DisableScheduledBackupsController implements \dhope0000\LXDClient\Interfac
             $host->getProject()
         );
 
-        return ["state"=>"success", "message"=>"Disabled schedule for instance"];
+        return [
+            'state' => 'success',
+            'message' => 'Disabled schedule for instance',
+        ];
     }
 }

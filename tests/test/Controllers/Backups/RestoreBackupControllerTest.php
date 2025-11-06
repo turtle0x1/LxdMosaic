@@ -1,17 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RestoreBackupControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
         $container = $builder->build();
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
-
 
         $this->database = $container->get("dhope0000\LXDClient\Model\Database\Database");
         $this->database->dbObject->beginTransaction();
@@ -19,29 +21,34 @@ final class RestoreBackupControllerTest extends TestCase
         $this->backupId = $inesrtBackup->insert(
             new \DateTime(),
             1,
-            "default",
-            "fakeInstance",
-            "fakeBackupName",
-            "/not/a/real/path",
+            'default',
+            'fakeInstance',
+            'fakeBackupName',
+            '/not/a/real/path',
             0
         );
     }
 
-    public function tearDown() :void
+    #[\Override]
+    protected function tearDown(): void
     {
         $this->database->dbObject->rollBack();
     }
 
-
-    public function test_no_acces_to_project_doesnt_allow_restore() :void
+    public function testNoAccesToProjectDoesntAllowRestore(): void
     {
         $this->expectException(\Exception::class);
-        $_POST = ["backupId"=>$this->backupId, "targetHost"=>1];
-
+        $_POST = [
+            'backupId' => $this->backupId,
+            'targetHost' => 1,
+        ];
 
         $result = $this->routeApi->route(
             Request::create('/api/Backups/RestoreBackupController/restore', 'POST'),
-            ["userid"=>2, "project"=>"testProject"],
+            [
+                'userid' => 2,
+                'project' => 'testProject',
+            ],
             true
         );
     }

@@ -23,7 +23,7 @@ class StringTools
         $pieces = [];
         $max = mb_strlen($keyspace, '8bit') - 1;
         for ($i = 0; $i < $length; ++$i) {
-            $pieces []= $keyspace[random_int(0, $max)];
+            $pieces[] = $keyspace[random_int(0, $max)];
         }
         return implode('', $pieces);
     }
@@ -33,7 +33,7 @@ class StringTools
      */
     public function stringStartsWith(string $string, string $query)
     {
-        return substr($string, 0, strlen($query)) === $query;
+        return str_starts_with($string, $query);
     }
 
     /**
@@ -54,73 +54,76 @@ class StringTools
     public static function usedByStringsToLinks(Host $host, array $usedBy)
     {
         foreach ($usedBy as $index => $item) {
-            $parts = parse_url($item);
+            $parts = parse_url((string) $item);
 
             $query = [];
 
-            if (isset($parts["query"])) {
+            if (isset($parts['query'])) {
                 parse_str($parts['query'], $query);
             }
 
-            $explodedPath = explode("/", $parts["path"]);
+            $explodedPath = explode('/', $parts['path']);
 
             $lastItem = array_pop($explodedPath);
 
-            $itemProject = "default";
+            $itemProject = 'default';
 
-            if (isset($query["project"])) {
-                $itemProject = $query["project"];
+            if (isset($query['project'])) {
+                $itemProject = $query['project'];
             }
 
-            $icon = "";
-            $class = "";
-            $href = "";
-            $tag = "a";
+            $icon = '';
+            $class = '';
+            $href = '';
+            $tag = 'a';
 
-            if (strpos($item, '/snapshots/') !== false) {
+            if (str_contains((string) $item, '/snapshots/')) {
                 $container = $explodedPath[count($explodedPath) - 2];
-                $lastItem =  $container . "/" . $lastItem;
-                $href = "/instance/{$host->getHostId()}/$container";
-                $icon = "camera";
-            } elseif (strpos($item, '/instances/') !== false || strpos($item, '/containers/') !== false) {
-                $icon = "box";
-                $href = "/instance/{$host->getHostId()}/$lastItem";
-            } elseif (strpos($item, '/profiles/') !== false) {
-                $icon = "users";
-                $href = "/profiles/{$host->getHostId()}/$lastItem";
-            } elseif (strpos($item, '/images/') !== false) {
+                $lastItem = $container . '/' . $lastItem;
+                $href = "/instance/{$host->getHostId()}/{$container}";
+                $icon = 'camera';
+            } elseif (str_contains((string) $item, '/instances/') || str_contains((string) $item, '/containers/')) {
+                $icon = 'box';
+                $href = "/instance/{$host->getHostId()}/{$lastItem}";
+            } elseif (str_contains((string) $item, '/profiles/')) {
+                $icon = 'users';
+                $href = "/profiles/{$host->getHostId()}/{$lastItem}";
+            } elseif (str_contains((string) $item, '/images/')) {
                 $origProject = $host->getProject();
                 $host->setProject($itemProject);
                 $imageDetails = $host->images->info($lastItem);
                 $host->setProject($origProject);
 
-                $lastItem = $imageDetails["properties"]["os"] . " " . $imageDetails["properties"]["release"] . "({$imageDetails['type']})";
+                $lastItem = $imageDetails['properties']['os'] . ' ' . $imageDetails['properties']['release'] . "({$imageDetails['type']})";
 
-                if (!empty($imageDetails["aliases"])) {
-                    $lastItem = implode(",", array_column($imageDetails["aliases"], "name")) . "({$imageDetails['type']})";
+                if (!empty($imageDetails['aliases'])) {
+                    $lastItem = implode(
+                        ',',
+                        array_column($imageDetails['aliases'], 'name')
+                    ) . "({$imageDetails['type']})";
                 }
 
-                $icon = "images";
+                $icon = 'images';
 
-                $href = "/images/{$host->getHostId()}/{$imageDetails["fingerprint"]}";
-            } elseif (strpos($item, '/volumes/') !== false) {
-                $tag = "span";
-                $class = "disabled";
-                $icon = "database";
+                $href = "/images/{$host->getHostId()}/{$imageDetails['fingerprint']}";
+            } elseif (str_contains((string) $item, '/volumes/')) {
+                $tag = 'span';
+                $class = 'disabled';
+                $icon = 'database';
             }
 
             // Currently the frontend can't handle jumping to items in a project
             // the user isn't currently in so we have to make these non clickable
             // for the time being
             if ($itemProject !== $host->getProject()) {
-                $tag = "span";
+                $tag = 'span';
             }
 
-            $item = "<$tag href='$href?project={$itemProject}' class='$class' data-navigo>
-                <i class='fas fa-$icon pe-1'></i>
-                $lastItem
-                <i class='fas fa-project-diagram ps-2 pe-1'></i> $itemProject
-            </$tag>";
+            $item = "<{$tag} href='{$href}?project={$itemProject}' class='{$class}' data-navigo>
+                <i class='fas fa-{$icon} pe-1'></i>
+                {$lastItem}
+                <i class='fas fa-project-diagram ps-2 pe-1'></i> {$itemProject}
+            </{$tag}>";
 
             $usedBy[$index] = $item;
         }

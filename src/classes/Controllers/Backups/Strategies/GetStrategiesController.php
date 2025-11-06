@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetStrategiesController
 {
-    private $fetchStrategies;
-
-    public function __construct(FetchStrategies $fetchStrategies)
-    {
-        $this->fetchStrategies = $fetchStrategies;
+    public function __construct(
+        private readonly FetchStrategies $fetchStrategies
+    ) {
     }
 
     /**

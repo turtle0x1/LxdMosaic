@@ -2,13 +2,15 @@
 
 $_ENV = getenv();
 
-date_default_timezone_set("UTC");
+date_default_timezone_set('UTC');
 
-require __DIR__ . "/../../../vendor/autoload.php";
+require __DIR__ . '/../../../vendor/autoload.php';
 
 $container = (new \DI\ContainerBuilder())->build();
 
-$getSoftwareAssetsSnapshotData = $container->make("dhope0000\LXDClient\Tools\Hosts\SoftwareAssets\GetSoftwareAssetsSnapshotData");
+$getSoftwareAssetsSnapshotData = $container->make(
+    "dhope0000\LXDClient\Tools\Hosts\SoftwareAssets\GetSoftwareAssetsSnapshotData"
+);
 $insertSoftwareAssets = $container->make("dhope0000\LXDClient\Model\Hosts\SoftwareAssets\InsertSoftwareAssetsSnapshot");
 
 $date = new \DateTimeImmutable();

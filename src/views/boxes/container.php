@@ -617,8 +617,8 @@
 
 </div>
 <?php
-    require_once __DIR__ . "/boxComponents/instance/packages.html";
-    require_once __DIR__ . "/boxComponents/instance/timers.html";
+require_once __DIR__ . '/boxComponents/instance/packages.html';
+require_once __DIR__ . '/boxComponents/instance/timers.html';
 ?>
 </div>
 <script src="/assets/dist/xterm.js"></script>
@@ -2707,12 +2707,12 @@ $("#containerBox").on("click", ".changeInstanceState", function(){
 });
 </script>
 <?php
-    require __DIR__ . "/../modals/containers/migrateContainer.php";
-    require __DIR__ . "/../modals/containers/createContainer.php";
-    require __DIR__ . "/../modals/containers/editSettings.php";
-    require __DIR__ . "/../modals/containers/files/uploadFile.php";
-    require __DIR__ . "/../modals/instances/vms/createVm.php";
-    require __DIR__ . "/../modals/containers/createImage.php";
-    require __DIR__ . "/../modals/containers/assignProfiles.php";
-    require __DIR__ . "/../modals/instances/attachVolumes.php";
+    require __DIR__ . '/../modals/containers/migrateContainer.php';
+require __DIR__ . '/../modals/containers/createContainer.php';
+require __DIR__ . '/../modals/containers/editSettings.php';
+require __DIR__ . '/../modals/containers/files/uploadFile.php';
+require __DIR__ . '/../modals/instances/vms/createVm.php';
+require __DIR__ . '/../modals/containers/createImage.php';
+require __DIR__ . '/../modals/containers/assignProfiles.php';
+require __DIR__ . '/../modals/instances/attachVolumes.php';
 ?>

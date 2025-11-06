@@ -3,16 +3,13 @@
 namespace dhope0000\LXDClient\Controllers\Projects;
 
 use dhope0000\LXDClient\Tools\Projects\GetProjectsOverview;
-use dhope0000\LXDClient\Objects\Host;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetProjectsOverviewController
 {
-    private $getProjectsOverview;
-    
-    public function __construct(GetProjectsOverview $getProjectsOverview)
-    {
-        $this->getProjectsOverview = $getProjectsOverview;
+    public function __construct(
+        private readonly GetProjectsOverview $getProjectsOverview
+    ) {
     }
 
     /**

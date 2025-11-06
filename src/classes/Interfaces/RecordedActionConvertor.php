@@ -6,5 +6,5 @@ use dhope0000\LXDClient\Objects\RecordedAction;
 
 interface RecordedActionConvertor
 {
-    public function convert(array $recordedAction) :RecordedAction;
+    public function convert(array $recordedAction): RecordedAction;
 }

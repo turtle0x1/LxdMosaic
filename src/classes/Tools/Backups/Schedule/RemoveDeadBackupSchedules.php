@@ -3,23 +3,16 @@
 namespace dhope0000\LXDClient\Tools\Backups\Schedule;
 
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\FetchBackupSchedules;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\UpdateBackupSchedules;
+use dhope0000\LXDClient\Model\Hosts\GetDetails;
 
 class RemoveDeadBackupSchedules
 {
-    private $fetchBackupSchedules;
-    private $getDetails;
-    private $updateBackupSchedules;
-
     public function __construct(
-        FetchBackupSchedules $fetchBackupSchedules,
-        GetDetails $getDetails,
-        UpdateBackupSchedules $updateBackupSchedules
+        private readonly FetchBackupSchedules $fetchBackupSchedules,
+        private readonly GetDetails $getDetails,
+        private readonly UpdateBackupSchedules $updateBackupSchedules
     ) {
-        $this->fetchBackupSchedules = $fetchBackupSchedules;
-        $this->getDetails = $getDetails;
-        $this->updateBackupSchedules = $updateBackupSchedules;
     }
 
     public function remove()
@@ -28,15 +21,13 @@ class RemoveDeadBackupSchedules
         foreach ($hostBackups as $hostId => $backups) {
             $hostProjectSchedules = [];
             foreach ($backups as $backup) {
-                if (!isset($hostProjectSchedules[$backup["project"]])) {
-                    $hostProjectSchedules[$backup["project"]] = [];
+                if (!isset($hostProjectSchedules[$backup['project']])) {
+                    $hostProjectSchedules[$backup['project']] = [];
                 }
-                $hostProjectSchedules[$backup["project"]][] = $backup;
+                $hostProjectSchedules[$backup['project']][] = $backup;
             }
 
-
             $host = $this->getDetails->fetchHost($hostId);
-
 
             foreach ($hostProjectSchedules as $project => $schedules) {
                 $instances = [];
@@ -47,11 +38,11 @@ class RemoveDeadBackupSchedules
                 }
 
                 foreach ($schedules as $schedule) {
-                    if (!in_array($schedule["instance"], $instances)) {
+                    if (!in_array($schedule['instance'], $instances)) {
                         $this->updateBackupSchedules->disableActiveScheds(
                             1, // Admin user id
                             $hostId,
-                            $schedule["instance"],
+                            $schedule['instance'],
                             $project
                         );
                     }

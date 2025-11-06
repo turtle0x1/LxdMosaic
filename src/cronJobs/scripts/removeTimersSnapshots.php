@@ -1,8 +1,8 @@
 <?php
 
 $_ENV = getenv();
-date_default_timezone_set("UTC");
-require __DIR__ . "/../../../vendor/autoload.php";
+date_default_timezone_set('UTC');
+require __DIR__ . '/../../../vendor/autoload.php';
 
 $builder = new \DI\ContainerBuilder();
 $container = $builder->build();

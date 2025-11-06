@@ -2,18 +2,17 @@
 
 namespace dhope0000\LXDClient\Controllers\Instances\RecordedActions;
 
-use dhope0000\LXDClient\Tools\Instances\RecordedActions\GetAllInstanceRecordedActions;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Instances\RecordedActions\GetAllInstanceRecordedActions;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetHostInstanceEventsController
 {
-    private $getAllInstanceRecordedActions;
-    
-    public function __construct(GetAllInstanceRecordedActions $getAllInstanceRecordedActions)
-    {
-        $this->getAllInstanceRecordedActions = $getAllInstanceRecordedActions;
+    public function __construct(
+        private readonly GetAllInstanceRecordedActions $getAllInstanceRecordedActions
+    ) {
     }
+
     /**
      * @Route("/api/Instances/RecordedActions/GetHostInstanceEventsController/get", name="Get Instance Recorded Actions", methods={"POST"})
      */

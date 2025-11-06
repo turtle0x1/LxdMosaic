@@ -7,18 +7,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetAllImageServersController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $fetchImageServers;
-
-    public function __construct(FetchImageServers $fetchImageServers)
-    {
-        $this->fetchImageServers = $fetchImageServers;
+    public function __construct(
+        private readonly FetchImageServers $fetchImageServers
+    ) {
     }
+
     /**
      * @Route("/api/InstanceSettings/ImageServers/GetAllImageServersController/all", name="Get all image servers aliases", methods={"POST"})
      */
     public function all()
     {
         $aliases = $this->fetchImageServers->fetchAllAliases();
-        return ["state" => "success", "servers" => $aliases];
+        return [
+            'state' => 'success',
+            'servers' => $aliases,
+        ];
     }
 }

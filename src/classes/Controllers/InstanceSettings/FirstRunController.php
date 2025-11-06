@@ -3,27 +3,28 @@
 namespace dhope0000\LXDClient\Controllers\InstanceSettings;
 
 use dhope0000\LXDClient\Tools\InstanceSettings\FirstRun;
+use DI\Container;
 use Symfony\Component\Routing\Annotation\Route;
-use \DI\Container;
 
 class FirstRunController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $firstRun;
-    private $container;
-
-    public function __construct(FirstRun $firstRun, Container $container)
-    {
-        $this->firstRun = $firstRun;
-        $this->container = $container;
+    public function __construct(
+        private readonly FirstRun $firstRun,
+        private readonly Container $container
+    ) {
     }
+
     /**
      * @Route("/api/InstanceSettings/FirstRunController/run", name="Run LXDMosaic First Run", methods={"POST"})
      */
     public function run(array $hosts, string $adminPassword, array $settings = [])
     {
-        $this->container->call(["dhope0000\LXDClient\Model\Database\Database", "beginTransaction"]);
+        $this->container->call(["dhope0000\LXDClient\Model\Database\Database", 'beginTransaction']);
         $this->firstRun->run($hosts, $adminPassword, $settings);
-        $this->container->call(["dhope0000\LXDClient\Model\Database\Database", "commitTransaction"]);
-        return ["state"=>"success", "message"=>"Setup LXD Mosaic"];
+        $this->container->call(["dhope0000\LXDClient\Model\Database\Database", 'commitTransaction']);
+        return [
+            'state' => 'success',
+            'message' => 'Setup LXD Mosaic',
+        ];
     }
 }

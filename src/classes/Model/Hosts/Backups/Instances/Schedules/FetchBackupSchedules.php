@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchBackupSchedules
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class FetchBackupSchedules
 
     public function fetchActiveSchedsGroupedByHostId()
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `IBS_Host_ID` as `hostId`,
                     `IBS_Instance` as `instance`,
                     `IBS_Project` as `project`,
@@ -31,14 +31,14 @@ class FetchBackupSchedules
                     `IBS_Disabled` = 0
                 ORDER BY
                     `IBS_ID` ASC
-                ";
+                ';
         $do = $this->database->query($sql);
-        return $do->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_ASSOC);
+        return $do->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_ASSOC);
     }
 
     public function fetchActive(int $hostId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `IBS_Host_ID` as `hostId`,
                     `IBS_Instance` as `instance`,
                     `IBS_Project` as `project`,
@@ -56,10 +56,10 @@ class FetchBackupSchedules
                     `IBS_Disabled` = 0
                 ORDER BY
                     `IBS_ID` ASC
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId
+            ':hostId' => $hostId,
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

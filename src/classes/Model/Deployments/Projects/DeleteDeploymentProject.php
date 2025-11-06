@@ -13,12 +13,12 @@ class DeleteDeploymentProject
         $this->database = $database->dbObject;
     }
 
-    public function delete(int $deploymentProjectId) :bool
+    public function delete(int $deploymentProjectId): bool
     {
-        $sql = "DELETE FROM `Deployment_Projects` WHERE `DP_ID` = :deploymentProjectId";
+        $sql = 'DELETE FROM `Deployment_Projects` WHERE `DP_ID` = :deploymentProjectId';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":deploymentProjectId"=>$deploymentProjectId
+            ':deploymentProjectId' => $deploymentProjectId,
         ]);
         return $do->rowCount() ? true : false;
     }

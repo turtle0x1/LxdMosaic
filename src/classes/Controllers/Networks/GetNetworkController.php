@@ -2,17 +2,15 @@
 
 namespace dhope0000\LXDClient\Controllers\Networks;
 
-use dhope0000\LXDClient\Tools\Networks\GetNetwork;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Networks\GetNetwork;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetNetworkController
 {
-    private $getNetwork;
-    
-    public function __construct(GetNetwork $getNetwork)
-    {
-        $this->getNetwork = $getNetwork;
+    public function __construct(
+        private readonly GetNetwork $getNetwork
+    ) {
     }
 
     /**

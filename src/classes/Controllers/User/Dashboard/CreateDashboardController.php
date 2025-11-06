@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateDashboardController
 {
-    private $insertUserDashboard;
-    
-    public function __construct(InsertUserDashboard $insertUserDashboard)
-    {
-        $this->insertUserDashboard = $insertUserDashboard;
+    public function __construct(
+        private readonly InsertUserDashboard $insertUserDashboard
+    ) {
     }
 
     /**
@@ -20,6 +18,9 @@ class CreateDashboardController
     public function create(int $userId, string $name)
     {
         $this->insertUserDashboard->insert($userId, $name);
-        return ["state"=>"success", "message"=>"Created dashbaord"];
+        return [
+            'state' => 'success',
+            'message' => 'Created dashbaord',
+        ];
     }
 }

@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetCloudsConfigController
 {
-    private $getCloudConfigs;
-    
-    public function __construct(GetCloudConfigs $getCloudConfigs)
-    {
-        $this->getCloudConfigs = $getCloudConfigs;
+    public function __construct(
+        private readonly GetCloudConfigs $getCloudConfigs
+    ) {
     }
 
     /**

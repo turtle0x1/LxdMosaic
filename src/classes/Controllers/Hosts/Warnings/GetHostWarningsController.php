@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Hosts\Warnings;
 
 use dhope0000\LXDClient\Objects\Host;

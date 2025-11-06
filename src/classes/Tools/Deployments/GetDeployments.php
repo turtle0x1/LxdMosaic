@@ -3,30 +3,22 @@
 namespace dhope0000\LXDClient\Tools\Deployments;
 
 use dhope0000\LXDClient\Model\Deployments\FetchDeployments;
-use dhope0000\LXDClient\Tools\Deployments\GetDeployment;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetDeployments
 {
-    private $fetchDeployments;
-    private $getDeployment;
-    private $fetchUserDetails;
-    
     public function __construct(
-        FetchDeployments $fetchDeployments,
-        GetDeployment $getDeployment,
-        FetchUserDetails $fetchUserDetails
+        private readonly FetchDeployments $fetchDeployments,
+        private readonly GetDeployment $getDeployment,
+        private readonly FetchUserDetails $fetchUserDetails
     ) {
-        $this->fetchDeployments = $fetchDeployments;
-        $this->getDeployment = $getDeployment;
-        $this->fetchUserDetails = $fetchUserDetails;
     }
 
     public function getAll(int $userId)
     {
         $deploymentList = [];
 
-        if ($this->fetchUserDetails->isAdmin($userId) !== "1") {
+        if ($this->fetchUserDetails->isAdmin($userId) !== '1') {
             $deploymentList = $this->fetchDeployments->fetchUserHasAccessTo($userId);
         } else {
             $deploymentList = $this->fetchDeployments->fetchAll();
@@ -37,10 +29,10 @@ class GetDeployments
 
     private function addDetails($userId, $deploymentList)
     {
-        foreach ($deploymentList as $index =>$deployment) {
-            $details = $this->getDeployment->get($userId, $deployment["id"]);
-            $containerDetails = $this->getContainerDetails($details["containers"]);
-            $deploymentList[$index]["containerDetails"] = $containerDetails;
+        foreach ($deploymentList as $index => $deployment) {
+            $details = $this->getDeployment->get($userId, $deployment['id']);
+            $containerDetails = $this->getContainerDetails($details['containers']);
+            $deploymentList[$index]['containerDetails'] = $containerDetails;
         }
         return $deploymentList;
     }
@@ -53,15 +45,15 @@ class GetDeployments
             if (!$host->hostOnline()) {
                 continue;
             }
-            $containers = $host->getCustomProp("containers");
+            $containers = $host->getCustomProp('containers');
             $totalContainers += count($containers);
             foreach ($containers as $container) {
-                $totalMem += $container["state"]["memory"]["usage"];
+                $totalMem += $container['state']['memory']['usage'];
             }
         }
         return [
-            "totalMem"=>$totalMem,
-            "totalContainers"=>$totalContainers
+            'totalMem' => $totalMem,
+            'totalContainers' => $totalContainers,
         ];
     }
 }

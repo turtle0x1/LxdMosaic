@@ -1226,6 +1226,6 @@ function loadServerView(hostId)
 </script>
 
 <?php
-    require __DIR__ . "/../modals/hosts/instances/addProxyDevices.php";
-    require __DIR__ . "/../modals/hosts/editSettings.php";
+    require __DIR__ . '/../modals/hosts/instances/addProxyDevices.php';
+require __DIR__ . '/../modals/hosts/editSettings.php';
 ?>

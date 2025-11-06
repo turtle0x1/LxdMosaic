@@ -19,9 +19,9 @@
     </div>
 
     <?php
-        require __DIR__ . "/boxComponents/dashboard/generalDashboard.html";
-        require __DIR__ . "/boxComponents/dashboard/userDashboard.html";
-        require __DIR__ . "/boxComponents/dashboard/projectAnalytics.html";
+        require __DIR__ . '/boxComponents/dashboard/generalDashboard.html';
+    require __DIR__ . '/boxComponents/dashboard/userDashboard.html';
+    require __DIR__ . '/boxComponents/dashboard/projectAnalytics.html';
     ?>
 
 </div>
@@ -313,5 +313,5 @@ function loadDashboard(){
 </script>
 
 <?php
-    require __DIR__ . "/../modals/hosts/editDetails.php";
-?>
+    require __DIR__ . '/../modals/hosts/editDetails.php';
+    ?>

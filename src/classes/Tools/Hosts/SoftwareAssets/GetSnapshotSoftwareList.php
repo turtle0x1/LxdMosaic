@@ -2,20 +2,15 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts\SoftwareAssets;
 
-use dhope0000\LXDClient\Model\Hosts\SoftwareAssets\FetchSoftwareAssetSnapshots;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
+use dhope0000\LXDClient\Model\Hosts\SoftwareAssets\FetchSoftwareAssetSnapshots;
 
 class GetSnapshotSoftwareList
 {
-    private $fetchSoftwareAssetSnapshots;
-    private $getDetails;
-
     public function __construct(
-        FetchSoftwareAssetSnapshots $fetchSoftwareAssetSnapshots,
-        GetDetails $getDetails
+        private readonly FetchSoftwareAssetSnapshots $fetchSoftwareAssetSnapshots,
+        private readonly GetDetails $getDetails
     ) {
-        $this->fetchSoftwareAssetSnapshots = $fetchSoftwareAssetSnapshots;
-        $this->getDetails = $getDetails;
     }
 
     public function get(\DateTimeImmutable $date)
@@ -26,7 +21,7 @@ class GetSnapshotSoftwareList
             return [];
         }
 
-        $snapshot = json_decode($snapshot["data"], true);
+        $snapshot = json_decode((string) $snapshot['data'], true);
 
         $output = [];
 
@@ -41,9 +36,9 @@ class GetSnapshotSoftwareList
                 foreach ($instances as $instance => $packages) {
                     foreach ($packages as $package) {
                         $output[] = array_merge([
-                            "hostName" => $hostAliases[$hostId],
-                            "project" => $project,
-                            "instance" => $instance
+                            'hostName' => $hostAliases[$hostId],
+                            'project' => $project,
+                            'instance' => $instance,
                         ], $package);
                     }
                 }

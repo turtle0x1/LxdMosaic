@@ -8,22 +8,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeletePathController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deletePath;
-
-    public function __construct(DeletePath $deletePath)
-    {
-        $this->deletePath = $deletePath;
+    public function __construct(
+        private readonly DeletePath $deletePath
+    ) {
     }
+
     /**
      * @Route("/api/Instances/Files/DeletePathController/delete", name="Delete Instance File", methods={"POST"})
      */
-    public function delete(
-        Host $host,
-        string $container,
-        string $path
-    ) {
+    public function delete(Host $host, string $container, string $path)
+    {
         $response = $this->deletePath->delete($host, $container, $path);
 
-        return ["state"=>"success", "message"=>"Deleted item", "lxdResponse"=>$response];
+        return [
+            'state' => 'success',
+            'message' => 'Deleted item',
+            'lxdResponse' => $response,
+        ];
     }
 }

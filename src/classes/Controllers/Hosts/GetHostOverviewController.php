@@ -1,17 +1,16 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Hosts;
 
-use dhope0000\LXDClient\Tools\Hosts\GetHostOverview;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Hosts\GetHostOverview;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetHostOverviewController
 {
-    private $getHostOverview;
-    
-    public function __construct(GetHostOverview $getHostOverview)
-    {
-        $this->getHostOverview = $getHostOverview;
+    public function __construct(
+        private readonly GetHostOverview $getHostOverview
+    ) {
     }
 
     /**

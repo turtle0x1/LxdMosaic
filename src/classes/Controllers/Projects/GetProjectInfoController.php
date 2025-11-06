@@ -2,17 +2,15 @@
 
 namespace dhope0000\LXDClient\Controllers\Projects;
 
-use dhope0000\LXDClient\Tools\Projects\GetProjectInfo;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Projects\GetProjectInfo;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetProjectInfoController
 {
-    private $getProjectInfo;
-    
-    public function __construct(GetProjectInfo $getProjectInfo)
-    {
-        $this->getProjectInfo = $getProjectInfo;
+    public function __construct(
+        private readonly GetProjectInfo $getProjectInfo
+    ) {
     }
 
     /**

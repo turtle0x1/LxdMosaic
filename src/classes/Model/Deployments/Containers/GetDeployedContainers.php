@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class GetDeployedContainers
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class GetDeployedContainers
 
     public function getByDeploymentId(int $deploymentId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `DC_ID` as `dcId`,
                     `DC_Host_ID` as `hostId`,
                     `DC_Name` as `name`,
@@ -27,10 +27,10 @@ class GetDeployedContainers
                     `Deployment_Containers`
                 WHERE
                     `DC_Deployment_ID` = :deploymentId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":deploymentId"=>$deploymentId
+            ':deploymentId' => $deploymentId,
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

@@ -2,11 +2,10 @@
 
 namespace dhope0000\LXDClient\Objects;
 
-use dhope0000\LXDClient\Objects\Host;
-
 class HostsCollection implements \Iterator, \JsonSerializable
 {
     private $hosts = [];
+
     private $index = 0;
 
     public function __construct(array $hosts)
@@ -16,7 +15,8 @@ class HostsCollection implements \Iterator, \JsonSerializable
         }
     }
 
-    final public function jsonSerialize()
+    #[\Override]
+    final public function jsonSerialize(): mixed
     {
         return $this->hosts;
     }
@@ -41,27 +41,32 @@ class HostsCollection implements \Iterator, \JsonSerializable
         return $this->hosts;
     }
 
-    public function current()
+    #[\Override]
+    public function current(): mixed
     {
         return $this->hosts[$this->index];
     }
 
-    public function next()
+    #[\Override]
+    public function next(): void
     {
         $this->index ++;
     }
 
-    public function key()
+    #[\Override]
+    public function key():  mixed
     {
         return $this->index;
     }
 
-    public function valid()
+    #[\Override]
+    public function valid(): bool
     {
         return isset($this->hosts[$this->key()]);
     }
 
-    public function rewind()
+    #[\Override]
+    public function rewind(): void
     {
         $this->index = 0;
     }

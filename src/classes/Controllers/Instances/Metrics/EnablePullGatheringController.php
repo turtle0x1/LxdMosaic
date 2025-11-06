@@ -2,17 +2,15 @@
 
 namespace dhope0000\LXDClient\Controllers\Instances\Metrics;
 
-use dhope0000\LXDClient\Tools\Instances\Metrics\EnablePullGathering;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Instances\Metrics\EnablePullGathering;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EnablePullGatheringController
 {
-    private $enablePullGathering;
-    
-    public function __construct(EnablePullGathering $enablePullGathering)
-    {
-        $this->enablePullGathering = $enablePullGathering;
+    public function __construct(
+        private readonly EnablePullGathering $enablePullGathering
+    ) {
     }
 
     /**
@@ -21,6 +19,9 @@ class EnablePullGatheringController
     public function enable(Host $host, string $instance)
     {
         $this->enablePullGathering->enable($host, $instance);
-        return ["state"=>"success", "message"=>"Enabled pulling metrics"];
+        return [
+            'state' => 'success',
+            'message' => 'Enabled pulling metrics',
+        ];
     }
 }

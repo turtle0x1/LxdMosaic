@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchInstanceBackups
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class FetchInstanceBackups
 
     public function fetchAll(int $hostId, string $instance)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `CB_ID` as `id`,
                     `CB_Backup_Date_Created` as `dateCreated`,
                     `CB_Backup` as `backupName`,
@@ -32,11 +32,11 @@ class FetchInstanceBackups
                     `CB_Host_ID` = :hostId
                 ORDER BY
                     `dateCreated` DESC
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId,
-            ":container"=>$instance
+            ':hostId' => $hostId,
+            ':container' => $instance,
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

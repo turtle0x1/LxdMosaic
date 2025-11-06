@@ -439,8 +439,8 @@ $("#profileBox").on("click", "#deleteProfile", function(){
 </script>
 
 <?php
-require __DIR__ . "/../modals/profiles/replace.php";
-require __DIR__ . "/../modals/profiles/rename.php";
-require __DIR__ . "/../modals/profiles/copy.php";
-require __DIR__ . "/../modals/profiles/create.php";
+require __DIR__ . '/../modals/profiles/replace.php';
+require __DIR__ . '/../modals/profiles/rename.php';
+require __DIR__ . '/../modals/profiles/copy.php';
+require __DIR__ . '/../modals/profiles/create.php';
 ?>

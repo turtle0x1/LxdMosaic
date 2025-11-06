@@ -91,7 +91,7 @@
     <input id="username" class="form-control" placeholder="Username" name="username" required="" autofocus="">
     <label for="inputPassword" class="visually-hidden">Password</label>
     <input type="password" id="password" class="form-control" name="password" placeholder="Password" required="">
-    <?= $this->loginError == null ? "" : "<div class='text-danger'>! {$this->loginError}</div>" /** @phpstan-ignore-line */ ?>
+    <?= $this->loginError == null ? '' : "<div class='text-danger'>! {$this->loginError}</div>" /** @phpstan-ignore-line */ ?>
     <button class="btn btn-lg btn-primary btn-block" name="login" value="1" type="submit">Sign in</button>
   </form>
   <script>

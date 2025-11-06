@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetController
 {
-    private $getDeployments;
-
-    public function __construct(GetDeployments $getDeployments)
-    {
-        $this->getDeployments = $getDeployments;
+    public function __construct(
+        private readonly GetDeployments $getDeployments
+    ) {
     }
 
     /**

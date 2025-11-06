@@ -2,18 +2,14 @@
 
 namespace dhope0000\LXDClient\Tools\User;
 
-use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 use dhope0000\LXDClient\Model\Users\FetchUsers;
 
 class SearchUsers
 {
-    private $validatePermissions;
-    private $fetchUsers;
-    
-    public function __construct(ValidatePermissions $validatePermissions, FetchUsers $fetchUsers)
-    {
-        $this->validatePermissions = $validatePermissions;
-        $this->fetchUsers = $fetchUsers;
+    public function __construct(
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly FetchUsers $fetchUsers
+    ) {
     }
 
     public function search(int $userId, string $search)

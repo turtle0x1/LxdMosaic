@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Tools\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
@@ -14,8 +15,8 @@ class Migrate
     ) {
         $this->checkIfMigratingToSameHost($sourceHost, $destinationHost);
 
-        $this->checkIfHostUrlIsLocalhost($sourceHost, "source");
-        $this->checkIfHostUrlIsLocalhost($destinationHost, "destination");
+        $this->checkIfHostUrlIsLocalhost($sourceHost, 'source');
+        $this->checkIfHostUrlIsLocalhost($destinationHost, 'destination');
 
         $response = $sourceHost->instances->migrate(
             $destinationHost->getClient(),
@@ -24,8 +25,8 @@ class Migrate
             true
         );
 
-        if ($response["err"] !== "") {
-            throw new \Exception($response["err"], 1);
+        if ($response['err'] !== '') {
+            throw new \Exception($response['err'], 1);
         }
 
         if ($delete) {
@@ -38,14 +39,14 @@ class Migrate
     public function checkIfMigratingToSameHost(Host $source, Host $destination)
     {
         if ($source->getUrl() === $destination->getUrl()) {
-            throw new \Exception("You must use two different hosts to migrate", 1);
+            throw new \Exception('You must use two different hosts to migrate', 1);
         }
     }
 
     private function checkIfHostUrlIsLocalhost(Host $host, string $type)
     {
-        if (parse_url($host->getUrl())["host"] == "localhost") {
-            throw new \Exception("Your $type server has a URL of 'localhost', this wont work!", 1);
+        if (parse_url($host->getUrl())['host'] == 'localhost') {
+            throw new \Exception("Your {$type} server has a URL of 'localhost', this wont work!", 1);
         }
     }
 }

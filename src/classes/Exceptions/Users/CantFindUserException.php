@@ -6,6 +6,6 @@ class CantFindUserException extends \Exception
 {
     public function __construct($username)
     {
-        parent::__construct("Cant find user account for $username");
+        parent::__construct("Cant find user account for {$username}");
     }
 }

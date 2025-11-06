@@ -317,9 +317,9 @@
             </div>
         </div>
     </div>
-    <?php require_once __DIR__ . "/boxComponents/settings/softwareAssets.html" ?>
-    <?php require_once __DIR__ . "/boxComponents/settings/timers.html" ?>
-    <?php require_once __DIR__ . "/boxComponents/settings/imageServers.html" ?>
+    <?php require_once __DIR__ . '/boxComponents/settings/softwareAssets.html' ?>
+    <?php require_once __DIR__ . '/boxComponents/settings/timers.html' ?>
+    <?php require_once __DIR__ . '/boxComponents/settings/imageServers.html' ?>
 </div>
 
 <script>
@@ -1597,5 +1597,5 @@ $("#instanceSettingsBox").on("click", "#saveLdapSettings", function(){
 </script>
 
 <?php
-    require __DIR__ . "/../modals/users/projectAccess.php";
-?>
+    require __DIR__ . '/../modals/users/projectAccess.php';
+    ?>

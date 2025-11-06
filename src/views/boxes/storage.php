@@ -554,6 +554,6 @@ $("#volumeDetails").on("click", "#deleteVolume", function(){
 </script>
 
 <?php
-    require __DIR__ . "/../modals/storage/createPool.php";
-    require __DIR__ . "/../modals/storage/createVolume.php";
+require __DIR__ . '/../modals/storage/createPool.php';
+require __DIR__ . '/../modals/storage/createVolume.php';
 ?>

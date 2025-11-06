@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Hosts\Settings;
 
 use dhope0000\LXDClient\Objects\Host;
@@ -7,12 +8,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UpdateHostSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $validatePermissions;
-
-    public function __construct(ValidatePermissions $validatePermissions)
-    {
-        $this->validatePermissions = $validatePermissions;
+    public function __construct(
+        private readonly ValidatePermissions $validatePermissions
+    ) {
     }
+
     /**
      * @Route("/api/Hosts/Settings/UpdateHostSettingsController/update", name="Update hosts config settings", methods={"POST"})
      */
@@ -20,10 +20,13 @@ class UpdateHostSettingsController implements \dhope0000\LXDClient\Interfaces\Re
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         $info = $host->host->info();
-        foreach ($settings as $key=>$value) {
-            $info["config"][$key] = $value;
+        foreach ($settings as $key => $value) {
+            $info['config'][$key] = $value;
         }
         $host->host->replace($info['config']);
-        return ["state"=>"success", "messages"=>"Updated LXD Settings"];
+        return [
+            'state' => 'success',
+            'messages' => 'Updated LXD Settings',
+        ];
     }
 }

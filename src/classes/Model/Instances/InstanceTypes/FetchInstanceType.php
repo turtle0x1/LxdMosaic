@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchInstanceType
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class FetchInstanceType
 
     public function fetchByName($name)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `ITP_ID` as `providerId`,
                     `IT_ID` as `id`,
                     `ITP_Name` as `providerName`,
@@ -28,10 +28,10 @@ class FetchInstanceType
                     `Instace_Type_Providers`.`ITP_ID` = `Instance_Types`.`IT_Provider_ID`
                 WHERE
                     `IT_Name` = :name
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":name"=>$name
+            ':name' => $name,
         ]);
         return $do->fetch(\PDO::FETCH_ASSOC);
     }

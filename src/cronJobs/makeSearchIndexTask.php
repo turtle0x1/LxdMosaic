@@ -9,7 +9,9 @@ $container = $builder->build();
 
 $getInstanceSetting = $container->make(dhope0000\LXDClient\Model\InstanceSettings\GetSetting::class);
 
-$createSearchIndex = $getInstanceSetting->getSettingLatestValue(dhope0000\LXDClient\Constants\InstanceSettingsKeys::SEARCH_INDEX);
+$createSearchIndex = $getInstanceSetting->getSettingLatestValue(
+    dhope0000\LXDClient\Constants\InstanceSettingsKeys::SEARCH_INDEX
+);
 
 if (empty($createSearchIndex) || $createSearchIndex == 0) {
     return new Schedule();

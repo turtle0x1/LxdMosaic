@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
@@ -7,21 +8,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $deleteInstance;
-    
-    public function __construct(DeleteInstance $deleteInstance)
-    {
-        $this->deleteInstance =  $deleteInstance;
+    public function __construct(
+        private readonly DeleteInstance $deleteInstance
+    ) {
     }
+
     /**
      * @Route("/api/Instances/DeleteInstanceController/delete", name="Delete Instance", methods={"POST"})
      */
-    public function delete(
-        int $userId,
-        Host $host,
-        string $container
-    ) {
+    public function delete(int $userId, Host $host, string $container)
+    {
         $this->deleteInstance->delete($userId, $host, $container);
-        return ["state"=>"success", "message"=>"Deleting {$host->getAlias()}/$container"];
+        return [
+            'state' => 'success',
+            'message' => "Deleting {$host->getAlias()}/{$container}",
+        ];
     }
 }

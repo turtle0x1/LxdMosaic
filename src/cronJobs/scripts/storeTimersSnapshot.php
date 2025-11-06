@@ -5,9 +5,9 @@ use dhope0000\LXDClient\Tools\Hosts\Timers\GetTimersSnapshotData;
 
 $_ENV = getenv();
 
-date_default_timezone_set("UTC");
+date_default_timezone_set('UTC');
 
-require __DIR__ . "/../../../vendor/autoload.php";
+require __DIR__ . '/../../../vendor/autoload.php';
 
 $container = (new \DI\ContainerBuilder())->build();
 

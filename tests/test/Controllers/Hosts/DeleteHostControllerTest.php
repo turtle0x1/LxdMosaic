@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class DeleteHostControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -13,15 +16,19 @@ final class DeleteHostControllerTest extends TestCase
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
     }
 
-    public function test_nonAdminUserCantDeleteHost() :void
+    public function testNonAdminUserCantDeleteHost(): void
     {
         $this->expectException(\Exception::class);
 
-        $_POST = ["hostId"=>1];
+        $_POST = [
+            'hostId' => 1,
+        ];
 
         $result = $this->routeApi->route(
             Request::create('/api/Hosts/DeleteHostController/delete', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
 

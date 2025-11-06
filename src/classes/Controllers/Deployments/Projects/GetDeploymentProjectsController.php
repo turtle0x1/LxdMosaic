@@ -2,20 +2,18 @@
 
 namespace dhope0000\LXDClient\Controllers\Deployments\Projects;
 
-use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
 use dhope0000\LXDClient\Model\Deployments\Projects\FetchDeploymentProjects;
+use dhope0000\LXDClient\Tools\Deployments\Authorise\AuthoriseDeploymentAccess;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetDeploymentProjectsController
 {
-    private $authoriseDeploymentAccess;
-    private $fetchDeploymentProjects;
-
-    public function __construct(AuthoriseDeploymentAccess $authoriseDeploymentAccess, FetchDeploymentProjects $fetchDeploymentProjects)
-    {
-        $this->authoriseDeploymentAccess = $authoriseDeploymentAccess;
-        $this->fetchDeploymentProjects = $fetchDeploymentProjects;
+    public function __construct(
+        private readonly AuthoriseDeploymentAccess $authoriseDeploymentAccess,
+        private readonly FetchDeploymentProjects $fetchDeploymentProjects
+    ) {
     }
+
     /**
      * @Route("/api/Deployments/Projects/GetDeploymentProjectsController/get", name="Get Deployment Projects", methods={"POST"})
      */

@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteDashboardController
 {
-    private $deleteDashboard;
-
-    public function __construct(DeleteDashboard $deleteDashboard)
-    {
-        $this->deleteDashboard = $deleteDashboard;
+    public function __construct(
+        private readonly DeleteDashboard $deleteDashboard
+    ) {
     }
 
     /**
@@ -20,6 +18,9 @@ class DeleteDashboardController
     public function delete(int $userId, int $dashboardId)
     {
         $this->deleteDashboard->delete($userId, $dashboardId);
-        return ["state"=>"success", "message"=>"Deleted dashboard"];
+        return [
+            'state' => 'success',
+            'message' => 'Deleted dashboard',
+        ];
     }
 }

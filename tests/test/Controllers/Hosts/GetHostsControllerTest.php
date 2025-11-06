@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class GetHostsControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -13,22 +16,26 @@ final class GetHostsControllerTest extends TestCase
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
     }
 
-    public function test_nonAdminTryingToGetAllHosts() :void
+    public function testNonAdminTryingToGetAllHosts(): void
     {
         $this->expectException(\Exception::class);
 
         $this->routeApi->route(
             Request::create('/api/Hosts/GetHostsController/getAllHosts', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
     }
 
-    public function test_adminGettingAllHosts() :void
+    public function testAdminGettingAllHosts(): void
     {
         $result = $this->routeApi->route(
             Request::create('/api/Hosts/GetHostsController/getAllHosts', 'POST'),
-            ["userid"=>1],
+            [
+                'userid' => 1,
+            ],
             true
         );
 

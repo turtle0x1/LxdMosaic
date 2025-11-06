@@ -2,23 +2,16 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\Backups;
 
-use dhope0000\LXDClient\Tools\Instances\Backups\StoreBackupLocally;
-use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 
 class BackupInstance
 {
-    private $storeBackupLocally;
-
-    private $hasExtension;
-
     public function __construct(
-        StoreBackupLocally $storeBackupLocally,
-        HasExtension $hasExtension
+        private readonly StoreBackupLocally $storeBackupLocally,
+        private readonly HasExtension $hasExtension
     ) {
-        $this->storeBackupLocally = $storeBackupLocally;
-        $this->hasExtension = $hasExtension;
     }
 
     public function create(
@@ -29,7 +22,7 @@ class BackupInstance
         $wait,
         bool $importAndDelete
     ) {
-        if ($wait === "false") {
+        if ($wait === 'false') {
             $wait = false;
         }
 
@@ -41,7 +34,7 @@ class BackupInstance
             throw new \Exception("Host doesn't support backups", 1);
         }
 
-        $host->callClientMethod("setProject", $project);
+        $host->callClientMethod('setProject', $project);
         $response = $host->instances->backups->create($instance, $backup, [], $wait);
 
         if ($importAndDelete) {

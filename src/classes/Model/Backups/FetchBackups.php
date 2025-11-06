@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchBackups
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class FetchBackups
 
     public function fetchAll()
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `CB_ID` as `id`,
                     `CB_Date_Created` as `storedDateCreated`,
                     `CB_Backup_Date_Created` as `backupDateCreated`,
@@ -32,14 +32,14 @@ class FetchBackups
                     `Container_Backups`
                 ORDER BY
                     `storedDateCreated` DESC
-                ";
+                ';
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function fetchBackupsUserCanAccess(int $userId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `CB_ID` as `id`,
                     `CB_Date_Created` as `storedDateCreated`,
                     `CB_Backup_Date_Created` as `backupDateCreated`,
@@ -69,10 +69,10 @@ class FetchBackups
                         `User_Allowed_Projects`
                     WHERE
                         `UAP_User_ID` = :userId
-                )";
+                )';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId
+            ':userId' => $userId,
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

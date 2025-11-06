@@ -7,17 +7,15 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchAnalytics
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
     }
 
-    public function fetchBetween(
-        \DateTimeInterface $start,
-        \DateTimeInterface $end
-    ) {
-        $sql = "SELECT
+    public function fetchBetween(\DateTimeInterface $start, \DateTimeInterface $end)
+    {
+        $sql = 'SELECT
                     `PA_Date_Created` as `created`,
                     `PA_Host_ID` as `hostId`,
                     `PA_Project` as `project`,
@@ -33,11 +31,11 @@ class FetchAnalytics
                     `Host_ID` = `PA_Host_ID`
                 WHERE
                     `PA_Date_Created` BETWEEN :startDate AND :endDate
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":startDate"=>$start->format("Y-m-d H:i:s"),
-            ":endDate"=>$end->format("Y-m-d H:i:s")
+            ':startDate' => $start->format('Y-m-d H:i:s'),
+            ':endDate' => $end->format('Y-m-d H:i:s'),
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

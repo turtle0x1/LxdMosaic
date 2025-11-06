@@ -2,26 +2,23 @@
 
 namespace dhope0000\LXDClient\Tools\InstanceSettings;
 
-use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 use dhope0000\LXDClient\Model\InstanceSettings\InsertSetting;
+use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class SaveSettings
 {
-    private $insertSetting;
-    private $validatePermissions;
-
-    public function __construct(ValidatePermissions $validatePermissions, InsertSetting $insertSetting)
-    {
-        $this->validatePermissions = $validatePermissions;
-        $this->insertSetting = $insertSetting;
+    public function __construct(
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly InsertSetting $insertSetting
+    ) {
     }
 
-    public function save($userId, $settings) :bool
+    public function save($userId, $settings): bool
     {
         $this->validatePermissions->isAdminOrThrow($userId);
 
         foreach ($settings as $setting) {
-            $this->insertSetting->insert($setting["id"], $setting["value"]);
+            $this->insertSetting->insert($setting['id'], $setting['value']);
         }
         return true;
     }

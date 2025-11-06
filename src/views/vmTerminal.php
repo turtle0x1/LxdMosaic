@@ -1,19 +1,23 @@
 <?php
 
-$expectedGet = ["hostId", "project", "instance"];
+$expectedGet = ['hostId', 'project', 'instance'];
 
 foreach ($expectedGet as $expected) {
     if (!isset($_GET[$expected]) || empty($_GET[$expected])) {
-        throw new \Exception("Missing $expected", 1);
+        throw new \Exception("Missing {$expected}", 1);
     }
 }
 
-$hostId = $_GET["hostId"];
-$project = $_GET["project"];
-$instance = $_GET["instance"];
+$hostId = $_GET['hostId'];
+$project = $_GET['project'];
+$instance = $_GET['instance'];
 
 $userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession"); /** @phpstan-ignore-line */
-$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions"); /** @phpstan-ignore-line */
+
+// @phpstan-ignore-next-line
+$validatePermissions = $this->container->make( 
+    "dhope0000\LXDClient\Tools\User\ValidatePermissions"
+);
 
 $userId = $userSession->getUserId();
 $apiToken = $userSession->getToken();
@@ -22,12 +26,11 @@ $validatePermissions->canAccessHostProjectOrThrow($userId, $hostId, $project);
 
 echo "<script>
 var userDetails = {
-    apiToken: '$apiToken',
-    userId: $userId
+    apiToken: '{$apiToken}',
+    userId: {$userId}
 }
 
 </script>";
-
 
 ?>
 <!DOCTYPE html>

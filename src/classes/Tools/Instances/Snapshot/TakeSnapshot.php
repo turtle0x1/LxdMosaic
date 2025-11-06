@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Tools\Instances\Snapshot;
 
 use dhope0000\LXDClient\Objects\Host;

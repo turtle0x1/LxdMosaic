@@ -8,13 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetClusterController
 {
-    private $getCluster;
-    private $validatePermissions;
-    
-    public function __construct(GetCluster $getCluster, ValidatePermissions $validatePermissions)
-    {
-        $this->getCluster = $getCluster;
-        $this->validatePermissions = $validatePermissions;
+    public function __construct(
+        private readonly GetCluster $getCluster,
+        private readonly ValidatePermissions $validatePermissions
+    ) {
     }
 
     /**

@@ -15,15 +15,15 @@ class InsertIndex
 
     public function insert(array $index)
     {
-        $sql = "INSERT INTO `Search_Index` (
+        $sql = 'INSERT INTO `Search_Index` (
                     `SI_Data`
                 ) VALUES (
                     :data
                 )
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":data" => json_encode($index)
+            ':data' => json_encode($index),
         ]);
         return $this->database->lastInsertId();
     }

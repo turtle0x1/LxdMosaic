@@ -8,15 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteController
 {
-    private $validatePermissions;
-    private $deleteInstanceType;
-    
     public function __construct(
-        ValidatePermissions $validatePermissions,
-        DeleteInstanceType $deleteInstanceType
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly DeleteInstanceType $deleteInstanceType
     ) {
-        $this->validatePermissions = $validatePermissions;
-        $this->deleteInstanceType = $deleteInstanceType;
     }
 
     /**
@@ -26,6 +21,9 @@ class DeleteController
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         $this->deleteInstanceType->delete($typeId);
-        return ["state"=>"success", "message"=>"Deleted instance type"];
+        return [
+            'state' => 'success',
+            'message' => 'Deleted instance type',
+        ];
     }
 }

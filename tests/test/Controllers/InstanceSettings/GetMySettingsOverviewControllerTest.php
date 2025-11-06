@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 final class GetMySettingsOverviewControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -14,14 +16,16 @@ final class GetMySettingsOverviewControllerTest extends TestCase
         $this->routeApi = $container->make("dhope0000\LXDClient\App\RouteApi");
     }
 
-    public function test_userCanGetTheirSettings() :void
+    public function testUserCanGetTheirSettings(): void
     {
         $result = $this->routeApi->route(
             Request::create('/api/InstanceSettings/GetMySettingsOverviewController/get', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
 
-        $this->assertEquals(["permanentTokens"], array_keys($result));
+        $this->assertEquals(['permanentTokens'], array_keys($result));
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Model\CloudConfig\Data;
 
 use dhope0000\LXDClient\Model\Database\Database;
@@ -12,13 +13,9 @@ class Update
         $this->database = $database->dbObject;
     }
 
-    public function insert(
-        int $cloudConfigId,
-        string $codeJson,
-        string $imageJson,
-        string $envVariablesJson
-    ) {
-        $sql = "INSERT INTO `Cloud_Config_Data`
+    public function insert(int $cloudConfigId, string $codeJson, string $imageJson, string $envVariablesJson)
+    {
+        $sql = 'INSERT INTO `Cloud_Config_Data`
                 (
                     `CCD_Cloud_Config_ID`,
                     `CCD_Data`,
@@ -29,13 +26,13 @@ class Update
                     :codeJson,
                     :imageDetails,
                     :envVariables
-                )";
+                )';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":cloudConfigId"=>$cloudConfigId,
-            ":codeJson"=>$codeJson,
-            ":imageDetails"=>$imageJson,
-            ":envVariables"=>$envVariablesJson
+            ':cloudConfigId' => $cloudConfigId,
+            ':codeJson' => $codeJson,
+            ':imageDetails' => $imageJson,
+            ':envVariables' => $envVariablesJson,
         ]);
         return $do->rowCount() ? true : false;
     }

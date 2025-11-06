@@ -2,18 +2,17 @@
 
 namespace dhope0000\LXDClient\Controllers\Storage\Volumes;
 
+use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Storage\Volumes\GetVolume;
 use Symfony\Component\Routing\Annotation\Route;
-use dhope0000\LXDClient\Objects\Host;
 
 class GetStorageVolumeController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
-    private $getVolume;
-    
-    public function __construct(GetVolume $getVolume)
-    {
-        $this->getVolume = $getVolume;
+    public function __construct(
+        private readonly GetVolume $getVolume
+    ) {
     }
+
     /**
      * @Route("/api/Storage/Volumes/GetStorageVolumeController/get", name="Get storage volume info", methods={"POST"})
      */

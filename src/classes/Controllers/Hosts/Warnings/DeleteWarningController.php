@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\Hosts\Warnings;
 
 use dhope0000\LXDClient\Objects\Host;
@@ -7,11 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteWarningController
 {
-    private $deleteWarning;
-
-    public function __construct(DeleteWarning $deleteWarning)
-    {
-        $this->deleteWarning = $deleteWarning;
+    public function __construct(
+        private readonly DeleteWarning $deleteWarning
+    ) {
     }
 
     /**
@@ -20,6 +19,10 @@ class DeleteWarningController
     public function delete(int $userId, Host $host, string $id)
     {
         $this->deleteWarning->delete($userId, $host, $id);
-        return ["state"=>"success", "message"=>"Deleted warning", "id"=>$id];
+        return [
+            'state' => 'success',
+            'message' => 'Deleted warning',
+            'id' => $id,
+        ];
     }
 }

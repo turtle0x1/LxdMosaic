@@ -14,12 +14,11 @@ class ValidateBackupObject
         $this->validateDayOfMonth($schedule);
     }
 
-
     public function validateRange(BackupSchedule $schedule)
     {
-        $allowedRange = ["daily", "weekly", "monthly"];
+        $allowedRange = ['daily', 'weekly', 'monthly'];
         if (!in_array($schedule->getRange(), $allowedRange)) {
-            throw new \Exception("Unknown Rnage: The range is unknown", 1);
+            throw new \Exception('Unknown Rnage: The range is unknown', 1);
         }
     }
 
@@ -27,9 +26,9 @@ class ValidateBackupObject
     {
         $times = $schedule->getTimes();
         foreach ($times as $time) {
-            $x = preg_match("/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/", $time);
+            $x = preg_match('/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/', (string) $time);
             if ($x === 0) {
-                throw new \Exception("Invalid time in schedule: $time", 1);
+                throw new \Exception("Invalid time in schedule: {$time}", 1);
             }
         }
     }
@@ -39,7 +38,7 @@ class ValidateBackupObject
         $daysOfWeek = $schedule->getDaysOfWeek();
         foreach ($daysOfWeek as $day) {
             if (!is_numeric($day) || ($day < 0 || $day > 6)) {
-                throw new \Exception("Invalid time in schedule: $day", 1);
+                throw new \Exception("Invalid time in schedule: {$day}", 1);
             }
         }
     }
@@ -49,7 +48,7 @@ class ValidateBackupObject
         $dayOfMonth = $schedule->getDayOfMonth();
 
         if (!is_numeric($dayOfMonth) || ($dayOfMonth < 0 || $dayOfMonth > 31)) {
-            throw new \Exception("Invalid day of month: $dayOfMonth", 1);
+            throw new \Exception("Invalid day of month: {$dayOfMonth}", 1);
         }
     }
 }

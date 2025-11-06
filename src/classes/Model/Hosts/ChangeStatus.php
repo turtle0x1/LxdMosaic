@@ -15,20 +15,20 @@ class ChangeStatus
 
     public function setOnline($hostId)
     {
-        $sql = "UPDATE `Hosts` SET `Host_Online` = 1 WHERE `Host_ID` = :hostId";
+        $sql = 'UPDATE `Hosts` SET `Host_Online` = 1 WHERE `Host_ID` = :hostId';
         $do = $this->db->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId
+            ':hostId' => $hostId,
         ]);
         return $do->rowCount() ? true : false;
     }
 
     public function setOffline($hostId)
     {
-        $sql = "UPDATE `Hosts` SET `Host_Online` = 0 WHERE `Host_ID` = :hostId";
+        $sql = 'UPDATE `Hosts` SET `Host_Online` = 0 WHERE `Host_ID` = :hostId';
         $do = $this->db->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId
+            ':hostId' => $hostId,
         ]);
         return $do->rowCount() ? true : false;
     }

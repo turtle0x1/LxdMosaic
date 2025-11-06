@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetAllAvailableMetricsController
 {
-    private $getAvailableHostsMetrics;
-    
-    public function __construct(GetAvailableHostsMetrics $getAvailableHostsMetrics)
-    {
-        $this->getAvailableHostsMetrics = $getAvailableHostsMetrics;
+    public function __construct(
+        private readonly GetAvailableHostsMetrics $getAvailableHostsMetrics
+    ) {
     }
 
     /**

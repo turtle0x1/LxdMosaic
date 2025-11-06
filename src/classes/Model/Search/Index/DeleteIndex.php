@@ -15,10 +15,10 @@ class DeleteIndex
 
     public function deleteWhereIdNot(int $toKeepIndex)
     {
-        $sql = "DELETE FROM `Search_Index` WHERE SI_ID <> :toKeep";
+        $sql = 'DELETE FROM `Search_Index` WHERE SI_ID <> :toKeep';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":toKeep" => $toKeepIndex
+            ':toKeep' => $toKeepIndex,
         ]);
         return $do->rowCount();
     }

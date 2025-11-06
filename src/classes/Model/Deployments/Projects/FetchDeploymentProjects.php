@@ -13,9 +13,9 @@ class FetchDeploymentProjects
         $this->database = $database->dbObject;
     }
 
-    public function fetchAll(int $deploymentId) :array
+    public function fetchAll(int $deploymentId): array
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `DP_ID` as `id`,
                     COALESCE(`Host_Alias`, `Host_Url_And_Port`) as `hostAlias`,
                     `Host_ID` as `hostId`,
@@ -26,10 +26,10 @@ class FetchDeploymentProjects
                     `Hosts`.`Host_ID` = `DP_Host_ID`
                 WHERE
                     `DP_Deployment_ID` = :deploymentId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":deploymentId"=>$deploymentId
+            ':deploymentId' => $deploymentId,
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

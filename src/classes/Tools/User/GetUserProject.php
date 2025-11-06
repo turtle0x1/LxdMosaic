@@ -3,30 +3,20 @@
 namespace dhope0000\LXDClient\Tools\User;
 
 use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
-use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
-use dhope0000\LXDClient\Tools\User\SetUserProject;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
+use dhope0000\LXDClient\Model\Users\Projects\FetchUserProject;
 
 class GetUserProject
 {
-    private $fetchAllowedProjects;
-    private $fetchUserProject;
-    private $setUserProject;
-    private $fetchUserDetails;
-    
     public function __construct(
-        FetchAllowedProjects $fetchAllowedProjects,
-        FetchUserProject $fetchUserProject,
-        SetUserProject $setUserProject,
-        FetchUserDetails $fetchUserDetails
+        private readonly FetchAllowedProjects $fetchAllowedProjects,
+        private readonly FetchUserProject $fetchUserProject,
+        private readonly SetUserProject $setUserProject,
+        private readonly FetchUserDetails $fetchUserDetails
     ) {
-        $this->fetchAllowedProjects = $fetchAllowedProjects;
-        $this->fetchUserProject = $fetchUserProject;
-        $this->setUserProject = $setUserProject;
-        $this->fetchUserDetails = $fetchUserDetails;
     }
 
-    public function getForHost(int $userId, $host) :string
+    public function getForHost(int $userId, $host): string
     {
         $project = $this->fetchUserProject->fetch($userId, $host->getHostId());
 
@@ -37,18 +27,18 @@ class GetUserProject
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);
 
         if ($isAdmin) {
-            $this->setUserProject->set($userId, $host->getHostId(), "default");
-            return "default";
+            $this->setUserProject->set($userId, $host->getHostId(), 'default');
+            return 'default';
         }
 
         $allowedProjects = $this->fetchAllowedProjects->fetchForHost($userId, $host->getHostId());
 
         if (empty($allowedProjects)) {
-            throw new \Exception("Trying to access host with no allowed projects", 1);
+            throw new \Exception('Trying to access host with no allowed projects', 1);
         }
 
-        if (in_array("default", $allowedProjects)) {
-            $project = "default";
+        if (in_array('default', $allowedProjects)) {
+            $project = 'default';
         } else {
             $project = $allowedProjects[0];
         }

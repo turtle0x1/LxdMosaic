@@ -1,21 +1,19 @@
 <?php
+
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Model\Hosts\HostList;
-use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use dhope0000\LXDClient\Constants\LxdApiExtensions;
 use dhope0000\LXDClient\Constants\LxdRecursionLevels;
+use dhope0000\LXDClient\Model\Hosts\HostList;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 
 class GetHostsInstances
 {
-    private $hostList;
-    private $hasExtension;
-    
-    public function __construct(HostList $hostList, HasExtension $hasExtension)
-    {
-        $this->hostList = $hostList;
-        $this->hasExtension = $hasExtension;
+    public function __construct(
+        private readonly HostList $hostList,
+        private readonly HasExtension $hasExtension
+    ) {
     }
 
     public function getAll()
@@ -28,9 +26,9 @@ class GetHostsInstances
 
             $supportsBackups = $this->hasExtension->checkWithHost($host, LxdApiExtensions::CONTAINER_BACKUP);
 
-            $host->setCustomProp("containers", $instances);
-            $host->setCustomProp("supportsBackups", $supportsBackups);
-            $host->setCustomProp("hostInfo", $hostInfo);
+            $host->setCustomProp('containers', $instances);
+            $host->setCustomProp('supportsBackups', $supportsBackups);
+            $host->setCustomProp('hostInfo', $hostInfo);
         }
         return $hosts;
     }
@@ -56,24 +54,24 @@ class GetHostsInstances
         foreach ($instances as $index => $instance) {
             if (is_string($instance)) {
                 $instance = $host->instances->info($instance);
-                $instance["state"] = $host->instances->state($instance["name"]);
+                $instance['state'] = $host->instances->state($instance['name']);
             } else {
                 // Keep the return between get all and using LXD recusion method
                 // the above is slow enough lets not force it to add +2 api
                 // calls to match this array
-                unset($instance["backups"]);
-                unset($instance["snapshots"]);
+                unset($instance['backups']);
+                unset($instance['snapshots']);
             }
 
             unset($instances[$index]);
 
-            if ($instance["location"] !== "") {
-                if ($instance["location"] !== "none" && $instance["location"] !== $hostInfo["environment"]["server_name"]) {
+            if ($instance['location'] !== '') {
+                if ($instance['location'] !== 'none' && $instance['location'] !== $hostInfo['environment']['server_name']) {
                     continue;
                 }
             }
 
-            $instances[$instance["name"]] = $instance;
+            $instances[$instance['name']] = $instance;
         }
 
         return $instances;

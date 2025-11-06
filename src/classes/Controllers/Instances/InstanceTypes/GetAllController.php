@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetAllController
 {
-    private $getInstanceTypes;
-    
-    public function __construct(GetInstanceTypes $getInstanceTypes)
-    {
-        $this->getInstanceTypes = $getInstanceTypes;
+    public function __construct(
+        private readonly GetInstanceTypes $getInstanceTypes
+    ) {
     }
 
     /**

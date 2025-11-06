@@ -8,7 +8,9 @@ class SetInstanceSettings
 {
     public function set(Host $host, string $instance, array $settings)
     {
-        $host->instances->update($instance, ["config"=>$settings]);
+        $host->instances->update($instance, [
+            'config' => $settings,
+        ]);
         return true;
     }
 }

@@ -6,17 +6,15 @@ use dhope0000\LXDClient\Model\Users\FetchTokens;
 
 class GetSettingsOverview
 {
-    private $fetchTokens;
-    
-    public function __construct(FetchTokens $fetchTokens)
-    {
-        $this->fetchTokens = $fetchTokens;
+    public function __construct(
+        private readonly FetchTokens $fetchTokens
+    ) {
     }
 
-    public function get(string $userId) :array
+    public function get(string $userId): array
     {
         return [
-            "permanentTokens"=>$this->fetchTokens->fetchPermanentTokenHeaders($userId)
+            'permanentTokens' => $this->fetchTokens->fetchPermanentTokenHeaders($userId),
         ];
     }
 }

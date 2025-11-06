@@ -15,36 +15,37 @@ class FetchTimersSnapshot
 
     public function fetchLatest()
     {
-        $sql = "SELECT TS_Date as `date`, TS_Data as `data` FROM `Timers_Snapshots` WHERE TS_ID = (SELECT
+        $sql = 'SELECT TS_Date as `date`, TS_Data as `data` FROM `Timers_Snapshots` WHERE TS_ID = (SELECT
                     TS_ID
                 FROM
                     `Timers_Snapshots`
                 ORDER BY
                     `TS_Date` DESC
                 LIMIT 1)
-                ";
-        return $this->database->query($sql)->fetch(\PDO::FETCH_ASSOC);
+                ';
+        return $this->database->query($sql)
+            ->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function fetchForDate(\DateTimeImmutable $date)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     JSON_UNQUOTE(`TS_Data`) as `data`
                 FROM
                     `Timers_Snapshots`
                 WHERE
                     `TS_Date` = :date
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":date" => $date->format("Y-m-d")
+            ':date' => $date->format('Y-m-d'),
         ]);
         return $do->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function fetchLastSevenHeaders()
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `TS_ID` as `id`,
                     `TS_Date` as `date`,
                     `TS_Last_Updated` as `lastUpdate`
@@ -53,7 +54,8 @@ class FetchTimersSnapshot
                 ORDER BY
                     `TS_Date` DESC
                 LIMIT 7
-                ";
-        return $this->database->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+                ';
+        return $this->database->query($sql)
+            ->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

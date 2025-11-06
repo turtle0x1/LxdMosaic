@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetNetworksDashboardController
 {
-    private $getNetworksDashboard;
-    
-    public function __construct(GetNetworksDashboard $getNetworksDashboard)
-    {
-        $this->getNetworksDashboard = $getNetworksDashboard;
+    public function __construct(
+        private readonly GetNetworksDashboard $getNetworksDashboard
+    ) {
     }
 
     /**

@@ -8,15 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ToggleAdminStatusController
 {
-    private $toggleAdminStatus;
-    private $validatePermissions;
-    
     public function __construct(
-        ToggleAdminStatus $toggleAdminStatus,
-        ValidatePermissions $validatePermissions
+        private readonly ToggleAdminStatus $toggleAdminStatus,
+        private readonly ValidatePermissions $validatePermissions
     ) {
-        $this->toggleAdminStatus = $toggleAdminStatus;
-        $this->validatePermissions = $validatePermissions;
     }
 
     /**
@@ -26,6 +21,9 @@ class ToggleAdminStatusController
     {
         $this->validatePermissions->isAdminOrThrow($userId);
         $this->toggleAdminStatus->toggle($targetUser, $status);
-        return ["state"=>"success", "message"=>"Changed status"];
+        return [
+            'state' => 'success',
+            'message' => 'Changed status',
+        ];
     }
 }

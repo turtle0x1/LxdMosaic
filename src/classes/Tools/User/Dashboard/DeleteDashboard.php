@@ -6,11 +6,9 @@ use dhope0000\LXDClient\Model\Users\Dashboard\DeleteUserDashboard;
 
 class DeleteDashboard
 {
-    private $deleteUserDashboard;
-
-    public function __construct(DeleteUserDashboard $deleteUserDashboard)
-    {
-        $this->deleteUserDashboard = $deleteUserDashboard;
+    public function __construct(
+        private readonly DeleteUserDashboard $deleteUserDashboard
+    ) {
     }
 
     public function delete(int $userId, int $dashboardId)

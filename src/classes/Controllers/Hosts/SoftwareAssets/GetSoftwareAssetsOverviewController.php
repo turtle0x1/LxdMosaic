@@ -8,15 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetSoftwareAssetsOverviewController
 {
-    private $fetchUserDetails;
-    private $getSoftwareSnapshotOverview;
-
     public function __construct(
-        FetchUserDetails $fetchUserDetails,
-        GetSoftwareSnapshotOverview $getSoftwareSnapshotOverview
+        private readonly FetchUserDetails $fetchUserDetails,
+        private readonly GetSoftwareSnapshotOverview $getSoftwareSnapshotOverview
     ) {
-        $this->fetchUserDetails = $fetchUserDetails;
-        $this->getSoftwareSnapshotOverview = $getSoftwareSnapshotOverview;
     }
 
     /**
@@ -26,7 +21,7 @@ class GetSoftwareAssetsOverviewController
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);
         if (!$isAdmin) {
-            throw new \Exception("No access", 1);
+            throw new \Exception('No access', 1);
         }
         $date = new \DateTimeImmutable($date);
         return $this->getSoftwareSnapshotOverview->get($date);

@@ -3,23 +3,15 @@
 namespace dhope0000\LXDClient\Tools\Backups;
 
 use dhope0000\LXDClient\Model\Backups\FetchBackups;
-use dhope0000\LXDClient\Tools\Backups\GetHostInstanceStatusForBackupSet;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 
 class GetBackupsOverview
 {
-    private $fetchBackups;
-    private $getHostInstanceStatusForBackupSet;
-    private $fetchUserDetails;
-
     public function __construct(
-        FetchBackups $fetchBackups,
-        GetHostInstanceStatusForBackupSet $getHostInstanceStatusForBackupSet,
-        FetchUserDetails $fetchUserDetails
+        private readonly FetchBackups $fetchBackups,
+        private readonly GetHostInstanceStatusForBackupSet $getHostInstanceStatusForBackupSet,
+        private readonly FetchUserDetails $fetchUserDetails
     ) {
-        $this->fetchBackups = $fetchBackups;
-        $this->getHostInstanceStatusForBackupSet = $getHostInstanceStatusForBackupSet;
-        $this->fetchUserDetails = $fetchUserDetails;
     }
 
     public function get($userId)
@@ -32,12 +24,12 @@ class GetBackupsOverview
 
         $properties = $this->getProperties($allBackups);
 
-        $allBackups = $this->getHostInstanceStatusForBackupSet->get($userId, $properties["localBackups"]);
+        $allBackups = $this->getHostInstanceStatusForBackupSet->get($userId, $properties['localBackups']);
 
         return [
-            "sizeByMonthYear"=>$properties["sizeByMonthYear"],
-            "filesByMonthYear"=>$properties["filesByMonthYear"],
-            "allBackups"=>$allBackups
+            'sizeByMonthYear' => $properties['sizeByMonthYear'],
+            'filesByMonthYear' => $properties['filesByMonthYear'],
+            'allBackups' => $allBackups,
         ];
     }
 
@@ -47,26 +39,25 @@ class GetBackupsOverview
         $filesByMonthYear = [];
 
         foreach ($backups as $index => $backup) {
-            $date = new \DateTime($backup["storedDateCreated"]);
-            $month = $date->format("n");
-            $year = $date->format("Y");
+            $date = new \DateTime($backup['storedDateCreated']);
+            $month = $date->format('n');
+            $year = $date->format('Y');
 
             if (!isset($sizeByMonthYear[$year])) {
                 $this->createYearArray($sizeByMonthYear, $year);
                 $this->createYearArray($filesByMonthYear, $year);
             }
 
-
-            $filesize = $backup["filesize"];
+            $filesize = $backup['filesize'];
             // After 6 months or so this  can be removed, most backup should have
             // thier size stored in the database then.
-            if ($filesize == 0  && file_exists($backup["localPath"])) {
-                $filesize = filesize($backup["localPath"]);
+            if ($filesize == 0 && file_exists($backup['localPath'])) {
+                $filesize = filesize($backup['localPath']);
             }
 
-            $backup["filesize"] = $filesize;
+            $backup['filesize'] = $filesize;
 
-            if ($backup["deletedDate"] != null) {
+            if ($backup['deletedDate'] != null) {
                 unset($backups[$index]);
             }
 
@@ -75,9 +66,9 @@ class GetBackupsOverview
         }
 
         return [
-            "sizeByMonthYear"=>$sizeByMonthYear,
-            "filesByMonthYear"=>$filesByMonthYear,
-            "localBackups"=>$backups
+            'sizeByMonthYear' => $sizeByMonthYear,
+            'filesByMonthYear' => $filesByMonthYear,
+            'localBackups' => $backups,
         ];
     }
 

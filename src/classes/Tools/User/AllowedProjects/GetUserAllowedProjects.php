@@ -2,28 +2,19 @@
 
 namespace dhope0000\LXDClient\Tools\User\AllowedProjects;
 
-use dhope0000\LXDClient\Tools\User\ValidatePermissions;
-use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 use dhope0000\LXDClient\Model\Hosts\GetDetails;
+use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
+use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class GetUserAllowedProjects
 {
-    private $validatePermissions;
-    private $fetchAllowedProjects;
-    private $getDetails;
-    private $fetchUserDetails;
-    
     public function __construct(
-        ValidatePermissions $validatePermissions,
-        FetchAllowedProjects $fetchAllowedProjects,
-        GetDetails $getDetails,
-        FetchUserDetails $fetchUserDetails
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly FetchAllowedProjects $fetchAllowedProjects,
+        private readonly GetDetails $getDetails,
+        private readonly FetchUserDetails $fetchUserDetails
     ) {
-        $this->validatePermissions = $validatePermissions;
-        $this->fetchAllowedProjects = $fetchAllowedProjects;
-        $this->getDetails = $getDetails;
-        $this->fetchUserDetails = $fetchUserDetails;
     }
 
     public function get(int $userId, int $targetUserId)
@@ -36,15 +27,15 @@ class GetUserAllowedProjects
             $allowedProjects = $this->fetchAllowedProjects->fetchAll($targetUserId);
             foreach ($allowedProjects as $hostId => $projects) {
                 $host = $this->getDetails->fetchHost($hostId);
-                $host->setCustomProp("projects", $projects);
+                $host->setCustomProp('projects', $projects);
 
                 $output[] = $host;
             }
         }
 
         return [
-            "isAdmin"=>$isAdmin,
-            "projects"=>$output
+            'isAdmin' => $isAdmin,
+            'projects' => $output,
         ];
     }
 }

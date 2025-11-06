@@ -1,12 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 
+declare(strict_types=1);
+
+use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 final class SaveAllSettingsControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -17,34 +20,49 @@ final class SaveAllSettingsControllerTest extends TestCase
         $this->database->dbObject->beginTransaction();
     }
 
-    public function tearDown() :void
+    #[\Override]
+    protected function tearDown(): void
     {
         $this->database->dbObject->rollBack();
     }
 
-    public function test_nonAdminCantSaveSettings() :void
+    public function testNonAdminCantSaveSettings(): void
     {
         $this->expectException(\Exception::class);
 
-        $_POST = ["settings"=>[]];
+        $_POST = [
+            'settings' => [],
+        ];
 
         $this->routeApi->route(
             Request::create('/api/InstanceSettings/SaveAllSettingsController/saveAll', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
     }
 
-    public function test_adminCanSaveSettings() :void
+    public function testAdminCanSaveSettings(): void
     {
-        $_POST = ["settings"=>[["id"=>InstanceSettingsKeys::STRONG_PASSWORD_POLICY, "value"=>0]]];
+        $_POST = [
+            'settings' => [[
+                'id' => InstanceSettingsKeys::STRONG_PASSWORD_POLICY,
+                'value' => 0,
+            ]],
+        ];
 
         $result = $this->routeApi->route(
             Request::create('/api/InstanceSettings/SaveAllSettingsController/saveAll', 'POST'),
-            ["userid"=>1],
+            [
+                'userid' => 1,
+            ],
             true
         );
 
-        $this->assertEquals(["state"=>"success", "message"=>"Saved Settings"], $result);
+        $this->assertEquals([
+            'state' => 'success',
+            'message' => 'Saved Settings',
+        ], $result);
     }
 }

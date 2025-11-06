@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class InsertSetting
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class InsertSetting
 
     public function insert(int $settingId, $value)
     {
-        $sql = "INSERT INTO
+        $sql = 'INSERT INTO
                     `Instance_Settings_Values`
                 (
                     `ISV_IS_ID`,
@@ -23,11 +23,11 @@ class InsertSetting
                 ) VALUES (
                     :settingId,
                     :value
-                );";
+                );';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":settingId"=>$settingId,
-            ":value"=>$value
+            ':settingId' => $settingId,
+            ':value' => $value,
         ]);
         return $do->rowCount() ? true : false;
     }

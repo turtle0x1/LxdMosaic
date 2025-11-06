@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchInstanceTypes
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class FetchInstanceTypes
 
     public function fetchAll()
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `ITP_ID` as `providerId`,
                     `IT_ID` as `id`,
                     `ITP_Name` as `providerName`,
@@ -29,7 +29,7 @@ class FetchInstanceTypes
                 ORDER BY
                     `IT_ID`,
                     `ITP_ID`
-                ";
+                ';
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }

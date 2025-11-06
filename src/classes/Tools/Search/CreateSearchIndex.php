@@ -6,19 +6,17 @@ use Symfony\Component\Yaml\Yaml;
 
 class CreateSearchIndex
 {
-    private $getIndexable;
-
-    public function __construct(GetIndexable $getIndexable)
-    {
-        $this->getIndexable = $getIndexable;
+    public function __construct(
+        private readonly GetIndexable $getIndexable
+    ) {
     }
 
     public function create()
     {
         $output = $this->getIndexable->get();
 
-        $valueToListFunc = function ($key, $path, $value, &$index) {
-            if ($value == "") {
+        $valueToListFunc = function ($key, $path, $value, &$index): void {
+            if ($value == '') {
                 return;
             }
             if (!isset($index[$value])) {
@@ -54,18 +52,23 @@ class CreateSearchIndex
             // Any Operating System Names
             '/\[([^]]+)\]\[([^]]+)\]\[([^]]+)\]\[([^]]+)\]\[(properties|config)\]\[(os|image\.os)\]/' => null,
             // Cloud Config Data
-            '/\[([^]]+)\]\[([^]]+)\]\[([^]]+)\]\[([^]]+)\]\[config\]\[user\.user-data\]/' => function ($key, $path, $value, &$index) {
+            '/\[([^]]+)\]\[([^]]+)\]\[([^]]+)\]\[([^]]+)\]\[config\]\[user\.user-data\]/' => function (
+                $key,
+                $path,
+                $value,
+                &$index
+            ): void {
                 try {
                     $x = Yaml::parse($value);
-                    if (isset($x["packages"])) {
-                        foreach ($x["packages"] as $package) {
+                    if (isset($x['packages'])) {
+                        foreach ($x['packages'] as $package) {
                             if (!isset($index[$package])) {
                                 $index[$package] = [];
                             }
                             $index[$package][] = $path;
                         }
                     }
-                } catch (\Throwable $e) { // Slienty ingore user-data we cant parse as yaml
+                } catch (\Throwable) { // Slienty ingore user-data we cant parse as yaml
                 }
             },
             // All storage drivers
@@ -77,29 +80,38 @@ class CreateSearchIndex
         $idChain = 0;
         $this->buildIndex($output, $indexableKeys, $index, '', $uniqueEntities, $idChain);
 
-        return ["dataIndex" => $index, "entityIndex" => array_keys($uniqueEntities)];
+        return [
+            'dataIndex' => $index,
+            'entityIndex' => array_keys($uniqueEntities),
+        ];
     }
 
     // Inspired by https://stackoverflow.com/a/28473131/4008082
-    private function buildIndex(array $input, array $indexableKeys, array &$index, string $currentKey = '', array &$uniqueEntities = [], int &$idChain = 0): void
-    {
+    private function buildIndex(
+        array $input,
+        array $indexableKeys,
+        array &$index,
+        string $currentKey = '',
+        array &$uniqueEntities = [],
+        int &$idChain = 0
+    ): void {
         foreach ($input as $key => $value) {
             foreach ($indexableKeys as $searchKey => $searchCallback) {
-                $i = preg_match($searchKey, ($currentKey . "[$key]"));
+                $i = preg_match($searchKey, ($currentKey . "[{$key}]"));
 
                 if ($i !== 0) {
                     if (!is_array($value)) {
-                        if (!isset($uniqueEntities[$currentKey . "[$key]"])) {
-                            $uniqueEntities[$currentKey . "[$key]"] = $idChain;
+                        if (!isset($uniqueEntities[$currentKey . "[{$key}]"])) {
+                            $uniqueEntities[$currentKey . "[{$key}]"] = $idChain;
                             $idChain = $idChain + 1;
                         }
 
                         if (is_callable($searchCallback)) {
-                            $searchCallback($key, ($currentKey . "[$key]"), $value, $index);
+                            $searchCallback($key, ($currentKey . "[{$key}]"), $value, $index);
                         } else {
-                            $v = strtolower($value);
+                            $v = strtolower((string) $value);
 
-                            if ($value == "") {
+                            if ($value == '') {
                                 continue;
                             }
 
@@ -107,17 +119,17 @@ class CreateSearchIndex
                                 $index[$v] = [];
                             }
 
-                            $index[$v][] = $uniqueEntities[$currentKey . "[$key]"];
+                            $index[$v][] = $uniqueEntities[$currentKey . "[{$key}]"];
                             // $index[$v][] = $currentKey . "[$key]";
                         }
                     } else {
-                        throw new \Exception("Indexing array keys not supported yet", 1);
+                        throw new \Exception('Indexing array keys not supported yet', 1);
                     }
                 }
             }
 
             if (is_array($value)) {
-                $this->buildIndex($value, $indexableKeys, $index, $currentKey . "[$key]", $uniqueEntities, $idChain);
+                $this->buildIndex($value, $indexableKeys, $index, $currentKey . "[{$key}]", $uniqueEntities, $idChain);
             }
         }
     }

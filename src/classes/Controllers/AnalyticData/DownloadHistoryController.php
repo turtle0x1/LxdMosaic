@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DownloadHistoryController
 {
-    private $downloadHistory;
-    
-    public function __construct(DownloadHistory $downloadHistory)
-    {
-        $this->downloadHistory = $downloadHistory;
+    public function __construct(
+        private readonly DownloadHistory $downloadHistory
+    ) {
     }
 
     /**
@@ -19,6 +17,6 @@ class DownloadHistoryController
      */
     public function download(int $userId)
     {
-        return  $this->downloadHistory->download($userId);
+        return $this->downloadHistory->download($userId);
     }
 }

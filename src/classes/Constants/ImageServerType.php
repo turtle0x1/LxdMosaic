@@ -4,6 +4,7 @@ namespace dhope0000\LXDClient\Constants;
 
 class ImageServerType
 {
-    const SIMPLE_STREAMS = 1;
-    const UBUNTU_RELEASE = 2;
+    public const SIMPLE_STREAMS = 1;
+
+    public const UBUNTU_RELEASE = 2;
 }

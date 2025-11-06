@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ResetPasswordController
 {
-    private $resetPassword;
-
-    public function __construct(ResetPassword $resetPassword)
-    {
-        $this->resetPassword = $resetPassword;
+    public function __construct(
+        private readonly ResetPassword $resetPassword
+    ) {
     }
 
     /**
@@ -20,6 +18,9 @@ class ResetPasswordController
     public function reset(int $userId, int $targetUser, string $newPassword)
     {
         $this->resetPassword->reset($userId, $targetUser, $newPassword);
-        return ["state"=>"success", "message"=>"Updated password"];
+        return [
+            'state' => 'success',
+            'message' => 'Updated password',
+        ];
     }
 }

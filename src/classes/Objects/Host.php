@@ -8,30 +8,45 @@ use Opensaucesystems\Lxd\Client;
 class Host implements \JsonSerializable
 {
     private $id;
+
     private $urlAndPort;
+
     private $certPath;
+
     private $alias;
 
     private $certFilePath;
-    private $keyFilePath ;
+
+    private $keyFilePath;
+
     private $hostOnline;
 
     private $supportsLoadAvgs;
 
     private $customProps = [];
 
-    private $lxdClient;
     private $client = null;
 
-    public function __construct(LxdClient $lxdClient)
+    public function __construct(
+        private readonly LxdClient $lxdClient
+    ) {
+    }
+
+    public function __set($prop, $value)
     {
-        $this->lxdClient = $lxdClient;
+        throw new \Exception('Not allowed to set public properties on this object, use get/set/removeCustomProp', 1);
+    }
+
+    public function __get($target)
+    {
+        return $this->getClient()
+            ->{$target};
     }
 
     public function setCustomProp(string $name, $value)
     {
-        if (in_array($name, ["hostId", "alias", "urlAndPort"])) {
-            throw new \Exception("Not to set $name is custom props", 1);
+        if (in_array($name, ['hostId', 'alias', 'urlAndPort'])) {
+            throw new \Exception("Not to set {$name} is custom props", 1);
         }
         $this->customProps[$name] = $value;
     }
@@ -46,32 +61,32 @@ class Host implements \JsonSerializable
         unset($this->customProps[$name]);
     }
 
-    public function getHostId() :int
+    public function getHostId(): int
     {
         return $this->id;
     }
 
-    public function getCertPath() :string
+    public function getCertPath(): string
     {
         return $this->certPath;
     }
 
-    public function getUrl() :string
+    public function getUrl(): string
     {
         return $this->urlAndPort;
     }
 
-    public function hostOnline() :bool
+    public function hostOnline(): bool
     {
         return (bool) $this->hostOnline;
     }
 
-    public function getAlias() :string
+    public function getAlias(): string
     {
         return $this->alias;
     }
 
-    public function hostSupportLoadAvgs() :bool
+    public function hostSupportLoadAvgs(): bool
     {
         return (bool) $this->supportsLoadAvgs;
     }
@@ -79,27 +94,31 @@ class Host implements \JsonSerializable
     public function callClientMethod($method, $param = null)
     {
         if ($param !== null) {
-            return $this->getClient()->$method($param);
-        } else {
-            return $this->getClient()->$method();
+            return $this->getClient()
+                ->{$method}($param);
         }
+        return $this->getClient()
+            ->{$method}();
+
     }
 
-    final public function jsonSerialize()
+    #[\Override]
+    final public function jsonSerialize(): mixed
     {
         return array_merge([
-            "hostId"=>$this->id,
-            "alias"=>$this->alias,
-            "urlAndPort"=>$this->urlAndPort,
-            "hostOnline"=>$this->hostOnline,
-            "supportsLoadAvgs"=>$this->supportsLoadAvgs,
-            "currentProject"=>$this->getProject()
+            'hostId' => $this->id,
+            'alias' => $this->alias,
+            'urlAndPort' => $this->urlAndPort,
+            'hostOnline' => $this->hostOnline,
+            'supportsLoadAvgs' => $this->supportsLoadAvgs,
+            'currentProject' => $this->getProject(),
         ], $this->customProps);
     }
+
     /**
      * You should probably not be using this.
      */
-    public function getClient() :Client
+    public function getClient(): Client
     {
         if ($this->client == null) {
             $this->client = $this->lxdClient->getClientWithHost($this);
@@ -121,15 +140,5 @@ class Host implements \JsonSerializable
             $this->client = $this->lxdClient->getClientWithHost($this);
         }
         return $this->client->getProject();
-    }
-
-    public function __set($prop, $value)
-    {
-        throw new \Exception("Not allowed to set public properties on this object, use get/set/removeCustomProp", 1);
-    }
-
-    public function __get($target)
-    {
-        return $this->getClient()->$target;
     }
 }

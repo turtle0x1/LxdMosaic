@@ -2,20 +2,15 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts;
 
-use dhope0000\LXDClient\Tools\Clusters\GetAllClusters;
 use dhope0000\LXDClient\Model\Hosts\HostList;
+use dhope0000\LXDClient\Tools\Clusters\GetAllClusters;
 
 class GetClustersAndStandaloneHosts
 {
-    private $getAllClusters;
-    private $hostList;
-    
     public function __construct(
-        GetAllClusters $getAllClusters,
-        HostList $hostList
+        private readonly GetAllClusters $getAllClusters,
+        private readonly HostList $hostList
     ) {
-        $this->getAllClusters = $getAllClusters;
-        $this->hostList = $hostList;
     }
 
     public function get()
@@ -25,9 +20,10 @@ class GetClustersAndStandaloneHosts
         $hostsInClusterGroups = [];
 
         foreach ($clusters as $cluster) {
-            $hostsInClusterGroups = array_merge($hostsInClusterGroups, array_map(function ($member) {
-                return $member->getHostId();
-            }, $cluster["members"]));
+            $hostsInClusterGroups = array_merge(
+                $hostsInClusterGroups,
+                array_map(fn ($member) => $member->getHostId(), $cluster['members'])
+            );
         }
 
         if (empty($hostsInClusterGroups)) {
@@ -37,12 +33,12 @@ class GetClustersAndStandaloneHosts
         }
 
         $standaloneHosts = [
-            "members"=>$standaloneHosts
+            'members' => $standaloneHosts,
         ];
 
         return [
-            "clusters"=>$clusters,
-            "standalone"=>$standaloneHosts
+            'clusters' => $clusters,
+            'standalone' => $standaloneHosts,
         ];
     }
 }

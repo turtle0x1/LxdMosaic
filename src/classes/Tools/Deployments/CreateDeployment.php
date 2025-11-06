@@ -2,24 +2,17 @@
 
 namespace dhope0000\LXDClient\Tools\Deployments;
 
-use dhope0000\LXDClient\Model\Deployments\InsertDeployment;
 use dhope0000\LXDClient\Model\CloudConfig\GetConfig;
 use dhope0000\LXDClient\Model\Deployments\CloudConfig\AddCloudConfig;
+use dhope0000\LXDClient\Model\Deployments\InsertDeployment;
 
 class CreateDeployment
 {
-    private $insertDeployment;
-    private $getConfig;
-    private $addCloudConfig;
-    
     public function __construct(
-        InsertDeployment $insertDeployment,
-        GetConfig $getConfig,
-        AddCloudConfig $addCloudConfig
+        private readonly InsertDeployment $insertDeployment,
+        private readonly GetConfig $getConfig,
+        private readonly AddCloudConfig $addCloudConfig
     ) {
-        $this->insertDeployment = $insertDeployment;
-        $this->getConfig = $getConfig;
-        $this->addCloudConfig = $addCloudConfig;
     }
 
     public function create(string $name, array $cloudConfigs)
@@ -29,7 +22,7 @@ class CreateDeployment
 
         foreach ($cloudConfigs as $cloudConfigId) {
             $latestRev = $this->getConfig->getLatestConfig($cloudConfigId);
-            $this->addCloudConfig->add($deploymentId, $latestRev["revisionId"]);
+            $this->addCloudConfig->add($deploymentId, $latestRev['revisionId']);
         }
 
         return $deploymentId;

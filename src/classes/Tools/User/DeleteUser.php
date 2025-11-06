@@ -2,44 +2,26 @@
 
 namespace dhope0000\LXDClient\Tools\User;
 
-use dhope0000\LXDClient\Tools\User\ValidatePermissions;
-use dhope0000\LXDClient\Model\Users\UpdateUserDeletedStatus;
-use dhope0000\LXDClient\Model\Users\UpdateUsername;
-use dhope0000\LXDClient\Model\Users\AllowedProjects\DeleteUserAccess;
-use dhope0000\LXDClient\Model\Users\ApiTokens\DeleteUserApiTokens;
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\DeleteBackupSchedules;
 use dhope0000\LXDClient\Model\InstanceSettings\RecordActions\DeleteRecordedActions;
+use dhope0000\LXDClient\Model\Users\AllowedProjects\DeleteUserAccess;
+use dhope0000\LXDClient\Model\Users\ApiTokens\DeleteUserApiTokens;
 use dhope0000\LXDClient\Model\Users\UpdateLoginStatus;
+use dhope0000\LXDClient\Model\Users\UpdateUserDeletedStatus;
+use dhope0000\LXDClient\Model\Users\UpdateUsername;
 
 class DeleteUser
 {
-    private $validatePermissions;
-    private $updateUserDeletedStatus;
-    private $updateUsername;
-    private $deleteUserAccess;
-    private $deleteUserApiTokens;
-    private $deleteBackupSchedules;
-    private $deleteRecordedActions;
-    private $updateLoginStatus;
-
     public function __construct(
-        ValidatePermissions $validatePermissions,
-        UpdateUserDeletedStatus $updateUserDeletedStatus,
-        UpdateUsername $updateUsername,
-        DeleteUserAccess $deleteUserAccess,
-        DeleteUserApiTokens $deleteUserApiTokens,
-        DeleteBackupSchedules $deleteBackupSchedules,
-        DeleteRecordedActions $deleteRecordedActions,
-        UpdateLoginStatus $updateLoginStatus
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly UpdateUserDeletedStatus $updateUserDeletedStatus,
+        private readonly UpdateUsername $updateUsername,
+        private readonly DeleteUserAccess $deleteUserAccess,
+        private readonly DeleteUserApiTokens $deleteUserApiTokens,
+        private readonly DeleteBackupSchedules $deleteBackupSchedules,
+        private readonly DeleteRecordedActions $deleteRecordedActions,
+        private readonly UpdateLoginStatus $updateLoginStatus
     ) {
-        $this->validatePermissions = $validatePermissions;
-        $this->updateUserDeletedStatus = $updateUserDeletedStatus;
-        $this->updateUsername = $updateUsername;
-        $this->deleteUserAccess = $deleteUserAccess;
-        $this->deleteUserApiTokens = $deleteUserApiTokens;
-        $this->deleteBackupSchedules = $deleteBackupSchedules;
-        $this->deleteRecordedActions = $deleteRecordedActions;
-        $this->updateLoginStatus = $updateLoginStatus;
     }
 
     public function delete(
@@ -58,7 +40,7 @@ class DeleteUser
         $this->deleteUserApiTokens->deleteAllNonPermanent($targetUserId);
 
         if ($changeUserName) {
-            $this->updateUsername->update($targetUserId, "Deleted User");
+            $this->updateUsername->update($targetUserId, 'Deleted User');
         }
 
         if ($removeProjectAccess) {

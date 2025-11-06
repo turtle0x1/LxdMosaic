@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class GrantAccessControllerTest extends TestCase
 {
-    public function setUp() :void
+    #[\Override]
+    protected function setUp(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -16,34 +19,50 @@ final class GrantAccessControllerTest extends TestCase
         $this->database->dbObject->beginTransaction();
     }
 
-    public function tearDown() :void
+    #[\Override]
+    protected function tearDown(): void
     {
         $this->database->dbObject->rollBack();
     }
 
-    public function test_nonAdminUserTryingToGrantAccess() :void
+    public function testNonAdminUserTryingToGrantAccess(): void
     {
         $this->expectException(\Exception::class);
 
-        $_POST = ["targetUser"=>1, "hosts"=>[1], "projects"=>["default"]];
+        $_POST = [
+            'targetUser' => 1,
+            'hosts' => [1],
+            'projects' => ['default'],
+        ];
 
         $this->routeApi->route(
             Request::create('/api/User/AllowedProjects/GrantAccessController/grant', 'POST'),
-            ["userid"=>2],
+            [
+                'userid' => 2,
+            ],
             true
         );
     }
 
-    public function test_grantUserAccess() :void
+    public function testGrantUserAccess(): void
     {
-        $_POST = ["targetUser"=>2, "hosts"=>[1], "projects"=>["default"]];
+        $_POST = [
+            'targetUser' => 2,
+            'hosts' => [1],
+            'projects' => ['default'],
+        ];
 
         $result = $this->routeApi->route(
             Request::create('/api/User/AllowedProjects/GrantAccessController/grant', 'POST'),
-            ["userid"=>1],
+            [
+                'userid' => 1,
+            ],
             true
         );
 
-        $this->assertEquals(["state"=>"success", "message"=>"Granted Access"], $result);
+        $this->assertEquals([
+            'state' => 'success',
+            'message' => 'Granted Access',
+        ], $result);
     }
 }

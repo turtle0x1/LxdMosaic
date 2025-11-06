@@ -1,8 +1,14 @@
 <?php
 
 $userSession = $this->container->make("dhope0000\LXDClient\Tools\User\UserSession"); /** @phpstan-ignore-line */
-$validatePermissions = $this->container->make("dhope0000\LXDClient\Tools\User\ValidatePermissions"); /** @phpstan-ignore-line */
-$getSetting = $this->container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting"); /** @phpstan-ignore-line */
+// @phpstan-ignore-next-line
+$validatePermissions = $this->container->make(
+    "dhope0000\LXDClient\Tools\User\ValidatePermissions"
+);
+// @phpstan-ignore-next-line
+$getSetting = $this->container->make(
+    "dhope0000\LXDClient\Model\InstanceSettings\GetSetting"
+);
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
 $siteTitle = $getSetting->getSettingLatestValue(InstanceSettingsKeys::SITE_TITLE);
@@ -11,12 +17,11 @@ $userId = $userSession->getUserId();
 $isAdmin = (int) $validatePermissions->isAdmin($userId);
 $apiToken = $userSession->getToken();
 
-
 echo "<script>
 var userDetails = {
-    isAdmin: $isAdmin,
-    apiToken: '$apiToken',
-    userId: $userId
+    isAdmin: {$isAdmin},
+    apiToken: '{$apiToken}',
+    userId: {$userId}
 }
 </script>";
 ?>
@@ -552,21 +557,21 @@ var userDetails = {
                     <div class="row">
                         <div class="col-md-12" id="boxHolder">
                             <?php
-                                require __DIR__ . "/boxes/dashboard.php";
-                                require __DIR__ . "/boxes/container.php";
-                                require __DIR__ . "/boxes/profile.php";
-                                require __DIR__ . "/boxes/cluster.php";
-                                require __DIR__ . "/boxes/cloudConfig.php";
-                                require __DIR__ . "/boxes/images.php";
-                                require __DIR__ . "/boxes/projects.php";
-                                require __DIR__ . "/boxes/deployments.php";
-                                require __DIR__ . "/boxes/storage.php";
-                                require __DIR__ . "/boxes/networks.php";
-                                require __DIR__ . "/boxes/server.php";
-                                require __DIR__ . "/boxes/backups.php";
-                                require __DIR__ . "/boxes/settings.php";
-                                require __DIR__ . "/boxes/mySettings.php";
-                            ?>
+                                require __DIR__ . '/boxes/dashboard.php';
+require __DIR__ . '/boxes/container.php';
+require __DIR__ . '/boxes/profile.php';
+require __DIR__ . '/boxes/cluster.php';
+require __DIR__ . '/boxes/cloudConfig.php';
+require __DIR__ . '/boxes/images.php';
+require __DIR__ . '/boxes/projects.php';
+require __DIR__ . '/boxes/deployments.php';
+require __DIR__ . '/boxes/storage.php';
+require __DIR__ . '/boxes/networks.php';
+require __DIR__ . '/boxes/server.php';
+require __DIR__ . '/boxes/backups.php';
+require __DIR__ . '/boxes/settings.php';
+require __DIR__ . '/boxes/mySettings.php';
+?>
                             <div class="boxSlide" id="notFound">
                                 <h4 class="text-center">Not Found</h4>
                             </div>
@@ -822,10 +827,10 @@ $(document).on("click", ".openProjectAccess", function(){
 });
 </script>
 <?php
-    require_once __DIR__ . "/modals/images/import.php";
-    require_once __DIR__ . "/modals/projects/projectAccess.php";
-    require_once __DIR__ . "/modals/helpers/newDeviceObj.php";
-    require_once __DIR__ . "/modals/helpers/editDeviceObj.php";
-    require_once __DIR__ . "/modals/search/search.php";
+    require_once __DIR__ . '/modals/images/import.php';
+require_once __DIR__ . '/modals/projects/projectAccess.php';
+require_once __DIR__ . '/modals/helpers/newDeviceObj.php';
+require_once __DIR__ . '/modals/helpers/editDeviceObj.php';
+require_once __DIR__ . '/modals/search/search.php';
 ?>
 </html>

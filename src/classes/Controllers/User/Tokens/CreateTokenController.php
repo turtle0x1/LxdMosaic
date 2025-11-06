@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateTokenController
 {
-    private $insertToken;
-    
-    public function __construct(InsertToken $insertToken)
-    {
-        $this->insertToken = $insertToken;
+    public function __construct(
+        private readonly InsertToken $insertToken
+    ) {
     }
 
     /**
@@ -20,6 +18,9 @@ class CreateTokenController
     public function create(int $userId, string $token)
     {
         $this->insertToken->insert($userId, $token, 1);
-        return ["state"=>"success", "message"=>"Create API permanent key"];
+        return [
+            'state' => 'success',
+            'message' => 'Create API permanent key',
+        ];
     }
 }

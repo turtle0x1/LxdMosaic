@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class DeleteUserAccess
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,7 +15,7 @@ class DeleteUserAccess
 
     public function delete(int $userId, int $hostId, string $project)
     {
-        $sql = "DELETE FROM `User_Allowed_Projects`
+        $sql = 'DELETE FROM `User_Allowed_Projects`
                 WHERE
                     `UAP_User_ID` = :userId
                 AND
@@ -23,55 +23,56 @@ class DeleteUserAccess
                 AND
                     `UAP_Project` = :project
 
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId,
-            ":hostId"=>$hostId,
-            ":project"=>$project
+            ':userId' => $userId,
+            ':hostId' => $hostId,
+            ':project' => $project,
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
 
     public function deletAllForProject(int $hostId, string $project)
     {
-        $sql = "DELETE FROM `User_Allowed_Projects`
+        $sql = 'DELETE FROM `User_Allowed_Projects`
                 WHERE
                     `UAP_Host_ID` = :hostId
                 AND
                     `UAP_Project` = :project
 
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId,
-            ":project"=>$project
+            ':hostId' => $hostId,
+            ':project' => $project,
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
 
     public function deleteForHost(int $hostId)
     {
-        $sql = "DELETE FROM `User_Allowed_Projects`
+        $sql = 'DELETE FROM `User_Allowed_Projects`
                 WHERE
                     `UAP_Host_ID` = :hostId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId
+            ':hostId' => $hostId,
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
+
     public function deleteForUser(int $targetUserId)
     {
-        $sql = "DELETE FROM `User_Allowed_Projects`
+        $sql = 'DELETE FROM `User_Allowed_Projects`
                 WHERE
                     `UAP_User_ID` = :targetUserId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":targetUserId"=>$targetUserId
+            ':targetUserId' => $targetUserId,
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
 }

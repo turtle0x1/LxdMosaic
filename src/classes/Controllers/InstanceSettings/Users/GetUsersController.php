@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetUsersController
 {
-    private $getUsers;
-
-    public function __construct(GetUsers $getUsers)
-    {
-        $this->getUsers = $getUsers;
+    public function __construct(
+        private readonly GetUsers $getUsers
+    ) {
     }
 
     /**

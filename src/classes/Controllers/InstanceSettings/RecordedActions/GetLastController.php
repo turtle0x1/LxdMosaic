@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetLastController
 {
-    private $getActions;
-
-    public function __construct(GetActions $getActions)
-    {
-        $this->getActions = $getActions;
+    public function __construct(
+        private readonly GetActions $getActions
+    ) {
     }
 
     /**

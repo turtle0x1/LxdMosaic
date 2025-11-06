@@ -7,25 +7,19 @@ use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 
 class CreateProject
 {
-    private $hasExtension;
-    
-    public function __construct(HasExtension $hasExtension)
-    {
-        $this->hasExtension = $hasExtension;
+    public function __construct(
+        private readonly HasExtension $hasExtension
+    ) {
     }
 
-    public function create(
-        HostsCollection $hosts,
-        string $name,
-        string $description = "",
-        array $config = []
-    ) {
+    public function create(HostsCollection $hosts, string $name, string $description = '', array $config = [])
+    {
         foreach ($hosts as $host) {
             //TODO Check if project exsits
-            $supportsNetworks = $this->hasExtension->checkWithHost($host, "projects_networks");
+            $supportsNetworks = $this->hasExtension->checkWithHost($host, 'projects_networks');
 
             if (!$supportsNetworks) {
-                unset($config["features.networks"]);
+                unset($config['features.networks']);
             }
             $host->projects->create($name, $description, $config);
         }

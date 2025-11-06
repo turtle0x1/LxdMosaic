@@ -15,10 +15,10 @@ class DeleteImageServer
 
     public function delete(string $alias)
     {
-        $sql = "DELETE FROM `Image_Servers` WHERE IS_Alias = :alias";
+        $sql = 'DELETE FROM `Image_Servers` WHERE IS_Alias = :alias';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":alias" => $alias
+            ':alias' => $alias,
         ]);
         return $do->rowCount() ? true : false;
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
 use dhope0000\LXDClient\Tools\CloudConfig\GetDetails;
@@ -6,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetDetailsController
 {
-    private $getDetails;
-
-    public function __construct(GetDetails $getDetails)
-    {
-        $this->getDetails = $getDetails;
+    public function __construct(
+        private readonly GetDetails $getDetails
+    ) {
     }
 
     /**

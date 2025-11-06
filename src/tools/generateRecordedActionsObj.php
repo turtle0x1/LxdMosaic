@@ -1,11 +1,12 @@
 <?php
-require __DIR__ . "/../../vendor/autoload.php";
 
-use \Doctrine\Common\Annotations\AnnotationReader;
-use \Doctrine\Common\Annotations\AnnotationRegistry;
+require __DIR__ . '/../../vendor/autoload.php';
 
-$path = __DIR__ . "/../../src/classes/Controllers/";
-$fqcns = array();
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+
+$path = __DIR__ . '/../../src/classes/Controllers/';
+$fqcns = [];
 
 $allFiles = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
 $phpFiles = new RegexIterator($allFiles, '/\.php$/');
@@ -17,15 +18,15 @@ foreach ($phpFiles as $phpFile) {
         if (!isset($tokens[$index][0])) {
             continue;
         }
-        if (T_NAMESPACE === $tokens[$index][0]) {
+        if ($tokens[$index][0] === T_NAMESPACE) {
             $index += 2; // Skip namespace keyword and whitespace
             while (isset($tokens[$index]) && is_array($tokens[$index])) {
                 $namespace .= $tokens[$index++][1];
             }
         }
-        if (T_CLASS === $tokens[$index][0]) {
+        if ($tokens[$index][0] === T_CLASS) {
             $index += 2; // Skip class keyword and whitespace
-            $fqcns[] = $namespace.'\\'.$tokens[$index][1];
+            $fqcns[] = $namespace . '\\' . $tokens[$index][1];
         }
     }
 }
@@ -58,7 +59,7 @@ foreach ($fqcns as $class) {
     }
     $methods = $refClass->getMethods(ReflectionMethod::IS_PUBLIC);
     foreach ($methods as $method) {
-        if ($method->getName() == "__construct") {
+        if ($method->getName() == '__construct') {
             continue;
         }
 
@@ -68,9 +69,9 @@ foreach ($fqcns as $class) {
         );
 
         if ($route !== null) {
-            $routeNames[$class . "\\" . $method->getName()] = $route->getName();
+            $routeNames[$class . '\\' . $method->getName()] = $route->getName();
         } else {
-            echo "Missing " . $class . "::" . $method->getName() . PHP_EOL;
+            echo 'Missing ' . $class . '::' . $method->getName() . PHP_EOL;
         }
     }
 }
@@ -79,7 +80,6 @@ foreach ($fqcns as $class) {
 // anymore
 $routeNames['dhope0000\\LXDClient\\Controllers\\Images\\ImportLinuxContainersByAliasController\\import'] = 'Import LinunxContainer.Org Image';
 
-
 $routesString = var_export($routeNames, true);
-$classString = str_replace("REPLACE_ME", $routesString, $classString);
-file_put_contents(__DIR__ . "/../classes/Objects/RouteToNameMapping.php", $classString);
+$classString = str_replace('REPLACE_ME', $routesString, $classString);
+file_put_contents(__DIR__ . '/../classes/Objects/RouteToNameMapping.php', $classString);

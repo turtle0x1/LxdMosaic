@@ -8,26 +8,25 @@ class BackupStringToObject
 {
     public function trimString($data)
     {
-        return trim($data);
+        return trim((string) $data);
     }
 
     public function convertStringArrayToPhp($string)
     {
-        $string = str_replace("[", "", $string);
-        $string = str_replace("]", "", $string);
-        return array_map([$this, "trimString"], explode(",", $string));
+        $string = str_replace('[', '', $string);
+        $string = str_replace(']', '', $string);
+        return array_map($this->trimString(...), explode(',', $string));
     }
 
-
-    public function parseString($string) :BackupSchedule
+    public function parseString($string): BackupSchedule
     {
         $this->validateString($string);
-        
-        $parts = array_map([$this, "trimString"], explode("~", $string));
+
+        $parts = array_map($this->trimString(...), explode('~', (string) $string));
 
         $time = $parts[1];
 
-        if (strpos($time, "[") !== false) {
+        if (str_contains((string) $time, '[')) {
             $time = $this->convertStringArrayToPhp($time);
         } else {
             $time = [$time];
@@ -35,22 +34,17 @@ class BackupStringToObject
 
         $daysOfWeek = [];
 
-        if ($parts[2] !== "[]" && !empty($parts[2])) {
+        if ($parts[2] !== '[]' && !empty($parts[2])) {
             $daysOfWeek = $this->convertStringArrayToPhp($parts[2]);
         }
 
-        return new BackupSchedule(
-            $parts[0],
-            $time,
-            $daysOfWeek,
-            is_numeric($parts[3]) ? $parts[3] : 0
-        );
+        return new BackupSchedule($parts[0], $time, $daysOfWeek, is_numeric($parts[3]) ? $parts[3] : 0);
     }
 
-    public function validateString(string $string) :void
+    public function validateString(string $string): void
     {
-        if (substr_count($string, "~") < 3) {
-            throw new \Exception("Syntax Error: There must be 4 tidles in the string", 1);
+        if (substr_count($string, '~') < 3) {
+            throw new \Exception('Syntax Error: There must be 4 tidles in the string', 1);
         }
     }
 }

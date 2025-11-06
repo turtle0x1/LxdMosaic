@@ -8,13 +8,10 @@ use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class GetCommonToHostsProjects
 {
-    private $validatePermissions;
-    private $hasExtension;
-
-    public function __construct(ValidatePermissions $validatePermissions, HasExtension $hasExtension)
-    {
-        $this->validatePermissions = $validatePermissions;
-        $this->hasExtension = $hasExtension;
+    public function __construct(
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly HasExtension $hasExtension
+    ) {
     }
 
     public function get(int $userId, HostsCollection $hosts)
@@ -25,12 +22,12 @@ class GetCommonToHostsProjects
         foreach ($hosts as $host) {
             $totalHosts++;
 
-            $supportsProjects = $this->hasExtension->checkWithHost($host, "projects");
+            $supportsProjects = $this->hasExtension->checkWithHost($host, 'projects');
 
             if ($supportsProjects) {
                 $projects = $host->projects->all();
             } else {
-                $projects = ["default"];
+                $projects = ['default'];
             }
 
             foreach ($projects as $project) {

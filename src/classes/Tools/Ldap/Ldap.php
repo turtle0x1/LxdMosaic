@@ -2,18 +2,16 @@
 
 namespace dhope0000\LXDClient\Tools\Ldap;
 
-use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 use dhope0000\LXDClient\Exceptions\Users\CantFindUserException;
 use dhope0000\LXDClient\Exceptions\Users\PasswordIncorrectException;
+use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
 
 class Ldap
 {
-    private $getSetting;
-
-    public function __construct(GetSetting $getSetting)
-    {
-        $this->getSetting = $getSetting;
+    public function __construct(
+        private readonly GetSetting $getSetting
+    ) {
     }
 
     public function getConnectionOrThrow($server)
@@ -33,7 +31,7 @@ class Ldap
     {
         $ldapbind = @ldap_bind($con, $adminUser, $adminPass);
         if (!$ldapbind) {
-            throw new \Exception("Couldn't login with acount $adminUser", 1);
+            throw new \Exception("Couldn't login with acount {$adminUser}", 1);
         }
         return $con;
     }
@@ -41,20 +39,20 @@ class Ldap
     /**
      * Returns username that can be looked up in the DB
      */
-    public function verifyAccount($con, $username, $password) :string
+    public function verifyAccount($con, $username, $password): string
     {
         $baseDn = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_BASE_DN);
-        $username = ldap_escape($username, "", LDAP_ESCAPE_FILTER);
-        $filter = "(|(cn=$username)(mail=$username))"; // where to look for specified "user name"
+        $username = ldap_escape($username, '', LDAP_ESCAPE_FILTER);
+        $filter = "(|(cn={$username})(mail={$username}))"; // where to look for specified "user name"
 
-        $attrs = array("dn", "cn");
+        $attrs = ['dn', 'cn'];
         $search = ldap_search($con, $baseDn, $filter, $attrs);
         $entries = ldap_get_entries($con, $search);
-        if ($entries["count"] == 0) {
+        if ($entries['count'] == 0) {
             throw new CantFindUserException($username);
         }
 
-        $bind = @ldap_bind($con, $entries[0]["dn"], $password);
+        $bind = @ldap_bind($con, $entries[0]['dn'], $password);
 
         if (!$bind) {
             throw new PasswordIncorrectException($username);
@@ -62,13 +60,13 @@ class Ldap
 
         // Return a CN we can look up in the DB incase user logged in with
         // a mail account
-        return $entries[0]["cn"][0];
+        return $entries[0]['cn'][0];
     }
 
     public function getAdminBoundConnection()
     {
         $server = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_SERVER);
-        $adminUser  = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_LOOKUP_USER);
+        $adminUser = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_LOOKUP_USER);
         $adminPass = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::LDAP_LOOKUP_USER_PASS);
 
         $connection = $this->getConnectionOrThrow($server);

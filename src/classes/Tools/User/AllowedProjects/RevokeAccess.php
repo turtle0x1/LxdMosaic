@@ -2,29 +2,19 @@
 
 namespace dhope0000\LXDClient\Tools\User\AllowedProjects;
 
-use dhope0000\LXDClient\Tools\User\ValidatePermissions;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
-use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Model\Users\AllowedProjects\DeleteUserAccess;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Model\Users\Projects\DeleteUserProject;
+use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class RevokeAccess
 {
-    private $validatePermissions;
-    private $fetchUserDetails;
-    private $deleteUserAccess;
-    private $deleteUserProject;
-    
     public function __construct(
-        ValidatePermissions $validatePermissions,
-        FetchUserDetails $fetchUserDetails,
-        DeleteUserAccess $deleteUserAccess,
-        DeleteUserProject $deleteUserProject
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly FetchUserDetails $fetchUserDetails,
+        private readonly DeleteUserAccess $deleteUserAccess,
+        private readonly DeleteUserProject $deleteUserProject
     ) {
-        $this->validatePermissions = $validatePermissions;
-        $this->fetchUserDetails = $fetchUserDetails;
-        $this->deleteUserAccess = $deleteUserAccess;
-        $this->deleteUserProject = $deleteUserProject;
     }
 
     public function revoke(int $userId, int $targetUserId, int $hostId, string $project)

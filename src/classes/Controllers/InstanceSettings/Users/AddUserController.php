@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AddUserController
 {
-    private $addUser;
-
-    public function __construct(AddUser $addUser)
-    {
-        $this->addUser = $addUser;
+    public function __construct(
+        private readonly AddUser $addUser
+    ) {
     }
 
     /**
@@ -20,6 +18,9 @@ class AddUserController
     public function add(int $userId, string $username, string $password)
     {
         $this->addUser->add($userId, $username, $password);
-        return ["state"=>"success", "message"=>"Addded user"];
+        return [
+            'state' => 'success',
+            'message' => 'Addded user',
+        ];
     }
 }

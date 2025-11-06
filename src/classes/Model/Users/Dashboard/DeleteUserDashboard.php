@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class DeleteUserDashboard
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,14 +15,14 @@ class DeleteUserDashboard
 
     public function delete(int $dashboardId)
     {
-        $sql = "DELETE FROM
+        $sql = 'DELETE FROM
                     `User_Dashboards`
                 WHERE
                     `UD_ID` = :dashboardId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":dashboardId"=>$dashboardId
+            ':dashboardId' => $dashboardId,
         ]);
         return $do->rowCount() ? true : false;
     }

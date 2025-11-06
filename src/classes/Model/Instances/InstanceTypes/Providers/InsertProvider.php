@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class InsertProvider
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,11 +15,11 @@ class InsertProvider
 
     public function insert(string $name)
     {
-        $sql = "INSERT INTO `Instace_Type_Providers`(`ITP_Name`) VALUES (:name)";
+        $sql = 'INSERT INTO `Instace_Type_Providers`(`ITP_Name`) VALUES (:name)';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":name"=>$name
+            ':name' => $name,
         ]);
-        return $do->rowCount() ?  true : false;
+        return $do->rowCount() ? true : false;
     }
 }

@@ -8,15 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetUserOverviewController
 {
-    private $getUserOverview;
-    private $validatePermissions;
-    
     public function __construct(
-        GetUserOverview $getUserOverview,
-        ValidatePermissions $validatePermissions
+        private readonly GetUserOverview $getUserOverview,
+        private readonly ValidatePermissions $validatePermissions
     ) {
-        $this->getUserOverview = $getUserOverview;
-        $this->validatePermissions = $validatePermissions;
     }
 
     /**

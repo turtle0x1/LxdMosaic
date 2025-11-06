@@ -9,8 +9,9 @@ $container = $builder->build();
 
 $getInstanceSetting = $container->make("dhope0000\LXDClient\Model\InstanceSettings\GetSetting");
 
-$ldapServer = $getInstanceSetting->getSettingLatestValue(dhope0000\LXDClient\Constants\InstanceSettingsKeys::LDAP_SERVER);
-
+$ldapServer = $getInstanceSetting->getSettingLatestValue(
+    dhope0000\LXDClient\Constants\InstanceSettingsKeys::LDAP_SERVER
+);
 
 if (empty($ldapServer)) {
     return new Schedule();

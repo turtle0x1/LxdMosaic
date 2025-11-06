@@ -15,14 +15,14 @@ class DeleteTimerSnapshots
 
     public function deleteBefore(\DateTimeInterface $before)
     {
-        $sql = "DELETE FROM
+        $sql = 'DELETE FROM
                     `Timers_Snapshots`
                 WHERE
                     `TS_Date` <= :beforeDate
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":beforeDate" => $before->format("Y-m-d H:i:s")
+            ':beforeDate' => $before->format('Y-m-d H:i:s'),
         ]);
         return $do->rowCount() ? true : false;
     }

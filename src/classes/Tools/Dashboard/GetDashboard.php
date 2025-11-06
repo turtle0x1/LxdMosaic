@@ -7,25 +7,20 @@ use dhope0000\LXDClient\Tools\ProjectAnalytics\GetGraphableProjectAnalytics;
 
 class GetDashboard
 {
-    private $fetchUserDashboards;
-    private $getGraphableProjectAnalytics;
-    
     public function __construct(
-        FetchUserDashboards $fetchUserDashboards,
-        GetGraphableProjectAnalytics $getGraphableProjectAnalytics
+        private readonly FetchUserDashboards $fetchUserDashboards,
+        private readonly GetGraphableProjectAnalytics $getGraphableProjectAnalytics
     ) {
-        $this->fetchUserDashboards = $fetchUserDashboards;
-        $this->getGraphableProjectAnalytics = $getGraphableProjectAnalytics;
     }
 
-    public function get($userId, string $history = "-30 minutes")
+    public function get($userId, string $history = '-30 minutes')
     {
         $dashboards = $this->fetchUserDashboards->fetchAll($userId);
         $projectGraphData = $this->getGraphableProjectAnalytics->getCurrent($userId, $history);
 
         return [
-            "userDashboards"=>$dashboards,
-            "projectsUsageGraphData"=>$projectGraphData["totals"]
+            'userDashboards' => $dashboards,
+            'projectsUsageGraphData' => $projectGraphData['totals'],
         ];
     }
 }

@@ -2,43 +2,25 @@
 
 namespace dhope0000\LXDClient\Tools\Instances\Backups;
 
-use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
+use dhope0000\LXDClient\Constants\LxdApiExtensions;
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\InsertInstanceBackup;
-use dhope0000\LXDClient\Tools\Instances\Backups\DeleteRemoteBackup;
-
+use dhope0000\LXDClient\Model\InstanceSettings\GetSetting;
+use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\Hosts\HasExtension;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use dhope0000\LXDClient\Tools\Hosts\HasExtension;
-use dhope0000\LXDClient\Constants\LxdApiExtensions;
-
-use dhope0000\LXDClient\Objects\Host;
-
-use dhope0000\LXDClient\Tools\Instances\Backups\DownloadFile;
 
 class StoreBackupLocally
 {
-    private $getSetting;
-    private $filesystem;
-    private $insertInstanceBackup;
-    private $deleteRemoteBackup;
-    private $hasExtension;
-    private $downloadFile;
-
     public function __construct(
-        GetSetting $getSetting,
-        Filesystem $filesystem,
-        InsertInstanceBackup $insertInstanceBackup,
-        DeleteRemoteBackup $deleteRemoteBackup,
-        HasExtension $hasExtension,
-        DownloadFile $downloadFile
+        private readonly GetSetting $getSetting,
+        private Filesystem $filesystem,
+        private readonly InsertInstanceBackup $insertInstanceBackup,
+        private readonly DeleteRemoteBackup $deleteRemoteBackup,
+        private readonly HasExtension $hasExtension,
+        private readonly DownloadFile $downloadFile
     ) {
-        $this->hasExtension = $hasExtension;
-        $this->getSetting = $getSetting;
-        $this->filesystem = $filesystem;
-        $this->insertInstanceBackup = $insertInstanceBackup;
-        $this->deleteRemoteBackup = $deleteRemoteBackup;
-        $this->downloadFile = $downloadFile;
     }
 
     public function store(Host $host, string $project, string $instance, string $backup, bool $deleteRemote)
@@ -50,8 +32,8 @@ class StoreBackupLocally
             throw new \Exception("Host doesn't support backups", 1);
         }
 
-        if (isset($_ENV["SNAP"])) {
-            $backupDir = $_ENV["SNAP_COMMON"];
+        if (isset($_ENV['SNAP'])) {
+            $backupDir = $_ENV['SNAP_COMMON'];
         } else {
             $backupDir = $this->getSetting->getSettingLatestValue(InstanceSettingsKeys::BACKUP_DIRECTORY);
         }
@@ -60,7 +42,7 @@ class StoreBackupLocally
 
         $backupInfo = $this->downloadBackup($host, $project, $instance, $backupDir, $backup);
 
-        $backupDate = (new \DateTime($backupInfo["created"]))->setTimezone(new \DateTimeZone("UTC"));
+        $backupDate = (new \DateTime($backupInfo['created']))->setTimezone(new \DateTimeZone('UTC'));
 
         $this->insertInstanceBackup->insert(
             $backupDate,
@@ -68,8 +50,8 @@ class StoreBackupLocally
             $project,
             $instance,
             $backup,
-            $backupInfo["backupFile"],
-            $backupInfo["filesize"]
+            $backupInfo['backupFile'],
+            $backupInfo['filesize']
         );
 
         if ($deleteRemote) {
@@ -85,27 +67,27 @@ class StoreBackupLocally
         string $instance,
         string $backupDir,
         string $backup
-    ) :array {
+    ): array {
         $backupInfo = $host->instances->backups->info($instance, $backup);
 
-        $backupFileName = "backup." . $backupInfo['created_at'] .".tar";
+        $backupFileName = 'backup.' . $backupInfo['created_at'] . '.tar';
 
-        $backupFilePath = "$backupDir/$backupFileName";
+        $backupFilePath = "{$backupDir}/{$backupFileName}";
 
         $this->downloadFile->download($host, $project, $instance, $backupFilePath, $backup);
 
         return [
-            "filesize"=>filesize($backupFilePath),
-            "backupFile"=>$backupFilePath,
-            "created"=>$backupInfo["created_at"]
+            'filesize' => filesize($backupFilePath),
+            'backupFile' => $backupFilePath,
+            'created' => $backupInfo['created_at'],
         ];
     }
 
-    private function makeDirectory(string $backupDir, int $hostId, string $project, string $instance) :string
+    private function makeDirectory(string $backupDir, int $hostId, string $project, string $instance): string
     {
         try {
             $this->filesystem = new Filesystem();
-            $path = "$backupDir/$hostId/$project/$instance";
+            $path = "{$backupDir}/{$hostId}/{$project}/{$instance}";
 
             if ($this->filesystem->exists($path)) {
                 return $path;

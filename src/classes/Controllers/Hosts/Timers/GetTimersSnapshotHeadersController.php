@@ -2,21 +2,16 @@
 
 namespace dhope0000\LXDClient\Controllers\Hosts\Timers;
 
-use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Model\Hosts\Timers\FetchTimersSnapshot;
+use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetTimersSnapshotHeadersController
 {
-    private $fetchUserDetails;
-    private $fetchTimersSnapshot;
-
     public function __construct(
-        FetchUserDetails $fetchUserDetails,
-        FetchTimersSnapshot $fetchTimersSnapshot
+        private readonly FetchUserDetails $fetchUserDetails,
+        private readonly FetchTimersSnapshot $fetchTimersSnapshot
     ) {
-        $this->fetchUserDetails = $fetchUserDetails;
-        $this->fetchTimersSnapshot = $fetchTimersSnapshot;
     }
 
     /**
@@ -26,7 +21,7 @@ class GetTimersSnapshotHeadersController
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);
         if (!$isAdmin) {
-            throw new \Exception("No access", 1);
+            throw new \Exception('No access', 1);
         }
         return $this->fetchTimersSnapshot->fetchLastSevenHeaders();
     }

@@ -1,16 +1,15 @@
 <?php
+
 namespace dhope0000\LXDClient\Tools\Instances;
 
-use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Model\Hosts\Backups\Instances\Schedules\UpdateBackupSchedules;
+use dhope0000\LXDClient\Objects\Host;
 
 class DeleteInstance
 {
-    private $updateBackupSchedules;
-    
-    public function __construct(UpdateBackupSchedules $updateBackupSchedules)
-    {
-        $this->updateBackupSchedules = $updateBackupSchedules;
+    public function __construct(
+        private readonly UpdateBackupSchedules $updateBackupSchedules
+    ) {
     }
 
     public function delete(int $userId, Host $host, string $instance)

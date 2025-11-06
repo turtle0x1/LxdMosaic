@@ -1,4 +1,5 @@
 <?php
+
 namespace dhope0000\LXDClient\Tools\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
@@ -10,22 +11,22 @@ class CreateImage
         string $instance,
         string $alias,
         bool $public,
-        string $os = null,
-        string $description = null
-    ) :bool {
+        ?string $os = null,
+        ?string $description = null
+    ): bool {
         $x = $host->images->createFromContainer($instance, [
-            "properties"=>[
-                "os" => $os
+            'properties' => [
+                'os' => $os,
             ],
-            "aliases"=>[
+            'aliases' => [
                 [
-                    "name"=>$alias,
-                    "description"=>$description
-                ]
-            ]
+                    'name' => $alias,
+                    'description' => $description,
+                ],
+            ],
         ]);
-        if ($x["err"] !== "") {
-            throw new \Exception($x["err"], 1);
+        if ($x['err'] !== '') {
+            throw new \Exception($x['err'], 1);
         }
         return true;
     }

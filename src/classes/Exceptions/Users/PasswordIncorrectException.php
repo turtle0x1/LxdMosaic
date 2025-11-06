@@ -6,6 +6,6 @@ class PasswordIncorrectException extends \Exception
 {
     public function __construct($username)
     {
-        parent::__construct("Password incorrect for $username");
+        parent::__construct("Password incorrect for {$username}");
     }
 }

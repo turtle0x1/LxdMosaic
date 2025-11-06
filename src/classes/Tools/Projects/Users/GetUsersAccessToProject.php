@@ -2,22 +2,19 @@
 
 namespace dhope0000\LXDClient\Tools\Projects\Users;
 
-use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 use dhope0000\LXDClient\Model\Users\AllowedProjects\FetchAllowedProjects;
 use dhope0000\LXDClient\Objects\Host;
+use dhope0000\LXDClient\Tools\User\ValidatePermissions;
 
 class GetUsersAccessToProject
 {
-    private $validatePermissions;
-    private $fetchAllowedProjects;
-
-    public function __construct(ValidatePermissions $validatePermissions, FetchAllowedProjects $fetchAllowedProjects)
-    {
-        $this->validatePermissions = $validatePermissions;
-        $this->fetchAllowedProjects = $fetchAllowedProjects;
+    public function __construct(
+        private readonly ValidatePermissions $validatePermissions,
+        private readonly FetchAllowedProjects $fetchAllowedProjects
+    ) {
     }
 
-    public function get(int $userId, Host $host, string $project) :array
+    public function get(int $userId, Host $host, string $project): array
     {
         $this->validatePermissions->isAdminOrThrow($userId);
 

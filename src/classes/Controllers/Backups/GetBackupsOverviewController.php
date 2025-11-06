@@ -7,11 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetBackupsOverviewController
 {
-    private $getBackupsOverview;
-
-    public function __construct(GetBackupsOverview $getBackupsOverview)
-    {
-        $this->getBackupsOverview = $getBackupsOverview;
+    public function __construct(
+        private readonly GetBackupsOverview $getBackupsOverview
+    ) {
     }
 
     /**

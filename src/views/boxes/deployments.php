@@ -443,7 +443,7 @@ $("#deploymentsBox").on("click", "#deploy", function(){
 </script>
 
 <?php
-    require __DIR__ . "/../modals/deployments/createDeployment.php";
-    require __DIR__ . "/../modals/deployments/deploy.php";
-    require __DIR__ . "/../modals/deployments/projects.php";
+require __DIR__ . '/../modals/deployments/createDeployment.php';
+require __DIR__ . '/../modals/deployments/deploy.php';
+require __DIR__ . '/../modals/deployments/projects.php';
 ?>

@@ -2,8 +2,6 @@
 
 namespace dhope0000\LXDClient\Tools\Utilities;
 
-use dhope0000\LXDClient\Objects\Host;
-
 class DateTools
 {
     /**
@@ -18,11 +16,11 @@ class DateTools
         bool $stopAtNow = false,
         int $startMinute = 0
     ) {
-        $times = array();
-        $x = (int) (new \DateTimeImmutable())->format("Hi");
+        $times = [];
+        $x = (int) (new \DateTimeImmutable())->format('Hi');
         for ($h = $startHour; $h < $endHour; $h++) {
             $o = $h === $startHour ? $startMinute : 0;
-            for ($m = $o; $m < 60 ; $m += $minuteIncrement) {
+            for ($m = $o; $m < 60; $m += $minuteIncrement) {
                 if ((int) sprintf('%02d%02d', $h, $m) > $x && $stopAtNow) {
                     break 2;
                 }

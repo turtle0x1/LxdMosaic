@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1020dc8b29995a782cb0f01739e8b93",
+    "content-hash": "d7055187f572beac8e02f4d6def31155",
     "packages": [
         {
             "name": "cakephp/core",
@@ -395,20 +395,20 @@
         },
         {
             "name": "dhope0000/lxd",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/turtle0x1/php-lxd.git",
-                "reference": "a3304076edd94d6b0f54a956555e50a4aa35b98d"
+                "reference": "9413db9fc865140389d7095424a599d1bc91b776"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/a3304076edd94d6b0f54a956555e50a4aa35b98d",
-                "reference": "a3304076edd94d6b0f54a956555e50a4aa35b98d",
+                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/9413db9fc865140389d7095424a599d1bc91b776",
+                "reference": "9413db9fc865140389d7095424a599d1bc91b776",
                 "shasum": ""
             },
             "require": {
-                "php": "~5.5|~7.0",
+                "php": "^7.2.5|~8.0",
                 "php-http/cache-plugin": "^1.6",
                 "php-http/client-common": "^2.7.2",
                 "php-http/client-implementation": "^1.0",
@@ -463,9 +463,9 @@
             ],
             "support": {
                 "issues": "https://github.com/turtle0x1/php-lxd/issues",
-                "source": "https://github.com/turtle0x1/php-lxd/tree/v1.0.0"
+                "source": "https://github.com/turtle0x1/php-lxd/tree/v1.1.0"
             },
-            "time": "2025-11-03T23:07:44+00:00"
+            "time": "2025-11-04T00:15:33+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -6855,7 +6855,9 @@
     "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
+    "platform": {
+        "php": "^8.4"
+    },
     "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

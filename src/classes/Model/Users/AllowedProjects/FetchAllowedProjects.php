@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class FetchAllowedProjects
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -26,14 +26,14 @@ class FetchAllowedProjects
                 ";
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId
+            ':userId' => $userId,
         ]);
-        return $do->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_COLUMN, 1);
+        return $do->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN, 1);
     }
 
     public function fetchForUserHost(int $userId, int $hostId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `UAP_Project`
                 FROM
                     `User_Allowed_Projects`
@@ -41,18 +41,18 @@ class FetchAllowedProjects
                     `UAP_User_ID` = :userId
                 AND
                     `UAP_Host_ID` = :hostId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId,
-            ":hostId"=>$hostId
+            ':userId' => $userId,
+            ':hostId' => $hostId,
         ]);
         return $do->fetchAll(\PDO::FETCH_COLUMN, 0);
     }
 
     public function fetchAllUsersPermissions()
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `UAP_Host_ID` as `hostId`,
                     `UAP_Project` as `project`,
                     `UAP_User_ID` as `userId`,
@@ -61,13 +61,14 @@ class FetchAllowedProjects
                     `User_Allowed_Projects`
                 LEFT JOIN `Users` ON
                     `User_ID` = `UAP_User_ID`
-                ";
+                ';
         $do = $this->database->query($sql);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
+
     public function fetchForHost(int $userId, int $hostId)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `UAP_Project`
                 FROM
                     `User_Allowed_Projects`
@@ -75,18 +76,18 @@ class FetchAllowedProjects
                     `UAP_User_ID` = :userId
                 AND
                     `UAP_Host_ID` = :hostId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId,
-            ":hostId"=>$hostId
+            ':userId' => $userId,
+            ':hostId' => $hostId,
         ]);
         return $do->fetchAll(\PDO::FETCH_COLUMN, 0);
     }
 
     public function fetchForHostProject(int $hostId, string $project)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `UAP_ID` as `id`,
                     `UAP_User_ID` as `userId`,
                     `Users`.`User_Name` as `userName`
@@ -98,18 +99,18 @@ class FetchAllowedProjects
                     `UAP_Host_ID` = :hostId
                 AND
                     `UAP_Project` = :project
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId,
-            ":project"=>$project
+            ':hostId' => $hostId,
+            ':project' => $project,
         ]);
         return $do->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function fetchUsersCanAcessProject(int $hostId, string $project)
     {
-        $sql = "SELECT
+        $sql = 'SELECT
                     `Users`.`User_Name`
                 FROM
                     `User_Allowed_Projects`
@@ -119,11 +120,11 @@ class FetchAllowedProjects
                     `UAP_Host_ID` = :hostId
                 AND
                     `UAP_Project` = :project
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":hostId"=>$hostId,
-            ":project"=>$project
+            ':hostId' => $hostId,
+            ':project' => $project,
         ]);
         return $do->fetchAll(\PDO::FETCH_COLUMN, 0);
     }

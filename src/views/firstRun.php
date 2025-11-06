@@ -2,20 +2,20 @@
 
 use dhope0000\LXDClient\Constants\InstanceSettingsKeys;
 
-require "../../vendor/autoload.php";
+require '../../vendor/autoload.php';
 
 // @phpstan-ignore-next-line
 $haveServers = $this->container->make("dhope0000\LXDClient\Model\Hosts\HostList");
 
 if ($haveServers->haveAny() === true) {
-    header("Location: /");
+    header('Location: /');
     exit;
 }
 
 $timezoneList = (new dhope0000\LXDClient\Tools\Utilities\DateTools())->getTimezoneList();
 $currenTimezone = date_default_timezone_get();
 
-$socketPath = "/var/snap/lxd/common/lxd/unix.socket";
+$socketPath = '/var/snap/lxd/common/lxd/unix.socket';
 $addServer = false;
 
 if (file_exists($socketPath)) {
@@ -28,7 +28,7 @@ if (file_exists($socketPath)) {
     curl_setopt($ch, CURLOPT_BUFFERSIZE, 256);
     curl_setopt($ch, CURLOPT_TIMEOUT, 1000000);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_URL, "http:/localhost/1.0/resources");
+    curl_setopt($ch, CURLOPT_URL, 'http:/localhost/1.0/resources');
     $x = curl_exec($ch);
     $addServer = $x !== false;
 }
@@ -196,10 +196,10 @@ if (file_exists($socketPath)) {
                             <select class="form-select instanceSetting" data-setting-id="<?= InstanceSettingsKeys::TIMEZONE; ?>" id="instanceSetting<?= InstanceSettingsKeys::TIMEZONE; ?>">
                                 <?php
                                 foreach ($timezoneList as $timezone) {
-                                    $s = $timezone === $currenTimezone ? "selected" : '';
+                                    $s = $timezone === $currenTimezone ? 'selected' : '';
                                     echo "<option value='{$timezone}' " . $s . ">{$timezone}</option>";
                                 }
-                                ?>
+?>
                             </select>
                             <label for="instanceSetting<?= InstanceSettingsKeys::TIMEZONE; ?>">LXDMosaic Timezone</label>
                         </div>

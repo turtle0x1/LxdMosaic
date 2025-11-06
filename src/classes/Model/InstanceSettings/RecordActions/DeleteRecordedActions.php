@@ -7,7 +7,7 @@ use dhope0000\LXDClient\Model\Database\Database;
 class DeleteRecordedActions
 {
     private $database;
-    
+
     public function __construct(Database $database)
     {
         $this->database = $database->dbObject;
@@ -15,13 +15,13 @@ class DeleteRecordedActions
 
     public function deleteForUser(int $userId)
     {
-        $sql = "DELETE FROM `Recorded_Actions`
+        $sql = 'DELETE FROM `Recorded_Actions`
                 WHERE
                     `RA_User_ID` = :userId
-                ";
+                ';
         $do = $this->database->prepare($sql);
         $do->execute([
-            ":userId"=>$userId
+            ':userId' => $userId,
         ]);
         return $do->rowCount() ? true : false;
     }
