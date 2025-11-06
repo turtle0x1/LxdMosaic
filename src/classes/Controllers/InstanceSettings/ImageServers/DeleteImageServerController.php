@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\InstanceSettings\ImageServers;
 
 use dhope0000\LXDClient\Model\InstanceSettings\ImageServers\DeleteImageServer;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DeleteImageServerController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -14,9 +14,7 @@ class DeleteImageServerController implements \dhope0000\LXDClient\Interfaces\Rec
     ) {
     }
 
-    /**
-     * @Route("/api/InstanceSettings/ImageServers/DeleteImageServerController/delete", name="Delete an image server", methods={"POST"})
-     */
+    #[Route(path: '/api/InstanceSettings/ImageServers/DeleteImageServerController/delete', name: 'Delete an image server', methods: ['POST'])]
     public function delete(string $userId, string $alias)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

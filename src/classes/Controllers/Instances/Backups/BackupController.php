@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Backups;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Backups\BackupInstance;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class BackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class BackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/Backups/BackupController/backup", name="Backup Instance", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/Backups/BackupController/backup', name: 'Backup Instance', methods: ['POST'])]
     public function backup(Host $host, string $container, string $backup, int $importAndDelete, $wait = true)
     {
         $lxdRespone = $this->backupInstance->create(

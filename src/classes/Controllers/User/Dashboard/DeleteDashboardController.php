@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\User\Dashboard;
 
 use dhope0000\LXDClient\Tools\User\Dashboard\DeleteDashboard;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DeleteDashboardController
 {
@@ -12,9 +12,7 @@ class DeleteDashboardController
     ) {
     }
 
-    /**
-     * @Route("/api/User/Dashboard/DeleteDashboardController/delete", name="api_user_dashboard_deletedashboardcontroller_delete", methods={"POST"})
-     */
+    #[Route(path: '/api/User/Dashboard/DeleteDashboardController/delete', name: 'api_user_dashboard_deletedashboardcontroller_delete', methods: ['POST'])]
     public function delete(int $userId, int $dashboardId)
     {
         $this->deleteDashboard->delete($userId, $dashboardId);

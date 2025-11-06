@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Deployments;
 
 use dhope0000\LXDClient\Tools\Deployments\Deploy;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,9 +12,7 @@ class DeployController implements \dhope0000\LXDClient\Interfaces\RecordAction
     ) {
     }
 
-    /**
-     * @Route("/api/Deployments/DeployController/deploy", name="Deploy Deployment", methods={"POST"})
-     */
+    #[Route(path: '/api/Deployments/DeployController/deploy', name: 'Deploy Deployment', methods: ['POST'])]
     public function deploy(int $userId, int $deploymentId, array $instances)
     {
         $data = $this->deploy->deploy($userId, $deploymentId, $instances);

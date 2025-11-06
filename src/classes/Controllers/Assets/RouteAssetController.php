@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Assets;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class RouteAssetController
 {
@@ -17,9 +17,7 @@ class RouteAssetController
         'woff2' => 'font/woff2',
     ];
 
-    /**
-     * @Route("/assets/{path}", name="serve_asset", requirements={"path"=".+"})
-     */
+    #[Route(path: '/assets/{path}', name: 'serve_asset', requirements: ['path' => '.+'])]
     public function get(Request $request): Response
     {
         $path = trim($request->getPathInfo(), '/');

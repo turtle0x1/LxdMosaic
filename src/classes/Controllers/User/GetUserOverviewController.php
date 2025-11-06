@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\User;
 
 use dhope0000\LXDClient\Tools\InstanceSettings\RecordActions\GetUserOverview;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetUserOverviewController
 {
@@ -14,9 +14,7 @@ class GetUserOverviewController
     ) {
     }
 
-    /**
-     * @Route("/api/User/GetUserOverviewController/get", name="api_user_getuseroverviewcontroller_get", methods={"POST"})
-     */
+    #[Route(path: '/api/User/GetUserOverviewController/get', name: 'api_user_getuseroverviewcontroller_get', methods: ['POST'])]
     public function get(int $userId, int $targetUser)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

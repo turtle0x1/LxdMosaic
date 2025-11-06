@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Deployments;
 
 use dhope0000\LXDClient\Tools\Deployments\GetDeployment;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetDeploymentController
 {
@@ -12,9 +12,7 @@ class GetDeploymentController
     ) {
     }
 
-    /**
-     * @Route("/api/Deployments/GetDeploymentController/get", name="api_deployments_getdeploymentcontroller_get", methods={"POST"})
-     */
+    #[Route(path: '/api/Deployments/GetDeploymentController/get', name: 'api_deployments_getdeploymentcontroller_get', methods: ['POST'])]
     public function get(int $userId, int $deploymentId)
     {
         return $this->getDeployment->get($userId, $deploymentId);

@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Projects;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Projects\RenameProject;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class RenameProjectController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class RenameProjectController implements \dhope0000\LXDClient\Interfaces\RecordA
     ) {
     }
 
-    /**
-     * @Route("/api/Projects/RenameProjectController/rename", name="Rename Project", methods={"POST"})
-     */
+    #[Route(path: '/api/Projects/RenameProjectController/rename', name: 'Rename Project', methods: ['POST'])]
     public function rename(Host $host, string $project, string $newName)
     {
         return $this->renameProject->rename($host, $project, $newName);

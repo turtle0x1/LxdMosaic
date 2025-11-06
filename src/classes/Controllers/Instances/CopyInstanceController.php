@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Copy;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class CopyInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class CopyInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAc
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/CopyInstanceController/copy", name="Copy instance", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/CopyInstanceController/copy', name: 'Copy instance', methods: ['POST'])]
     public function copy(
         Host $host,
         string $container,

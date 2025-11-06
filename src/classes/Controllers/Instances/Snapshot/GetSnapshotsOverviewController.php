@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Snapshot;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Snapshot\GetSnapshotsOverview;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetSnapshotsOverviewController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class GetSnapshotsOverviewController implements \dhope0000\LXDClient\Interfaces\
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/Snapshot/GetSnapshotsOverviewController/get", name="Get an overview of existing snapshots & configuration", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/Snapshot/GetSnapshotsOverviewController/get', name: 'Get an overview of existing snapshots & configuration', methods: ['POST'])]
     public function get(Host $host, string $container)
     {
         return $this->getSnapshotsOverview->get($host, $container);

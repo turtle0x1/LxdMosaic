@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts\Timers;
 
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
 use dhope0000\LXDClient\Tools\Hosts\Timers\GetTimersOverview;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetTimersOverivewController
 {
@@ -14,9 +14,7 @@ class GetTimersOverivewController
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/Timers/GetTimersOverivewController/get", name="api_hosts_timers_gettimersoverivewcontroller_get", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/Timers/GetTimersOverivewController/get', name: 'api_hosts_timers_gettimersoverivewcontroller_get', methods: ['POST'])]
     public function get(int $userId, string $date)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

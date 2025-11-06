@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Projects;
 
 use dhope0000\LXDClient\Tools\Projects\GetProjectsOverview;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetProjectsOverviewController
 {
@@ -12,9 +12,7 @@ class GetProjectsOverviewController
     ) {
     }
 
-    /**
-     * @Route("/api/Projects/GetProjectsOverviewController/get", name="api_projects_getprojectsoverviewcontroller_get", methods={"POST"})
-     */
+    #[Route(path: '/api/Projects/GetProjectsOverviewController/get', name: 'api_projects_getprojectsoverviewcontroller_get', methods: ['POST'])]
     public function get(int $userId)
     {
         return $this->getProjectsOverview->get($userId);

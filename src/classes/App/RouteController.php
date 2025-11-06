@@ -7,9 +7,10 @@ use dhope0000\LXDClient\Tools\User\LogUserIn;
 use dhope0000\LXDClient\Tools\User\UserSession;
 use dhope0000\LXDClient\Tools\User\ValidateToken;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
+
 
 class RouteController
 {
@@ -26,7 +27,8 @@ class RouteController
         private readonly ValidateToken $validateToken,
         private readonly FetchUserDetails $fetchUserDetails
     ) {
-        $this->session = new Session(new NativeSessionStorage(), new NamespacedAttributeBag());
+        $this->session = new Session(new NativeSessionStorage(), new AttributeBag());
+        $this->session->start();
     }
 
     public function routeRequest(Request $request)

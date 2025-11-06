@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Backups;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Backups\RestoreBackup;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class RestoreBackupController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class RestoreBackupController implements \dhope0000\LXDClient\Interfaces\RecordA
     ) {
     }
 
-    /**
-     * @Route("/api/Backups/RestoreBackupController/restore", name="Restore Local Backup To Host", methods={"POST"})
-     */
+    #[Route(path: '/api/Backups/RestoreBackupController/restore', name: 'Restore Local Backup To Host', methods: ['POST'])]
     public function restore(int $userId, int $backupId, Host $targetHost)
     {
         $response = $this->restoreBackup->restore($userId, $backupId, $targetHost);

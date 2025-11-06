@@ -6,12 +6,11 @@
         "php-di/php-di": "7.1.1",
         "dhope0000/lxd": "^1.2.0",
         "vlucas/phpdotenv": "^5.6",
-        "symfony/http-foundation": "^5.4",
-        "symfony/filesystem": "^5.4",
-        "symfony/cache": "^5.4",
-        "doctrine/annotations": "^1.10",
+        "symfony/http-foundation": "^7.3.6",
+        "symfony/filesystem": "^7.3.6",
+        "symfony/cache": "^7.3.6",
         "crunzphp/crunz": "^3.8.0",
-        "symfony/routing": "^5.4",
+        "symfony/routing": "^7.3.6",
         "robmorgan/phinx": "^0.16.10"
     },
     "autoload": {

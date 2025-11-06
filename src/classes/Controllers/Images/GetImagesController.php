@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Images;
 
 use dhope0000\LXDClient\Tools\Images\GetAllImages;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetImagesController
 {
@@ -12,9 +12,7 @@ class GetImagesController
     ) {
     }
 
-    /**
-     * @Route("/api/Images/GetImagesController/getAllHostImages", name="api_images_getimagescontroller_getallhostimages", methods={"POST"})
-     */
+    #[Route(path: '/api/Images/GetImagesController/getAllHostImages', name: 'api_images_getimagescontroller_getallhostimages', methods: ['POST'])]
     public function getAllHostImages(int $userId)
     {
         return $this->getAllImages->getAllHostImages($userId);

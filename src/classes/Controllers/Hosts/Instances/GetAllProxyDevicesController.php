@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Hosts\Instances\GetAllProxyDevices;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetAllProxyDevicesController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class GetAllProxyDevicesController implements \dhope0000\LXDClient\Interfaces\Re
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/Instances/GetAllProxyDevicesController/get", name="Get all proxy devices", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/Instances/GetAllProxyDevicesController/get', name: 'Get all proxy devices', methods: ['POST'])]
     public function get(Host $host)
     {
         return $this->getAllProxyDevices->get($host);

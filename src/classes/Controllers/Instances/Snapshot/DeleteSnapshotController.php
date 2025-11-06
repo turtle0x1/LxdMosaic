@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Snapshot;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Snapshot\DeleteSnapshot;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DeleteSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class DeleteSnapshotController implements \dhope0000\LXDClient\Interfaces\Record
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/Snapshot/DeleteSnapshotController/deleteSnapshot", name="Delete Instance Snapshot", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/Snapshot/DeleteSnapshotController/deleteSnapshot', name: 'Delete Instance Snapshot', methods: ['POST'])]
     public function deleteSnapshot(Host $host, string $container, string $snapshotName)
     {
         $lxdResponse = $this->deleteSnapshot->deleteSnapshot($host, $container, $snapshotName);

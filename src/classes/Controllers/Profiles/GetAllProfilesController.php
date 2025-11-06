@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Tools\Universe;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetAllProfilesController
 {
@@ -12,9 +12,7 @@ class GetAllProfilesController
     ) {
     }
 
-    /**
-     * @Route("/api/Profiles/GetAllProfilesController/getAllProfiles", name="api_profiles_getallprofilescontroller_getallprofiles", methods={"POST"})
-     */
+    #[Route(path: '/api/Profiles/GetAllProfilesController/getAllProfiles', name: 'api_profiles_getallprofilescontroller_getallprofiles', methods: ['POST'])]
     public function getAllProfiles(int $userId)
     {
         return $this->universe->getEntitiesUserHasAccesTo($userId, 'profiles');

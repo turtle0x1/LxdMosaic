@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\ProjectAnalytics;
 
 use dhope0000\LXDClient\Tools\ProjectAnalytics\GetGraphableProjectAnalytics;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetGraphableProjectAnalyticsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,9 +12,7 @@ class GetGraphableProjectAnalyticsController implements \dhope0000\LXDClient\Int
     ) {
     }
 
-    /**
-     * @Route("/api/ProjectAnalytics/GetGraphableProjectAnalyticsController/get", name="Get graphable analytics", methods={"POST"})
-     */
+    #[Route(path: '/api/ProjectAnalytics/GetGraphableProjectAnalyticsController/get', name: 'Get graphable analytics', methods: ['POST'])]
     public function get(int $userId, string $history = '-30 minutes')
     {
         return $this->getGraphableProjectAnalytics->getCurrent($userId, $history);

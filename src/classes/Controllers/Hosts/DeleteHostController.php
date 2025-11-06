@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts;
 
 use dhope0000\LXDClient\Tools\Hosts\RemoveHost;
 use DI\Container;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DeleteHostController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -14,9 +14,7 @@ class DeleteHostController implements \dhope0000\LXDClient\Interfaces\RecordActi
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/DeleteHostController/delete", name="Delete Host", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/DeleteHostController/delete', name: 'Delete Host', methods: ['POST'])]
     public function delete(int $userId, int $hostId)
     {
         $this->container->call(["dhope0000\LXDClient\Model\Database\Database", 'beginTransaction']);

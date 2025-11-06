@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\User\AllowedProjects;
 
 use dhope0000\LXDClient\Tools\User\AllowedProjects\GrantAccess;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GrantAccessController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,9 +12,7 @@ class GrantAccessController implements \dhope0000\LXDClient\Interfaces\RecordAct
     ) {
     }
 
-    /**
-     * @Route("/api/User/AllowedProjects/GrantAccessController/grant", name="Grant user access to a hosts project", methods={"POST"})
-     */
+    #[Route(path: '/api/User/AllowedProjects/GrantAccessController/grant', name: 'Grant user access to a hosts project', methods: ['POST'])]
     public function grant(int $userId, int $targetUser, array $hosts, array $projects)
     {
         $this->grantAccess->grant($userId, $targetUser, $hosts, $projects);

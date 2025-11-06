@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\InstanceSettings\ImageServers;
 
 use dhope0000\LXDClient\Model\InstanceSettings\ImageServers\FetchImageServers;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetAllImageServersListController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -14,9 +14,7 @@ class GetAllImageServersListController implements \dhope0000\LXDClient\Interface
     ) {
     }
 
-    /**
-     * @Route("/api/InstanceSettings/ImageServers/GetAllImageServersListController/all", name="Get all image servers list", methods={"POST"})
-     */
+    #[Route(path: '/api/InstanceSettings/ImageServers/GetAllImageServersListController/all', name: 'Get all image servers list', methods: ['POST'])]
     public function all(string $userId)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Hosts;
 
 use dhope0000\LXDClient\Tools\Hosts\AddHosts;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class AddHostsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,9 +12,7 @@ class AddHostsController implements \dhope0000\LXDClient\Interfaces\RecordAction
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/AddHostsController/add", name="Add Hosts", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/AddHostsController/add', name: 'Add Hosts', methods: ['POST'])]
     public function add($userId, array $hostsDetails)
     {
         $this->addHosts->add($userId, $hostsDetails);

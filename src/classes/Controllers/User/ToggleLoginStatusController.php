@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\User;
 
 use dhope0000\LXDClient\Tools\User\ToggleLoginStatus;
 use dhope0000\LXDClient\Tools\User\ValidatePermissions;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ToggleLoginStatusController
 {
@@ -14,9 +14,7 @@ class ToggleLoginStatusController
     ) {
     }
 
-    /**
-     * @Route("/api/User/ToggleLoginStatusController/toggle", name="api_user_toggleloginstatuscontroller_toggle", methods={"POST"})
-     */
+    #[Route(path: '/api/User/ToggleLoginStatusController/toggle', name: 'api_user_toggleloginstatuscontroller_toggle', methods: ['POST'])]
     public function toggle(int $userId, int $targetUser, int $status)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

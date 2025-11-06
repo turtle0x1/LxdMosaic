@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\User\AllowedProjects;
 
 use dhope0000\LXDClient\Tools\User\AllowedProjects\RevokeAccess;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class RevokeAccessController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,9 +12,7 @@ class RevokeAccessController implements \dhope0000\LXDClient\Interfaces\RecordAc
     ) {
     }
 
-    /**
-     * @Route("/api/User/AllowedProjects/RevokeAccessController/revoke", name="Revoke a users access from a hosts project", methods={"POST"})
-     */
+    #[Route(path: '/api/User/AllowedProjects/RevokeAccessController/revoke', name: 'Revoke a users access from a hosts project', methods: ['POST'])]
     public function revoke(int $userId, int $targetUser, int $hostId, string $project)
     {
         $this->revokeAccess->revoke($userId, $targetUser, $hostId, $project);

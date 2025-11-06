@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Instances\Metrics;
 
 use dhope0000\LXDClient\Tools\Instances\Metrics\GetAvailableHostsMetrics;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetAllAvailableMetricsController
 {
@@ -12,9 +12,7 @@ class GetAllAvailableMetricsController
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/Metrics/GetAllAvailableMetricsController/get", name="api_instances_metrics_getallavailablemetricscontroller_get", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/Metrics/GetAllAvailableMetricsController/get', name: 'api_instances_metrics_getallavailablemetricscontroller_get', methods: ['POST'])]
     public function get()
     {
         return $this->getAvailableHostsMetrics->get();

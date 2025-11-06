@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\CloudConfig;
 
 use dhope0000\LXDClient\Tools\CloudConfig\GetDetails;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetDetailsController
 {
@@ -12,9 +12,7 @@ class GetDetailsController
     ) {
     }
 
-    /**
-     * @Route("/api/CloudConfig/GetDetailsController/get", name="api_cloudconfig_getdetailscontroller_get", methods={"POST"})
-     */
+    #[Route(path: '/api/CloudConfig/GetDetailsController/get', name: 'api_cloudconfig_getdetailscontroller_get', methods: ['POST'])]
     public function get(int $id)
     {
         return $this->getDetails->get($id);

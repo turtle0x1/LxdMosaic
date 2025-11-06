@@ -2,8 +2,7 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
+use Symfony\Component\Routing\Attribute\Route;
 
 $path = __DIR__ . '/../../src/classes/Controllers/';
 $fqcns = [];
@@ -19,23 +18,20 @@ foreach ($phpFiles as $phpFile) {
             continue;
         }
         if ($tokens[$index][0] === T_NAMESPACE) {
-            $index += 2; // Skip namespace keyword and whitespace
+            $index += 2;
             while (isset($tokens[$index]) && is_array($tokens[$index])) {
                 $namespace .= $tokens[$index++][1];
             }
         }
         if ($tokens[$index][0] === T_CLASS) {
-            $index += 2; // Skip class keyword and whitespace
+            $index += 2;
             $fqcns[] = $namespace . '\\' . $tokens[$index][1];
         }
     }
 }
 
-AnnotationRegistry::registerLoader('class_exists');
-$reader = new AnnotationReader();
-
 $routeNames = [];
-$classString = '<?php
+$classTemplate = '<?php
 
 namespace dhope0000\LXDClient\Objects;
 
@@ -43,43 +39,42 @@ class RouteToNameMapping
 {
     public $routesToName = REPLACE_ME;
 
-    public function getControllerName(string $controller)
+    public function getControllerName(string $controller): string
     {
-        if (!isset($this->routesToName[$controller])) {
-            return "";
-        }
-        return $this->routesToName[$controller];
+        return $this->routesToName[$controller] ?? "";
     }
 }';
 
 foreach ($fqcns as $class) {
+    if (!class_exists($class)) {
+        continue;
+    }
+
     $refClass = new ReflectionClass($class);
     if (!$refClass->implementsInterface("dhope0000\LXDClient\Interfaces\RecordAction")) {
         continue;
     }
-    $methods = $refClass->getMethods(ReflectionMethod::IS_PUBLIC);
-    foreach ($methods as $method) {
-        if ($method->getName() == '__construct') {
+
+    foreach ($refClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+        if ($method->getName() === '__construct') {
             continue;
         }
 
-        $route = $reader->getMethodAnnotation(
-            new ReflectionMethod($class, $method->getName()),
-            Symfony\Component\Routing\Annotation\Route::class
-        );
+        $attributes = $method->getAttributes(Route::class);
 
-        if ($route !== null) {
+        if (!empty($attributes)) {
+            /** @var Route $route */
+            $route = $attributes[0]->newInstance();
             $routeNames[$class . '\\' . $method->getName()] = $route->getName();
         } else {
-            echo 'Missing ' . $class . '::' . $method->getName() . PHP_EOL;
+            echo "Missing {$class}::{$method->getName()}" . PHP_EOL;
         }
     }
 }
 
-// Old routes we just manually add because they wont be found by the script
-// anymore
-$routeNames['dhope0000\\LXDClient\\Controllers\\Images\\ImportLinuxContainersByAliasController\\import'] = 'Import LinunxContainer.Org Image';
+$routeNames['dhope0000\\LXDClient\\Controllers\\Images\\ImportLinuxContainersByAliasController\\import']
+    = 'Import LinuxContainer.Org Image';
 
 $routesString = var_export($routeNames, true);
-$classString = str_replace('REPLACE_ME', $routesString, $classString);
+$classString = str_replace('REPLACE_ME', $routesString, $classTemplate);
 file_put_contents(__DIR__ . '/../classes/Objects/RouteToNameMapping.php', $classString);

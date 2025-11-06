@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Search;
 
 use dhope0000\LXDClient\Tools\Search\SearchIndex;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class SearchIndexController
 {
@@ -12,9 +12,7 @@ class SearchIndexController
     ) {
     }
 
-    /**
-     * @Route("/api/search/fuzzy", name="fuzzy search lxd", methods={"POST"})
-     */
+    #[Route(path: '/api/search/fuzzy', name: 'fuzzy search lxd', methods: ['POST'])]
     public function get($userId, string $search)
     {
         return $this->searchIndex->search($userId, $search);

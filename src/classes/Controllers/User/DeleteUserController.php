@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\User;
 
 use dhope0000\LXDClient\Tools\User\DeleteUser;
 use DI\Container;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DeleteUserController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -14,9 +14,7 @@ class DeleteUserController implements \dhope0000\LXDClient\Interfaces\RecordActi
     ) {
     }
 
-    /**
-     * @Route("/api/User/DeleteUserController/delete", name="Delete a user", methods={"POST"})
-     */
+    #[Route(path: '/api/User/DeleteUserController/delete', name: 'Delete a user', methods: ['POST'])]
     public function delete(
         int $userId,
         int $targetUserId,

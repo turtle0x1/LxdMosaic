@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\InstanceSettings\Ldap;
 
 use dhope0000\LXDClient\Tools\InstanceSettings\Ldap\SaveLdapSettings;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class SaveLdapSettingsController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -12,9 +12,7 @@ class SaveLdapSettingsController implements \dhope0000\LXDClient\Interfaces\Reco
     ) {
     }
 
-    /**
-     * @Route("/api/InstanceSettings/Ldap/SaveLdapSettingsController/save", name="Save LXDMosaic Ldap Settings", methods={"POST"})
-     */
+    #[Route(path: '/api/InstanceSettings/Ldap/SaveLdapSettingsController/save', name: 'Save LXDMosaic Ldap Settings', methods: ['POST'])]
     public function save($userId, $settings)
     {
         $this->saveLdapSettings->save($userId, $settings);

@@ -3,7 +3,7 @@
 namespace dhope0000\LXDClient\Controllers\Profiles;
 
 use dhope0000\LXDClient\Tools\Profiles\GetProfilesDashboard;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetProfilesDashboardController
 {
@@ -12,9 +12,7 @@ class GetProfilesDashboardController
     ) {
     }
 
-    /**
-     * @Route("/api/Profiles/GetProfilesDashboardController/get", methods={"POST"},  name="Get Profile Dashboard")
-     */
+    #[Route(path: '/api/Profiles/GetProfilesDashboardController/get', methods: ['POST'], name: 'Get Profile Dashboard')]
     public function get(int $userId)
     {
         return $this->getProfilesDashboard->get($userId);

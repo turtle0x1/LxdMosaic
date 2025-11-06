@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Projects;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Projects\DeleteProject;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DeleteProjectController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class DeleteProjectController implements \dhope0000\LXDClient\Interfaces\RecordA
     ) {
     }
 
-    /**
-     * @Route("/api/Projects/DeleteProjectController/delete", name="Delete Project", methods={"POST"})
-     */
+    #[Route(path: '/api/Projects/DeleteProjectController/delete', name: 'Delete Project', methods: ['POST'])]
     public function delete(Host $host, string $project)
     {
         $this->deleteProject->remove($host, $project);

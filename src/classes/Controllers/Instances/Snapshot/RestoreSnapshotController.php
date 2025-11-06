@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Snapshot;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Snapshot\RestoreSnapshot;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class RestoreSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class RestoreSnapshotController implements \dhope0000\LXDClient\Interfaces\Recor
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/Snapshot/RestoreSnapshotController/restoreSnapshot", name="Restore Instance Snapshot", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/Snapshot/RestoreSnapshotController/restoreSnapshot', name: 'Restore Instance Snapshot', methods: ['POST'])]
     public function restoreSnapshot(Host $host, string $container, string $snapshotName)
     {
         $this->restoreSnapshot->restoreSnapshot($host, $container, $snapshotName);

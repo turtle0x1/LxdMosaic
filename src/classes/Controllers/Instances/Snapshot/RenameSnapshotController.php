@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances\Snapshot;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\Snapshot\RenameSnapshot;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class RenameSnapshotController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class RenameSnapshotController implements \dhope0000\LXDClient\Interfaces\Record
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/Snapshot/RenameSnapshotController/renameSnapshot", name="Rename Instance Snapshot", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/Snapshot/RenameSnapshotController/renameSnapshot', name: 'Rename Instance Snapshot', methods: ['POST'])]
     public function renameSnapshot(Host $host, string $container, string $snapshotName, string $newSnapshotName)
     {
         $this->renameSnapshot->rename($host, $container, $snapshotName, $newSnapshotName);

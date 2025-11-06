@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Instances;
 
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\Instances\RenameInstance;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class RenameInstanceController implements \dhope0000\LXDClient\Interfaces\RecordAction
 {
@@ -13,9 +13,7 @@ class RenameInstanceController implements \dhope0000\LXDClient\Interfaces\Record
     ) {
     }
 
-    /**
-     * @Route("/api/Instances/RenameInstanceController/rename", name="Rename Instance", methods={"POST"})
-     */
+    #[Route(path: '/api/Instances/RenameInstanceController/rename', name: 'Rename Instance', methods: ['POST'])]
     public function rename(Host $host, string $container, string $newContainer)
     {
         $result = $this->renameInstance->rename($host, $container, $newContainer);

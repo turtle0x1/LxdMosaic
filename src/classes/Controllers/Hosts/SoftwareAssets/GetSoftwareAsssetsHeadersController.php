@@ -4,7 +4,7 @@ namespace dhope0000\LXDClient\Controllers\Hosts\SoftwareAssets;
 
 use dhope0000\LXDClient\Model\Hosts\SoftwareAssets\FetchSoftwareAssetSnapshots;
 use dhope0000\LXDClient\Model\Users\FetchUserDetails;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetSoftwareAsssetsHeadersController
 {
@@ -14,9 +14,7 @@ class GetSoftwareAsssetsHeadersController
     ) {
     }
 
-    /**
-     * @Route("/api/Hosts/SoftwareAssets/GetSoftwareAsssetsHeadersController/get", name="api_hosts_softwareassets_getsoftwareasssetsheaderscontroller_get", methods={"POST"})
-     */
+    #[Route(path: '/api/Hosts/SoftwareAssets/GetSoftwareAsssetsHeadersController/get', name: 'api_hosts_softwareassets_getsoftwareasssetsheaderscontroller_get', methods: ['POST'])]
     public function get(int $userId)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);
