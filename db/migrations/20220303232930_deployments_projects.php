@@ -18,7 +18,7 @@ final class DeploymentsProjects extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('Deployment_Projects', ['id' => "DP_ID", 'primary_key' => ["DP_ID"]]);
+        $table = $this->table('Deployment_Projects', ['id' => "DP_ID", "signed"]);
         $table->addColumn('DP_Date_Created', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('DP_User_ID', 'integer')
             ->addColumn('DP_Deployment_ID', 'integer')
@@ -35,12 +35,11 @@ final class DeploymentsProjects extends AbstractMigration
             ->create();
 
         if ($this->isMigratingUp()) {
-            $builder = $this->getQueryBuilder();
-            $hosts = $builder->select('*')->from('Hosts')->execute()->fetchAll();
-            $builder = $this->getQueryBuilder();
-            $users = $builder->select('*')->from('Users')->execute()->fetchAll();
+            $hosts = $this->fetchAll('SELECT * FROM Hosts');
+            $users = $this->fetchAll('SELECT * FROM Users');
+
             if (count($hosts) > 0 && count($users) > 0) {
-                $this->execute("INSERT INTO `Deployment_Projects`(
+                $this->execute("INSERT INTO `Deployment_Projects` (
                     `DP_User_ID`,
                     `DP_Deployment_ID`,
                     `DP_Host_ID`,

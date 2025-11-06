@@ -12,7 +12,7 @@
         "doctrine/annotations": "^1.10",
         "crunzphp/crunz": "^3.8.0",
         "symfony/routing": "^5.4",
-        "robmorgan/phinx": "^0.12.4"
+        "robmorgan/phinx": "^0.16.10"
     },
     "autoload": {
         "psr-4": {
