@@ -8,7 +8,7 @@ apt-get install -y software-properties-common
 add-apt-repository ppa:ondrej/php -y
 
 # # Install Dependecies
-apt-get install -y apache2 php8.4 php8.4-cli php8.4-mysql php8.4-xml php8.4-curl php8.4-mbstring unzip zip git nodejs openssl || exit $?
+apt-get install -y apache2 php8.4 php8.4-cli php8.4-mysql php8.4-xml php8.4-curl php8.4-mbstring unzip zip git openssl || exit $?
 apt-get install -y mysql-server || exit $?
 apt-get install -y --no-install-recommends cron || exit $?
 apt-get install -y --no-install-recommends php8.4-xdebug || exit $?
