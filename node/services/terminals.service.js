@@ -1,5 +1,5 @@
 var WebSocket = require('ws');
-var internalUuidv1 = require('uuid/v1');
+const { v1: uuidv1 } = require('uuid');
 var http = require('http');
 var https = require('https');
 
@@ -17,7 +17,7 @@ module.exports = class Terminals {
     if (knownInternalId && this.activeTerminals.hasOwnProperty(knownInternalId) && this.activeTerminals[knownInternalId].closing !== true) {
       return this.internalUuidMap[key].uuid
     }
-    let internalUuid = internalUuidv1();
+    let internalUuid = uuidv1();
 
     this.internalUuidMap[key] = {
         "uuid": internalUuid,

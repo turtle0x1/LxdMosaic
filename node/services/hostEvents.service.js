@@ -1,5 +1,5 @@
 var WebSocket = require('ws');
-var internalUuidv1 = require('uuid/v1');
+const { v1: uuidv1 } = require('uuid');
 
 module.exports = class HostEvents {
 
@@ -21,7 +21,7 @@ module.exports = class HostEvents {
     }
 
     addClientSocket(clientSocket, userId){
-        let uuid = internalUuidv1();
+        let uuid = uuidv1();
         this._clientSockets[uuid] = {
             socket: clientSocket,
             listeningTo: {},

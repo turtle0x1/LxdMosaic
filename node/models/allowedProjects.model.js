@@ -1,5 +1,5 @@
 var WebSocket = require('ws');
-var internalUuidv1 = require('uuid/v1');
+const { v1: uuidv1 } = require('uuid');
 
 module.exports = class AllowedProjects {
   constructor(database) {

@@ -1,5 +1,5 @@
 var WebSocket = require('ws');
-var internalUuidv1 = require('uuid/v1');
+const { v1: uuidv1 } = require('uuid');
 var http = require('http');
 var https = require('https');
 
@@ -50,8 +50,8 @@ module.exports = class VgaTerminals {
          }
 
           this.getSocket(userId, hostDetails, project, instance).then((lxdWebSocket)=>{
-              let lxdSocketId = internalUuidv1();
-              let clientSocketId = internalUuidv1();
+              let lxdSocketId = uuidv1();
+              let clientSocketId = uuidv1();
               this.instanceSockets[hostId][project][instance][userId].clientSockets[clientSocketId] = clientSocket
               this.instanceSockets[hostId][project][instance][userId].lxdSockets[lxdSocketId] = lxdWebSocket
 
