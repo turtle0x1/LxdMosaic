@@ -397,6 +397,15 @@ var userDetails = {
             "hideMethod": "fadeOut"
           }
 
+          $(document).ready(function() {
+                $(document).keydown(function(e) {                
+                    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+                        e.preventDefault(); 
+                        $("#openSearch").trigger("click"); 
+                    }
+                });
+          });
+
           $(document).on("keyup", ".validateName", function(){
               this.value = this.value.replace(/[^-a-zA-Z0-9]+/g,'');
           })
