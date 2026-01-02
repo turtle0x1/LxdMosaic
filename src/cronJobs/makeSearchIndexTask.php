@@ -19,7 +19,7 @@ if (empty($createSearchIndex) || $createSearchIndex == 0) {
 $schedule = new Schedule();
 $task = $schedule->run(PHP_BINARY . '  ' . __DIR__ . '/scripts/makeSearchIndex.php');
 $task
-    ->everyFifteenMinutes()
+    ->everySixHours()
     ->description('Make search index');
 
 return $schedule;
