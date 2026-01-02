@@ -70,10 +70,8 @@ chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/
 chown -R www-data:www-data /var/www/LxdMosaic/src/sensitiveData/backups
 
 # Let PHP use as much memory as it wants within apache, typically for backups (#249)
-if test -f "/etc/php/7.4/apache2/php.ini"; then
-    sed -i -e "s/memory_limit = .*/memory_limit = -1/g" /etc/php/7.4/apache2/php.ini
-elif test -f "/etc/php/7.2/apache2/php.ini"; then
-    sed -i -e "s/memory_limit = .*/memory_limit = -1/g" /etc/php/7.2/apache2/php.ini
+if test -f "/etc/php/8.4/apache2/php.ini"; then
+    sed -i -e "s/memory_limit = .*/memory_limit = -1/g" /etc/php/8.4/apache2/php.ini
 fi
 
 # Move in LxdManager

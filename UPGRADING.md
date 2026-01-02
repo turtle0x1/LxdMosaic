@@ -30,7 +30,25 @@ systemctl restart httpd
 
 ```
 
-## 0.15.X -> 0.16.0 (Unreleased)
+## 0.16.0 -> 0.17.0 (Unreleased)
+
+```
+# Upgrade php
+ ## TODO general packages
+ ## TODO php.ini variables
+
+# Upgrade DB
+ ## TODO classic instructions
+
+# Upgrade apache
+ ## TODO super weird POST processing timeout for large files (ISO upload)
+
+# Node
+ ## TODO Switch to nvm instead of N
+ ## TODO Remove PM2 and install systemd service
+ ```
+
+## 0.15.X -> 0.16.0
 
 ```
 # New apache config required (dont forget to update any domain names etc)
