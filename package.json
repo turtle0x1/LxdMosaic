@@ -24,8 +24,6 @@
     "body-parser": "^2.2.0",
     "bufferutil": "^4.0.9",
     "cors": "^2.8.5",
-    "dotenv": "^6.2.0",
-    "dotenv-expand": "^5.1.0",
     "express": "^5.1.0",
     "express-ws": "^5.0.2",
     "mysql": "^2.18.1",

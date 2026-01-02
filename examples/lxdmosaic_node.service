@@ -7,7 +7,7 @@ Type=simple
 User=root
 WorkingDirectory=/var/www/LxdMosaic
 
-ExecStart=/root/.nvm/versions/node/v24.12.0/bin/node /var/www/LxdMosaic/node/events.js
+ExecStart=/root/.nvm/versions/node/v24.12.0/bin/node --env-file=/var/www/LxdMosaic/.env /var/www/LxdMosaic/node/events.js
 
 Restart=always
 RestartSec=5

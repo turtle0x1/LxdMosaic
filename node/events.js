@@ -1,5 +1,4 @@
 // IMPORT CORE COMPONENTS
-import Environment from './services/environment.service.js';
 import Filesystem from './services/filesystem.service.js';
 import Express from './services/express.service.js';
 
@@ -23,9 +22,6 @@ import TextTerminalController from './controllers/textTerminal.controller.js';
 import CloudConfigController from './controllers/cloudConfig.controller.js';
 import VgaTerminalController from './controllers/vgaTerminal.controller.js';
 import HostEventsController from './controllers/hostEvents.controller.js';
-
-// LOAD ENVIRONMENT
-new Environment().load(new URL('../.env', import.meta.url).pathname);
 
 // INSTANTIATE FILESYSTEM
 const fileSystem = new Filesystem();
