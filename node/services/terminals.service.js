@@ -1,9 +1,10 @@
-var WebSocket = require('ws');
-const { v1: uuidv1 } = require('uuid');
-var http = require('http');
-var https = require('https');
+import WebSocket from 'ws';
+import { v1 as uuidv1 } from 'uuid';
+import http from 'http';
+import https from 'https';
 
-module.exports = class Terminals {
+
+export default class  Terminals {
   constructor(hosts) {
     this._hosts = hosts
     this.activeTerminals = {};

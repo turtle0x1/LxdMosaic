@@ -38,8 +38,6 @@ then
     update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
 fi
 
-npm -g install pm2 || exit $?
-
 # Install composer
 
 ##Download composer
@@ -131,11 +129,12 @@ PASSWD=""
 
 cp examples/lxd_manager.conf /etc/apache2/sites-available/
 
-pm2 start node/events.js || exit $?
+cp examples/lxdmosaic_node.service /etc/systemd/system/
 
-pm2 startup || exit $?
-
-pm2 save || exit $?
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl enable lxdmosaic_node
+sudo systemctl start lxdmosaic_node
 
 if [ ! -f /etc/crontab ]; then
     touch /etc/crontab

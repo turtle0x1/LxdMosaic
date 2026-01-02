@@ -1,7 +1,7 @@
-var WebSocket = require('ws');
-const { v1: uuidv1 } = require('uuid');
+import WebSocket from 'ws';
+import { v1 as uuidv1 } from 'uuid';
 
-module.exports = class HostEvents {
+export default class  HostEvents {
 
     _allowedProjects;
     _hostSockets = {}

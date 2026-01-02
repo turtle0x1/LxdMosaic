@@ -1,6 +1,6 @@
-const fs = require('fs');
+import fs from 'fs';
 
-module.exports = class Filesystem {
+export default class  Filesystem {
     checkAndAwaitFileExists(filePath) {
         var startDate = new Date();
         while (!fs.existsSync(filePath)) {

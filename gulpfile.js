@@ -1,9 +1,11 @@
-// gulpfile.js
-import { src, dest, parallel } from 'gulp';
+import gulp from 'gulp';
 import concat from 'gulp-concat';
 import minify from 'gulp-minify';
 import cleanCSS from 'gulp-clean-css';
 import replace from 'gulp-replace';
+
+const { src, dest, parallel } = gulp;
+
 
 export function css() {
     return src([

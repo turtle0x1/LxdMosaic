@@ -1,4 +1,4 @@
-module.exports = class CloudConfigController {
+export default class  CloudConfigController {
     _startBlueText = '\x1B[34m';
     _endBlueText = '\x1B[0m';
     _dangerRegexs = [

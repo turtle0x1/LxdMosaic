@@ -1,56 +1,60 @@
-    // REQUIRE CORE COMPONENTS
-const Environment = require('./services/environment.service'),
-    Filesystem = require('./services/filesystem.service'),
-    Express = require('./services/express.service'),
-    // REQUIRE MIDDLEWARE
-    AuthenticateExpressRoute = require('./middleware/expressAuth.middleware'),
-    // REQUIRE MODELS
-    FetchHosts = require('./models/fetchHosts.model'),
-    WsTokens = require('./models/wsTokens.model'),
-    AllowedProjects = require('./models/allowedProjects.model'),
-    // REQUIRE SERVICES
-    Hosts = require('./services/hosts.service'),
-    HostEvents = require('./services/hostEvents.service'),
-    Terminals = require('./services/terminals.service'),
-    VgaTerminals = require('./services/vgaTerminals.service'),
-    DbConnection = require('./services/db.service'),
-    // REQUIRE CONTROLLERS
-    TextTerminalController = require('./controllers/textTerminal.controller'),
-    CloudConfigController = require('./controllers/cloudConfig.controller'),
-    VgaTerminalController = require('./controllers/vgaTerminal.controller'),
-    HostEventsController = require('./controllers/hostEvents.controller');
+// IMPORT CORE COMPONENTS
+import Environment from './services/environment.service.js';
+import Filesystem from './services/filesystem.service.js';
+import Express from './services/express.service.js';
+
+// IMPORT MIDDLEWARE
+import AuthenticateExpressRoute from './middleware/expressAuth.middleware.js';
+
+// IMPORT MODELS
+import FetchHosts from './models/fetchHosts.model.js';
+import WsTokens from './models/wsTokens.model.js';
+import AllowedProjects from './models/allowedProjects.model.js';
+
+// IMPORT SERVICES
+import Hosts from './services/hosts.service.js';
+import HostEvents from './services/hostEvents.service.js';
+import Terminals from './services/terminals.service.js';
+import VgaTerminals from './services/vgaTerminals.service.js';
+import DbConnection from './services/db.service.js';
+
+// IMPORT CONTROLLERS
+import TextTerminalController from './controllers/textTerminal.controller.js';
+import CloudConfigController from './controllers/cloudConfig.controller.js';
+import VgaTerminalController from './controllers/vgaTerminal.controller.js';
+import HostEventsController from './controllers/hostEvents.controller.js';
 
 // LOAD ENVIRONMENT
-(new Environment).load(__dirname + '/../.env')
+new Environment().load(new URL('../.env', import.meta.url).pathname);
 
 // INSTANTIATE FILESYSTEM
-var fileSystem = new Filesystem();
+const fileSystem = new Filesystem();
 
 // BUILD EXPRESS APP
-var app = (new Express(fileSystem)).createExpressApp()
+const app = new Express(fileSystem).createExpressApp();
 
 // INSTANTIATE DB CONNECTION
-var con = (new DbConnection(fileSystem)).getDbConnection();
+const con = new DbConnection(fileSystem).getDbConnection();
 
 // BUILD MODELS
-var allowedProjects = new AllowedProjects(con);
-var wsTokens = new WsTokens(con);
-var fetchHosts = new FetchHosts(con);
+const allowedProjects = new AllowedProjects(con);
+const wsTokens = new WsTokens(con);
+const fetchHosts = new FetchHosts(con);
 
 // BUILD SERVICES
-var hosts = new Hosts(fetchHosts);
-var hostEvents = new HostEvents(hosts, allowedProjects);
-var terminals = new Terminals(hosts);
-var vgaTerminals = new VgaTerminals(hosts);
+const hosts = new Hosts(fetchHosts);
+const hostEvents = new HostEvents(hosts, allowedProjects);
+const terminals = new Terminals(hosts);
+const vgaTerminals = new VgaTerminals(hosts);
 
 // BUILD CONTROLLERS
-var textTerminalController = new TextTerminalController(terminals)
-var cloudConfgController = new CloudConfigController(terminals)
-var vgaTerminalsController = new VgaTerminalController(vgaTerminals)
-var hostEventsController = new HostEventsController(hostEvents)
+const textTerminalController = new TextTerminalController(terminals);
+const cloudConfgController = new CloudConfigController(terminals);
+const vgaTerminalsController = new VgaTerminalController(vgaTerminals);
+const hostEventsController = new HostEventsController(hostEvents);
 
 // BUILD MIDDLEWARE
-var authenticateExpressRoute = new AuthenticateExpressRoute(wsTokens, allowedProjects)
+const authenticateExpressRoute = new AuthenticateExpressRoute(wsTokens, allowedProjects);
 
 // REGISTER MIDDLEWARE
 app.use(authenticateExpressRoute.authenticateReq);
@@ -59,13 +63,13 @@ app.use(authenticateExpressRoute.authenticateReq);
 app.post('/terminals', textTerminalController.getNewTerminalProcess);
 
 // REGISTER WEBSOCKET ENDPOINTS
-app.ws('/node/terminal/', vgaTerminalsController.openTerminal)
-app.ws('/node/operations', hostEventsController.addClientSocket)
-app.ws('/node/console', textTerminalController.openTerminal)
-app.ws('/node/cloudConfig', cloudConfgController.openTerminal)
+app.ws('/node/terminal/', vgaTerminalsController.openTerminal);
+app.ws('/node/operations', hostEventsController.addClientSocket);
+app.ws('/node/console', textTerminalController.openTerminal);
+app.ws('/node/cloudConfig', cloudConfgController.openTerminal);
 
 // HANDLE EXIT
-process.on('SIGINT', function() {
+process.on('SIGINT', () => {
     hostEvents.closeAllSockets();
     terminals.closeAll();
     process.exit();

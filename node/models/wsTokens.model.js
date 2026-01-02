@@ -1,4 +1,4 @@
-module.exports = class WsTokens {
+export default class  WsTokens {
   constructor(mysqlCon) {
     this.con = mysqlCon;
   }

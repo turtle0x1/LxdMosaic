@@ -1,4 +1,4 @@
-module.exports = class HostEventsController {
+export default class  HostEventsController {
     constructor(hostEvents) {
         this._hostEvents = hostEvents
     }

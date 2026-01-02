@@ -1,7 +1,7 @@
-const dotenv = require('dotenv'),
-  dotenvExpand = require('dotenv-expand');
+import dotenv from 'dotenv';
+import dotenvExpand from 'dotenv-expand';
 
-module.exports = class Environment {
+export default class  Environment {
     load(path) {
         var envImportResult = dotenvExpand(dotenv.config({
           path: path

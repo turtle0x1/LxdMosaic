@@ -1,10 +1,10 @@
-const express = require('express'),
-  https = require('https'),
-  expressWs = require('express-ws'),
-  bodyParser = require('body-parser'),
-  cors = require('cors');
+import express from 'express';
+import https from 'https';
+import expressWs from 'express-ws';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 
-module.exports = class Express {
+export default class  Express {
     constructor(fileSystem){
         this._fileSystem = fileSystem
     }

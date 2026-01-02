@@ -1,8 +1,8 @@
-var http = require('http');
-var https = require('https');
-var fs = require('fs');
+import http from 'http';
+import https from 'https';
+import fs from 'fs';
 
-module.exports = class Hosts {
+export default class  Hosts {
   constructor(fetchHosts) {
     this._fetchHosts = fetchHosts
     this.hostDetails = {};

@@ -1,4 +1,4 @@
-module.exports = class TextTerminalController {
+export default class  TextTerminalController {
     constructor(terminals) {
         this._terminals = terminals
     }

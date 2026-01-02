@@ -1,0 +1,21 @@
+[Unit]
+Description=LxdMosaic Node Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/LxdMosaic
+
+ExecStart=/root/.nvm/versions/node/v24.12.0/bin/node /var/www/LxdMosaic/node/events.js
+
+Restart=always
+RestartSec=5
+
+Environment=NODE_ENV=production
+
+# Ensure systemd can find Node even without a shell
+Environment=PATH=/root/.nvm/versions/node/v24.12.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+[Install]
+WantedBy=multi-user.target

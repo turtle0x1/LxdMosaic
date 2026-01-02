@@ -1,7 +1,7 @@
-const mysql = require('mysql'),
-    sqlite3 = require('sqlite3').verbose();
+import mysql from 'mysql';
+import sqlite3 from 'sqlite3';
 
-module.exports = class DbConnection {
+export default class  DbConnection {
     constructor(fileSystem){
         this._fileSystem = fileSystem
     }

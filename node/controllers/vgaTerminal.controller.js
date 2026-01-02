@@ -1,4 +1,4 @@
-module.exports = class VgaTerminalController {
+export default class  VgaTerminalController {
     constructor(vgaTerminals) {
         this._vgaTerminals = vgaTerminals
     }

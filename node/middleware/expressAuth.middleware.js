@@ -1,5 +1,5 @@
 
-module.exports = class AuthenticateExpressRoute {
+export default class  AuthenticateExpressRoute {
 
      constructor(wsTokens, allowedProjects){
          this.wsTokens = wsTokens

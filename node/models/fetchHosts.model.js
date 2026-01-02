@@ -1,4 +1,4 @@
-module.exports = class FetchHosts {
+export default class  FetchHosts {
     constructor(con){
         this._con = con
     }
