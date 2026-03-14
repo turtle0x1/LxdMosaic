@@ -1,3 +1,9 @@
+<style>
+    #serverHeaderInfo h5 {
+        font-size: .8rem;
+        margin-bottom: 0px;
+    }
+</style>
 <div id="serverBox" class="boxSlide">
     <div id="serverOverview">
         <div class="row border-bottom">
@@ -12,44 +18,35 @@
                       </div>
                     </div>
                 </div>
+                <div class="row row-cols-1 row-cols-md-4 g-2 mb-2" id="serverHeaderInfo">
+                    <div class="col">
+                    <div class="card card-body text-center bg-dark text-white ps-1 pe-1">
+                        <h5><i style="min-width: 10px" class="fas fa-microchip"></i><span id="serverCpuDisplay"></span></h5>
+                    </div>
+                    </div>
+                    <div class="col">
+                    <div class="card card-body text-center bg-dark text-white ps-1 pe-1">
+                        <h5><i style="min-width: 10px; text-align: center;" class="fas fa-memory"></i><span class="ps-1" id="serverMemoryDisplay"></span> RAM</h5>
+                    </div>
+                    </div>
+                    <div class="col">
+                    <div class="card card-body text-center bg-dark text-white ps-1 pe-1">
+                        <h5><i style="min-width: 10px; text-align: center;" class="fas fa-bolt"></i><span id="serverGpuDisplay"></span></h5>
+                    </div>
+                    </div>
+                    <div class="col">
+                    <div class="card card-body text-center bg-dark text-white ps-1 pe-1 enableIfAdmin" style="display: none;">
+                        <h5><i style="min-width: 10px; text-align: center;" class="fas fa-hdd"></i><span id="serverDisksDisplay"></span></h5>
+                    </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3 pt-2">
-                <div class="mb-2">
-                    <h5><i style="min-width: 20px" class="fas fa-microchip me-2"></i>CPU's</h5>
-                    <div id="serverCpuDisplay">
-                    </div>
-                </div>
-                <div class="mt-2 mb-2">
-                    <h5><i style="min-width: 20px; text-align: center;" class="fas fa-memory me-2"></i>Memory</h5>
-                    <div id="serverMemoryDisplay">
-                    </div>
-                </div>
-                <div class="mt-2 mb-2">
-                    <h5><i style="min-width: 20px; text-align: center;" class="fas fa-bolt me-2"></i>GPU's</h5>
-                    <div id="serverGpuDisplay">
-
-                    </div>
-                </div>
-                <div class="mt-2 mb-2 enableIfAdmin" style="display: none;">
-                    <h5><i style="min-width: 20px; text-align: center;" class="fas fa-hdd me-2"></i>Disk's</h5>
-                    <div id="serverDisksDisplay">
-
-                    </div>
-                </div>
-                <div class="mt-2 mb-2 enableIfAdmin" style="display: none;">
-                    <h5><i style="min-width: 20px; text-align: center;" class="fas fa-server me-2"></i>Hardware</h5>
-                    <table class="table table-transparent" id="hostDetailsTable">
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="col-md-9 pt-2 border-start">
+            <div class="col-md-12 pt-2 border-start">
                 <div class="row pb-2 mb-2">
                         <div class="col-md-12 text-center justify-content" id="">
-                            <ul class="nav nav-tabs text-center" id="serverBoxNav" style="border: none !important;">
+                            <ul class="nav nav-tabs nav-justified text-center" id="serverBoxNav" style="border: none !important;">
                                 <li class="nav-item" data-view="serverInfoBox">
                                     <div class="nav-link active" id="serverDetailsBtn">
                                         <i class="fas fa-tachometer-alt pe-2"></i>Overview
@@ -111,6 +108,15 @@
                                     <div class="card mt-2 bg-dark text-white text-center">
                                         <h1 id="networksCount"></h1>
                                         <h4><i class="fas fa-ethernet me-2"></i>Networks</h4>
+                                    </div>
+                                    <div class="mt-2 mb-2 enableIfAdmin" style="display: none;">
+                                        <div class="card card-body mt-2 bg-dark text-white text-center">
+                                            <h5><i style="min-width: 20px; text-align: center;" class="fas fa-server me-2"></i>Hardware</h5>
+                                            <table class="table table-dark" id="hostDetailsTable">
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-8" id="serverOverviewGraphs">
@@ -302,33 +308,35 @@ function _loadServerDetailsIfReq(hostId){
         let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
 
         $.each(data.resources.cpu.sockets, (_, item)=>{
-            cpuHtml += `<div class="ps-2">
+            cpuHtml += `<span class="ps-1">
                 ${item[cpuIndentKey]} - ${$.isNumeric(item.cores) ? item.cores : item.cores.length} Cores
-            </div>`
+            </span>`
         });
 
         $("#serverCpuDisplay").empty().append(cpuHtml);
-        $("#serverMemoryDisplay").empty().append(`<div class="ps-2">${formatBytes(data.resources.memory.total)}</div>`);
+        $("#serverMemoryDisplay").empty().append(`${formatBytes(data.resources.memory.total)}`);
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
             $.each(data.resources.gpu.cards, function(i, gpu){
                 let name = gpu?.nvidia?.model ?? (gpu?.vendor ?? gpu.driver)  + " - " + (gpu?.product ?? gpu.driver_version)
-                gpuHtml += `<div class="ps-2">${name}</div>`;
+                gpuHtml += `<span class="ps-1">${name}</span>`;
             });
         }else{
-            gpuHtml += `<div class="ps-2">No GPU's</div>`;
+            gpuHtml += `<span class="ps-1">No GPU's</span>`;
         }
 
         $("#serverGpuDisplay").empty().append(gpuHtml);
 
         let disks = "";
-
+        
         if(userDetails.isAdmin && data.resources.hasOwnProperty("storage") && data.resources.storage.hasOwnProperty("disks")){
-            $.each(data.resources.storage.disks, (_, disk)=>{
-                disks += `<div class="ps-2">${disk.model} - ${formatBytes(disk.size)}</div>`
-            });
+            if(data.resources.storage.disks.length == 1){
+                disks += `<span>${data.resources.storage.disks[0].model} - ${formatBytes(data.resources.storage.disks[0].size)}</span>`
+            }else{
+                disks += `<a class="viewServerDisks" href="#">${data.resources.storage.disks.length} Disks</a>`
+            }
         }else{
-            disks = `<div class="ps-2">Nothing To Display</div>`;
+            disks = `<span>Nothing To Display</span>`;
         }
 
         $("#serverDisksDisplay").empty().append(disks);
@@ -381,25 +389,25 @@ function _loadServerDetailsIfReq(hostId){
 
             hostDetailsTrs += `
                 <tr>
-                    <td>Motherboard</td>
+                    <th>Motherboard</th>
                     <td>${mbProduct}</td>
                 </tr>
                 <tr>
-                    <td>Type</td>
+                    <th>Type</th>
                     <td>${type}</td>
                 </tr>
                 <tr>
-                    <td>Chasis Type</td>
+                    <th>Chasis Type</th>
                     <td>${chasisType}</td>
                 </tr>
                 <tr>
-                    <td>System Firmware</td>
+                    <th>System Firmware</th>
                     <td>
                         ${firmwareDetails}
                     </td>
                 </tr>
                 <tr>
-                    <td>UUID</td>
+                    <th>UUID</th>
                     <td>${uuid}</td>
                 </tr>
             `;
@@ -970,21 +978,21 @@ function loadServerView(hostId)
         let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
 
         $.each(data.resources.cpu.sockets, (_, item)=>{
-            cpuHtml += `<div class="ps-2">
+            cpuHtml += `<span>
                 ${item[cpuIndentKey]} - ${$.isNumeric(item.cores) ? item.cores : item.cores.length} Cores
-            </div>`
+            </span>`
         });
 
         $("#serverCpuDisplay").empty().append(cpuHtml);
-        $("#serverMemoryDisplay").empty().append(`<div class="ps-2">${formatBytes(data.resources.memory.total)}</div>`);
+        $("#serverMemoryDisplay").empty().append(`${formatBytes(data.resources.memory.total)}`);
 
         if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
             $.each(data.resources.gpu.cards, function(i, gpu){
                 let name = gpu?.nvidia?.model ?? (gpu?.vendor ?? gpu.driver)  + " - " + (gpu?.product ?? gpu.driver_version)
-                gpuHtml += `<div class="ps-2">${name}</div>`;
+                gpuHtml += `<span class="ps-1">${name}</span>`;
             });
         }else{
-            gpuHtml += `<div class="ps-2">No GPU's</div>`;
+            gpuHtml += `<span class="ps-1">No GPU's</span>`;
         }
 
         $("#serverGpuDisplay").empty().append(gpuHtml);
@@ -992,11 +1000,13 @@ function loadServerView(hostId)
         let disks = "";
 
         if(userDetails.isAdmin && data.resources.hasOwnProperty("storage") && data.resources.storage.hasOwnProperty("disks")){
-            $.each(data.resources.storage.disks, (_, disk)=>{
-                disks += `<div class="ps-2">${disk.model} - ${formatBytes(disk.size)}</div>`
-            });
+            if(data.resources.storage.disks.length == 1){
+                disks += `<span>${data.resources.storage.disks[0].model} - ${formatBytes(data.resources.storage.disks[0].size)}</span>`
+            }else{
+                disks += `<a class="viewServerDisks" href="#">${data.resources.storage.disks.length} Disks</a>`
+            }
         }else{
-            disks = `<div class="ps-2">Nothing To Display</div>`;
+            disks = `<span>Nothing To Display</span>`;
         }
 
         $("#serverDisksDisplay").empty().append(disks);
@@ -1004,15 +1014,15 @@ function loadServerView(hostId)
         if(data.resources.hasOwnProperty("hostDetails")){
             hostDetailsTrs += `
                 <tr>
-                    <td>OS</td>
+                    <th>OS</th>
                     <td>${data.resources.hostDetails.os_name}</td>
                 </tr>
                 <tr>
-                    <td>OS Version</td>
+                    <th>OS Version</th>
                     <td>${data.resources.hostDetails.os_version}</td>
                 </tr>
                 <tr>
-                    <td>Firewall</td>
+                    <th>Firewall</th>
                     <td>${data.resources.hostDetails.firewall}</td>
                 </tr>
             `
@@ -1049,25 +1059,25 @@ function loadServerView(hostId)
 
             hostDetailsTrs += `
                 <tr>
-                    <td>Motherboard</td>
+                    <th>Motherboard</th>
                     <td>${mbProduct}</td>
                 </tr>
                 <tr>
-                    <td>Type</td>
+                    <th>Type</th>
                     <td>${type}</td>
                 </tr>
                 <tr>
-                    <td>Chasis Type</td>
+                    <th>Chasis Type</th>
                     <td>${chasisType}</td>
                 </tr>
                 <tr>
-                    <td>System Firmware</td>
+                    <th>System Firmware</th>
                     <td>
                         ${firmwareDetails}
                     </td>
                 </tr>
                 <tr>
-                    <td>UUID</td>
+                    <th>UUID</th>
                     <td>${uuid}</td>
                 </tr>
             `;
@@ -1223,6 +1233,11 @@ function loadServerView(hostId)
         $("#serverOverviewGraphs").append(y)
     });
 }
+$(document).on("click", ".viewServerDisks", function(e){
+    e.preventDefault();
+    e.stopPropagation()
+    router.navigate(`/host/${currentServer.hostAlias}/disks`)
+})
 </script>
 
 <?php
