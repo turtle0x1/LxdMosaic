@@ -1,0 +1,98 @@
+<div class="systemEndpointBox row" id="systemEndpointStorage">
+    <div class="col-md-12">
+        <div class="card bg-dark text-white mb-2">
+            <div class="card-header">
+                <h5>Config</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark" id="systemStorageConfigTbl">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card bg-dark text-white mb-2">
+            <div class="card-header">
+                <h5>Drives</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark" id="systemStorageDrivesTbl">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Serial Number</th>
+                            <th>Capacity</th>
+                            <th>Boot</th>
+                            <th>Multipath</th>
+                            <th>Removable</th>
+                            <th>Remote</th>
+                            <th>Member Pool</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card bg-dark text-white mb-2">
+            <div class="card-header">
+                <h5>Pools</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark" id="systemStoragePoolsTbl">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>State</th>
+                            <th>Encryption Key Status</th>
+                            <th>Usable Size</th>
+                            <th>Allocated Space</th>
+                            <th>Volumes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function renderStorage(data) {
+        $("#systemEndpointStorage").show()
+        $("#systemStorageConfigTbl > tbody").empty().append(Object.keys(data.config).map(cKey => {
+            return `<tr>
+                <th>${cKey}</th>
+                <td>${data.config[cKey] !== "" ? data.config[cKey] : "Not Set"}</td>
+            </tr>`
+        }).join(""))
+
+        $("#systemStorageDrivesTbl > tbody").empty().append(data.state.drives.map(drive => {
+            return `<tr>
+                <td>${drive.model_family} - ${drive.model_name}</td>
+                <td>${drive.serial_number}</td>
+                <td>${formatBytes(drive.capacity_in_bytes)}</td>
+                <td><i class="fas fa-${drive.boot ? "check" : "times"}"></i></td>
+                <td><i class="fas fa-${drive.multipath ? "check" : "times"}"></i></td>
+                <td><i class="fas fa-${drive.removable ? "check" : "times"}"></i></td>
+                <td><i class="fas fa-${drive.remote ? "check" : "times"}"></i></td>
+                <td>${drive.member_pool}</td>
+            </tr>`
+        }).join(""))
+        $("#systemStoragePoolsTbl > tbody").empty().append(data.state.pools.map(pool => {
+            return `<tr>
+                <td>${pool.name}</td>
+                <td>${pool.type}</td>
+                <td>${pool.state}</td>
+                <td>${pool.encryption_key_status}</td>
+                <td>${formatBytes(pool.usable_pool_size_in_bytes)}</td>
+                <td>${formatBytes(pool.pool_allocated_space_in_bytes)}</td>
+                <td>${pool.volumes.length}</td>
+            </tr>`
+        }).join(""))
+    }
+</script>

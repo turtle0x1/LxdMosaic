@@ -1,0 +1,65 @@
+<div class="systemEndpointBox" id="systemEndpointUpdate">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h5>Config</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-dark" id="systemUpdateConfigTbl">
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h5>State</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-dark" id="systemUpdateStateTbl">
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function renderUpdate(data) {
+        $("#systemEndpointUpdate").show()
+        $("#systemUpdateConfigTbl > tbody").empty().append(`
+            <tr>
+                <th>Auto Reboot</th>
+                <td>${data.config.auto_reboot}</td>
+            </tr>
+            <tr>
+                <th>Channel</th>
+                <td>${data.config.channel}</td>
+            </tr>
+            <tr>
+                <th>Check Frequency</th>
+                <td>${data.config.check_frequency}</td>
+            </tr>
+        `)
+        $("#systemUpdateStateTbl > tbody").empty().append(`
+            <tr>
+                <th>Last Check</th>
+                <td>${moment(data.state.last_check).format("llll")}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>${data.state.status}</td>
+            </tr>
+            <tr>
+                <th>Needs Reboot</th>
+                <td>${data.state.needs_reboot}</td>
+            </tr>
+        `)
+    }
+</script>

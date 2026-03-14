@@ -1,0 +1,112 @@
+<div class="systemEndpointBox" id="systemEndpointSecurity">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card bg-dark text-white mb-2">
+                <div class="card-header">
+                    <h5>Config</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-dark" id="systemSecurityConfigTbl">
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card bg-dark text-white mb-2">
+                <div class="card-header">
+                    <h5>Encrypted Volumes</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-dark" id="systemSecurityEncryptedVolsTbl">
+                        <thead>
+                            <tr>
+                                <th>Volume</th>
+                                <th>State</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card bg-dark text-white mb-2">
+                <div class="card-header">
+                    <h5>State</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-dark" id="systemSecurityStateTbl">
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h5>Secure Boot Certs</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm table-dark" id="systemSecuritySecureBootCertsTbl">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Issuer</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function renderSecurity(data) {
+        $("#systemEndpointSecurity").show()
+        
+        $("#systemSecurityConfigTbl > tbody").empty().append(`
+            <tr>
+                <th>Encryption Recovery Keys</th>
+                <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button></td>
+            </tr>
+            <tr>
+                <th>Pool Recovery Keys</th>
+                <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button></td>
+            </tr>
+        `)
+        $("#systemSecurityEncryptedVolsTbl > tbody").empty().append(data.state.encrypted_volumes.map(vol => {
+            return `<tr>
+                <td>${vol.volume}</td>
+                <td>${vol.state}</td>
+            </tr>`
+        }).join(""))
+        $("#systemSecuritySecureBootCertsTbl > tbody").empty().append(data.state.secure_boot_certificates.map(cert => {
+            return `<tr>
+                <td>${cert.type}</td>
+                <td>${cert.issuer.split(",")[0].replace("CN=", "")}</td>
+                <td><button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i></button></td>
+            </tr>`
+        }).join(""))
+        $("#systemSecurityStateTbl > tbody").empty().append(`
+            <tr>
+                <th>Encryption Recovery Keys Retrieved</th>
+                <td>${data.state.encryption_recovery_keys_retrieved ? "Yes" : "No"}</td>
+            </tr>
+            <tr>
+                <th>Secure Boot Enabled</th>
+                <td>${data.state.secure_boot_enabled ? "Yes" : "No"}</td>
+            </tr>
+            <tr>
+                <th>TPM Status</th>
+                <td>${data.state.tpm_status}</td>
+            </tr>
+        `)
+    }
+</script>

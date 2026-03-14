@@ -1,0 +1,46 @@
+<div class="systemServiceBox row" id="systemSerivceNetbird">
+    <div class="col-md-6">
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h5>State</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark" id="systemSerivceNetbirdState">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h5>Config</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark" id="systemSerivceNetbirdConfig">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function renderNetbird(data) {
+        $("#systemSerivceNetbird").show()
+        $("#systemSerivceNetbirdState > tbody").empty().append(`
+            <tr>
+                <td><i class="fas fa-info-circle text-info me-2"></i>No State Data</td>
+            </tr>
+        `)
+        $("#systemSerivceNetbirdConfig > tbody").empty().append(Object.keys(data.config).map(ccKey => {
+            return `<tr>
+                <th>${ccKey}</th>
+                <td>${data.config[ccKey]}</td>
+            </tr>`
+        }))
+    }
+</script>

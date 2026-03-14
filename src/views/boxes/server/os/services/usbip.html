@@ -1,0 +1,50 @@
+<div class="systemServiceBox row" id="systemServiceUsbip">
+    <div class="col-md-6">
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h5>State</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark" id="systemServiceUsbipState">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h5>Config</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark" id="systemServiceUsbipConfig">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function renderUsbip(data) {
+        $("#systemServiceUsbip").show()
+        $("#systemServiceUsbipState > tbody").empty().append(`
+            <tr>
+                <td><i class="fas fa-info-circle text-info me-2"></i>No State Data</td>
+            </tr>
+        `)
+        $("#systemServiceUsbipConfig > tbody").empty().append(`
+            <tr>
+                <th>Enabled</th>
+                <td><i class="fas fa-${data.config.enabled ? "check" : "times"}"></i></td>
+            </tr>
+            <tr>
+                <th>Targets</th>
+                <td>${data.config.targets.length == 0 ? "No Targets" : data.config.targets.join("<br/>")}</td>
+            </tr>
+        `)
+    }
+</script>
