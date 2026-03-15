@@ -123,43 +123,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="serverViewBox" id="serverInstanceBox">
-                            <div class="row">
-                                <div class="col-md-12 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-2">
-                                    <h4><i class="fas fa-box me-2"></i>Instances</h4>
-                                    <div class="btn-toolbar float-end">
-                                      <div class="btn-group me-2">
-                                        <button class="btn btn-success serverContainerActions" data-action="start" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Start Instances" disabled>
-                                            <i class="fas fa-play"></i>
-                                        </button>
-                                        <button class="btn btn-warning serverContainerActions" data-action="stop" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Stop Instances" disabled>
-                                            <i class="fas fa-stop"></i>
-                                        </button>
-                                        <button class="btn btn-danger serverContainerActions" data-action="delete" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Instances" disabled>
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                      </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table id="serverInstanceTable" class="table table-dark table-bordered" style="vertical-align: middle">
-                                    <thead>
-                                        <tr>
-                                            <td> <input type="checkbox" id="toggleAllContainers"> </td>
-                                            <td> Instance </td>
-                                            <td> Disk Usage </td>
-                                            <td> Memory Usage </td>
-                                            <td> IP Addresses </td>
-                                            <td> <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Excluding local interface bytes sent & received"> Network Usage </a> </td>
-                                            <td> Gather Metrics</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                         <div class="serverViewBox" id="serverProxyBox">
                             <div class="card bg-dark text-white">
                                 <div class="card-header text-white">
@@ -256,6 +219,9 @@
                                 </table>
                             </div>
                         </div>
+                        <?php
+                            require_once __DIR__ . "/server/instances.html";
+                        ?>
                     </div>
                 </div>
             </div>
@@ -577,173 +543,6 @@ function loadHostWarnings(req){
     });
 }
 
-function loadHostInstances(req){
-    currentContainerDetails = null;
-    let hostId = req.data.hostId;
-    currentServer.hostId = hostId
-    currentServer.hostAlias = hostsAliasesLookupTable[hostId]
-    createDashboardSidebar()
-    _loadServerDetailsIfReq(hostId);
-    changeActiveNav(".overview")
-    $(".boxSlide, .serverViewBox").hide();
-    $("#serverInstanceBox, #serverBox").show();
-
-    addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Instances"], ["", "", "active"], false, ["/", "", ""]);
-
-    $("#serverBoxNav").find(".active").removeClass("active")
-    $("#serverBoxNav .nav-item[data-view='serverInstanceBox'] > .nav-link").addClass("active")
-
-    ajaxRequest(globalUrls.hosts.instances.getHostContainers, {hostId: currentServer.hostId}, (data)=>{
-        let instances = makeToastr(data)
-        let instanceStatusesRows = {};
-
-        if(Object.keys(instances).length > 0){
-            $.each(instances, (name, instance)=>{
-                if(!instanceStatusesRows[instance.status]){
-                    instanceStatusesRows[instance.status] = `<tr class="statusRow">
-                        <td class="text-center text-primary" colspan="999">
-                            <i class="${instanceStatusesRows[instance.status]}"></i>
-                            ${instance.status}
-                            <input class="toggleStatusContainer" type="checkbox"/>
-                        </td>
-                    </tr>`
-                }
-
-                let storageUsage = instance.state.disk == null || instance.state.disk.length == 0 ? "N/A" : formatBytes(instance.state.disk.root.usage);
-
-                let bytesSent = 0, bytesRecieved = 0;
-                let ipAddresses = ``;
-                $.each(instance.state.network, (networkName, network)=>{
-                    if(networkName == "lo"){
-                        return true;
-                    }
-                    $.each(network.addresses, (_, address)=>{
-                        ipAddresses += `<div>${networkName}: <span>${address.address}</span></div>`
-                    });
-                    bytesSent += network.counters.bytes_sent;
-                    bytesRecieved += network.counters.bytes_received;
-                });
-
-                let metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-primary btn-sm enableMetrics'>
-                    Enable
-                </button>`;
-
-                if(instance.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics")){
-                    metricsButton = `<button data-host-id="${currentServer.hostId}" data-instance="${name}" class='btn btn-outline-warning btn-sm disableMetrics'>
-                        Disable
-                    </button>`;
-                }
-
-                instanceStatusesRows[instance.status] += `<tr data-name="${name}">
-                    <td><input name="instanceCheckbox" type="checkbox"/></td>
-                    <td>${name}</td>
-                    <td>${storageUsage}</td>
-                    <td>${formatBytes(instance.state.memory.usage)}</td>
-                    <td>${ipAddresses}</td>
-                    <td>R: ${formatBytes(bytesRecieved)} <br/> S: ${formatBytes(bytesSent)}</td>
-                    <td>${metricsButton}</td>
-                </tr>`
-            });
-        }else{
-            instanceStatusesRows = `<tr><td class="text-center" colspan="999"><i class="fas fa-info-circle text-info me-2"></i>No instances!</td></tr>`
-        }
-
-        $("#serverInstanceTable > tbody").empty()
-
-        if(typeof instanceStatusesRows == "string"){
-            $("#serverInstanceTable > tbody").append(instanceStatusesRows);
-        }else{
-            let keys = Object.keys(instanceStatusesRows).sort();
-            $.each(keys,  (_, key)=>{
-                $("#serverInstanceTable > tbody").append(instanceStatusesRows[key])
-            })
-        }
-    });
-}
-
-$(document).on("change", ".toggleStatusContainer", function(){
-    let checked = $(this).is(":checked");
-    let tr = $(this).parents("tr");
-
-    if(checked){
-        $(".serverContainerActions").attr("disabled", false);
-        $("#serverInfoBox").find('[data-bs-toggle="tooltip"]').tooltip("enable")
-    }else {
-        $(".serverContainerActions").attr("disabled", true);
-        $("#serverInfoBox").find('[data-bs-toggle="tooltip"]').tooltip("hide")
-        $("#serverInfoBox").find('[data-bs-toggle="tooltip"]').tooltip("disable")
-    }
-
-    $("#serverInstanceTable").find(`tr:gt(${tr.index() + 1})`).each(function(){
-        if($(this).hasClass("statusRow")){
-            return false;
-        }
-        $(this).find("input[name=instanceCheckbox]").prop("checked", checked);
-    });
-});
-
-$(document).on("click", ".disableMetrics", function(){
-    let btn = $(this);
-    let td = btn.parents("td");
-    btn.attr("disabled", true);
-    let x = btn.data();
-
-    $.confirm({
-        title: 'Disable Metric Gathering?!',
-        content: `<div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="clearMetricdata">
-          <label class="form-check-label" for="clearMetricdata">
-            Clear Metric Data ?
-          </label>
-        </div>`,
-        buttons: {
-            cancel: function () {},
-            yes: {
-                btnClass: 'btn-danger',
-                action: function () {
-                    this.buttons.yes.setText('<i class="fa fa-cog fa-spin"></i>Deleting..'); // let the user know
-                    this.buttons.yes.disable();
-                    this.buttons.cancel.disable();
-                    var modal = this;
-                    x.clearData = modal.$content.find("#clearMetricdata").is(":checked") ? 1 : 0;
-                    ajaxRequest(globalUrls.instances.metrics.disablePullGathering, x, (data)=>{
-                        data = makeToastr(data);
-                        if(data.state == "error"){
-                            btn.attr("disabled", false);
-                            return false;
-                        }
-                        modal.close();
-                        td.empty().append(`<button data-host-id="${x.hostId}" data-instance="${x.instance}" class='btn btn-outline-primary btn-sm enableMetrics'>
-                            Enable
-                        </button>`);
-                    });
-                    return false;
-                }
-            }
-        }
-    });
-
-});
-
-$(document).on("click", ".enableMetrics", function(){
-    let btn = $(this);
-    let td = btn.parents("td");
-    btn.attr("disabled", true);
-    let x = btn.data();
-
-    ajaxRequest(globalUrls.instances.metrics.enablePullGathering, x, (data)=>{
-        data = makeToastr(data);
-        if(data.state == "error"){
-            btn.attr("disabled", false);
-            return false;
-        }
-
-        td.empty().append(`<button data-host-id="${x.hostId}" data-instance="${x.instance}" class='btn btn-outline-warning btn-sm disableMetrics'>
-                    Disable
-                </button>`);
-    });
-});
-
 $(document).on("click", ".deleteProxy", function(){
     let btn = $(this);
     btn.attr("disabled", true);
@@ -782,34 +581,6 @@ $(document).on("click", "#serverBoxNav > .nav-item", function(){
     }
 });
 
-$(document).on("change", "input[name=instanceCheckbox]", function(){
-    if($("input[name=instanceCheckbox]:checked").length > 0){
-        $(".serverContainerActions").attr("disabled", false);
-        $("#serverInstanceBox").find('[data-bs-toggle="tooltip"]').tooltip("enable")
-    }else{
-        $(".serverContainerActions").attr("disabled", true);
-        $("#serverInstanceBox").find('[data-bs-toggle="tooltip"]').tooltip("hide")
-        $("#serverInstanceBox").find('[data-bs-toggle="tooltip"]').tooltip("disable")
-    }
-});
-
-$(document).on("click", "#toggleAllContainers", function(){
-    let checked = $(this).is(":checked");
-
-    if(checked){
-        $(".serverContainerActions").attr("disabled", false);
-        $("#serverInstanceBox").find('[data-bs-toggle="tooltip"]').tooltip("enable")
-    }else {
-        $(".serverContainerActions").attr("disabled", true);
-        $("#serverInstanceBox").find('[data-bs-toggle="tooltip"]').tooltip("hide")
-        $("#serverInstanceBox").find('[data-bs-toggle="tooltip"]').tooltip("disable")
-    }
-
-    $("#serverInstanceTable").find("input[name=instanceCheckbox]").each(function(){
-        $(this).prop("checked", checked);
-    });
-});
-
 $(document).on("click", ".ackWarning", function(){
     let warningId = $(this).parents("tr").attr("id");
     let td = $(this).parents("td");
@@ -839,47 +610,6 @@ $(document).on("click", ".deleteWarning", function(){
             return false;
         }
         tr.remove();
-    });
-});
-
-$(document).on("click", ".serverContainerActions", function(){
-    let action = $(this).data("action");
-    if(action== ""){
-        return false;
-    }
-
-    let btn = $(this);
-
-    let origHtml = btn.html();
-
-    btn.html("<i class='fas fa-cog fa-spin'></i>");
-
-    let checkboxes = $("#serverInstanceTable").find("input[name=instanceCheckbox]");
-
-    let selectedContainers = checkboxes.filter(":checked").map(function () {
-        return $(this).parents("tr").data("name");
-    }).get();
-
-
-    if(selectedContainers.length == 0){
-        $.alert("Please select atleast one container");
-        return false;
-    }
-
-    let details = {
-        hostId: currentServer.hostId,
-        containers: selectedContainers
-    };
-
-    let url = globalUrls.hosts.instances[action]
-
-    ajaxRequest(url, details, (data)=>{
-        btn.html(origHtml);
-        data = makeToastr(data);
-        $("#serverBoxNav").find("[data-view='serverInstanceBox']").trigger("click")
-        $("#serverContainerActions").find("option[value='']").prop("selected", true);
-        $("#serverInstanceBox").find('[data-bs-toggle="tooltip"]').tooltip("hide")
-        $("#serverInstanceBox").find('[data-bs-toggle="tooltip"]').tooltip("disable")
     });
 });
 
