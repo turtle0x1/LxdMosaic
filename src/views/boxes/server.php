@@ -69,7 +69,7 @@
                                 </li>
                                 <li class="nav-item enableIfAdmin" data-view="serverWarningsBox">
                                     <div class="nav-link " id="serverWarningsBtn">
-                                        <i class="fas fa-exclamation-triangle pe-2" style="color: black !important;"></i>Warnings
+                                        <i class="fas fa-exclamation-triangle pe-2" style="color: black !important;"></i>Warnings<span id="newWarningsCount"></span>
                                     </div>
                                 </li>
                                 <li class="nav-item enableIfAdmin" data-view="serverSettingsBox">
@@ -85,11 +85,7 @@
                         <div id="serverInfoBox" class="serverViewBox">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="card bg-dark text-white text-center" id="newWarningCountCard" style="display: none;">
-                                        <h1 id="newWarningsCount"></h1>
-                                        <h4><i style="min-width: 20px; text-align: center; color: yellow !important;" class="fas fa-exclamation-triangle me-2"></i>New Warnings</h4>
-                                    </div>
-                                    <div class="card mt-2 bg-dark text-white text-center" id="memoryUsageCard">
+                                    <div class="card bg-dark text-white text-center" id="memoryUsageCard">
                                         <div class="p-2 m-2 mb-0 pb-0" id="serverMemoryUsageBox"></div>
                                         <h4><i class="fas fa-memory me-2"></i>Memory</h4>
                                     </div>
@@ -112,7 +108,7 @@
                                     <div class="mt-2 mb-2 enableIfAdmin" style="display: none;">
                                         <div class="card card-body mt-2 bg-dark text-white text-center">
                                             <h5><i style="min-width: 20px; text-align: center;" class="fas fa-server me-2"></i>Hardware</h5>
-                                            <table class="table table-dark" id="hostDetailsTable">
+                                            <table class="table table-sm table-dark" id="hostDetailsTable">
                                                 <tbody>
                                                 </tbody>
                                             </table>
@@ -688,17 +684,15 @@ function loadServerView(hostId)
                 }
             });
             if(newWarnings > 0){
-                $("#newWarningsCount").text(newWarnings)
-                $("#newWarningCountCard").show();
-                $("#memoryUsageCard").addClass("mt-2")
+                $("#newWarningsCount").text(`(${newWarnings})`)
+                $("#newWarningsCount").show();
+                $("#serverWarningsBtn").find(".fas").attr("style", "color: yellow !important")
             }else{
-                $("#newWarningCountCard").hide();
-                $("#memoryUsageCard").removeClass("mt-2")
+                $("#serverWarningsBtn").find(".fas").attr("style", "color: black !important")
             }
 
         }else{
             $("#newWarningCountCard").hide();
-            $("#memoryUsageCard").removeClass("mt-2")
         }
 
         let cpuHtml = "",
@@ -887,10 +881,10 @@ function loadServerView(hostId)
             }
 
 
-            let canvas = `<canvas height="250" id="${cId}"></canvas>`;
+            let canvas = `<canvas height="200" id="${cId}"></canvas>`;
 
             if (totalUsage == 0) {
-                canvas = '<div style="min-height: 250;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
+                canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
             }
 
             let x = $(`<div class='col-md-6 ${config.cardClasses}'>
