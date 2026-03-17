@@ -530,7 +530,7 @@ var userDetails = {
                   <button class="btn btn-outline-info dropdown-toggle" type="button" id="operationsDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                      <i class="fas fa-bell"></i>
                   </button>
-                  <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end px-3" aria-labelledby="operationsDropdownButton" id="operationsList" style="min-width: 20vw;">
+                  <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end px-3" aria-labelledby="operationsDropdownButton" id="operationsList" style="min-width: 20vw; max-height: 80vh; overflow-y: scroll">
                       <li id="noOps"><div class="dropdown-item" href="#"><i class="fas fa-info-circle text-info me-2"></i>No Operations In Progress</div></li>
                   </ul>
               </div>
