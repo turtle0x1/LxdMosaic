@@ -699,6 +699,10 @@ $(function(){
     router.on('/host/:hostId/warnings', loadHostWarnings);
     router.on('/host/:hostId/settings', loadHostSettings);
     router.on('/host/:hostId/disks', loadHostDisks);
+    router.on('/host/:hostId/os', loadHostOS);
+    router.on('/host/:hostId/os/system/:endpoint', loadHostOSSystem);
+    router.on('/host/:hostId/os/apps/:app', loadHostOSApps);
+    router.on('/host/:hostId/os/services/:service', loadHostOSServices);
 
     router.on('/instance/:hostId/:instance', loadContainerViewReq);
     router.on("/backups", loadBackupsView);

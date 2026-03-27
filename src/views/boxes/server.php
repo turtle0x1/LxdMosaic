@@ -62,6 +62,11 @@
                                         <i class="fas fa-exchange-alt pe-2"></i>Proxy Devices
                                     </div>
                                 </li>
+                                <li class="nav-item enableIfAdmin" data-view="serverOSView">
+                                    <div class="nav-link " id="serverDiskBtn">
+                                        <i class="fas fa-server pe-2" style="color: black !important;"></i>OS
+                                    </div>
+                                </li>
                                 <li class="nav-item enableIfAdmin" data-view="serverDiskBox">
                                     <div class="nav-link " id="serverDiskBtn">
                                         <i class="fas fa-hdd pe-2" style="color: black !important;"></i>Disks
@@ -217,6 +222,7 @@
                         </div>
                         <?php
                             require_once __DIR__ . "/server/instances.html";
+                            require_once __DIR__ . "/server/os.php"; 
                         ?>
                     </div>
                 </div>
@@ -574,6 +580,8 @@ $(document).on("click", "#serverBoxNav > .nav-item", function(){
         router.navigate(`/host/${currentServer.hostAlias}/settings`)
     }else if($(this).data("view") == "serverDiskBox"){
         router.navigate(`/host/${currentServer.hostAlias}/disks`)
+    }else if($(this).data("view") == "serverOSView"){
+        router.navigate(`/host/${currentServer.hostAlias}/os`)
     }
 });
 

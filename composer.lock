@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a3f4139e1fdc87de3e8b66b5f846f8d2",
+    "content-hash": "fa97b2bd4a8bc092159f9cde216e15d4",
     "packages": [
         {
             "name": "cakephp/chronos",
@@ -488,16 +488,16 @@
         },
         {
             "name": "dhope0000/lxd",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/turtle0x1/php-lxd.git",
-                "reference": "5df1967e69f3b86aebb1194d7d6ade704e45a464"
+                "reference": "d5da20962a4b7f7ce71ce6fc890041d227c2ea4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/5df1967e69f3b86aebb1194d7d6ade704e45a464",
-                "reference": "5df1967e69f3b86aebb1194d7d6ade704e45a464",
+                "url": "https://api.github.com/repos/turtle0x1/php-lxd/zipball/d5da20962a4b7f7ce71ce6fc890041d227c2ea4c",
+                "reference": "d5da20962a4b7f7ce71ce6fc890041d227c2ea4c",
                 "shasum": ""
             },
             "require": {
@@ -556,9 +556,9 @@
             ],
             "support": {
                 "issues": "https://github.com/turtle0x1/php-lxd/issues",
-                "source": "https://github.com/turtle0x1/php-lxd/tree/v1.2.0"
+                "source": "https://github.com/turtle0x1/php-lxd/tree/v1.3.0"
             },
-            "time": "2025-11-06T23:21:57+00:00"
+            "time": "2026-03-14T17:52:09+00:00"
         },
         {
             "name": "doctrine/lexer",

@@ -1,0 +1,50 @@
+<div class="systemServiceBox row" id="systemServicesLVM">
+    <div class="col-md-6">
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h5>State</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark" id="systemServicesLVMState">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h5>Config</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark" id="systemServicesLVMConfig">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function renderLvm(data) {
+        $("#systemServicesLVM").show()
+        $("#systemServicesLVMState > tbody").empty().append(`
+            <tr>
+                <td><i class="fas fa-info-circle text-info me-2"></i>No State Data</td>
+            </tr>
+        `)
+        $("#systemServicesLVMConfig > tbody").empty().append(`
+            <tr>
+                <th>Enabled</th>
+                <td><i class="fas fa-${data.config.enabled ? "check" : "times"}"></i></td>
+            </tr>
+            <tr>
+                <th>System ID</th>
+                <td>${data.config.system_id}</td>
+            </tr>
+        `)
+    }
+</script>

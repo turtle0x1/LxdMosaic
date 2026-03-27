@@ -1,0 +1,85 @@
+<div class="systemEndpointBox" id="systemEndpointNetwork">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card bg-dark text-white mb-2">
+                <div class="card-header">
+                    <h5>Time</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-dark" id="systemNetworkTimeTbl">
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h5>Interfaces</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm table-dark" id="systemNetworkInterfacesTbl">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Mac</th>
+                                <th>State</th>
+                                <th>Addresses</th>
+                                <th>Stats</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function routeNetwork(data) {
+        $("#systemEndpointNetwork").show()
+        $("#systemNetworkTimeTbl > tbody").empty().append(`
+            <tr>
+                <th>Timezone</th>
+                <td>${data.config.time.timezone}</td>
+            </tr>
+        `)
+        $("#systemNetworkInterfacesTbl > tbody").empty().append(Object.keys(data.state.interfaces).map(interface =>{
+            let d = data.state.interfaces[interface]
+            let firstAddress = d.addresses[0]
+
+            return `<tr>
+                <td>${interface}</td>
+                <td>${d.type}</td>
+                <td>${d.hwaddr}</td>
+                <td>${d.state}</td>
+                <td>${firstAddress} ${d.addresses.length - 1 > 0 ? `<a class="viewAddresses" data-addresses="${d.addresses.join(",")}" href="#">+${d.addresses.length - 1} more</a>` : ""}</td>
+                <td>TX: ${formatBytes(d.stats.rx_bytes)}<br/>RX: ${formatBytes(d.stats.tx_bytes)}</td>
+            </tr>`
+        }).join(""))
+    }
+    $("#systemNetworkInterfacesTbl").on("click", ".viewAddresses", function(e){
+        e.preventDefault()
+        const addresses = $(this).data("addresses").split(",")
+        $.confirm({
+            title: "All Addresses",
+            content: `<table class="table table-bodered">
+                <thead>
+                    <tr>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        ${addresses.map(add =>{
+                            return `<tr>
+                                <td>${add}</td>
+                            </tr>`
+                        }).join("")}
+                </tbody>
+            </table>`
+        })
+    });
+</script>
