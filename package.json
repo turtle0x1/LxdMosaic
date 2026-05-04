@@ -28,7 +28,7 @@
     "express-ws": "^5.0.2",
     "mysql": "^2.18.1",
     "sqlite3": "^5.1.7",
-    "uuid": "^13.0.0",
+    "uuid": "^14.0.0",
     "ws": "^8.18.3"
   },
   "devDependencies": {
