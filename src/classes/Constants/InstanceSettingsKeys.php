@@ -39,4 +39,6 @@ class InstanceSettingsKeys
     public const TIMERS_MONITOR_DAYS_DURATION = 17;
 
     public const SEARCH_INDEX = 18;
+
+    public const VULNERABILITY_MONITOR = 19;
 }

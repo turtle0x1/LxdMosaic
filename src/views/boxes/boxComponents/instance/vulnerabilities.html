@@ -1,0 +1,592 @@
+<div id="vulnerabilityDashboard" class="settingsBox">
+    <div class="row" id="vulnLoadingBox">
+        <h4 class="text-center"><i class="fas fa-cog fa-spin"></i></h4>
+    </div>
+    <div class="row" id="vulnContentRow" style="display:none;">
+        <!-- Tab Navigation -->
+        <div class="col-md-12 mb-3">
+            <div class="row">
+                <div class="col-md-12 text-center justify-content">
+                    <ul class="nav nav-tabs text-center" id="vulnerabilityNav" style="border: none !important;">
+                        <li class="nav-item">
+                            <div class="nav-link active" data-target="vulnDashboardTab">
+                                <i class="fas fa-tachometer-alt pe-2"></i>Dashboard
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="nav-link" data-target="vulnSearchTab">
+                                <i class="fas fa-search pe-2"></i>Search
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div class="row vulnerabilityTab" id="vulnDashboardTab">
+            <!-- Top Stats Row -->
+            <div class="col-md-12 mb-3">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card card-body bg-dark text-center text-white">
+                            <h3 id="vulnTotalVulns">0</h3>
+                            <p class="mb-0">Total Advisories</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-body bg-dark text-center text-white">
+                            <h3 id="vulnTotalCves">0</h3>
+                            <p class="mb-0">Total CVEs</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-body bg-dark text-center text-white">
+                            <h3 id="vulnTotalPackages">0</h3>
+                            <p class="mb-0">Affected Packages</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-body bg-dark text-center text-white">
+                            <h3 id="vulnTotalOs">0</h3>
+                            <p class="mb-0">Operating Systems</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracked Vulns Column (left) + Impacted Instances Column (right) -->
+            <div class="col-md-6 mb-3">
+                <h5 class="text-white mb-2"><i class="fas fa-shield-alt pe-2"></i>Tracked Vulns</h5>
+
+                <div class="card card-body bg-dark mb-3" id="trackedSeverityChartDiv"
+                     style="min-height: 28vh; max-height: 28vh;">
+                </div>
+                <div class="card card-body bg-dark mb-3" id="trackedOsChartDiv"
+                     style="min-height: 28vh; max-height: 28vh;">
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <h5 class="text-white mb-2"><i class="fas fa-exclamation-triangle pe-2 text-warning"></i>Exposed Instances</h5>
+
+                <!-- Impact summary cards -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="card card-body bg-dark text-center text-white">
+                            <h4 id="impactedInstancesCount">-</h4>
+                            <p class="mb-0 small">Impacted Instances</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-body bg-dark text-center text-white">
+                            <h4 id="totalImpactedPackages">-</h4>
+                            <p class="mb-0 small">Vulnerable Pkgs</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-body bg-dark text-center text-white">
+                            <h4 id="totalScannedInstances">-</h4>
+                            <p class="mb-0 small">Instances Scanned</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manager breakdown chart -->
+                <div class="card card-body bg-dark mb-3" id="impactManagerChartDiv"
+                     style="min-height: 18vh; max-height: 18vh;">
+                </div>
+
+                <!-- Top impacted instances list -->
+                <div class="card card-body bg-dark" style="max-height: 22vh; overflow-y: auto;">
+                    <table class="table table-sm table-dark mb-0" id="impactedInstancesTable">
+                        <thead>
+                            <tr>
+                                <th>Instance</th>
+                                <th>Project</th>
+                                <th>Host</th>
+                                <th>Vuln Pkgs</th>
+                            </tr>
+                        </thead>
+                        <tbody id="impactedInstancesBody">
+                            <tr><td colspan="4" class="text-center text-muted">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Tab -->
+        <div class="row vulnerabilityTab" id="vulnSearchTab" style="display: none">
+            <!-- Filter & Search Row -->
+            <div class="col-md-12 mb-3">
+                <div class="card bg-dark text-white">
+                    <div class="card-body bg-dark">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" placeholder="Search by title, USN-ID, or CVE-ID..."
+                                   id="vulnSearchInput" />
+                            <button class="btn btn-primary" id="vulnSearchBtn">Search</button>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4">
+                                <label class="form-label">Filter by OS</label>
+                                <select class="form-select" id="vulnOsFilter">
+                                    <option value="">All Operating Systems</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Filter by Severity</label>
+                                <select class="form-select" id="vulnSeverityFilter">
+                                    <option value="">All Severities</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerabilities Table -->
+            <div class="col-md-12">
+                <div class="card bg-dark text-white">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5><i class="fas fa-list me-2"></i>Advisories</h5>
+                        <span class="badge bg-primary" id="vulnResultCount">0 results</span>
+                    </div>
+                    <div class="card-body bg-dark table-responsive" style="max-height: 60vh; overflow-y: auto;">
+                        <table class="table table-bordered table-dark" id="vulnerabilitiesTable">
+                            <thead>
+                                <tr>
+                                    <th>Severity</th>
+                                    <th>Title</th>
+                                    <th>USN</th>
+                                    <th>OS</th>
+                                    <th>CVEs</th>
+                                    <th>Issued</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var _currentVulnData = [];
+
+function loadVulnerabilityDashboard() {
+    $(".settingsBox").hide();
+    $("#settingsBox").show();
+    putAdminSidebar(adminSettingUrls.vulnerabilities);
+    changeActiveNav(null);
+    $(".viewSettings").addClass("active");
+    $("#vulnerabilityDashboard").show();
+    addBreadcrumbs(["Admin Settings", "Vulnerabilities"], ["", "active"], false, ["/admin"]);
+
+    $(".softwareSnapshotBox").hide();
+    $("#vulnLoadingBox").show();
+    $("#vulnContentRow").hide();
+
+    // Load overview stats + impacted instances in parallel
+    ajaxRequest('/api/Vulnerabilities/GetVulnerabilityOverviewController/get', {}, (data) => {
+        data = makeToastr(data);
+
+        $("#vulnLoadingBox").hide();
+        $("#vulnContentRow").show();
+
+        // Summary cards
+        if (data.summary) {
+            $("#vulnTotalVulns").text(data.summary.total_vulns || 0);
+            $("#vulnTotalCves").text(data.summary.total_cves || 0);
+            $("#vulnTotalPackages").text(data.summary.total_packages || 0);
+            $("#vulnTotalOs").text(data.summary.total_os || 0);
+        }
+
+        // Populate severity filter dropdown
+        let sevHtml = '<option value="">All Severities</option>';
+        let sevLabels = [];
+        let sevValues = [];
+        let sevColors = [];
+        if (data.severity_breakdown && data.severity_breakdown.length > 0) {
+            data.severity_breakdown.forEach(item => {
+                let sevName = item.severity || item.V_Severity || 'Unknown';
+                let sevCount = parseInt(item.count) || 0;
+                sevHtml += `<option value="${sevName}">${sevName} (${sevCount})</option>`;
+                sevLabels.push(sevName);
+                sevValues.push(sevCount);
+                sevColors.push(randomColor());
+            });
+        }
+        $("#vulnSeverityFilter").html(sevHtml);
+
+        // Severity donut chart — now in Tracked Vulns column
+        if (sevLabels.length > 0) {
+            let chartId = 'trackedSeverityChart_' + randomColor().replace('#', '');
+            $("#trackedSeverityChartDiv").empty().append(`<canvas id="${chartId}"></canvas>`);
+            let ctx = $(`#${chartId}`)[0].getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: sevLabels,
+                    datasets: [{
+                        label: 'Vulnerabilities by Severity',
+                        data: sevValues,
+                        backgroundColor: sevColors,
+                        borderColor: '#212529',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#fff' } },
+                        title: { display: true, text: 'Severity Distribution', color: '#fff' }
+                    }
+                }
+            });
+        }
+
+        // Populate OS filter dropdown and build OS chart
+        let osHtml = '<option value="">All Operating Systems</option>';
+        let osLabels = [];
+        let osValues = [];
+        let osColors = [];
+        if (data.os_list && data.os_list.length > 0) {
+            data.os_list.forEach(item => {
+                let name = item.os_name || item.OS_Name || '';
+                let version = item.os_version || item.OS_Version || '';
+                let codename = item.os_codename || item.OS_Codename || '';
+                let count = parseInt(item.vuln_count) || 0;
+                let label = `${name} ${version}${codename ? ' (' + codename + ')' : ''}`;
+                osHtml += `<option value="${name.toLowerCase()}">${label} (${count})</option>`;
+                osLabels.push(label);
+                osValues.push(count);
+                osColors.push(randomColor());
+            });
+        }
+        $("#vulnOsFilter").html(osHtml);
+
+        // OS donut chart — now in Tracked Vulns column
+        if (osLabels.length > 0) {
+            let osChartId = 'trackedOsChart_' + randomColor().replace('#', '');
+            $("#trackedOsChartDiv").empty().append(`<canvas id="${osChartId}"></canvas>`);
+            let osCtx = $(`#${osChartId}`)[0].getContext('2d');
+            new Chart(osCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: osLabels,
+                    datasets: [{
+                        label: 'Vulnerabilities by OS',
+                        data: osValues,
+                        backgroundColor: osColors,
+                        borderColor: '#212529',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#fff' } },
+                        title: { display: true, text: 'Distribution by OS', color: '#fff' }
+                    }
+                }
+            });
+        }
+
+        // Load initial list
+        _loadVulnerabilitiesList();
+    });
+
+    // Fetch impacted instances from snapshot comparison
+    ajaxRequest('/api/Vulnerabilities/GetImpactedInstancesOverviewController/get', {}, (impactData) => {
+        impactData = makeToastr(impactData);
+
+        if (!impactData.has_snapshot) {
+            $("#impactedInstancesCount").text('-');
+            $("#totalImpactedPackages").text('-');
+            $("#totalScannedInstances").text('-');
+            $("#impactedInstancesBody").html('<tr><td colspan="4" class="text-center text-muted">No snapshot available</td></tr>');
+            return;
+        }
+
+        // Summary cards
+        $("#impactedInstancesCount").text(impactData.impacted_instances_count || 0);
+        $("#totalImpactedPackages").text(impactData.total_impacted_packages || 0);
+        $("#totalScannedInstances").text(impactData.total_instances_scanned || 0);
+
+        // Manager breakdown chart
+        if (impactData.manager_breakdown && impactData.manager_breakdown.length > 0) {
+            let mgrLabels = [];
+            let mgrValues = [];
+            let mgrColors = [];
+            impactData.manager_breakdown.forEach(m => {
+                mgrLabels.push(m.manager);
+                mgrValues.push(m.count);
+                mgrColors.push(randomColor());
+            });
+            if (mgrLabels.length > 0) {
+                let mgrChartId = 'impactManagerChart_' + randomColor().replace('#', '');
+                $("#impactManagerChartDiv").empty().append(`<canvas id="${mgrChartId}"></canvas>`);
+                let mgrCtx = $(`#${mgrChartId}`)[0].getContext('2d');
+                new Chart(mgrCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: mgrLabels,
+                        datasets: [{
+                            label: 'Impacted Packages by Manager',
+                            data: mgrValues,
+                            backgroundColor: mgrColors,
+                            borderColor: '#212529',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: 'By Package Manager', color: '#fff' }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { color: '#fff' } },
+                            x: { ticks: { color: '#fff' } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Top impacted instances table (limit to 20)
+        let tbody = '';
+        if (impactData.instance_details && impactData.instance_details.length > 0) {
+            let topInstances = impactData.instance_details.slice(0, 20);
+            topInstances.forEach(inst => {
+                tbody += `<tr>
+                    <td>${inst.instance_name}</td>
+                    <td>${inst.project}</td>
+                    <td>${inst.host_name}</td>
+                    <td><span class="badge bg-danger">${inst.impacted_packages_count}</span></td>
+                </tr>`;
+            });
+        } else {
+            tbody = '<tr><td colspan="4" class="text-center text-success"><i class="fas fa-check-circle me-1"></i>No exposed instances</td></tr>';
+        }
+        $("#impactedInstancesBody").html(tbody);
+    });
+}
+
+function _loadVulnerabilitiesList() {
+    let osFilter = $("#vulnOsFilter").val();
+    let limit = 200;
+    $("#vulnerabilitiesTable > tbody").empty().append('<tr><td colspan="7" class="text-center text-info"><i class="fas fa-cog fa-spin"></i> Loading...</td></tr>');
+
+    ajaxRequest('/api/Vulnerabilities/GetVulnerabilitiesController/get', { osFilter: osFilter, limit: limit }, (data) => {
+        data = makeToastr(data);
+        _currentVulnData = data;
+        _renderVulnTable(data);
+    });
+}
+
+function _renderVulnTable(vulns) {
+    let trs = "";
+    let severities = {
+        'High': 'danger',
+        'Medium': 'warning',
+        'Low': 'info',
+        'Negligible': 'secondary',
+        'Unknown': 'secondary',
+        'Important': 'danger',
+        'Critical': 'dark'
+    };
+
+    if (vulns.length === 0) {
+        trs += '<tr><td colspan="7" class="text-center text-info">No vulnerabilities found</td></tr>';
+    } else {
+        vulns.forEach(v => {
+            let sevClass = severities[v.V_Severity] || 'secondary';
+            let usnLink = v.V_USN_Id
+                ? `<a href="${v.V_USN_Url || '#'}" target="_blank" class="text-primary">${v.V_USN_Id}</a>`
+                : '-';
+            let cveCount = v.cves ? v.cves.length : 0;
+            let issuedDate = v.V_Issued_Date ? moment(v.V_Issued_Date).fromNow() : '-';
+
+            let truncatedTitle = v.V_Title.length > 80 ? v.V_Title.substring(0, 80) + '...' : v.V_Title;
+
+            trs += `<tr data-vuln-id="${v.V_ID}" data-severity="${v.V_Severity}" data-os="${(v.os_name || '').toLowerCase()}">
+                <td><span class="badge bg-${sevClass}">${v.V_Severity}</span></td>
+                <td title="${v.V_Title || ''}">${truncatedTitle}</td>
+                <td>${usnLink}</td>
+                <td>${v.os_name || ''} ${v.os_version || ''}</td>
+                <td>${cveCount}</td>
+                <td>${issuedDate}</td>
+                <td>
+                    <button class="btn btn-outline-primary btn-sm viewVulnDetails"><i class="fas fa-eye"></i></button>
+                </td>
+            </tr>`;
+        });
+    }
+
+    $("#vulnerabilitiesTable > tbody").empty().append(trs);
+    $("#vulnResultCount").text(vulns.length + ' results');
+}
+
+// Tab switching — mimics the software assets pattern
+$("#vulnerabilityNav").on("click", ".nav-link", function (e) {
+    e.preventDefault();
+    $("#vulnerabilityNav").find(".active").removeClass("active");
+    $(this).addClass("active");
+    $(".vulnerabilityTab").hide();
+    let target = $(this).data("target");
+    $(`#${target}`).show();
+    if (target == "vulnSearchTab") {
+        // Load data on first tab switch if table is empty
+        if ($("#vulnerabilitiesTable > tbody").children().length === 0) {
+            _loadVulnerabilitiesList();
+        }
+    }
+});
+
+// Client-side filtering by severity on current loaded data
+$("#vulnerabilitiesTable").on("keyup", "#vulnSearchInput", function () {
+    _applyClientFilters();
+});
+
+$("#vulnOsFilter").on("change", function () {
+    _loadVulnerabilitiesList();
+});
+
+$("#vulnSeverityFilter").on("change", function () {
+    _applyClientFilters();
+});
+
+function _applyClientFilters() {
+    let searchVal = $("#vulnSearchInput").val().trim().toLowerCase();
+    let severityVal = $("#vulnSeverityFilter").val();
+
+let filtered = _currentVulnData.filter(function (v) {
+        let matchSeverity = !severityVal || v.V_Severity === severityVal;
+        let matchSearch = true;
+        if (searchVal) {
+            let title = (v.V_Title || '').toLowerCase();
+            let usn = (v.V_USN_Id || '').toLowerCase();
+            let inCves = false;
+            if (v.cves) {
+                inCves = v.cves.some(c => (c.id || '').toLowerCase().includes(searchVal));
+            }
+            matchSearch = title.includes(searchVal) || usn.includes(searchVal) || inCves;
+        }
+        return matchSeverity && matchSearch;
+    });
+
+    _renderVulnTable(filtered);
+}
+
+// Search button handler
+$("#vulnSearchBtn").on("click", function () {
+    let query = $("#vulnSearchInput").val().trim();
+    if (!query) {
+        _loadVulnerabilitiesList();
+        return;
+    }
+
+    $("#vulnerabilitiesTable > tbody").empty().append('<tr><td colspan="7" class="text-center text-info"><i class="fas fa-cog fa-spin"></i> Searching...</td></tr>');
+
+    ajaxRequest('/api/Vulnerabilities/SearchVulnerabilitiesController/search', { query: query }, (data) => {
+        data = makeToastr(data);
+        _currentVulnData = data;
+        _renderVulnTable(data);
+    });
+});
+
+// View vulnerability details modal
+$("#vulnerabilitiesTable").on("click", ".viewVulnDetails", function () {
+    let tr = $(this).closest("tr");
+    let vulnId = tr.data("vuln-id");
+
+    // Find the full data from _currentVulnData
+    let vuln = _currentVulnData.find(v => String(v.V_ID) === String(vulnId));
+    if (!vuln) return;
+
+    let sevSev = {'High':'danger','Medium':'warning','Low':'info','Negligible':'secondary','Unknown':'secondary','Important':'danger','Critical':'dark'};
+    let sevClass = sevSev[vuln.V_Severity] || 'secondary';
+
+    let usnInfo = vuln.V_USN_Id
+        ? `<div class="mb-2"><strong>USN:</strong> <a href="${vuln.V_USN_Url || '#'}" target="_blank">${vuln.V_USN_Id}</a></div>`
+        : '';
+
+    let descText = vuln.V_Description ? vuln.V_Description.replace(/\n/g, '<br>') : '<em>No description available.</em>';
+
+    // Build CVEs table rows
+    let cveRows = '';
+    if (vuln.cves && vuln.cves.length > 0) {
+        vuln.cves.forEach(c => {
+            cveRows += `<tr>
+                <td><code>${c.id || ''}</code></td>
+                <td>${c.priority || '-'}</td>
+                <td>${c.cvss_score !== null && c.cvss_score !== '' ? parseFloat(c.cvss_score) : '-'}</td>
+                <td>${c.cvss_severity || '-'}</td>
+                <td>${c.public_date || '-'}</td>
+            </tr>`;
+        });
+    } else {
+        cveRows = '<tr><td colspan="5" class="text-center text-info">No CVE data</td></tr>';
+    }
+
+    // Build packages table rows
+    let pkgRows = '';
+    if (vuln.affected_packages && vuln.affected_packages.length > 0) {
+        vuln.affected_packages.forEach(p => {
+            pkgRows += `<tr>
+                <td>${p.name || p.package || ''}</td>
+                <td><code>${p.version || p.fixed_version || 'Not fixed'}</code></td>
+            </tr>`;
+        });
+    } else {
+        pkgRows = '<tr><td colspan="2" class="text-center text-info">No package data</td></tr>';
+    }
+
+    let content = `
+        <div class="mb-3">
+            <span class="badge bg-${sevClass} fs-6">${vuln.V_Severity}</span>
+            <strong> Issued: ${moment(vuln.V_Issued_Date).format('LL')}</strong>
+        </div>
+        <div class="mb-3">
+            <h6>${vuln.V_Title}</h6>
+        </div>
+        ${usnInfo}
+        <div class="mb-2"><strong>OS:</strong> ${vuln.os_name || ''} ${vuln.os_version || ''} ${vuln.os_codename ? '(' + vuln.os_codename + ')' : ''}</div>
+        <hr/>
+        <h6>Description</h6>
+        <div style="max-height:200px;overflow-y:auto;margin-bottom:10px;font-size:0.9em;">${descText}</div>
+        <h6>CVEs (${vuln.cves ? vuln.cves.length : 0})</h6>
+        <table class="table table-sm table-bordered">
+            <thead><tr><th>CVE ID</th><th>Priority</th><th>CVSS</th><th>Severity</th><th>Public Date</th></tr></thead>
+            <tbody>${cveRows}</tbody>
+        </table>
+        <h6>Affected Packages (${vuln.affected_packages ? vuln.affected_packages.length : 0})</h6>
+        <table class="table table-sm table-bordered">
+            <thead><tr><th>Package</th><th>Fixed Version</th></tr></thead>
+            <tbody>${pkgRows}</tbody>
+        </table>
+    `;
+
+    $.confirm({
+        icon: 'fa fa-shield-alt',
+        title: 'Vulnerability Details',
+        columnClass: 'col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1',
+        content: content,
+        buttons: {
+            close: { btnClass: 'btn-secondary' }
+        }
+    });
+});
+
+
+</script>
