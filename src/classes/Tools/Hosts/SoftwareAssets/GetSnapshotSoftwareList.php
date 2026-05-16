@@ -35,15 +35,21 @@ class GetSnapshotSoftwareList
             foreach ($projects as $project => $instances) {
                 foreach ($instances as $instance => $packages) {
                     foreach ($packages as $package) {
-                        $output[] = array_merge([
+                        $key = $package["manager"] . "-" . $package["name"] . "-" . $package["version"];
+
+                        if(!isset($output[$key])){
+                            $output[$key] = array_merge(["instances"=>[]], $package);
+                        }
+
+                        $output[$key]["instances"][] = [
                             'hostName' => $hostAliases[$hostId],
                             'project' => $project,
                             'instance' => $instance,
-                        ], $package);
+                        ];
                     }
                 }
             }
         }
-        return $output;
+        return array_values($output);
     }
 }

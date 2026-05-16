@@ -84,12 +84,10 @@
                         <table class="table table-bordered table-dark table-responsive" id="softwareSnapshotPackageTbl">
                             <thead>
                                 <tr>
-                                    <th>Host</th>
-                                    <th>Project</th>
-                                    <th>Instance</th>
                                     <th>Package</th>
                                     <th>Version</th>
                                     <th>Manager</th>
+                                    <th>Instances</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -240,17 +238,46 @@
                 let packageHtml = ""
                 packages.forEach(package => {
                     packageHtml += `<tr>
-                        <td>${package.hostName}</td>
-                        <td>${package.project}</td>
-                        <td>${package.instance}</td>
                         <td>${package.name}</td>
                         <td>${package.version}</td>
                         <td>${package.manager}</td>
+                        <td><a data-package="${package.name}" data-version="${package.version}" data-manager="${package.manager}" data-instances='${JSON.stringify(package.instances)}' href="#" class="viewPackageHosts">${package.instances.length}</a></td>
                     </tr>`
                 });
                 $("#softwareSnapshotPackageTbl > tbody").empty().append(packageHtml)
             });
         }
+    })
 
+    $("#softwareSnapshotPackageTbl").on("click", ".viewPackageHosts", function(e){
+        e.preventDefault()
+        let package = $(this).data("package")
+        let version = $(this).data("version")
+        let manager = $(this).data("manager")
+        let instances = $(this).data("instances")
+        $.confirm({
+            title: `${package} - ${version} - ${manager}`,
+            content: `<table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Host</th>
+                        <th>Project</th>
+                        <th>Instance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${instances.map(instance => {
+                        return `<tr>
+                            <td>${instance.hostName}</td>
+                            <td>${instance.project}</td>
+                            <td>${instance.instance}</td>
+                        </tr>`
+                    }).join("")}
+                </tbody>
+            </table>`,
+            buttons: {
+                close: ()=>{}
+            }
+        })
     })
 </script>
