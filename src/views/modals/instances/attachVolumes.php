@@ -69,7 +69,7 @@
                 return false;
             }
             $("#modal-container-attachVolumes").modal("hide");
-            loadContainerViewAfter();
+            loadInstanceView(currentContainerDetails, true, false);
         });
     });
 

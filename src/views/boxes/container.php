@@ -629,17 +629,6 @@ var fitAddon = new window.FitAddon.FitAddon()
 var consoleSocket;
 var currentTerminalProcessId = null;
 
-function loadContainerViewAfter(data = null, milSeconds = 2000)
-{
-    setTimeout(function(){
-        let p = currentContainerDetails;
-        if($.isPlainObject(data)){
-            p = data;
-        }
-        loadContainerView(p);
-    }, 2000);
-}
-
 function loadContainerTreeAfter(milSeconds = 2000, hostId = null, hostAlias = null)
 {
     setTimeout(function(){
@@ -878,7 +867,7 @@ function editInstanceComment(hostId, hostAlias, container)
                         let r = makeToastr(data);
 
                         if(r.state == "success"){
-                            loadContainerView(currentContainerDetails);
+                            loadInstanceView(currentContainerDetails);
                         }
                     });
                 }
@@ -931,7 +920,7 @@ function renameContainerConfirm(hostId, container, reloadView, hostAlias)
                         addHostContainerList(hostId, hostAlias);
                         if(reloadView){
                             currentContainerDetails.container = newName;
-                            loadContainerView(currentContainerDetails);
+                            loadInstanceView(currentContainerDetails);
                         }
 
                     });
@@ -983,6 +972,7 @@ function snapshotContainerConfirm(hostId, container)
                             return false;
                         }
                         modal.close();
+                        loadInstanceView(currentContainerDetails, true, false);
                     });
                     return false;
                 }
@@ -1164,27 +1154,25 @@ function titleCase(str) {
 }
 
 
-function loadContainerViewReq(req) {
+function loadInstanceViewReq(req) {
     currentContainerDetails = {hostId: req.data.hostId, container: req.data.instance, alias: hostsAliasesLookupTable[req.data.hostId]};
     createDashboardSidebar()
-    loadContainerView(currentContainerDetails)
+    loadInstanceView(currentContainerDetails)
 
 }
-
-function loadContainerView(data)
+function loadInstanceView(data, skipTerminalReset = false, forceNavigation = true)
 {
-    $(".instanceViewBox").hide();
-    $("#containerDetails").show();
-    $("#goToDetails").trigger("click");
-    if(consoleSocket !== undefined && currentTerminalProcessId !== null){
-        // Dont output "shell closed" message because the close is expected
+    if(forceNavigation){
+        $(".instanceViewBox").hide();
+        $("#containerDetails").show();
+        $("#goToDetails").trigger("click");
+    }
+    if(!skipTerminalReset && consoleSocket !== undefined && currentTerminalProcessId !== null){
         consoleSocket.onclose = function(){}
         consoleSocket.close();
         currentTerminalProcessId = null;
     }
     currentContainerDetails = data
-
-    // window.disconnectFromTerminal();
 
     $("#goToMetrics").attr("disabled", true).addClass("disabled").data({
         toggle: "tooltip",
@@ -1199,360 +1187,365 @@ function loadContainerView(data)
             makeToastr(result);
             return false;
         }
-        changeActiveNav(".overview");
-        addBreadcrumbs(["Dashboard", data.alias, data.container ], ["", "", "active"], false, ["/", `/host/${data.hostId}/overview`]);
 
-        let disableActions = x.state.status_code !== 102;
+        updateContainerSections(x, data, forceNavigation);
 
-        let stateBtnsToEnable = [];
-        let stateBtnsToDisable = [];
+        if(!skipTerminalReset){
+            $(".boxSlide").hide();
+            $("#containerBox").show();
+            $('html, body').animate({scrollTop:0},500);
+            router.updatePageLinks()
 
-        if(x.state.status_code == 103 || x.state.status_code == 113){
-            stateBtnsToEnable = ["stop", "freeze", "restart"];
-            stateBtnsToDisable = ["start", "unfreeze"];
-        }else if(x.state.status_code == 102){
-            stateBtnsToEnable = ["start"];
-            stateBtnsToDisable = ["stop", "freeze", "restart", "unfreeze"];
-        }else if(x.state.status_code == 110){
-            stateBtnsToEnable = ["unfreeze"];
-            stateBtnsToDisable = ["start", "stop", "freeze", "restart"];
-        }else{
-            stateBtnsToEnable = ["start", "unfreeze"];
-            stateBtnsToDisable = ["stop", "freeze"];
-        }
-
-        $.each(stateBtnsToDisable, (_, i)=>{
-            $(`.changeInstanceState[data-action='${i}']`).addClass("bg-secondary disabled").attr("disabled", "disabled");
-        })
-        $.each(stateBtnsToEnable, (_, i)=>{
-            $(`.changeInstanceState[data-action='${i}']`).removeClass("bg-secondary disabled").attr("disabled", false);
-        })
-
-
-        if(!x.details.hasOwnProperty("type") || x.details.type == "container"){
-            $("#goToTerminal").hide();
-        }else{
-            $("#goToTerminal").show();
-        }
-
-        if(x.mosaicExtensions.audit){
-            $("#goToEvents").removeClass("disabled")
-            $("#goToEvents").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
-        }else{
-            $("#goToEvents").addClass("disabled")
-            $("#goToEvents").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
-        }
-        
-
-        if(x.mosaicExtensions.packages){
-            $("#goToPackages").removeClass("disabled")
-            $("#goToPackages").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
-        }else{
-            $("#goToPackages").addClass("disabled")
-            $("#goToPackages").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
-        }
-        if(x.mosaicExtensions.timers){
-            $("#goToTimers").removeClass("disabled")
-            $("#goToTimers").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
-        }else{
-            $("#goToTimers").addClass("disabled")
-            $("#goToTimers").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
-        }
-
-
-        if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.mosaicExtensions.haveMetrics){
-            $("#goToMetrics").removeClass("disabled")
-            $("#goToMetrics").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
-        }else{
-            $("#goToMetrics").addClass("disabled")
-            $("#goToMetrics").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
-        }
-
-        $(".renameContainer").attr("disabled", disableActions);
-        $(".deleteContainer").attr("disabled", disableActions);
-
-        $("#container-currentState").html(`<i class="` + statusCodeIconMap[x.state.status_code] +`"></i>`);
-
-        if(x.mosaicExtensions.backups){
-            $("#goToBackups").removeClass("disabled")
-            $("#goToBackups").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
-        }else{
-            $("#goToBackups").addClass("disabled")
-            $("#goToBackups").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
-        }
-
-        //NOTE Read more here https://github.com/lxc/pylxd/issues/242
-        let containerCpuTime = nanoSecondsToHourMinutes(x.state.cpu.usage);
-
-        let os = x.details.config.hasOwnProperty("image.os") ? x.details.config["image.os"] : "<b style='color: #ffc107'>Can't find OS</b>";
-        let version = "<b style='color: #ffc107'>Cant find version</b>";
-        if(x.details.config.hasOwnProperty("image.version")){
-            version = x.details.config["image.version"];
-        }else if(x.details.config.hasOwnProperty("image.release")){
-            version = x.details.config["image.release"];
-        }
-
-        $("#container-hostNameDisplay").text(data.alias);
-        $("#container-containerNameDisplay").text(data.container);
-        $("#instanceProject").text(x.project);
-        $("#container-imageDescription").html(`${os} (${version})`);
-        $("#container-cpuTime").text(containerCpuTime);
-        $("#container-createdAt").text(moment(x.details.created_at).format("MMM DD YYYY h:mm A"));
-
-        let settingsTr = "";
-
-        $.each(x.details.config, (key, value)=>{
-            if(!key.startsWith("image") && !key.startsWith("volatile") && !key.startsWith("snapshots") && !["user.comment", "user.vendor-data", "user.user-data"].includes(key)){
-                settingsTr += `<tr>
-                    <td>${key}</td>
-                    <td>${value}</td>
-                </tr>`
-            }
-        });
-
-        if(settingsTr == ""){
-            $("#viewInstanceSettingsTable > thead").hide()
-            $("#viewInstanceSettingsTable > tbody").css({"border-top": "inherit"})
-            settingsTr = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-primary me-2'></i>No Settings</td></tr>";
-        }else{
-            $("#viewInstanceSettingsTable > thead").show()
-            $("#viewInstanceSettingsTable > tbody").css({"border-top": "2px solid currentColor"})
-        }
-
-
-        $("#viewInstanceSettingsTable > tbody").empty().append(settingsTr);
-
-        if(x.details.hasOwnProperty("last_used_at")){
-            let last_used_at = moment(x.details.last_used_at);
-            if(last_used_at.format("YYYY") == "1970"){
-                $("#container-upTime").text("Not Started Yet");
-            }else if(!disableActions){
-                $("#container-upTime").text("Offline");
-            }else{
-                let now = moment(new Date());
-
-                var ms = now.diff(last_used_at);
-                var d = moment.duration(ms);
-                var s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss")
-                $("#container-upTime").text(s);
-            }
-        }else{
-            $("#container-upTime").text("LXD Extension Missing");
-        }
-
-        let deployment = "Not In Deployment";
-
-        if(x.deploymentDetails !== false){
-            deployment = `<a href="/deployments/${x.deploymentDetails.id}">${x.deploymentDetails.name}</a>`
-        }
-
-        $("#container-deployment").html(deployment);
-
-        let userComment = "";
-
-        if(x.details.config.hasOwnProperty("user.comment") !== false){
-            userComment = nl2br(x.details.config["user.comment"]);
-        }else{
-            userComment = `<div class="d-block text-center"><i class="fas fa-info-circle text-info me-2"></i>No Comment</div>`
-        }
-
-        $("#container-comment").html(userComment);
-
-        let snapshotTrHtml = "";
-
-        if(x.snapshots.length == 0){
-            snapshotTrHtml += `<tr>
-                <td class='text-center' colspan='2'><i class='fas fa-info-circle text-primary me-2'></i>No Snapshots</td>
-
-            </tr>`
-        }else{
-            $.each(x.snapshots, function(i, item){
-                snapshotTrHtml += `<tr>
-                    <td>${item}</td>
-                </tr>`;
-            });
-        }
-
-        $("#snapshotData >  tbody").empty().append(snapshotTrHtml);
-
-        let profileTrHtml = "";
-
-        if(x.details.profiles.length == 0){
-            profileTrHtml = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-primary me-2'></i>No Profiles</td></tr>"
-        }else{
-            $.each(x.details.profiles, function(i, item){
-                profileTrHtml += `<span class="badge bg-secondary m-1" data-profile="${item}">
-                <a style="color: white; text-decoration: underline" href='/profiles/${data.hostId}/${item}' data-profile=${item} data-navigo>${item}</a>
-                <span class='text-danger removeProfile ms-1' style="cursor: pointer;">x</span>
-                </span>
-                `;
-            });
-        }
-
-        $("#profileData").empty().append(profileTrHtml);
-
-        let networkData = "";
-
-        if(x.state.network !== null){
-            networkData += ''
-            $.each(x.state.network,  function(i, item){
-                if(i == "lo"){
-                    return;
+            if(currentTerminalProcessId === null){
+                if(x.state.status_code === 103 || x.state.status_code === 113){
+                    $("#terminalControls").find(".btn").removeClass("disabled")
+                    openShell(null, x.details.config.hasOwnProperty("image.os") ? x.details.config["image.os"] : "")
+                }else{
+                    $("#terminalControls").find(".btn").addClass("disabled")
+                    const terminalContainer = document.getElementById('terminal-container');
+                    while (terminalContainer.children.length) {
+                        terminalContainer.removeChild(terminalContainer.children[0]);
+                    }
+                    term = new Terminal({});
+                    term.loadAddon(fitAddon)
+                    term.open(terminalContainer);
+                    fitAddon.fit()
+                    $("#terminalDiv").height($("#terminal-container").height())
+                    setTimeout(() => {
+                        term.writeln("Instance not in a running state, shell not opened.")
+                    }, 0)
                 }
-                networkData += `<div><b><i class="fas fa-ethernet me-2"></i>${i}</b> <small class="float-end">${item.hwaddr}</small><br/>`;
-                let lastKey = item.addresses.length - 1;
-                $.each(item.addresses, function(i, item){
-                    networkData += `<span class="mt-3 ms-2">${item.address}<br/></span>`;
-                });
-                networkData += "</div>";
-            });
-
-            if(networkData == ""){
-                networkData = '<div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Only local interface present!</div>';
             }
-
-            networkData = '<h5 class="mt-2"> <i class="fas fa-network-wired me-2 text-success"></i> Network Information </h5>' + networkData
-        }else{
-            networkData = '<h5 class="mt-2"> <i class="fas fa-network-wired me-2 text-danger"></i> Network Information </h5><div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>';
-        }
-
-        $("#networkDetailsCard").empty().append(networkData);
-
-        function unhumanize(text) {
-            var powers = {'k': 1, 'm': 2, 'g': 3, 't': 4};
-            var regex = /(\d+(?:\.\d+)?)\s?(k|m|g|t)?b?/i;
-            var res = regex.exec(text);
-            return res[1] * Math.pow(1024, powers[res[2].toLowerCase()]);
-        }
-
-        if(x.state.status_code == 103 || x.state.status_code == 113){
-            let totalMemory = x.totalMemory.total;
-            var regExp = /[a-zA-Z]/g;
-
-
-            if(regExp.test(totalMemory)){
-                totalMemory = unhumanize(totalMemory);
-            }
-
-            let memoryUsageHtml = `<h5 class="text-white">
-                <i class="fas fa-memory me-2 text-success"></i>
-                Memory Usage
-            </h5>`;
-            $.each(x.state.memory, function(i, item){
-                let memoryWidth = ((item / totalMemory) * 100)
-                if(i.includes("peak")){
-                    return true;
-                }
-                memoryUsageHtml += `<div class="mb-2">
-                    <b>${titleCase(i.replace(/_/g, ' '))}</b>
-                    <div class="progress ms-3 mt-2">
-                        <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(item)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${item}" aria-valuemin="0" aria-valuemax="${(totalMemory)}"></div>
-                        <div data-bs-toggle="tooltip" data-bs-placement="right" title="${formatBytes(totalMemory)} (Source: ${x.totalMemory.source})" class="progress-bar bg-secondary" style="width: ${100 - memoryWidth}%" role="progressbar" aria-valuenow="${item}" aria-valuemin="0" aria-valuemax="${(totalMemory)}"></div>
-                    </div>
-                </div>`
-            });
-
-            $("#memoryDataCard").empty().append(memoryUsageHtml)
-            $("#memoryDataCard").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
-        }else{
-            $("#memoryDataCard").empty().append(`<h5 class="text-white">
-                <i class="fas fa-memory me-2 text-danger"></i>
-                Memory Usage
-            </h5>
-            <div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>`);
-        }
-
-        let storageHtml = `
-            <h5 class="text-white">
-                <i class="fas fa-hdd me-2 text-primary"></i>
-                Disks
-                <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attach Volume" class="btn btn-sm btn-outline-primary float-end" id="attachVolumesBtn">
-                    <i class="fas fa-hdd"></i>
-                </button>
-            </h5>
-            <div style="width: 100%;">`;
-
-        $.each(x.state.disk, (i, disk)=>{
-            if(disk.hasOwnProperty("usage")){
-                var regExp = /[a-zA-Z]/g;
-
-                let totalStorage = disk.poolSize;
-
-                if(regExp.test(totalStorage)){
-                    totalStorage = unhumanize(totalStorage);
-                }
-
-                let storageWidth = ((disk.usage / totalStorage) * 100)
-
-                storageHtml += `<div class="mb-2">
-                    <b>${titleCase(i.replace(/_/g, ' '))}</b>
-                    <div class="progress ms-3 mt-2">
-                        <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(disk.usage)}" class="progress-bar bg-primary" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage.total)}"></div>
-                        <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(totalStorage)}"  class="progress-bar bg-secondary" style="width: ${100 - storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage.total)}"></div>
-                    </div>
-                </div>`
-            }else{
-                storageHtml += `<div class="mb-2">
-                    <b>${titleCase(i.replace(/_/g, ' '))}</b>
-                    <div class="text-center mt-2">
-                        <i class="fas fa-info-circle text-primary me-2"></i>No Usage information available.
-                    </div>
-                </div>`
-            }
-
-
-        });
-
-        $("#storageDataCard").empty().append(storageHtml)
-        $("#storageDataCard").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
-
-        let proxyDevices = "";
-
-        if(x.proxyDevices.length == 0){
-            proxyDevices = "<tr><td class='text-center' colspan='2'><i class='fas fa-info-circle text-primary me-2'></i> No Proxies </td></tr>"
-        }else{
-            $.each(x.proxyDevices, (name, details)=>{
-                proxyDevices += `<tr>
-                    <td>${name}</td>
-                    <td>${details.listen.replace("0.0.0.0", '*')}<i class="fas fa-arrow-right ms-2 me-2"></i>${details.connect.replace("0.0.0.0", '*')}</td>
-                </tr>`
-            });
-        }
-
-        $("#instanceProxiesTable > tbody").empty().append(proxyDevices)
-
-
-        $(".boxSlide").hide();
-        $("#containerBox").show();
-        $('html, body').animate({scrollTop:0},500);
-        router.updatePageLinks()
-
-        if(currentTerminalProcessId === null){
-            if(x.state.status_code === 103 || x.state.status_code === 113){
-                $("#terminalControls").find(".btn").removeClass("disabled")
-                openShell(null, x.details.config.hasOwnProperty("image.os") ? x.details.config["image.os"] : "")
-            }else{
-                $("#terminalControls").find(".btn").addClass("disabled")
-                const terminalContainer = document.getElementById('terminal-container');
-                // Clean terminal
-                while (terminalContainer.children.length) {
-                    terminalContainer.removeChild(terminalContainer.children[0]);
-                }
-
-                term = new Terminal({});
-                term.loadAddon(fitAddon)
-                term.open(terminalContainer);
-                fitAddon.fit()
-                $("#terminalDiv").height($("#terminal-container").height())
-                // fit is called within a setTimeout, cols and rows need this.
-                setTimeout(() => {
-                    term.writeln("Instance not in a running state, shell not opened.")
-                }, 0)
-            }
-
-
         }
     });
+}
+
+function updateContainerSections(x, data, forceNavigation = true)
+{
+    if(forceNavigation){
+        changeActiveNav(".overview");
+        addBreadcrumbs(["Dashboard", data.alias, data.container ], ["", "", "active"], false, ["/", `/host/${data.hostId}/overview`]);
+    }
+
+    let disableActions = x.state.status_code !== 102;
+
+    let stateBtnsToEnable = [];
+    let stateBtnsToDisable = [];
+
+    if(x.state.status_code == 103 || x.state.status_code == 113){
+        stateBtnsToEnable = ["stop", "freeze", "restart"];
+        stateBtnsToDisable = ["start", "unfreeze"];
+    }else if(x.state.status_code == 102){
+        stateBtnsToEnable = ["start"];
+        stateBtnsToDisable = ["stop", "freeze", "restart", "unfreeze"];
+    }else if(x.state.status_code == 110){
+        stateBtnsToEnable = ["unfreeze"];
+        stateBtnsToDisable = ["start", "stop", "freeze", "restart"];
+    }else{
+        stateBtnsToEnable = ["start", "unfreeze"];
+        stateBtnsToDisable = ["stop", "freeze"];
+    }
+
+    $.each(stateBtnsToDisable, (_, i)=>{
+        $(`.changeInstanceState[data-action='${i}']`).addClass("bg-secondary disabled").attr("disabled", "disabled");
+    })
+    $.each(stateBtnsToEnable, (_, i)=>{
+        $(`.changeInstanceState[data-action='${i}']`).removeClass("bg-secondary disabled").attr("disabled", false);
+    })
+
+
+    if(!x.details.hasOwnProperty("type") || x.details.type == "container"){
+        $("#goToTerminal").hide();
+    }else{
+        $("#goToTerminal").show();
+    }
+
+    if(x.mosaicExtensions.audit){
+        $("#goToEvents").removeClass("disabled")
+        $("#goToEvents").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+    }else{
+        $("#goToEvents").addClass("disabled")
+        $("#goToEvents").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+    }
+
+
+    if(x.mosaicExtensions.packages){
+        $("#goToPackages").removeClass("disabled")
+        $("#goToPackages").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+    }else{
+        $("#goToPackages").addClass("disabled")
+        $("#goToPackages").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+    }
+    if(x.mosaicExtensions.timers){
+        $("#goToTimers").removeClass("disabled")
+        $("#goToTimers").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+    }else{
+        $("#goToTimers").addClass("disabled")
+        $("#goToTimers").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+    }
+
+
+    if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.mosaicExtensions.haveMetrics){
+        $("#goToMetrics").removeClass("disabled")
+        $("#goToMetrics").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+    }else{
+        $("#goToMetrics").addClass("disabled")
+        $("#goToMetrics").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+    }
+
+    $(".renameContainer").attr("disabled", disableActions);
+    $(".deleteContainer").attr("disabled", disableActions);
+
+    $("#container-currentState").html(`<i class="` + statusCodeIconMap[x.state.status_code] +`"></i>`);
+
+    if(x.mosaicExtensions.backups){
+        $("#goToBackups").removeClass("disabled")
+        $("#goToBackups").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+    }else{
+        $("#goToBackups").addClass("disabled")
+        $("#goToBackups").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+    }
+
+    //NOTE Read more here https://github.com/lxc/pylxd/issues/242
+    let containerCpuTime = nanoSecondsToHourMinutes(x.state.cpu.usage);
+
+    let os = x.details.config.hasOwnProperty("image.os") ? x.details.config["image.os"] : "<b style='color: #ffc107'>Can't find OS</b>";
+    let version = "<b style='color: #ffc107'>Cant find version</b>";
+    if(x.details.config.hasOwnProperty("image.version")){
+        version = x.details.config["image.version"];
+    }else if(x.details.config.hasOwnProperty("image.release")){
+        version = x.details.config["image.release"];
+    }
+
+    $("#container-hostNameDisplay").text(data.alias);
+    $("#container-containerNameDisplay").text(data.container);
+    $("#instanceProject").text(x.project);
+    $("#container-imageDescription").html(`${os} (${version})`);
+    $("#container-cpuTime").text(containerCpuTime);
+    $("#container-createdAt").text(moment(x.details.created_at).format("MMM DD YYYY h:mm A"));
+
+    let settingsTr = "";
+
+    $.each(x.details.config, (key, value)=>{
+        if(!key.startsWith("image") && !key.startsWith("volatile") && !key.startsWith("snapshots") && !["user.comment", "user.vendor-data", "user.user-data"].includes(key)){
+            settingsTr += `<tr>
+                <td>${key}</td>
+                <td>${value}</td>
+            </tr>`
+        }
+    });
+
+    if(settingsTr == ""){
+        $("#viewInstanceSettingsTable > thead").hide()
+        $("#viewInstanceSettingsTable > tbody").css({"border-top": "inherit"})
+        settingsTr = "<tr><td colspan='2' class='text-center'><i class='fas fa-info-circle text-primary me-2'></i>No Settings</td></tr>";
+    }else{
+        $("#viewInstanceSettingsTable > thead").show()
+        $("#viewInstanceSettingsTable > tbody").css({"border-top": "2px solid currentColor"})
+    }
+
+
+    $("#viewInstanceSettingsTable > tbody").empty().append(settingsTr);
+
+    if(x.details.hasOwnProperty("last_used_at")){
+        let last_used_at = moment(x.details.last_used_at);
+        if(last_used_at.format("YYYY") == "1970"){
+            $("#container-upTime").text("Not Started Yet");
+        }else if(!disableActions){
+            $("#container-upTime").text("Offline");
+        }else{
+            let now = moment(new Date());
+
+            var ms = now.diff(last_used_at);
+            var d = moment.duration(ms);
+            var s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss")
+            $("#container-upTime").text(s);
+        }
+    }else{
+        $("#container-upTime").text("LXD Extension Missing");
+    }
+
+    let deployment = "Not In Deployment";
+
+    if(x.deploymentDetails !== false){
+        deployment = `<a href="/deployments/${x.deploymentDetails.id}">${x.deploymentDetails.name}</a>`
+    }
+
+    $("#container-deployment").html(deployment);
+
+    let userComment = "";
+
+    if(x.details.config.hasOwnProperty("user.comment") !== false){
+        userComment = nl2br(x.details.config["user.comment"]);
+    }else{
+        userComment = `<div class="d-block text-center"><i class="fas fa-info-circle text-info me-2"></i>No Comment</div>`
+    }
+
+    $("#container-comment").html(userComment);
+
+    let snapshotTrHtml = "";
+
+    if(x.snapshots.length == 0){
+        snapshotTrHtml += `<tr>
+            <td class='text-center' colspan='2'><i class='fas fa-info-circle text-primary me-2'></i>No Snapshots</td>
+
+        </tr>`
+    }else{
+        $.each(x.snapshots, function(i, item){
+            snapshotTrHtml += `<tr>
+                <td>${item}</td>
+            </tr>`;
+        });
+    }
+
+    $("#snapshotData >  tbody").empty().append(snapshotTrHtml);
+
+    let profileTrHtml = "";
+
+    if(x.details.profiles.length == 0){
+        profileTrHtml = "<tr><td colspan='999' class='text-center'><i class='fas fa-info-circle text-primary me-2'></i>No Profiles</td></tr>"
+    }else{
+        $.each(x.details.profiles, function(i, item){
+            profileTrHtml += `<span class="badge bg-secondary m-1" data-profile="${item}">
+            <a style="color: white; text-decoration: underline" href='/profiles/${data.hostId}/${item}' data-profile=${item} data-navigo>${item}</a>
+            <span class='text-danger removeProfile ms-1' style="cursor: pointer;">x</span>
+            </span>
+            `;
+        });
+    }
+
+    $("#profileData").empty().append(profileTrHtml);
+
+    let networkData = "";
+
+    if(x.state.network !== null){
+        networkData += ''
+        $.each(x.state.network,  function(i, item){
+            if(i == "lo"){
+                return;
+            }
+            networkData += `<div><b><i class="fas fa-ethernet me-2"></i>${i}</b> <small class="float-end">${item.hwaddr}</small><br/>`;
+            let lastKey = item.addresses.length - 1;
+            $.each(item.addresses, function(i, item){
+                networkData += `<span class="mt-3 ms-2">${item.address}<br/></span>`;
+            });
+            networkData += "</div>";
+        });
+
+        if(networkData == ""){
+            networkData = '<div class="text-center"><i class="fas fa-info-circle text-info me-2"></i>Only local interface present!</div>';
+        }
+
+        networkData = '<h5 class="mt-2"> <i class="fas fa-network-wired me-2 text-success"></i> Network Information </h5>' + networkData
+    }else{
+        networkData = '<h5 class="mt-2"> <i class="fas fa-network-wired me-2 text-danger"></i> Network Information </h5><div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>';
+    }
+
+    $("#networkDetailsCard").empty().append(networkData);
+
+    function unhumanize(text) {
+        var powers = {'k': 1, 'm': 2, 'g': 3, 't': 4};
+        var regex = /(\d+(?:\.\d+)?)\s?(k|m|g|t)?b?/i;
+        var res = regex.exec(text);
+        return res[1] * Math.pow(1024, powers[res[2].toLowerCase()]);
+    }
+
+    if(x.state.status_code == 103 || x.state.status_code == 113){
+        let totalMemory = x.totalMemory.total;
+        var regExp = /[a-zA-Z]/g;
+
+
+        if(regExp.test(totalMemory)){
+            totalMemory = unhumanize(totalMemory);
+        }
+
+        let memoryUsageHtml = `<h5 class="text-white">
+            <i class="fas fa-memory me-2 text-success"></i>
+            Memory Usage
+        </h5>`;
+        $.each(x.state.memory, function(i, item){
+            let memoryWidth = ((item / totalMemory) * 100)
+            if(i.includes("peak")){
+                return true;
+            }
+            memoryUsageHtml += `<div class="mb-2">
+                <b>${titleCase(i.replace(/_/g, ' '))}</b>
+                <div class="progress ms-3 mt-2">
+                    <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(item)}" class="progress-bar bg-success" style="width: ${memoryWidth}%" role="progressbar" aria-valuenow="${item}" aria-valuemin="0" aria-valuemax="${(totalMemory)}"></div>
+                    <div data-bs-toggle="tooltip" data-bs-placement="right" title="${formatBytes(totalMemory)} (Source: ${x.totalMemory.source})" class="progress-bar bg-secondary" style="width: ${100 - memoryWidth}%" role="progressbar" aria-valuenow="${item}" aria-valuemin="0" aria-valuemax="${(totalMemory)}"></div>
+                </div>
+            </div>`
+        });
+
+        $("#memoryDataCard").empty().append(memoryUsageHtml)
+        $("#memoryDataCard").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
+    }else{
+        $("#memoryDataCard").empty().append(`<h5 class="text-white">
+            <i class="fas fa-memory me-2 text-danger"></i>
+            Memory Usage
+        </h5>
+        <div class="text-center"><i class="fas fa-info-circle text-danger me-2"></i>Instance Offline</div>`);
+    }
+
+    let storageHtml = `
+        <h5 class="text-white">
+            <i class="fas fa-hdd me-2 text-primary"></i>
+            Disks
+            <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attach Volume" class="btn btn-sm btn-outline-primary float-end" id="attachVolumesBtn">
+                <i class="fas fa-hdd"></i>
+            </button>
+        </h5>
+        <div style="width: 100%;">`;
+
+    $.each(x.state.disk, (i, disk)=>{
+        if(disk.hasOwnProperty("usage")){
+            var regExp = /[a-zA-Z]/g;
+
+            let totalStorage = disk.poolSize;
+
+            if(regExp.test(totalStorage)){
+                totalStorage = unhumanize(totalStorage);
+            }
+
+            let storageWidth = ((disk.usage / totalStorage) * 100)
+
+            storageHtml += `<div class="mb-2">
+                <b>${titleCase(i.replace(/_/g, ' '))}</b>
+                <div class="progress ms-3 mt-2">
+                    <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(disk.usage)}" class="progress-bar bg-primary" style="width: ${storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage.total)}"></div>
+                    <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="${formatBytes(totalStorage)}"  class="progress-bar bg-secondary" style="width: ${100 - storageWidth}%" role="progressbar" aria-valuenow="${disk.usage}" aria-valuemin="0" aria-valuemax="${(totalStorage.total)}"></div>
+                </div>
+            </div>`
+        }else{
+            storageHtml += `<div class="mb-2">
+                <b>${titleCase(i.replace(/_/g, ' '))}</b>
+                <div class="text-center mt-2">
+                    <i class="fas fa-info-circle text-primary me-2"></i>No Usage information available.
+                </div>
+            </div>`
+        }
+
+
+    });
+
+    $("#storageDataCard").empty().append(storageHtml)
+    $("#storageDataCard").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
+
+    let proxyDevices = "";
+
+    if(x.proxyDevices.length == 0){
+        proxyDevices = "<tr><td class='text-center' colspan='2'><i class='fas fa-info-circle text-primary me-2'></i> No Proxies </td></tr>"
+    }else{
+        $.each(x.proxyDevices, (name, details)=>{
+            proxyDevices += `<tr>
+                <td>${name}</td>
+                <td>${details.listen.replace("0.0.0.0", '*')}<i class="fas fa-arrow-right ms-2 me-2"></i>${details.connect.replace("0.0.0.0", '*')}</td>
+            </tr>`
+        });
+    }
+
+    $("#instanceProxiesTable > tbody").empty().append(proxyDevices)
+
 }
 
 function openShell(shell = null, imageOsString = ""){
@@ -2486,6 +2479,7 @@ $("#instanceSnapshotsTable").on("click", ".deleteSnap", function(){
                             return false;
                         }
                         tr.remove();
+                        loadInstanceView(currentContainerDetails, true, false);
                     });
                 }
             }
@@ -2702,7 +2696,7 @@ $("#containerBox").on("click", ".changeInstanceState", function(){
     $(".changeInstanceState").tooltip("hide");
     ajaxRequest(url, currentContainerDetails, function(data){
         let result = makeToastr(data);
-        loadContainerViewAfter();
+        loadInstanceView(currentContainerDetails);
     });
 });
 </script>

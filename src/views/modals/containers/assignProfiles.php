@@ -52,7 +52,7 @@
                 return false;
             }
             $("#modal-container-assignProfiles").modal("hide");
-            loadContainerViewAfter();
+            loadInstanceView(currentContainerDetails, true, false);
         });
     });
 

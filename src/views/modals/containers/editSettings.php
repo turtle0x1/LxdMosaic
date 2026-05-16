@@ -10,13 +10,26 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="mb-3 text-center">
-            <i class="fas fa-info-circle text-warning me-2"></i>
+        <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
             Currently not possible to delete existing keys.
         </div>
-        <div class="d-block" id="editSettings-list"></div>
-        <button class="btn btn-success mt-2 float-end" id="addNewSettingRow">
-            Add Setting
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle" id="editSettings-list">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 30%;">Key</th>
+                        <th style="width: 35%;">Description</th>
+                        <th style="width: 25%;">Value</th>
+                        <th style="width: 10%;" class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <button class="btn btn-success mt-2 text-nowrap" id="addNewSettingRow">
+            <i class="fas fa-plus"></i> Add Setting
         </button>
       </div>
       <div class="modal-footer">
@@ -32,7 +45,7 @@
 
     $("#modal-container-editSettings").on("hide.bs.modal", function(){
         $("#editSettings-currentHost").text("");
-        $("#editSettings-list").empty();
+        $("#editSettings-list tbody").empty();
     });
 
     $("#modal-container-editSettings").on("shown.bs.modal", function(){
@@ -54,23 +67,24 @@
             if(data.existingSettings.length > 0){
                 let existingSettingsHtml = "";
                 $.each(data.existingSettings, function(i, item){
-                    existingSettingsHtml += `<div style='margin-bottom: 5px; border-bottom: 1px solid black; padding: 10px;' class='input-group'>
-                    <div class='col-md-4'>
-                        <select name='key' class='form-select settingSelect' disabled='disabled' style='width: 100%'>
-                            <option value='${item.key}' selected>${item.key}</option>
-                         </select>
-                    </div>
-                    <div class='col-md-4'>
-                        <div class='description'>${item.description}</div>
-                    </div>
-                    <div class='col-md-3'>
-                        <input  style="width: 100%" type="text" name="value" value="${item.value}" class="form-control"/>
-                    </div>
-                    </div>`;
+                    existingSettingsHtml += `<tr>
+                        <td>
+                            <select name='key' class='form-select form-select-sm settingSelect' disabled='disabled'>
+                                <option value='${item.key}' selected>${item.key}</option>
+                            </select>
+                        </td>
+                        <td class='text-muted small description'>${item.description || '—'}</td>
+                        <td>
+                            <input type="text" name="value" value="${item.value}" class="form-control form-control-sm"/>
+                        </td>
+                        <td class="text-center">
+                            <small class="text-muted">Read-only</small>
+                        </td>
+                    </tr>`;
                 });
-                $("#editSettings-list").empty().append(existingSettingsHtml);
+                $("#editSettings-list tbody").empty().append(existingSettingsHtml);
             }else{
-                $("#editSettings-list").empty()
+                $("#editSettings-list tbody").empty();
             }
 
             if(!$.isEmptyObject(data.remainingSettings)){
@@ -91,26 +105,26 @@
     });
 
     $("#modal-container-editSettings").on("click", ".removeSetting", function(){
-        $(this).parents(".input-group").remove();
+        $(this).closest("tr").remove();
     });
 
     $("#modal-container-editSettings").on("change", ".settingSelect", function(){
         $(this).val();
         let defaultValue = $(this).find(":selected").data("default");
         let description = $(this).find(":selected").data("description");
-        $(this).parents(".input-group").find("input[name=value]").val(defaultValue);
-        $(this).parents(".input-group").find("div.description").text(description);
+        $(this).closest("tr").find("input[name=value]").val(defaultValue);
+        $(this).closest("tr").find(".description").text(description || '—');
     });
 
     $("#modal-container-editSettings").on("click", "#addSettings", function(){
         let btn = $(this);
 
-        let inputGroups = $("#editSettings-list").find(".input-group");
+        let rows = $("#editSettings-list tbody").find("tr");
         let data = {
             settings: {}
         };
         let invalid = false;
-        $.each(inputGroups, function(i, item){
+        $.each(rows, function(i, item){
             let keySelector = $(this).find("select[name=key]").find(":selected");
             let key = keySelector.val();
 
@@ -144,26 +158,25 @@
             btn.attr("disabled", false);
             if(data.state == "success"){
                 $("#modal-container-editSettings").modal("toggle");
+                loadInstanceView(currentContainerDetails, true, false);
             }
         });
     });
 
     $("#modal-container-editSettings").on("click", "#addNewSettingRow", function(){
-        $("#editSettings-list").append(
-            `<div style='margin-bottom: 5px; border-bottom: 1px solid #D3D3D3; padding: 10px;' class='input-group'>
-            <div class='col-md-4'>
-                <select name='key' class='form-select settingSelect' style='width: 100%'> ${reamingSettingSelectOptions}</select>
-            </div>
-            <div class='col-md-4'>
-                <div class='description'></div>
-            </div>
-            <div class='col-md-3'>
-                <input  style="width: 100%" type="text" name="value" class="form-control"/>
-            </div>
-            <div class='col-md-1'>
-                <button class="btn btn-danger removeSetting"><i class="fa fa-trash"></i></button>
-            </div>
-            </div>`
+        $("#editSettings-list tbody").append(
+            `<tr>
+                <td>
+                    <select name='key' class='form-select form-select-sm settingSelect'> ${reamingSettingSelectOptions}</select>
+                </td>
+                <td class='text-muted small description'></td>
+                <td>
+                    <input type="text" name="value" class="form-control form-control-sm"/>
+                </td>
+                <td class="text-center">
+                    <button class="btn btn-danger btn-sm removeSetting"><i class="fa fa-trash"></i></button>
+                </td>
+            </tr>`
         );
     });
 

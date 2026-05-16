@@ -700,7 +700,7 @@ $(function(){
     router.on('/host/:hostId/settings', loadHostSettings);
     router.on('/host/:hostId/disks', loadHostDisks);
 
-    router.on('/instance/:hostId/:instance', loadContainerViewReq);
+    router.on('/instance/:hostId/:instance', loadInstanceViewReq);
     router.on("/backups", loadBackupsView);
     router.on("/cluster/:clusterId", loadClusterView);
     router.on("/cloudConfig", loadCloudConfigOverview);

@@ -122,7 +122,7 @@
             data = makeToastr(data);
             if(data.hasOwnProperty("state") && data.state == "success"){
                 if(addProxyDeviceObj.instance !== null){
-                    loadContainerView(currentContainerDetails);
+                    loadInstanceView(currentContainerDetails, true, false);
                 }else{
                     $("#serverProxyDevicesBtn").trigger("click")
                 }
