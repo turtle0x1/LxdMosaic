@@ -48,8 +48,8 @@ foreach ($rii as $file) {
         foreach ($attributes as $attribute) {
             $annot = $attribute->newInstance();
 
-            $path = $annot->getPath();
-            $name = $annot->getName() ?: strtolower(str_replace('\\', '_', $fqcn . '_' . $method->getName()));
+            $path = $annot->path;
+            $name = $annot->name ?: strtolower(str_replace('\\', '_', $fqcn . '_' . $method->getName()));
 
             if (in_array($path, $seenPaths)) {
                 throw new \Exception("Duplicate route path '{$path}' detected");
@@ -63,16 +63,16 @@ foreach ($rii as $file) {
 
             $route = new Route(
                 $path,
-                array_merge($annot->getDefaults(), [
+                array_merge($annot->defaults, [
                     '_controller' => $fqcn,
                     '_method' => $method->getName(),
                 ]),
-                $annot->getRequirements(),
-                $annot->getOptions(),
-                $annot->getHost(),
-                $annot->getSchemes(),
-                $annot->getMethods(),
-                $annot->getCondition()
+                $annot->requirements,
+                $annot->options,
+                $annot->host,
+                $annot->schemes,
+                $annot->methods,
+                $annot->condition
             );
 
             $routes->add($name, $route);
