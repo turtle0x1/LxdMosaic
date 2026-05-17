@@ -86,7 +86,7 @@ class GetSoftwareAssetsSnapshotData
         foreach ($lines as $line) {
             // Use regex to extract package details
             if (preg_match(
-                '/^(?P<name>[\w\.\-\/]+),now (?P<version>[\w\:\-\.]+) (?P<architecture>\w+) \[(?P<status>[^\]]+)\]$/',
+                '/^(?P<name>[\w\.\-\+\/]+)\/(?P<suite>[\w\.\-_,]+),now (?P<version>[\w:\.\-\~\+]+) (?P<architecture>\w+) \[(?P<status>[^\]]+)\]$/',
                 $line,
                 $matches
             )) {
