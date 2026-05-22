@@ -29,7 +29,7 @@
     "mysql": "^2.18.1",
     "sqlite3": "^6.0.1",
     "uuid": "^14.0.0",
-    "ws": "^8.18.3"
+    "ws": "^8.20.1"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0",
