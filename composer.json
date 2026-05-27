@@ -10,7 +10,7 @@
         "symfony/filesystem": "^7.3.6",
         "symfony/cache": "^7.3.6",
         "crunzphp/crunz": "^3.8.0",
-        "symfony/routing": "^7.3.6",
+        "symfony/routing": "^8.0.13",
         "robmorgan/phinx": "^0.16.10"
     },
     "autoload": {
