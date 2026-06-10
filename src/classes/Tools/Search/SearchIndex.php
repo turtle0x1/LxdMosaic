@@ -17,6 +17,7 @@ class SearchIndex
 
     public function search(string $userId, string $search)
     {
+        $search = strtolower($search);
         $searchData = $this->fetchIndex->fetchLatestData();
         if ($searchData == false) {
             throw new \Exception('Search index missing');
