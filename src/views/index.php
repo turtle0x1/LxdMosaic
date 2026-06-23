@@ -730,6 +730,7 @@ $(function(){
     router.on("/admin/softwareAssets", loadSoftwareAssets);
     router.on("/admin/timers", loadTimers);
     router.on("/admin/imageServers", loadImageServers);
+    router.on("/admin/vulnerabilities", loadVulnerabilityDashboard);
 
     router.on("*", function(){
         $(".boxSlide").hide()

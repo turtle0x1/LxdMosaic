@@ -320,6 +320,7 @@
     <?php require_once __DIR__ . '/boxComponents/settings/softwareAssets.html' ?>
     <?php require_once __DIR__ . '/boxComponents/settings/timers.html' ?>
     <?php require_once __DIR__ . '/boxComponents/settings/imageServers.html' ?>
+    <?php require_once __DIR__ . '/boxComponents/instance/vulnerabilities.html' ?>
 </div>
 
 <script>
@@ -340,6 +341,7 @@ var adminSettingUrls = {
     retiredData: '/admin/retiredData',
     softwareSnapshots: '/admin/softwareAssets',
     timersSnapshots: '/admin/timers',
+    vulnerabilities: '/admin/vulnerabilities',
 };
 
 function putAdminSidebar(selected) {
@@ -394,6 +396,11 @@ function putAdminSidebar(selected) {
         <li class="nav-item mt-2">
             <a class="nav-link p-0  ${selected === adminSettingUrls.timersSnapshots ? "active" : null }" href="${adminSettingUrls.timersSnapshots}" data-navigo>
                 <i class="fas fa-hourglass-half me-2"></i>Timers Snapshots
+            </a>
+        </li>
+        <li class="nav-item mt-2">
+            <a class="nav-link p-0  ${selected === adminSettingUrls.vulnerabilities ? "active" : null }" href="${adminSettingUrls.vulnerabilities}" data-navigo>
+                <i class="fas fa-shield-alt me-2"></i>Vulnerabilities
             </a>
         </li>
         <li class="nav-item mt-2">
