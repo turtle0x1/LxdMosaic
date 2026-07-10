@@ -795,22 +795,18 @@ function loadInstanceSettings(){
         if(data.versionDetails.cantSeeGithub){
             $("#currentVersion").text("Cant see github");
             $("#newVersion").text("Cant see github");
-            return false;
+        } else {
+            $("#currentVersion").text(data.versionDetails.currentVersion);
+            let newVersion = "";
+            if(data.versionDetails.newVersionUrl !== false){
+                newVersion = `<a target="_blank" href="${data.versionDetails.newVersionUrl}">${data.versionDetails.newVersion}</a>`;
+            } else if(data.versionDetails.master == true){
+                newVersion = "N/A - You are on the master branch";
+            } else if(data.versionDetails.snap == true){
+                newVersion = "N/A - Snap will keep you up to date";
+            }
+            $("#newVersion").html(newVersion);
         }
-
-        $("#currentVersion").text(data.versionDetails.currentVersion);
-
-        let newVersion = "";
-
-        if(data.versionDetails.newVersionUrl !== false){
-            newVersion = `<a target="_blank" href="${data.versionDetails.newVersionUrl}">${data.versionDetails.newVersion}</a>`;
-        } else if(data.versionDetails.master == true){
-            newVersion = "N/A - You are on the master branch";
-        } else if(data.versionDetails.snap == true){
-            newVersion = "N/A - Snap will keep you up to date";
-        }
-
-        $("#newVersion").html(newVersion);
 
         $("#ldapSettingListTable > tbody").empty().append(ldapTrs);
         $("#settingListTable > tbody").empty().append(trs);

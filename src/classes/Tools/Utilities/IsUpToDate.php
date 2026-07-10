@@ -8,7 +8,7 @@ class IsUpToDate
     {
         $x = [
             'master' => false,
-            'currentVersion' => 'SNAP',
+            'currentVersion' => isset($_ENV['SNAP']) ?? "GIT",
             'cantSeeGithub' => false,
             'snap' => isset($_ENV['SNAP']),
             'newVersion' => false,
@@ -24,7 +24,8 @@ class IsUpToDate
         curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_URL => 'https://api.github.com/repos/turtle0x1/LxdMosaic/git/refs/tags',
-            CURLOPT_USERAGENT => 'Firefox',
+            CURLOPT_USERAGENT => 'LXDMosaic',
+            CURLOPT_TIMEOUT => 3 // Some environments will be isolated the net without this it crashes waiting
         ]);
         // Send the request & save response to $resp
         $resp = curl_exec($curl);
@@ -32,8 +33,10 @@ class IsUpToDate
         curl_close($curl);
 
         $githubData = json_decode($resp, true);
+        
+        $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-        if (json_last_error()) {
+        if (json_last_error() || $statusCode !== 200) {
             $x['cantSeeGithub'] = true;
             return $x;
         }
