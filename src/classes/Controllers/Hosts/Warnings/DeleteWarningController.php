@@ -13,7 +13,7 @@ class DeleteWarningController
     ) {
     }
 
-    #[Route(path: '/api/Hosts/Warnings/DeleteWarningController/delete', name: 'api_hosts_warnings_deletewarningcontroller_delete', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/Warnings/DeleteWarningController/delete', name: 'Delete warning', methods: ['POST'])]
     public function delete(int $userId, Host $host, string $id)
     {
         $this->deleteWarning->delete($userId, $host, $id);

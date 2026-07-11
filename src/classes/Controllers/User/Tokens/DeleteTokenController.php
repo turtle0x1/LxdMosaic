@@ -12,7 +12,7 @@ class DeleteTokenController
     ) {
     }
 
-    #[Route(path: '/api/User/Tokens/DeleteTokenController/delete', name: 'api_user_tokens_deletetokencontroller_delete', methods: ['POST'])]
+    #[Route(path: '/api/User/Tokens/DeleteTokenController/delete', name: 'Delete API token', methods: ['POST'])]
     public function delete(int $userId, int $tokenId)
     {
         $this->deleteToken->delete($userId, $tokenId);

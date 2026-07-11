@@ -12,7 +12,7 @@ class CreateTokenController
     ) {
     }
 
-    #[Route(path: '/api/User/Tokens/CreateTokenController/create', name: 'api_user_tokens_createtokencontroller_create', methods: ['POST'])]
+    #[Route(path: '/api/User/Tokens/CreateTokenController/create', name: 'Create API token', methods: ['POST'])]
     public function create(int $userId, string $token)
     {
         $this->insertToken->insert($userId, $token, 1);

@@ -14,7 +14,7 @@ class GetTimersOverivewController
     ) {
     }
 
-    #[Route(path: '/api/Hosts/Timers/GetTimersOverivewController/get', name: 'api_hosts_timers_gettimersoverivewcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/Timers/GetTimersOverivewController/get', name: 'Get timers overview', methods: ['POST'])]
     public function get(int $userId, string $date)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

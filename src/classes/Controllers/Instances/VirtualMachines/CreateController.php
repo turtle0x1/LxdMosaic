@@ -13,7 +13,7 @@ class CreateController
     ) {
     }
 
-    #[Route(path: '/api/Instances/VirtualMachines/CreateController/create', name: 'api_instances_virtualmachines_createcontroller_create', methods: ['POST'])]
+    #[Route(path: '/api/Instances/VirtualMachines/CreateController/create', name: 'Create VM', methods: ['POST'])]
     public function create(
         string $name,
         string $username,

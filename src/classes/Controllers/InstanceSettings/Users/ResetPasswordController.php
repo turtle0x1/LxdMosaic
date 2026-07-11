@@ -12,7 +12,7 @@ class ResetPasswordController
     ) {
     }
 
-    #[Route(path: '/api/InstanceSettings/Users/ResetPasswordController/reset', name: 'api_instancesettings_users_resetpasswordcontroller_reset', methods: ['POST'])]
+    #[Route(path: '/api/InstanceSettings/Users/ResetPasswordController/reset', name: 'Reset user password', methods: ['POST'])]
     public function reset(int $userId, int $targetUser, string $newPassword)
     {
         $this->resetPassword->reset($userId, $targetUser, $newPassword);

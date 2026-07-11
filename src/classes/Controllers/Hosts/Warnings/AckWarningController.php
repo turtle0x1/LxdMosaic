@@ -13,7 +13,7 @@ class AckWarningController
     ) {
     }
 
-    #[Route(path: '/api/Hosts/Warnings/AckWarningController/ack', name: 'api_hosts_warnings_ackwarningcontroller_ack', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/Warnings/AckWarningController/ack', name: 'Acknowledge warning', methods: ['POST'])]
     public function ack(int $userId, Host $host, string $id)
     {
         $this->ackWarning->ack($userId, $host, $id);

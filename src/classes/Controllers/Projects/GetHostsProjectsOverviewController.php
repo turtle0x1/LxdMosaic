@@ -12,7 +12,7 @@ class GetHostsProjectsOverviewController
     ) {
     }
 
-    #[Route(path: '/api/Projects/GetHostsProjectsOverviewController/get', name: 'api_projects_gethostsprojectsoverviewcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Projects/GetHostsProjectsOverviewController/get', name: 'Get hosts projects overview', methods: ['POST'])]
     public function get(int $userId)
     {
         return $this->getHostProjectsOverview->get($userId);

@@ -14,7 +14,7 @@ class GetClusterController
     ) {
     }
 
-    #[Route(path: '/api/Clusters/GetClusterController/get', name: 'api_clusters_getclustercontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Clusters/GetClusterController/get', name: 'Get cluster', methods: ['POST'])]
     public function get(int $userId, $cluster)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

@@ -12,7 +12,7 @@ class GetHostsStorageController
     ) {
     }
 
-    #[Route(path: '/api/Storage/GetHostsStorageController/get', name: 'api_storage_gethostsstoragecontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Storage/GetHostsStorageController/get', name: 'Get hosts storage', methods: ['POST'])]
     public function get($userId)
     {
         return $this->getUserStorage->getAll($userId);

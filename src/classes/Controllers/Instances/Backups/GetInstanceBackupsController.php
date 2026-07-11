@@ -13,7 +13,7 @@ class GetInstanceBackupsController
     ) {
     }
 
-    #[Route(path: '/api/Instances/Backups/GetInstanceBackupsController/get', name: 'api_instances_backups_getinstancebackupscontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Instances/Backups/GetInstanceBackupsController/get', name: 'Get instance backups', methods: ['POST'])]
     public function get(Host $host, string $container)
     {
         return $this->getInstanceBackups->get($host, $container);

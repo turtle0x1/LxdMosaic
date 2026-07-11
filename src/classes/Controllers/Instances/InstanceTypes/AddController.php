@@ -14,7 +14,7 @@ class AddController
     ) {
     }
 
-    #[Route(path: '/api/Instances/InstanceTypes/AddController/add', name: 'api_instances_instancetypes_addcontroller_add', methods: ['POST'])]
+    #[Route(path: '/api/Instances/InstanceTypes/AddController/add', name: 'Add instance type', methods: ['POST'])]
     public function add(int $userId, int $providerId, string $name, float $cpu, float $mem)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

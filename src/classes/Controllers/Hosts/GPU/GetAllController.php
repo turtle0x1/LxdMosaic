@@ -13,7 +13,7 @@ class GetAllController
     ) {
     }
 
-    #[Route(path: '/api/Hosts/GPU/GetAllController/getAll', name: 'api_hosts_gpu_getallcontroller_getall', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/GPU/GetAllController/getAll', name: 'Get all GPUs', methods: ['POST'])]
     public function getAll(Host $host)
     {
         return $this->getAll->getAll($host);

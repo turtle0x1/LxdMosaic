@@ -17,7 +17,7 @@ class GetAllSettingsController
     ) {
     }
 
-    #[Route(path: '/api/InstanceSettings/GetAllSettingsController/getAll', name: 'api_instancesettings_getallsettingscontroller_getall', methods: ['POST'])]
+    #[Route(path: '/api/InstanceSettings/GetAllSettingsController/getAll', name: 'Get all settings', methods: ['POST'])]
     public function getAll(int $userId)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

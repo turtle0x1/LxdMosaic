@@ -12,7 +12,7 @@ class GetBackupsOverviewController
     ) {
     }
 
-    #[Route(path: '/api/Backups/GetBackupsOverviewController/get', name: 'api_backups_getbackupsoverviewcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Backups/GetBackupsOverviewController/get', name: 'Get backups overview', methods: ['POST'])]
     public function get($userId)
     {
         return $this->getBackupsOverview->get($userId);

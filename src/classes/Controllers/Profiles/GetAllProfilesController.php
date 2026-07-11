@@ -12,7 +12,7 @@ class GetAllProfilesController
     ) {
     }
 
-    #[Route(path: '/api/Profiles/GetAllProfilesController/getAllProfiles', name: 'api_profiles_getallprofilescontroller_getallprofiles', methods: ['POST'])]
+    #[Route(path: '/api/Profiles/GetAllProfilesController/getAllProfiles', name: 'Get all profiles', methods: ['POST'])]
     public function getAllProfiles(int $userId)
     {
         return $this->universe->getEntitiesUserHasAccesTo($userId, 'profiles');

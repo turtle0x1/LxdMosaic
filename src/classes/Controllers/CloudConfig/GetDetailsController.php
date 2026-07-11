@@ -12,7 +12,7 @@ class GetDetailsController
     ) {
     }
 
-    #[Route(path: '/api/CloudConfig/GetDetailsController/get', name: 'api_cloudconfig_getdetailscontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/CloudConfig/GetDetailsController/get', name: 'Get cloud config details', methods: ['POST'])]
     public function get(int $id)
     {
         return $this->getDetails->get($id);

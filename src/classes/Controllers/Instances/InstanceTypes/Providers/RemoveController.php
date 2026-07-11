@@ -16,7 +16,7 @@ class RemoveController
     ) {
     }
 
-    #[Route(path: '/api/Instances/InstanceTypes/Providers/RemoveController/remove', name: 'api_instances_instancetypes_providers_removecontroller_remove', methods: ['POST'])]
+    #[Route(path: '/api/Instances/InstanceTypes/Providers/RemoveController/remove', name: 'Remove instance type provider', methods: ['POST'])]
     public function remove(int $userId, int $providerId)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

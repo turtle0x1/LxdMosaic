@@ -13,7 +13,7 @@ class GetCommonToHostsProjectsController
     ) {
     }
 
-    #[Route(path: '/api/Projects/Search/GetCommonToHostsProjectsController/get', name: 'api_projects_search_getcommontohostsprojectscontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Projects/Search/GetCommonToHostsProjectsController/get', name: 'Get common projects', methods: ['POST'])]
     public function get(int $userId, HostsCollection $hosts)
     {
         return $this->getCommonToHostsProjects->get($userId, $hosts);

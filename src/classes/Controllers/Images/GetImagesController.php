@@ -12,7 +12,7 @@ class GetImagesController
     ) {
     }
 
-    #[Route(path: '/api/Images/GetImagesController/getAllHostImages', name: 'api_images_getimagescontroller_getallhostimages', methods: ['POST'])]
+    #[Route(path: '/api/Images/GetImagesController/getAllHostImages', name: 'Get all host images', methods: ['POST'])]
     public function getAllHostImages(int $userId)
     {
         return $this->getAllImages->getAllHostImages($userId);

@@ -14,7 +14,7 @@ class GetSnapshotSoftwareListController
     ) {
     }
 
-    #[Route(path: '/api/Hosts/SoftwareAssets/GetSnapshotSoftwareListController/get', name: 'api_hosts_softwareassets_getsnapshotsoftwarelistcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/SoftwareAssets/GetSnapshotSoftwareListController/get', name: 'Get snapshot software list', methods: ['POST'])]
     public function get(int $userId, string $date)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

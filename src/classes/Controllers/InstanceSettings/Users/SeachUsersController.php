@@ -12,7 +12,7 @@ class SeachUsersController
     ) {
     }
 
-    #[Route(path: '/api/InstanceSettings/Users/SeachUsersController/search', name: 'api_instancesettings_users_seachuserscontroller_search', methods: ['POST'])]
+    #[Route(path: '/api/InstanceSettings/Users/SeachUsersController/search', name: 'Search users', methods: ['POST'])]
     public function search(int $userId, string $search)
     {
         return $this->searchUsers->search($userId, $search);

@@ -14,7 +14,7 @@ class DeleteController
     ) {
     }
 
-    #[Route(path: '/api/Instances/InstanceTypes/DeleteController/delete', name: 'api_instances_instancetypes_deletecontroller_delete', methods: ['POST'])]
+    #[Route(path: '/api/Instances/InstanceTypes/DeleteController/delete', name: 'Delete instance type', methods: ['POST'])]
     public function delete(int $userId, int $typeId)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

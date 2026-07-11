@@ -12,7 +12,7 @@ class GetStrategiesController
     ) {
     }
 
-    #[Route(path: '/api/Backups/Strategies/GetStrategiesController/get', name: 'api_backups_strategies_getstrategiescontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Backups/Strategies/GetStrategiesController/get', name: 'Get backup strategies', methods: ['POST'])]
     public function get()
     {
         return $this->fetchStrategies->fetchAll();

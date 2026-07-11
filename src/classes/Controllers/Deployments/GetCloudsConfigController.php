@@ -12,7 +12,7 @@ class GetCloudsConfigController
     ) {
     }
 
-    #[Route(path: '/api/Deployments/GetCloudsConfigController/get', name: 'api_deployments_getcloudsconfigcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Deployments/GetCloudsConfigController/get', name: 'Get deployment cloud configs', methods: ['POST'])]
     public function get(int $userId, int $deploymentId)
     {
         return $this->getCloudConfigs->getAll($userId, $deploymentId);

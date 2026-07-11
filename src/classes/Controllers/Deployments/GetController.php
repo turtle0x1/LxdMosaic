@@ -12,7 +12,7 @@ class GetController
     ) {
     }
 
-    #[Route(path: '/api/Deployments/GetController/getAll', name: 'api_deployments_getcontroller_getall', methods: ['POST'])]
+    #[Route(path: '/api/Deployments/GetController/getAll', name: 'Get all deployments', methods: ['POST'])]
     public function getAll(int $userId)
     {
         return $this->getDeployments->getAll($userId);

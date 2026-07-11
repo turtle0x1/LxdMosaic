@@ -13,7 +13,7 @@ class GetInstanceController
     ) {
     }
 
-    #[Route(path: '/api/Instances/GetInstanceController/get', name: 'api_instances_getinstancecontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Instances/GetInstanceController/get', name: 'Get instance', methods: ['POST'])]
     public function get(Host $host, string $container)
     {
         return $this->getInstance->get($host, $container);

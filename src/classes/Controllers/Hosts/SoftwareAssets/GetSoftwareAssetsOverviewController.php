@@ -14,7 +14,7 @@ class GetSoftwareAssetsOverviewController
     ) {
     }
 
-    #[Route(path: '/api/Hosts/SoftwareAssets/GetSoftwareAssetsOverviewController/get', name: 'api_hosts_softwareassets_getsoftwareassetsoverviewcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/SoftwareAssets/GetSoftwareAssetsOverviewController/get', name: 'Get software assets overview', methods: ['POST'])]
     public function get(int $userId, string $date)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

@@ -12,7 +12,7 @@ class GetDashboardController
     ) {
     }
 
-    #[Route(path: '/api/User/Dashboard/GetDashboardController/get', name: 'api_user_dashboard_getdashboardcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/User/Dashboard/GetDashboardController/get', name: 'Get user dashboard', methods: ['POST'])]
     public function get(int $userId, int $dashboardId)
     {
         return $this->getUserDashboard->get($userId, $dashboardId);

@@ -12,7 +12,7 @@ class GetLastController
     ) {
     }
 
-    #[Route(path: '/api/InstanceSettings/RecordedActions/GetLastController/get', name: 'api_instancesettings_recordedactions_getlastcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/InstanceSettings/RecordedActions/GetLastController/get', name: 'Get recent actions', methods: ['POST'])]
     public function get(int $userId, int $ammount)
     {
         return $this->getActions->get($userId, $ammount);

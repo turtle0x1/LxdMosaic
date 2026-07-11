@@ -12,7 +12,7 @@ class AddGraphController
     ) {
     }
 
-    #[Route(path: '/api/User/Dashboard/Graphs/AddGraphController/add', name: 'api_user_dashboard_graphs_addgraphcontroller_add', methods: ['POST'])]
+    #[Route(path: '/api/User/Dashboard/Graphs/AddGraphController/add', name: 'Add dashboard graph', methods: ['POST'])]
     public function add(
         int $userId,
         int $dashboardId,

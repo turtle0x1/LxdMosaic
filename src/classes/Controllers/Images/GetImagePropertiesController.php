@@ -13,7 +13,7 @@ class GetImagePropertiesController
     ) {
     }
 
-    #[Route(path: '/api/Images/GetImagePropertiesController/getAll', name: 'api_images_getimagepropertiescontroller_getall', methods: ['POST'])]
+    #[Route(path: '/api/Images/GetImagePropertiesController/getAll', name: 'Get image properties', methods: ['POST'])]
     public function getAll(Host $host, string $fingerprint)
     {
         return $this->getImageProperties->getAll($host, $fingerprint);
@@ -22,7 +22,7 @@ class GetImagePropertiesController
     /**
      * This is the list of proprties we support updating for an image
      */
-    #[Route(path: '/api/Images/GetImagePropertiesController/getFiltertedList', name: 'api_images_getimagepropertiescontroller_getfiltertedlist', methods: ['POST'])]
+    #[Route(path: '/api/Images/GetImagePropertiesController/getFiltertedList', name: 'Get editable image properties', methods: ['POST'])]
     public function getFiltertedList(Host $host, string $fingerprint)
     {
         return $this->getImageProperties->getFiltertedList($host, $fingerprint);

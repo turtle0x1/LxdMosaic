@@ -14,7 +14,7 @@ class GetUserOverviewController
     ) {
     }
 
-    #[Route(path: '/api/User/GetUserOverviewController/get', name: 'api_user_getuseroverviewcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/User/GetUserOverviewController/get', name: 'Get user overview', methods: ['POST'])]
     public function get(int $userId, int $targetUser)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

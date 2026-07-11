@@ -12,7 +12,7 @@ class SetHostProjectController
     ) {
     }
 
-    #[Route(path: '/api/User/SetHostProjectController/set', name: 'api_user_sethostprojectcontroller_set', methods: ['POST'])]
+    #[Route(path: '/api/User/SetHostProjectController/set', name: 'Set host project', methods: ['POST'])]
     public function set(int $userId, int $hostId, string $project)
     {
         $this->setUserProject->set($userId, $hostId, $project);

@@ -12,19 +12,19 @@ class GetGraphDataController
     ) {
     }
 
-    #[Route(path: '/api/Instances/Metrics/GetGraphDataController/getAllTypes', name: 'api_instances_metrics_getgraphdatacontroller_getalltypes', methods: ['POST'])]
+    #[Route(path: '/api/Instances/Metrics/GetGraphDataController/getAllTypes', name: 'Get graph data types', methods: ['POST'])]
     public function getAllTypes(int $hostId, string $container)
     {
         return $this->getMetricsForContainer->getAllTypes($hostId, $container);
     }
 
-    #[Route(path: '/api/Instances/Metrics/GetGraphDataController/getTypeFilters', name: 'api_instances_metrics_getgraphdatacontroller_gettypefilters', methods: ['POST'])]
+    #[Route(path: '/api/Instances/Metrics/GetGraphDataController/getTypeFilters', name: 'Get graph data filters', methods: ['POST'])]
     public function getTypeFilters(int $hostId, string $container, int $type)
     {
         return $this->getMetricsForContainer->getTypeFilters($hostId, $container, $type);
     }
 
-    #[Route(path: '/api/Instances/Metrics/GetGraphDataController/get', name: 'api_instances_metrics_getgraphdatacontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Instances/Metrics/GetGraphDataController/get', name: 'Get graph data', methods: ['POST'])]
     public function get(int $hostId, string $container, int $type, string $filter, string $range)
     {
         return $this->getMetricsForContainer->get($hostId, $container, $type, $filter, $range);

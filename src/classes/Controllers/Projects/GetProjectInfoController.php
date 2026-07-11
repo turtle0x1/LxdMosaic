@@ -13,7 +13,7 @@ class GetProjectInfoController
     ) {
     }
 
-    #[Route(path: '/api/Projects/GetProjectInfoController/get', name: 'api_projects_getprojectinfocontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Projects/GetProjectInfoController/get', name: 'Get project info', methods: ['POST'])]
     public function get(Host $host, string $project)
     {
         return $this->getProjectInfo->get($host, $project);

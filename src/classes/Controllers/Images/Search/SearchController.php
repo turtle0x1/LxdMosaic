@@ -12,7 +12,7 @@ class SearchController
     ) {
     }
 
-    #[Route(path: '/api/Images/Search/SearchController/getAllAvailableImages', name: 'api_images_search_searchcontroller_getallavailableimages', methods: ['POST'])]
+    #[Route(path: '/api/Images/Search/SearchController/getAllAvailableImages', name: 'Search images', methods: ['POST'])]
     public function getAllAvailableImages(int $userId, string $search, string $type = '')
     {
         $allImages = $this->getAllImages->getAllHostImages($userId);

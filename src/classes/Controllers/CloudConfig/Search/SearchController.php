@@ -12,7 +12,7 @@ class SearchController
     ) {
     }
 
-    #[Route(path: '/api/CloudConfig/Search/SearchController/searchAll', name: 'api_cloudconfig_search_searchcontroller_searchall', methods: ['POST'])]
+    #[Route(path: '/api/CloudConfig/Search/SearchController/searchAll', name: 'Search cloud configs', methods: ['POST'])]
     public function searchAll(string $criteria)
     {
         return $this->searchCloudConfig->searchAll($criteria);

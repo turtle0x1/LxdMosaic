@@ -12,7 +12,7 @@ class GetHostsNetworksController
     ) {
     }
 
-    #[Route(path: '/api/Networks/GetHostsNetworksController/get', name: 'api_networks_gethostsnetworkscontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Networks/GetHostsNetworksController/get', name: 'Get hosts networks', methods: ['POST'])]
     public function get(int $userId)
     {
         return $this->getHostsNetworks->getAll($userId);

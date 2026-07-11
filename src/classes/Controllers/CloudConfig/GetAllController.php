@@ -12,7 +12,7 @@ class GetAllController
     ) {
     }
 
-    #[Route(path: '/api/CloudConfig/GetAllController/getAll', name: 'api_cloudconfig_getallcontroller_getall', methods: ['POST'])]
+    #[Route(path: '/api/CloudConfig/GetAllController/getAll', name: 'Get all cloud configs', methods: ['POST'])]
     public function getAll()
     {
         return $this->getConfigs->getAll();

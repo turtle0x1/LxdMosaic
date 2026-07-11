@@ -14,7 +14,7 @@ class GetTimersSnapshotHeadersController
     ) {
     }
 
-    #[Route(path: '/api/Hosts/Timers/GetTimersSnapshotHeadersController/get', name: 'api_hosts_timers_gettimerssnapshotheaderscontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/Timers/GetTimersSnapshotHeadersController/get', name: 'Get timers snapshot headers', methods: ['POST'])]
     public function get(int $userId)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

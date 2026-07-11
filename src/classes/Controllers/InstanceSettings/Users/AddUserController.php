@@ -12,7 +12,7 @@ class AddUserController
     ) {
     }
 
-    #[Route(path: '/api/InstanceSettings/Users/AddUserController/add', name: 'api_instancesettings_users_addusercontroller_add', methods: ['POST'])]
+    #[Route(path: '/api/InstanceSettings/Users/AddUserController/add', name: 'Add user', methods: ['POST'])]
     public function add(int $userId, string $username, string $password)
     {
         $this->addUser->add($userId, $username, $password);

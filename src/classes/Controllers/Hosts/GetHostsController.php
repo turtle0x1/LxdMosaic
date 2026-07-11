@@ -14,7 +14,7 @@ class GetHostsController
     ) {
     }
 
-    #[Route(path: '/api/Hosts/GetHostsController/getAllHosts', name: 'api_hosts_gethostscontroller_getallhosts', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/GetHostsController/getAllHosts', name: 'Get all hosts', methods: ['POST'])]
     public function getAllHosts(int $userId)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

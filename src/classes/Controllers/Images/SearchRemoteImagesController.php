@@ -12,7 +12,7 @@ class SearchRemoteImagesController
     ) {
     }
 
-    #[Route(path: '/api/Images/SearchRemoteImagesController/get', name: 'api_images_searchremoteimagescontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Images/SearchRemoteImagesController/get', name: 'Search remote images', methods: ['POST'])]
     public function get($urlKey, $searchType, $searchArch)
     {
         return $this->getImages->get($urlKey, $searchType, $searchArch);

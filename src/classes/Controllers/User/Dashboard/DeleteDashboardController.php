@@ -12,7 +12,7 @@ class DeleteDashboardController
     ) {
     }
 
-    #[Route(path: '/api/User/Dashboard/DeleteDashboardController/delete', name: 'api_user_dashboard_deletedashboardcontroller_delete', methods: ['POST'])]
+    #[Route(path: '/api/User/Dashboard/DeleteDashboardController/delete', name: 'Delete user dashboard', methods: ['POST'])]
     public function delete(int $userId, int $dashboardId)
     {
         $this->deleteDashboard->delete($userId, $dashboardId);

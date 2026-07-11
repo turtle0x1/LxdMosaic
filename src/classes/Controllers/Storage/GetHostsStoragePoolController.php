@@ -13,7 +13,7 @@ class GetHostsStoragePoolController
     ) {
     }
 
-    #[Route(path: '/api/Storage/GetHostsStoragePoolController/get', name: 'api_storage_gethostsstoragepoolcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Storage/GetHostsStoragePoolController/get', name: 'Get storage pool', methods: ['POST'])]
     public function get(int $userId, Host $host, string $poolName)
     {
         return $this->getStoragePool->get($userId, $host, $poolName);

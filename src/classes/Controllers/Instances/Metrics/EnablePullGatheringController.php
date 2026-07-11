@@ -13,7 +13,7 @@ class EnablePullGatheringController
     ) {
     }
 
-    #[Route(path: '/api/Instances/Metrics/EnablePullGatheringController/enable', name: 'api_instances_metrics_enablepullgatheringcontroller_enable', methods: ['POST'])]
+    #[Route(path: '/api/Instances/Metrics/EnablePullGatheringController/enable', name: 'Enable metrics gathering', methods: ['POST'])]
     public function enable(Host $host, string $instance)
     {
         $this->enablePullGathering->enable($host, $instance);

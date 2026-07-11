@@ -13,7 +13,7 @@ class DisablePullGatheringController
     ) {
     }
 
-    #[Route(path: '/api/Instances/Metrics/DisablePullGatheringController/disable', name: 'api_instances_metrics_disablepullgatheringcontroller_disable', methods: ['POST'])]
+    #[Route(path: '/api/Instances/Metrics/DisablePullGatheringController/disable', name: 'Disable metrics gathering', methods: ['POST'])]
     public function disable(Host $host, string $instance, int $clearData = 0)
     {
         $this->disablePullGathering->disable($host, $instance, (bool) $clearData);

@@ -18,7 +18,7 @@ class SearchHosts
     ) {
     }
 
-    #[Route(path: '/api/Hosts/SearchHosts/search', name: 'api_hosts_searchhosts_search', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/SearchHosts/search', name: 'Search hosts', methods: ['POST'])]
     public function search(int $userId, string $hostSearch, array $extensionRequirements = [])
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

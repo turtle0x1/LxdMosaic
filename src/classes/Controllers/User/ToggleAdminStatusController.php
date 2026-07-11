@@ -14,7 +14,7 @@ class ToggleAdminStatusController
     ) {
     }
 
-    #[Route(path: '/api/User/ToggleAdminStatusController/toggle', name: 'api_user_toggleadminstatuscontroller_toggle', methods: ['POST'])]
+    #[Route(path: '/api/User/ToggleAdminStatusController/toggle', name: 'Toggle admin status', methods: ['POST'])]
     public function toggle(int $userId, int $targetUser, int $status)
     {
         $this->validatePermissions->isAdminOrThrow($userId);

@@ -12,7 +12,7 @@ class GetAllAvailableMetricsController
     ) {
     }
 
-    #[Route(path: '/api/Instances/Metrics/GetAllAvailableMetricsController/get', name: 'api_instances_metrics_getallavailablemetricscontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Instances/Metrics/GetAllAvailableMetricsController/get', name: 'Get all available metrics', methods: ['POST'])]
     public function get()
     {
         return $this->getAvailableHostsMetrics->get();

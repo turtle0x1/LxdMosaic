@@ -12,7 +12,7 @@ class DownloadHistoryController
     ) {
     }
 
-    #[Route(path: '/api/AnalyticData/DownloadHistoryController/download', name: 'api_analyticdata_downloadhistorycontroller_download', methods: ['POST'])]
+    #[Route(path: '/api/AnalyticData/DownloadHistoryController/download', name: 'Download analytics history', methods: ['POST'])]
     public function download(int $userId)
     {
         return $this->downloadHistory->download($userId);

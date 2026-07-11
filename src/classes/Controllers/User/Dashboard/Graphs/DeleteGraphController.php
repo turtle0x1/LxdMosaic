@@ -12,7 +12,7 @@ class DeleteGraphController
     ) {
     }
 
-    #[Route(path: '/api/User/Dashboard/Graphs/DeleteGraphController/delete', name: 'api_user_dashboard_graphs_deletegraphcontroller_delete', methods: ['POST'])]
+    #[Route(path: '/api/User/Dashboard/Graphs/DeleteGraphController/delete', name: 'Delete dashboard graph', methods: ['POST'])]
     public function delete(int $userId, int $graphId)
     {
         $this->deleteGraph->delete($userId, $graphId);

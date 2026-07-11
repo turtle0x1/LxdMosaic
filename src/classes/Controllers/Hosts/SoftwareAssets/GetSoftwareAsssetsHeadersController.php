@@ -14,7 +14,7 @@ class GetSoftwareAsssetsHeadersController
     ) {
     }
 
-    #[Route(path: '/api/Hosts/SoftwareAssets/GetSoftwareAsssetsHeadersController/get', name: 'api_hosts_softwareassets_getsoftwareasssetsheaderscontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/SoftwareAssets/GetSoftwareAsssetsHeadersController/get', name: 'Get software assets headers', methods: ['POST'])]
     public function get(int $userId)
     {
         $isAdmin = $this->fetchUserDetails->isAdmin($userId);

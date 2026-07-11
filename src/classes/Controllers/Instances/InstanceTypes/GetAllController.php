@@ -12,7 +12,7 @@ class GetAllController
     ) {
     }
 
-    #[Route(path: '/api/Instances/InstanceTypes/GetAllController/getAll', name: 'api_instances_instancetypes_getallcontroller_getall', methods: ['POST'])]
+    #[Route(path: '/api/Instances/InstanceTypes/GetAllController/getAll', name: 'Get all instance types', methods: ['POST'])]
     public function getAll()
     {
         return $this->getInstanceTypes->getGroupedByProvider();

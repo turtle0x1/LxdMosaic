@@ -13,7 +13,7 @@ class GetCurrentInstanceSettingsController
     ) {
     }
 
-    #[Route(path: '/api/Instances/GetCurrentInstanceSettingsController/get', name: 'api_instances_getcurrentinstancesettingscontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Instances/GetCurrentInstanceSettingsController/get', name: 'Get instance settings', methods: ['POST'])]
     public function get(Host $host, string $container)
     {
         return $this->getInstanceSettings->get($host, $container);

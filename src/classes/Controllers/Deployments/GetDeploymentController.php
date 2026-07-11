@@ -12,7 +12,7 @@ class GetDeploymentController
     ) {
     }
 
-    #[Route(path: '/api/Deployments/GetDeploymentController/get', name: 'api_deployments_getdeploymentcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Deployments/GetDeploymentController/get', name: 'Get deployment', methods: ['POST'])]
     public function get(int $userId, int $deploymentId)
     {
         return $this->getDeployment->get($userId, $deploymentId);

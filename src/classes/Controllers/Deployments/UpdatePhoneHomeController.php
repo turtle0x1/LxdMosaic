@@ -12,7 +12,7 @@ class UpdatePhoneHomeController
     ) {
     }
 
-    #[Route(path: '/api/Deployments/UpdatePhoneHomeController/update', name: 'api_deployments_updatephonehomecontroller_update', methods: ['POST'])]
+    #[Route(path: '/api/Deployments/UpdatePhoneHomeController/update', name: 'Update phone home time', methods: ['POST'])]
     public function update(int $deploymentId, string $hostname)
     {
         $this->updatePhoneHomeTime->update($deploymentId, $hostname);

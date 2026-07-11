@@ -12,7 +12,7 @@ class GetNetworksDashboardController
     ) {
     }
 
-    #[Route(path: '/api/Networks/GetNetworksDashboardController/get', name: 'api_networks_getnetworksdashboardcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Networks/GetNetworksDashboardController/get', name: 'Get networks dashboard', methods: ['POST'])]
     public function get(int $userId)
     {
         return $this->getNetworksDashboard->get($userId);

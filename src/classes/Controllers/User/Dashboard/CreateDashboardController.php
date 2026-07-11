@@ -12,7 +12,7 @@ class CreateDashboardController
     ) {
     }
 
-    #[Route(path: '/api/User/Dashboard/CreateDashboardController/create', name: 'api_user_dashboard_createdashboardcontroller_create', methods: ['POST'])]
+    #[Route(path: '/api/User/Dashboard/CreateDashboardController/create', name: 'Create user dashboard', methods: ['POST'])]
     public function create(int $userId, string $name)
     {
         $this->insertUserDashboard->insert($userId, $name);

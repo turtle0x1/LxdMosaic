@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class GetHostWarningsController
 {
-    #[Route(path: '/api/Hosts/Warnings/GetHostWarningsController/getOnHost', name: 'api_hosts_warnings_gethostwarningscontroller_getonhost', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/Warnings/GetHostWarningsController/getOnHost', name: 'Get host warnings', methods: ['POST'])]
     public function getOnHost(Host $host)
     {
         return $host->warnings->all();

@@ -16,7 +16,7 @@ class UpdateImagePropertiesController
     /**
      * This is the list of proprties we support updating for an image
      */
-    #[Route(path: '/api/Images/UpdateImagePropertiesController/update', name: 'api_images_updateimagepropertiescontroller_update', methods: ['POST'])]
+    #[Route(path: '/api/Images/UpdateImagePropertiesController/update', name: 'Update image properties', methods: ['POST'])]
     public function update(Host $host, string $fingerprint, array $settings)
     {
         $this->updateImageProperties->update($host, $fingerprint, $settings);

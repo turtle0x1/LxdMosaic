@@ -13,7 +13,7 @@ class GetNetworkController
     ) {
     }
 
-    #[Route(path: '/api/Networks/GetNetworkController/get', name: 'api_networks_getnetworkcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Networks/GetNetworkController/get', name: 'Get network', methods: ['POST'])]
     public function get(int $userId, Host $host, $network)
     {
         return $this->getNetwork->get($userId, $host, $network);

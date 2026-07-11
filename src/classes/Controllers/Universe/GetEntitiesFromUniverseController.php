@@ -12,7 +12,7 @@ class GetEntitiesFromUniverseController
     ) {
     }
 
-    #[Route(path: '/api/Universe/GetEntitiesFromUniverseController/get', name: 'api_universe_getentitiesfromuniversecontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Universe/GetEntitiesFromUniverseController/get', name: 'Get user entities', methods: ['POST'])]
     public function get(int $userId, ?string $entity = null)
     {
         return $this->universe->getEntitiesUserHasAccesTo($userId, $entity);

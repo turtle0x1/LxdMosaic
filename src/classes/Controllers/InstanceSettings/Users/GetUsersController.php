@@ -12,7 +12,7 @@ class GetUsersController
     ) {
     }
 
-    #[Route(path: '/api/InstanceSettings/Users/GetUsersController/getAll', name: 'api_instancesettings_users_getuserscontroller_getall', methods: ['POST'])]
+    #[Route(path: '/api/InstanceSettings/Users/GetUsersController/getAll', name: 'Get all users', methods: ['POST'])]
     public function getAll(int $userId)
     {
         return $this->getUsers->getAll($userId);

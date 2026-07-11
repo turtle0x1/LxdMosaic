@@ -13,7 +13,7 @@ class GetHostOverviewController
     ) {
     }
 
-    #[Route(path: '/api/Hosts/GetHostOverviewController/get', name: 'api_hosts_gethostoverviewcontroller_get', methods: ['POST'])]
+    #[Route(path: '/api/Hosts/GetHostOverviewController/get', name: 'Get host overview', methods: ['POST'])]
     public function get(int $userId, Host $host)
     {
         return $this->getHostOverview->get($userId, $host);
