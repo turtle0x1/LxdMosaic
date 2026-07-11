@@ -3,7 +3,6 @@
 namespace dhope0000\LXDClient\Model\Client;
 
 use dhope0000\LXDClient\App\RouteApi;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Objects\Host;
 use dhope0000\LXDClient\Tools\User\GetUserProject;
 use GuzzleHttp\Client as GuzzleClient;
@@ -16,8 +15,7 @@ class LxdClient
 
     public function __construct(
         private readonly RouteApi $routeApi,
-        private readonly GetUserProject $getUserProject,
-        private readonly GetDetails $getDetails
+        private readonly GetUserProject $getUserProject
     ) {
     }
 
@@ -27,7 +25,7 @@ class LxdClient
             return $this->clientBag[$host->getUrl()];
         }
 
-        $socketPath = $this->getDetails->getSocketPath($host->getHostId());
+        $socketPath = $host->getSocketPath();
         $certPath = $this->createFullcertPath($host->getCertPath());
         $config = $this->createConfigArray($certPath, $socketPath);
         $client = $this->createNewClient($host->getUrl(), $config);

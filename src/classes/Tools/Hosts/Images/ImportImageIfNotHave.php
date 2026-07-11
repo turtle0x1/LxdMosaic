@@ -2,12 +2,14 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts\Images;
 
+use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Objects\Host;
 
 class ImportImageIfNotHave
 {
     public function __construct(
-        private readonly HostHasImage $hostHasImage
+        private readonly HostHasImage $hostHasImage,
+        private readonly GetDetails $getDetails
     ) {
     }
 
@@ -19,6 +21,8 @@ class ImportImageIfNotHave
         if ($this->hostHasImage->has($host, $imageDetails['fingerprint'])) {
             return $imageDetails['fingerprint'];
         }
+
+        $this->checkIfSourceServerUsesSocket($imageDetails);
 
         if (isset($imageDetails['provideMyHostsCert'])) {
             $provideCerts = $imageDetails['provideMyHostsCert'];
@@ -42,5 +46,18 @@ class ImportImageIfNotHave
         }
 
         return $response['metadata']['fingerprint'];
+    }
+
+    private function checkIfSourceServerUsesSocket(array $imageDetails): void
+    {
+        if (!isset($imageDetails['server'])) {
+            return;
+        }
+
+        $sourceHost = $this->getDetails->fetchHostByUrl($imageDetails['server']);
+
+        if ($sourceHost && $sourceHost->usesSocket()) {
+            throw new \Exception("The source server '{$imageDetails['server']}' is connected via a Unix socket. Pulling images from a Unix socket-based host is not supported as proxying over Unix sockets is not available.", 1);
+        }
     }
 }

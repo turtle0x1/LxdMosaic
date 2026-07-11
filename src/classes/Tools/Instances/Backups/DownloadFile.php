@@ -3,15 +3,13 @@
 namespace dhope0000\LXDClient\Tools\Instances\Backups;
 
 use dhope0000\LXDClient\Model\Client\LxdClient;
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Objects\Host;
 use GuzzleHttp\Client;
 
 class DownloadFile
 {
     public function __construct(
-        private readonly LxdClient $lxdClient,
-        private readonly GetDetails $getDetails
+        private readonly LxdClient $lxdClient
     ) {
     }
 
@@ -19,9 +17,7 @@ class DownloadFile
     {
         $certPath = $_ENV['LXD_CERTS_DIR'] . $host->getCertPath();
 
-        $socketPath = $this->getDetails->getSocketPath($host->getHostId());
-
-        $config = $this->lxdClient->createConfigArray($certPath, $socketPath);
+        $config = $this->lxdClient->createConfigArray($certPath, $host->getSocketPath());
 
         $config = array_merge($config, [
             'sink' => $backupFilePath,
