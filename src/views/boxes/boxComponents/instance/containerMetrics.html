@@ -156,15 +156,22 @@
         });
     });
 
-    $("#containerBox").on("click", "#goToMetrics", function(){
+
+    function loadContainerMetricsReq(req){
+        currentContainerDetails = {hostId: req.data.hostId, container: req.data.instance, alias: hostsAliasesLookupTable[req.data.hostId]};
+        createDashboardSidebar()
+        loadInstanceView(currentContainerDetails, true, false);
+        
         $(".instanceViewBox").hide();
         $("#containerMetrics").show();
-
+        
+        $("#containerBoxNav").find(".active").removeClass("active");
+        $("#containerBoxNav .nav-item[data-view='containerMetrics'] > .nav-link").addClass("active");
+        
         $("#metricGraphBody").empty();
         $("#metricRangePicker").attr("disabled", true);
         $("#metricTypeFilterSelect").attr("disabled", true).empty().append(`<option value=''>Please Select</option>`)
         $("#metricRangePicker").find("option[value='']").attr("selected", true);
-        let x = {...{type: 1}, ...currentContainerDetails}
 
         ajaxRequest(globalUrls.instances.metrics.getAllTypes, currentContainerDetails, (data)=>{
             data = makeToastr(data);
@@ -175,6 +182,5 @@
             $("#metricTypeSelect").attr("disabled", false)
             $("#metricTypeSelect").empty().append(html);
         });
-
-    });
+    }
 </script>

@@ -50,9 +50,17 @@
     </div>
 </div>
 <script>
-    $("#containerBox").on("click", "#goToSnapshots", function() {
+    function loadContainerSnapshotsReq(req){
+        currentContainerDetails = {hostId: req.data.hostId, container: req.data.instance, alias: hostsAliasesLookupTable[req.data.hostId]};
+        createDashboardSidebar()
+        loadInstanceView(currentContainerDetails, true, false);
+        
         $(".instanceViewBox").hide();
         $("#containerSnapshots").show();
+        
+        $("#containerBoxNav").find(".active").removeClass("active");
+        $("#containerBoxNav .nav-item[data-view='containerSnapshots'] > .nav-link").addClass("active");
+        
         ajaxRequest('/api/Instances/Snapshot/GetSnapshotsOverviewController/get', currentContainerDetails, (data)=>{
             data = makeToastr(data);
             if(data.schedule == null){
@@ -108,7 +116,7 @@
             }
             $("#instanceSnapshotsTable > tbody").empty().append(trs)
         });
-    });
+    }
 
     $("#instanceSnapshotsTable").on("click", ".restoreSnapToOrigin", function(){
         let tr = $(this).parents("tr");
@@ -286,7 +294,7 @@
                                 modal.buttons.cancel.enable();
                                 return false;
                             }
-                            $("#goToSnapshots").trigger("click");
+                            router.navigate(`/instance/${currentContainerDetails.alias}/${currentContainerDetails.container}/snapshots`);
                             modal.close()
                         });
                         return false;

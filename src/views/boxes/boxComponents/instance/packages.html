@@ -40,9 +40,17 @@
     </div>
 </div>
 <script>
-    $("#containerBox").on("click", "#goToPackages", function () {
+    function loadContainerPackagesReq(req){
+        currentContainerDetails = {hostId: req.data.hostId, container: req.data.instance, alias: hostsAliasesLookupTable[req.data.hostId]};
+        createDashboardSidebar()
+        loadInstanceView(currentContainerDetails, true, false);
+        
         $(".instanceViewBox").hide();
         $("#instancePackages").show();
+        
+        $("#containerBoxNav").find(".active").removeClass("active");
+        $("#containerBoxNav .nav-item[data-view='instancePackages'] > .nav-link").addClass("active");
+        
         ajaxRequest('/api/instances/packages/latest', currentContainerDetails, (data) => {
             data = makeToastr(data);
             let trs = "";
@@ -86,5 +94,5 @@
                 }
             });
         });
-    });
+    }
 </script>

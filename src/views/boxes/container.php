@@ -71,55 +71,54 @@
     </div>
     </div>
     <div class="row" id="containerViewBtns">
-        <div class="col-md-12 text-centert">
-            <ul class="nav nav-tabs justify-content-center" id="" style="border: none !important;">
-                <li class="nav-item" id="goToDetails">
-                    <div class="nav-link active">
+        <div class="col-md-12 text-center">
+            <ul class="nav nav-tabs justify-content-center" id="containerBoxNav" style="border: none !important;">
+                <li class="nav-item" data-view="containerDetails">
+                    <div class="nav-link active" id="goToDetails">
                         <i class="fas fa-info-circle pe-2"></i>Details
                     </div>
                 </li>
-                <li class="nav-item" id="goToBackups">
-                    <div class="nav-link ">
+                <li class="nav-item" data-view="containerBackups">
+                    <div class="nav-link" id="goToBackups">
                         <i class="fas fa-save pe-2"></i>Backups
                     </div>
                 </li>
-                    </li>
-                <li class="nav-item" id="goToEvents">
-                    <div class="nav-link" >
+                <li class="nav-item" data-view="containerEvents">
+                    <div class="nav-link" id="goToEvents">
                         <i class="fas fa-book-open pe-2"></i>Events
                     </div>
                 </li>
-                <li class="nav-item" id="goToFiles">
-                    <div class="nav-link ">
+                <li class="nav-item" data-view="containerFiles">
+                    <div class="nav-link" id="goToFiles">
                         <i class="fas fa-folder pe-2"></i>File System
                     </div>
                 </li>
-                <li class="nav-item" id="goToMetrics">
-                    <div class="nav-link ">
+                <li class="nav-item" data-view="containerMetrics">
+                    <div class="nav-link" id="goToMetrics">
                         <i class="fas fa-chart-bar pe-2"></i>Metrics
                     </div>
                 </li>
-                <li class="nav-item" id="goToPackages">
-                    <div class="nav-link" >
+                <li class="nav-item" data-view="instancePackages">
+                    <div class="nav-link" id="goToPackages">
                         <i class="fas fa-box pe-2"></i>Packages
                     </div>
                 </li>
-                <li class="nav-item" id="goToSnapshots">
-                    <div class="nav-link ">
+                <li class="nav-item" data-view="containerSnapshots">
+                    <div class="nav-link" id="goToSnapshots">
                         <i class="fas fa-images pe-2"></i>Snapshots
                     </div>
                 </li>
-                <li class="nav-item" id="goToTerminal">
-                    <div class="nav-link ">
+                <li class="nav-item" data-view="containerTerminal">
+                    <div class="nav-link" id="goToTerminal">
                         <i class="fas fa-tv pe-2"></i>Terminal
                     </div>
                 </li>
-                <li class="nav-item" id="goToTimers">
-                    <div class="nav-link" >
+                <li class="nav-item" data-view="instanceTimers">
+                    <div class="nav-link" id="goToTimers">
                         <i class="fas fa-hourglass-half pe-2"></i>Timers
                     </div>
                 </li>
-            <ul>
+            </ul>
             <div class="btn-toolbar  mb-2 mb-md-0">
 
             </div>
@@ -145,6 +144,35 @@ function loadContainerTreeAfter(milSeconds = 2000, hostId = null, hostAlias = nu
         addHostContainerList(p, a);
     }, milSeconds);
 }
+
+$(document).on("click", "#containerBoxNav > .nav-item", function(){
+    if($(this).hasClass("disabled")){
+        return false;
+    }
+    let view = $(this).data("view");
+    let instanceName = currentContainerDetails.container;
+    let hostAlias = currentContainerDetails.alias;
+    
+    if(view == "containerDetails"){
+        router.navigate(`/instance/${hostAlias}/${instanceName}/details`)
+    }else if(view == "containerBackups"){
+        router.navigate(`/instance/${hostAlias}/${instanceName}/backups`)
+    }else if(view == "containerEvents"){
+        router.navigate(`/instance/${hostAlias}/${instanceName}/events`)
+    }else if(view == "containerFiles"){
+        router.navigate(`/instance/${hostAlias}/${instanceName}/files`)
+    }else if(view == "containerMetrics"){
+        router.navigate(`/instance/${hostAlias}/${instanceName}/metrics`)
+    }else if(view == "instancePackages"){
+        router.navigate(`/instance/${hostAlias}/${instanceName}/packages`)
+    }else if(view == "containerSnapshots"){
+        router.navigate(`/instance/${hostAlias}/${instanceName}/snapshots`)
+    }else if(view == "containerTerminal"){
+        router.navigate(`/instance/${hostAlias}/${instanceName}/terminal`)
+    }else if(view == "instanceTimers"){
+        router.navigate(`/instance/${hostAlias}/${instanceName}/timers`)
+    }
+});
 
 
 </script>

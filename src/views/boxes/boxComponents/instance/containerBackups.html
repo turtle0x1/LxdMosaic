@@ -113,14 +113,19 @@
         });
     }
 
-    $("#containerBox").on("click", "#goToBackups", function() {
-        if($(this).hasClass("disabled")){
-            return false;
-        }
-        loadContainerBackups();
+
+    function loadContainerBackupsReq(req){
+        currentContainerDetails = {hostId: req.data.hostId, container: req.data.instance, alias: hostsAliasesLookupTable[req.data.hostId]};
+        createDashboardSidebar()
+        loadInstanceView(currentContainerDetails, true, false);        
         $(".instanceViewBox").hide();
         $("#containerBackups").show();
-    });
+        
+        $("#containerBoxNav").find(".active").removeClass("active");
+        $("#containerBoxNav .nav-item[data-view='containerBackups'] > .nav-link").addClass("active");
+        
+        loadContainerBackups();
+    }
 
     $("#containerBox").on("click", "#createBackup", function(){
         backupContainerConfirm(

@@ -137,10 +137,6 @@
 </div>
 </div>
 <script>
-    $("#containerBox").on("click", "#goToDetails", function(){
-        $(".instanceViewBox").hide();
-        $("#containerDetails").show();
-    });
 
     function openShell(shell = null, imageOsString = ""){
         if(consoleSocket !== undefined && currentTerminalProcessId !== null){
@@ -692,17 +688,32 @@
         loadInstanceView(currentContainerDetails)
 
     }
+
+    function loadContainerDetailsReq(req){
+        currentContainerDetails = {hostId: req.data.hostId, container: req.data.instance, alias: hostsAliasesLookupTable[req.data.hostId]};
+        createDashboardSidebar()
+        
+        $(".instanceViewBox").hide();
+        $("#containerDetails").show();
+        
+        $("#containerBoxNav").find(".active").removeClass("active");
+        $("#containerBoxNav .nav-item[data-view='containerDetails'] > .nav-link").addClass("active");
+        
+        if(currentTerminalProcessId !== null){
+            // Terminal session already active — refresh data without touching terminal
+            loadInstanceView(currentContainerDetails, true, false);
+        }else{
+            loadInstanceView(currentContainerDetails);
+        }
+    }
     function loadInstanceView(data, skipTerminalReset = false, forceNavigation = true)
     {
         if(forceNavigation){
             $(".instanceViewBox").hide();
             $("#containerDetails").show();
-            $("#goToDetails").trigger("click");
-        }
-        if(!skipTerminalReset && consoleSocket !== undefined && currentTerminalProcessId !== null){
-            consoleSocket.onclose = function(){}
-            consoleSocket.close();
-            currentTerminalProcessId = null;
+            
+            $("#containerBoxNav").find(".active").removeClass("active");
+            $("#containerBoxNav .nav-item[data-view='containerDetails'] > .nav-link").addClass("active");
         }
         currentContainerDetails = data
 
@@ -793,36 +804,36 @@
         }
 
         if(x.mosaicExtensions.audit){
-            $("#goToEvents").removeClass("disabled")
-            $("#goToEvents").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+            $("#goToEvents").removeClass("disabled").attr("style" , "cursor: pointer;");
+            $("#goToEvents").parents(".nav-item:first").removeClass("disabled");
         }else{
-            $("#goToEvents").addClass("disabled")
-            $("#goToEvents").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+            $("#goToEvents").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+            $("#goToEvents").parents(".nav-item:first").addClass("disabled");
         }
 
 
         if(x.mosaicExtensions.packages){
-            $("#goToPackages").removeClass("disabled")
-            $("#goToPackages").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+            $("#goToPackages").removeClass("disabled").attr("style" , "cursor: pointer;");
+            $("#goToPackages").parents(".nav-item:first").removeClass("disabled");
         }else{
-            $("#goToPackages").addClass("disabled")
-            $("#goToPackages").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+            $("#goToPackages").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+            $("#goToPackages").parents(".nav-item:first").addClass("disabled");
         }
         if(x.mosaicExtensions.timers){
-            $("#goToTimers").removeClass("disabled")
-            $("#goToTimers").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+            $("#goToTimers").removeClass("disabled").attr("style" , "cursor: pointer;");
+            $("#goToTimers").parents(".nav-item:first").removeClass("disabled");
         }else{
-            $("#goToTimers").addClass("disabled")
-            $("#goToTimers").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+            $("#goToTimers").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+            $("#goToTimers").parents(".nav-item:first").addClass("disabled");
         }
 
 
         if(x.details.expanded_config.hasOwnProperty("environment.lxdMosaicPullMetrics") || x.mosaicExtensions.haveMetrics){
-            $("#goToMetrics").removeClass("disabled")
-            $("#goToMetrics").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+            $("#goToMetrics").removeClass("disabled").attr("style" , "cursor: pointer;");
+            $("#goToMetrics").parents(".nav-item:first").removeClass("disabled");
         }else{
-            $("#goToMetrics").addClass("disabled")
-            $("#goToMetrics").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+            $("#goToMetrics").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+            $("#goToMetrics").parents(".nav-item:first").addClass("disabled");
         }
 
         $(".renameContainer").attr("disabled", disableActions);
@@ -831,11 +842,11 @@
         $("#container-currentState").html(`<i class="` + statusCodeIconMap[x.state.status_code] +`"></i>`);
 
         if(x.mosaicExtensions.backups){
-            $("#goToBackups").removeClass("disabled")
-            $("#goToBackups").find(".nav-link").removeClass("disabled").attr("style" , "cursor: pointer;");
+            $("#goToBackups").removeClass("disabled").attr("style" , "cursor: pointer;");
+            $("#goToBackups").parents(".nav-item:first").removeClass("disabled");
         }else{
-            $("#goToBackups").addClass("disabled")
-            $("#goToBackups").find(".nav-link").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+            $("#goToBackups").addClass("disabled").attr("style" , "cursor: not-allowed; color: grey !important");
+            $("#goToBackups").parents(".nav-item:first").addClass("disabled");
         }
 
         //NOTE Read more here https://github.com/lxc/pylxd/issues/242
@@ -1108,4 +1119,6 @@
             loadInstanceView(currentContainerDetails);
         });
     });
+
+
 </script>

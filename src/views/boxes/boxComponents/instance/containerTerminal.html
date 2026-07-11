@@ -170,16 +170,23 @@
     </div>
 </div>
 <script>
-    $("#containerBox").on("click", "#goToTerminal", function() {
+    function loadContainerTerminalReq(req){
+        currentContainerDetails = {hostId: req.data.hostId, container: req.data.instance, alias: hostsAliasesLookupTable[req.data.hostId]};
+        createDashboardSidebar()
+        loadInstanceView(currentContainerDetails, true, false);
+        
         $(".instanceViewBox").hide();
         $("#containerTerminal").show();
-
+        
+        $("#containerBoxNav").find(".active").removeClass("active");
+        $("#containerBoxNav .nav-item[data-view='containerTerminal'] > .nav-link").addClass("active");
+        
         $.confirm({
             title: 'What Size Monitor?!',
             content: `What size monitor do you plan on using?`,
             buttons: {
                 back: function(){
-                    $("#goToDetails").trigger("click");
+                    router.navigate(`/instance/${currentContainerDetails.alias}/${currentContainerDetails.container}/details`);
                 },
                 go: {
                     text: "800x640",
@@ -200,10 +207,10 @@
                         let project = $("#instanceProject").text();
                         let x = {hostId: currentContainerDetails.hostId, project: project, instance: currentContainerDetails.container};
                         window.open("/terminal?" + $.param(x), "_blank");
-                        $("#goToDetails").trigger("click");
+                        router.navigate(`/instance/${currentContainerDetails.alias}/${currentContainerDetails.container}/details`);
                     }
                 }
             }
         });
-    });
+    }
 </script>

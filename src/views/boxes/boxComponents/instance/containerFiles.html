@@ -143,7 +143,15 @@ function loadFileSystemPath(path){
      });
 }
 
-$("#containerBox").on("click", "#goToFiles", function(){
+$(document).on("click", ".filesystemObject", function(){
+    loadFileSystemPath($(this).data("path"));
+});
+
+function loadContainerFilesReq(req){
+    currentContainerDetails = {hostId: req.data.hostId, container: req.data.instance, alias: hostsAliasesLookupTable[req.data.hostId]};
+    createDashboardSidebar()
+        loadInstanceView(currentContainerDetails, true, false);
+    
     $.confirm({
         title: 'DONT USE ON METERED CONNECTIONS!',
         content: `<i class="fas fa-info-circle  text-danger me-2"></i>Do not use this over a metered internet connection.
@@ -155,7 +163,7 @@ $("#containerBox").on("click", "#goToFiles", function(){
         type: 'red',
         buttons: {
             back: function(){
-                $("#goToDetails").trigger("click");
+                router.navigate(`/instance/${currentContainerDetails.alias}/${currentContainerDetails.container}/details`);
             },
             goLarge: {
                 text: "View Files",
@@ -163,16 +171,16 @@ $("#containerBox").on("click", "#goToFiles", function(){
                 action: function(){
                     $(".instanceViewBox").hide();
                     $("#containerFiles").show();
+                    
+                    $("#containerBoxNav").find(".active").removeClass("active");
+                    $("#containerBoxNav .nav-item[data-view='containerFiles'] > .nav-link").addClass("active");
+                    
                     loadFileSystemPath("/");
                 }
             }
         }
     });
-});
-
-$(document).on("click", ".filesystemObject", function(){
-    loadFileSystemPath($(this).data("path"));
-});
+}
 
 $(document).on("click", ".goUpDirectory", function(){
     let parts = currentPath.split("/").filter(word => word.length > 0);

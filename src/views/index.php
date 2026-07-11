@@ -700,6 +700,15 @@ $(function(){
     router.on('/host/:hostId/settings', loadHostSettings);
     router.on('/host/:hostId/disks', loadHostDisks);
 
+    router.on('/instance/:hostId/:instance/details', loadContainerDetailsReq);
+    router.on('/instance/:hostId/:instance/backups', loadContainerBackupsReq);
+    router.on('/instance/:hostId/:instance/events', loadContainerEventsReq);
+    router.on('/instance/:hostId/:instance/files', loadContainerFilesReq);
+    router.on('/instance/:hostId/:instance/metrics', loadContainerMetricsReq);
+    router.on('/instance/:hostId/:instance/packages', loadContainerPackagesReq);
+    router.on('/instance/:hostId/:instance/snapshots', loadContainerSnapshotsReq);
+    router.on('/instance/:hostId/:instance/terminal', loadContainerTerminalReq);
+    router.on('/instance/:hostId/:instance/timers', loadContainerTimersReq);
     router.on('/instance/:hostId/:instance', loadInstanceViewReq);
     router.on("/backups", loadBackupsView);
     router.on("/cluster/:clusterId", loadClusterView);
