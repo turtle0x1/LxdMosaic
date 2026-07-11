@@ -282,6 +282,49 @@ if (file_exists($socketPath)) {
 
 </html>
 <script>
+    function showToast(state, message) {
+        var container = document.getElementById('toastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container position-fixed top-0 end-0 p-3';
+            container.style.zIndex = '99999';
+            document.body.appendChild(container);
+        }
+
+        var bgClass = '';
+        switch(state) {
+            case 'success':
+                bgClass = 'bg-success';
+                break;
+            case 'error':
+                bgClass = 'bg-danger';
+                break;
+            case 'warning':
+                bgClass = 'bg-warning text-dark';
+                break;
+            default:
+                bgClass = 'bg-primary';
+                break;
+        }
+
+        var toastId = 'toast-' + Date.now();
+        var html = '<div id="' + toastId + '" class="toast align-items-center text-white ' + bgClass + '" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">' +
+                   '<div class="d-flex">' +
+                     '<div class="toast-body">' + message + '</div>' +
+                     '<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>' +
+                   '</div>' +
+                 '</div>';
+
+        container.insertAdjacentHTML('beforeend', html);
+        var toastEl = document.getElementById(toastId);
+        var toast = new bootstrap.Toast(toastEl);
+        toast.show();
+        toastEl.addEventListener('hidden.bs.toast', function() {
+            toastEl.remove();
+        });
+    }
+
     $(function() {
         $(".slide:eq(0)").show();
         $(".slide:eq(0)").css({
@@ -515,7 +558,7 @@ if (file_exists($socketPath)) {
         let adminPasswordInput = $("#adminPasswordInput");
 
         if (adminPasswordInput.length === 0) {
-            toastr["error"]("Nice try hax0r!");
+            showToast("error", "Nice try hax0r!");
             launchBtn.attr("disabled", false)
             return false;
         }
@@ -525,7 +568,7 @@ if (file_exists($socketPath)) {
         if (adminPassword === "") {
             $("#footer").find(".setupUsers:eq(0)").trigger("click")
             adminPasswordInput.addClass("is-invalid")
-            toastr["error"]("Please provide an admin password!");
+            showToast("error", "Please provide an admin password!");
             launchBtn.attr("disabled", false)
             return false;
         }
@@ -533,7 +576,7 @@ if (file_exists($socketPath)) {
 
         if ($(".newHost").length == 0) {
             $("#footer").find(".getStarted:eq(0)").trigger("click")
-            toastr["error"]("Please provide atleast one host");
+            showToast("error", "Please provide atleast one host");
             launchBtn.attr("disabled", false)
             return false;
         }
@@ -595,7 +638,7 @@ if (file_exists($socketPath)) {
                     } else if (result.message.match(/Can't connect to/g)) {
                         $("#footer").find(".getStarted:eq(0)").trigger("click")
                     }
-                    toastr["error"](result.message);
+                    showToast("error", result.message);
                     return false;
                 }
                 location.reload();

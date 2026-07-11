@@ -11,7 +11,6 @@ export function css() {
     return src([
         "node_modules/bootstrap/dist/css/bootstrap.min.css",
         "node_modules/jquery-confirm/dist/jquery-confirm.min.css",
-        "node_modules/toastr/build/toastr.min.css",
         "node_modules/@xterm/xterm/css/xterm.css",
         "src/assets/token/styles/token-input.css",
         "src/assets/token/styles/token-input-facebook.css",
@@ -35,7 +34,6 @@ export function js() {
         "node_modules/ace-builds/src-min/theme-monokai.js",
         "node_modules/ace-builds/src-min/mode-yaml.js",
         "node_modules/jquery-confirm/dist/jquery-confirm.min.js",
-        "node_modules/toastr/build/toastr.min.js",
         "src/assets/token/src/jquery.tokeninput.js",
         "node_modules/dropzone/dist/min/dropzone.min.js",
         "node_modules/jquery-timepicker/jquery.timepicker.js",
@@ -87,7 +85,6 @@ export function fontAwesomeCss() {
 export function preAuthCss() {
     return src([
         "node_modules/bootstrap/dist/css/bootstrap.min.css",
-        "node_modules/toastr/build/toastr.min.css",
         "node_modules/jquery-confirm/dist/jquery-confirm.min.css"
     ])
         .pipe(cleanCSS({}))
@@ -100,7 +97,6 @@ export function preAuthJs() {
         "node_modules/jquery/dist/jquery.min.js",
         "node_modules/@popperjs/core/dist/umd/popper.min.js",
         "node_modules/bootstrap/dist/js/bootstrap.min.js",
-        "node_modules/toastr/build/toastr.min.js",
         "node_modules/jquery-confirm/dist/jquery-confirm.min.js"
     ])
     .pipe(minify({ noSource: true }))

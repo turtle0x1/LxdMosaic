@@ -30,9 +30,52 @@ function makeToastr(x) {
 
 
     if(x.hasOwnProperty("state") && x.hasOwnProperty("message")){
-        toastr[x.state](x.message);
+        showToast(x.state, x.message);
     }
     return x;
+}
+
+function showToast(state, message) {
+    var container = document.getElementById('toastContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'toast-container position-fixed top-0 end-0 p-3';
+        container.style.zIndex = '99999';
+        document.body.appendChild(container);
+    }
+
+    var bgClass = '';
+    switch(state) {
+        case 'success':
+            bgClass = 'bg-success';
+            break;
+        case 'error':
+            bgClass = 'bg-danger';
+            break;
+        case 'warning':
+            bgClass = 'bg-warning text-dark';
+            break;
+        default:
+            bgClass = 'bg-primary';
+            break;
+    }
+
+    var toastId = 'toast-' + Date.now();
+    var html = '<div id="' + toastId + '" class="toast align-items-center text-white ' + bgClass + '" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">' +
+               '<div class="d-flex">' +
+                 '<div class="toast-body">' + message + '</div>' +
+                 '<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>' +
+               '</div>' +
+             '</div>';
+
+    container.insertAdjacentHTML('beforeend', html);
+    var toastEl = document.getElementById(toastId);
+    var toast = new bootstrap.Toast(toastEl);
+    toast.show();
+    toastEl.addEventListener('hidden.bs.toast', function() {
+        toastEl.remove();
+    });
 }
 
 // https://stackoverflow.com/a/14438954/4008082
