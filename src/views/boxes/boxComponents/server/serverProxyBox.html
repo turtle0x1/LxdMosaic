@@ -1,0 +1,98 @@
+<div class="serverViewBox" id="serverProxyBox">
+    <div class="card bg-dark text-white">
+        <div class="card-header text-white">
+            <h4>Proxy Devices
+            <button class="btn btn-sm btn-primary float-end" id="addProxyDevice">
+                <i class="fas fa-plus"></i>
+            </button>
+            </h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-dark" id="serverProxyTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Source</th>
+                        <th>Destination</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+
+function loadHostProxies(req){
+    currentContainerDetails = null;
+    let hostId = req.data.hostId;
+    currentServer.hostId = hostId
+    currentServer.hostAlias = hostsAliasesLookupTable[hostId]
+    createDashboardSidebar()
+    _loadServerDetailsIfReq(hostId);
+    changeActiveNav(".overview")
+    $(".boxSlide, .serverViewBox").hide();
+    $("#serverProxyBox, #serverBox").show();
+
+    addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Proxy Devices"], ["", "", "active"], false, ["/", "", ""]);
+
+    $("#serverBoxNav").find(".active").removeClass("active")
+    $("#serverBoxNav .nav-item[data-view='serverProxyBox'] > .nav-link").addClass("active")
+
+    ajaxRequest(globalUrls.hosts.instances.getAllProxyDevices, currentServer, (data)=>{
+        data = makeToastr(data);
+
+        let x = "";
+        if(Object.keys(data).length){
+            $.each(data, (container, proxies)=>{
+                x += `<tr><td colspan="999" class="bg-primary text-white text-center">${container}</td></tr>`
+                $.each(proxies, (name, device)=>{
+                    x += `<tr>
+                        <td>${name}</td>
+                        <td>${device.listen}</td>
+                        <td>${device.connect}</td>
+                        <td>
+                            <button
+                                class="btn btn-danger deleteProxy"
+                                data-instance="${container}"
+                                data-device="${name}"
+                            >
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>`
+                });
+            });
+        }else{
+            x += `<tr><td colspan="999" class="text-center text-info">No Proxy Devices</td></tr>`
+        }
+
+        $("#serverProxyTable > tbody").empty().append(x);
+    });
+}
+
+$(document).on("click", ".deleteProxy", function(){
+    let btn = $(this);
+    btn.attr("disabled", true);
+    btn.html('<i class="fas fa-spinner fa-spin"></i>');
+    let tr = btn.parents("tr");
+    let x = $.extend(btn.data(), currentServer);
+    ajaxRequest(globalUrls.hosts.instances.deleteProxyDevice, x, (data)=>{
+        data = makeToastr(data)
+        if(data.hasOwnProperty("state") && data.state == "success"){
+            $("#serverProxyDevicesBtn").trigger("click");
+        }else{
+            btn.attr("disabled", false);
+            btn.html('<i class="fas fa-trash"></i>');
+        }
+    });
+});
+
+$(document).on("click", "#addProxyDevice", function(){
+    addProxyDeviceObj.hostId = currentServer.hostId;
+    $("#modal-hosts-instnaces-addProxyDevice").modal("show");
+});
+</script>

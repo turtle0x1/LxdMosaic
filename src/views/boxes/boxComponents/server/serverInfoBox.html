@@ -1,0 +1,517 @@
+<div id="serverInfoBox" class="serverViewBox">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card bg-dark text-white text-center" id="memoryUsageCard">
+                <div class="p-2 m-2 mb-0 pb-0" id="serverMemoryUsageBox"></div>
+                <h4><i class="fas fa-memory me-2"></i>Memory</h4>
+            </div>
+            <div class="card mt-2 bg-dark text-white text-center" id="projectCountCard">
+                <h1 id="projectsCount"></h1>
+                <h4><i class="fas fa-project-diagram me-2"></i>Projects</h4>
+            </div>
+            <div class="card mt-2 bg-dark text-white text-center">
+                <h1 id="containerCount"></h1>
+                <h4><i class="fas fa-box me-2"></i>Containers</h4>
+            </div>
+            <div class="card mt-2 bg-dark text-white text-center">
+                <h1 id="virtualMachineCount"></h1>
+                <h4><i class="fas fa-vr-cardboard me-2"></i>Virutal Machines</h4>
+            </div>
+            <div class="card mt-2 bg-dark text-white text-center">
+                <h1 id="networksCount"></h1>
+                <h4><i class="fas fa-ethernet me-2"></i>Networks</h4>
+            </div>
+            <div class="mt-2 mb-2 enableIfAdmin" style="display: none;">
+                <div class="card card-body mt-2 bg-dark text-white text-center">
+                    <h5><i style="min-width: 20px; text-align: center;" class="fas fa-server me-2"></i>Hardware</h5>
+                    <table class="table table-sm table-dark" id="hostDetailsTable">
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8" id="serverOverviewGraphs">
+        </div>
+    </div>
+</div>
+
+<script>
+
+function _loadServerDetailsIfReq(hostId){
+    if($("#serverCpuDisplay").text().trim() !== ""){
+        return true;
+    }
+    ajaxRequest(globalUrls.hosts.getHostOverview, {hostId: hostId}, (data)=>{
+        data = makeToastr(data);
+        //TODO This is duplicate code, clear this up
+        let ident = data.header.alias == null ? data.header.urlAndPort : data.header.alias;
+        currentServer.hostAlias = data.header.alias;
+        currentServer.supportsLoadAvgs = data.header.supportsLoadAvgs;
+
+        router.updatePageLinks()
+
+        $("#serverHeading").text(ident);
+
+        let cpuHtml = "",
+        hostDetailsTrs = "",
+        gpuHtml = "";
+
+        if(userDetails.isAdmin){
+            $(".enableIfAdmin").show();
+        }else{
+            $(".enableIfAdmin").hide();
+        }
+
+        let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
+
+        $.each(data.resources.cpu.sockets, (_, item)=>{
+            cpuHtml += `<span class="ps-1">
+                ${item[cpuIndentKey]} - ${$.isNumeric(item.cores) ? item.cores : item.cores.length} Cores
+            </span>`
+        });
+
+        $("#serverCpuDisplay").empty().append(cpuHtml);
+        $("#serverMemoryDisplay").empty().append(`${formatBytes(data.resources.memory.total)}`);
+
+        if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
+            $.each(data.resources.gpu.cards, function(i, gpu){
+                let name = gpu?.nvidia?.model ?? (gpu?.vendor ?? gpu.driver)  + " - " + (gpu?.product ?? gpu.driver_version)
+                gpuHtml += `<span class="ps-1">${name}</span>`;
+            });
+        }else{
+            gpuHtml += `<span class="ps-1">No GPU's</span>`;
+        }
+
+        $("#serverGpuDisplay").empty().append(gpuHtml);
+
+        let disks = "";
+
+        if(userDetails.isAdmin && data.resources.hasOwnProperty("storage") && data.resources.storage.hasOwnProperty("disks")){
+            if(data.resources.storage.disks.length == 1){
+                disks += `<span>${data.resources.storage.disks[0].model} - ${formatBytes(data.resources.storage.disks[0].size)}</span>`
+            }else{
+                disks += `<a class="viewServerDisks" href="#">${data.resources.storage.disks.length} Disks</a>`
+            }
+        }else{
+            disks = `<span>Nothing To Display</span>`;
+        }
+
+        $("#serverDisksDisplay").empty().append(disks);
+
+        if(data.resources.hasOwnProperty("hostDetails")){
+            hostDetailsTrs += `
+                <tr>
+                    <td>OS</td>
+                    <td>${data.resources.hostDetails.os_name}</td>
+                </tr>
+                <tr>
+                    <td>OS Version</td>
+                    <td>${data.resources.hostDetails.os_version}</td>
+                </tr>
+                <tr>
+                    <td>Firewall</td>
+                    <td>${data.resources.hostDetails.firewall}</td>
+                </tr>
+            `
+        }
+
+        if(data.resources.hasOwnProperty("system")){
+
+            let mbProduct = "Not Set";
+            let chasisType = "Not Set";
+            let firmwareDetails = "Not Set";
+            let uuid = "Not Set";
+            let type = "Not Set";
+
+            if(data.resources.system != null){
+                type = data.resources.system.type;
+                uuid = data.resources.system.uuid;
+
+                if(data.resources.system.motherboard != null){
+                    mbProduct = data.resources.system.motherboard.product;
+                }
+
+                if(data.resources.system.chassis != null){
+                    chasisType = data.resources.system.chassis.type
+                }
+
+                if(data.resources.system.firmware  != null){
+                    firmwareDetails = `${data.resources.system.firmware.vendor}
+                    -
+                    ${data.resources.system.firmware.version}
+                    (${data.resources.system.firmware.date})`;
+                }
+            }
+
+
+            hostDetailsTrs += `
+                <tr>
+                    <th>Motherboard</th>
+                    <td>${mbProduct}</td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>${type}</td>
+                </tr>
+                <tr>
+                    <th>Chasis Type</th>
+                    <td>${chasisType}</td>
+                </tr>
+                <tr>
+                    <th>System Firmware</th>
+                    <td>
+                        ${firmwareDetails}
+                    </td>
+                </tr>
+                <tr>
+                    <th>UUID</th>
+                    <td>${uuid}</td>
+                </tr>
+            `;
+        }
+        $("#hostDetailsTable > tbody").empty().append(hostDetailsTrs);
+    });
+}
+
+function loadServerView(hostId)
+{
+    changeActiveNav(".overview")
+    $(".boxSlide, .serverViewBox").hide();
+    $("#serverOverview, #serverBox, #serverInfoBox").show();
+
+    $("#serverBoxNav").find(".active").removeClass("active")
+    $("#serverBoxNav .nav-item[data-view='serverInfoBox']").addClass("active")
+
+    if(userDetails.isAdmin){
+        $(".enableIfAdmin").show();
+    }else{
+        $(".enableIfAdmin").hide();
+    }
+
+    addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId]], ["", "active"], false, ["/", ""]);
+
+    $("#serverNavBox").find(".active").removeClass("active");
+    $("#serverDetailsBtn").addClass("active");
+
+    $("#serverInfoBox").find('[data-bs-toggle="tooltip"]').tooltip("disable")
+
+    currentServer.hostId = hostId;
+
+    ajaxRequest(globalUrls.hosts.getHostOverview, {hostId: hostId}, (data)=>{
+        data = makeToastr(data);
+
+        let ident = data.header.alias == null ? data.header.urlAndPort : data.header.alias;
+        currentServer.hostAlias = data.header.alias;
+        currentServer.supportsLoadAvgs = data.header.supportsLoadAvgs;
+
+        router.updatePageLinks()
+
+        $("#serverHeading").text(ident);
+
+        $(".serverContainerActions").attr("disabled", true)
+        $("#toggleAllContainers").prop("checked", false);
+
+        $("#projectsCount").text(data.resources.projects.length)
+
+        function getLastKey(obj){
+            return Object.keys(obj)[Object.keys(obj).length - 1];
+        }
+
+        if(Object.keys(data.projectAnalytics).length > 0){
+            $("#containerCount").text(data.projectAnalytics.Containers[getLastKey(data.projectAnalytics.Containers)])
+            $("#virtualMachineCount").text(data.projectAnalytics["Virtual Machines"][getLastKey(data.projectAnalytics["Virtual Machines"])])
+            $("#networksCount").text(data.projectAnalytics["Networks"][getLastKey(data.projectAnalytics["Networks"])])
+        }else{
+            $("#containerCount").text("No Analytics / 0 Usage");
+            $("#virtualMachineCount").text("No Analytics / 0 Usage");
+            $("#networksCount").text("No Analytics / 0 Usage");
+        }
+
+        if(userDetails.isAdmin){
+            let newWarnings = 0;
+            $.each(data.warnings, (_, warning)=>{
+                if(warning.status !== "acknowledged"){
+                    newWarnings++;
+                }
+            });
+            if(newWarnings > 0){
+                $("#newWarningsCount").text(`(${newWarnings})`)
+                $("#newWarningsCount").show();
+                $("#serverWarningsBtn").find(".fas").attr("style", "color: yellow !important")
+            }else{
+                $("#serverWarningsBtn").find(".fas").attr("style", "color: black !important")
+            }
+
+        }else{
+            $("#newWarningCountCard").hide();
+        }
+
+        let cpuHtml = "",
+        hostDetailsTrs = "",
+        gpuHtml = "";
+
+        let cpuIndentKey = data.resources.extensions.resCpuSocket ? "name" : "vendor";
+
+        $.each(data.resources.cpu.sockets, (_, item)=>{
+            cpuHtml += `<span>
+                ${item[cpuIndentKey]} - ${$.isNumeric(item.cores) ? item.cores : item.cores.length} Cores
+            </span>`
+        });
+
+        $("#serverCpuDisplay").empty().append(cpuHtml);
+        $("#serverMemoryDisplay").empty().append(`${formatBytes(data.resources.memory.total)}`);
+
+        if(data.resources.extensions.resGpu && data.resources.hasOwnProperty("gpu") && data.resources.gpu.cards.length > 0){
+            $.each(data.resources.gpu.cards, function(i, gpu){
+                let name = gpu?.nvidia?.model ?? (gpu?.vendor ?? gpu.driver)  + " - " + (gpu?.product ?? gpu.driver_version)
+                gpuHtml += `<span class="ps-1">${name}</span>`;
+            });
+        }else{
+            gpuHtml += `<span class="ps-1">No GPU's</span>`;
+        }
+
+        $("#serverGpuDisplay").empty().append(gpuHtml);
+
+        let disks = "";
+
+        if(userDetails.isAdmin && data.resources.hasOwnProperty("storage") && data.resources.storage.hasOwnProperty("disks")){
+            if(data.resources.storage.disks.length == 1){
+                disks += `<span>${data.resources.storage.disks[0].model} - ${formatBytes(data.resources.storage.disks[0].size)}</span>`
+            }else{
+                disks += `<a class="viewServerDisks" href="#">${data.resources.storage.disks.length} Disks</a>`
+            }
+        }else{
+            disks = `<span>Nothing To Display</span>`;
+        }
+
+        $("#serverDisksDisplay").empty().append(disks);
+
+        if(data.resources.hasOwnProperty("hostDetails")){
+            hostDetailsTrs += `
+                <tr>
+                    <th>OS</th>
+                    <td>${data.resources.hostDetails.os_name}</td>
+                </tr>
+                <tr>
+                    <th>OS Version</th>
+                    <td>${data.resources.hostDetails.os_version}</td>
+                </tr>
+                <tr>
+                    <th>Firewall</th>
+                    <td>${data.resources.hostDetails.firewall}</td>
+                </tr>
+            `
+        }
+
+        if(data.resources.hasOwnProperty("system")){
+
+            let mbProduct = "Not Set";
+            let chasisType = "Not Set";
+            let firmwareDetails = "Not Set";
+            let uuid = "Not Set";
+            let type = "Not Set";
+
+            if(data.resources.system != null){
+                type = data.resources.system.type;
+                uuid = data.resources.system.uuid;
+
+                if(data.resources.system.motherboard != null){
+                    mbProduct = data.resources.system.motherboard.product;
+                }
+
+                if(data.resources.system.chassis != null){
+                    chasisType = data.resources.system.chassis.type
+                }
+
+                if(data.resources.system.firmware  != null){
+                    firmwareDetails = `${data.resources.system.firmware.vendor}
+                    -
+                    ${data.resources.system.firmware.version}
+                    (${data.resources.system.firmware.date})`;
+                }
+            }
+
+
+            hostDetailsTrs += `
+                <tr>
+                    <th>Motherboard</th>
+                    <td>${mbProduct}</td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>${type}</td>
+                </tr>
+                <tr>
+                    <th>Chasis Type</th>
+                    <td>${chasisType}</td>
+                </tr>
+                <tr>
+                    <th>System Firmware</th>
+                    <td>
+                        ${firmwareDetails}
+                    </td>
+                </tr>
+                <tr>
+                    <th>UUID</th>
+                    <td>${uuid}</td>
+                </tr>
+            `;
+        }
+
+        $("#hostDetailsTable > tbody").empty().append(hostDetailsTrs);
+
+        let instanceMemoryUsage  = 0;
+        if(Object.keys(data.projectAnalytics).length > 0){
+            instanceMemoryUsage = data.projectAnalytics["Memory"][getLastKey(data.projectAnalytics["Memory"])]
+        }
+
+        let memUsagePercent = ((data.resources.memory.used - instanceMemoryUsage) / data.resources.memory.total) * 100
+        let instanceUsagePercent = (instanceMemoryUsage / data.resources.memory.total) * 100
+
+        $("#serverMemoryUsageBox").empty().append(`<div class="mb-2">
+            <div class="progress">
+                <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="Instances: ${formatBytes(instanceMemoryUsage)} (${instanceUsagePercent.toFixed(2)}%)" class="progress-bar bg-success" style="width: ${instanceUsagePercent}%" role="progressbar" aria-valuenow="${instanceMemoryUsage}" aria-valuemin="0" aria-valuemax="${(data.resources.memory.total - data.resources.memory.used)}"></div>
+                <div data-bs-toggle="tooltip" data-bs-placement="bottom" title="System: ${formatBytes(data.resources.memory.used - instanceMemoryUsage)} (${memUsagePercent.toFixed(2)}%)" class="progress-bar bg-primary" style="width: ${memUsagePercent}%" role="progressbar" aria-valuenow="${data.resources.memory.used}" aria-valuemin="0" aria-valuemax="${(data.resources.memory.total - data.resources.memory.used)}"></div>
+            </div>
+        </div>`);
+
+        $("#serverBox").find("[data-bs-toggle='tooltip']").tooltip();
+
+        let displayItems = {
+            "Instances": {
+                formatBytes: false,
+                icon: 'fas fa-box',
+                cardClasses: '',
+            },
+            "Disk": {
+                formatBytes: true,
+                icon: 'fas fa-hdd',
+                cardClasses: '',
+            },
+            "Memory": {
+                formatBytes: true,
+                icon: 'fas fa-memory',
+                cardClasses: "mt-2"
+            },
+            "Processes": {
+                formatBytes: false,
+                icon: 'fas fa-microchip',
+                cardClasses: "mt-2"
+            }
+        }
+        $("#serverOverviewGraphs").empty();
+        $("#overviewHistoryDurationBox").show()
+        let y = $(`<div class="row mb-2" ></div>`)
+        $.each(displayItems, (title, config) => {
+            let labels = [];
+            let values = [];
+            let limits = [];
+
+            let cId = title.toLowerCase();
+
+            let totalUsage = 0;
+
+            if(Object.keys(data.projectAnalytics).length > 0 ){
+                let entries = data.projectAnalytics[title];
+                let noOfEntries = Object.keys(entries).length;
+
+                let dateFormat = noOfEntries == 13 || noOfEntries == 7 ? "HH:mm" : "ll HH:mm"
+
+                $.each(entries, (created, value) => {
+                    labels.push(moment.utc(created).local().format(dateFormat))
+                    values.push(value)
+                });
+
+                totalUsage = values.reduce(function(a, b) {
+                    a = a == null ? 0 : a
+                    b = b == null ? 0 : b
+                    return parseInt(a) + parseInt(b);
+                }, 0);
+            }else{
+                totalUsage = 0;
+            }
+
+
+            let canvas = `<canvas height="200" id="${cId}"></canvas>`;
+
+            if (totalUsage == 0) {
+                canvas = '<div style="min-height: 200;" class="text-center "><i class="fas fa-info-circle  text-primary me-2"></i>No Usage</div>'
+            }
+
+            let x = $(`<div class='col-md-6 ${config.cardClasses}'>
+                  <div class="card bg-dark text-white">
+                      <div class="card-body">
+                        <h4 class="mb-3 text-center"><i class="${config.icon} me-2"></i>${title}</h4>
+                        ${canvas}
+                      </div>
+                  </div>
+              </div>`);
+
+            if (totalUsage > 0) {
+                let graphDataSets = [{
+                    label: "total",
+                    borderColor: 'rgba(46, 204, 113, 1)',
+                    pointBackgroundColor: "rgba(46, 204, 113, 1)",
+                    pointBorderColor: "rgba(46, 204, 113, 1)",
+                    data: values
+                }];
+
+                let options = {
+                    responsive: true,
+                    elements: {
+                        point: {
+                            // After 6 hours hide the dots on the graph
+                            radius: 0
+                        }
+                    }
+                };
+
+                if (config.formatBytes) {
+                    options.scales = scalesBytesCallbacks;
+                    options.tooltips = toolTipsBytesCallbacks
+                } else {
+                    options.scales = {
+                        yAxes: [{
+                            ticks: {
+                                precision: 0
+                            }
+                        }],
+                    }
+                }
+
+                options.legend = {
+                        display: false
+                    },
+
+                    // scales.yAxes.ticks
+                    options.scales.yAxes[0].gridLines = {
+                        color: "rgba(0, 0, 0, 0)",
+                    }
+                options.scales.yAxes[0].ticks.beginAtZero = false;
+                options.scales.xAxes = [{
+                    gridLines: {
+                        color: "rgba(0, 0, 0, 0)",
+                    },
+                }]
+
+                new Chart(x.find("#" + cId), {
+                    type: 'line',
+                    data: {
+                        datasets: graphDataSets,
+                        labels: labels
+                    },
+                    options: options
+                });
+            }
+            y[0].append(x[0]);
+        });
+        $("#serverOverviewGraphs").append(y)
+    });
+}
+$(document).on("click", ".viewServerDisks", function(e){
+    e.preventDefault();
+    e.stopPropagation()
+    router.navigate(`/host/${currentServer.hostAlias}/disks`)
+})
+</script>

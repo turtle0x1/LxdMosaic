@@ -1,0 +1,60 @@
+<div class="serverViewBox" id="serverSettingsBox">
+    <div class="card bg-dark text-white">
+        <div class="card-header text-white">
+            <h4>Settings
+                <button class="btn btn-outline-primary float-end" id="editHostSettings">
+                    <i class="fas fa-wrench"></i>
+                </button>
+            </h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-dark" id="serverSettingTable">
+                <thead>
+                    <tr>
+                        <th>Setting</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+
+function loadHostSettings(req){
+    currentContainerDetails = null;
+    let hostId = req.data.hostId;
+    currentServer.hostId = hostId
+    currentServer.hostAlias = hostsAliasesLookupTable[hostId]
+    createDashboardSidebar()
+    _loadServerDetailsIfReq(hostId);
+    changeActiveNav(".overview")
+    $(".boxSlide, .serverViewBox").hide();
+    $("#serverSettingsBox, #serverBox").show();
+
+    addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Settings"], ["", "", "active"], false, ["/", "", ""]);
+
+    $("#serverBoxNav").find(".active").removeClass("active")
+    $("#serverBoxNav .nav-item[data-view='serverSettingsBox'] > .nav-link").addClass("active")
+    ajaxRequest('/api/Hosts/Settings/GetHostSettingsController/get', currentServer, (data)=>{
+        data = makeToastr(data);
+        let settingTrs = "";
+        $.each(data, (key, value)=>{
+            settingTrs += `<tr>
+                <td>${key}</td>
+                <td>${value}</td>
+            </tr>`
+        });
+        $("#serverSettingTable > tbody").empty().append(settingTrs);
+    });
+}
+
+$(document).on("click", "#editHostSettings", function(){
+    editHostSettingsDetailsObj.hostAlias = currentServer.hostAlias
+    editHostSettingsDetailsObj.hostId = currentServer.hostId
+    $("#modal-hosts-editSettings").modal("show");
+});
+</script>
