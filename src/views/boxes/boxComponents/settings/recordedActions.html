@@ -1,0 +1,148 @@
+<div id="recordedActionsBox" class="settingsBox">
+    <div class="card bg-dark text-white" id="recordedActionsCard">
+        <div class="card-header bg-dark" role="tab">
+            <h5>
+                <a class="text-white" data-bs-toggle="collapse" data-parent="#accordion" href="#lastRecordedActions"
+                    aria-expanded="true" aria-controls="lastRecordedActions">
+                    Last <span id="actionCount"></span> Recorded Actions
+                </a>
+                <button class="btn btn-primary float-end" id="loadMoreRecordedActions">
+                    <i class="fas fa-search-plus"></i>
+                </button>
+            </h5>
+        </div>
+        <div id="lastRecordedActions" class="collapse in show" role="tabpanel">
+            <div class="card-body table-responsive bg-dark">
+                <table class="table table-dark table-bordered" id="recordedActionsTable">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Date</th>
+                            <th>Controller</th>
+                            <th>Params</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function loadRecordedActions(req, ammount = 30) {
+        $(".settingsBox").hide();
+        $("#settingsBox").show();
+        putAdminSidebar(adminSettingUrls.history);
+        changeActiveNav(null)
+        $(".viewSettings").addClass("active");
+        $("#recordedActionsBox").show();
+        addBreadcrumbs(["Admin Settings", "Recorded Actions"], ["", "active"], false, ["/admin"]);
+        $("#actionCount").text(ammount);
+        $("#recordedActionsTable > tbody").empty()
+        ajaxRequest(globalUrls.settings.recordedActions.getLastResults, { ammount: ammount }, (data) => {
+            data = makeToastr(data);
+            let trs = "";
+            if (data.length > 0) {
+                $.each(data, (_, item) => {
+
+                    let params = "-";
+                    let userParams = JSON.parse(item.params)
+
+                    let userKeys = Object.keys(item.params);
+
+                    if (userKeys.length > 0) {
+                        params = ""
+                        $.each(userParams, (key, value) => {
+                            if (value == null) {
+                                return true;
+                            }
+                            let t = typeof value
+                            if (t !== "array" && t !== "object") {
+                                params += `<div class="mb-1">
+                                <b>${key}</b>: ${value}
+                            </div>`
+                                // NOTE 1 level recursion not traversing whole tree's
+                            } else if (t === "object") {
+                                let pKeys = Object.keys(value);
+                                params += `<div class="mb-1">
+                                <b>${key}</b>:
+                            </div>`
+                                $.each(pKeys, (_, k) => {
+                                    params += `<div class="mb-1 ps-2">
+                                    <b>${k}</b>: ${value[k]}
+                                </div>`
+                                });
+                            }
+                        });
+                    }
+
+                    const tr = $(`<tr>
+                    <td>${item.userName}</td>
+                    <td>${moment.utc(item.date).local().fromNow()}</td>
+                    <td>${item.controllerName == "" ? item.controller : item.controllerName}</td>
+                    <td class="text-break" data-params="${JSON.stringify(item.params)}"><button class="btn btn-outline-primary btn-sm p-1 viewParams"><i class="fas fa-eye"></i></button></td>
+                </tr>`)
+                    tr.on("click", ".viewParams", function () {
+                        $.confirm({
+                            title: "Request params",
+                            content: params,
+                            buttons: {
+                                ok: () => { }
+                            }
+                        })
+                    })
+                    $("#recordedActionsTable > tbody").append(tr);
+                });
+            } else {
+                trs += `<tr><td colspan="999" class="text-info text-center">No Recorded Actions</td></tr>`
+            }
+
+        });
+    }
+
+    $("#recordedActionsBox").on("click", "#loadMoreRecordedActions", function () {
+        $.confirm({
+            title: 'Prompt!',
+            content: `
+    <form action="" class="formName">
+        <div class="mb-2">
+            <label>Ammount Of Logs To Fetch</label>
+            <input type="text" value="30" class="ammount form-control" required />
+        </div>
+        <div class="alert alert-danger">
+            Loading to many logs may crash your browser!
+        </div>
+    </form>`,
+            buttons: {
+                formSubmit: {
+                    text: 'Submit',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        var ammount = this.$content.find('.ammount').val();
+                        if (!$.isNumeric(ammount)) {
+                            $.alert('provide a valid ammount');
+                            return false;
+                        }
+                        loadRecordedActions({}, ammount)
+                    }
+                },
+                cancel: function () {
+                    //close
+                },
+            },
+            onContentReady: function () {
+                // bind to events
+                var jc = this;
+                this.$content.find('form').on('submit', function (e) {
+                    // if the user submits the form by pressing enter in the field.
+                    e.preventDefault();
+                    jc.$$formSubmit.trigger('click'); // reference the button and click it
+                });
+            }
+        });
+    });
+
+</script>

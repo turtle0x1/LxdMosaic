@@ -1,0 +1,463 @@
+<div id="usersList" class="settingsBox">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card bg-dark text-white" id="usersCard" style="max-height: 90vh; overflow: hidden">
+                <div class="card-header" role="tab">
+                    <h5>
+                        Users
+                        <button class="btn btn-success float-end" id="addUser">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </h5>
+                </div>
+                <div class="card-body" style="max-height: 90vh; overflow-y: scroll">
+                    <div class="input-group mb-3">
+                        <div class="input-group-text">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Filter Users" id="filterUsersTable">
+                        <div class="input-group-text">
+                            <input class="form-check-input mt-0" type="checkbox" value="" id="showDeletedUserFilter">
+                            <label for="showDeletedUserFilter" class="form-check-label ms-2">Show Deleted?</label>
+                        </div>
+                    </div>
+                    <table class="table table-dark table-bordered" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Added</th>
+                                <th>Admin</th>
+                                <th>Disabled</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div id="userDetails" class="settingsBox">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function loadUsers() {
+        $(".settingsBox").hide();
+        $("#settingsBox").show();
+        putAdminSidebar(adminSettingUrls.users);
+        changeActiveNav(null)
+        $(".viewSettings").addClass("active");
+        $("#usersList").show();
+        addBreadcrumbs(["Admin Settings", "User Management"], ["", "active"], false, ["/admin"]);
+        $("#showDeletedUserFilter").prop("checked", false)
+        ajaxRequest(globalUrls.settings.users.getAll, {}, (data) => {
+            data = makeToastr(data);
+            let trs = "";
+            if (data.length > 0) {
+                $.each(data, (_, user) => {
+                    let isAdmin = "times-circle";
+                    let isAdminTClass = "text-success";
+
+                    if (user.isAdmin == 1) {
+                        isAdmin = "check-circle"
+                        isAdminTClass = "text-warning";
+                    }
+
+                    let isDisabled = "times-circle";
+                    let isDisabledTClass = "text-success";
+
+                    if (user.isDisabled == 1) {
+                        isDisabled = "check-circle"
+                        isDisabledTClass = "text-warning";
+                    }
+
+                    let resetPasswordBtn = '<div class="dropdown-item resetPassword" href="#">Reset Password</div>';
+
+                    if (parseInt(user.fromLdap) == 1) {
+                        resetPasswordBtn = '';
+                    }
+
+                    let isDisabledVal = user.isDisabled;
+                    let isDeleted = user.isDeleted
+                    let trStyle = isDeleted == 1 ? "display: none;" : ""
+                    let userIcon = isDeleted == 1 ? '<i class="fas fa-ghost me-2"></i>' : '';
+
+                    trs += `<tr data-user-id="${user.id}" data-is-admin="${user.isAdmin}" data-user-name="${user.username}" data-is-disabled=${isDisabledVal} data-is-deleted="${user.isDeleted}" style="${trStyle}">
+                        <td><p id="${user.id}" class='viewUser text-primary text-decoration-underline' style="cursor: pointer;">${userIcon}${user.username}</p></td>
+                        <td>${moment.utc(user.created).local().fromNow()}</td>
+                        <td><i class="fas fa-${isAdmin} ${isAdminTClass}"></i></td>
+                        <td><i class="fas fa-${isDisabled} ${isDisabledTClass}"></i></td>
+                        <td>
+                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <div class="dropdown-item setUserProject" href="#">Set Projects Access</div>
+                            ${resetPasswordBtn}
+                            <div class="dropdown-item toggleUserLogin" href="#">Toggle User Login</div>
+                            <div class="dropdown-item toggleUserAdmin" href="#">Toggle User Admin</div>
+                            <div class="dropdown-item deleteUser text-danger" href="#">Delete User</div>
+                            </div>
+                        </td>
+                    </tr>`;
+                });
+            } else {
+                trs += `<tr><td colspan="999" class="text-info">No Users</td></tr>`
+            }
+            $("#usersTable > tbody").empty().append(trs);
+        });
+    }
+
+    $("#usersTable").on("click", ".deleteUser", function () {
+        let tr = $(this).parents("tr");
+        let targetUserId = tr.data("userId");
+        $.confirm({
+            title: "Deleting User: " + $(this).parents("tr").data("userName"),
+            content: `
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="changeUserName" checked>
+                    <label class="form-check-label" for="changeUserName">Change username to "Deleted User"</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="removeProjectAccess" checked>
+                    <label class="form-check-label" for="removeProjectAccess">Remove all project access</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="removeApiKeys" checked>
+                    <label class="form-check-label" for="removeApiKeys">Remove all API keys</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="deleteAuditLogs">
+                    <label class="form-check-label" for="deleteAuditLogs">Delete user audit logs</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="deleteBackupSchedules">
+                    <label class="form-check-label" for="deleteBackupSchedules">Delete user backup schedules</label>
+                </div>`,
+            type: "red",
+            buttons: {
+                cancel: function () { },
+                yes: {
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        this.buttons.yes.setText('<i class="fa fa-cog fa-spin me-2"></i>Deleting User'); // let the user know
+                        this.buttons.yes.disable();
+                        this.buttons.cancel.disable();
+                        var modal = this;
+                        var changeUserName = this.$content.find('#changeUserName').is(":checked") ? 1 : 0
+                        var removeProjectAccess = this.$content.find('#removeProjectAccess').is(":checked") ? 1 : 0
+                        var removeApiKeys = this.$content.find('#removeApiKeys').is(":checked") ? 1 : 0
+                        var deleteAuditLogs = this.$content.find('#deleteAuditLogs').is(":checked") ? 1 : 0
+                        var deleteBackupSchedules = this.$content.find('#deleteBackupSchedules').is(":checked") ? 1 : 0
+
+                        let x = {
+                            targetUserId,
+                            changeUserName,
+                            removeProjectAccess,
+                            removeApiKeys,
+                            deleteAuditLogs,
+                            deleteBackupSchedules
+                        }
+
+                        ajaxRequest('/api/User/DeleteUserController/delete', x, (data) => {
+                            data = makeToastr(data);
+                            if (data.state == "error") {
+                                this.buttons.yes.enable();
+                                this.buttons.yes.setText('Yes'); // let the user know
+                                this.buttons.cancel.enable();
+                                return false;
+                            }
+                            tr.remove()
+                            modal.close();
+                        });
+                        return false;
+                    }
+                }
+            }
+        });
+    });
+
+    $("#usersTable").on("click", ".toggleUserAdmin", function () {
+        let tr = $(this).parents("tr");
+        let isAdmin = tr.data("isAdmin");
+        let title = isAdmin ? "Revoke Admin Privileges?" : "Grant Admin Privileges?";
+        let doingTxt = isAdmin ? "Revoking..." : "Granting...";
+        // If they are already an admin we are trying to revoke
+        let status = isAdmin ? 0 : 1;
+        let targetUser = tr.data("userId");
+        $.confirm({
+            title: title,
+            content: 'Are you sure you want todo this?!',
+            buttons: {
+                cancel: function () { },
+                yes: {
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        this.buttons.yes.setText('<i class="fa fa-cog fa-spin me-2"></i>' + doingTxt); // let the user know
+                        this.buttons.yes.disable();
+                        this.buttons.cancel.disable();
+                        var modal = this;
+                        ajaxRequest(globalUrls.settings.users.toggleAdminStatus, { targetUser, status }, (data) => {
+                            data = makeToastr(data);
+                            if (data.state == "error") {
+                                this.buttons.yes.enable();
+                                this.buttons.yes.setText('Yes'); // let the user know
+                                this.buttons.cancel.enable();
+                                return false;
+                            }
+                            let isAdmin = "times-circle";
+                            let isAdminTClass = "text-success";
+
+                            if (status == 1) {
+                                isAdmin = "check-circle"
+                                isAdminTClass = "text-warning";
+                            }
+
+                            tr.find("td:eq(2)").html(`<i class="fas fa-${isAdmin} ${isAdminTClass}"></i>`)
+                            tr.data("isAdmin", status);
+                            modal.close();
+                        });
+                        return false;
+                    }
+                }
+            }
+        });
+    });
+
+    $("#usersTable").on("click", ".toggleUserLogin", function () {
+        let tr = $(this).parents("tr");
+        let isDisabled = parseInt(tr.data("isDisabled")) === 1
+        let title = isDisabled ? "Enable Login?" : "Disable Login?";
+        let doingTxt = isDisabled ? "Granting..." : "Revoking...";
+        let status = isDisabled ? 0 : 1;
+        let targetUser = tr.data("userId");
+        $.confirm({
+            title: title,
+            content: 'Are you sure you want todo this?!',
+            buttons: {
+                cancel: function () { },
+                yes: {
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        this.buttons.yes.setText('<i class="fa fa-cog fa-spin me-2"></i>' + doingTxt); // let the user know
+                        this.buttons.yes.disable();
+                        this.buttons.cancel.disable();
+                        var modal = this;
+                        let x = { targetUser, status };
+
+                        ajaxRequest(globalUrls.settings.users.toggleLoginStatus, x, (data) => {
+                            data = makeToastr(data);
+                            if (data.state == "error") {
+                                this.buttons.yes.enable();
+                                this.buttons.yes.setText('Yes'); // let the user know
+                                this.buttons.cancel.enable();
+                                return false;
+                            }
+                            let isDisabledIcon = "times-circle";
+                            let isDisabledTClass = "text-success";
+
+                            if (status == 1) {
+                                isDisabledIcon = "check-circle"
+                                isDisabledTClass = "text-warning";
+                            }
+
+                            tr.find("td:eq(3)").html(`<i class="fas fa-${isDisabledIcon} ${isDisabledTClass}"></i>`)
+
+                            tr.data("isDisabled", status);
+                            modal.close();
+                        });
+                        return false;
+                    }
+                }
+            }
+        });
+    });
+
+    $("#usersList").on("click", ".viewUser", function () {
+        let x = { targetUser: $(this).attr("id") }
+        let userName = $(this).text();
+
+        $("#userDetails").show();
+        addBreadcrumbs(["Users", userName], ["", "active"], true, ["/admin/users", ""]);
+        ajaxRequest(globalUrls.user.getUserOverview, x, (data) => {
+            data = makeToastr(data);
+            let x = `<div class="mb-3 text-center">
+            <h4 class="text-underline">
+                <i class="fas fa-user me-2"></i>Viewing <code>${userName}</code> latest attempted actions
+            </h4>
+        </div>`;
+
+            let categoryIcons = {
+                "instance": "fas fa-box",
+                "backups": "fas fa-save",
+                "projects": "fas fa-project-diagram",
+                "profiles": "fas fa-users",
+                "networks": "fas fa-network-wired",
+                "storage": "fas fa-hdd"
+
+            };
+
+            let methodIcons = {
+                "create": "fas fa-plus",
+                "delete": "fas fa-trash",
+                "schedule": "fas fa-clock",
+                "disable": "fas fa-power-off"
+            };
+
+            if (data.length == 0) {
+                x += `<div class="text-center"><h5><i class="fas fa-info-circle text-info me-2"></i>No Recorded Actions</h5></div>`;
+            } else {
+                $.each(data, (category, methods) => {
+                    x += `<div class='mb-3 pb-2 border-bottom'>
+                    <h1><i class="${categoryIcons[category]} me-2"></i>${category}
+                    </h1>
+                    <div class="row">`
+                    let c = Math.floor(12 / Object.keys(methods).length);
+                    let i = 0;
+                    $.each(methods, (method, events) => {
+                        let bl = i == 0 ? "" : "border-start";
+                        x += `<div class="col-md-${c} ${bl} text-center"><h4><i class="${methodIcons[method]} me-2"></i> ${method} - ${events.length}</h4></div>`;
+                        i++;
+                    });
+                    x += `</div></div>`
+                });
+            }
+
+            $("#userDetails").empty().append(x);
+
+        });
+    });
+
+    $("#usersList").on("click", "#addUser", function () {
+        $.confirm({
+            title: 'Create user!',
+            content: `<form action="" class="formName">
+            <div class="mb-2">
+                <label>Username</label>
+                <input type="text" class="form-control" name="username" required />
+            </div>
+            <div class="mb-2">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password" required />
+            </div>
+            <i class="fas fa-info-circle text-warning me-2"></i>Users wont be able to login until you grant access to projects!
+        </form>`,
+            buttons: {
+                cancel: {
+                    action: function () { }
+                },
+                create: {
+                    text: 'create',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        let username = this.$content.find('input[name=username]').val().trim();
+                        let password = this.$content.find('input[name=password]').val().trim();
+                        if (username == "") {
+                            $.alert('provide a username');
+                            return false;
+                        } else if (password == "") {
+                            $.alert('provide a password');
+                            return false;
+                        }
+
+                        ajaxRequest(globalUrls.settings.users.add, { username: username, password: password }, (data) => {
+                            data = makeToastr(data);
+                            if (data.hasOwnProperty("state") && data.state == "error") {
+                                return false;
+                            }
+                            loadUsers();
+                        });
+                    }
+                },
+                cancel: function () {
+                    //close
+                },
+            }
+        });
+    });
+
+    $("#usersCard").on("keyup", "#filterUsersTable", function () {
+        let search = $(this).val().trim().toLowerCase()
+        if (search == "") {
+            $("#usersTable > tbody > tr").show()
+            return false;
+        }
+        let showDeleted = $("#showDeletedUserFilter").is(":checked")
+        $("#usersTable > tbody > tr").each(function () {
+            let name = $(this).data("userName")
+            let deleted = $(this).data("isDeleted")
+            if (name.includes(search) && (!isDeleted || showDeleted)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+
+    $("#usersCard").on("change", "#showDeletedUserFilter", function () {
+        if ($(this).is(":checked")) {
+            $("#usersList").find("[data-is-deleted=1]").show()
+        } else {
+            $("#usersList").find("[data-is-deleted=1]").hide()
+        }
+    });
+
+    $("#usersList").on("click", ".setUserProject", function () {
+        setUserSettings.targetUser = $(this).parents("tr").data("userId");
+        $("#modal-settings-setUserProject").modal("show");
+    });
+
+    $("#usersList").on("click", ".resetPassword", function (e) {
+        let targetUser = $(this).parents("tr").data("userId");
+        $.confirm({
+            backgroundDismiss: true,
+            title: 'Reset password!',
+            content: `<form>
+            <div class="mb-2">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password" required />
+            </div>
+        </form>`,
+            buttons: {
+                cancel: {
+                    action: function () { }
+                },
+                reset: {
+                    text: 'reset',
+                    btnClass: 'btn-blue',
+                    keys: ['enter'],
+                    action: function () {
+                        let password = this.$content.find('input[name=password]').val().trim();
+                        if (password == "") {
+                            $.alert('provide a password');
+                            return false;
+                        }
+
+                        ajaxRequest(globalUrls.settings.users.resetPassword, { targetUser: targetUser, newPassword: password }, (data) => {
+                            data = makeToastr(data);
+                            if (data.hasOwnProperty("state") && data.state == "error") {
+                                return false;
+                            }
+                            loadUsers();
+                        });
+                    }
+                }
+            },
+            onContentReady: function () {
+                // bind to events
+                var jc = this;
+                this.$content.find('form').on('submit', function (e) {
+                    // if the user submits the form by pressing enter in the field.
+                    e.preventDefault();
+                    jc.$$reset.trigger('click'); // reference the button and click it
+                });
+            }
+        });
+    });
+
+</script>
