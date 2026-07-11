@@ -34,6 +34,7 @@ final class GetHostsProfilesTest extends TestCase
             'hostId',
             'alias',
             'urlAndPort',
+            'socketPath',
             'hostOnline',
             'supportsLoadAvgs',
             'currentProject',
