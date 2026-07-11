@@ -1,0 +1,190 @@
+<div id="containerFiles"  class="col-md-12 instanceViewBox mt-2">
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle text-info me-2"></i>You can right click to delete a file / folder
+        <br/>
+        <i class="fas fa-info-circle text-info me-2"></i>You can right click between the files /  folders to upload new files
+    </div>
+    <div class="row" data-masonry='{"percentPosition": true }' id="filesystemTable" style="padding-bottom: 50px;">
+    </div>
+</div>
+<script>
+var currentPath = "/";
+
+var currentRequest = null;
+
+function deleteFilesystemObjectConfirm(path)
+{
+    $.confirm({
+        title: `Delete From - ${currentContainerDetails.alias} / ${currentContainerDetails.container} `,
+        content: `
+            ${path}
+            `,
+        buttons: {
+            cancel: function(){},
+            rename: {
+                text: 'Delete',
+                btnClass: 'btn-danger',
+                action: function () {
+                    let modal = this;
+                    let btn  = $(this);
+
+                    modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Deleeting..'); // let the user know
+                    modal.buttons.rename.disable();
+                    modal.buttons.cancel.disable();
+
+                    let x = {
+                        ...{path: path},
+                        ...currentContainerDetails
+                    };
+
+                    ajaxRequest(globalUrls.instances.files.delete, x, function(data){
+                        let x = makeToastr(data);
+                        if(x.state == "error"){
+                            modal.buttons.rename.setText('Delete'); // let the user know
+                            modal.buttons.rename.enable();
+                            modal.buttons.cancel.enable();
+                            return false;
+                        }
+                        loadFileSystemPath(currentPath);
+                        modal.close();
+                    });
+                    return false;
+                }
+            },
+        }
+    });
+}
+
+function loadFileSystemPath(path){
+    let reqData = {
+        ...currentContainerDetails,
+        ...{path: path, download: 0}
+    };
+
+    currentRequest = $.ajax({
+         type: 'POST',
+         data: reqData,
+         url: globalUrls.instances.files.getPath,
+         beforeSend : function()    {
+            if(currentRequest != null) {
+                currentRequest.abort();
+            }
+         },
+         success: function(data){
+             currentRequest = null;
+             data = makeToastr(data);
+
+
+             if(data.hasOwnProperty("state") && data.state == "error"){
+                 // pathHistory[pathHistory.length - 1].directory = false;
+                 return false;
+             }
+
+             if(data.isDirectory){
+                 currentPath = path;
+                 let h = "";
+                 if(path.endsWith("/") !== true){
+                     path += "/";
+                 }
+                 if(path !== "/"){
+
+                     h = `<div class="col-md-2"><div class="card bg-dark text-white mb-2 mt-2 goUpDirectory" style="font-size: .5rem">
+                        <div class="card-body text-center">
+                            <i class="fas fa-ellipsis text-white fa-3x"></i>
+                            <h4>Back</h4>
+                        </div>
+                      </div></div>`;
+                 }
+                 $.each(data.contents, function(_, item){
+                     let icon = `<i class="fas fa-3x fa-${item.isDirectory ? "folder" : "file"}"></i>`
+
+                     h += `<div class="col-md-2">
+                     <div class="card bg-dark text-white mb-2 mt-2 filesystemObject bg-dark" data-name="${item.name}" data-path="${path}${item.name}" style="font-size: .5rem">
+                        <div class="card-body text-center">
+                            ${icon}
+                            <h4>${item.name}</h4>
+                        </div>
+                      </div>
+                      </div>
+                     `
+                 });
+                 $("#filesystemTable").empty().append(h);
+             }else {
+                 var formData = new FormData();
+
+                 let parts = path.split("/")
+                 let fileName = parts[parts.length - 1];
+
+                formData.append("hostId", currentContainerDetails.hostId);
+                formData.append("path", path);
+                formData.append("container", currentContainerDetails.container);
+                formData.append("download", 1);
+                // Stolen straight from stackoverflow
+                 fetch('/api/Instances/Files/GetPathController/get', {
+                     method: 'POST',
+                     headers: userDetails,
+                     body: formData
+                 })
+                  .then(resp => resp.blob())
+                  .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    // the filename you want
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                  })
+                  .catch(() => alert('oh no something went wrong!'));
+             }
+         }
+     });
+}
+
+$("#containerBox").on("click", "#goToFiles", function(){
+    $.confirm({
+        title: 'DONT USE ON METERED CONNECTIONS!',
+        content: `<i class="fas fa-info-circle  text-danger me-2"></i>Do not use this over a metered internet connection.
+        To Correctly indentify the if something is a directory or a file we have to download the file and check which could cost alot on big files.
+        <br/>
+        <br/>
+        <i class="fas fa-info-circle  text-danger me-2"></i>This will also probably <b> underperform or break </b> on large directories until
+        LXD changes the directory struct indictating if its a file or directory`,
+        type: 'red',
+        buttons: {
+            back: function(){
+                $("#goToDetails").trigger("click");
+            },
+            goLarge: {
+                text: "View Files",
+                btnClass: "btn-primary",
+                action: function(){
+                    $(".instanceViewBox").hide();
+                    $("#containerFiles").show();
+                    loadFileSystemPath("/");
+                }
+            }
+        }
+    });
+});
+
+$(document).on("click", ".filesystemObject", function(){
+    loadFileSystemPath($(this).data("path"));
+});
+
+$(document).on("click", ".goUpDirectory", function(){
+    let parts = currentPath.split("/").filter(word => word.length > 0);
+
+    if(parts.length > 1){
+        parts.pop();
+    }else{
+        parts = ["/"];
+    }
+
+    let p = parts.join("/")
+
+    loadFileSystemPath(p);
+});
+</script>

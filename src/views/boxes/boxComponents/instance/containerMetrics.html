@@ -1,0 +1,180 @@
+<div id="containerMetrics"  class="col-md-8 offset-md-2 instanceViewBox mt-2">
+    <div class="card bg-dark text-white">
+        <div class="card-header">
+            <h4>Metric Graph
+            <div class="input-group w-75 float-end">
+                <span class="input-group-text"><i class="fas fa-chart-bar"></i></span>
+                <select class="form-select" id="metricTypeSelect" disabled>
+                </select>
+                <span class="input-group-text"><i class="fas fa-filter"></i></span>
+                <select class="form-select" id="metricTypeFilterSelect" disabled>
+                </select>
+                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                <select class="form-select" id="metricRangePicker" disabled>
+                    <option value="">Please Select</option>
+                    <option value="-15 minutes">Last 15 Minutes</option>
+                    <option value="-30 minutes">Last 30 Minutes</option>
+                    <option value="-45 minutes">Last 45 Minutes</option>
+                    <option value="-60 minutes">Last 60 Minutes</option>
+                    <option value="-3 hours">Last 3 Hours</option>
+                    <option value="-6 hours">Last 6 Hours</option>
+                    <option value="-12 hours">Last 12 Hours</option>
+                    <option value="-24 hours">Last 24 Hours</option>
+                    <option value="-2 days">Last 2 Days</option>
+                    <option value="-3 days">Last 3 Days</option>
+                    <option value="-1 weeks">Last 1 Week</option>
+                    <option value="-2 weeks">Last 2 Weeks</option>
+                    <option value="-3 weeks">Last 3 Weeks</option>
+                    <option value="-4 weeks">Last 4 Weeks</option>
+                    <option value="-1 months">Last 1 Month</option>
+                    <option value="-2 months">Last 2 Months</option>
+                </select>
+                </div>
+            </h4>
+
+        </div>
+        <div class="card-body bg-dark" id="metricGraphBody">
+
+        </div>
+    </div>
+
+</div>
+<script>
+    $("#containerBox").on("change", "#metricTypeSelect", function(){
+        let type = $(this).val();
+        if(type == ""){
+            $("#metricTypeFilterSelect, #metricRangePicker").attr("disabled", true);
+            $("#metricGraphBody").empty();
+            return false;
+        }
+        let x = {...{type: type}, ...currentContainerDetails}
+        ajaxRequest(globalUrls.instances.metrics.getTypeFilters, x, (data)=>{
+            data = makeToastr(data);
+            let html = "<option value=''>Please select</option>";
+            $.each(data, (_, filter)=>{
+                html += `<option value='${filter}'>${filter}</option>`
+            });
+            $("#metricTypeFilterSelect").attr("disabled", false).empty().append(html);
+        });
+    });
+
+    $("#containerBox").on("change", "#metricRangePicker", function(){
+        if($(this).val() == ""){
+            $("#metricGraphBody").empty();
+            return false;
+        }
+        $("#metricTypeFilterSelect").trigger("change");
+    });
+
+    $("#containerBox").on("change", "#metricTypeFilterSelect", function(){
+        let filter = $(this).val();
+        let type = $("#metricTypeSelect").val();
+        let range = $("#metricRangePicker").val();
+
+        if(type == "" || filter == ""){
+            $("#metricRangePicker").attr("disabled", true);
+            $("#metricGraphBody").empty();
+            return false;
+        }
+
+        $("#metricRangePicker").attr("disabled", false);
+
+        if(range == ""){
+            return false;
+        }
+
+        let x = {...{type: type, filter: filter, range: range}, ...currentContainerDetails}
+        ajaxRequest(globalUrls.instances.metrics.getGraphData, x, (data)=>{
+            let color = '#2ecc71'
+            data = makeToastr(data);
+            $("#metricGraphBody").empty().append('<canvas id="metricGraph"></canvas>');
+
+            let scales = data.formatBytes ? scalesBytesCallbacks : {yAxes: [{}]}
+            let tooltips = data.formatBytes ? toolTipsBytesCallbacks : [];
+
+            scales.yAxes[0].gridLines = {drawBorder: false}
+            scales.yAxes[0].gridLines = {
+                color: "rgba(0, 0, 0, 0)",
+            }
+            scales.yAxes[0].ticks.beginAtZero = true;
+            let labels = [];
+            data.labels.forEach((element) => {
+                let d = moment.utc(element).local();
+                let f = d.isSame(moment(), 'day') ? "HH:mm" : "MMM Do HH:mm";
+                labels.push(d.format(f))
+            });
+
+            new Chart($("#metricGraph"), {
+                type: "line",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `Data`,
+                        fill: false,
+                        borderColor: color,
+                        pointHoverBackgroundColor: color,
+                        backgroundColor: color,
+                        pointHoverBorderColor: color,
+                        data: data.data,
+                        pointRadius: 0,
+                        formatBytes: data.formatBytes,
+						lineTension: 0,
+						borderWidth: 2
+                    }]
+                },
+                options: {
+                    animation: {
+                        duration: 0
+                    },
+                    legend: {
+                        display: false
+                    },
+                    scales:scales,
+                    tooltips: {
+                        intersect: false,
+                        mode: 'index',
+                        callbacks: {
+                            label: function(tooltipItem, myData) {
+                                let ds = myData.datasets[tooltipItem.datasetIndex];
+                                var label = ds.label || '';
+
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if(ds.hasOwnProperty("formatBytes") && ds.formatBytes){
+                                    label += formatBytes(tooltipItem.value);
+                                }else{
+                                    label += parseFloat(tooltipItem.value).toFixed(2);
+                                }
+
+                                return label;
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    });
+
+    $("#containerBox").on("click", "#goToMetrics", function(){
+        $(".instanceViewBox").hide();
+        $("#containerMetrics").show();
+
+        $("#metricGraphBody").empty();
+        $("#metricRangePicker").attr("disabled", true);
+        $("#metricTypeFilterSelect").attr("disabled", true).empty().append(`<option value=''>Please Select</option>`)
+        $("#metricRangePicker").find("option[value='']").attr("selected", true);
+        let x = {...{type: 1}, ...currentContainerDetails}
+
+        ajaxRequest(globalUrls.instances.metrics.getAllTypes, currentContainerDetails, (data)=>{
+            data = makeToastr(data);
+            let html = "<option value=''>Please select</option>";
+            $.each(data, (_, item)=>{
+                html += `<option value='${item.typeId}'>${item.type}</option>`
+            });
+            $("#metricTypeSelect").attr("disabled", false)
+            $("#metricTypeSelect").empty().append(html);
+        });
+
+    });
+</script>
