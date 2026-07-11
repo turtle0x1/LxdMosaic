@@ -1,0 +1,104 @@
+<div id="retiredData" class="settingsBox">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card bg-dark text-white" id="usersCard">
+                <div class="card-header" role="tab">
+                    <h5>
+                        <a class="text-white">
+                            <i class="fas fa-chart-line me-2"></i>Fleet Analytics
+                        </a>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>
+                        The dashboard graphs were driven by data aggregated about all your hosts,
+                        this data wasn't stored on a per host / project basis.
+                    </p>
+                    <p>
+                        This made data like "Active Containers" wrong,
+                        we have since added a new way of gathering data by host & project.
+                    </p>
+                    <p>
+                        Because this has been around for so long you may want to
+                        keep a copy before it is deleted in the next release!
+                    </p>
+                    <p class="font-italic">Sample Data</p>
+                    <table class="table table-dark table-bordered table-sm" id="retiredDataTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Total Memory Usage (Int)</th>
+                                <th>Active Containers (Int)</th>
+                                <th>Total Storage Usage (Int)</th>
+                                <th>Total Storage Available (Int)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2021-01-17 16:00:00</td>
+                                <td>123</td>
+                                <td>123</td>
+                                <td>123</td>
+                                <td>123</td>
+                            </tr>
+                            <tr>
+                                <td>2021-01-17 16:05:00</td>
+                                <td>123</td>
+                                <td>123</td>
+                                <td>123</td>
+                                <td>123</td>
+                            </tr>
+                            <tr>
+                                <td>2021-01-17 16:10:00</td>
+                                <td>123</td>
+                                <td>123</td>
+                                <td>123</td>
+                                <td>123</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-dark">
+                    <button class="btn btn-primary float-end" id="downloadOldFleetAnalytics">
+                        <i class="fas fa-download me-2"></i>Download CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function loadRetiredData() {
+        $(".settingsBox").hide();
+        $("#settingsBox").show();
+        putAdminSidebar(adminSettingUrls.retiredData);
+        changeActiveNav(null)
+        $(".viewSettings").addClass("active");
+        $("#retiredData").show();
+        addBreadcrumbs(["Admin Settings", "Retired Data"], ["", "active"], false, ["/admin"]);
+    }
+
+    $("#retiredData").on("click", "#downloadOldFleetAnalytics", function () {
+        ajaxRequest(globalUrls.analytics.getAllData, {}, (data) => {
+            data = makeToastr(data)
+            csv = 'Date,Total Memory Usage,Active Containers,Total Storage Usage,Total Storage Available\n';
+
+            //merge the data with CSV
+            data.forEach(function (row) {
+                csv += Object.values(row).join(',');
+                csv += "\n";
+            });
+
+            var hiddenElement = document.createElement('a');
+            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+            hiddenElement.target = '_blank';
+
+            //provide the name for the CSV file to be downloaded
+            hiddenElement.download = 'LXDMosaic_Fleet_Analytics.csv';
+            hiddenElement.click();
+        });
+    });
+
+</script>

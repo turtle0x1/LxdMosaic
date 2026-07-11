@@ -1,0 +1,155 @@
+<div id="containerEvents"  class="col-md-12 instanceViewBox mt-2">
+    <div class="card bg-dark text-white">
+        <div class="card-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2">
+            <h4>Event Logs</h4>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle float-end" type="button" id="filterEventsTableBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-form dropdown-menu-dark  dropdown-menu-end p-3" style="width: 25vw;" aria-labelledby="filterEventsTableBtn" id="filterEventsUl">
+                </ul>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <table class="table table-dark table-bordered" id="containerEventsTable">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Date</th>
+                        <th>Event</th>
+                        <th>Parameters</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $("#containerBox").on("click", "#goToEvents", function() {
+        $(".instanceViewBox").hide();
+        $("#containerEvents").show();
+        ajaxRequest('/api/Instances/RecordedActions/GetHostInstanceEventsController/get', currentContainerDetails, (data)=>{
+            data = makeToastr(data);
+            let trs = "";
+            let filterEventOptions = [];
+            let filterEventUsers = [];
+            if(data.length > 0){
+                $.each(data, (_, instanceEvent)=>{
+                    let eName = instanceEvent.controllerName == "" ? instanceEvent.controller : instanceEvent.controllerName;
+
+                    let params = "-";
+                    let userParams = instanceEvent.params;
+                    let userKeys = Object.keys(instanceEvent.params);
+                    if(userKeys.length > 0){
+                        params  = ""
+                        $.each(userKeys, (_, key)=>{
+                            if(userParams[key] == null){
+                                return true;
+                            }
+                            let t = typeof userParams[key]
+                            if(t !== "array" && t !== "object"){
+                                params += `<div class="mb-1">
+                                    ${key}: ${userParams[key]}
+                                </div>`
+                            // NOTE 1 level recursion not traversing whole tree's
+                            } else if(t === "object"){
+                                let pKeys = Object.keys(userParams[key]);
+                                params += `<div class="mb-1">
+                                    ${key}:
+                                </div>`
+                                $.each(pKeys, (_, k)=>{
+                                    params += `<div class="mb-1 ps-2">
+                                        ${k}: ${userParams[key][k]}
+                                    </div>`
+                                });
+                            }
+                        });
+                    }
+
+                    trs += `<tr data-user-name="${instanceEvent.userName}" data-event-name="${eName}">
+                        <td>${instanceEvent.userName}</td>
+                        <td>${moment.utc(instanceEvent.date).local().format("llll")}</td>
+                        <td>${eName}</td>
+                        <td>${params}</td>
+                    </tr>`
+                    if(!filterEventUsers.includes(instanceEvent.userName)){
+                        filterEventUsers.push(instanceEvent.userName);
+                    }
+                    if(!filterEventOptions.includes(eName)){
+                        filterEventOptions.push(eName);
+                    }
+                });
+            }else{
+                trs = "<tr><td colspan='999' class='text-center'>No Logs</td></tr>"
+            }
+            let filters = '<li><h6 class="dropdown-header p-0"><i class="fas fa-filter me-2"></i>Users</h6></li>';
+            $.each(filterEventUsers, (i, userName)=>{
+                filters += `<div class="ps-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input userFilter" data-user-name="${userName}" id="${i}UserFilter" checked>
+                        <label class="form-check-label" for="${i}UserFilter">
+                            ${userName}
+                        </label>
+                    </div>
+                </div>`
+            });
+            filters += '<li><h6 class="dropdown-header p-0"><i class="fas fa-filter me-2"></i>Events</h6></li>';
+            $.each(filterEventOptions, (i, option)=>{
+                filters += `<div class="ps-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input eventFilter" data-event-name="${option}" id="${i}EventFilter" checked>
+                        <label class="form-check-label" for="${i}EventFilter">
+                            ${option}
+                        </label>
+                    </div>
+                </div>`
+            });
+
+            $("#filterEventsUl").empty().append(filters);
+            $("#containerEventsTable > tbody").empty().append(trs);
+        });
+    });
+
+    $("#filterEventsUl").on("click", ".userFilter, .eventFilter", function(){
+        let users = $("#filterEventsUl").find(".userFilter").map(function(){
+            if($(this).is(":checked")){
+                return $(this).data("userName");
+            }
+        });
+        let events = $("#filterEventsUl").find(".eventFilter").map(function(){
+            if($(this).is(":checked")){
+                return $(this).data("eventName");
+            }
+        });
+
+        users = Object.values(users)
+        events = Object.values(events)
+
+        $("#containerEventsTable > tbody > tr").each(function(){
+            let inEventFilter = true;
+            let inUserFilter = true;
+            let d = $(this).data();
+            if(users.length > 0 && !users.includes(d.userName)){
+                inUserFilter = false;
+            }
+            if(events.length > 0 && !events.includes(d.eventName)){
+                inEventFilter = false;
+            }
+
+            if(inEventFilter && inUserFilter){
+                $(this).show();
+            }else{
+                $(this).hide();
+            }
+        });
+    });
+
+    $('.dropdown-menu').on('click', function(e) {
+        if($(this).hasClass('dropdown-menu-form')) {
+            e.stopPropagation();
+        }
+    });
+</script>

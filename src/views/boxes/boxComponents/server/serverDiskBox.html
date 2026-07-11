@@ -1,0 +1,63 @@
+<div class="serverViewBox" id="serverDiskBox">
+    <div class="card bg-dark card-body">
+        <table class="table table-dark" id="serverDisksTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Device</th>
+                    <th>Model</th>
+                    <th>Type</th>
+                    <th>Read Only</th>
+                    <th>Mounted</th>
+                    <th>Size</th>
+                    <th>Removable</th>
+                    <th>Block Size</th>
+                    <th>RPM</th>
+                    <th>Device ID</th>
+                    <th>Partitions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+function loadHostDisks(req){
+    currentContainerDetails = null;
+    let hostId = req.data.hostId;
+    currentServer.hostId = hostId
+    currentServer.hostAlias = hostsAliasesLookupTable[hostId]
+    createDashboardSidebar()
+    _loadServerDetailsIfReq(hostId);
+    changeActiveNav(".overview")
+    $(".boxSlide, .serverViewBox").hide();
+    $("#serverDiskBox, #serverBox").show();
+    $("#serverBoxNav").find(".active").removeClass("active")
+    $("#serverBoxNav .nav-item[data-view='serverDiskBox'] > .nav-link").addClass("active")
+    ajaxRequest(globalUrls.hosts.getHostOverview, {hostId: hostId}, (data)=>{
+        data = makeToastr(data)
+        let diskTrs = "";
+        data.resources.storage.disks.forEach(disk => {
+            diskTrs += `<tr>
+                <td>${disk.id}</td>
+                <td>${disk.device}</td>
+                <td>${disk.model}</td>
+                <td>${disk.type}</td>
+                <td>${disk.read_only ? `<i class="fas fa-check">` : `<i class="fas fa-times"></i>`}</td>
+                <td>${disk.mounted ? `<i class="fas fa-check">` : `<i class="fas fa-times"></i>`}</td>
+                <td>${formatBytes(disk.size)}</td>
+                <td>${disk.removeable ? `<i class="fas fa-check">` : `<i class="fas fa-times"></i>`}</td>
+                <td>${disk.block_size}</td>
+                <td>${disk.rpm}</td>
+                <td>${disk.device_id}</td>
+                <td>${disk.partitions.length}</td>
+            </tr>`
+        });
+        $("#serverDisksTable > tbody").empty().append(diskTrs)
+    })
+}
+</script>

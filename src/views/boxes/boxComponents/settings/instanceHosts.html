@@ -1,0 +1,268 @@
+<div id="instanceHostsBox" class="settingsBox">
+    <div class="card bg-dark text-white" id="recordedActionsCard">
+        <div class="card-header bg-dark" role="tab">
+            <h5>Hosts
+                <button class="btn btn-outline-primary float-end" id="addHostBtn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </h5>
+        </div>
+        <div id="allHostsList" class="collapse in show" role="tabpanel">
+            <div class="card-body table-responsive bg-dark">
+                <table class="table table-dark table-bordered" id="hostListTable">
+                    <thead>
+                        <tr>
+                            <th>Alias</th>
+                            <th>IP</th>
+                            <th>Online</th>
+                            <th>Certificate Expires</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function loadInstancesHostsView() {
+        $(".settingsBox").hide();
+        $("#settingsBox").show();
+        putAdminSidebar(adminSettingUrls.hosts);
+        changeActiveNav(null)
+        $(".viewSettings").addClass("active");
+        $("#instanceHostsBox").show();
+        addBreadcrumbs(["Admin Settings", "Hosts Management"], ["", "active"], false, ["/admin"]);
+        ajaxRequest(globalUrls.hosts.getAllHosts, {}, (data) => {
+            data = makeToastr(data);
+            let trs = "";
+            if (data.length > 0) {
+                let now = moment();
+                $.each(data, (_, host) => {
+                    let o = "<i class='fas fa-check text-success'></i>";
+                    if (host.hostOnline == 0) {
+                        o = "<i class='fas fa-times text-danger'></i>";
+                    }
+                    let certExpiresIcon = "";
+                    let certExpires = moment(host.certExpires);
+                    let threeMonthsPrior = moment(host.certExpires).subtract(3, 'months')
+
+                    if (certExpires < now) {
+                        certExpiresIcon = "<i class='fas fa-exclamation-triangle text-danger me-2'></i>"
+                    } else if (now > threeMonthsPrior) {
+                        certExpiresIcon = "<i class='fas fa-exclamation-triangle me-2' style='color: yellow !important;'></i>"
+                    }
+
+                    trs += `<tr id="${host.hostId}">
+                    <td>${host.alias}</td>
+                    <td>${host.urlAndPort}</td>
+                    <td>${o}</td>
+                    <td>${certExpiresIcon} ${certExpires.format("ll")}</td>
+                        <td>
+                            <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <div class='dropdown-item renewCertificate'><i class="fas fa-sync"></i> Renew Certificate</div>
+                              <div class='dropdown-item deleteHost'><i class="fas fa-trash"></i> Delete Host</div>
+                            </div>
+                        </td>
+                </tr>`
+                });
+            } else {
+                trs += `<tr><td colspan="999" class="text-info">No Hosts</td></tr>`
+            }
+            $("#hostListTable > tbody").empty().append(trs);
+        });
+    }
+
+    $("#instanceHostsBox").on("click", "#addHostBtn", function () {
+        $.confirm({
+            icon: "fa fa-server",
+            title: "Add Host",
+            columnClass: "col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1",
+            content: `<div class="mb-2">
+             <label>Alias</label>
+             <input class="form-control" name="alias" placeholder="PC, Laptop, Server-1"/>
+         </div>
+         <label class="mb-2">How Do You Want To Access The Host?</label>
+         <nav>
+           <div class="nav nav-pills mb-3" id="host-nav" role="tablist">
+             <button class="nav-link text-dark  active" id="nav-token-tab" data-bs-toggle="tab" data-bs-target="#nav-token" type="button" role="tab" aria-controls="nav-token" aria-selected="true">Token</button>
+             <button class="nav-link text-dark" id="nav-network-tab" data-bs-toggle="tab" data-bs-target="#nav-network" type="button" role="tab" aria-controls="nav-network" aria-selected="true">Trust Password (Depreciated)</button>
+             <button class="nav-link text-dark" id="nav-socket-tab" data-bs-toggle="tab" data-bs-target="#nav-socket" type="button" role="tab" aria-controls="nav-socket" aria-selected="false">Socket</button>
+           </div>
+         </nav>
+         <div class="tab-content" id="host-navContent">
+           <div class="tab-pane fade show active" id="nav-token" role="tabpanel" aria-labelledby="nav-token-tab">
+               <div class="mb-2">
+                   <label>IP Address / Hostname</label>
+                   <input class="form-control" name="name" placeholder="" autocomplete="off"/>
+               </div>
+               <div class="mb-2">
+                   <label>Token</label>
+                   <textarea class="form-control" type="text" name="token" placeholder="" autocomplete="off"></textarea>
+               </div>
+           </div>
+           <div class="tab-pane fade show" id="nav-network" role="tabpanel" aria-labelledby="nav-network-tab">
+               <div class="mb-2">
+                   <label>IP Address / Hostname</label>
+                   <input class="form-control" name="name" placeholder="" autocomplete="off"/>
+               </div>
+               <div class="mb-2">
+                   <label>Trust Password</label>
+                   <input class="form-control" type="password" name="trustPassword" placeholder=""/>
+               </div>
+           </div>
+           <div class="tab-pane fade" id="nav-socket" role="tabpanel" aria-labelledby="nav-socket-tab">
+               <div class="mb-2">
+                   <label>Socket Path</label>
+                   <input class="form-control" name="socketPath" value="/var/snap/lxd/common/lxd/unix.socket"/>
+               </div>
+           </div>
+         </div>
+         `,
+            buttons: {
+                cancel: {},
+                add: {
+                    btnClass: "btn-primary",
+                    action: function () {
+                        let alias = this.$content.find('input[name=alias]').val().trim();
+
+                        if (alias === "") {
+                            $.alert("Please enter an alias")
+                            return false;
+                        }
+
+                        let name = ""
+                        let trustPassword = ""
+                        let token = ""
+                        let socketPath = ""
+
+                        let activeNav = this.$content.find("#host-nav .active").data().bsTarget
+
+                        if (activeNav === "#nav-socket") {
+                            socketPath = this.$content.find('input[name=socketPath]').val().trim();
+
+                            if (socketPath === "") {
+                                $.alert("Please enter socket path")
+                                return false;
+                            }
+                        } else {
+                            name = this.$content.find('input[name=name]').val().trim();
+
+                            if (name === "") {
+                                $.alert("Please enter ip address / hostname")
+                                return false;
+                            }
+                            if (activeNav == "#nav-token") {
+                                token = this.$content.find('textarea[name=token]').val().trim();
+                                if (token === "") {
+                                    $.alert("Please enter token")
+                                    return false;
+                                }
+                            } else {
+                                trustPassword = this.$content.find('input[name=trustPassword]').val().trim();
+                                if (trustPassword === "") {
+                                    $.alert("Please enter trust password")
+                                    return false;
+                                }
+                            }
+
+                        }
+                        let x = {
+                            hostsDetails: [
+                                {
+                                    name: name,
+                                    trustPassword: trustPassword,
+                                    token: token,
+                                    socketPath: socketPath,
+                                    alias: alias
+                                }
+                            ]
+                        }
+
+                        ajaxRequest("/api/Hosts/AddHostsController/add", x, function (data) {
+                            let x = makeToastr(data);
+                            if (x.state == "error") {
+                                return false;
+                            }
+                            location.reload();
+                        });
+                    }
+                }
+            }
+        });
+    });
+
+    $("#hostListTable").on("click", ".renewCertificate", function () {
+        let tr = $(this).parents("tr");
+        let hostId = tr.attr("id");
+        $.confirm({
+            title: 'Renew Certificate',
+            content: 'Renew LXDMosaic certificate with LXD!',
+            buttons: {
+                cancel: function () { },
+                renew: {
+                    btnClass: 'btn-success',
+                    action: function () {
+                        this.buttons.renew.setText('<i class="fa fa-cog fa-spin"></i>Renewing..'); // let the user know
+                        this.buttons.renew.disable();
+                        this.buttons.cancel.disable();
+                        var modal = this;
+                        ajaxRequest('/api/Hosts/Certificates/RenewHostCertificateController/renew', { hostId: hostId }, (data) => {
+                            data = makeToastr(data);
+                            if (data.state == "error") {
+                                this.buttons.renew.enable();
+                                this.buttons.renew.setText('renew'); // let the user know
+                                this.buttons.cancel.enable();
+                                return false;
+                            }
+                            window.location.reload()
+                            modal.close();
+                        });
+                        return false;
+                    }
+                }
+            }
+        });
+    });
+
+    $("#hostListTable").on("click", ".deleteHost", function () {
+        let tr = $(this).parents("tr");
+        let hostId = tr.attr("id");
+        $.confirm({
+            title: 'Delete Host',
+            content: 'Are you sure you want to remove this host!',
+            buttons: {
+                cancel: function () { },
+                yes: {
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        this.buttons.yes.setText('<i class="fa fa-cog fa-spin"></i>Deleting..'); // let the user know
+                        this.buttons.yes.disable();
+                        this.buttons.cancel.disable();
+                        var modal = this;
+                        ajaxRequest(globalUrls.hosts.delete, { hostId: hostId }, (data) => {
+                            data = makeToastr(data);
+                            if (data.state == "error") {
+                                this.buttons.yes.enable();
+                                this.buttons.yes.setText('Yes'); // let the user know
+                                this.buttons.cancel.enable();
+                                return false;
+                            }
+                            tr.remove();
+                            modal.close();
+                        });
+                        return false;
+                    }
+                }
+            }
+        });
+    });
+
+</script>

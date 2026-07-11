@@ -1,0 +1,372 @@
+<div id="containerBackups" class="instanceViewBox mt-2">
+    <div class="row" id="backupErrorRow">
+        <div class="col-md-12 alert alert-danger" id="backupErrorMessage">
+        </div>
+    </div>
+    <div class="row" id="backupDetailsRow">
+        <div class="col-md-6">
+            <div class="card bg-dark text-white">
+                <div class="card-header bg-dark">
+                    <h4> LXDMosaic Instance Backups </h4>
+                </div>
+                <div class="card-body bg-dark">
+                    <table class="table table-bordered table-dark" id="localBackupTable">
+                        <thead>
+                            <tr>
+                                <th> Backup </th>
+                                <th> Date </th>
+                                <th> Size </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-dark text-white">
+                <div class="card-header bg-dark">
+                    <h4>
+                        LXD Instance Backups
+                        <button class="btn btn-success float-end" id="createBackup">
+                            Create
+                        </button>
+                    </h4>
+                </div>
+                <div class="card-body bg-dark">
+                    <table class="table table-bordered table-dark" id="remoteBackupTable">
+                        <thead>
+                            <tr>
+                                <th> Backup </th>
+                                <th> Date </th>
+                                <th> Stored Locally </th>
+                                <th> Import </th>
+                                <th> Delete </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function loadContainerBackups()
+    {
+        ajaxRequest(globalUrls.instances.backups.getContainerBackups, currentContainerDetails, (data)=>{
+            x = makeToastr(data);
+            $("#backupDetailsRow").show();
+            $("#backupErrorRow").hide()
+            if(x.hasOwnProperty("state") && x.state == "error"){
+                $("#backupErrorRow").show()
+                $("#backupErrorMessage").text(x.message);
+                $("#backupDetailsRow").hide();
+                return false;
+            }
+
+            let localBackups = "";
+
+            if(x.localBackups.length > 0 ){
+                $.each(x.localBackups, function(_, item){
+                    localBackups += `<tr data-backup-id="${item.id}">
+                        <td>${item.backupName}</td>
+                        <td>${moment(item.dateCreated).fromNow()}</td>
+                        <td>${formatBytes(item.filesize)}</td>
+                    </tr>`
+                });
+            } else{
+                localBackups = `<tr><td colspan="999" class="text-center text-info">No backups</td></tr>`
+            }
+
+            $("#localBackupTable > tbody").empty().append(localBackups);
+
+            let remoteBackups = "";
+            if(x.remoteBackups.length > 0){
+                $.each(x.remoteBackups, function(_, item){
+
+
+                    let  downloadedLocallySym = '<i class="fas fa-times-circle text-danger"></i>',
+                        importHtml = `<button class="btn btn-primary importBackup"><i class="fas fa-download"></i></button>`;
+
+                    if(item.storedLocally){
+                        downloadedLocallySym = '<i class="fas fa-check-circle text-success"></i>';
+                        importHtml = "<b class='text-info'>Already Imported</b>"
+                    }
+
+                    remoteBackups += `<tr data-name="${item.name}" class="">
+                        <td>${item.name}</td>
+                        <td>${moment(item.created_at).fromNow()}</td>
+                        <td>${downloadedLocallySym}</td>
+                        <td>${importHtml}</td>
+                        <td><button class='btn btn-danger deleteBackup'><i class="fas fa-trash"></i></button></td>
+                    </tr>`
+                });
+            }else{
+                remoteBackups = `<tr><td colspan="999" class="text-center text-info">No backups</td></tr>`
+            }
+
+
+            $("#remoteBackupTable > tbody").empty().append(remoteBackups);
+        });
+    }
+
+    $("#containerBox").on("click", "#goToBackups", function() {
+        if($(this).hasClass("disabled")){
+            return false;
+        }
+        loadContainerBackups();
+        $(".instanceViewBox").hide();
+        $("#containerBackups").show();
+    });
+
+    $("#containerBox").on("click", "#createBackup", function(){
+        backupContainerConfirm(
+            currentContainerDetails.hostId,
+            currentContainerDetails.alias,
+            currentContainerDetails.container,
+            loadContainerBackups
+        );
+    });
+
+    $("#containerBox").on("click", ".containerRestoreBackup", function(){
+        let backupId = $(this).parents("tr").data("backupId");
+
+        restoreBackupContainerConfirm(
+            backupId,
+            currentContainerDetails.alias,
+            currentContainerDetails.container
+        );
+
+    });
+
+    $("#containerBox").on("click", ".deleteBackup", function(){
+
+        let x = {
+            hostId: currentContainerDetails.hostId,
+            container: currentContainerDetails.container,
+            backup: $(this).parents("tr").data("name")
+        }
+
+        $.confirm({
+            title: `Delete Backup - ${currentContainerDetails.alias} / ${currentContainerDetails.container} / ${x.backup} `,
+            content: ``,
+            buttons: {
+                cancel: function(){},
+                delete: {
+                    text: 'Delete Backup',
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        let modal = this;
+                        let btn  = $(this);
+
+                        modal.buttons.delete.setText('<i class="fa fa-cog fa-spin"></i>Deleting..'); // let the user know
+                        modal.buttons.delete.disable();
+                        modal.buttons.cancel.disable();
+
+                        ajaxRequest(globalUrls.instances.backups.deleteContainerBackup, x, (data)=>{
+                            data = makeToastr(data);
+                            if(x.state == "error"){
+                                modal.buttons.delete.setText('Delete Backup'); // let the user know
+                                modal.buttons.delete.enable();
+                                modal.buttons.cancel.enable();
+                                return false;
+                            }else{
+                                modal.close();
+                                loadContainerBackups();
+                            }
+                        });
+                        return false;
+                    }
+                }
+            }
+        });
+    });
+
+    $("#containerBox").on("click", ".importBackup", function(){
+        let tr =  $(this).parents("tr");
+        $.confirm({
+            title: `Import Backup - ${currentContainerDetails.alias} / ${currentContainerDetails.container} / ${tr.data("name")} `,
+            content: `
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" name="delete">
+                  <label class="form-check-label" for="delete">Delete From Remote?</label>
+                </div>
+                `,
+            buttons: {
+                cancel: function(){},
+                rename: {
+                    text: 'Import',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        let modal = this;
+                        let btn  = $(this);
+
+                        let deleteFromRemote = this.$content.find('input[name=delete]').is(":checked") ? 1 : 0
+
+                        modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Importing..'); // let the user know
+                        modal.buttons.rename.disable();
+                        modal.buttons.cancel.disable();
+
+                        let x = {
+                            hostId: currentContainerDetails.hostId,
+                            container: currentContainerDetails.container,
+                            backup: tr.data("name"),
+                            'delete': deleteFromRemote
+                        }
+
+                        ajaxRequest(globalUrls.instances.backups.importContainerBackup, x, (data)=>{
+                            data = makeToastr(data);
+                            if(data.state == "error"){
+                                modal.buttons.rename.setText('Importing'); // let the user know
+                                modal.buttons.rename.enable();
+                                modal.buttons.cancel.enable();
+                            }
+
+                            modal.close();
+                            loadContainerBackups();
+                        });
+                        return false;
+                    }
+                },
+            }
+        });
+    });
+
+    function restoreBackupContainerConfirm(backupId, hostAlias, container, callback = null, wait = true)
+    {
+        $.confirm({
+            title: `Backup Instance - ${hostAlias} / ${container} `,
+            content: `
+                <div class="mb-2">
+                    <label> Target Host </label>
+                    <input class="form-control" name="targetHost"/>
+                </div>
+                `,
+            buttons: {
+                cancel: function(){},
+                rename: {
+                    text: 'Restore',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        let modal = this;
+                        let btn  = $(this);
+
+                        let targetHost = this.$content.find('input[name=targetHost]').tokenInput("get");
+
+                        if(targetHost.length == 0){
+                            $.alert("Please select target host");
+                            return false;
+                        }
+
+                        modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Restoring..'); // let the user know
+                        modal.buttons.rename.disable();
+                        modal.buttons.cancel.disable();
+
+                        let x = {
+                            backupId: backupId,
+                            targetHost: targetHost[0].hostId
+                        }
+
+                        ajaxRequest(globalUrls.backups.restore, x, (data)=>{
+                            data = makeToastr(data);
+                            if(data.state == "error"){
+                                modal.buttons.rename.setText('Backup'); // let the user know
+                                modal.buttons.rename.enable();
+                                modal.buttons.cancel.enable();
+                                return false;
+                            }
+                            if($.isFunction(callback)){
+                                callback.call();
+                            }
+                            modal.close();
+                        });
+                        return false;
+                    }
+                },
+            },
+            onContentReady: function () {
+                // bind to events
+                var jc = this;
+                this.$content.find('input[name=targetHost]').tokenInput(globalUrls.hosts.search.search, {
+                    queryParam: "hostSearch",
+                    propertyToSearch: "host",
+                    tokenValue: "hostId",
+                    preventDuplicates: false,
+                    tokenLimit: 1,
+                    theme: "facebook"
+                });
+            }
+        });
+    }
+
+    function backupContainerConfirm(hostId, hostAlias, container, callback = null, wait = true)
+    {
+        $.confirm({
+            title: `Backup Instance - ${hostAlias} / ${container} `,
+            content: `
+                <div class="mb-2">
+                    <label> Backup Name </label>
+                    <input class="form-control validateName" maxlength="63" name="name"/>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" name="importAndDelete">
+                  <label class="form-check-label" for="importAndDelete">Import & Delete From Remote</label>
+                </div>
+                <div class="alert alert-warning">
+                    This will block the browser while it runs, schedule a backup to
+                    run in the background! (Or open a new tab)
+                </div>
+                `,
+            buttons: {
+                cancel: function(){},
+                rename: {
+                    text: 'Backup',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        let modal = this;
+                        let btn  = $(this);
+
+                        let backupName = this.$content.find('input[name=name]').val();
+
+                        if(backupName == ""){
+                            $.alert('provide a backup name');
+                            return false;
+                        }
+
+                        let importAndDelete = this.$content.find('input[name=importAndDelete]').is(":checked") ? 1 : 0
+
+                        modal.buttons.rename.setText('<i class="fa fa-cog fa-spin"></i>Backing Up..'); // let the user know
+                        modal.buttons.rename.disable();
+                        modal.buttons.cancel.disable();
+
+                        let x = {
+                            hostId: hostId,
+                            container: container,
+                            backup: backupName,
+                            wait: wait,
+                            importAndDelete: importAndDelete
+                        }
+
+                        ajaxRequest(globalUrls.instances.backups.backup, x, function(data){
+                            let x = makeToastr(data);
+                            if(x.state == "error"){
+                                modal.buttons.rename.setText('Backup'); // let the user know
+                                modal.buttons.rename.enable();
+                                modal.buttons.cancel.enable();
+                                return false;
+                            }
+                            if($.isFunction(callback)){
+                                callback.call();
+                            }
+                            modal.close();
+                        });
+                        return false;
+                    }
+                },
+            }
+        });
+    }
+</script>

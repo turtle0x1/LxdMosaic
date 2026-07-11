@@ -1,0 +1,109 @@
+<div class="serverViewBox" id="serverWarningsBox">
+    <div class="card bg-dark text-white">
+        <div class="card-header text-white">
+            <h4>Warnings</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-dark" id="serverWarningTable">
+                <thead>
+                    <tr>
+                        <th>Severity</th>
+                        <th>Type</th>
+                        <th>Last Message</th>
+                        <th>Status</th>
+                        <th>Acknowledge</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+
+function loadHostWarnings(req){
+    currentContainerDetails = null;
+    let hostId = req.data.hostId;
+    currentServer.hostId = hostId
+    currentServer.hostAlias = hostsAliasesLookupTable[hostId]
+    createDashboardSidebar()
+    _loadServerDetailsIfReq(hostId);
+    changeActiveNav(".overview")
+    $(".boxSlide, .serverViewBox").hide();
+    $("#serverWarningsBox, #serverBox").show();
+
+    addBreadcrumbs(["Dashboard", hostsAliasesLookupTable[hostId], "Warnings"], ["", "", "active"], false, ["/", "", ""]);
+
+    $("#serverBoxNav").find(".active").removeClass("active")
+    $("#serverBoxNav .nav-item[data-view='serverWarningsBox'] > .nav-link").addClass("active")
+
+    ajaxRequest(globalUrls.hosts.warnings.getOnHost, currentServer, (data)=>{
+        data = makeToastr(data);
+
+        let x = "";
+        if(Object.keys(data).length){
+            $.each(data, (_, warning)=>{
+                let ackButton = '-';
+                if(warning.status != "acknowledged"){
+                    ackButton = `<button class="btn btn-success ackWarning">
+                        <i class="fas fa-check" style="color: white !important;"></i>
+                    </button>`
+                }
+                x += `<tr id="${warning.uuid}">
+                    <td>${warning.severity}</td>
+                    <td>${warning.type}</td>
+                    <td>${warning.last_message}</td>
+                    <td>${warning.status}</td>
+                    <td>
+                        ${ackButton}
+                    </td>
+                    <td>
+                        <button class="btn btn-danger deleteWarning">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>`
+            });
+        }else{
+            x += `<tr><td colspan="999" class="text-center text-info">No Warnings</td></tr>`
+        }
+
+        $("#serverWarningTable > tbody").empty().append(x);
+    });
+}
+
+$(document).on("click", ".ackWarning", function(){
+    let warningId = $(this).parents("tr").attr("id");
+    let td = $(this).parents("td");
+    let btn = $(this);
+    btn.attr("disabled", true);
+    ajaxRequest(globalUrls.hosts.warnings.acknowledge, {hostId: currentServer.hostId, id: warningId}, (data)=>{
+        data = makeToastr(data);
+        if(data.hasOwnProperty("error") || data.state == "error"){
+            btn.attr("disabled", false);
+            return false;
+        }
+        td.empty().append("-");
+    });
+});
+
+$(document).on("click", ".deleteWarning", function(){
+    let tr = $(this).parents("tr");
+    let warningId = tr.attr("id");
+    let btn = $(this);
+    btn.html("<i class='fas fa-cog fa-spin'></i>")
+    tr.find("button").attr("disabled", true);
+    ajaxRequest(globalUrls.hosts.warnings.delete, {hostId: currentServer.hostId, id: warningId}, (data)=>{
+        data = makeToastr(data);
+        if(data.hasOwnProperty("error") || data.state == "error"){
+            btn.html("<i class='fas fa-trash'></i>")
+            tr.find("button").attr("disabled", false);
+            return false;
+        }
+        tr.remove();
+    });
+});
+</script>
