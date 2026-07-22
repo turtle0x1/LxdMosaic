@@ -9,6 +9,10 @@ class Copy
 {
     public function copyToTargetHosts(Host $host, string $profile, HostsCollection $targetHosts, string $newName)
     {
+        if ($host->usesSocket()) {
+            throw new \Exception('Copying profiles from a host connected via a Unix socket is not supported. Proxying over Unix sockets is not available.', 1);
+        }
+
         $profileInfo = $host->profiles->info($profile);
 
         $profileInfo['devices'] = $profileInfo['devices'] ?: null;
