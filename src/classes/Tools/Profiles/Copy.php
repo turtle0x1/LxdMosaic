@@ -13,12 +13,6 @@ class Copy
             throw new \Exception('Copying profiles from a host connected via a Unix socket is not supported. Proxying over Unix sockets is not available.', 1);
         }
 
-        foreach ($targetHosts as $targetHost) {
-            if ($targetHost->usesSocket()) {
-                throw new \Exception("Copying profiles to host '{$targetHost->getAlias()}' is not supported. The target host is connected via a Unix socket and proxying over Unix sockets is not available.", 1);
-            }
-        }
-
         $profileInfo = $host->profiles->info($profile);
 
         $profileInfo['devices'] = $profileInfo['devices'] ?: null;
