@@ -65,7 +65,7 @@ var userDetails = {
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-      <title>LXD Mosaic</title>
+      <title><?= htmlspecialchars('LXDMosaic - ' . $instance . ' (' . $project . ')') ?></title>
 
       <link rel="stylesheet" href="/assets/dist/external.fontawesome.css">
 
@@ -88,12 +88,80 @@ var userDetails = {
       </script>
 
       <style>
-      .spice-screen
+      html, body
       {
-          min-height: 600px;
-          height: 100%;
-          margin: 10px;
-          padding: 0;
+          height: 100% !important;
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          overflow: hidden !important;
+          display: flex;
+          flex-direction: column;
+      }
+
+      #containerTerminal
+      {
+          height: 100vh !important;
+          width: 100vw !important;
+          display: flex;
+          flex-direction: column;
+          margin: 0 !important;
+          padding: 0 !important;
+          background-color: transparent !important;
+      }
+
+      #containerTerminal > .row
+      {
+          height: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          display: flex;
+          flex-direction: column;
+      }
+
+      #containerTerminal .col-md-12
+      {
+          height: 100% !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          display: flex;
+          flex-direction: column;
+          background-color: black !important;
+      }
+
+      #spice-area
+      {
+          height: 100% !important;
+          width: 100% !important;
+          max-width: none !important;
+          border: none !important;
+          box-shadow: none !important;
+          border-radius: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          display: flex;
+          flex-direction: column;
+          background-color: black !important;
+      }
+
+      .spice-screen, #spice-screen
+      {
+          height: 100% !important;
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          background-color: black !important;
+          display: flex;
+          flex-direction: column;
+      }
+
+      /* Spice canvas should fill its screen container */
+      #spice-screen canvas
+      {
+          object-fit: contain;
+          max-height: 100%;
+          max-width: 100%;
+          margin: auto;
       }
       </style>
 
@@ -235,7 +303,7 @@ var userDetails = {
 
       <div id="containerTerminal" class="instanceViewBox">
           <div class="row m-0 p-0 h-100">
-              <div class="col-md-12 text-center h-100 bg-secondary m-0 p-0">
+              <div class="col-md-12 text-center h-100 bg-black m-0 p-0">
                   <div id="spice-area">
                       <div id="spice-screen" class="spice-screen">
                       </div>
@@ -243,13 +311,35 @@ var userDetails = {
               </div>
           </div>
       </div>
-      <style>
-        #spice-screen {
-            margin: 0px !important;
-        }
-      </style>
 
       <script>
+      // If this popup is still smaller than the screen (browser ignored the
+      // borderless sizing), fall back to native fullscreen so the terminal
+      // truly consumes 100% of the display. Re-trigger Spice resize afterwards.
+      window.addEventListener('load', function() {
+          setTimeout(function() {
+              if (!window.matchMedia('(display-mode: fullscreen)').matches) {
+                  const el = document.documentElement;
+                  const req = el.requestFullscreen || el.webkitRequestFullscreen ||
+                              el.msRequestFullscreen || el.mozRequestFullScreen;
+                  if (req && document.fullscreenElement === null) {
+                      try { req.call(el).catch ? req.call(el).catch(function(){}) : req.call(el); } catch(e) {}
+                  }
+              }
+              // Give the browser a beat to settle at full size, then resize Spice.
+              window.setTimeout(function() {
+                  try { if (window.spice_connection) SpiceHtml5HandleResizeFallback(); } catch(e) {}
+              }, 300);
+          }, 250);
+      });
+
+      function SpiceHtml5HandleResizeFallback() {
+          // spice_html5 exposes handle_resize on the connection via its own module
+          // We rely on the already-registered window.resize listener instead by
+          // dispatching a synthetic resize event.
+          window.dispatchEvent(new Event('resize'));
+      }
+
       $(function(){
           $("#spice-screen").append(`<h4 id="spiceLoadingIndicator"> <i class="fas fa-cog fa-spin"></i> </h4>`)
           let project = $("#instanceProject").text();

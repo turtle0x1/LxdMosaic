@@ -201,12 +201,30 @@
                     }
                 },
                 goLarge: {
-                    text: "> 800x640 (Opens New Tab)",
+                    text: "> 800x640 (Opens Fullscreen Window)",
                     btnClass: "btn-primary",
                     action: function(){
                         let project = $("#instanceProject").text();
                         let x = {hostId: currentContainerDetails.hostId, project: project, instance: currentContainerDetails.container};
-                        window.open("/terminal?" + $.param(x), "_blank");
+                        // Open a borderless popup sized to the full available screen.
+                        // Removing chrome (menubar/toolbar/location/statusbar) means
+                        // window.innerHeight == screen height, so Spice's terminal
+                        // (sized via innerHeight) consumes 100% of the display.
+                        const features = [
+                            `width=${window.screen.availWidth}`,
+                            `height=${window.screen.availHeight}`,
+                            `left=${window.screenX || 0}`,
+                            `top=${window.screenY || 0}`,
+                            'menubar=no',
+                            'toolbar=no',
+                            'location=no',
+                            'directories=no',
+                            'status=no',
+                            'titlebar=no',
+                            'resizable=yes',
+                            'fullscreen=yes'
+                        ].join(',');
+                        window.open("/terminal?" + $.param(x), "lxdmosaic-terminal", features);
                         router.navigate(`/instance/${currentContainerDetails.alias}/${currentContainerDetails.container}/details`);
                     }
                 }
