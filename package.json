@@ -39,7 +39,7 @@
     "@xterm/xterm": "5.5.0",
     "ace-builds": "^1.43.4",
     "bootstrap": "^5.3.8",
-    "chart.js": "^2.9.4",
+    "chart.js": "^4.5.1",
     "dropzone": "^5.9.3",
     "gulp": "^5.0.1",
     "gulp-clean-css": "^4.3.0",

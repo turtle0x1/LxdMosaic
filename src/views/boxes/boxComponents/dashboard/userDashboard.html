@@ -65,13 +65,16 @@
 
                     </div>
                 </div>`);
-                let scales = graph.formatBytes ? scalesBytesCallbacks : {
-                    yAxes: [{}]
+                let scales = graph.formatBytes ? scalesBytesCallbacks() : {
+                    y: {}
                 }
-                scales.yAxes[0].gridLines = {
-                    drawBorder: false
+                scales.y.grid = {
+                    display: true
                 }
-                let tooltips = graph.formatBytes ? toolTipsBytesCallbacks : [];
+                scales.y.border = {
+                    display: false
+                }
+                let tooltips = graph.formatBytes ? toolTipsBytesCallbacks() : [];
                 let color = '#2ecc71'
 
                 new Chart(x.find("#" + i), {
@@ -88,7 +91,7 @@
                             data: graph.data,
                             pointRadius: 0,
                             formatBytes: graph.formatBytes,
-                            lineTension: 0,
+                            tension: 0,
                             borderWidth: 2
                         }]
                     },
@@ -97,24 +100,26 @@
                             duration: 0
                         },
                         scales: scales,
-                        tooltips: {
-                            intersect: false,
-                            mode: 'index',
-                            callbacks: {
-                                label: function(tooltipItem, myData) {
-                                    let ds = myData.datasets[tooltipItem.datasetIndex];
-                                    var label = ds.label || '';
+                        plugins: {
+                            tooltip: {
+                                intersect: false,
+                                mode: 'index',
+                                callbacks: {
+                                    label: function(context) {
+                                        let ds = context.dataset;
+                                        var label = ds.label || '';
 
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (ds.hasOwnProperty("formatBytes") && ds.formatBytes) {
-                                        label += formatBytes(tooltipItem.value);
-                                    } else {
-                                        label += parseFloat(tooltipItem.value).toFixed(2);
-                                    }
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (ds.hasOwnProperty("formatBytes") && ds.formatBytes) {
+                                            label += formatBytes(context.parsed.y);
+                                        } else {
+                                            label += parseFloat(context.parsed.y).toFixed(2);
+                                        }
 
-                                    return label;
+                                        return label;
+                                    }
                                 }
                             }
                         }

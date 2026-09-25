@@ -468,32 +468,33 @@ function loadServerView(hostId)
                 };
 
                 if (config.formatBytes) {
-                    options.scales = scalesBytesCallbacks;
-                    options.tooltips = toolTipsBytesCallbacks
+                    options.scales = scalesBytesCallbacks();
+                    options.plugins = { tooltip: toolTipsBytesCallbacks() };
                 } else {
                     options.scales = {
-                        yAxes: [{
+                        y: {
                             ticks: {
                                 precision: 0
                             }
-                        }],
+                        },
                     }
                 }
 
-                options.legend = {
+                options.plugins = options.plugins || {};
+                options.plugins.legend = {
                         display: false
                     },
 
-                    // scales.yAxes.ticks
-                    options.scales.yAxes[0].gridLines = {
+                    // scales.y.grid
+                    options.scales.y.grid = {
                         color: "rgba(0, 0, 0, 0)",
                     }
-                options.scales.yAxes[0].ticks.beginAtZero = false;
-                options.scales.xAxes = [{
-                    gridLines: {
+                options.scales.y.ticks.beginAtZero = false;
+                options.scales.x = {
+                    grid: {
                         color: "rgba(0, 0, 0, 0)",
                     },
-                }]
+                }
 
                 new Chart(x.find("#" + cId), {
                     type: 'line',

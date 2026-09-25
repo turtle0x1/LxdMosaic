@@ -367,10 +367,11 @@ function loadStorageView()
                 }]
               },
               options: {
-                cutoutPercentage: 40,
                 responsive: false,
-                // scales: scalesBytesCallbacks,
-                tooltips: toolTipsBytesCallbacks
+                // scales: scalesBytesCallbacks(),
+                plugins: {
+                  tooltip: toolTipsBytesCallbacks()
+                }
               }
         });
 

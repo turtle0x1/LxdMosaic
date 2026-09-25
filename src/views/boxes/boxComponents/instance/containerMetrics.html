@@ -89,14 +89,13 @@
             data = makeToastr(data);
             $("#metricGraphBody").empty().append('<canvas id="metricGraph"></canvas>');
 
-            let scales = data.formatBytes ? scalesBytesCallbacks : {yAxes: [{}]}
-            let tooltips = data.formatBytes ? toolTipsBytesCallbacks : [];
+            let scales = data.formatBytes ? scalesBytesCallbacks() : {y: {}}
 
-            scales.yAxes[0].gridLines = {drawBorder: false}
-            scales.yAxes[0].gridLines = {
+            scales.y.border = {display: false}
+            scales.y.grid = {
                 color: "rgba(0, 0, 0, 0)",
             }
-            scales.yAxes[0].ticks.beginAtZero = true;
+            scales.y.ticks.beginAtZero = true;
             let labels = [];
             data.labels.forEach((element) => {
                 let d = moment.utc(element).local();
@@ -118,7 +117,7 @@
                         data: data.data,
                         pointRadius: 0,
                         formatBytes: data.formatBytes,
-						lineTension: 0,
+						tension: 0,
 						borderWidth: 2
                     }]
                 },
@@ -126,31 +125,33 @@
                     animation: {
                         duration: 0
                     },
-                    legend: {
-                        display: false
-                    },
-                    scales:scales,
-                    tooltips: {
-                        intersect: false,
-                        mode: 'index',
-                        callbacks: {
-                            label: function(tooltipItem, myData) {
-                                let ds = myData.datasets[tooltipItem.datasetIndex];
-                                var label = ds.label || '';
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            intersect: false,
+                            mode: 'index',
+                            callbacks: {
+                                label: function(context) {
+                                    let ds = context.dataset;
+                                    var label = ds.label || '';
 
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if(ds.hasOwnProperty("formatBytes") && ds.formatBytes){
-                                    label += formatBytes(tooltipItem.value);
-                                }else{
-                                    label += parseFloat(tooltipItem.value).toFixed(2);
-                                }
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if(ds.hasOwnProperty("formatBytes") && ds.formatBytes){
+                                        label += formatBytes(context.parsed.y);
+                                    }else{
+                                        label += parseFloat(context.parsed.y).toFixed(2);
+                                    }
 
-                                return label;
+                                    return label;
+                                }
                             }
                         }
-                    }
+                    },
+                    scales:scales,
                 }
             });
         });

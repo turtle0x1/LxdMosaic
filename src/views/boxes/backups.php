@@ -556,9 +556,10 @@ function loadBackupsOverview() {
                 datasets: sizeChartData.data
             },
             options: {
-              cutoutPercentage: 40,
-              scales: scalesBytesCallbacks,
-              tooltips: toolTipsBytesCallbacks
+              scales: scalesBytesCallbacks(),
+              plugins: {
+                  tooltip: toolTipsBytesCallbacks()
+              }
             }
         });
 
@@ -570,11 +571,11 @@ function loadBackupsOverview() {
             },
             options: {
                 scales: {
-                    yAxes: [{
+                    y: {
                       ticks: {
                         stepSize: 5
                       }
-                    }]
+                    }
                 }
             }
         });
