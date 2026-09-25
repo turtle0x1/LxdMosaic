@@ -21,21 +21,55 @@
         $("#fuzzySearch").val("")
         $("#searchResultsList").empty();
         $("#resultCount").text(`0 Results`)
+        selectedSearchIndex = -1;
     });
 
     $("#modal-search").on("shown.bs.modal", function() {
         $("#fuzzySearch").val("").focus();
     });
 
+    var selectedSearchIndex = -1;
+
     $('#modal-search').on('click', ".searchResult", function() {
-        router.navigate($(this).data("href"))
-        $("#modal-search").modal("hide")
+        activateSearchResult($(this));
+    });
+
+    function activateSearchResult($result) {
+        if (!$result.length) {
+            return;
+        }
+        router.navigate($result.data("href"));
+        $("#modal-search").modal("hide");
+    }
+
+    $('#fuzzySearch').on('keydown', function(e) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            let $results = $(".searchResult");
+            if ($results.length === 0) {
+                return;
+            }
+
+            selectedSearchIndex += e.key === 'ArrowDown' ? 1 : -1;
+            if (selectedSearchIndex >= $results.length) {
+                selectedSearchIndex = 0;
+            } else if (selectedSearchIndex < 0) {
+                selectedSearchIndex = $results.length - 1;
+            }
+
+            $results.removeClass("active").eq(selectedSearchIndex).addClass("active");
+            $results.eq(selectedSearchIndex)[0].scrollIntoView({block: "nearest"});
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            activateSearchResult($(".searchResult.active").length > 0 ? $(".searchResult.active") : $(".searchResult").first());
+        }
     });
 
     $('#fuzzySearch').on('keyup', function() {
         let search = $(this).val()
 
         if (search == "") {
+            selectedSearchIndex = -1;
             $("#resultCount").text(`0 Results`)
             $("#searchResultsList").empty();
             return false;
@@ -84,8 +118,12 @@
 
                 html += `</a>`
             });
+            selectedSearchIndex = data.length > 0 ? 0 : -1;
             $("#searchResultsList").empty().append(html);
             $("#resultCount").text(`${data.length} Results`)
+            if (selectedSearchIndex >= 0) {
+                $(".searchResult").eq(0).addClass("active");
+            }
         })
     });
 </script>
