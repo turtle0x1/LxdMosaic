@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/turtle0x1/LxdManager#readme",
   "dependencies": {
-    "body-parser": "^2.2.0",
+    "body-parser": "^2.3.0",
     "bufferutil": "^4.0.9",
     "cors": "^2.8.5",
     "express": "^5.1.0",
