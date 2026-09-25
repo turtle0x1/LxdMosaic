@@ -55,6 +55,7 @@ var userDetails = {
       <meta name="viewport" content="width=device-width, initial-scale=1">
 
       <script src="/assets/dist/external.dist.js" type="text/javascript" charset="utf-8"></script>
+      <script src="/assets/dist/chart.umd.js" type="text/javascript" charset="utf-8"></script>
       <script src="/assets/lxdMosaic/lxdDevicesProperties.js" type="text/javascript" charset="utf-8"></script>
       <script src="/assets/lxdMosaic/lxdLifecycleCallbacks.js" type="text/javascript" charset="utf-8"></script>
       <script src="/assets/lxdMosaic/lxdHostSettings.js" type="text/javascript" charset="utf-8"></script>
@@ -730,7 +731,7 @@ $(function(){
 
     router.resolve();
 
-    Chart.defaults.global.defaultFontColor='white';
+    Chart.defaults.color = 'white';
     $.contextMenu({
         selector: '.view-container',
         items: {

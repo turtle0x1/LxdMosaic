@@ -234,24 +234,36 @@ function getSum(total, num) {
     return parseInt(total) + parseInt(num);
 }
 
-var scalesBytesCallbacks = {
-  yAxes: [{
-    ticks: {
-      beginAtZero: true,
-      callback: function(value, index, values) {
-          return formatBytes(value);
+// Returns a FRESH object each call so per-chart mutations (grid, beginAtZero, etc.)
+// don't corrupt other charts' config — Chart.js v4 no longer deep-clones the config on read.
+function scalesBytesCallbacks() {
+  return {
+    y: {
+      ticks: {
+        beginAtZero: true,
+        callback: function(value) {
+            return formatBytes(value);
+        }
       }
     }
-  }]
-};
+  };
+}
 
-var toolTipsBytesCallbacks = {
-    callbacks: {
-        label: function(value, data) {
-            return formatBytes(data.datasets[value.datasetIndex].data[value.index]);
+function toolTipsBytesCallbacks() {
+    return {
+        callbacks: {
+            label: function(context) {
+                // For cartesian (line/bar) charts use the y value;
+                // for polar (pie/doughnut) charts context.parsed.y is undefined,
+                // so fall back to the raw dataset value.
+                let value = (context.parsed && context.parsed.y != null)
+                    ? context.parsed.y
+                    : context.dataset.data[context.dataIndex];
+                return formatBytes(value);
+            }
         }
-    }
-};
+    };
+}
 
 var monthsNameArray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
