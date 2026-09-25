@@ -44,7 +44,7 @@ $("#modal-cloudConfig-confirm").on("click", "#confirm", function(){
         btn.attr("disabled", false);
         btn.html(`Deploy`)
         return false;
-    } else if(!$.isNumeric(hostId)){
+    } else if(!Number.isFinite(hostId)){
         makeToastr(JSON.stringify({state: "error", message: "Please choose a destination"}));
         $("#deployCloudConfigHosts").focus();
         btn.attr("disabled", false);

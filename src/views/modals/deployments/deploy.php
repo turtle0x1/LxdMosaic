@@ -97,7 +97,7 @@ $("#modal-deployments-deploy").on("click", "#deploy", function(){
         if(data.state == "error"){
             return false;
         }
-        if($.isFunction(deploymentDeployObj.callback)){
+        if(typeof deploymentDeployObj.callback === "function"){
             deploymentDeployObj.callback();
         }
         $("#modal-deployments-deploy").modal("toggle");

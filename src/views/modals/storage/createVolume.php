@@ -120,7 +120,7 @@
             nameInput.focus();
             makeToastr(JSON.stringify({state: "error", message: "Please input name"}));
             return false;
-        } else if(sizeInGb == "" || !$.isNumeric(sizeInGb)){
+        } else if(sizeInGb == "" || !Number.isFinite(sizeInGb)){
             sizeInGbInput.focus();
             makeToastr(JSON.stringify({state: "error", message: "Please input size in gb"}));
             return false;

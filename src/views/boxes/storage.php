@@ -316,7 +316,7 @@ function loadStorageSidebar(data = null){
             });
         }else {
             $("#sidebar-ul").find(".active").removeClass("active");
-            if($.isNumeric(currentPool.hostId)){
+            if(Number.isFinite(currentPool.hostId)){
                 $("#sidebar-ul").find(`.nav-link[href="/storage/${hostIdOrAliasForUrl(currentPool.hostAlias, currentPool.hostId)}/${currentPool.poolName}"]`).addClass("active")
             }else{
                 $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")

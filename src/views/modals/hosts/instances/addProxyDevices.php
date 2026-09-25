@@ -46,7 +46,7 @@
     });
 
     $("#modal-hosts-instnaces-addProxyDevice").on("show.bs.modal", function(){
-        if(!$.isNumeric(addProxyDeviceObj.hostId)){
+        if(!Number.isFinite(addProxyDeviceObj.hostId)){
             makeToastr(JSON.stringify({state: "error", message: "Developer Fail - Please provide host id"}));
             $("#modal-hosts-instnaces-addProxyDevice").modal("toggle");
             return false;

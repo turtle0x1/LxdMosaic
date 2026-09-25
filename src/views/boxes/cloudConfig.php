@@ -204,7 +204,7 @@ function loadCloudConfigTree(force = false)
         });
     }else{
         $("#sidebar-ul").find(".active").removeClass("active");
-        if($.isNumeric(currentCloudConfigId)){
+        if(Number.isFinite(currentCloudConfigId)){
             $("#sidebar-ul").find("[data-id='" + currentCloudConfigId + "'] > .nav-link").addClass("active")
         }else{
             $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")

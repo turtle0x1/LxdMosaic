@@ -152,7 +152,7 @@
             });
         } else {
             $("#sidebar-ul").find(".active").removeClass("active");
-            if ($.isNumeric(currentNetwork.hostId)) {
+            if (Number.isFinite(currentNetwork.hostId)) {
                 $("#sidebar-ul").find(`.nav-link[href="/networks/${hostIdOrAliasForUrl(currentNetwork.alias, currentNetwork.hostId)}/${currentNetwork.network}"]`).addClass("active")
             } else {
                 $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
@@ -195,7 +195,7 @@
                             let formatedTotal = key.includes("packets") ? parseFloat(hostTotals[key]).toLocaleString('en') : formatBytes(hostTotals[key])
                             let formatedPercent = Math.round(parseFloat(percent).toFixed(2))
                             let instanceName = instance.length > 10 ? `<a href="#" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="${instance}">${instance.substring(0,10)}...</a>` : instance;
-                            hostHtml[key] += `<div class="text-truncate">${instanceName} - ${interfaceName} - ${$.isNumeric(formatedPercent) ? formatedPercent : 0}%</div>
+                            hostHtml[key] += `<div class="text-truncate">${instanceName} - ${interfaceName} - ${Number.isFinite(formatedPercent) ? formatedPercent : 0}%</div>
                                 <div class="progress bg-secondary" data-bs-toggle="tooltip" data-bs-placement="right" title="${formatedTotal}">
                                     <div class="progress-bar bg-primary" role="progressbar" data-bs-toggle="tooltip" data-bs-placement="left" title="${formatedUsed} - ${formatedPercent}%" style="width: ${percent}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                     <div class="progress-bar bg-secondary" style="width: ${100 - percent}%">

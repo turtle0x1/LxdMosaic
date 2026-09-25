@@ -41,6 +41,12 @@ export function js() {
         "node_modules/masonry-layout/dist/masonry.pkgd.min.js",
         "node_modules/navigo/lib/navigo.min.js"
     ])
+    // Apply jQuery 4 compat shims before minification. These regexes are specific
+    // enough that they only match inside jquery-confirm and jquery-timepicker.
+    .pipe(replace(/themePrefix\+\$\.trim\(a\)/g, 'themePrefix+a.trim()'))
+    .pipe(replace(/bgDismissPrefix\+\$\.trim\(a\)/g, 'bgDismissPrefix+a.trim()'))
+    .pipe(replace(/animationPrefix\+\$\.trim\(a\)/g, 'animationPrefix+a.trim()'))
+    .pipe(replace(/\$\.isFunction\(i\.options\.change\)/g, 'typeof i.options.change === "function"'))
     .pipe(minify({ noSource: true }))
     .pipe(concat('external.dist.js'))
     .pipe(dest('src/assets/dist'));

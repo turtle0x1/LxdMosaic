@@ -60,7 +60,7 @@ $("#modal-cloudConfig-deploy").on("hidden.bs.modal",  function(){
 
 $("#modal-cloudConfig-deploy").on("change", "#deployCloudConfigHosts", function() {
     let hostId = $(this).find(":selected").parents("optgroup").attr("id")
-    if($.isNumeric(hostId)){
+    if(Number.isFinite(hostId)){
         ajaxRequest(globalUrls.hosts.gpu.getAll, {hostId}, (data)=>{
             data =  makeToastr(data);
             //TODO if len == 0
@@ -85,7 +85,7 @@ $("#modal-cloudConfig-deploy").on("show.bs.modal", function(){
     $("#modal-cloudConfig-deploy .modal-dialog").removeClass("modal-xl")
     $("#modal-cloudConfig-deploy .modal-body").empty().append(_deployCloudConfigContents);
     $("#modal-cloudConfig-deploy").find('[data-bs-toggle="tooltip"]').tooltip({html: true})
-    if(!$.isNumeric(deployCloudConfigObj.cloudConfigId)){
+    if(!Number.isFinite(deployCloudConfigObj.cloudConfigId)){
         makeToastr(JSON.stringify({state: "error", message: "Developer fail - set <code>cloud-config</code> id to open this modal"}));
         return false;
     }
@@ -141,7 +141,7 @@ $("#modal-cloudConfig-deploy").on("click", "#deployCloudConfig", function(){
         makeToastr(JSON.stringify({state: "error", message: "Please provide instance name"}));
         containerNameInput.focus()
         return false;
-    } else if(!$.isNumeric(hostId)){
+    } else if(!Number.isFinite(hostId)){
         makeToastr(JSON.stringify({state: "error", message: "Please choose a destination"}));
         $("#deployCloudConfigHosts").focus();
         return false;

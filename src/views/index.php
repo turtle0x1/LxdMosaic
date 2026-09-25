@@ -649,7 +649,7 @@ $(function(){
 
                     $("#navProjectControlHostList").empty().append(projectsDropdown);
 
-                    if( match.data !== null && match.data.hasOwnProperty("hostId") && !$.isNumeric(match.data.hostId)){
+                    if( match.data !== null && match.data.hasOwnProperty("hostId") && !Number.isFinite(match.data.hostId)){
                          router.navigate("/404")
                          done(false)
                     }else{
@@ -657,9 +657,9 @@ $(function(){
                     }
                 });
             } else if(match.data !== null && match.data.hasOwnProperty("hostId")){
-                if(!$.isNumeric(match.data.hostId)){
+                if(!Number.isFinite(match.data.hostId)){
                     let lookupId = hostsIdsLookupTable[match.data.hostId];
-                    if(!$.isNumeric(lookupId)){
+                    if(!Number.isFinite(lookupId)){
                         router.navigate("/404")
                         done(false)
                     }else{

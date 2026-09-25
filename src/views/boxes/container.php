@@ -139,7 +139,7 @@ var currentTerminalProcessId = null;
 function loadContainerTreeAfter(milSeconds = 2000, hostId = null, hostAlias = null)
 {
     setTimeout(function(){
-        let p = $.isNumeric(hostId) ? hostId : currentContainerDetails.hostId;
+        let p = Number.isFinite(hostId) ? hostId : currentContainerDetails.hostId;
         let a = hostAlias == null ? currentContainerDetails.alias : hostAlias;
         addHostContainerList(p, a);
     }, milSeconds);

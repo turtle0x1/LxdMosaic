@@ -314,7 +314,7 @@ function loadProjectsSidebar(){
         });
     }else {
         $("#sidebar-ul").find(".active").removeClass("active");
-        if($.isNumeric(currentProject.hostId)){
+        if(Number.isFinite(currentProject.hostId)){
             $("#sidebar-ul").find(`.nav-link[href="/projects/${hostIdOrAliasForUrl(currentProject.hostAlias, currentProject.hostId)}/${currentProject.project}"]`).addClass("active")
         }else{
             $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")

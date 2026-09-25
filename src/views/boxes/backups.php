@@ -306,11 +306,11 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                         $.alert("Select backup time")
                         timeInput.focus()
                         return false;
-                    } else if(!$.isNumeric(strategy)) {
+                    } else if(!Number.isFinite(strategy)) {
                         $.alert("Select strategy")
                         strategyInput.focus()
                         return false;
-                    } else if(!$.isNumeric(retention)) {
+                    } else if(!Number.isFinite(retention)) {
                         $.alert("Number of backups to keep must be a number");
                         retentionInput.focus();
                         return false;
@@ -327,7 +327,7 @@ $(document).on("click", "#scheduleInstanceBackup", function(){
                     let dayOfMonth = 0;
                     if(frequency == "monthly"){
                         dayOfMonth = $("#bMonthlyDayOfMonth").val();
-                        if(!$.isNumeric(dayOfMonth) || dayOfMonth == 0){
+                        if(!Number.isFinite(dayOfMonth) || dayOfMonth == 0){
                             $.alert("Day of month must number 1 - 31");
                             $("#bMonthlyDayOfMonth").focus();
                             return false;

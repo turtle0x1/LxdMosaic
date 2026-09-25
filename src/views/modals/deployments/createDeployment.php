@@ -49,7 +49,7 @@ $("#modal-deployments-create").on("click", "#create", function(){
         if(data.state == "error"){
             return false;
         }
-        if($.isFunction(createDeploymentCallback)){
+        if(typeof createDeploymentCallback === "function"){
             createDeploymentCallback(data.deploymentId);
         }
         $("#modal-deployments-create").modal("toggle");

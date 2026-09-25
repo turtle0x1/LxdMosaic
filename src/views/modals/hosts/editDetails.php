@@ -38,7 +38,7 @@ $("#modal-hosts-edit").on("hide.bs.modal", function(){
 });
 
 $("#modal-hosts-edit").on("shown.bs.modal", function(){
-    if(!$.isNumeric(editHostDetailsObj.hostId)){
+    if(!Number.isFinite(editHostDetailsObj.hostId)){
         makeToastr(JSON.stringify({state: "error", message: "Developer Fail - Please provide host id"}));
         $("#modal-hosts-edit").modal("toggle");
         return false;

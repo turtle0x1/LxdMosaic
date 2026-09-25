@@ -179,7 +179,7 @@ function loadDeploymentsSidebar(inputData = null){
     function _doResult(data){
         let hosts = `
         <li class="nav-item mb-2 mt-2 deployments-overview">
-            <a class="nav-link p-0 ${$.isNumeric(currentDeployment) ? "" : "active"}" href="/deployments" data-navigo>
+            <a class="nav-link p-0 ${Number.isFinite(currentDeployment) ? "" : "active"}" href="/deployments" data-navigo>
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
         </li>`;
@@ -202,7 +202,7 @@ function loadDeploymentsSidebar(inputData = null){
         _doResult(inputData);
     }else{
         $("#sidebar-ul").find(".active").removeClass("active");
-        if($.isNumeric(currentDeployment)){
+        if(Number.isFinite(currentDeployment)){
             $("#sidebar-ul").find(`.nav-link[href="/deployments/${currentDeployment}"]`).addClass("active")
         }else{
             $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")

@@ -262,7 +262,7 @@ function loadProfileSidebar(){
         });
     }else{
         $("#sidebar-ul").find(".active").removeClass("active");
-        if($.isNumeric(currentProfileDetails.hostId)){
+        if(Number.isFinite(currentProfileDetails.hostId)){
             $("#sidebar-ul").find(`.nav-link[href="/profiles/${hostIdOrAliasForUrl(currentProfileDetails.hostAlias, currentProfileDetails.hostId)}/${currentProfileDetails.profile}"]`).addClass("active")
         }else{
             $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")

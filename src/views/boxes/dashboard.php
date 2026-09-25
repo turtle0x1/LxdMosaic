@@ -122,9 +122,9 @@ function createDashboardSidebar()
         });
     }else {
         $("#sidebar-ul").find(".active").removeClass("active");
-        if(currentContainerDetails !== null && $.isNumeric(currentContainerDetails.hostId)){
+        if(currentContainerDetails !== null && Number.isFinite(currentContainerDetails.hostId)){
             $("#sidebar-ul").find(`.nav-link[href="/instance/${hostIdOrAliasForUrl(currentContainerDetails.alias ,currentContainerDetails.hostId)}/${currentContainerDetails.container}"]`).addClass("active")
-        }else if(currentServer !== null && $.isNumeric(currentServer.hostId)){
+        }else if(currentServer !== null && Number.isFinite(currentServer.hostId)){
             $("#sidebar-ul").find(`.nav-link[href="/host/${hostIdOrAliasForUrl(currentServer.hostAlias, currentServer.hostId)}/overview"]`).addClass("active")
         }else{
             $("#sidebar-ul").find(".nav-link:eq(0)").addClass("active")
