@@ -14,6 +14,8 @@ class Migrate
         bool $delete = false
     ) {
         $this->checkIfMigratingToSameHost($sourceHost, $destinationHost);
+        $this->checkIfHostUsesSocket($sourceHost, 'source');
+        $this->checkIfHostUsesSocket($destinationHost, 'destination');
 
         $this->checkIfHostUrlIsLocalhost($sourceHost, 'source');
         $this->checkIfHostUrlIsLocalhost($destinationHost, 'destination');
@@ -40,6 +42,13 @@ class Migrate
     {
         if ($source->getUrl() === $destination->getUrl()) {
             throw new \Exception('You must use two different hosts to migrate', 1);
+        }
+    }
+
+    private function checkIfHostUsesSocket(Host $host, string $type)
+    {
+        if ($host->usesSocket()) {
+            throw new \Exception("Your {$type} server is connected via a Unix socket. Host-to-host migration is not supported over Unix sockets.", 1);
         }
     }
 

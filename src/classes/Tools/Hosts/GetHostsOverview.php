@@ -2,14 +2,12 @@
 
 namespace dhope0000\LXDClient\Tools\Hosts;
 
-use dhope0000\LXDClient\Model\Hosts\GetDetails;
 use dhope0000\LXDClient\Model\Hosts\HostList;
 
 class GetHostsOverview
 {
     public function __construct(
-        private readonly HostList $hostList,
-        private readonly GetDetails $getDetails
+        private readonly HostList $hostList
     ) {
     }
 
@@ -20,10 +18,9 @@ class GetHostsOverview
     {
         $hosts = $this->hostList->fetchAllHosts();
         foreach ($hosts as $host) {
-            $socketPath = $this->getDetails->getSocketPath($host->getHostId());
             $certExpires = new \DateTime('9999-12-31');
 
-            if ($socketPath === null) {
+            if (!$host->usesSocket()) {
                 $cert = file_get_contents($_ENV['LXD_CERTS_DIR'] . $host->getCertPath());
 
                 $certinfo = openssl_x509_parse($cert);

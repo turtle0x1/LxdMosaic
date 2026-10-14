@@ -23,6 +23,8 @@ class Host implements \JsonSerializable
 
     private $supportsLoadAvgs;
 
+    private $socketPath;
+
     private $customProps = [];
 
     private $client = null;
@@ -86,6 +88,16 @@ class Host implements \JsonSerializable
         return $this->alias;
     }
 
+    public function getSocketPath(): ?string
+    {
+        return $this->socketPath;
+    }
+
+    public function usesSocket(): bool
+    {
+        return !empty($this->socketPath);
+    }
+
     public function hostSupportLoadAvgs(): bool
     {
         return (bool) $this->supportsLoadAvgs;
@@ -109,6 +121,7 @@ class Host implements \JsonSerializable
             'hostId' => $this->id,
             'alias' => $this->alias,
             'urlAndPort' => $this->urlAndPort,
+            'socketPath' => $this->socketPath,
             'hostOnline' => $this->hostOnline,
             'supportsLoadAvgs' => $this->supportsLoadAvgs,
             'currentProject' => $this->getProject(),
